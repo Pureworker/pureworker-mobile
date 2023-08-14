@@ -23,6 +23,7 @@ import FundingHistory from '../screens/user/fundingHistory';
 import PaymentMethod2 from '../screens/user/paymentMethod2';
 import BecomeAServiceProvider from '../screens/user/becomeAServiceProvider';
 import ViewLocation from '../screens/user/viewLocation';
+import EditAccount from '../screens/user/editAccount';
 
 const Stack = createNativeStackNavigator();
 
@@ -132,6 +133,11 @@ export default function CustomerNavigation() {
       <Stack.Screen
         name="ViewLocation"
         component={ViewLocation}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="EditAccount"
+        component={EditAccount}
         options={{headerShown: false, animationEnabled: false}}
       />
     </Stack.Navigator>

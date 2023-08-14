@@ -24,63 +24,68 @@ const Account = () => {
   const dispatch = useDispatch();
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
-      <ScrollView>
-        <View
-          style={{
-            marginTop:
-              Platform.OS === 'ios'
-                ? getStatusBarHeight(true)
-                : StatusBar.currentHeight &&
-                  StatusBar.currentHeight + getStatusBarHeight(true),
-          }}
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginHorizontal: 20,
-          }}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              source={images.back}
-              style={{height: 25, width: 25}}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-          <View style={tw`mx-auto`}>
+      <View
+        style={{
+          marginTop:
+            Platform.OS === 'ios'
+              ? getStatusBarHeight(true)
+              : StatusBar.currentHeight &&
+                StatusBar.currentHeight + getStatusBarHeight(true),
+        }}
+      />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginHorizontal: 20,
+          paddingBottom: 10,
+        }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            source={images.back}
+            style={{height: 25, width: 25}}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={tw`mx-auto`}>
+          <Textcomp
+            text={'Account'}
+            size={17}
+            lineHeight={17}
+            color={'#000413'}
+            fontFamily={'Inter-SemiBold'}
+          />
+        </TouchableOpacity>
+      </View>
+      <View style={[tw`mt-4`, {marginHorizontal: perWidth(20)}]}>
+        <View style={tw`flex flex-row justify-between`}>
+          <View style={tw``}>
             <Textcomp
-              text={'Account'}
+              text={'Account Info'}
               size={17}
               lineHeight={17}
               color={'#000413'}
               fontFamily={'Inter-SemiBold'}
             />
           </View>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('EditAccount');
+            }}
+            style={tw``}>
+            <Textcomp
+              text={'Edit'}
+              size={17}
+              lineHeight={17}
+              color={'#000413'}
+              fontFamily={'Inter-SemiBold'}
+            />
+          </TouchableOpacity>
         </View>
+      </View>
+      <ScrollView>
         <View style={tw`flex-1`}>
-          <View style={[tw`mt-4`, {marginHorizontal: perWidth(20)}]}>
-            <View style={tw`flex flex-row justify-between`}>
-              <View style={tw``}>
-                <Textcomp
-                  text={'Account Info'}
-                  size={17}
-                  lineHeight={17}
-                  color={'#000413'}
-                  fontFamily={'Inter-SemiBold'}
-                />
-              </View>
-              <TouchableOpacity onPress={() => {}} style={tw``}>
-                <Textcomp
-                  text={'Edit'}
-                  size={17}
-                  lineHeight={17}
-                  color={'#000413'}
-                  fontFamily={'Inter-SemiBold'}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
           <View
             style={[
               tw`bg-[${colors.darkPurple}] mt-4 pl-5 justify-center`,
@@ -289,12 +294,10 @@ const Account = () => {
               </View>
             </View>
           </View>
-
         </View>
-        <View style={tw`h-20`}/>
-
+        <View style={tw`h-20`} />
       </ScrollView>
-      <View style={tw`h-0.5 w-full bg-black absolute  bottom-[3%]`}/>
+      <View style={tw`h-0.5 w-full bg-black absolute  bottom-[3%]`} />
     </View>
   );
 };
