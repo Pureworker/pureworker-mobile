@@ -207,7 +207,7 @@ const TokenVerification = () => {
           <OTPInputView
             style={{width: '87.5%', height: 200}}
             pinCount={6}
-            autoFocusOnLoad
+            autoFocusOnLoad={false}
             codeInputFieldStyle={styles.underlineStyleBase}
             codeInputHighlightStyle={styles.underlineStyleHighLighted}
             onCodeFilled={code => {

@@ -188,6 +188,26 @@ export const api = emptySplitApi.injectEndpoints({
       providesTags: ['Favorite']
     }),
 
+    getSingleProviderService: builder.query<any, { serviceId: number }>({
+      
+      query: (serviceId) => {
+        return {
+          url: `/services/singleProvider/${serviceId}`,
+          method: 'GET',
+        }
+      },
+    }),
+
+    getSingleProviderAllService: builder.query<any, { serviceId: number }>({
+      
+      query: (serviceId) => {
+        return {
+          url: `/services/singleProviderAllServices/${serviceId}`,
+          method: 'GET',
+        }
+      },
+    }),
+
   }),
   overrideExisting: true,
 })
@@ -206,4 +226,6 @@ export const {
   useGetAllServiceProviderProfileQuery,
   useGetFavoriteProductQuery,
   useMakeFavoriteProductMutation,
+  useGetSingleProviderServiceQuery,
+  useGetSingleProviderAllServiceQuery,
 } = api

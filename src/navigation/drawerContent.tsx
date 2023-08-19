@@ -1,30 +1,34 @@
-import React, {useContext, useState} from 'react';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
-import {DrawerContentScrollView} from '@react-navigation/drawer';
+import React, { useContext, useState } from 'react';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { DrawerContentScrollView } from '@react-navigation/drawer';
 import tw from 'twrnc';
 // import {useStoreActions, useStoreState} from 'easy-peasy';
-import {perHeight, perWidth} from '../utils/position/sizes';
+import { perHeight, perWidth } from '../utils/position/sizes';
 import images from '../constants/images';
 import Textcomp from '../components/Textcomp';
 import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../store/reducer/mainSlice';
 import {useGetUserDetailQuery} from '../store/slice/api';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigation } from '../constants/navigation';
+import { BUSINESS, FREELANCER } from '../constants/userType';
 
-const DrawerContent = ({navigation}) => {
+const DrawerContent = () => {
+  const navigation = useNavigation<StackNavigation>()
   const navLinks = [
-    {label: 'Wallet', route: 'Wallet', icon: images.wallet},
-    {label: 'Support', route: 'Support', icon: images.help},
-    {label: 'Account Info', route: 'Account', icon: images.info},
+    { label: 'Wallet', route: 'Wallet', icon: images.wallet },
+    { label: 'Support', route: 'Support', icon: images.help },
+    { label: 'Account Info', route: 'Account', icon: images.info },
   ];
   const navLinks2 = [
-    {label: 'Log out', route: 'Logout', icon: images.wallet},
+    { label: 'Log out', route: 'Logout', icon: images.wallet },
     {
       label: 'Deactivate Account',
       route: 'DeactivateAccount',
       icon: images.deactivte,
     },
-    {label: 'Privacy Policy', route: 'PrivacyPolicy', icon: images.support},
+    { label: 'Privacy Policy', route: 'PrivacyPolicy', icon: images.support },
   ];
   const dispatch = useDispatch();
 
@@ -68,12 +72,15 @@ const DrawerContent = ({navigation}) => {
         <View
           style={[
             tw`bg-[#2D303C] flex flex-row px-2 w-[90%] mx-auto rounded-lg items-center`,
-            {marginTop: perHeight(10), height: perHeight(88)},
+            { marginTop: perHeight(10), height: perHeight(88) },
           ]}>
           <TouchableOpacity
             style={[tw`bg-red-300 rounded-full`, {width: 50, height: 50}]}
             onPress={() => {
-              openLibraryfordp();
+              // openLibraryfordp();
+              if (userType.userType === BUSINESS || userType.userType == FREELANCER) {
+                navigation.navigate('ProfileStep1')
+              }
             }}>
             <Image
               resizeMode="cover"
@@ -87,7 +94,7 @@ const DrawerContent = ({navigation}) => {
                 text={`${getUser?.firstName}`}
                 size={14}
                 color={'#ffffff'}
-                style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '500'}]}
+                style={[tw`ml-3`, { lineHeight: 14 }, { fontWeight: '500' }]}
               />
             </View>
             <TouchableOpacity
@@ -100,13 +107,13 @@ const DrawerContent = ({navigation}) => {
                   text={'4.8 '}
                   size={14}
                   color={'#FFCD1E'}
-                  style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '500'}]}
+                  style={[tw`ml-3`, { lineHeight: 14 }, { fontWeight: '500' }]}
                 />
               </View>
               <View>
                 <Image
                   resizeMode="contain"
-                  style={{width: 14, height: 14, tintColor: '#FFCD1E'}}
+                  style={{ width: 14, height: 14, tintColor: '#FFCD1E' }}
                   source={images.star_2}
                 />
               </View>
@@ -115,7 +122,7 @@ const DrawerContent = ({navigation}) => {
                   text={'Rating'}
                   size={14}
                   color={'#FFCD1E'}
-                  style={[tw`ml-1`, {lineHeight: 14}, {fontWeight: '500'}]}
+                  style={[tw`ml-1`, { lineHeight: 14 }, { fontWeight: '500' }]}
                 />
               </View>
             </TouchableOpacity>
@@ -125,7 +132,7 @@ const DrawerContent = ({navigation}) => {
         <View
           style={[
             tw`bg-[#2D303C] px-2 w-[90%] pb-6 pt-3 mx-auto rounded-lg`,
-            {marginTop: perHeight(70)},
+            { marginTop: perHeight(70) },
           ]}>
           {navLinks.map((link, index) => (
             <TouchableOpacity
@@ -135,12 +142,12 @@ const DrawerContent = ({navigation}) => {
               }}
               style={[
                 tw` w-full  border-[#F2F2F2]  flex flex-row items-center`,
-                {marginTop: index === 0 ? 0 : perHeight(19)},
+                { marginTop: index === 0 ? 0 : perHeight(19) },
               ]}>
               {
                 <Image
                   resizeMode="contain"
-                  style={{width: 20, height: 20}}
+                  style={{ width: 20, height: 20 }}
                   source={link.icon}
                 />
               }
@@ -148,7 +155,7 @@ const DrawerContent = ({navigation}) => {
                 text={link.label}
                 size={14}
                 color={'#FFFFFF'}
-                style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '500'}]}
+                style={[tw`ml-3`, { lineHeight: 14 }, { fontWeight: '500' }]}
               />
             </TouchableOpacity>
           ))}
@@ -157,7 +164,7 @@ const DrawerContent = ({navigation}) => {
         <View
           style={[
             tw`bg-[#2D303C] px-2 w-[90%] pb-6 pt-3 mx-auto rounded-lg`,
-            {marginTop: perHeight(60)},
+            { marginTop: perHeight(60) },
           ]}>
           {navLinks2.map((link, index) => (
             <TouchableOpacity
@@ -167,12 +174,12 @@ const DrawerContent = ({navigation}) => {
               }}
               style={[
                 tw` w-full  border-[#F2F2F2]  flex flex-row items-center`,
-                {marginTop: index === 0 ? 0 : perHeight(19)},
+                { marginTop: index === 0 ? 0 : perHeight(19) },
               ]}>
               {
                 <Image
                   resizeMode="contain"
-                  style={{width: 20, height: 20}}
+                  style={{ width: 20, height: 20 }}
                   // source={images.info}
                   source={link.icon}
                 />
@@ -181,7 +188,7 @@ const DrawerContent = ({navigation}) => {
                 text={link.label}
                 size={14}
                 color={'#FFFFFF'}
-                style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '500'}]}
+                style={[tw`ml-3`, { lineHeight: 14 }, { fontWeight: '500' }]}
               />
             </TouchableOpacity>
           ))}
@@ -194,13 +201,13 @@ const DrawerContent = ({navigation}) => {
             }}
             style={[
               tw`bg-[#2D303C] px-2 py-4 w-[90%] mx-auto `,
-              {marginTop: perHeight(40), borderRadius: 5},
+              { marginTop: perHeight(40), borderRadius: 5 },
             ]}>
             <Textcomp
               text={'Become a Service Provider'}
               size={14}
               color={'#FFCD1E'}
-              style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '500'}]}
+              style={[tw`ml-3`, { lineHeight: 14 }, { fontWeight: '500' }]}
             />
           </TouchableOpacity>
         )}
