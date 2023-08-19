@@ -20,11 +20,16 @@ import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import FastImage from 'react-native-fast-image';
 import colors from '../../constants/colors';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import Modal from 'react-native-modal';
+import Review from '../../components/Review';
 
 const ServiceProviderProfile = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [activeSection, setActiveSection] = useState('About');
+  const [imageModal, setimageModal] = useState(false);
+
+  const [saved, setsaved] = useState(false);
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View>
@@ -84,11 +89,25 @@ const ServiceProviderProfile = () => {
                 style={{width: 25, height: 25, tintColor: 'black'}}
               />
             </TouchableOpacity>
-            <TouchableOpacity>
+            {/* <TouchableOpacity>
               <Image
                 source={images.save}
                 resizeMode="contain"
                 style={{width: 20, height: 20, tintColor: 'black'}}
+              />
+            </TouchableOpacity> */}
+            <TouchableOpacity
+              onPress={() => {
+                setsaved(!saved);
+              }}>
+              <Image
+                resizeMode="contain"
+                style={{
+                  width: perWidth(20),
+                  height: perWidth(20),
+                  tintColor: saved ? '#C0392B' : 'black',
+                }}
+                source={saved ? images.saved : images.save}
               />
             </TouchableOpacity>
           </View>
@@ -426,6 +445,7 @@ const ServiceProviderProfile = () => {
                       renderItem={(item, index) => {
                         return (
                           <FastImage
+                            onTouchStart={() => setimageModal(true)}
                             style={[
                               tw`mr-2`,
                               {
@@ -464,6 +484,7 @@ const ServiceProviderProfile = () => {
                       renderItem={(item, index) => {
                         return (
                           <FastImage
+                            onTouchStart={() => setimageModal(true)}
                             style={[
                               tw`mr-2`,
                               {
@@ -596,7 +617,7 @@ const ServiceProviderProfile = () => {
                           </View>
                         </View>
                       </View>
-                      <View>
+                      {/* <View>
                         <View
                           style={[
                             tw``,
@@ -610,7 +631,7 @@ const ServiceProviderProfile = () => {
                             fontFamily={'Inter-SemiBold'}
                           />
                         </View>
-                      </View>
+                      </View> */}
                       <View
                         style={tw`mt-auto flex flex-row items-center justify-between`}>
                         <View
@@ -676,13 +697,7 @@ const ServiceProviderProfile = () => {
                     />
                   </View>
                   <View style={tw` pt-2`}>
-                    <Textcomp
-                      text={'stars'}
-                      size={16}
-                      lineHeight={17}
-                      color={'#FFFFFF'}
-                      fontFamily={'Inter-Bold'}
-                    />
+                    <Review value={2} editable={false} />
                   </View>
                 </View>
                 <View style={tw`flex mt-auto flex-row justify-between`}>
@@ -696,13 +711,7 @@ const ServiceProviderProfile = () => {
                     />
                   </View>
                   <View style={tw` pt-2`}>
-                    <Textcomp
-                      text={'stars'}
-                      size={16}
-                      lineHeight={17}
-                      color={'#FFFFFF'}
-                      fontFamily={'Inter-Bold'}
-                    />
+                    <Review value={3} editable={false} />
                   </View>
                 </View>
                 <View style={tw`flex mt-auto flex-row justify-between`}>
@@ -716,13 +725,7 @@ const ServiceProviderProfile = () => {
                     />
                   </View>
                   <View style={tw` pt-2`}>
-                    <Textcomp
-                      text={'stars'}
-                      size={16}
-                      lineHeight={17}
-                      color={'#FFFFFF'}
-                      fontFamily={'Inter-Bold'}
-                    />
+                    <Review value={4} editable={false} />
                   </View>
                 </View>
                 <View style={tw`flex mt-auto flex-row justify-between`}>
@@ -736,13 +739,7 @@ const ServiceProviderProfile = () => {
                     />
                   </View>
                   <View style={tw` pt-2`}>
-                    <Textcomp
-                      text={'stars'}
-                      size={16}
-                      lineHeight={17}
-                      color={'#FFFFFF'}
-                      fontFamily={'Inter-Bold'}
-                    />
+                    <Review value={2} editable={false} />
                   </View>
                 </View>
               </View>
@@ -758,7 +755,7 @@ const ServiceProviderProfile = () => {
                           colors.darkPurple
                         }]`,
                         {
-                          height: perWidth(130),
+                          height: perWidth(157),
                           width: SIZES.width * 0.95,
                           borderWidth: 0,
                           borderRadius: 5,
@@ -804,68 +801,54 @@ const ServiceProviderProfile = () => {
                           <View style={[tw`flex flex-row justify-between`, {}]}>
                             <View style={[tw``, {}]}>
                               <Textcomp
-                                text={'$15'}
+                                text={'Stacy  W.'}
                                 size={14}
                                 lineHeight={16}
                                 color={colors.white}
                                 fontFamily={'Inter-Bold'}
                               />
                             </View>
+                            <View style={tw` pt-2`}>
+                              <Review value={2} editable={false} />
+                            </View>
                           </View>
                           <View
                             style={[
-                              tw``,
-                              {width: perWidth(252), marginTop: perHeight(4)},
+                              tw`flex flex-row justify-between`,
+                              { marginTop: perHeight(4)},
                             ]}>
                             <Textcomp
-                              text={'description'}
+                              text={'Lagos'}
                               size={12}
                               lineHeight={14}
-                              color={colors.white}
+                              color={'#FFFFFF80'}
                               fontFamily={'Inter-SemiBold'}
                               numberOfLines={2}
                             />
+                            <View style={[tw`ml-auto`, {}]}>
+                              <Textcomp
+                                text={'4 days ago'}
+                                size={12}
+                                lineHeight={16}
+                                color={'#FFFFFF80'}
+                                fontFamily={'Inter-Bold'}
+                              />
+                            </View>
                           </View>
                         </View>
                       </View>
                       <View>
-                        <View
-                          style={[
-                            tw``,
-                            {width: perWidth(105), marginTop: perWidth(4)},
-                          ]}>
-                          <Textcomp
-                            text={'Steven W.s'}
-                            size={12}
-                            lineHeight={14}
-                            color={colors.white}
-                            fontFamily={'Inter-SemiBold'}
-                          />
-                        </View>
-                      </View>
                       <View
-                        style={tw`mt-auto flex flex-row items-center justify-between`}>
-                        <View
                           style={[
-                            tw``,
-                            {width: perWidth(105), marginTop: perWidth(4)},
+                            tw` ml-auto mr-2`,
+                            {width: perWidth(252), marginTop: perWidth(5)},
                           ]}>
                           <Textcomp
-                            text={'Jan3, 2020'}
+                            text={'He is very good plumber with years of experience as stated in his profile. His job was quick and delivered as discussed, I will recommend him for any job here.'}
                             size={12}
                             lineHeight={14}
                             color={colors.white}
                             fontFamily={'Inter-SemiBold'}
-                          />
-                        </View>
-
-                        <View style={[tw``, {}]}>
-                          <Textcomp
-                            text={'IN PROGRESS'}
-                            size={12}
-                            lineHeight={14}
-                            color={colors.primary}
-                            fontFamily={'Inter-Bold'}
                           />
                         </View>
                       </View>
@@ -899,6 +882,43 @@ const ServiceProviderProfile = () => {
           fontFamily={'Inter-SemiBold'}
         />
       </TouchableOpacity>
+      <Modal
+        isVisible={imageModal}
+        onBackButtonPress={() => setimageModal(false)}
+        onBackdropPress={() => setimageModal(false)}
+        swipeThreshold={200}
+        // swipeDirection={['down']}
+        style={{
+          width: SIZES.width,
+          padding: 0,
+          margin: 0,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        onSwipeComplete={() => setimageModal(false)}>
+        <View
+          style={[
+            tw`bg-white mt-auto mb-[25%] items-center  rounded-lg `,
+            {width: perWidth(310), height: perHeight(315), borderRadius: 15},
+          ]}>
+          <FastImage
+            style={[
+              tw``,
+              {
+                width: perWidth(310),
+                height: perHeight(315),
+                borderRadius: 15,
+              },
+            ]}
+            source={{
+              uri: 'https://res.cloudinary.com/dr0pef3mn/image/upload/v1691626246/Assets/1691626245707-Frame%2071.png.png',
+              headers: {Authorization: 'someAuthToken'},
+              priority: FastImage.priority.normal,
+            }}
+            resizeMode={FastImage.resizeMode.cover}
+          />
+        </View>
+      </Modal>
     </View>
   );
 };

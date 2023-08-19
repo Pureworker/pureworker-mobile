@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   View,
   Text,
@@ -8,65 +8,87 @@ import {
   FlatList,
   ActivityIndicator,
   StatusBar,
-  ScrollView
+  ScrollView,
+  Platform,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
 import images from '../../constants/images';
 import TextInputs from '../../components/TextInput2';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 
-import { SIZES, perHeight, perWidth } from '../../utils/position/sizes';
+import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 
 import colors from '../../constants/colors';
 import ServiceCard from '../../components/cards/serviceCard';
 import ClosetoYou from '../../components/cards/closeToYou';
 import CategoryList2 from '../../components/CategoryList2';
 import commonStyle from '../../constants/commonStyle';
-import { useGetAllServiceProviderPotfolioQuery, useGetAllServiceProviderProfileQuery, useGetCategoryQuery, useGetUserDetailQuery } from '../../store/slice/api';
+import {
+  useGetAllServiceProviderPotfolioQuery,
+  useGetAllServiceProviderProfileQuery,
+  useGetCategoryQuery,
+  useGetUserDetailQuery,
+} from '../../store/slice/api';
 
 import Modal from 'react-native-modal';
-import { StackNavigation } from '../../constants/navigation';
-import { useNavigation } from '@react-navigation/native';
+import {StackNavigation} from '../../constants/navigation';
+import {useNavigation} from '@react-navigation/native';
 const Home = () => {
-
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
-  const { data: getServiceProviderProfileData, isLoading: isLoadingServiceProviderProfile } = useGetAllServiceProviderProfileQuery();
+  const {
+    data: getServiceProviderProfileData,
+    isLoading: isLoadingServiceProviderProfile,
+  } = useGetAllServiceProviderProfileQuery();
   const getServiceProviderProfile = getServiceProviderProfileData ?? [];
-  const { data: getServiceProviderPotfolioData, isLoading: isLoadingServiceProviderPotfolio } = useGetAllServiceProviderPotfolioQuery();
+  const {
+    data: getServiceProviderPotfolioData,
+    isLoading: isLoadingServiceProviderPotfolio,
+  } = useGetAllServiceProviderPotfolioQuery();
   const getServiceProviderPotfolio = getServiceProviderPotfolioData ?? [];
-  const { data: getUserData, isLoading: isLoadingUser } = useGetUserDetailQuery();
+  const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
   const getUser = getUserData ?? [];
-  const { data: getCategoryData, isLoading, isError } = useGetCategoryQuery();
+  const {data: getCategoryData, isLoading, isError} = useGetCategoryQuery();
   const getCategory = getCategoryData ?? [];
 
   const [InfoModal, setInfoModal] = useState(false);
 
   const filterBySearchProduct = useMemo(() => {
     var searchArray = [];
-    if (Array.isArray(getServiceProviderProfile) && getServiceProviderProfile.length) {
+    if (
+      Array.isArray(getServiceProviderProfile) &&
+      getServiceProviderProfile.length
+    ) {
       searchArray = getServiceProviderProfile.filter(txt => {
-        const text = txt?.fullNameFirst ? txt?.fullNameFirst.toUpperCase() : ''.toUpperCase();
+        const text = txt?.fullNameFirst
+          ? txt?.fullNameFirst.toUpperCase()
+          : ''.toUpperCase();
         const textSearch = search.toUpperCase();
         return text.indexOf(textSearch) > -1;
       });
     }
 
     if (searchArray.length) {
-      return searchArray
+      return searchArray;
     } else {
-      return []
+      return [];
     }
   }, [search, getServiceProviderProfile]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#EBEBEB' }}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
-      <View style={[{ flex: 1, backgroundColor: '#EBEBEB' }]}>
-
+      <View
+        style={[
+          {
+            flex: 1,
+            backgroundColor: '#EBEBEB',
+            paddingTop: Platform.OS === 'ios' ? 10 : 20,
+          },
+        ]}>
         <ScrollView>
           <View
             style={[
@@ -81,12 +103,12 @@ const Home = () => {
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
               <Image
                 source={images.profile}
-                style={{ height: 40, width: 40 }}
+                style={{height: 40, width: 40}}
                 resizeMode="contain"
               />
             </TouchableOpacity>
             <TextInputs
-              style={{ marginTop: 0, width: '70%' }}
+              style={{marginTop: 0, width: '70%'}}
               labelText={'Search'}
               state={search}
               setState={setSearch}
@@ -117,7 +139,7 @@ const Home = () => {
               }}>
               <Image
                 source={images.question}
-                style={{ height: 20, width: 20 }}
+                style={{height: 20, width: 20}}
                 resizeMode="contain"
               />
             </TouchableOpacity>
@@ -126,7 +148,7 @@ const Home = () => {
           <View
             style={[
               tw``,
-              { marginLeft: perWidth(18), marginTop: perHeight(28) },
+              {marginLeft: perWidth(18), marginTop: perHeight(28)},
             ]}>
             <Textcomp
               text={`Welcome ${getUser.firstName},`}
@@ -140,8 +162,7 @@ const Home = () => {
           <View
             style={[
               tw`flex flex-row items-center justify-between`,
-              { marginLeft: perWidth(18), marginTop: perHeight(22) },
-
+              {marginLeft: perWidth(18), marginTop: perHeight(22)},
             ]}>
             <View style={[tw``]}>
               <Textcomp
@@ -205,13 +226,19 @@ const Home = () => {
             </View>
           </View> */}
 
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <FlatList
               data={getServiceProviderPotfolio}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               renderItem={(item: any) => {
-                return <ServiceCard navigation={navigation} item={item.item} index={item.index} />;
+                return (
+                  <ServiceCard
+                    navigation={navigation}
+                    item={item.item}
+                    index={item.index}
+                  />
+                );
               }}
               keyExtractor={item => item.id}
             />
@@ -221,7 +248,7 @@ const Home = () => {
           <View
             style={[
               tw`flex flex-row items-center justify-between`,
-              { marginLeft: perWidth(24), marginTop: perHeight(52) },
+              {marginLeft: perWidth(24), marginTop: perHeight(52)},
             ]}>
             <View style={[tw``]}>
               <Textcomp
@@ -248,13 +275,19 @@ const Home = () => {
             </TouchableOpacity>
           </View>
 
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <FlatList
               data={filterBySearchProduct}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               renderItem={(item: any) => {
-                return <ClosetoYou navigation={navigation} item={item.item} index={item.index} />;
+                return (
+                  <ClosetoYou
+                    navigation={navigation}
+                    item={item.item}
+                    index={item.index}
+                  />
+                );
               }}
               keyExtractor={item => item.id}
             />
@@ -265,7 +298,7 @@ const Home = () => {
             <View
               style={[
                 tw`flex flex-row items-center justify-between`,
-                { marginLeft: perWidth(24), marginTop: perHeight(52) },
+                {marginLeft: perWidth(24), marginTop: perHeight(52)},
               ]}>
               <View style={[tw``]}>
                 <Textcomp
@@ -285,7 +318,7 @@ const Home = () => {
                 contentContainerStyle={tw`w-[92%] mx-auto`}
                 horizontal>
                 <FlatList
-                  style={{ flex: 1 }}
+                  style={{flex: 1}}
                   data={getCategory}
                   scrollEnabled={false}
                   ListFooterComponent={() => {
@@ -307,7 +340,7 @@ const Home = () => {
                     );
                   }}
                   showsVerticalScrollIndicator={false}
-                  renderItem={({ item, index }) => (
+                  renderItem={({item, index}) => (
                     <CategoryList2 categoryName={item.name} catId={item?.id} />
                   )}
                   ListEmptyComponent={() => (
@@ -335,7 +368,7 @@ const Home = () => {
         onModalHide={() => {
           setInfoModal(false);
         }}
-        style={{ width: SIZES.width, marginHorizontal: 0 }}
+        style={{width: SIZES.width, marginHorizontal: 0}}
         deviceWidth={SIZES.width}>
         <View style={tw` h-full w-full bg-black bg-opacity-5`}>
           <TouchableOpacity

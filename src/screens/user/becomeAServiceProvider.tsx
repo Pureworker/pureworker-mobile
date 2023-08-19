@@ -79,9 +79,9 @@ const BecomeAServiceProvider = () => {
             ]}>
             <Textcomp
               text={'Register as a Service Provider'}
-              size={14}
+              size={16}
               color={'#88087B'}
-              style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '500'}]}
+              style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '700'}]}
             />
           </TouchableOpacity>
 

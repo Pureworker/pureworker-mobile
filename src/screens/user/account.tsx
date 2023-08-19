@@ -18,10 +18,15 @@ import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {perHeight, perWidth} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
+import { useGetUserDetailQuery } from '../../store/slice/api';
 
 const Account = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
+  const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
+  const getUser = getUserData ?? [];
+
+  // console.log(getUser);
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
@@ -84,7 +89,7 @@ const Account = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={tw`flex-1`}>
           <View
             style={[
@@ -94,7 +99,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                  text={'Peter'}
+                  text={`${getUser?.firstName}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}
@@ -120,7 +125,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                  text={'Peter'}
+                  text={`${getUser?.lastName}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}
@@ -129,7 +134,7 @@ const Account = () => {
               </View>
               <View style={tw`mt-2`}>
                 <Textcomp
-                  text={'First name'}
+                  text={'Last name'}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF80'}
@@ -146,7 +151,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                  text={'Peter'}
+                   text={`${getUser?.email}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}
@@ -172,7 +177,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                  text={'Peter'}
+                  text={`${getUser?.phoneNumber}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}
@@ -198,7 +203,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                  text={'Peter'}
+                  text={`${getUser?.address}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}
@@ -224,7 +229,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                  text={'Peter'}
+                  text={`${getUser?.nationality}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}
@@ -250,7 +255,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                  text={'Peter'}
+                  text={`${getUser?.dob}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}
@@ -276,7 +281,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                  text={'Peter'}
+                 text={`${getUser?.gender}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}

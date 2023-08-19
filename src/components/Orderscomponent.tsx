@@ -344,6 +344,10 @@ const Orderscomponent2 = ({item, index, status, navigation}: any) => {
               </View>
 
               <TouchableOpacity
+                onPress={() => {
+                  setInfoModal(false);
+                  setmodalSection('All');
+                }}
                 style={[
                   {
                     width: perWidth(316),

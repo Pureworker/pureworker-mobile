@@ -1,4 +1,4 @@
-import { Image, View } from 'react-native';
+import { Image, TouchableOpacity, View } from 'react-native';
 import { perHeight, perWidth } from '../../utils/position/sizes';
 import React from 'react';
 import images from '../../constants/images';
@@ -8,12 +8,13 @@ import StarRating from 'react-native-star-rating-widget';
 import colors from '../../constants/colors';
 import Review from '../Review';
 
-const ClosetoYou = ({ item, index }: any) => {
+const ClosetoYou = ({ item, index, navigation }: any) => {
 
   const price = JSON.parse(item?.price);
   return (
 
-    <View
+    <TouchableOpacity 
+      onPress={() => navigation.navigate('ServiceProviderProfile', item)}
       style={[
         tw` mt-4 border-[#FFC727] justify-between bg-[${colors.darkPurple}]`,
         {
@@ -134,7 +135,7 @@ const ClosetoYou = ({ item, index }: any) => {
         />
       </View>
     </View> */}
-    </View>
+    </TouchableOpacity>
   )
 }
 

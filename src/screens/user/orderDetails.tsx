@@ -27,8 +27,8 @@ const OrderDetails = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [locationItems, setLocationItems] = useState([
-    {label: 'Online', value: 'Online'},
-    {label: 'Offline', value: 'Offline'},
+    {label: 'Online(Job will be done virtually)', value: 'Online'},
+    {label: 'Offline(Job will be done at your location)', value: 'Offline'},
     {label: 'Both', value: 'Both'},
   ]);
   const [locationOpen, setLocationOpen] = useState(false);
@@ -36,41 +36,40 @@ const OrderDetails = () => {
   const [description, setDescription] = useState('');
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
-      <ScrollView>
-        <View
-          style={{
-            marginTop:
-              Platform.OS === 'ios'
-                ? getStatusBarHeight(true)
-                : StatusBar.currentHeight &&
-                  StatusBar.currentHeight + getStatusBarHeight(true),
-          }}
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginHorizontal: 20,
-          }}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              source={images.back}
-              style={{height: 25, width: 25}}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-          <View style={tw`mx-auto`}>
-            <Textcomp
-              text={'Order Details'}
-              size={17}
-              lineHeight={17}
-              color={'#000413'}
-              fontFamily={'Inter-SemiBold'}
-            />
-          </View>
+      <View
+        style={{
+          marginTop:
+            Platform.OS === 'ios'
+              ? getStatusBarHeight(true)
+              : StatusBar.currentHeight &&
+                StatusBar.currentHeight + getStatusBarHeight(true),
+        }}
+      />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginHorizontal: 20,
+        }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            source={images.back}
+            style={{height: 25, width: 25}}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
+        <View style={tw`mx-auto`}>
+          <Textcomp
+            text={'Order Details'}
+            size={17}
+            lineHeight={17}
+            color={'#000413'}
+            fontFamily={'Inter-SemiBold'}
+          />
         </View>
-
+      </View>
+      <ScrollView>
         <View style={tw``}>
           <View
             style={[
@@ -259,7 +258,7 @@ const OrderDetails = () => {
               // marginTop: 15,
               minHeight: 250,
               marginHorizontal: perWidth(25),
-              width: perWidth(301),
+              width: perWidth(321),
             }}>
             <Text
               style={{
@@ -330,10 +329,9 @@ const OrderDetails = () => {
             />
           </View>
 
-
           <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={() => {navigation.goBack()}}
               style={[
                 tw`bg-[${colors.darkPurple}] items-center justify-center`,
                 {
@@ -352,7 +350,9 @@ const OrderDetails = () => {
               />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => {navigation.navigate('OrderReview')}}
+              onPress={() => {
+                navigation.navigate('OrderReview');
+              }}
               style={[
                 tw`bg-[${colors.primary}] items-center justify-center`,
                 {
@@ -373,9 +373,9 @@ const OrderDetails = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={tw`h-10`}/>
+        <View style={tw`h-10`} />
       </ScrollView>
-      <View style={tw`h-1 w-full mb-5 bg-black`}/>
+      <View style={tw`h-1 w-full mb-5 bg-black`} />
     </View>
   );
 };

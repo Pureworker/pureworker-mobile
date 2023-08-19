@@ -21,28 +21,35 @@ import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
 import commonStyle from '../../constants/commonStyle';
 import DropDownPicker from 'react-native-dropdown-picker';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {useGetUserDetailQuery} from '../../store/slice/api';
 
 const EditAccount = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
 
+  const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
+  const getUser = getUserData ?? [];
+
   const [locationItems, setLocationItems] = useState([
-    {label: 'Online', value: 'Online'},
-    {label: 'Offline', value: 'Offline'},
-    {label: 'Both', value: 'Both'},
+    {label: 'Male', value: 'Male'},
+    {label: 'Female', value: 'Female'},
+    {label: 'Others', value: 'Others'},
   ]);
   const [locationOpen, setLocationOpen] = useState(false);
-  const [locationValue, setLocationValue] = useState(null);
+  const [locationValue, setLocationValue] = useState(getUser?.gender || null);
   const [description, setDescription] = useState('');
 
-  const [firstName, setfirstName] = useState('');
-  const [lastName, setlastName] = useState('');
-  const [email, setemail] = useState('');
-  const [phoneNumber, setphoneNumber] = useState('');
-  const [address, setaddress] = useState('');
-  const [nationality, setnationality] = useState('');
-  const [dob, setdob] = useState('');
-  const [gender, setgender] = useState('');
+  const [firstName, setfirstName] = useState(getUser?.firstName || '');
+  const [lastName, setlastName] = useState(getUser?.lastName || '');
+  const [email, setemail] = useState(getUser?.email || '');
+  const [phoneNumber, setphoneNumber] = useState(getUser?.phoneNumber || '');
+  const [address, setaddress] = useState(getUser?.address || '');
+  const [nationality, setnationality] = useState(getUser?.nationality || '');
+  const [dob, setdob] = useState(getUser?.dob || '');
+  const [gender, setgender] = useState(getUser?.gender || '');
+  console.log(locationValue);
+  
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView>
@@ -122,29 +129,7 @@ const EditAccount = () => {
                 onChangeText={text => {
                   setfirstName(text);
                 }}
-              />
-            </View>
-          </View>
-          <View
-            style={[
-              tw`bg-[${colors.darkPurple}] mt-4 pl-5 justify-center`,
-              {height: perHeight(60)},
-            ]}>
-            <View>
-              <View style={tw``}>
-                <Textcomp
-                  text={'First name'}
-                  size={14}
-                  lineHeight={15}
-                  color={'#FFFFFF80'}
-                  fontFamily={'Inter-SemiBold'}
-                />
-              </View>
-              <TextInput
-                style={[tw` text-white py-3 w-9/10`, {fontSize: 16}]}
-                onChangeText={text => {
-                  setfirstName(text);
-                }}
+                value={firstName}
               />
             </View>
           </View>
@@ -168,6 +153,7 @@ const EditAccount = () => {
                 onChangeText={text => {
                   setlastName(text);
                 }}
+                value={lastName}
               />
             </View>
           </View>
@@ -191,6 +177,7 @@ const EditAccount = () => {
                 onChangeText={text => {
                   setemail(text);
                 }}
+                value={email}
               />
             </View>
           </View>
@@ -214,6 +201,7 @@ const EditAccount = () => {
                 onChangeText={text => {
                   setphoneNumber(text);
                 }}
+                value={phoneNumber}
               />
             </View>
           </View>
@@ -237,6 +225,7 @@ const EditAccount = () => {
                 onChangeText={text => {
                   setaddress(text);
                 }}
+                value={address}
               />
             </View>
           </View>
@@ -260,6 +249,7 @@ const EditAccount = () => {
                 onChangeText={text => {
                   setnationality(text);
                 }}
+                value={nationality}
               />
             </View>
           </View>
@@ -283,13 +273,14 @@ const EditAccount = () => {
                 onChangeText={text => {
                   setdob(text);
                 }}
+                value={dob}
               />
             </View>
           </View>
           <View
             style={[
-              tw`bg-[${colors.darkPurple}] mt-4 pl-5 justify-center`,
-              {height: perHeight(60)},
+              tw`bg-[${colors.darkPurple}]  mt-4 pl-5 justify-center`,
+              {height: perHeight(100)},
             ]}>
             {/* <View>
               <View style={tw``}>
@@ -308,85 +299,88 @@ const EditAccount = () => {
                 }}
               />
             </View> */}
-          </View>
-          <View
-            style={{
-              zIndex: 1,
-              minHeight: 250,
-              marginHorizontal: perWidth(5),
-              width: SIZES.width * 0.95,
-              backgroundColor: colors.darkPurple,
-            }}>
-            <Text
+
+            <View
               style={{
-                fontSize: 16,
-                fontFamily: commonStyle.fontFamily.bold,
-                color: '#000000',
-                marginTop: 15,
-                marginBottom: 15,
+                zIndex: 1,
+                minHeight: 50,
+                marginHorizontal: perWidth(5),
+                width: SIZES.width * 0.95,
+                // backgroundColor: colors.darkPurple,
               }}>
-              Gender
-            </Text>
-            <DropDownPicker
-              open={locationOpen}
-              value={locationValue}
-              items={locationItems}
-              setOpen={setLocationOpen}
-              setValue={setLocationValue}
-              setItems={setLocationItems}
-              showArrowIcon={true}
-              ArrowDownIconComponent={({style}) => (
-                <Image
-                  resizeMode="contain"
-                  style={{width: 15, height: 15, tintColor: '#010B2D'}}
-                  source={!locationOpen && images.polygonForward}
-                />
-              )}
-              ArrowUpIconComponent={({style}) => (
-                <Image
-                  resizeMode="contain"
-                  style={{width: 15, height: 15, tintColor: '#010B2D'}}
-                  source={locationOpen && images.polygonDown}
-                />
-              )}
-              zIndex={10}
-              dropDownContainerStyle={{
-                borderWidth: 0,
-              }}
-              labelStyle={{
-                fontFamily: commonStyle.fontFamily.regular,
-                fontSize: 14,
-                color: '#000',
-              }}
-              placeholderStyle={{
-                fontFamily: commonStyle.fontFamily.regular,
-                fontSize: 14,
-                color: '#9E9E9E',
-              }}
-              style={{
-                backgroundColor: '#D9D9D9',
-                borderColor: '#9E9E9E14',
-              }}
-              listMode="FLATLIST"
-              showTickIcon={false}
-              textStyle={{
-                color: '#9E9E9E',
-              }}
-              listParentLabelStyle={{
-                color: '#000',
-                fontSize: 16,
-                fontFamily: commonStyle.fontFamily.regular,
-              }}
-              listItemContainerStyle={{
-                backgroundColor: 'D9D9D9',
-                borderColor: 'red',
-                opacity: 1,
-                borderWidth: 0,
-              }}
-            />
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: commonStyle.fontFamily.bold,
+                  color: '#FFFFFF80',
+                  marginTop: 15,
+                  marginBottom: 15,
+                }}>
+                Gender
+              </Text>
+              <DropDownPicker
+                open={locationOpen}
+                value={locationValue}
+                items={locationItems}
+                setOpen={setLocationOpen}
+                setValue={setLocationValue}
+                setItems={setLocationItems}
+                showArrowIcon={true}
+                ArrowDownIconComponent={({style}) => (
+                  <Image
+                    resizeMode="contain"
+                    style={{width: 15, height: 15, tintColor: '#010B2D'}}
+                    source={!locationOpen && images.polygonForward}
+                  />
+                )}
+                ArrowUpIconComponent={({style}) => (
+                  <Image
+                    resizeMode="contain"
+                    style={{width: 15, height: 15, tintColor: '#010B2D'}}
+                    source={locationOpen && images.polygonDown}
+                  />
+                )}
+                zIndex={10}
+                placeholder="Select Gender"
+                dropDownContainerStyle={{
+                  borderWidth: 0,
+                }}
+                labelStyle={{
+                  fontFamily: commonStyle.fontFamily.regular,
+                  fontSize: 14,
+                  color: '#000',
+                }}
+                placeholderStyle={{
+                  fontFamily: commonStyle.fontFamily.regular,
+                  fontSize: 14,
+                  color: '#9E9E9E',
+                }}
+                style={{
+                  backgroundColor: '#D9D9D9',
+                  borderColor: '#9E9E9E14',
+                  width: 250,
+                }}
+                listMode="FLATLIST"
+                showTickIcon={false}
+                textStyle={{
+                  color: '#9E9E9E',
+                }}
+                listParentLabelStyle={{
+                  color: '#000',
+                  fontSize: 16,
+                  fontFamily: commonStyle.fontFamily.regular,
+                }}
+                listItemContainerStyle={{
+                  backgroundColor: 'D9D9D9',
+                  borderColor: 'red',
+                  opacity: 1,
+                  borderWidth: 0,
+                }}
+              />
+            </View>
           </View>
         </View>
-        <View style={tw`h-20`} />
+        <View style={tw`h-60`} />
       </ScrollView>
       <View style={tw`h-0.5 w-full bg-black absolute  bottom-[3%]`} />
     </View>

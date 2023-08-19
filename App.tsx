@@ -25,7 +25,7 @@ export default () => {
   // async function onAuthStateChanged(user) {
   //   setUser(user);
   //   console.log('fofof', user);
-  // }
+  // }295860
 
   // useEffect(() => {
   //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);

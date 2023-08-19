@@ -1,7 +1,6 @@
 import React, {useRef, useState} from 'react';
-import {StyleSheet, Text, View, Image, Dimensions} from 'react-native';
+import {StyleSheet, Text, View, Image, Dimensions, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {ScrollView} from 'react-native-gesture-handler';
 import images from '../constants/images';
 import Button from '../components/Button';
 import MyStatusBar from '../components/MyStatusBar';

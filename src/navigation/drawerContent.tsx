@@ -8,6 +8,8 @@ import images from '../constants/images';
 import Textcomp from '../components/Textcomp';
 import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../store/reducer/mainSlice';
+import {useGetUserDetailQuery} from '../store/slice/api';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const DrawerContent = ({navigation}) => {
   const navLinks = [
@@ -37,6 +39,23 @@ const DrawerContent = ({navigation}) => {
   const userType = useSelector((state: any) => state.user.isLoggedIn);
   // console.log('user_', userType);
   // if (!userType.userType === 'CUSTOMER') {
+  //
+  const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
+  const getUser = getUserData ?? [];
+
+  const [PhotoUri, setPhotoUri] = useState('');
+  const options = {mediaType: 'photo', selectionLimit: 1};
+  const openLibraryfordp = () => {
+    console.log('called logo');
+    launchImageLibrary(options, async (resp: unknown) => {
+      if (resp?.assets?.length > 0) {
+        // console.log('resp', resp?.assets);
+        console.log('resp', resp?.assets[0]);
+        setPhotoUri(resp?.assets[0].uri);
+      }
+    });
+  };
+
   return (
     <DrawerContentScrollView
       contentContainerStyle={{
@@ -51,21 +70,31 @@ const DrawerContent = ({navigation}) => {
             tw`bg-[#2D303C] flex flex-row px-2 w-[90%] mx-auto rounded-lg items-center`,
             {marginTop: perHeight(10), height: perHeight(88)},
           ]}>
-          <Image
-            resizeMode="contain"
-            style={{width: 50, height: 50}}
-            source={images.profile}
-          />
+          <TouchableOpacity
+            style={[tw`bg-red-300 rounded-full`, {width: 50, height: 50}]}
+            onPress={() => {
+              openLibraryfordp();
+            }}>
+            <Image
+              resizeMode="cover"
+              style={{width: 50, height: 50, borderRadius: 25}}
+              source={PhotoUri.length > 5 ? {uri: PhotoUri} : images.profile}
+            />
+          </TouchableOpacity>
           <View style={tw``}>
             <View style={tw``}>
               <Textcomp
-                text={'Peter'}
+                text={`${getUser?.firstName}`}
                 size={14}
                 color={'#ffffff'}
                 style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '500'}]}
               />
             </View>
-            <View style={tw`mt-3 flex flex-row`}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Rating');
+              }}
+              style={tw`mt-3 flex flex-row`}>
               <View style={tw``}>
                 <Textcomp
                   text={'4.8 '}
@@ -89,7 +118,7 @@ const DrawerContent = ({navigation}) => {
                   style={[tw`ml-1`, {lineHeight: 14}, {fontWeight: '500'}]}
                 />
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -160,7 +189,9 @@ const DrawerContent = ({navigation}) => {
 
         {userType.userType === 'CUSTOMER' && (
           <TouchableOpacity
-            onPress={() => {navigation.navigate('BecomeAServiceProvider')}}
+            onPress={() => {
+              navigation.navigate('BecomeAServiceProvider');
+            }}
             style={[
               tw`bg-[#2D303C] px-2 py-4 w-[90%] mx-auto `,
               {marginTop: perHeight(40), borderRadius: 5},

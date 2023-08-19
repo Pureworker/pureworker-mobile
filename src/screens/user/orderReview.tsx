@@ -19,8 +19,9 @@ import {perHeight, perWidth} from '../../utils/position/sizes';
 import {color} from 'react-native-reanimated';
 import colors from '../../constants/colors';
 
-const OrderReview = () => {
+const OrderReview = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
+
   const dispatch = useDispatch();
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -159,7 +160,11 @@ const OrderReview = () => {
               </View>
 
               <View style={tw`items-center pr-3`}>
-                <Image style={{width: 15, height: 15}} source={images.search} />
+                <Image
+                  resizeMode="contain"
+                  style={[tw``, {width: 15, height: 15}]}
+                  source={images.arrow_up}
+                />
 
                 <View style={tw`mt-1.5`}>
                   <Textcomp
@@ -174,7 +179,7 @@ const OrderReview = () => {
             </View>
           </View>
 
-          <View style={tw`border-b pb-3 border-[#0004132E] mx-[2%] `}>
+          <View style={tw`border-b pb-6 border-[#0004132E] mx-[2%] `}>
             <View
               style={[
                 tw`flex flex-row justify-between `,
@@ -226,8 +231,9 @@ const OrderReview = () => {
               </View>
               <View style={tw`items-end pr-3`}>
                 <Image
+                  resizeMode="contain"
                   style={[tw`mr-3`, {width: 15, height: 15}]}
-                  source={images.search}
+                  source={images.arrow_up}
                 />
 
                 <View style={tw`mt-2`}>
@@ -248,15 +254,15 @@ const OrderReview = () => {
                     fontFamily={'Inter-SemiBold'}
                   />
                 </View>
-                <View style={tw`mt-2`}>
+                <TouchableOpacity onPress={() => {}} style={tw`mt-2`}>
                   <Textcomp
                     text={'Enter a Code'}
-                    size={14}
+                    size={13}
                     lineHeight={15}
-                    color={'#000413'}
-                    fontFamily={'Inter-SemiBold'}
+                    color={'#88087B'}
+                    fontFamily={'Inter-Regular'}
                   />
-                </View>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -284,7 +290,8 @@ const OrderReview = () => {
           <View style={tw`mt-auto mb-[8%]`}>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('PaymentConfirmed');
+                // navigation.navigate('PaymentConfirmed');
+                navigation.navigate('PaymentMethod2', {amount: 4000});
               }}
               style={[
                 tw`bg-[${colors.darkPurple}] items-center rounded-lg justify-center mx-auto py-3`,

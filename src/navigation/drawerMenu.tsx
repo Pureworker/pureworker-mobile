@@ -13,9 +13,16 @@ import Wallet from '../screens/user/Wallet';
 import Orders from '../screens/user/Orders';
 import Support from '../screens/user/support';
 import Account from '../screens/user/account';
-import PrivacyPolicy from '../screens/user/privacy-policy';
-import DeactivateAccount from '../screens/user/deactivateAccount';
+// import PrivacyPolicy from '../screens/user/privacy-policy';
+// import DeactivateAccount from '../screens/user/deactivateAccount';
 import FAQ from '../screens/FAQ';
+import DeactivateAccount from '../screens/common/deactivateAccount';
+import {Rating} from 'react-native-ratings';
+import Ratings from '../screens/common/ratings';
+import PrivacyPolicy from '../screens/common/privacyPolicy';
+import Index from '../screens/user/notification';
+import Chat from '../screens/user/chat/index'
+import TabServices from '../screens/user/tab_services';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -62,7 +69,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Services"
-        component={HomeScreen}
+        component={TabServices}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
@@ -72,7 +79,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Chats"
-        component={HomeScreen}
+        component={Chat}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
@@ -82,7 +89,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Notifications"
-        component={HomeScreen}
+        component={Index}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
@@ -133,6 +140,11 @@ const DrawerMenu = () => {
         <Drawer.Screen
           name="DeactivateAccount"
           component={DeactivateAccount}
+          options={{headerShown: false}}
+        />
+        <Drawer.Screen
+          name="Rating"
+          component={Ratings}
           options={{headerShown: false}}
         />
         {/* Add other drawer screens as needed */}

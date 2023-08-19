@@ -1,7 +1,6 @@
 // import React, { useState } from 'react';
 // import { View, TouchableOpacity, Text, StyleSheet, ActivityIndicator } from 'react-native';
 
-// import { ScrollView } from 'react-native-gesture-handler';
 // import { useNavigation } from '@react-navigation/native';
 // import { useDispatch } from 'react-redux';
 

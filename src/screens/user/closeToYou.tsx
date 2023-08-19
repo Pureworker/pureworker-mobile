@@ -149,14 +149,14 @@ const CloseToYou = () => {
             ]}>
             <TouchableOpacity onPress={() => setsearchModal(false)}>
               <Image
-                source={images.search}
+                source={images.cross}
                 style={{height: 20, width: 20}}
                 resizeMode="contain"
               />
             </TouchableOpacity>
             <TextInputs
               style={{marginTop: 10, width: '70%'}}
-              labelText={'Search for service provider'}
+              labelText={'Search for close to you'}
               state={searchInput}
               setState={setsearchInput}
             />
@@ -182,7 +182,7 @@ const CloseToYou = () => {
           <View style={tw`flex flex-row`}>
             <TouchableOpacity
               onPress={() => {
-                setActiveSection('All');
+                setActiveSection('All'); 
               }}
               style={tw`w-1/2 border-b-2  items-center ${
                 activeSection === 'All'

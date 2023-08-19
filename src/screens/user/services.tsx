@@ -8,6 +8,7 @@ import {
   Platform,
   StatusBar,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
@@ -217,11 +218,14 @@ const Services = () => {
                 </TouchableOpacity>
               );
             })}
-            <View style={[tw` mt-2 bg-[${colors.darkPurple}]`, {height: 3}]} />
           </View>
         </View>
         <View style={tw`h-20`} />
       </ScrollView>
+
+      <SafeAreaView>
+        <View style={[tw` mt-auto bg-[${colors.darkPurple}]`, {height: 3}]} />
+      </SafeAreaView>
     </View>
   );
 };

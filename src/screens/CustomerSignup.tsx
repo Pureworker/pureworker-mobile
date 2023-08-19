@@ -7,10 +7,10 @@ import {
   Dimensions,
   TouchableOpacity,
   StatusBar,
-  ActivityIndicator
+  ActivityIndicator,
+  ScrollView
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { ScrollView } from 'react-native-gesture-handler';
 import images from '../constants/images';
 
 import commonStyle from '../constants/commonStyle';

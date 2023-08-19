@@ -8,6 +8,7 @@ import Textcomp from '../Textcomp';
 import colors from '../../constants/colors';
 
 import {Rating, AirbnbRating} from 'react-native-ratings';
+import Review from '../Review';
 
 const ServiceCard2 = ({item, index, navigation}: any) => {
   const [saved, setsaved] = useState(false);
@@ -141,7 +142,7 @@ const ServiceCard2 = ({item, index, navigation}: any) => {
             tw`ml-auto  items-end`,
             {width: perWidth(80), marginTop: perWidth(1)},
           ]}>
-          <Rating
+          {/* <Rating
             type="custom"
             ratingImage={images.star2}
             ratingColor="white"
@@ -153,7 +154,8 @@ const ServiceCard2 = ({item, index, navigation}: any) => {
             showRating={false}
             readonly={true}
             startingValue={2}
-          />
+          /> */}
+          <Review value={4} editable={false}/>
         </View>
       </View>
     </TouchableOpacity>

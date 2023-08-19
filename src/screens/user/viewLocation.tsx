@@ -18,7 +18,7 @@ import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
-import { SIZES } from '../../utils/position/sizes';
+import {SIZES} from '../../utils/position/sizes';
 
 const ViewLocation = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -66,7 +66,7 @@ const ViewLocation = () => {
             alignItems: 'center',
             justifyContent: 'space-between',
             marginHorizontal: 20,
-            paddingVertical:  10,
+            paddingVertical: 10,
           }}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image
@@ -136,7 +136,24 @@ const ViewLocation = () => {
                       }}
                     />
                   </Marker>
-
+                  <Marker
+                    coordinate={{
+                      latitude: latitude - 0.059,
+                      longitude: longitude - 0.059,
+                    }}
+                    title="Service Provider"
+                    description="Service Provider"
+                    identifier="Service Provider"
+                    pinColor="red">
+                    <Image
+                      resizeMode="contain"
+                      source={images.location}
+                      style={{
+                        width: 40,
+                        height: 40,
+                      }}
+                    />
+                  </Marker>
                 </MapView>
               </>
             )}
