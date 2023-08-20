@@ -32,19 +32,19 @@ const ServiceProviderProfile = () => {
 
   const [saved, setsaved] = useState(false);
   const route: any = useRoute()
-
-  const { data: getSingleProviderServiceData, isLoading: isLoadingUser } = useGetSingleProviderServiceQuery(route.params?.service?.serviceId);
+  const { data: getSingleProviderServiceData, isLoading: isLoadingUser } = useGetSingleProviderServiceQuery(route.params?.id);
   const getSingleProviderService = getSingleProviderServiceData ?? [];
 
-  const { data: getSingleProviderAllServiceData } = useGetSingleProviderAllServiceQuery(route.params?.service?.serviceId)
+  const { data: getSingleProviderAllServiceData } = useGetSingleProviderAllServiceQuery(route.params?.id)
   const getSingleProviderAllService = getSingleProviderAllServiceData ?? [];
-  // const price = getSingleProviderService?.price ? JSON.parse(JSON.parse(JSON.parse(JSON.stringify(getSingleProviderService?.price)))) : ''
+  const price = JSON.parse(getSingleProviderService?.price) 
+  const serviceDetail = JSON.parse(getSingleProviderService?.serviceDetail) 
  
   const firstPotfolio = getSingleProviderService?.ServicePotfolio?.length ? JSON.parse(getSingleProviderService?.ServicePotfolio[0]?.potfolioImages) : []
   const secondPotfolio = getSingleProviderService?.ServicePotfolio?.length > 1 ? JSON.parse(getSingleProviderService?.ServicePotfolio[1]?.potfolioImages) : []
   // const thirdPotfolio = getSingleProviderService?.ServicePotfolio?.length > 2 ? JSON.parse(getSingleProviderService?.ServicePotfolio[2]?.potfolioImages) : []
+
   
-  // console.log('dsds', price);
   
   return (
     <View style={[{ flex: 1, backgroundColor: '#EBEBEB' }]}>
@@ -304,7 +304,7 @@ const ServiceProviderProfile = () => {
                   </View>
                   <View style={[tw` `, { marginTop: perHeight(5) }]}>
                     <Textcomp
-                      text={'4'}
+                      text={price[0]?.priceMax}
                       size={12}
                       lineHeight={15}
                       color={'#FFFFFF'}
@@ -398,18 +398,18 @@ const ServiceProviderProfile = () => {
                   <View style={tw`w-full`}>
                     <FlatList
                       scrollEnabled={false}
-                      data={getSingleProviderAllService}
+                      data={serviceDetail}
                       renderItem={({item, index}) => {
                         
                         return (
                           <View
                             key={index}
                             style={[
-                              tw`bg-white rounded-lg w-[30%] mr-2 py-1 items-center`,
+                              tw`bg-white rounded-lg w-auto p-3 mr-2 py-1 items-center`,
                               { marginTop: perHeight(5) },
                             ]}>
                             <Textcomp
-                              text={item?.description}
+                              text={item?.serviceName}
                               size={9}
                               lineHeight={12}
                               color={'#000000'}
@@ -441,7 +441,7 @@ const ServiceProviderProfile = () => {
                     />
                   </View>
 
-                  {firstPotfolio?.length && <View style={tw`w-full mt-3`}>
+                  {firstPotfolio?.length ? <View style={tw`w-full mt-3`}>
                     <View style={tw` `}>
                       <Textcomp
                         text={'Project1'}
@@ -479,8 +479,8 @@ const ServiceProviderProfile = () => {
                       numColumns={3}
                       contentContainerStyle={{ marginTop: 10 }}
                     />
-                  </View>}
-                  {secondPotfolio?.length && <View style={tw`w-full mt-3`}>
+                  </View> : null}
+                  {secondPotfolio?.length ? <View style={tw`w-full mt-3`}>
                     <View style={tw` `}>
                       <Textcomp
                         text={'Project2'}
@@ -518,7 +518,7 @@ const ServiceProviderProfile = () => {
                       numColumns={3}
                       contentContainerStyle={{ marginTop: 10 }}
                     />
-                  </View>}
+                  </View> : null}
                 </View>
               </View> : null}
 

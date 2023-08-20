@@ -52,9 +52,10 @@ const CloseToYou = () => {
       getServiceProviderProfile.length
     ) {
       searchArray = getServiceProviderProfile.filter(txt => {
+        
         const text = txt?.fullNameFirst
-          ? txt?.fullNameFirst.toUpperCase()
-          : ''.toUpperCase();
+        ? txt?.fullNameFirst.concat(txt?.fullNameSecond).toUpperCase()
+        : ''.toUpperCase();
         const textSearch = searchInput.toUpperCase();
         return text.indexOf(textSearch) > -1;
       });
@@ -75,7 +76,7 @@ const CloseToYou = () => {
     ) {
       searchArray = getServiceProviderFavorite.filter(txt => {
         const text = txt?.fullNameFirst
-          ? txt?.fullNameFirst.toUpperCase()
+          ? txt?.fullNameFirst.concat(txt?.fullNameSecond).toUpperCase()
           : ''.toUpperCase();
         const textSearch = searchInput.toUpperCase();
         return text.indexOf(textSearch) > -1;

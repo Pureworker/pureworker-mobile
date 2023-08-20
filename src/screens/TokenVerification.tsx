@@ -44,7 +44,7 @@ const TokenVerification = () => {
   const [createOtp] = useCreateOtpMutation();
   const [resetOtp] = useResetOtpMutation();
 
-  const [seconds, setSeconds] = useState(120);
+  const [seconds, setSeconds] = useState(30);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -81,7 +81,7 @@ const TokenVerification = () => {
       .unwrap()
       .then((data: any) => {
         if (data) {
-          setSeconds(120);
+          setSeconds(30);
           Snackbar.show({
             text: 'OTP has been sent',
             duration: Snackbar.LENGTH_SHORT,
