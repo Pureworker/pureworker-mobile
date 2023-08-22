@@ -12,6 +12,7 @@ import {
   Platform,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
+import _ from 'lodash'
 import images from '../../constants/images';
 import TextInputs from '../../components/TextInput2';
 import tw from 'twrnc';
@@ -49,36 +50,42 @@ const Home = () => {
     isLoading: isLoadingServiceProviderPotfolio,
   } = useGetAllServiceProviderPotfolioQuery();
   const getServiceProviderPotfolio = getServiceProviderPotfolioData ?? [];
+  // console.log("🚀 ~ file: Home.tsx:52 ~ Home ~ getServiceProviderPotfolio:", getServiceProviderPotfolio)
   const { data: getUserData, isLoading: isLoadingUser } = useGetUserDetailQuery();
   const getUser = getUserData ?? [];
   const { data: getCategoryData, isLoading, isError } = useGetCategoryQuery();
   const getCategory = getCategoryData ?? [];
 
   const [InfoModal, setInfoModal] = useState(false);
+  const filteredData = !_.isEmpty(getServiceProviderPotfolioData) ? getServiceProviderPotfolioData.filter((item: { description: string; }) =>
+    item.description.toLowerCase().includes(search.toLowerCase())
+  ) : []
 
-  const filterBySearchProduct = useMemo(() => {
-    var searchArray = [];
-    if (
-      Array.isArray(getServiceProviderProfile) &&
-      getServiceProviderProfile.length
-    ) {
-      searchArray = getServiceProviderProfile.filter(txt => {
-        const data = txt?.price ? JSON.parse(txt?.price) : ''
-        const serviceName = data[0].serviceName;
-        const text = serviceName
-          ? serviceName.toUpperCase()
-          : ''.toUpperCase();
-        const textSearch = search.toUpperCase();
-        return text.indexOf(textSearch) > -1;
-      });
-    }
 
-    if (searchArray.length) {
-      return searchArray;
-    } else {
-      return [];
-    }
-  }, [search, getServiceProviderProfile]);
+  // const filterBySearchProduct = useMemo(() => {
+  //   var searchArray = [];
+  //   console.log("🚀 ~ file: Home.tsx:64 ~ filterBySearchProduct ~ getServiceProviderProfile:", getServiceProviderProfile)
+  //   if (
+  //     Array.isArray(getServiceProviderProfile) &&
+  //     getServiceProviderProfile.length
+  //   ) {
+  //     searchArray = getServiceProviderProfile.filter(txt => {
+  //       const data = txt?.price ? JSON.parse(txt?.price) : ''
+  //       const serviceName = data[0].serviceName;
+  //       const text = serviceName
+  //         ? serviceName.toUpperCase()
+  //         : ''.toUpperCase();
+  //       const textSearch = search.toUpperCase();
+  //       return text.indexOf(textSearch) > -1;
+  //     });
+  //   }
+
+  //   if (searchArray.length) {
+  //     return searchArray;
+  //   } else {
+  //     return [];
+  //   }
+  // }, [search, getServiceProviderProfile]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#EBEBEB' }}>
@@ -230,7 +237,7 @@ const Home = () => {
 
           <View style={{ flex: 1 }}>
             <FlatList
-              data={getServiceProviderPotfolio}
+              data={filteredData}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               renderItem={(item: any) => {
@@ -279,7 +286,7 @@ const Home = () => {
 
           <View style={{ flex: 1 }}>
             <FlatList
-              data={filterBySearchProduct}
+              data={getServiceProviderProfile}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               renderItem={(item: any) => {
