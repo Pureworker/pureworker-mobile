@@ -37,8 +37,8 @@ const ServiceProviderProfile = () => {
 
   const { data: getSingleProviderAllServiceData } = useGetSingleProviderAllServiceQuery(route.params?.id)
   const getSingleProviderAllService = getSingleProviderAllServiceData ?? [];
-  const price = JSON.parse(getSingleProviderService?.price) 
-  const serviceDetail = JSON.parse(getSingleProviderService?.serviceDetail) 
+  const price = getSingleProviderService?.price ? JSON.parse(getSingleProviderService?.price) : [] 
+  const serviceDetail = getSingleProviderService?.serviceDetail ? JSON.parse(getSingleProviderService?.serviceDetail) : []
  
   const firstPotfolio = getSingleProviderService?.ServicePotfolio?.length ? JSON.parse(getSingleProviderService?.ServicePotfolio[0]?.potfolioImages) : []
   const secondPotfolio = getSingleProviderService?.ServicePotfolio?.length > 1 ? JSON.parse(getSingleProviderService?.ServicePotfolio[1]?.potfolioImages) : []
