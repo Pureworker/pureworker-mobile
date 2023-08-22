@@ -62,14 +62,21 @@ const Home = () => {
       Array.isArray(getServiceProviderProfile) &&
       getServiceProviderProfile.length
     ) {
-      searchArray = getServiceProviderProfile.filter(txt => {
-        const data = txt?.price ? JSON.parse(txt?.price) : ''
-        const serviceName = data[0].serviceName;
-        const text = serviceName
-          ? serviceName.toUpperCase()
-          : ''.toUpperCase();
-        const textSearch = search.toUpperCase();
-        return text.indexOf(textSearch) > -1;
+      searchArray = getServiceProviderProfile.filter(item => {
+
+        const data = item?.price ? JSON.parse(item?.price) : ''
+        if (Array.isArray(data) && data.length) {
+          const array = data.filter((service) => {
+            const text = service?.serviceName
+            ? service?.serviceName.toUpperCase()
+            : ''.toUpperCase();
+            const textSearch = search.toUpperCase();
+            return text.indexOf(textSearch) > -1;
+          })
+          if (array.length) {
+            return item
+          }
+        }
       });
     }
 

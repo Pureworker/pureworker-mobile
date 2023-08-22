@@ -76,7 +76,7 @@ const CloseToYou = () => {
     ) {
       searchArray = getServiceProviderFavorite.filter(txt => {
         const text = txt?.fullNameFirst
-          ? txt?.fullNameFirst.concat(txt?.fullNameSecond).toUpperCase()
+          ? txt?.fullNameFirst.concat(" "+txt?.fullNameSecond).toUpperCase()
           : ''.toUpperCase();
         const textSearch = searchInput.toUpperCase();
         return text.indexOf(textSearch) > -1;
