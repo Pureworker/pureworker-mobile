@@ -11,7 +11,11 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
-import {StackNavigation} from '../../constants/navigation';
+import {
+  AndroidMode,
+  IOSMode,
+  StackNavigation,
+} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
@@ -22,6 +26,9 @@ import commonStyle from '../../constants/commonStyle';
 import TextWrapper from '../../components/TextWrapper';
 import colors from '../../constants/colors';
 import TextInputs from '../../components/TextInput2';
+import {Calendar} from 'react-native-calendars';
+import Modal from 'react-native-modal/dist/modal';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const OrderDetails = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -34,6 +41,27 @@ const OrderDetails = () => {
   const [locationOpen, setLocationOpen] = useState(false);
   const [locationValue, setLocationValue] = useState(null);
   const [description, setDescription] = useState('');
+  const [showDate, setshowDate] = useState(false);
+
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState<IOSMode | AndroidMode>('date');
+  const [show, setShow] = useState(false);
+
+  const onChange = (event: any, selectedDate: any) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+    // updateDate(currentDate);
+  };
+
+  const showMode = (currentMode: any) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatePicker = () => {
+    showMode(type);
+  };
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
@@ -179,12 +207,70 @@ const OrderDetails = () => {
               style={{fontSize: 16, marginTop: 20, color: colors.black}}
             />
 
+            {showDate && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={mode}
+                // is24Hour={false}
+                display="default"
+                onChange={onChange}
+              />
+            )}
+
+            {/* {showDate && (
+              <Modal
+                isVisible={true}
+                onBackButtonPress={() => setshowDate(false)}
+                onBackdropPress={() => setshowDate(false)}
+                swipeThreshold={200}
+                style={{
+                  width: WIDTH_SCREEN,
+                  padding: 0,
+                  margin: 0,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                onSwipeComplete={() => setshowDate(false)}>
+                <View
+                  style={[
+                    tw`, w-[95%] bg-white`,
+                    {height: HEIGHT_WINDOW * 0.325},
+                  ]}>
+                  <View style={tw``}>
+                    <Calendar
+                      // markedDates={bookedDates}
+                      onDayPress={day => {
+                        // Implement your logic here when a day is pressed
+                        console.log('Selected day:', day);
+                      }}
+                    />
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setshowDate(false);
+                    }}
+                    style={tw`bg-[${colors.primary}] rounded-xl mx-auto p-4 px-6`}>
+                    <Textcomp
+                      text={'Select'}
+                      fontSize={18}
+                      color={'#FFFFFF'}
+                      style={[tw`text-left mt-2`, {fontWeight: '400'}]}
+                      family={'Inter'}
+                      lineHeight={19}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </Modal>
+            )} */}
+
             <View
               style={[
                 tw`flex flex-row items-center  rounded-lg mt-5`,
                 {height: perHeight(40)},
               ]}>
-              <View
+              <TouchableOpacity
+                onPress={() => setshowDate(true)}
                 style={[
                   tw`flex flex-row rounded-lg`,
                   {width: perWidth(200), backgroundColor: colors.greyLight1},
@@ -197,6 +283,7 @@ const OrderDetails = () => {
                     ]}
                     keyboardType="numeric"
                     onChangeText={() => {}}
+                    // editable={false}
                   />
                 </View>
                 <View style={tw`border-r w-1/3  flex-1`}>
@@ -207,6 +294,7 @@ const OrderDetails = () => {
                     ]}
                     keyboardType="numeric"
                     onChangeText={() => {}}
+                    // editable={false}
                   />
                 </View>
                 <View style={tw` w-1/3`}>
@@ -217,9 +305,10 @@ const OrderDetails = () => {
                     ]}
                     keyboardType="numeric"
                     onChangeText={() => {}}
+                    // editable={false}
                   />
                 </View>
-              </View>
+              </TouchableOpacity>
               <View
                 style={[
                   tw`ml-1 rounded-lg flex  flex-row`,
@@ -256,7 +345,7 @@ const OrderDetails = () => {
             style={{
               zIndex: 1,
               // marginTop: 15,
-              minHeight: 250,
+              minHeight: 150,
               marginHorizontal: perWidth(25),
               width: perWidth(321),
             }}>
@@ -328,10 +417,39 @@ const OrderDetails = () => {
               }}
             />
           </View>
+          <View
+            style={[
+              tw`border-b border-[#00000033] pb-4 mx-4 px-4`,
+              {marginTop: perHeight(5)},
+            ]}>
+            <TextWrapper
+              children="Enter Address(if offline)"
+              isRequired={false}
+              fontType={'semiBold'}
+              style={{fontSize: 16, marginTop: 20, color: colors.black}}
+            />
 
-          <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
+            <View
+              style={[
+                tw`flex flex-row px-3 items-center  rounded-lg mt-4`,
+                {backgroundColor: colors.greyLight1, height: perHeight(40)},
+              ]}>
+              <TextInput
+                style={[
+                  tw`flex-1 py-2 ml-3 text-black`,
+                  {fontFamily: 'Inter-Medium'},
+                ]}
+                keyboardType="numeric"
+                onChangeText={() => {}}
+              />
+            </View>
+          </View>
+
+          <View style={tw`mx-auto flex flex-row justify-between mt-8`}>
             <TouchableOpacity
-              onPress={() => {navigation.goBack()}}
+              onPress={() => {
+                navigation.goBack();
+              }}
               style={[
                 tw`bg-[${colors.darkPurple}] items-center justify-center`,
                 {
@@ -373,7 +491,7 @@ const OrderDetails = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={tw`h-10`} />
+        <View style={tw`h-30`} />
       </ScrollView>
       <View style={tw`h-1 w-full mb-5 bg-black`} />
     </View>

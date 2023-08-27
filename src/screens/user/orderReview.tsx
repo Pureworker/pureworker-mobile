@@ -70,7 +70,7 @@ const OrderReview = ({route}: any) => {
               <View>
                 <View style={tw``}>
                   <Textcomp
-                    text={'Order Deatils'}
+                    text={'Order Details'}
                     size={17}
                     lineHeight={17}
                     color={'#000413'}

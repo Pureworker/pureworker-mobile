@@ -134,7 +134,7 @@ export default () => {
   function HomeStack() {
     const userType = useSelector((state: any) => state.user.isLoggedIn);
     console.log('user_', userType);
-    if (userType.userType === 'CUSTOMER') {
+    if (userType.userType !== 'CUSTOMER') {
       return <CustomerNavigation />;
     } else {
       return <VendorNavigation />;

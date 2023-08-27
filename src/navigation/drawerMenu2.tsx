@@ -13,8 +13,9 @@ import Wallet from '../screens/vendor/Wallet';
 import Orders from '../screens/vendor/Orders';
 import Support from '../screens/vendor/support';
 import Account from '../screens/vendor/account';
-import PrivacyPolicy from '../screens/vendor/privacy-policy';
-import DeactivateAccount from '../screens/vendor/deactivateAccount';
+import Ratings from '../screens/common/ratings';
+import DeactivateAccount from '../screens/common/deactivateAccount';
+import PrivacyPolicy from '../screens/common/privacyPolicy';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -36,7 +37,7 @@ const TabNavigator = () => {
           alignItems: 'center',
           alignSelf: 'center',
           width: SIZES.width,
-          height: Platform.OS === 'ios' ? perHeight(70) : perHeight(80),
+          height: Platform.OS === 'ios' ? perHeight(70) : perHeight(70),
         },
       }}>
       <Tab.Screen
@@ -121,6 +122,11 @@ const DrawerMenu = () => {
         <Drawer.Screen
           name="DeactivateAccount"
           component={DeactivateAccount}
+          options={{headerShown: false}}
+        />
+        <Drawer.Screen
+          name="Rating"
+          component={Ratings}
           options={{headerShown: false}}
         />
         {/* Add other drawer screens as needed */}

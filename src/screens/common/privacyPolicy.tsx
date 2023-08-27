@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -87,6 +87,7 @@ const PrivacyPolicy = () => {
       text: 'These Terms of Service constitute the entire agreement between you and Pureworker with respect to the use of the Pureworker app and its content, materials, and services and supersede all prior or contemporaneous communications and proposals,',
     },
   ];
+  const userType = useSelector((state: any) => state.user.isLoggedIn);
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
@@ -125,66 +126,142 @@ const PrivacyPolicy = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{minHeight: SIZES.height}}>
-        <View style={[tw` flex-1`]}>
-          <View style={tw`mx-auto mt-[5%]`}>
-            <Textcomp
-              text={'Terms of Service for Pureworker App'}
-              size={14}
-              lineHeight={17}
-              color={'#000413'}
-              fontFamily={'Inter-SemiBold'}
-            />
-          </View>
-          <View style={[tw` mt-[5%] mx-auto`, {width: perWidth(332)}]}>
-            <View style={tw``}>
+        {userType.userType === 'CUSTOMER' && (
+          <View style={[tw` flex-1`]}>
+            <View style={tw`mx-auto mt-[5%]`}>
               <Textcomp
-                text={''}
-                size={16}
+                text={'Terms of Service for Pureworker App'}
+                size={14}
                 lineHeight={17}
-                color={'#000000'}
+                color={'#000413'}
                 fontFamily={'Inter-SemiBold'}
               />
             </View>
-            <View style={tw`mt-2`}>
+            <View style={[tw` mt-[5%] mx-auto`, {width: perWidth(332)}]}>
+              <View style={tw``}>
+                <Textcomp
+                  text={''}
+                  size={16}
+                  lineHeight={17}
+                  color={'#000000'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </View>
+              <View style={tw`mt-2`}>
+                <Textcomp
+                  text={
+                    'These Terms of Service ("Terms") constitute a legally binding agreement between Pureworker ("Pureworker", "we", "us", or "our"), and you, the user of the Pureworker app ("you", "your", or "user"). By accessing or using the Pureworker app, you agree to be bound by these Terms, our Privacy Policy, and any additional terms and conditions that are referenced herein or that otherwise apply to your use of the Pureworker app.'
+                  }
+                  size={12}
+                  lineHeight={14.5}
+                  color={'#000000'}
+                  fontFamily={'Inter'}
+                />
+              </View>
+            </View>
+            {data.map((item, index) => {
+              return (
+                <View
+                  key={index}
+                  style={[tw` mt-[5%] mx-auto`, {width: perWidth(332)}]}>
+                  <View style={tw``}>
+                    <Textcomp
+                      text={item?.header}
+                      size={16}
+                      lineHeight={17}
+                      color={'#000000'}
+                      fontFamily={'Inter-SemiBold'}
+                    />
+                  </View>
+                  <View style={tw`mt-1`}>
+                    <Textcomp
+                      text={item?.text}
+                      size={12}
+                      lineHeight={14.5}
+                      color={'#000000'}
+                      fontFamily={'Inter'}
+                    />
+                  </View>
+                </View>
+              );
+            })}
+          </View>
+        )}
+        {userType.userType !== 'CUSTOMER' && (
+          <View style={[tw` flex-1`]}>
+            <View style={tw`mx-auto mt-[5%]`}>
               <Textcomp
-                text={
-                  'These Terms of Service ("Terms") constitute a legally binding agreement between Pureworker ("Pureworker", "we", "us", or "our"), and you, the user of the Pureworker app ("you", "your", or "user"). By accessing or using the Pureworker app, you agree to be bound by these Terms, our Privacy Policy, and any additional terms and conditions that are referenced herein or that otherwise apply to your use of the Pureworker app.'
-                }
-                size={12}
-                lineHeight={14.5}
-                color={'#000000'}
-                fontFamily={'Inter'}
+                text={'Terms of Service for Pureworker App'}
+                size={14}
+                lineHeight={17}
+                color={'#000413'}
+                fontFamily={'Inter-SemiBold'}
               />
             </View>
-          </View>
-          {data.map((item, index) => {
-            return (
-              <View
-                key={index}
-                style={[tw` mt-[5%] mx-auto`, {width: perWidth(332)}]}>
-                <View style={tw``}>
-                  <Textcomp
-                    text={item?.header}
-                    size={16}
-                    lineHeight={17}
-                    color={'#000000'}
-                    fontFamily={'Inter-SemiBold'}
-                  />
-                </View>
-                <View style={tw`mt-1`}>
-                  <Textcomp
-                    text={item?.text}
-                    size={12}
-                    lineHeight={14.5}
-                    color={'#000000'}
-                    fontFamily={'Inter'}
-                  />
-                </View>
+
+            <View style={[tw` mt-[5%] mx-auto`, {width: perWidth(332)}]}>
+              <View style={tw``}>
+                <Textcomp
+                  text={`At Pureworker, we are committed to protecting the privacy and confidentiality of our service providers (Businesses and Freelancers). This Privacy Policy outlines how we collect, use, store, and disclose your personal information as a service provider on our platform. Please read this policy carefully to understand our practices regarding your personal data.
+
+Information We Collect:
+When you register as a service provider on Pureworker, we may collect the following information:
+
+Personal Information: This includes your name, email address, contact number, and any other information you provide during the registration process.
+
+Profile Information: We collect information about your skills, experience, service offerings, portfolio, and other details you choose to provide to enhance your profile.
+
+Communication Data: We collect information from your communications with customers through our messaging system, including chat history and attachments.
+
+Use of Information:
+We use the collected information for the following purposes:
+
+To create and maintain your service provider account.
+To display your profile information to potential customers seeking services.
+To facilitate communication between you and customers regarding service requests, negotiations, and job details.
+To provide customer support and address any inquiries, issues, or disputes.
+To send you important updates, notifications, and promotional messages related to your account or the Pureworker platform.
+
+Data Sharing:
+We may share your personal information in the following cases:
+
+With Customers: Your profile information, portfolio, and ratings may be visible to customers seeking services.
+
+With Third Parties: We may engage third-party service providers to assist us in operating our platform and delivering services. These service providers are obligated to maintain the confidentiality and security of your information.
+
+Legal Requirements: We may disclose your information if required to comply with applicable laws, regulations, legal processes, or enforceable governmental requests.
+
+Data Security:
+We implement appropriate technical and organizational measures to protect your personal information from unauthorized access, loss, or misuse. However, please note that no data transmission over the internet or storage system is completely secure, and we cannot guarantee the absolute security of your data.
+
+Data Retention:
+We retain your personal information for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law.
+
+Your Rights:
+As a service provider, you have the right to access, update, correct, or delete your personal information. You can manage your information through your account settings or by contacting our support team.
+
+Changes to the Privacy Policy:
+We may update this Privacy Policy from time to time to reflect changes in our practices or legal obligations. We will notify you of any material changes and seek your consent, if required by applicable laws.
+                  `}
+                  size={14}
+                  lineHeight={16}
+                  color={'#000000'}
+                  fontFamily={'Inter-SemiBold'}
+                />
               </View>
-            );
-          })}
-        </View>
-        <View style={tw`h-40`} />
+              {/* <View style={tw`mt-1`}>
+                <Textcomp
+                  text={item?.text}
+                  size={12}
+                  lineHeight={14.5}
+                  color={'#000000'}
+                  fontFamily={'Inter'}
+                />
+              </View> */}
+            </View>
+          </View>
+        )}
+              <View style={tw`h-40`} />
       </ScrollView>
       <View style={tw`h-0.5 w-full bg-black absolute  bottom-[3%]`} />
     </View>

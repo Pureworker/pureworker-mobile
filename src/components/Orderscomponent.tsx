@@ -9,14 +9,16 @@ import {Rating, AirbnbRating} from 'react-native-ratings';
 import Modal from 'react-native-modal';
 import {WIDTH_WINDOW} from '../constants/generalStyles';
 
-const Orderscomponent2 = ({item, index, status, navigation}: any) => {
+const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
   const [saved, setsaved] = useState(false);
   const [InfoModal, setInfoModal] = useState(false);
 
   const [modalSection, setmodalSection] = useState('All');
   return (
     <>
-      <View
+      <TouchableOpacity
+        disabled={editable ? editable : false}
+        onPress={() => navigation.navigate('OrderActive', {data: item})}
         style={[
           tw` mt-4 mx-auto bg-[${colors.darkPurple}]`,
           {
@@ -165,7 +167,7 @@ const Orderscomponent2 = ({item, index, status, navigation}: any) => {
             />
           </TouchableOpacity>
         </View>
-      </View>
+      </TouchableOpacity>
       <Modal
         isVisible={InfoModal}
         onModalHide={() => {
