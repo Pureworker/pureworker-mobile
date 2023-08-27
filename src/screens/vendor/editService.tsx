@@ -31,9 +31,9 @@ import {allCountry, launchImageLibrary} from '../../constants/utils';
 import Snackbar from 'react-native-snackbar';
 import storage from '@react-native-firebase/storage';
 import Portfoliocomp from '../../components/Portfolio';
-import {perWidth} from '../../utils/position/sizes';
+import {SIZES, perWidth} from '../../utils/position/sizes';
 
-const PRofileStep2 = () => {
+const EditServices = () => {
   const navigation = useNavigation<StackNavigation>();
   const [description, setDescription] = useState('');
   const [shortDescription, setShortDescription] = useState('');
@@ -157,164 +157,15 @@ const PRofileStep2 = () => {
             color: colors.black,
             fontFamily: commonStyle.fontFamily.semibold,
           }}
-          title={'Complete your Registration'}
+          title={'Edit Services'}
           image={images.back}
         />
-        <ProfileStepWrapper active={'two'} />
         <View style={{marginHorizontal: 20}}>
-          <TextWrapper
-            children="Add Services"
-            fontType={'semiBold'}
-            style={{fontSize: 20, marginTop: 30, color: colors.black}}
-          />
-          <TextWrapper
-            children="What services do you provide?"
-            fontType={'semiBold'}
-            style={{fontSize: 16, marginTop: 13, color: colors.black}}
-          />
           <TextWrapper
             children="Profile"
             fontType={'semiBold'}
             style={{fontSize: 20, marginTop: 30, color: colors.black}}
           />
-
-          <View>
-            <View
-              style={[
-                generalStyles.contentCenter,
-                {
-                  width: 145,
-                  height: 145,
-                  borderRadius: 145,
-                  alignSelf: 'center',
-                  backgroundColor: colors.greyLight1,
-                },
-              ]}>
-              {!profileImageLoading ? (
-                <>
-                  {!imageUrl ? (
-                    <TextWrapper
-                      children="Upload Profile Photo"
-                      fontType={'semiBold'}
-                      style={{
-                        textAlign: 'center',
-                        fontSize: 14,
-                        color: colors.black,
-                      }}
-                    />
-                  ) : (
-                    <Image
-                      source={{uri: imageUrl}}
-                      style={{width: 145, height: 145, borderRadius: 145}}
-                    />
-                  )}
-                </>
-              ) : (
-                <ActivityIndicator
-                  style={{marginTop: 0}}
-                  size={'large'}
-                  color={colors.parpal}
-                />
-              )}
-            </View>
-            <View
-              style={{
-                position: 'absolute',
-                right: 40,
-                top: 10,
-                flexDirection: 'row',
-              }}>
-              <TouchableOpacity
-                onPress={async () => {
-                  try {
-                    const response: any = await launchImageLibrary();
-                    setProfileImageLoading(true);
-                    if (response) {
-                      const filename = response?.uri.substring(
-                        response?.uri.lastIndexOf('/') + 1,
-                      );
-                      const uploadUri =
-                        Platform.OS === 'ios'
-                          ? response?.uri.replace('file://', '')
-                          : response.uri;
-                      const task = await storage()
-                        .ref(filename)
-                        .putFile(uploadUri);
-                      if (task.metadata) {
-                        profilePicture.current = task.metadata.fullPath;
-                      }
-                      let url = '';
-                      if (profilePicture.current) {
-                        url = await storage()
-                          .ref(profilePicture.current)
-                          .getDownloadURL();
-                      }
-                      setImageUrl(url);
-                      profilePicture.current = '';
-                      setProfileImageLoading(false);
-                    } else {
-                      setProfileImageLoading(false);
-                    }
-                  } catch (error) {
-                    console.log('error', error);
-                    setProfileImageLoading(false);
-                  }
-                }}>
-                <Image
-                  source={images.edit}
-                  resizeMode="contain"
-                  style={{
-                    width: 20,
-                    height: 20,
-                    marginLeft: 20,
-                    tintColor: '#000',
-                  }}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setImageUrl('')}>
-                <Image
-                  source={images.bin}
-                  resizeMode="contain"
-                  style={{
-                    width: 20,
-                    height: 20,
-                    marginLeft: 20,
-                    tintColor: '#000',
-                  }}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <TextWrapper
-            children="Description"
-            isRequired={true}
-            fontType={'semiBold'}
-            style={{fontSize: 16, marginTop: 20, color: colors.black}}
-          />
-
-          <View
-            style={{
-              height: 130,
-              borderRadius: 8,
-              backgroundColor: colors.greyLight1,
-              marginTop: 13,
-            }}>
-            <TextInputs
-              styleInput={{
-                color: colors.black,
-                paddingHorizontal: 18,
-                fontSize: 12,
-              }}
-              style={{backgroundColor: colors.greyLight1}}
-              labelText={
-                'Introduce yourself and enter your profile description.'
-              }
-              state={description}
-              setState={setDescription}
-              multiline={true}
-              nbLines={5}
-            />
-          </View>
 
           <TextWrapper
             children="Service Intro"
@@ -329,7 +180,7 @@ const PRofileStep2 = () => {
           />
 
           {servicesDescription?.length
-            ? servicesDescription?.map((item: any, index: any) => {
+            ? servicesDescription?.slice(0, 1).map((item: any, index: any) => {
                 return (
                   <View
                     style={{
@@ -392,7 +243,7 @@ const PRofileStep2 = () => {
           />
 
           {servicePrice?.length
-            ? servicePrice?.map((item: any, index: any) => {
+            ? servicePrice.slice(0, 1)?.map((item: any, index: any) => {
                 return (
                   <View
                     style={{
@@ -501,6 +352,7 @@ const PRofileStep2 = () => {
                 setItems={setNationalityItems}
                 showArrowIcon={false}
                 zIndex={10}
+                placeholder="City"
                 dropDownContainerStyle={{
                   borderWidth: 0,
                 }}
@@ -523,6 +375,7 @@ const PRofileStep2 = () => {
                   backgroundColor: colors.lightBlack,
                   borderColor: colors.primary,
                   borderWidth: 2,
+                  width: SIZES.width * 0.875
                 }}
                 listMode="FLATLIST"
                 showTickIcon={false}
@@ -602,7 +455,7 @@ const PRofileStep2 = () => {
 
             <View>
               {portfolioToServiceCount?.map((item, index) => {
-                return <Portfoliocomp servicePrice={servicePrice}/>;
+                return <Portfoliocomp servicePrice={servicePrice} />;
               })}
             </View>
 
@@ -839,7 +692,7 @@ const PRofileStep2 = () => {
                     backgroundColor: colors.lightBlack,
                   }}
                   textStyle={{color: colors.primary}}
-                  text={'Next'}
+                  text={'Save'}
                 />
               </View>
             ) : (
@@ -857,4 +710,4 @@ const PRofileStep2 = () => {
   );
 };
 
-export default PRofileStep2;
+export default EditServices;

@@ -17,7 +17,7 @@ import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {perHeight} from '../../utils/position/sizes';
+import {perHeight, perWidth} from '../../utils/position/sizes';
 import TextInputs from '../../components/TextInput2';
 import CloseToYouCard2 from '../../components/cards/closeToYou2';
 import Orderscomponent from '../../components/Orderscomponent';
@@ -30,8 +30,9 @@ import OrderDelivered from '../../components/modals/orderDelivered';
 import OrderInProgress from '../../components/modals/OrderinProgress';
 import OrderPlaced from '../../components/modals/orderPlaced';
 import ScheduledDeliveryDate from '../../components/modals/scheduledDeliveryDate';
+import colors from '../../constants/colors';
 
-const Orders = () => {
+const OrderActive = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [searchModal, setsearchModal] = useState(false);
@@ -44,7 +45,7 @@ const Orders = () => {
   const [serviceProviderModal, setserviceProviderModal] = useState(false);
   const [privateFeedback, setprivateFeedback] = useState(false);
   const [rateYourExperience, setrateYourExperience] = useState(false);
-  const [orderCompleted, setorderCompleted] = useState(true);
+  const [orderCompleted, setorderCompleted] = useState(false);
   const [orderDispute, setorderDispute] = useState(false);
   const [orderDelivered, setorderDelivered] = useState(false);
   const [orderInProgress, setorderInProgress] = useState(false);
@@ -54,6 +55,50 @@ const Orders = () => {
   useEffect(() => {
     // setorderDelivered(true);
   }, []);
+
+  const item = route.params.data;
+
+  const links = [
+    {
+      title: 'Private Feedback',
+      func: function () {
+        setprivateFeedback(!privateFeedback);
+        console.log('hey', privateFeedback);
+      },
+    },
+    {
+      title: 'Rate your experince',
+      func: () => setrateYourExperience(true),
+    },
+    {
+      title: 'Service Provider Review',
+      func: () => setserviceProviderModal(true),
+    },
+    {
+      title: 'Order Completed',
+      func: () => setorderCompleted(true),
+    },
+    {
+      title: 'Order Dispute',
+      func: () => setorderDispute(true),
+    },
+    {
+      title: 'Order Delivered',
+      func: () => setorderDelivered(true),
+    },
+    {
+      title: 'Order In Progress',
+      func: () => setorderInProgress(true),
+    },
+    {
+      title: 'Scheduled Delivery Date',
+      func: () => setscheduledDeliveryDate(true),
+    },
+    {
+      title: 'Order Placed',
+      func: () => setorderPlacing(true),
+    },
+  ];
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -91,7 +136,7 @@ const Orders = () => {
               fontFamily={'Inter-SemiBold'}
             />
           </View>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {
               setsearchModal(true);
             }}>
@@ -100,7 +145,7 @@ const Orders = () => {
               style={{height: 25, width: 25}}
               resizeMode="contain"
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       ) : (
         <View
@@ -144,11 +189,8 @@ const Orders = () => {
         </View>
       )}
       <ScrollView>
-        <View style={tw`flex flex-row mt-4`}>
-          <TouchableOpacity
-            onPress={() => {
-              setactiveSection('Active');
-            }}
+        <View style={tw`flex flex-row mt-4 opacity-20`}>
+          <View
             style={tw`w-1/2 border-b-2  items-center ${
               activeSection === 'Active'
                 ? 'border-[#88087B]'
@@ -161,11 +203,8 @@ const Orders = () => {
               color={activeSection === 'Active' ? '#88087B' : '#000413'}
               fontFamily={'Inter-SemiBold'}
             />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setactiveSection('Closed');
-            }}
+          </View>
+          <View
             style={tw`w-1/2 border-b-2 items-center ${
               activeSection === 'Closed'
                 ? 'border-[#88087B]'
@@ -178,7 +217,7 @@ const Orders = () => {
               color={activeSection === 'Closed' ? '#88087B' : '#000413'}
               fontFamily={'Inter-SemiBold'}
             />
-          </TouchableOpacity>
+          </View>
         </View>
         {orders.length < 1 ? (
           <View style={[tw`flex-1 items-center`, {}]}>
@@ -235,7 +274,7 @@ const Orders = () => {
           <>
             {activeSection === 'Active' && (
               <View style={[tw`items-center`, {flex: 1}]}>
-                <ScrollView horizontal>
+                {/* <ScrollView horizontal>
                   <FlatList
                     data={orders}
                     horizontal={false}
@@ -254,30 +293,52 @@ const Orders = () => {
                     keyExtractor={item => item?.id}
                     ListFooterComponent={<View style={tw`h-20`} />}
                   />
-                </ScrollView>
-              </View>
-            )}
-            {activeSection === 'Closed' && (
-              <View style={[tw`items-center`, {flex: 1}]}>
-                <ScrollView horizontal>
-                  <FlatList
-                    scrollEnabled={false}
-                    data={orders}
-                    horizontal={false}
-                    renderItem={(item: any, index: any) => {
-                      return (
-                        <Orderscomponent
-                          navigation={navigation}
-                          item={item.item}
-                          index={item.index}
-                          status={index % 3 === 0 ? 'Pending' : 'Completed'}
-                        />
-                      );
-                    }}
-                    keyExtractor={item => item?.id}
-                    ListFooterComponent={<View style={tw`h-20`} />}
-                  />
-                </ScrollView>
+                </ScrollView> */}
+                <Orderscomponent
+                  navigation={navigation}
+                  item={item.item}
+                  index={item.index}
+                  status={'Inprogress'}
+                  editable={true}
+                />
+                <View
+                  style={[tw`bg-[#2D303C] rounded p-4 mt-1`, {width: perWidth(355)}]}>
+                  {links?.map((item, index) => {
+                    return (
+                      <>
+                        <TouchableOpacity
+                          key={index}
+                          style={[tw`flex flex-row items-center `, {}]}
+                          onPress={() => {
+                            item.func();
+                          }}>
+                          <View
+                            style={[
+                              tw`rounded-full mr-4 border border-[${colors.primary}]`,
+                              {width: 10, height: 10},
+                            ]}
+                          />
+                          <Textcomp
+                            text={item?.title}
+                            size={14.5}
+                            lineHeight={16.5}
+                            color={'#FFFFFF'}
+                            fontFamily={'Inter-Bold'}
+                            style={{textAlign: 'center'}}
+                          />
+                        </TouchableOpacity>
+                        {index < links.length - 1 && (
+                          <View
+                            style={[
+                              tw`border-l-2  ml-1 border-[${colors.primary}] w-full`,
+                              {height: 14},
+                            ]}
+                          />
+                        )}
+                      </>
+                    );
+                  })}
+                </View>
               </View>
             )}
           </>
@@ -351,4 +412,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default OrderActive;

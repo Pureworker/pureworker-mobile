@@ -21,7 +21,7 @@ import {
   useGetCategoryQuery,
 } from '../../store/slice/api';
 import colors from '../../constants/colors';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {WIDTH_WINDOW, generalStyles} from '../../constants/generalStyles';
 import ProfileStepWrapper from '../../components/ProfileStepWrapper';
 import TextInputs from '../../components/TextInputs';
@@ -31,9 +31,16 @@ import {allCountry, launchImageLibrary} from '../../constants/utils';
 import Snackbar from 'react-native-snackbar';
 import storage from '@react-native-firebase/storage';
 import Portfoliocomp from '../../components/Portfolio';
-import {perWidth} from '../../utils/position/sizes';
+import {SIZES, perWidth} from '../../utils/position/sizes';
+import {
+  Collapse,
+  CollapseHeader,
+  CollapseBody,
+} from 'accordion-collapse-react-native';
+import axios from 'axios';
+import {addCategory, removeCategory} from '../../store/reducer/mainSlice';
 
-const PRofileStep2 = () => {
+const AddServices = () => {
   const navigation = useNavigation<StackNavigation>();
   const [description, setDescription] = useState('');
   const [shortDescription, setShortDescription] = useState('');
@@ -147,6 +154,37 @@ const PRofileStep2 = () => {
     }
   };
 
+  //
+  const dispatch = useDispatch();
+  //
+  const [collapseState, setCollapseState] = useState(false);
+  const [collapseState2, setCollapseState2] = useState(false);
+
+  const [selectCategory, setselectCategory] = useState('');
+  const [subCategory, setsubCategory] = useState([]);
+
+  // const [getSubCategories] = useGetSubCategoriesQuery();
+
+  const HandleGetSubCategory = async param => {
+    console.log('started');
+    try {
+      const response = await axios({
+        method: 'get',
+        url: `https://pureworkers.com/api/users/category/${param}`,
+      });
+      // console.log(response?.data);
+      setsubCategory(response?.data);
+    } catch (error) {
+      console.log('err', error);
+      Snackbar.show({
+        text: error?.data?.message,
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+    }
+  };
+
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
       <ScrollView>
@@ -157,163 +195,251 @@ const PRofileStep2 = () => {
             color: colors.black,
             fontFamily: commonStyle.fontFamily.semibold,
           }}
-          title={'Complete your Registration'}
+          title={'Add Services'}
           image={images.back}
         />
-        <ProfileStepWrapper active={'two'} />
         <View style={{marginHorizontal: 20}}>
-          <TextWrapper
-            children="Add Services"
-            fontType={'semiBold'}
-            style={{fontSize: 20, marginTop: 30, color: colors.black}}
-          />
-          <TextWrapper
-            children="What services do you provide?"
-            fontType={'semiBold'}
-            style={{fontSize: 16, marginTop: 13, color: colors.black}}
-          />
           <TextWrapper
             children="Profile"
             fontType={'semiBold'}
             style={{fontSize: 20, marginTop: 30, color: colors.black}}
           />
 
-          <View>
-            <View
-              style={[
-                generalStyles.contentCenter,
-                {
-                  width: 145,
-                  height: 145,
-                  borderRadius: 145,
-                  alignSelf: 'center',
-                  backgroundColor: colors.greyLight1,
-                },
-              ]}>
-              {!profileImageLoading ? (
-                <>
-                  {!imageUrl ? (
+          <TextWrapper
+            children="What services do you provide?"
+            fontType={'semiBold'}
+            style={{
+              fontSize: 16,
+              marginTop: 13,
+              marginBottom: 45,
+              color: colors.black,
+            }}
+          />
+
+          <Collapse
+            isExpanded={collapseState}
+            onToggle={() => {
+              // if (!dataLoaded) {
+              //   setDataLoaded(true);
+              // }
+              setCollapseState(!collapseState);
+            }}
+            style={{
+              justifyContent: 'center',
+              flexDirection: 'column',
+            }}>
+            <CollapseHeader
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                backgroundColor: colors.lightBlack,
+                marginVertical: 10,
+                borderRadius: 5,
+                height: 35,
+                width: '95%',
+                borderColor: colors.primary,
+                borderWidth: 2,
+                paddingHorizontal: 15,
+                // marginHorizontal: 20
+              }}>
+              <View style={{}}>
+                <TextWrapper
+                  fontType={'semiBold'}
+                  style={{
+                    fontSize: 14,
+                    color: '#fff',
+                  }}>
+                  {selectCategory === '' || selectCategory?.length < 1
+                    ? 'Select Category'
+                    : selectCategory}
+                </TextWrapper>
+              </View>
+              {collapseState ? (
+                <Image
+                  source={images.polygonDown}
+                  resizeMode={'contain'}
+                  style={{width: 15, height: 15}}
+                />
+              ) : (
+                <Image
+                  source={images.polygonForward}
+                  resizeMode={'contain'}
+                  style={{width: 15, height: 15}}
+                />
+              )}
+              <TextWrapper
+                fontType={'semiBold'}
+                style={{
+                  fontSize: 35,
+                  color: '#D20713',
+                  position: 'absolute',
+                  right: -25,
+                }}>
+                {'*'}
+              </TextWrapper>
+            </CollapseHeader>
+            <CollapseBody>
+              {getCategory && getCategory.length > 0 && (
+                <View
+                  style={{
+                    borderColor: colors.primary,
+                    backgroundColor: colors.lightBlack,
+                    borderWidth: 2,
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    width: '95%',
+                  }}>
+                  {getCategory?.map((item: any, index: number) => {
+                    var offerStyle;
+                    if (index > 0) {
+                      offerStyle = {marginBottom: 25};
+                    }
+                    return (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => {
+                          setselectCategory(item?.name);
+                          HandleGetSubCategory(item?.id);
+                          setCollapseState(false);
+                        }}
+                        style={{marginTop: 8}}>
+                        <TextWrapper
+                          fontType={'semiBold'}
+                          style={{
+                            color:
+                              selectCategory === item?.name
+                                ? colors.primary
+                                : colors.white,
+                            marginLeft: 11,
+                            marginRight: 8,
+                            marginBottom: 8,
+                          }}>
+                          {item?.name}
+                        </TextWrapper>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              )}
+            </CollapseBody>
+          </Collapse>
+
+          <View style={{marginBottom: 40}}>
+            {selectCategory?.length > 0 && selectCategory !== '' && (
+              <Collapse
+                onToggle={() => {
+                  // if (!dataLoaded) {
+                  //   setDataLoaded(true);
+                  // }
+                  setCollapseState2(!collapseState2);
+                }}
+                isExpanded={collapseState2}
+                style={{
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                }}>
+                <CollapseHeader
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    backgroundColor: colors.lightBlack,
+                    marginVertical: 10,
+                    borderRadius: 5,
+                    height: 35,
+                    width: '95%',
+                    borderColor: colors.primary,
+                    borderWidth: 2,
+                    paddingHorizontal: 15,
+                    // marginHorizontal: 20
+                  }}>
+                  <View style={{}}>
                     <TextWrapper
-                      children="Upload Profile Photo"
                       fontType={'semiBold'}
                       style={{
-                        textAlign: 'center',
                         fontSize: 14,
-                        color: colors.black,
-                      }}
+                        color: '#fff',
+                      }}>
+                      Select Services
+                    </TextWrapper>
+                  </View>
+                  {collapseState ? (
+                    <Image
+                      source={images.polygonDown}
+                      resizeMode={'contain'}
+                      style={{width: 15, height: 15}}
                     />
                   ) : (
                     <Image
-                      source={{uri: imageUrl}}
-                      style={{width: 145, height: 145, borderRadius: 145}}
+                      source={images.polygonForward}
+                      resizeMode={'contain'}
+                      style={{width: 15, height: 15}}
                     />
                   )}
-                </>
-              ) : (
-                <ActivityIndicator
-                  style={{marginTop: 0}}
-                  size={'large'}
-                  color={colors.parpal}
-                />
-              )}
-            </View>
-            <View
-              style={{
-                position: 'absolute',
-                right: 40,
-                top: 10,
-                flexDirection: 'row',
-              }}>
-              <TouchableOpacity
-                onPress={async () => {
-                  try {
-                    const response: any = await launchImageLibrary();
-                    setProfileImageLoading(true);
-                    if (response) {
-                      const filename = response?.uri.substring(
-                        response?.uri.lastIndexOf('/') + 1,
-                      );
-                      const uploadUri =
-                        Platform.OS === 'ios'
-                          ? response?.uri.replace('file://', '')
-                          : response.uri;
-                      const task = await storage()
-                        .ref(filename)
-                        .putFile(uploadUri);
-                      if (task.metadata) {
-                        profilePicture.current = task.metadata.fullPath;
-                      }
-                      let url = '';
-                      if (profilePicture.current) {
-                        url = await storage()
-                          .ref(profilePicture.current)
-                          .getDownloadURL();
-                      }
-                      setImageUrl(url);
-                      profilePicture.current = '';
-                      setProfileImageLoading(false);
-                    } else {
-                      setProfileImageLoading(false);
-                    }
-                  } catch (error) {
-                    console.log('error', error);
-                    setProfileImageLoading(false);
-                  }
-                }}>
-                <Image
-                  source={images.edit}
-                  resizeMode="contain"
-                  style={{
-                    width: 20,
-                    height: 20,
-                    marginLeft: 20,
-                    tintColor: '#000',
-                  }}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setImageUrl('')}>
-                <Image
-                  source={images.bin}
-                  resizeMode="contain"
-                  style={{
-                    width: 20,
-                    height: 20,
-                    marginLeft: 20,
-                    tintColor: '#000',
-                  }}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <TextWrapper
-            children="Description"
-            isRequired={true}
-            fontType={'semiBold'}
-            style={{fontSize: 16, marginTop: 20, color: colors.black}}
-          />
-
-          <View
-            style={{
-              height: 130,
-              borderRadius: 8,
-              backgroundColor: colors.greyLight1,
-              marginTop: 13,
-            }}>
-            <TextInputs
-              styleInput={{
-                color: colors.black,
-                paddingHorizontal: 18,
-                fontSize: 12,
-              }}
-              style={{backgroundColor: colors.greyLight1}}
-              labelText={
-                'Introduce yourself and enter your profile description.'
-              }
-              state={description}
-              setState={setDescription}
-              multiline={true}
-              nbLines={5}
-            />
+                  <TextWrapper
+                    fontType={'semiBold'}
+                    style={{
+                      fontSize: 35,
+                      color: '#D20713',
+                      position: 'absolute',
+                      right: -25,
+                    }}>
+                    {'*'}
+                  </TextWrapper>
+                </CollapseHeader>
+                <CollapseBody>
+                  {subCategory && subCategory.length > 0 && (
+                    <View
+                      style={{
+                        borderColor: colors.primary,
+                        backgroundColor: colors.lightBlack,
+                        borderWidth: 2,
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        width: '95%',
+                      }}>
+                      {subCategory?.map((item: any, index: number) => {
+                        var offerStyle;
+                        if (index > 0) {
+                          offerStyle = {marginBottom: 25};
+                        }
+                        return (
+                          <TouchableOpacity
+                            key={index}
+                            onPress={() => {
+                              if (
+                                Array.isArray(category) &&
+                                category.length &&
+                                category.includes(item?.label)
+                              ) {
+                                dispatch(removeCategory(item?.label));
+                              } else {
+                                dispatch(addCategory(item?.label));
+                              }
+                              console.log(category);
+                            }}
+                            style={{marginTop: 8}}>
+                            <TextWrapper
+                              fontType={'semiBold'}
+                              style={{
+                                color: category?.includes(item?.label)
+                                  ? colors.primary
+                                  : colors.white,
+                                marginLeft: 11,
+                                marginRight: 8,
+                                marginBottom: 8,
+                              }}>
+                              {item?.label}
+                            </TextWrapper>
+                          </TouchableOpacity>
+                        );
+                      })}
+                    </View>
+                  )}
+                </CollapseBody>
+              </Collapse>
+            )}
           </View>
 
           <TextWrapper
@@ -322,16 +448,17 @@ const PRofileStep2 = () => {
             fontType={'semiBold'}
             style={{
               fontSize: 16,
-              marginTop: 20,
+              marginTop: 0,
               marginBottom: 13,
               color: colors.black,
             }}
           />
 
           {servicesDescription?.length
-            ? servicesDescription?.map((item: any, index: any) => {
+            ? servicesDescription?.slice(-1).map((item: any, index: any) => {
                 return (
                   <View
+                    key={index}
                     style={{
                       flexDirection: 'row',
                       alignItems: 'center',
@@ -392,9 +519,10 @@ const PRofileStep2 = () => {
           />
 
           {servicePrice?.length
-            ? servicePrice?.map((item: any, index: any) => {
+            ? servicePrice.slice(-1)?.map((item: any, index: any) => {
                 return (
                   <View
+                    key={index}
                     style={{
                       flexDirection: 'row',
                       alignItems: 'center',
@@ -501,6 +629,7 @@ const PRofileStep2 = () => {
                 setItems={setNationalityItems}
                 showArrowIcon={false}
                 zIndex={10}
+                placeholder="City"
                 dropDownContainerStyle={{
                   borderWidth: 0,
                 }}
@@ -523,6 +652,7 @@ const PRofileStep2 = () => {
                   backgroundColor: colors.lightBlack,
                   borderColor: colors.primary,
                   borderWidth: 2,
+                  width: SIZES.width * 0.875,
                 }}
                 listMode="FLATLIST"
                 showTickIcon={false}
@@ -602,7 +732,7 @@ const PRofileStep2 = () => {
 
             <View>
               {portfolioToServiceCount?.map((item, index) => {
-                return <Portfoliocomp servicePrice={servicePrice}/>;
+                return <Portfoliocomp servicePrice={servicePrice} />;
               })}
             </View>
 
@@ -637,193 +767,6 @@ const PRofileStep2 = () => {
                 />
               </View>
             )}
-
-            {/* {potfolioEnable || shortDescription || potfolioImageUrl.length ? (
-              <View>
-                <TextWrapper
-                  children="Short Description"
-                  isRequired={false}
-                  fontType={'semiBold'}
-                  style={{fontSize: 16, marginTop: 0, color: colors.black}}
-                />
-                <TextInput
-                  style={{
-                    paddingHorizontal: 10,
-                    marginTop: 10,
-                    height: 70,
-                    backgroundColor: colors.greyLight1,
-                    borderRadius: 5,
-                    color: '#000',
-                  }}
-                  placeholderTextColor={colors.grey}
-                  placeholder="Breiefly talk about the portfolio.....Max: 20 words"
-                  value={shortDescription}
-                  onChangeText={setShortDescription}
-                />
-
-                {!potfolioImageLoading ? (
-                  <View>
-                    {potfolioImageUrl.length < 3 && (
-                      <>
-                        <TouchableOpacity
-                          onPress={async () => {
-                            try {
-                              const response: any = await launchImageLibrary();
-                              setPotfolioImageLoading(true);
-                              if (response) {
-                                const filename = response?.uri.substring(
-                                  response?.uri.lastIndexOf('/') + 1,
-                                );
-                                const uploadUri =
-                                  Platform.OS === 'ios'
-                                    ? response?.uri.replace('file://', '')
-                                    : response.uri;
-                                const task = await storage()
-                                  .ref(filename)
-                                  .putFile(uploadUri);
-                                if (task.metadata) {
-                                  potfolioPicture.current =
-                                    task.metadata.fullPath;
-                                }
-                                let url;
-                                if (potfolioPicture.current) {
-                                  url = await storage()
-                                    .ref(potfolioPicture.current)
-                                    .getDownloadURL();
-                                }
-                                setPotfolioImageUrl([...potfolioImageUrl, url]);
-                                potfolioPicture.current = '';
-                                setPotfolioImageLoading(false);
-                              } else {
-                                setPotfolioImageLoading(false);
-                              }
-                              setPotfolioImageUrl([...potfolioImageUrl, url]);
-                              potfolioPicture.current = '';
-                              setPotfolioImageLoading(false);
-                            } catch {
-                              setPotfolioImageLoading(false);
-                            }
-                          }}
-                          style={[
-                            generalStyles.contentCenter,
-                            {
-                              height: 25,
-                              width: 120,
-                              borderRadius: 5,
-                              marginTop: 13,
-                              backgroundColor: colors.lightBlack,
-                            },
-                          ]}>
-                          <TextWrapper
-                            children="Upload Images"
-                            isRequired={false}
-                            fontType={'semiBold'}
-                            style={{
-                              textAlign: 'center',
-                              fontSize: 12,
-                              color: colors.white,
-                            }}
-                          />
-                        </TouchableOpacity>
-                      </>
-                    )}
-
-                    <View style={[generalStyles.rowCenter, {marginRight: 20}]}>
-                      {potfolioImageUrl.map((item: any, index: number) => {
-                        return (
-                          <View
-                            key={index}
-                            style={[
-                              [generalStyles.rowCenter, {marginRight: 20}],
-                              {marginTop: 10},
-                            ]}>
-                            <TextWrapper
-                              children={item?.slice(-8)}
-                              isRequired={false}
-                              fontType={'semiBold'}
-                              style={{
-                                textAlign: 'center',
-                                fontSize: 12,
-                                color: colors.black,
-                              }}
-                            />
-                            <TouchableOpacity
-                              onPress={() => {
-                                setPotfolioImageUrl(
-                                  potfolioImageUrl.filter(
-                                    (text: any) => text !== item,
-                                  ),
-                                );
-                              }}>
-                              <Image
-                                source={images.cross}
-                                resizeMode="contain"
-                                style={{
-                                  width: 10,
-                                  height: 10,
-                                  marginLeft: 20,
-                                  tintColor: '#000',
-                                }}
-                              />
-                            </TouchableOpacity>
-                          </View>
-                        );
-                      })}
-                    </View>
-                    <Button
-                      onClick={() => {
-                        if (!shortDescription) {
-                          Snackbar.show({
-                            text: 'Please enter potfolio description',
-                            duration: Snackbar.LENGTH_SHORT,
-                            textColor: '#fff',
-                            backgroundColor: '#88087B',
-                          });
-                          return;
-                        }
-                        const data = {
-                          key: key,
-                          shortDescription: shortDescription,
-                          potfolioImages: potfolioImageUrl,
-                        };
-                        setKey(key + 1);
-                        if (editkey) {
-                          const objIndex = allPotfolio.findIndex(
-                            (obj: any) => obj.key == editkey,
-                          );
-                          allPotfolio[objIndex].potfolioImages =
-                            potfolioImageUrl;
-                          allPotfolio[objIndex].shortDescription =
-                            shortDescription;
-                          setAllPotfolio([...allPotfolio]);
-                        } else {
-                          setAllPotfolio([...allPotfolio, data]);
-                        }
-                        setEditKey(null);
-                        setShortDescription('');
-                        setPotfolioImageUrl([]);
-                        setPotfolioEnable(false);
-                      }}
-                      style={{
-                        width: 80,
-                        marginTop: 10,
-                        alignSelf: 'flex-end',
-                        backgroundColor: colors.lightBlack,
-                      }}
-                      textStyle={{color: colors.primary}}
-                      text={'Done'}
-                    />
-                  </View>
-                ) : (
-                  <ActivityIndicator
-                    style={{marginTop: 50}}
-                    size={'large'}
-                    color={colors.parpal}
-                  />
-                )}
-              </View>
-            ) : null} */}
-
             {!isLoading ? (
               <View style={{marginHorizontal: 25, marginTop: 75}}>
                 <Button
@@ -839,7 +782,7 @@ const PRofileStep2 = () => {
                     backgroundColor: colors.lightBlack,
                   }}
                   textStyle={{color: colors.primary}}
-                  text={'Next'}
+                  text={'Edit'}
                 />
               </View>
             ) : (
@@ -857,4 +800,4 @@ const PRofileStep2 = () => {
   );
 };
 
-export default PRofileStep2;
+export default AddServices;

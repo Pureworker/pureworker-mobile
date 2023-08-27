@@ -16,6 +16,7 @@ import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import { perHeight } from '../../utils/position/sizes';
+import { logout } from '../../store/reducer/mainSlice';
 
 const BecomeAServiceProvider = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -72,7 +73,9 @@ const BecomeAServiceProvider = () => {
             />
           </View>
         <TouchableOpacity
-            onPress={() => {}}
+            onPress={() => {
+              dispatch(logout());
+            }}
             style={[
               tw` px-2 py-4  mx-auto `,
               {marginTop: perHeight(48), borderRadius: 5},

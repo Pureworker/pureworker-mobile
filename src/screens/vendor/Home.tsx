@@ -41,6 +41,7 @@ const Home = ({navigation}: any) => {
   const {data: getCategoryData, isLoading, isError} = useGetCategoryQuery();
   const getCategory = getCategoryData ?? [];
   console.log(getCategory);
+  const [ContactAgent, setContactAgent] = useState(false);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
@@ -414,6 +415,7 @@ const Home = ({navigation}: any) => {
         isVisible={InfoModal}
         onModalHide={() => {
           setInfoModal(false);
+          setContactAgent(false);
         }}
         style={{width: SIZES.width, marginHorizontal: 0}}
         deviceWidth={SIZES.width}>
@@ -422,61 +424,76 @@ const Home = ({navigation}: any) => {
             onPress={() => setInfoModal(false)}
             style={tw`flex-1`}
           />
-          <View style={tw`h-[20%]  items-center mt-auto bg-[#D9D9D9]`}>
-            <TouchableOpacity
-              onPress={() => {
-                setInfoModal(false);
-              }}
-              style={tw`w-15 h-1 rounded-full  bg-[${colors.darkPurple}]`}
-            />
-            <TouchableOpacity
-              style={{
-                width: perWidth(316),
-                height: perHeight(40),
-                borderRadius: 13,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: colors.darkPurple,
-                marginTop: 18,
-              }}>
-              <Textcomp
-                text={'FAQ'}
-                size={14}
-                lineHeight={17}
-                color={'#FFC727'}
-                fontFamily={'Inter-SemiBold'}
+          {!ContactAgent && (
+            <View style={tw`h-[20%]  items-center mt-auto bg-[#D9D9D9]`}>
+              <TouchableOpacity
+                onPress={() => {
+                  setInfoModal(false);
+                  setContactAgent(false);
+                }}
+                style={tw`w-15 h-1 rounded-full  bg-[${colors.darkPurple}]`}
               />
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setInfoModal(false);
+                  navigation.navigate('FAQ');
+                }}
+                style={{
+                  width: perWidth(316),
+                  height: perHeight(40),
+                  borderRadius: 13,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: colors.darkPurple,
+                  marginTop: 18,
+                }}>
+                <Textcomp
+                  text={'FAQ'}
+                  size={14}
+                  lineHeight={17}
+                  color={'#FFC727'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={{
-                width: perWidth(316),
-                height: perHeight(40),
-                borderRadius: 13,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: colors.darkPurple,
-                marginTop: 10,
-              }}>
-              <Textcomp
-                text={'Connect to an Agent'}
-                size={14}
-                lineHeight={17}
-                color={'#FFC727'}
-                fontFamily={'Inter-SemiBold'}
-              />
-            </TouchableOpacity>
-            {/* when connect to an agent is clicked */}
-            {/* <View style={tw` flex-1 items-center justify-center`}>
-              <Textcomp
-                text={'An Agent will contact you as soon as possible'}
-                size={14}
-                lineHeight={17}
-                color={'black'}
-                fontFamily={'Inter-Bold'}
-              />
-            </View> */}
-          </View>
+              <TouchableOpacity
+                onPress={() => {
+                  setContactAgent(true);
+                }}
+                style={{
+                  width: perWidth(316),
+                  height: perHeight(40),
+                  borderRadius: 13,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: colors.darkPurple,
+                  marginTop: 10,
+                }}>
+                <Textcomp
+                  text={'Connect to an Agent'}
+                  size={14}
+                  lineHeight={17}
+                  color={'#FFC727'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {ContactAgent && (
+            <View
+              style={tw`h-[10%] justify-center items-center mt-auto bg-[#D9D9D9]`}>
+              <View>
+                <Textcomp
+                  text={'An Agent will contact you as soon as possible'}
+                  size={14}
+                  lineHeight={17}
+                  color={'#000000'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </View>
+            </View>
+          )}
         </View>
       </Modal>
     </SafeAreaView>

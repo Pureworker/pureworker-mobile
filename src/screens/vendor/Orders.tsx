@@ -219,6 +219,7 @@ const Orders = () => {
                     renderItem={(item: any, index: any) => {
                       return (
                         <Orderscomponent2
+                          key={index}
                           navigation={navigation}
                           item={item.item}
                           index={item.index}
@@ -242,6 +243,7 @@ const Orders = () => {
                     renderItem={(item: any, index: any) => {
                       return (
                         <Orderscomponent2
+                          key={index}
                           navigation={navigation}
                           item={item.item}
                           index={item.index}

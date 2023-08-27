@@ -222,7 +222,7 @@ export default function BusinessSignup() {
               onClick={() => {
                 setUserType(BUSINESS);
               }}
-              textStyle={{ color: userType === BUSINESS ? colors.white : '#000', fontSize: 20, fontFamily: 'bold' }}
+              textStyle={{ color: userType === BUSINESS ? colors.white : '#000', fontSize: 20, fontFamily: commonStyle.fontFamily.semibold }}
               style={{ flex: 1, borderRadius: 8, height: 45, backgroundColor: userType === BUSINESS ? colors.parpal : colors.white, }} />
           </View>
 

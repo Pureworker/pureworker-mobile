@@ -44,7 +44,7 @@ const TabNavigator = () => {
           alignItems: 'center',
           alignSelf: 'center',
           width: SIZES.width,
-          height: Platform.OS === 'ios' ? perHeight(77) : perHeight(70),
+          height: Platform.OS === 'ios' ? perHeight(73) : perHeight(70),
         },
       }}>
       <Tab.Screen

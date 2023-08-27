@@ -6,10 +6,12 @@ import Textcomp from '../Textcomp';
 import colors from '../../constants/colors';
 
 const ServiceCard = ({item, index, navigation}: any) => {
-  
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('ServiceProviderProfile', {service: item})}
+      // onPress={() => navigation.navigate('ServiceProviderProfile', {service: item})}
+      onPress={() => {
+        navigation.navigate('_Services', {service: item});
+      }}
       style={[
         tw` mt-4 border-[#FFC727]`,
         {

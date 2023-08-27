@@ -24,6 +24,8 @@ import PaymentMethod2 from '../screens/user/paymentMethod2';
 import BecomeAServiceProvider from '../screens/user/becomeAServiceProvider';
 import ViewLocation from '../screens/user/viewLocation';
 import EditAccount from '../screens/user/editAccount';
+import TipServiceProvider from '../screens/user/TipServiceProvider';
+import OrderActive from '../screens/user/orderActive';
 
 const Stack = createNativeStackNavigator();
 
@@ -138,6 +140,16 @@ export default function CustomerNavigation() {
       <Stack.Screen
         name="EditAccount"
         component={EditAccount}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="TipServiceProvider"
+        component={TipServiceProvider}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="OrderActive"
+        component={OrderActive}
         options={{headerShown: false, animationEnabled: false}}
       />
     </Stack.Navigator>

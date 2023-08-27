@@ -98,12 +98,15 @@ const TextInputs = ({
             marginLeft: 15,
             color: '#000',
             fontSize: 14,
-            width: '100%',
+            width: '90%',
             fontWeight: 'normal',
             fontFamily: 'Inter-Medium',
             paddingLeft: image ? 30 : 0,
             lineHeight: multiline ? 24 : 16,
-            marginBottom: multiline ? 10 : 0
+            marginBottom: multiline ? 10 : 0,
+            // backgroundColor: 'red',
+            height: 40,
+            marginTop: 5,
           }, styleInput]}
         />
 

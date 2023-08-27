@@ -10,6 +10,9 @@ import ProfileStep3 from '../screens/profile/ProfileStep3';
 import ProfileStep4 from '../screens/profile/ProfileStep4';
 import ProfileStep5 from '../screens/profile/ProfileStep5';
 import DrawerMenu from './drawerMenu2';
+import EditServices from '../screens/vendor/editService';
+import TransactionHistory from '../screens/user/transactionHistory';
+import AddServices from '../screens/vendor/addServices';
 
 const Stack = createNativeStackNavigator();
 
@@ -54,6 +57,21 @@ export default function VendorNavigation() {
       <Stack.Screen
         name="ProfileStep5"
         component={ProfileStep5}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="TransactionHistory"
+        component={TransactionHistory}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="EditService"
+        component={EditServices}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="AddServices"
+        component={AddServices}
         options={{headerShown: false, animationEnabled: false}}
       />
     </Stack.Navigator>
