@@ -10,7 +10,7 @@ import {
   StatusBar,
   ScrollView,
 } from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import images from '../../constants/images';
 import TextInputs from '../../components/TextInput2';
 import tw from 'twrnc';
@@ -23,6 +23,8 @@ import CategoryList2 from '../../components/CategoryList2';
 import commonStyle from '../../constants/commonStyle';
 import {useGetCategoryQuery} from '../../store/slice/api';
 import Modal from 'react-native-modal/dist/modal';
+import { getCategory, getPopularService, getUser } from '../../utils/api/func';
+import { addPopularServices, addSCategory, addUserData } from '../../store/reducer/mainSlice';
 
 const Home = ({navigation}: any) => {
   //   const navigation = useNavigation<StackNavigation>();
@@ -38,9 +40,49 @@ const Home = ({navigation}: any) => {
     {id: '4', title: 'Item 4'},
     {id: '5', title: 'Item 5'},
   ];
-  const {data: getCategoryData, isLoading, isError} = useGetCategoryQuery();
-  const getCategory = getCategoryData ?? [];
-  console.log(getCategory);
+  // const {data: getCategoryData, isLoading, isError} = useGetCategoryQuery();
+  // const getCategory = getCategoryData ?? [];
+  // console.log(getCategory);
+
+  //
+  const [isLoading, setisLoading] = useState(false);
+
+  useEffect(() => {
+    const initGetUsers = async () => {
+      const res: any = await getUser('');
+      console.log('dddddddd', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addUserData(res?.data?.user));
+      }
+      // setloading(false);
+    };
+    const initGetCategory = async () => {
+      setisLoading(true);
+      const res: any = await getCategory('');
+      // console.log('aaaaaaaaa', res?.data?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addSCategory(res?.data?.data));
+      }
+      setisLoading(false);
+    };
+    const initGetPopularServices = async () => {
+      setisLoading(true);
+      const res: any = await getPopularService('');
+      // console.log('ppppppppp', res?.data?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addPopularServices(res?.data?.data));
+      }
+      setisLoading(false);
+    };
+    initGetUsers();
+    // initGetCategory();
+    // initGetPopularServices();
+  }, [dispatch]);
+
+  //selectors
+  const userData = useSelector((state: any) => state.user.userData);
+  const _getCategory = useSelector((state: any) => state.user.category);
+  const _popularServices = useSelector((state: any) => state.user.popularServices);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
@@ -107,7 +149,7 @@ const Home = ({navigation}: any) => {
               {marginLeft: perWidth(18), marginTop: perHeight(28)},
             ]}>
             <Textcomp
-              text={'Welcome Vendor,'}
+              text={`Welcome ${userData?.firstName || userData?.businessName},`}
               size={17}
               lineHeight={17}
               color={'#000413'}

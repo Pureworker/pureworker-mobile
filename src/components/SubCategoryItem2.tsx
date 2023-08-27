@@ -8,7 +8,7 @@ import {addCategory, removeCategory} from '../store/reducer/mainSlice';
 
 const SubCategoryItem = ({style, itemDetail, index}: any) => {
   const category = useSelector((state: any) => state.user.category);
-  const title = itemDetail.label;
+  const title = itemDetail.value;
   const dispatch = useDispatch();
 
   return (

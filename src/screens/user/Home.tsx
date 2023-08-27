@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   View,
   Text,
@@ -11,14 +11,14 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
-import _ from 'lodash'
+import {useDispatch, useSelector} from 'react-redux';
+import _ from 'lodash';
 import images from '../../constants/images';
 import TextInputs from '../../components/TextInput2';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 
-import { SIZES, perHeight, perWidth } from '../../utils/position/sizes';
+import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 
 import colors from '../../constants/colors';
 import ServiceCard from '../../components/cards/serviceCard';
@@ -33,8 +33,12 @@ import {
 } from '../../store/slice/api';
 
 import Modal from 'react-native-modal';
-import { StackNavigation } from '../../constants/navigation';
-import { useNavigation } from '@react-navigation/native';
+import {StackNavigation} from '../../constants/navigation';
+import {useNavigation} from '@react-navigation/native';
+import {useGetUserDataQuery} from '../../store/slice/api2';
+import {addCategory, addPopularServices, addSCategory, addUserData, } from '../../store/reducer/mainSlice';
+import {getCategory, getPopularService, getUser} from '../../utils/api/func';
+
 const Home = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
@@ -51,16 +55,57 @@ const Home = () => {
   } = useGetAllServiceProviderPotfolioQuery();
   const getServiceProviderPotfolio = getServiceProviderPotfolioData ?? [];
   // console.log("🚀 ~ file: Home.tsx:52 ~ Home ~ getServiceProviderPotfolio:", getServiceProviderPotfolio)
-  const { data: getUserData, isLoading: isLoadingUser } = useGetUserDetailQuery();
-  const getUser = getUserData ?? [];
-  const { data: getCategoryData, isLoading, isError } = useGetCategoryQuery();
-  const getCategory = getCategoryData ?? [];
+  const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
+  // const { data: getUserData, isLoading: isLoadingUser } = useGetUserDataQuery();
+  // const getUser = getUserData ?? [];
+  // const {data: getCategoryData, isLoading, isError} = useGetCategoryQuery();
+  // const getCategory = getCategoryData ?? [];
 
   const [InfoModal, setInfoModal] = useState(false);
-  const filteredData = !_.isEmpty(getServiceProviderPotfolioData) ? getServiceProviderPotfolioData.filter((item: { description: string; }) =>
-    item.description.toLowerCase().includes(search.toLowerCase())
-  ) : []
+  const filteredData = !_.isEmpty(getServiceProviderPotfolioData)
+    ? getServiceProviderPotfolioData.filter((item: {description: string}) =>
+        item.description.toLowerCase().includes(search.toLowerCase()),
+      )
+    : [];
+  const [isLoading, setisLoading] = useState(false);
 
+  useEffect(() => {
+    const initGetUsers = async () => {
+      const res: any = await getUser('');
+      console.log('dddddddd', res);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addUserData(res?.data?.user));
+      }
+      // setloading(false);
+    };
+    const initGetCategory = async () => {
+      setisLoading(true);
+      const res: any = await getCategory('');
+      console.log('aaaaaaaaa', res?.data?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addSCategory(res?.data?.data));
+      }
+      setisLoading(false);
+    };
+    const initGetPopularServices = async () => {
+      setisLoading(true);
+      const res: any = await getPopularService('');
+      console.log('ppppppppp', res?.data?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addPopularServices(res?.data?.data));
+      }
+      setisLoading(false);
+    };
+    initGetUsers();
+    initGetCategory();
+    initGetPopularServices();
+  }, []);
+
+  //selectors
+  const userData = useSelector((state: any) => state.user.userData);
+  const _getCategory = useSelector((state: any) => state.user.category);
+  const _popularServices = useSelector((state: any) => state.user.popularServices);
+  // console.log(userData);
 
   // const filterBySearchProduct = useMemo(() => {
   //   var searchArray = [];
@@ -88,7 +133,7 @@ const Home = () => {
   // }, [search, getServiceProviderProfile]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#EBEBEB' }}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
       <View
         style={[
@@ -112,12 +157,12 @@ const Home = () => {
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
               <Image
                 source={images.profile}
-                style={{ height: 40, width: 40 }}
+                style={{height: 40, width: 40}}
                 resizeMode="contain"
               />
             </TouchableOpacity>
             <TextInputs
-              style={{ marginTop: 0, width: '70%' }}
+              style={{marginTop: 0, width: '70%'}}
               labelText={'Search'}
               state={search}
               setState={setSearch}
@@ -148,7 +193,7 @@ const Home = () => {
               }}>
               <Image
                 source={images.question}
-                style={{ height: 20, width: 20 }}
+                style={{height: 20, width: 20}}
                 resizeMode="contain"
               />
             </TouchableOpacity>
@@ -157,10 +202,10 @@ const Home = () => {
           <View
             style={[
               tw``,
-              { marginLeft: perWidth(18), marginTop: perHeight(28) },
+              {marginLeft: perWidth(18), marginTop: perHeight(28)},
             ]}>
             <Textcomp
-              text={`Welcome ${getUser.firstName},`}
+              text={`Welcome ${userData?.firstName},`}
               size={17}
               lineHeight={17}
               color={'#000413'}
@@ -171,7 +216,7 @@ const Home = () => {
           <View
             style={[
               tw`flex flex-row items-center justify-between`,
-              { marginLeft: perWidth(18), marginTop: perHeight(22) },
+              {marginLeft: perWidth(18), marginTop: perHeight(22)},
             ]}>
             <View style={[tw``]}>
               <Textcomp
@@ -235,9 +280,9 @@ const Home = () => {
             </View>
           </View> */}
 
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <FlatList
-              data={filteredData}
+              data={_popularServices}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               renderItem={(item: any) => {
@@ -257,7 +302,7 @@ const Home = () => {
           <View
             style={[
               tw`flex flex-row items-center justify-between`,
-              { marginLeft: perWidth(24), marginTop: perHeight(52) },
+              {marginLeft: perWidth(24), marginTop: perHeight(52)},
             ]}>
             <View style={[tw``]}>
               <Textcomp
@@ -284,7 +329,7 @@ const Home = () => {
             </TouchableOpacity>
           </View>
 
-          <View style={{ flex: 1 }}>
+          {/* <View style={{flex: 1}}>
             <FlatList
               data={getServiceProviderProfile}
               horizontal={true}
@@ -300,14 +345,14 @@ const Home = () => {
               }}
               keyExtractor={item => item.id}
             />
-          </View>
+          </View> */}
 
           {/* Service Ctagories */}
           <View>
             <View
               style={[
                 tw`flex flex-row items-center justify-between`,
-                { marginLeft: perWidth(24), marginTop: perHeight(52) },
+                {marginLeft: perWidth(24), marginTop: perHeight(52)},
               ]}>
               <View style={[tw``]}>
                 <Textcomp
@@ -326,9 +371,20 @@ const Home = () => {
                 style={tw`w-full `}
                 contentContainerStyle={tw`w-[92%] mx-auto`}
                 horizontal>
-                <FlatList
-                  style={{ flex: 1 }}
-                  data={getCategory}
+                <ScrollView scrollEnabled={false}>
+                  {_getCategory?.map((item, index) => {
+                    // console.log(item);
+                    return (
+                      <CategoryList2
+                        categoryName={item?.name}
+                        catId={item?.id}
+                      />
+                    );
+                  })}
+                </ScrollView>
+                {/* <FlatList
+                  style={{flex: 1}}
+                  data={_getCategory}
                   scrollEnabled={false}
                   ListFooterComponent={() => {
                     return (
@@ -349,9 +405,15 @@ const Home = () => {
                     );
                   }}
                   showsVerticalScrollIndicator={false}
-                  renderItem={({ item, index }) => (
-                    <CategoryList2 categoryName={item.name} catId={item?.id} />
-                  )}
+                  renderItem={({item, index}) => {
+                    console.log(item);
+                    return (
+                      <CategoryList2
+                        categoryName={item.name}
+                        catId={item?.id}
+                      />
+                    );
+                  }}
                   ListEmptyComponent={() => (
                     <Text
                       style={[
@@ -365,7 +427,7 @@ const Home = () => {
                       {!loading ? 'No service found' : ''}
                     </Text>
                   )}
-                />
+                /> */}
               </ScrollView>
             </View>
           </View>
@@ -377,7 +439,7 @@ const Home = () => {
         onModalHide={() => {
           setInfoModal(false);
         }}
-        style={{ width: SIZES.width, marginHorizontal: 0 }}
+        style={{width: SIZES.width, marginHorizontal: 0}}
         deviceWidth={SIZES.width}>
         <View style={tw` h-full w-full bg-black bg-opacity-5`}>
           <TouchableOpacity

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Header from '../../components/Header';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -30,6 +30,7 @@ const EditAccount = () => {
 
   const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
   const getUser = getUserData ?? [];
+  const userData = useSelector((state: any) => state.user.userData);
 
   const [locationItems, setLocationItems] = useState([
     {label: 'Male', value: 'Male'},
@@ -37,19 +38,17 @@ const EditAccount = () => {
     {label: 'Others', value: 'Others'},
   ]);
   const [locationOpen, setLocationOpen] = useState(false);
-  const [locationValue, setLocationValue] = useState(getUser?.gender || null);
-  const [description, setDescription] = useState('');
+  const [locationValue, setLocationValue] = useState(userData?.gender || null);
 
-  const [firstName, setfirstName] = useState(getUser?.firstName || '');
-  const [lastName, setlastName] = useState(getUser?.lastName || '');
-  const [email, setemail] = useState(getUser?.email || '');
-  const [phoneNumber, setphoneNumber] = useState(getUser?.phoneNumber || '');
-  const [address, setaddress] = useState(getUser?.address || '');
-  const [nationality, setnationality] = useState(getUser?.nationality || '');
-  const [dob, setdob] = useState(getUser?.dob || '');
-  const [gender, setgender] = useState(getUser?.gender || '');
+  const [firstName, setfirstName] = useState(userData?.firstName || '');
+  const [lastName, setlastName] = useState(userData?.lastName || '');
+  const [email, setemail] = useState(userData?.email || '');
+  const [phoneNumber, setphoneNumber] = useState(userData?.phoneNumber || '');
+  const [address, setaddress] = useState(userData?.address || '');
+  const [nationality, setnationality] = useState(userData?.nationality || '');
+  const [dob, setdob] = useState(userData?.dob || '');
+  const [gender, setgender] = useState(userData?.gender || '');
   console.log(locationValue);
-  
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView>

@@ -39,11 +39,7 @@ const DrawerContent = () => {
       navigation.navigate(route);
     }
   };
-
   const userType = useSelector((state: any) => state.user.isLoggedIn);
-  // console.log('user_', userType);
-  // if (!userType.userType === 'CUSTOMER') {
-  //
   const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
   const getUser = getUserData ?? [];
 
@@ -59,7 +55,8 @@ const DrawerContent = () => {
       }
     });
   };
-
+  //
+  const userData = useSelector((state: any) => state.user.userData);
   return (
     <DrawerContentScrollView
       contentContainerStyle={{
@@ -91,7 +88,7 @@ const DrawerContent = () => {
           <View style={tw``}>
             <View style={tw``}>
               <Textcomp
-                text={`${getUser?.firstName}`}
+                text={`${userData?.firstName || userData?.businessName}`}
                 size={14}
                 color={'#ffffff'}
                 style={[tw`ml-3`, { lineHeight: 14 }, { fontWeight: '500' }]}

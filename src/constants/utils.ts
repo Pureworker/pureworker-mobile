@@ -116,5 +116,5 @@ export const allCountry =  [
   { label: 'Ugep', value: 'Ugep' },
   { label: 'Chakwama', value: 'Chakwama' },
   { label: 'Nnewi', value: 'Nnewi' },
-  { label: 'Ise-Ekiti', value: 'Ise-Ekiti' }
+  { label: 'Ise-Ekiti', value: 'Ise-Ekiti' },
 ]

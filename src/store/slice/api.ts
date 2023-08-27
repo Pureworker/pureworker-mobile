@@ -87,7 +87,7 @@ export const api = emptySplitApi.injectEndpoints({
     getUserDetail: builder.query<any, void>({
       query: () => {
         return {
-          url: '/users/',
+          url: '/user/me',
           method: 'GET',
         }
       },
