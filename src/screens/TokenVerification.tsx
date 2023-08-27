@@ -28,6 +28,7 @@ import {
   useVerifyOtpMutation,
 } from '../store/slice/api';
 import {loggedIn} from '../store/reducer/mainSlice';
+import {verifyLogin, verifyUser} from '../utils/api/auth';
 type Route = {
   key: string;
   name: string;
@@ -107,30 +108,76 @@ const TokenVerification = () => {
       return;
     }
     const loginData = {
-      email: route.params?.email,
-      otp: code,
+      email: route.params?.email?.toLowerCase(),
+      token: code,
     };
-    verification(loginData)
-      .unwrap()
-      .then((data: any) => {
-        if (data) {
-          dispatch(
-            loggedIn({
-              token: data.token,
-              type: data.type,
-            }),
-          );
-        }
-      })
-      .catch((error: any) => {
-        console.log('err', error);
+
+    if (route.params?.type === 'login') {
+      const res = await verifyLogin(loginData);
+      if (res?.status === 200 || res?.status === 201) {
+        dispatch(
+          loggedIn({
+            token: res?.data?.token,
+            type: res?.data?.user.accountType?.toUpperCase(),
+          }),
+        );
+      } else {
         Snackbar.show({
-          text: error.data.message,
+          text: res?.error?.message
+          ? res?.error?.message
+          : res?.error?.data?.message
+          ? res?.error?.data?.message
+          : 'Oops!, an error occured',
           duration: Snackbar.LENGTH_SHORT,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
-      });
+      }
+    } else {
+      const res = await verifyUser(code);
+      console.log('verify-here', res, 'data:', res?.data?.message);
+      if (res?.status === 200 || res?.status === 201) {
+        dispatch(
+          loggedIn({
+            token: res?.data?.message?.token,
+            // res?.message?.data?.token,
+            type: res?.data?.message?.user?.accountType?.toUpperCase(),
+          }),
+        );
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+    }
+
+
+    // verification(loginData)
+    //   .unwrap()
+    //   .then((data: any) => {
+    //     if (data) {
+    // dispatch(
+    //   loggedIn({
+    //     token: data.token,
+    //     type: data.type,
+    //   }),
+    //       );
+    //     }
+    //   })
+    //   .catch((error: any) => {
+    //     console.log('err', error);
+    //     Snackbar.show({
+    //       text: error.data.message,
+    //       duration: Snackbar.LENGTH_SHORT,
+    //       textColor: '#fff',
+    //       backgroundColor: '#88087B',
+    //     });
+    //   });
   };
 
   const minutes = Math.floor((seconds % 3600) / 60);

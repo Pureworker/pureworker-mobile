@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Header from '../../components/Header';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -19,12 +19,29 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {perHeight, perWidth} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
 import { useGetUserDetailQuery } from '../../store/slice/api';
+import { addUserData } from '../../store/reducer/mainSlice';
+import { getUser } from '../../utils/api/func';
 
 const Account = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
-  const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
-  const getUser = getUserData ?? [];
+  // const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
+  // const getUser = getUserData ?? [];
+
+  useEffect(() => {
+    const initGetUsers = async () => {
+      const res: any = await getUser('');
+      console.log('dddddddd', res);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addUserData(res?.data?.user));
+      }
+      // setloading(false);
+    };
+    initGetUsers();
+  }, []);
+
+  //selectors
+  const userData = useSelector((state: any) => state.user.userData);
 
   // console.log(getUser);
   return (
@@ -99,7 +116,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                  text={`${getUser?.firstName}`}
+                  text={`${userData?.firstName}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}
@@ -125,7 +142,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                  text={`${getUser?.lastName}`}
+                  text={`${userData?.lastName}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}
@@ -151,7 +168,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                   text={`${getUser?.email}`}
+                   text={`${userData?.email}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}
@@ -177,7 +194,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                  text={`${getUser?.phoneNumber}`}
+                  text={`${userData?.phoneNumber}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}
@@ -203,7 +220,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                  text={`${getUser?.address}`}
+                  text={`${userData?.address}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}
@@ -255,7 +272,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                  text={`${getUser?.dob}`}
+                  text={`${userData?.dob}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}
@@ -281,7 +298,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                 text={`${getUser?.gender}`}
+                 text={`${userData?.gender}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}

@@ -6,13 +6,16 @@ import {
   CollapseHeader,
   CollapseBody,
 } from 'accordion-collapse-react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import SubCategoryItem from './SubCategoryItem2';
 import TextWrapper from './TextWrapper';
 import images from '../constants/images';
 import {useGetSubCategoriesQuery} from '../store/slice/api';
 import colors from '../constants/colors';
 import {generalStyles} from '../constants/generalStyles';
+// import {getSubCategory} from '../utils/api/func';
+import {addSubcategory} from '../store/reducer/mainSlice';
+import { getSubCategory } from '../utils/api/func';
 
 type SubCategoryListPRops = {
   categoryName: string;
@@ -22,12 +25,32 @@ type SubCategoryListPRops = {
 const CategoryList = ({categoryName, catId}: SubCategoryListPRops) => {
   const [collapseState, setCollapseState] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const {
-    data: getSubCategoryData,
-    isLoading,
-    isError,
-  } = useGetSubCategoriesQuery({categoryId: catId});
-  const getSubCategory = getSubCategoryData ?? [];
+  const [isLoading, setisLoading] = useState(false);
+  const [_getSubCategory, set_getSubCategory] = useState([]);
+  // const {
+  //   data: getSubCategoryData,
+  //   isLoading,
+  //   isError,
+  // } = useGetSubCategoriesQuery({categoryId: catId});
+  // const getSubCategory = getSubCategoryData ?? [];
+
+  // console.log(categoryName);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const initGetCategory = async () => {
+      setisLoading(true);
+      console.log(catId);
+      const res: any = await getSubCategory(catId);
+      console.log('ssssssss', res?.data?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        // dispatch(addSubcategory(res?.data?.data?.services));
+        set_getSubCategory(res?.data?.data?.services);
+      }
+      setisLoading(false);
+    };
+    initGetCategory();
+  }, []);
 
   return (
     <View style={{}}>
@@ -91,7 +114,7 @@ const CategoryList = ({categoryName, catId}: SubCategoryListPRops) => {
           </TextWrapper>
         </CollapseHeader>
         <CollapseBody>
-          {getSubCategory && (
+          {_getSubCategory && (
             <View
               style={{
                 borderColor: colors.primary,
@@ -101,7 +124,7 @@ const CategoryList = ({categoryName, catId}: SubCategoryListPRops) => {
                 flexWrap: 'wrap',
                 width: '95%',
               }}>
-              {getSubCategory.map((item: any, index: number) => {
+              {_getSubCategory.map((item: any, index: number) => {
                 var offerStyle;
                 if (index > 0) {
                   offerStyle = {marginBottom: 25};

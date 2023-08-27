@@ -35,6 +35,7 @@
     "axios": "^1.4.0",
     "flutterwave-react-native": "^1.0.4",
     "jwt-check-expiration": "^1.0.5",
+    "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "react": "18.2.0",
     "react-native": "0.71.7",

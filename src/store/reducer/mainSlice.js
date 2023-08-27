@@ -13,9 +13,13 @@ const persistConfig = {
 const initialState = {
   isLoggedIn: null,
   category: [],
+  subcategory: [],
+  popularServices: [],
 
   //frontend Temporary data
   serviceView: null,
+  //
+  userData: null,
 };
 
 export const mainSlice = createSlice({
@@ -27,6 +31,7 @@ export const mainSlice = createSlice({
         token: action.payload.token,
         userType: action.payload.type,
       };
+      state.userData =  null;
     },
 
     logout: state => {
@@ -51,10 +56,22 @@ export const mainSlice = createSlice({
       var arr = state.category.filter(text => text !== action.payload);
       state.category = arr;
     },
+    addUserData: (state, action) => {
+      state.userData = action.payload;
+    },
+    addSCategory: (state, action) => {
+      state.category = action.payload;
+    },
+    addSubcategory: (state, action) => {
+      state.subcategory = action.payload;
+    },
+    addPopularServices: (state, action) => {
+      state.popularServices = action.payload;
+    },
   },
 });
 
-export const {loggedIn, logout, addCategory, removeCategory, emptyCategory} =
+export const {loggedIn, logout, addCategory, removeCategory, emptyCategory,addUserData, addSCategory,addSubcategory,addPopularServices} =
   mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);
