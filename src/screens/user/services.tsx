@@ -11,7 +11,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -37,7 +37,9 @@ const Services = () => {
     isLoading: isLoadingServiceProviderPotfolio,
     refetch,
   } = useGetAllServiceProviderPotfolioQuery();
-  const getServiceProviderPotfolio = getServiceProviderPotfolioData ?? [];
+  // const getServiceProviderPotfolio = getServiceProviderPotfolioData ?? [];
+  const _popularServices = useSelector((state: any) => state.user.popularServices);
+  const getServiceProviderPotfolio = _popularServices
 
   const filterServiceProviderPotfolio = useMemo(() => {
     var searchArray = [];
@@ -46,8 +48,8 @@ const Services = () => {
       getServiceProviderPotfolio.length
     ) {
       searchArray = getServiceProviderPotfolio.filter(txt => {
-        const text = txt?.description
-          ? txt?.description.toUpperCase()
+        const text = txt?.name
+          ? txt?.name.toUpperCase()
           : ''.toUpperCase();
         const textSearch = searchInput.toUpperCase();
         return text.indexOf(textSearch) > -1;
@@ -208,7 +210,7 @@ const Services = () => {
                   ]}>
                   <View style={tw`p-1.5`}>
                     <Textcomp
-                      text={item?.description}
+                      text={item?.name}
                       size={14}
                       lineHeight={16}
                       color={'#FFFFFF'}

@@ -44,7 +44,7 @@ const Orders = () => {
   const [serviceProviderModal, setserviceProviderModal] = useState(false);
   const [privateFeedback, setprivateFeedback] = useState(false);
   const [rateYourExperience, setrateYourExperience] = useState(false);
-  const [orderCompleted, setorderCompleted] = useState(true);
+  const [orderCompleted, setorderCompleted] = useState(false);
   const [orderDispute, setorderDispute] = useState(false);
   const [orderDelivered, setorderDelivered] = useState(false);
   const [orderInProgress, setorderInProgress] = useState(false);
@@ -267,6 +267,7 @@ const Orders = () => {
                     renderItem={(item: any, index: any) => {
                       return (
                         <Orderscomponent
+                          key={index}
                           navigation={navigation}
                           item={item.item}
                           index={item.index}

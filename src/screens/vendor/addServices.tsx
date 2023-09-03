@@ -27,7 +27,7 @@ import ProfileStepWrapper from '../../components/ProfileStepWrapper';
 import TextInputs from '../../components/TextInputs';
 import DropDownPicker from 'react-native-dropdown-picker';
 import PotfolioWrapper from '../../components/PotfolioWrapper';
-import {allCountry, launchImageLibrary} from '../../constants/utils';
+import {allCities, allCountry, launchImageLibrary} from '../../constants/utils';
 import Snackbar from 'react-native-snackbar';
 import storage from '@react-native-firebase/storage';
 import Portfoliocomp from '../../components/Portfolio';
@@ -38,7 +38,11 @@ import {
   CollapseBody,
 } from 'accordion-collapse-react-native';
 import axios from 'axios';
-import {addCategory, removeCategory} from '../../store/reducer/mainSlice';
+import {addCategory, addcompleteProfile, removeCategory} from '../../store/reducer/mainSlice';
+import ServiceIntroComp from '../../components/serviceIntro';
+import ServicePriceComp from '../../components/servicePrice';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { getSubCategory } from '../../utils/api/func';
 
 const AddServices = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -52,7 +56,13 @@ const AddServices = () => {
   const [key, setKey] = useState<any>(1);
   const [editkey, setEditKey] = useState<any>(null);
 
-  const category = useSelector((state: any) => state.user.category);
+  const category = useSelector((state: any) => state.user.pickedServices);
+  const currentServiceIntro = useSelector(
+    (state: any) => state.user.completeProfileData?.serviceIntro,
+  );
+  const currentPriceRange = useSelector(
+    (state: any) => state.user.completeProfileData?.priceRange,
+  );
   const [servicesDescription, setServicesDescription] = useState<any>([]); // State to store input values
   const [servicePrice, setServicePrice] = useState<any>([]); // State to store input values
   const [createService, {isLoading}] = useCreateServiceMutation();
@@ -64,12 +74,15 @@ const AddServices = () => {
   const [nationalityItems, setNationalityItems] = useState<any>([]);
   let potfolioPicture = useRef('');
   let profilePicture = useRef('');
-  console.log('nationalityItems', nationalityItems);
+  const completeProfileData = useSelector(
+    (state: any) => state.user.completeProfileData,
+  );
+  // console.log('nationalityItems', nationalityItems);
 
   const [portfolioToServiceCount, setportfolioToServiceCount] = useState([]);
 
   useEffect(() => {
-    setNationalityItems([...allCountry]);
+    setNationalityItems([...allCities]);
   }, []);
 
   useEffect(() => {
@@ -108,8 +121,10 @@ const AddServices = () => {
     updatedInputValues[index] = {...updatedInputValues[index], priceMax};
     setServicePrice(updatedInputValues);
   };
-  const {data: getCategoryData, isError} = useGetCategoryQuery();
-  const getCategory = getCategoryData ?? [];
+  const _getCategory = useSelector((state: any) => state.user.category);
+  const getCategory = _getCategory;
+
+  console.log(getCategory);
 
   const handleProfileSetup = () => {
     if (
@@ -153,7 +168,6 @@ const AddServices = () => {
       });
     }
   };
-
   //
   const dispatch = useDispatch();
   //
@@ -183,6 +197,68 @@ const AddServices = () => {
         backgroundColor: '#88087B',
       });
     }
+  };
+
+  useEffect(() => {
+    if (category?.length) {
+      const updatedInputValues = category.map((service: string) => ({
+        service: service?.name,
+        description: '',
+      }));
+      const updatedServiceIntro = [
+        ...(currentServiceIntro || []), // Use an empty array if currentServiceIntro is undefined
+        ...(updatedInputValues || []).filter(
+          updatedItem =>
+            !(currentServiceIntro || []).some(
+              currentItem => currentItem.service === updatedItem.service,
+            ),
+        ),
+      ];
+      // Update the Redux store with the updated array
+      setServicesDescription([...updatedServiceIntro]);
+      dispatch(addcompleteProfile({serviceIntro: updatedServiceIntro}));
+    }
+  }, [category]);
+
+  useEffect(() => {
+    if (category?.length) {
+      const updatedInputValues = category.map((service: string) => ({
+        serviceName: service?.name,
+        service: service?.id,
+        maxPrice: '',
+        minPrice: '',
+      }));
+      // Retrieve the current state of priceRange from Redux
+      // const currentPriceRange = getState().yourSliceName.priceRange;
+      // Create a new array with updated and existing values
+      const updatedPriceRange = [
+        ...(currentPriceRange || []),
+        ...updatedInputValues.filter(
+          updatedItem =>
+            // !currentPriceRange.some(
+            !(currentPriceRange || []).some(
+              currentItem => currentItem.service === updatedItem.service,
+            ),
+        ),
+      ];
+
+      // Update the Redux store with the updated array
+      setServicePrice([...updatedPriceRange]);
+      dispatch(addcompleteProfile({priceRange: updatedPriceRange}));
+    }
+    setDescription(completeProfileData?.description);
+  }, [category]);
+
+  const [_getSubCategory, set_getSubCategory] = useState([]);
+  const initSubGetCategory = async param => {
+    // setisLoading(true);
+    // console.log(param);
+    const res: any = await getSubCategory(param);
+    if (res?.status === 201 || res?.status === 200) {
+      // dispatch(addSubcategory(res?.data?.data?.services));
+      set_getSubCategory(res?.data?.data?.services);
+    }
+    // setisLoading(false);
   };
 
   return (
@@ -219,9 +295,6 @@ const AddServices = () => {
           <Collapse
             isExpanded={collapseState}
             onToggle={() => {
-              // if (!dataLoaded) {
-              //   setDataLoaded(true);
-              // }
               setCollapseState(!collapseState);
             }}
             style={{
@@ -298,9 +371,10 @@ const AddServices = () => {
                     return (
                       <TouchableOpacity
                         key={index}
-                        onPress={() => {
+                        onPress={async () => {
                           setselectCategory(item?.name);
-                          HandleGetSubCategory(item?.id);
+                          // HandleGetSubCategory(item?.id);
+                          await initSubGetCategory(item?.id);
                           setCollapseState(false);
                         }}
                         style={{marginTop: 8}}>
@@ -329,9 +403,6 @@ const AddServices = () => {
             {selectCategory?.length > 0 && selectCategory !== '' && (
               <Collapse
                 onToggle={() => {
-                  // if (!dataLoaded) {
-                  //   setDataLoaded(true);
-                  // }
                   setCollapseState2(!collapseState2);
                 }}
                 isExpanded={collapseState2}
@@ -352,7 +423,6 @@ const AddServices = () => {
                     borderColor: colors.primary,
                     borderWidth: 2,
                     paddingHorizontal: 15,
-                    // marginHorizontal: 20
                   }}>
                   <View style={{}}>
                     <TextWrapper
@@ -389,7 +459,7 @@ const AddServices = () => {
                   </TextWrapper>
                 </CollapseHeader>
                 <CollapseBody>
-                  {subCategory && subCategory.length > 0 && (
+                  {_getSubCategory && _getSubCategory.length > 0 && (
                     <View
                       style={{
                         borderColor: colors.primary,
@@ -399,7 +469,7 @@ const AddServices = () => {
                         flexWrap: 'wrap',
                         width: '95%',
                       }}>
-                      {subCategory?.map((item: any, index: number) => {
+                      {_getSubCategory?.map((item: any, index: number) => {
                         var offerStyle;
                         if (index > 0) {
                           offerStyle = {marginBottom: 25};
@@ -411,26 +481,32 @@ const AddServices = () => {
                               if (
                                 Array.isArray(category) &&
                                 category.length &&
-                                category.includes(item?.label)
+                                category.some(
+                                  catItem => catItem.name === item.name,
+                                )
                               ) {
-                                dispatch(removeCategory(item?.label));
+                                dispatch(removeCategory(item));
                               } else {
-                                dispatch(addCategory(item?.label));
+                                dispatch(addCategory(item));
                               }
-                              console.log(category);
+                              setCollapseState2(false);
+                              // console.log(category);
                             }}
                             style={{marginTop: 8}}>
                             <TextWrapper
                               fontType={'semiBold'}
                               style={{
-                                color: category?.includes(item?.label)
+                                color: category.some(
+                                  (catItem: {name: any}) =>
+                                    catItem.name === item.name,
+                                )
                                   ? colors.primary
                                   : colors.white,
                                 marginLeft: 11,
                                 marginRight: 8,
                                 marginBottom: 8,
                               }}>
-                              {item?.label}
+                              {item?.name}
                             </TextWrapper>
                           </TouchableOpacity>
                         );
@@ -454,7 +530,7 @@ const AddServices = () => {
             }}
           />
 
-          {servicesDescription?.length
+          {/* {servicesDescription?.length
             ? servicesDescription?.slice(-1).map((item: any, index: any) => {
                 return (
                   <View
@@ -504,6 +580,13 @@ const AddServices = () => {
                   </View>
                 );
               })
+            : null} */}
+          {servicesDescription?.length
+            ? servicesDescription?.map((item: any, index: any) => {
+                return (
+                  <ServiceIntroComp key={index} item={item} index={index} />
+                );
+              })
             : null}
 
           <TextWrapper
@@ -518,7 +601,7 @@ const AddServices = () => {
             }}
           />
 
-          {servicePrice?.length
+          {/* {servicePrice?.length
             ? servicePrice.slice(-1)?.map((item: any, index: any) => {
                 return (
                   <View
@@ -599,6 +682,13 @@ const AddServices = () => {
                       />
                     </View>
                   </View>
+                );
+              })
+            : null} */}
+          {servicePrice?.length
+            ? servicePrice?.map((item: any, index: any) => {
+                return (
+                  <ServicePriceComp key={index} item={item} index={index} />
                 );
               })
             : null}

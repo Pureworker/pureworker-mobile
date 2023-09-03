@@ -11,56 +11,56 @@ type ProfileStepWrapperProps = {
 export default function ({ active }: ProfileStepWrapperProps) {
   return (
     <View style={[generalStyles.rowCenter, { marginHorizontal: 20 }]}>
-      <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active == 'one' ? colors.parpal : colors.white }]}>
+      <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active === 'one' ? colors.parpal : colors.white }]}>
         <TextWrapper
           fontType={'semiBold'}
           style={{
             fontSize: 12,
-            color: active == 'one' ? colors.primary : colors.black,
+            color: active === 'one' ? colors.primary : colors.black,
           }}>
           1
         </TextWrapper>
       </View>
       <View style={{ height: 1, backgroundColor: colors.black, width: 15 }} />
-      <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active == 'two' ? colors.parpal : colors.white }]}>
+      <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active === 'two' ? colors.parpal : colors.white }]}>
         <TextWrapper
           fontType={'semiBold'}
           style={{
             fontSize: 12,
-            color: active == 'two' ? colors.primary : colors.black,
+            color: active === 'two' ? colors.primary : colors.black,
           }}>
           2
         </TextWrapper>
       </View>
       <View style={{ height: 1, backgroundColor: colors.black, width: 15 }} />
-      <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active == 'three' ? colors.parpal : colors.white }]}>
+      <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active === 'three' ? colors.parpal : colors.white }]}>
         <TextWrapper
           fontType={'semiBold'}
           style={{
             fontSize: 12,
-            color: active == 'three' ? colors.primary : colors.black,
+            color: active === 'three' ? colors.primary : colors.black,
           }}>
           3
         </TextWrapper>
       </View>
       <View style={{ height: 1, backgroundColor: colors.black, width: 15 }} />
-      <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active == 'four' ? colors.parpal : colors.white }]}>
+      <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active === 'four' ? colors.parpal : colors.white }]}>
         <TextWrapper
           fontType={'semiBold'}
           style={{
             fontSize: 12,
-            color: active == 'four' ? colors.primary : colors.black,
+            color: active === 'four' ? colors.primary : colors.black,
           }}>
           4
         </TextWrapper>
       </View>
       <View style={{ height: 1, backgroundColor: colors.black, width: 15 }} />
-      <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active == 'five' ? colors.parpal : colors.white }]}>
+      <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active === 'five' ? colors.parpal : colors.white }]}>
         <TextWrapper
           fontType={'semiBold'}
           style={{
             fontSize: 12,
-            color: active == 'five' ? colors.primary : colors.black,
+            color: active === 'five' ? colors.primary : colors.black,
           }}>
           5
         </TextWrapper>

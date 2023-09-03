@@ -22,7 +22,11 @@ import {
 } from '../../store/slice/api';
 import colors from '../../constants/colors';
 import {useDispatch, useSelector} from 'react-redux';
-import {addCategory, removeCategory} from '../../store/reducer/mainSlice';
+import {
+  addCategory,
+  addcompleteProfile,
+  removeCategory,
+} from '../../store/reducer/mainSlice';
 import {generalStyles} from '../../constants/generalStyles';
 import ProfileStepWrapper from '../../components/ProfileStepWrapper';
 import TextInputs from '../../components/TextInputs';
@@ -35,17 +39,26 @@ import {
 } from 'accordion-collapse-react-native';
 import axios from 'axios';
 import Snackbar from 'react-native-snackbar';
+import {getSubCategory} from '../../utils/api/func';
 
 const PRofileStep1 = () => {
   const navigation = useNavigation<StackNavigation>();
   const [addService, setAddService] = useState('');
   const [isAddService, setIsAddService] = useState(false);
 
-  const {data: getCategoryData, isLoading, isError} = useGetCategoryQuery();
-  const getCategory = getCategoryData ?? [];
+  // const {data: getCategoryData, isLoading, isError} = useGetCategoryQuery();
+  // const getCategory = getCategoryData ?? [];
 
-  const category = useSelector((state: any) => state.user.category);
+  const _getCategory = useSelector((state: any) => state.user.category);
+  const getCategory = _getCategory;
+  const category = useSelector((state: any) => state.user.pickedServices);
+  const categoryId = useSelector((state: any) => state.user.pickedServicesId);
+  const completeProfileData = useSelector(
+    (state: any) => state.user.completeProfileData,
+  );
   const dispatch = useDispatch();
+
+  console.log(completeProfileData, category);
 
   //
   const [collapseState, setCollapseState] = useState(false);
@@ -74,6 +87,19 @@ const PRofileStep1 = () => {
         backgroundColor: '#88087B',
       });
     }
+  };
+
+  const [_getSubCategory, set_getSubCategory] = useState([]);
+  const initSubGetCategory = async param => {
+    // setisLoading(true);
+    // console.log(param);
+    const res: any = await getSubCategory(param);
+    // console.log('ssssssss', res?.data?.data);
+    if (res?.status === 201 || res?.status === 200) {
+      // dispatch(addSubcategory(res?.data?.data?.services));
+      set_getSubCategory(res?.data?.data?.services);
+    }
+    // setisLoading(false);
   };
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
@@ -140,7 +166,7 @@ const PRofileStep1 = () => {
                     fontSize: 14,
                     color: '#fff',
                   }}>
-                  Select Category
+                  {selectCategory ? selectCategory : 'Select Category'}
                 </TextWrapper>
               </View>
               {collapseState ? (
@@ -185,10 +211,12 @@ const PRofileStep1 = () => {
                     }
                     return (
                       <TouchableOpacity
-                        onPress={() => {
+                        key={index}
+                        onPress={async () => {
                           setselectCategory(item?.name);
-                          HandleGetSubCategory(item?.id);
                           setCollapseState(false);
+                          // HandleGetSubCategory(item?.id);
+                          await initSubGetCategory(item?.id);
                         }}
                         style={{marginTop: 8}}>
                         <TextWrapper
@@ -251,7 +279,7 @@ const PRofileStep1 = () => {
                       Select Services
                     </TextWrapper>
                   </View>
-                  {collapseState ? (
+                  {collapseState2 ? (
                     <Image
                       source={images.polygonDown}
                       resizeMode={'contain'}
@@ -276,7 +304,7 @@ const PRofileStep1 = () => {
                   </TextWrapper>
                 </CollapseHeader>
                 <CollapseBody>
-                  {subCategory && subCategory.length > 0 && (
+                  {_getSubCategory && _getSubCategory.length > 0 && (
                     <View
                       style={{
                         borderColor: colors.primary,
@@ -286,37 +314,44 @@ const PRofileStep1 = () => {
                         flexWrap: 'wrap',
                         width: '95%',
                       }}>
-                      {subCategory?.map((item: any, index: number) => {
+                      {_getSubCategory?.map((item: any, index: number) => {
                         var offerStyle;
                         if (index > 0) {
                           offerStyle = {marginBottom: 25};
                         }
                         return (
                           <TouchableOpacity
+                            key={index}
                             onPress={() => {
                               if (
                                 Array.isArray(category) &&
                                 category.length &&
-                                category.includes(item?.label)
+                                category.some(
+                                  catItem => catItem.name === item.name,
+                                )
                               ) {
-                                dispatch(removeCategory(item?.label));
+                                dispatch(removeCategory(item));
                               } else {
-                                dispatch(addCategory(item?.label));
+                                dispatch(addCategory(item));
                               }
-                              console.log(category);
+                              setCollapseState2(false);
+                              // console.log(category);
                             }}
                             style={{marginTop: 8}}>
                             <TextWrapper
                               fontType={'semiBold'}
                               style={{
-                                color: category?.includes(item?.label)
+                                color: category.some(
+                                  (catItem: {name: any}) =>
+                                    catItem.name === item.name,
+                                )
                                   ? colors.primary
                                   : colors.white,
                                 marginLeft: 11,
                                 marginRight: 8,
                                 marginBottom: 8,
                               }}>
-                              {item?.label}
+                              {item?.name}
                             </TextWrapper>
                           </TouchableOpacity>
                         );
@@ -416,16 +451,23 @@ const PRofileStep1 = () => {
           /> */}
           <Button
             onClick={() => {
+              const data = completeProfileData;
+              data.services = category;
+              console.log(data, category, categoryId);
+              dispatch(addcompleteProfile({services: categoryId}));
               navigation.navigate('ProfileStep2');
             }}
-            style={[tw`ml-auto`,{width: 90, backgroundColor: colors.lightBlack}]}
+            style={[
+              tw`ml-auto`,
+              {width: 90, backgroundColor: colors.lightBlack},
+            ]}
             textStyle={{color: colors.primary}}
             text={'Next'}
           />
         </View>
 
         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-          {category?.length
+          {category?.length > 0
             ? category?.map((item: any, index: any) => {
                 return (
                   <View
@@ -453,7 +495,7 @@ const PRofileStep1 = () => {
                           fontSize: 12,
                           color: '#fff',
                         }}>
-                        {item}
+                        {item?.name}
                       </TextWrapper>
                     </View>
                     <TouchableOpacity

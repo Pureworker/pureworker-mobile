@@ -20,7 +20,7 @@ import {
   useLoginMutation,
 } from '../../store/slice/api';
 import colors from '../../constants/colors';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import ProfileStepWrapper from '../../components/ProfileStepWrapper';
 import TextInputs from '../../components/TextInputs';
 
@@ -30,6 +30,7 @@ import {
   CollapseBody,
 } from 'accordion-collapse-react-native';
 import Snackbar from 'react-native-snackbar';
+import {addcompleteProfile} from '../../store/reducer/mainSlice';
 type Route = {
   key: string;
   name: string;
@@ -43,23 +44,28 @@ const ProfileStep4 = () => {
   const [idNumber, setIdNumber] = useState('');
   const route: Route = useRoute();
 
-  const category = useSelector((state: any) => state.user.category);
+  const category = useSelector((state: any) => state.user.pickedServices);
   const [collapseState, setCollapseState] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [selectedVerification, setSelectedVerification] = useState('');
   const [nationalityItems, setNationalityItems] = useState([
     'Int. Passport',
     'Drivers License',
-    'NIN',
+    'vNIN',
     'Voters Card',
+    'Bank Verification Number',
     'Others',
   ]);
 
   const [login] = useLoginMutation();
   const [createService, {isLoading}] = useCreateServiceMutation();
 
+
+  // console.log('--pppp', completeProfileData);
+
+  const dispatch = useDispatch();
   const handleProfileSetup = () => {
-    if (idNumber) {
+    if (idNumber && selectedVerification) {
       const profileData = {
         serviceId: route?.params?.serviceId,
         idNumber: idNumber,
@@ -67,24 +73,48 @@ const ProfileStep4 = () => {
         scheduleDate: null,
         appointmentTime: null,
       };
-      createService(profileData)
-        .unwrap()
-        .then((data: any) => {
-          if (data) {
-            navigation.navigate('ProfileStep5', {
-              serviceId: route?.params?.serviceId,
-            });
-          }
-        })
-        .catch((error: any) => {
-          console.log('err', error);
-          Snackbar.show({
-            text: error.data.message,
-            duration: Snackbar.LENGTH_SHORT,
-            textColor: '#fff',
-            backgroundColor: '#88087B',
-          });
-        });
+
+      if (getUser?.user?.accountType?.toUpperCase() === 'FREELANCER') {
+        dispatch(
+          addcompleteProfile({
+            identity: {
+              means: selectedVerification,
+              number: idNumber,
+            },
+          }),
+        );
+      }
+      if (getUser?.user?.accountType?.toUpperCase() === 'BUSINESS') {
+        dispatch(
+          addcompleteProfile({
+            identity: {
+              businessName: selectedVerification,
+              cac: idNumber,
+            },
+          }),
+        );
+      }
+      navigation.navigate('ProfileStep5', {
+        serviceId: route?.params?.serviceId,
+      });
+      // createService(profileData)
+      //   .unwrap()
+      //   .then((data: any) => {
+      //     if (data) {
+      //       navigation.navigate('ProfileStep5', {
+      //         serviceId: route?.params?.serviceId,
+      //       });
+      //     }
+      //   })
+      //   .catch((error: any) => {
+      //     console.log('err', error);
+      //     Snackbar.show({
+      //       text: error.data.message,
+      //       duration: Snackbar.LENGTH_SHORT,
+      //       textColor: '#fff',
+      //       backgroundColor: '#88087B',
+      //     });
+      //   });
     } else {
       Snackbar.show({
         text: 'Please fill all fields',
@@ -98,7 +128,8 @@ const ProfileStep4 = () => {
   const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
   const getUser = getUserData ?? [];
 
-  console.log(getUserData, getUser);
+  // console.log(getUserData,'asdf', getUser, getUser?.userType);
+  console.log('mmmm', getUser?.user?.accountType?.toUpperCase());
 
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
@@ -121,7 +152,7 @@ const ProfileStep4 = () => {
             style={{fontSize: 20, marginTop: 30, color: colors.black}}
           />
           {/* For freelancers  */}
-          {getUser?.userType === 'FREELANCER' && (
+          {getUser?.user?.accountType?.toUpperCase() === 'FREELANCER' && (
             <>
               <Collapse
                 onToggle={() => {
@@ -228,7 +259,7 @@ const ProfileStep4 = () => {
                 children="Enter ID Number"
                 isRequired={true}
                 fontType={'semiBold'}
-                style={{fontSize: 13, marginTop: 13, color: colors.black}}
+                style={{fontSize: 13, marginTop: 25, color: colors.black}}
               />
               <TextInputs
                 style={{marginTop: 10, backgroundColor: colors.greyLight1}}
@@ -238,7 +269,7 @@ const ProfileStep4 = () => {
               />
             </>
           )}
-          {getUser?.userType !== 'BUSINESS' && (
+          {getUser?.user?.accountType?.toUpperCase() === 'BUSINESS' && (
             <>
               <>
                 <TextWrapper
@@ -274,10 +305,10 @@ const ProfileStep4 = () => {
           {!isLoading ? (
             <Button
               onClick={() => {
-                // handleProfileSetup();
-                navigation.navigate('ProfileStep5', {
-                  serviceId: route?.params?.serviceId,
-                });
+                handleProfileSetup();
+                // navigation.navigate('ProfileStep5', {
+                //   serviceId: route?.params?.serviceId,
+                // });
               }}
               style={{
                 marginHorizontal: 40,

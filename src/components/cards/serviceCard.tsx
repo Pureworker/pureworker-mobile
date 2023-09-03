@@ -19,7 +19,7 @@ const ServiceCard = ({item, index, navigation}: any) => {
           width: perWidth(150),
           borderWidth: 3,
           borderRadius: 20,
-          marginLeft: index == 0 ? 10 : 3,
+          marginLeft: index === 0 ? 10 : 3,
         },
       ]}>
       <Image
@@ -30,16 +30,16 @@ const ServiceCard = ({item, index, navigation}: any) => {
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
         }}
-        source={{uri: item?.potfolioImageFirst}}
+        source={{uri: item?.potfolioImageFirst || 'https://res.cloudinary.com/dr0pef3mn/image/upload/v1693314864/Assets/1693314863624-empty-300x240.png.png'}}
       />
       <View
         style={[
           tw`bg-[${colors.darkPurple}] flex-1`,
           {borderBottomLeftRadius: 20, borderBottomRightRadius: 20},
         ]}>
-        <View style={[tw``, {marginLeft: 10, marginTop: perHeight(6)}]}>
+        <View style={[tw``, {marginLeft: 10, marginRight: 10, marginTop: perHeight(6)}]}>
           <Textcomp
-            text={item?.description}
+            text={item?.name}
             size={12}
             lineHeight={14}
             color={colors.white}

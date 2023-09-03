@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   StatusBar,
   ScrollView,
+  Platform,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import images from '../constants/images';
@@ -30,12 +31,13 @@ const {width, height} = Dimensions.get('screen');
 export default function Login() {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [seconds, setSeconds] = useState(120);
+  const [seconds, setSeconds] = useState(30);
 
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
 
-  const [login, {isLoading}] = useLoginMutation();
+  // const [login, {isLoading}] = useLoginMutation();
+  const [isLoading, setisLoading] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -48,6 +50,7 @@ export default function Login() {
   }, [seconds]);
 
   const handleLogin = async () => {
+    setisLoading(true);
     if (email) {
       if (!validateEmail(email)) {
         Snackbar.show({
@@ -92,6 +95,7 @@ export default function Login() {
         //   text: error.data.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#88087B',
         // });
         //   });
+        setisLoading(false);
       }
     } else {
       Snackbar.show({
@@ -100,10 +104,17 @@ export default function Login() {
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
+      setisLoading(false);
     }
+    setisLoading(false);
   };
   return (
-    <View style={{flex: 1, backgroundColor: '#000'}}>
+    <View
+      style={{
+        flex: 1,
+        paddingTop: Platform.OS === 'ios' ? 30 : 0,
+        backgroundColor: '#000',
+      }}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <Image
           source={images.cross}
@@ -112,7 +123,10 @@ export default function Login() {
             width: 20,
             marginLeft: 25,
             marginBottom: 10,
-            marginTop: StatusBar.currentHeight && StatusBar.currentHeight + 40,
+            marginTop:
+              Platform.OS === 'ios'
+                ? 20
+                : StatusBar.currentHeight && StatusBar.currentHeight + 40,
           }}
           resizeMode="contain"
         />
@@ -161,7 +175,9 @@ export default function Login() {
                 style={{marginTop: 10}}
                 labelText={'Enter Email'}
                 state={email}
-                setState={setEmail}
+                setState={text => {
+                  setEmail(text?.trim());
+                }}
                 keyBoardType={'email-address'}
               />
             </View>
@@ -203,6 +219,7 @@ export default function Login() {
             </Text>
           </Text>
         </View>
+        <View style={{height: 30}} />
       </ScrollView>
     </View>
   );

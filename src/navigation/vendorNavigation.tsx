@@ -13,6 +13,7 @@ import DrawerMenu from './drawerMenu2';
 import EditServices from '../screens/vendor/editService';
 import TransactionHistory from '../screens/user/transactionHistory';
 import AddServices from '../screens/vendor/addServices';
+import Congratulations from '../screens/profile/congratulations';
 
 const Stack = createNativeStackNavigator();
 
@@ -57,6 +58,11 @@ export default function VendorNavigation() {
       <Stack.Screen
         name="ProfileStep5"
         component={ProfileStep5}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="Congratulations"
+        component={Congratulations}
         options={{headerShown: false, animationEnabled: false}}
       />
       <Stack.Screen

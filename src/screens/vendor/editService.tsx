@@ -33,9 +33,16 @@ import storage from '@react-native-firebase/storage';
 import Portfoliocomp from '../../components/Portfolio';
 import {SIZES, perWidth} from '../../utils/position/sizes';
 
-const EditServices = () => {
+const EditServices = ({route}:any) => {
   const navigation = useNavigation<StackNavigation>();
-  const [description, setDescription] = useState('');
+  //
+  const passed_index = route.params?.index;
+  const name = route.params?.name;
+  console.log(passed_index, name);
+  const profileData = useSelector((state: any) => state.user.profileData);
+  console.log(profileData?.serviceIntro?.[passed_index], profileData?.priceRange?.[passed_index]);
+  //
+  const [description, setDescription] = useState(profileData?.serviceIntro?.[passed_index]?.description ||  '');
   const [shortDescription, setShortDescription] = useState('');
   const [imageObject, setImageObject] = useState({});
   const [imageUrl, setImageUrl] = useState('');
@@ -45,7 +52,7 @@ const EditServices = () => {
   const [key, setKey] = useState<any>(1);
   const [editkey, setEditKey] = useState<any>(null);
 
-  const category = useSelector((state: any) => state.user.category);
+  const category = useSelector((state: any) => state.user.pickedServices);
   const [servicesDescription, setServicesDescription] = useState<any>([]); // State to store input values
   const [servicePrice, setServicePrice] = useState<any>([]); // State to store input values
   const [createService, {isLoading}] = useCreateServiceMutation();
@@ -57,7 +64,7 @@ const EditServices = () => {
   const [nationalityItems, setNationalityItems] = useState<any>([]);
   let potfolioPicture = useRef('');
   let profilePicture = useRef('');
-  console.log('nationalityItems', nationalityItems);
+  // console.log('nationalityItems', nationalityItems);
 
   const [portfolioToServiceCount, setportfolioToServiceCount] = useState([]);
 
@@ -166,7 +173,6 @@ const EditServices = () => {
             fontType={'semiBold'}
             style={{fontSize: 20, marginTop: 30, color: colors.black}}
           />
-
           <TextWrapper
             children="Service Intro"
             isRequired={true}
@@ -179,56 +185,51 @@ const EditServices = () => {
             }}
           />
 
-          {servicesDescription?.length
-            ? servicesDescription?.slice(0, 1).map((item: any, index: any) => {
-                return (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      width: WIDTH_WINDOW - 40,
-                      justifyContent: 'space-between',
-                      marginBottom: 13,
-                    }}>
-                    <View
-                      key={index}
-                      style={{
-                        paddingHorizontal: 10,
-                        justifyContent: 'center',
-                        backgroundColor: colors.lightBlack,
-                        height: 50,
-                        width: 120,
-                        borderRadius: 5,
-                      }}>
-                      <TextWrapper
-                        numberOfLines={1}
-                        fontType={'semiBold'}
-                        style={{
-                          fontSize: 12,
-                          color: '#fff',
-                        }}>
-                        {item?.serviceName}
-                      </TextWrapper>
-                    </View>
-                    <TextInput
-                      style={{
-                        width: '60%',
-                        paddingHorizontal: 10,
-                        backgroundColor: colors.lightBlack,
-                        borderRadius: 5,
-                        color: '#fff',
-                        height: Platform.OS === 'ios' ? 50 : 50,
-                      }}
-                      placeholderTextColor={colors.grey}
-                      placeholder="Enter service description"
-                      key={index}
-                      value={item.value} // Assign value from state
-                      onChangeText={value => handleInputChange(index, value)}
-                    />
-                  </View>
-                );
-              })
-            : null}
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              width: WIDTH_WINDOW - 40,
+              justifyContent: 'space-between',
+              marginBottom: 13,
+            }}>
+            <View
+              style={{
+                paddingHorizontal: 10,
+                justifyContent: 'center',
+                backgroundColor: colors.lightBlack,
+                height: 50,
+                width: 120,
+                borderRadius: 5,
+              }}>
+              <TextWrapper
+                numberOfLines={1}
+                fontType={'semiBold'}
+                style={{
+                  fontSize: 12,
+                  color: '#fff',
+                }}>
+                {/* {item?.serviceName} */}
+              {name}
+              </TextWrapper>
+            </View>
+            <TextInput
+              style={{
+                width: '60%',
+                paddingHorizontal: 10,
+                backgroundColor: colors.lightBlack,
+                borderRadius: 5,
+                color: '#fff',
+                height: Platform.OS === 'ios' ? 50 : 50,
+              }}
+              placeholderTextColor={colors.grey}
+              placeholder="Enter service description"
+              // key={index}
+              // value={item.value} // Assign value from state
+              value={description}
+              onChangeText={value => handleInputChange(index, value)}
+            />
+          </View>
 
           <TextWrapper
             children="Price Range"
@@ -241,90 +242,85 @@ const EditServices = () => {
               color: colors.black,
             }}
           />
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              width: WIDTH_WINDOW - 40,
+              justifyContent: 'space-between',
+              marginBottom: 13,
+            }}>
+            <View
+              style={{
+                paddingHorizontal: 10,
+                justifyContent: 'center',
+                backgroundColor: colors.lightBlack,
+                height: 50,
+                width: 120,
+                borderRadius: 5,
+              }}>
+              <TextWrapper
+                numberOfLines={1}
+                fontType={'semiBold'}
+                style={{
+                  fontSize: 12,
+                  color: '#fff',
+                }}>
+                {/* {item?.serviceName} */}
+                {name}
+              </TextWrapper>
+            </View>
 
-          {servicePrice?.length
-            ? servicePrice.slice(0, 1)?.map((item: any, index: any) => {
-                return (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      width: WIDTH_WINDOW - 40,
-                      justifyContent: 'space-between',
-                      marginBottom: 13,
-                    }}>
-                    <View
-                      key={index}
-                      style={{
-                        paddingHorizontal: 10,
-                        justifyContent: 'center',
-                        backgroundColor: colors.lightBlack,
-                        height: 50,
-                        width: 120,
-                        borderRadius: 5,
-                      }}>
-                      <TextWrapper
-                        numberOfLines={1}
-                        fontType={'semiBold'}
-                        style={{
-                          fontSize: 12,
-                          color: '#fff',
-                        }}>
-                        {item?.serviceName}
-                      </TextWrapper>
-                    </View>
-
-                    <View style={[generalStyles.rowCenter]}>
-                      <TextInput
-                        style={{
-                          width: 80,
-                          paddingHorizontal: 10,
-                          backgroundColor: colors.lightBlack,
-                          borderRadius: 5,
-                          color: '#fff',
-                          height: Platform.OS === 'ios' ? 50 : 50,
-                        }}
-                        placeholderTextColor={colors.grey}
-                        placeholder="N"
-                        keyboardType="number-pad"
-                        key={index}
-                        value={item.value} // Assign value from state
-                        onChangeText={value =>
-                          handleServicePriceMinChange(index, value)
-                        }
-                      />
-                      <TextWrapper
-                        fontType={'semiBold'}
-                        style={{
-                          fontSize: 12,
-                          color: colors.black,
-                          marginHorizontal: 10,
-                        }}>
-                        to
-                      </TextWrapper>
-                      <TextInput
-                        style={{
-                          width: 80,
-                          paddingHorizontal: 10,
-                          backgroundColor: colors.lightBlack,
-                          borderRadius: 5,
-                          color: '#fff',
-                          height: Platform.OS === 'ios' ? 50 : 50,
-                        }}
-                        placeholderTextColor={colors.grey}
-                        placeholder="N"
-                        keyboardType="number-pad"
-                        key={index}
-                        value={item.value} // Assign value from state
-                        onChangeText={value =>
-                          handleServicePriceMaxChange(index, value)
-                        }
-                      />
-                    </View>
-                  </View>
-                );
-              })
-            : null}
+            <View style={[generalStyles.rowCenter]}>
+              <TextInput
+                style={{
+                  width: 80,
+                  paddingHorizontal: 10,
+                  backgroundColor: colors.lightBlack,
+                  borderRadius: 5,
+                  color: '#fff',
+                  height: Platform.OS === 'ios' ? 50 : 50,
+                }}
+                placeholderTextColor={colors.grey}
+                placeholder="N"
+                keyboardType="number-pad"
+                value=""
+                // key={index}
+                // value={item.value} // Assign value from state
+                onChangeText={value =>
+                  handleServicePriceMinChange(index, value)
+                }
+              />
+              <TextWrapper
+                fontType={'semiBold'}
+                style={{
+                  fontSize: 12,
+                  color: colors.black,
+                  marginHorizontal: 10,
+                }}>
+                to
+              </TextWrapper>
+              <TextInput
+                style={{
+                  width: 80,
+                  paddingHorizontal: 10,
+                  backgroundColor: colors.lightBlack,
+                  borderRadius: 5,
+                  color: '#fff',
+                  height: Platform.OS === 'ios' ? 50 : 50,
+                }}
+                placeholderTextColor={colors.grey}
+                placeholder="N"
+                keyboardType="number-pad"
+                value=""
+                // key={index}
+                // value={item.value} // Assign value from state
+                onChangeText={value =>
+                  handleServicePriceMaxChange(index, value)
+                }
+              />
+            </View>
+          </View>
           <View
             style={{
               minHeight: 500,
@@ -375,7 +371,7 @@ const EditServices = () => {
                   backgroundColor: colors.lightBlack,
                   borderColor: colors.primary,
                   borderWidth: 2,
-                  width: SIZES.width * 0.875
+                  width: SIZES.width * 0.875,
                 }}
                 listMode="FLATLIST"
                 showTickIcon={false}

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Image} from 'react-native';
+import {View, Image, ActivityIndicator} from 'react-native';
 
 import {
   Collapse,
@@ -15,14 +15,25 @@ import colors from '../constants/colors';
 import {generalStyles} from '../constants/generalStyles';
 // import {getSubCategory} from '../utils/api/func';
 import {addSubcategory} from '../store/reducer/mainSlice';
-import { getSubCategory } from '../utils/api/func';
+import {getSubCategory} from '../utils/api/func';
 
 type SubCategoryListPRops = {
   categoryName: string;
   catId: number;
 };
+type SubCategoryListProps = {
+  categoryName: string;
+  catId: number;
+  isOpen: boolean; // New prop for controlling the dropdown state
+  onDropdownClick: (catId: number) => void; // Callback for updating parent component's state
+};
 
-const CategoryList = ({categoryName, catId}: SubCategoryListPRops) => {
+const CategoryList = ({
+  categoryName,
+  catId,
+  isOpen,
+  onDropdownClick,
+}: SubCategoryListProps) => {
   const [collapseState, setCollapseState] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [isLoading, setisLoading] = useState(false);
@@ -56,11 +67,13 @@ const CategoryList = ({categoryName, catId}: SubCategoryListPRops) => {
     <View style={{}}>
       <Collapse
         onToggle={() => {
-          if (!dataLoaded) {
+          if (!isLoading) {
             setDataLoaded(true);
           }
+          onDropdownClick(catId);
           setCollapseState(!collapseState);
         }}
+        isExpanded={isOpen}
         style={{
           justifyContent: 'center',
           flexDirection: 'column',
@@ -89,7 +102,7 @@ const CategoryList = ({categoryName, catId}: SubCategoryListPRops) => {
               {categoryName}
             </TextWrapper>
           </View>
-          {collapseState ? (
+          {isOpen ? (
             <Image
               source={images.polygonDown}
               resizeMode={'contain'}
@@ -114,32 +127,42 @@ const CategoryList = ({categoryName, catId}: SubCategoryListPRops) => {
           </TextWrapper>
         </CollapseHeader>
         <CollapseBody>
-          {_getSubCategory && (
-            <View
-              style={{
-                borderColor: colors.primary,
-                backgroundColor: colors.lightBlack,
-                borderWidth: 2,
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                width: '95%',
-              }}>
-              {_getSubCategory.map((item: any, index: number) => {
-                var offerStyle;
-                if (index > 0) {
-                  offerStyle = {marginBottom: 25};
-                }
-                return (
-                  <SubCategoryItem
-                    style={{}}
-                    key={index}
-                    itemDetail={item}
-                    catId={catId}
-                    index={index}
-                  />
-                );
-              })}
-            </View>
+          {isLoading ? (
+            <ActivityIndicator
+              style={{marginTop: 332}}
+              size={'large'}
+              color={colors.parpal}
+            />
+          ) : (
+            <>
+              {_getSubCategory && (
+                <View
+                  style={{
+                    borderColor: colors.primary,
+                    backgroundColor: colors.lightBlack,
+                    borderWidth: 2,
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    width: '95%',
+                  }}>
+                  {_getSubCategory.map((item: any, index: number) => {
+                    var offerStyle;
+                    if (index > 0) {
+                      offerStyle = {marginBottom: 25};
+                    }
+                    return (
+                      <SubCategoryItem
+                        style={{}}
+                        key={index}
+                        itemDetail={item}
+                        catId={catId}
+                        index={index}
+                      />
+                    );
+                  })}
+                </View>
+              )}
+            </>
           )}
         </CollapseBody>
       </Collapse>

@@ -14,6 +14,9 @@ import TextInputs from '../../components/TextInputs';
 import Snackbar from 'react-native-snackbar';
 import {useCreateServiceMutation} from '../../store/slice/api';
 import {validateEmail} from '../../constants/utils';
+import tw from 'twrnc';
+import {useDispatch, useSelector} from 'react-redux';
+import {addcompleteProfile} from '../../store/reducer/mainSlice';
 type Route = {
   key: string;
   name: string;
@@ -23,19 +26,44 @@ type Route = {
 };
 const ProfileStep3 = () => {
   const navigation = useNavigation<StackNavigation>();
-  const [name1, setName1] = useState('');
-  const [name2, setName2] = useState('');
-  const [relation1, setRelation1] = useState('');
-  const [relation2, setRelation2] = useState('');
-  const [phoneNumber1, setPhoneNumber1] = useState('');
-  const [phoneNumber2, setPhoneNumber2] = useState('');
-  const [email1, setEmail1] = useState('');
-  const [email2, setEmail2] = useState('');
-  const [address1, setAddress1] = useState('');
-  const [address2, setAddress2] = useState('');
+  const completeProfileData = useSelector(
+    (state: any) => state.user.completeProfileData,
+  );
+  const [name1, setName1] = useState(
+    completeProfileData?.contact?.[0]?.fullName || '',
+  );
+  const [name2, setName2] = useState(
+    completeProfileData?.contact?.[1]?.fullName || '',
+  );
+  const [relation1, setRelation1] = useState(
+    completeProfileData?.contact?.[0]?.relationship || '',
+  );
+  const [relation2, setRelation2] = useState(
+    completeProfileData?.contact?.[1]?.relationship || '',
+  );
+  const [phoneNumber1, setPhoneNumber1] = useState(
+    completeProfileData?.contact?.[0]?.phoneNumber || '',
+  );
+  const [phoneNumber2, setPhoneNumber2] = useState(
+    completeProfileData?.contact?.[1]?.phoneNumber || '',
+  );
+  const [email1, setEmail1] = useState(
+    completeProfileData?.contact?.[0]?.email || '',
+  );
+  const [email2, setEmail2] = useState(
+    completeProfileData?.contact?.[1]?.email || '',
+  );
+  const [address1, setAddress1] = useState(
+    completeProfileData?.contact?.[0]?.address || '',
+  );
+  const [address2, setAddress2] = useState(
+    completeProfileData?.contact?.[1]?.address || '',
+  );
   const route: Route = useRoute();
 
   const [createService, {isLoading}] = useCreateServiceMutation();
+
+  const dispatch = useDispatch();
 
   const handleProfileSetup = () => {
     if (
@@ -69,41 +97,65 @@ const ProfileStep3 = () => {
         });
         return;
       }
-      const profileData = {
-        addressFirst: address1,
-        fullNameFirst: name1,
-        relationFirst: relation1,
-        emailFirst: email1,
-        phoneNumberFirst: phoneNumber1,
-        fullNameSecond: name2,
-        relationSecond: relation2,
-        emailSecond: email2,
-        phoneNumberSecond: phoneNumber2,
-        addressSecond: address2,
-        idNumber: null,
-        scheduleDate: null,
-        appointmentTime: null,
-        potfolios: [],
+
+      dispatch(
+        addcompleteProfile({
+          contact: [
+            {
+              fullName: name1,
+              relationship: relation1,
+              phoneNumber: phoneNumber1,
+              email: email1,
+              address: address1,
+            },
+            {
+              fullName: name2,
+              relationship: relation2,
+              phoneNumber: phoneNumber2,
+              email: email2,
+              address: address2,
+            },
+          ],
+        }),
+      );
+      navigation.navigate('ProfileStep4', {
         serviceId: route?.params?.serviceId,
-      };
-      createService(profileData)
-        .unwrap()
-        .then((data: any) => {
-          if (data) {
-            navigation.navigate('ProfileStep4', {
-              serviceId: route?.params?.serviceId,
-            });
-          }
-        })
-        .catch((error: any) => {
-          console.log('error', error);
-          Snackbar.show({
-            text: JSON.stringify(error),
-            duration: Snackbar.LENGTH_SHORT,
-            textColor: '#fff',
-            backgroundColor: '#88087B',
-          });
-        });
+      });
+      // const profileData = {
+      //   addressFirst: address1,
+      //   fullNameFirst: name1,
+      //   relationFirst: relation1,
+      //   emailFirst: email1,
+      //   phoneNumberFirst: phoneNumber1,
+      //   fullNameSecond: name2,
+      //   relationSecond: relation2,
+      //   emailSecond: email2,
+      //   phoneNumberSecond: phoneNumber2,
+      //   addressSecond: address2,
+      //   idNumber: null,
+      //   scheduleDate: null,
+      //   appointmentTime: null,
+      //   potfolios: [],
+      //   serviceId: route?.params?.serviceId,
+      // };
+      // createService(profileData)
+      //   .unwrap()
+      //   .then((data: any) => {
+      //     if (data) {
+      //       navigation.navigate('ProfileStep4', {
+      //         serviceId: route?.params?.serviceId,
+      //       });
+      //     }
+      //   })
+      //   .catch((error: any) => {
+      //     console.log('error', error);
+      //     Snackbar.show({
+      //       text: JSON.stringify(error),
+      //       duration: Snackbar.LENGTH_SHORT,
+      //       textColor: '#fff',
+      //       backgroundColor: '#88087B',
+      //     });
+      //   });
     } else {
       Snackbar.show({
         text: 'Please fill all fields',
@@ -154,7 +206,10 @@ const ProfileStep3 = () => {
             style={{marginTop: 10, backgroundColor: colors.greyLight1}}
             labelText={''}
             state={name1}
-            setState={setName1}
+            setState={text => {
+              setName1(text);
+              // console.log(text);
+            }}
           />
 
           <TextWrapper
@@ -319,22 +374,25 @@ const ProfileStep3 = () => {
               generalStyles.rowBetween,
               {marginTop: 40, marginBottom: 35},
             ]}>
-            <Button
+            {/* <Button
               onClick={() => {}}
               style={{width: 130, backgroundColor: colors.lightBlack}}
               textStyle={{color: colors.primary}}
               text={'Save'}
-            />
+            /> */}
 
             {!isLoading ? (
               <Button
                 onClick={() => {
-                  navigation.navigate('ProfileStep4', {
-                    serviceId: route?.params?.serviceId,
-                  });
-                  // handleProfileSetup();
+                  // navigation.navigate('ProfileStep4', {
+                  //   serviceId: route?.params?.serviceId,
+                  // });
+                  handleProfileSetup();
                 }}
-                style={{width: 90, backgroundColor: colors.lightBlack}}
+                style={[
+                  tw`ml-auto`,
+                  {width: 90, backgroundColor: colors.lightBlack},
+                ]}
                 textStyle={{color: colors.primary}}
                 text={'Next'}
               />

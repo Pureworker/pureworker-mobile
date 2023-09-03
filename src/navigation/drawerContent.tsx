@@ -33,6 +33,8 @@ const DrawerContent = () => {
     {label: 'Privacy Policy', route: 'PrivacyPolicy', icon: images.support},
   ];
   const dispatch = useDispatch();
+  const [InfoModal, setInfoModal] = useState(false);
+  const [ContactAgent, setContactAgent] = useState(false);
 
   const handleNavigation = (route: string) => {
     if (route === 'Logout') {
@@ -61,49 +63,27 @@ const DrawerContent = () => {
   //
   const userData = useSelector((state: any) => state.user.userData);
   return (
-    <DrawerContentScrollView
-      contentContainerStyle={{
-        width: perWidth(265),
-        flex: 1,
-        backgroundColor: '#EBEBEB',
-        marginHorizontal: 5,
-      }}>
-      <View style={[tw`pt-4  `, {}]}>
-        <View
-          style={[
-            tw`bg-[#2D303C] flex flex-row px-2 w-[90%] mx-auto rounded-lg items-center`,
-            { marginTop: perHeight(10), height: perHeight(88) },
-          ]}>
-          <TouchableOpacity
-            style={[tw`bg-red-300 rounded-full`, {width: 50, height: 50}]}
-            onPress={() => {
-              // openLibraryfordp();
-              if (userType.userType === BUSINESS || userType.userType == FREELANCER) {
-                navigation.navigate('ProfileStep1')
-              }
-            }}>
-            <Image
-              resizeMode="cover"
-              style={{width: 50, height: 50, borderRadius: 25}}
-              source={PhotoUri.length > 5 ? {uri: PhotoUri} : images.profile}
-            />
-          </TouchableOpacity>
-          <View style={tw``}>
-            <View style={tw``}>
-              <Textcomp
-                text={`${userData?.firstName || userData?.businessName}`}
-                size={14}
-                color={'#ffffff'}
-                style={[tw`ml-3`, { lineHeight: 14 }, { fontWeight: '500' }]}
-              />
-            </View>
+    <>
+      <DrawerContentScrollView
+        contentContainerStyle={{
+          width: perWidth(265),
+          flex: 1,
+          backgroundColor: '#EBEBEB',
+          marginHorizontal: 5,
+        }}>
+        <View style={[tw`pt-4  `, {}]}>
+          <View
+            style={[
+              tw`bg-[#2D303C] flex flex-row px-2 w-[90%] mx-auto rounded-lg items-center`,
+              {marginTop: perHeight(10), height: perHeight(88)},
+            ]}>
             <TouchableOpacity
               style={[tw`bg-red-300 rounded-full`, {width: 50, height: 50}]}
               onPress={() => {
                 // openLibraryfordp();
                 if (
                   userType.userType === BUSINESS ||
-                  userType.userType == FREELANCER
+                  userType.userType === FREELANCER
                 ) {
                   navigation.navigate('ProfileStep1');
                 }
@@ -116,42 +96,44 @@ const DrawerContent = () => {
             </TouchableOpacity>
             <View style={tw``}>
               <View style={tw``}>
-                <Textcomp
-                  text={`${getUser?.firstName}`}
-                  size={14}
-                  color={'#ffffff'}
-                  style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '500'}]}
-                />
-              </View>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('Rating');
-                }}
-                style={tw`mt-3 flex flex-row`}>
                 <View style={tw``}>
                   <Textcomp
-                    text={'4.8 '}
+                    text={`${userData?.firstName || userData?.businessName}`}
                     size={14}
-                    color={'#FFCD1E'}
+                    color={'#ffffff'}
                     style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '500'}]}
                   />
                 </View>
-                <View>
-                  <Image
-                    resizeMode="contain"
-                    style={{width: 14, height: 14, tintColor: '#FFCD1E'}}
-                    source={images.star_2}
-                  />
-                </View>
-                <View>
-                  <Textcomp
-                    text={'Rating'}
-                    size={14}
-                    color={'#FFCD1E'}
-                    style={[tw`ml-1`, {lineHeight: 14}, {fontWeight: '500'}]}
-                  />
-                </View>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('Rating');
+                  }}
+                  style={tw`mt-3 flex flex-row`}>
+                  <View style={tw``}>
+                    <Textcomp
+                      text={'4.8 '}
+                      size={14}
+                      color={'#FFCD1E'}
+                      style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '500'}]}
+                    />
+                  </View>
+                  <View>
+                    <Image
+                      resizeMode="contain"
+                      style={{width: 14, height: 14, tintColor: '#FFCD1E'}}
+                      source={images.star_2}
+                    />
+                  </View>
+                  <View>
+                    <Textcomp
+                      text={'Rating'}
+                      size={14}
+                      color={'#FFCD1E'}
+                      style={[tw`ml-1`, {lineHeight: 14}, {fontWeight: '500'}]}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
 

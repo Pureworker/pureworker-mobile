@@ -8,9 +8,10 @@ import {
   StatusBar,
   ScrollView,
   TextInput,
+  Alert,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -23,11 +24,16 @@ import Snackbar from 'react-native-snackbar';
 
 //paystack
 import {Paystack, paystackProps} from 'react-native-paystack-webview';
+import PaystackWebView from '../../components/web';
+import {getUser} from '../../utils/api/func';
+import {addUserData} from '../../store/reducer/mainSlice';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const PaymentMethod2 = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [amount, setamount] = useState(route?.params?.amount || 0);
+  const [isLoading, setisLoading] = useState(false);
   console.log(route.params);
 
   //flutter wave Integration
@@ -52,9 +58,29 @@ const PaymentMethod2 = ({route}: any) => {
     }
     return `flw_tx_ref_${result}`;
   };
+  const userData = useSelector((state: any) => state.user.userData);
+
+  console.log(userData);
 
   //paystack
   const paystackWebViewRef = useRef<paystackProps.PayStackRef>();
+  const [webviewVisible, setWebviewVisible] = useState(false);
+  const paystackPaymentLink = 'YOUR_PAYSTACK_PAYMENT_LINK_HERE'; // Replace with your actual Paystack payment link
+
+  const handleOpenWebview = async () => {
+    setWebviewVisible(true);
+  };
+
+  const handleCloseWebview = () => {
+    // if (!_storeuserData?._id) {
+    //   Toast.show({
+    //     type: 'error',
+    //     text1: 'userID does not exist 🚀.',
+    //   });
+    //   return;
+    // }
+    setWebviewVisible(false);
+  };
 
   return (
     <View style={[{flex: 1, backgroundColor: colors.darkPurple}]}>
@@ -206,7 +232,6 @@ const PaymentMethod2 = ({route}: any) => {
               />
             </View>
           </View>
-
           {amount >= 100 && (
             <View style={[tw`mx-auto mt-10`, {width: perWidth(335)}]}>
               <PayWithFlutterwave
@@ -217,9 +242,9 @@ const PaymentMethod2 = ({route}: any) => {
                   authorization:
                     'FLWPUBK_TEST-cf38ec06f5d38e1724ad6b4fe75c0195-X',
                   customer: {
-                    email: 'bamtaiwo9@gmail.com',
+                    email: userData?.email,
                   },
-                  amount: 500,
+                  amount: amount,
                   currency: 'NGN',
                   payment_options: 'card',
                 }}
@@ -238,7 +263,10 @@ const PaymentMethod2 = ({route}: any) => {
                     borderRadius: 7,
                   },
                 ]}
-                onPress={() => paystackWebViewRef.current.startTransaction()}>
+                onPress={() => {
+                  handleOpenWebview();
+                  // paystackWebViewRef.current.startTransaction()
+                }}>
                 <Text style={{fontSize: 17, fontWeight: '600'}}>
                   Pay with Paystack
                 </Text>
@@ -259,6 +287,39 @@ const PaymentMethod2 = ({route}: any) => {
         }}
         ref={paystackWebViewRef}
       />
+      <PaystackWebView
+        visible={webviewVisible}
+        onClose={handleCloseWebview}
+        onSuccess={(data: any) => {
+          Alert.alert('Payment Successfull');
+          console.log('paymentback', data);
+          setisLoading(true);
+          setTimeout(() => {
+            const initGetUsers = async () => {
+              const res: any = await getUser('');
+              console.log('dddddddd', res);
+              if (res?.status === 201 || res?.status === 200) {
+                dispatch(addUserData(res?.data?.user));
+              }
+              // setloading(false);
+            };
+            initGetUsers();
+            setisLoading(false);
+            navigation.goBack();
+          }, 10000);
+
+        }}
+        paymentLink={''}
+        billingEmail={userData?.email}
+        amount={`${amount}00.00`}
+        paystackKey="pk_test_2e04c346edd25e14d0d073957628ee55afdc78d1"
+        firstName={userData?.firstName || ''}
+        lastName={userData?.lastName || ''}
+        phone={userData?.phoneNumber || ''}
+        billingName={userData?.fullName || ''}
+        userID={userData?._id}
+      />
+      <Spinner visible={isLoading} />
     </View>
   );
 };

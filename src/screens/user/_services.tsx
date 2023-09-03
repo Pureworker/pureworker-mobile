@@ -26,7 +26,7 @@ import TextInputs from '../../components/TextInput2';
 const _Services = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
-  const passedService = route.params.service.description;
+  const passedService = route.params.service.name;
   console.log(passedService);
 
   const dummyData = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];

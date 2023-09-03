@@ -230,3 +230,4 @@ export const resetPassword = async (param: any) => {
     };
   }
 };
+

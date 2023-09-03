@@ -34,33 +34,20 @@ const ServiceProviderProfile = () => {
   const [imageModal, setimageModal] = useState(false);
 
   const [saved, setsaved] = useState(false);
-<<<<<<< Updated upstream
-  const route: any = useRoute()
-  const { data: getSingleProviderServiceData, isLoading: isLoadingUser } = useGetSingleProviderServiceQuery(route.params?.id);
-  const getSingleProviderService = getSingleProviderServiceData ?? [];
-
-  const { data: getSingleProviderAllServiceData } = useGetSingleProviderAllServiceQuery(route.params?.id)
-  const getSingleProviderAllService = getSingleProviderAllServiceData ?? [];
-  const price = getSingleProviderService?.price ? JSON.parse(getSingleProviderService?.price) : [] 
-  const serviceDetail = getSingleProviderService?.serviceDetail ? JSON.parse(getSingleProviderService?.serviceDetail) : []
- 
-  const firstPotfolio = getSingleProviderService?.ServicePotfolio?.length ? JSON.parse(getSingleProviderService?.ServicePotfolio[0]?.potfolioImages) : []
-  const secondPotfolio = getSingleProviderService?.ServicePotfolio?.length > 1 ? JSON.parse(getSingleProviderService?.ServicePotfolio[1]?.potfolioImages) : []
-  // const thirdPotfolio = getSingleProviderService?.ServicePotfolio?.length > 2 ? JSON.parse(getSingleProviderService?.ServicePotfolio[2]?.potfolioImages) : []
-
-  
-  
-=======
   const route: any = useRoute();
-
   const {data: getSingleProviderServiceData, isLoading: isLoadingUser} =
-    useGetSingleProviderServiceQuery(route.params?.service?.serviceId);
+    useGetSingleProviderServiceQuery(route.params?.id);
   const getSingleProviderService = getSingleProviderServiceData ?? [];
 
   const {data: getSingleProviderAllServiceData} =
-    useGetSingleProviderAllServiceQuery(route.params?.service?.serviceId);
+    useGetSingleProviderAllServiceQuery(route.params?.id);
   const getSingleProviderAllService = getSingleProviderAllServiceData ?? [];
-  // const price = getSingleProviderService?.price ? JSON.parse(JSON.parse(JSON.parse(JSON.stringify(getSingleProviderService?.price)))) : ''
+  const price = getSingleProviderService?.price
+    ? JSON.parse(getSingleProviderService?.price)
+    : [];
+  const serviceDetail = getSingleProviderService?.serviceDetail
+    ? JSON.parse(getSingleProviderService?.serviceDetail)
+    : [];
 
   const firstPotfolio = getSingleProviderService?.ServicePotfolio?.length
     ? JSON.parse(getSingleProviderService?.ServicePotfolio[0]?.potfolioImages)
@@ -71,10 +58,6 @@ const ServiceProviderProfile = () => {
       : [];
   // const thirdPotfolio = getSingleProviderService?.ServicePotfolio?.length > 2 ? JSON.parse(getSingleProviderService?.ServicePotfolio[2]?.potfolioImages) : []
 
-  // console.log('dsds', price);
-  console.log(getSingleProviderService);
-
->>>>>>> Stashed changes
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View>
@@ -436,13 +419,8 @@ const ServiceProviderProfile = () => {
                           <View
                             key={index}
                             style={[
-<<<<<<< Updated upstream
                               tw`bg-white rounded-lg w-auto p-3 mr-2 py-1 items-center`,
-                              { marginTop: perHeight(5) },
-=======
-                              tw`bg-white rounded-lg w-[30%] mr-2 py-1 items-center`,
                               {marginTop: perHeight(5)},
->>>>>>> Stashed changes
                             ]}>
                             <Textcomp
                               text={item?.serviceName}
@@ -478,87 +456,7 @@ const ServiceProviderProfile = () => {
                       />
                     </View>
 
-<<<<<<< Updated upstream
-                  {firstPotfolio?.length ? <View style={tw`w-full mt-3`}>
-                    <View style={tw` `}>
-                      <Textcomp
-                        text={'Project1'}
-                        size={12}
-                        lineHeight={15}
-                        color={'#FFFFFF'}
-                        fontFamily={'Inter-Bold'}
-                      />
-                    </View>
-                    <FlatList
-                      scrollEnabled={false}
-                      data={firstPotfolio}
-                      renderItem={({item, index}) => {
-                        return (
-                          <FastImage
-                            onTouchStart={() => setimageModal(true)}
-                            style={[
-                              tw`mr-2`,
-                              {
-                                width: perWidth(95),
-                                aspectRatio: 1,
-                                borderRadius: 10,
-                              },
-                            ]}
-                            source={{
-                              uri: item,
-                              headers: { Authorization: 'someAuthToken' },
-                              priority: FastImage.priority.normal,
-                            }}
-                            resizeMode={FastImage.resizeMode.cover}
-                          />
-                        );
-                      }}
-                      //   keyExtractor={item => item.id}
-                      numColumns={3}
-                      contentContainerStyle={{ marginTop: 10 }}
-                    />
-                  </View> : null}
-                  {secondPotfolio?.length ? <View style={tw`w-full mt-3`}>
-                    <View style={tw` `}>
-                      <Textcomp
-                        text={'Project2'}
-                        size={12}
-                        lineHeight={15}
-                        color={'#FFFFFF'}
-                        fontFamily={'Inter-Bold'}
-                      />
-                    </View>
-                    <FlatList
-                      scrollEnabled={false}
-                      data={secondPotfolio}
-                      renderItem={({item, index}) => {
-                        return (
-                          <FastImage
-                            onTouchStart={() => setimageModal(true)}
-                            style={[
-                              tw`mr-2`,
-                              {
-                                width: perWidth(95),
-                                aspectRatio: 1,
-                                borderRadius: 10,
-                              },
-                            ]}
-                            source={{
-                              uri: item,
-                              headers: { Authorization: 'someAuthToken' },
-                              priority: FastImage.priority.normal,
-                            }}
-                            resizeMode={FastImage.resizeMode.cover}
-                          />
-                        );
-                      }}
-                      //   keyExtractor={item => item.id}
-                      numColumns={3}
-                      contentContainerStyle={{ marginTop: 10 }}
-                    />
-                  </View> : null}
-=======
-                    {firstPotfolio?.length && (
+                    {firstPotfolio?.length ? (
                       <View style={tw`w-full mt-3`}>
                         <View style={tw` `}>
                           <Textcomp
@@ -598,8 +496,8 @@ const ServiceProviderProfile = () => {
                           contentContainerStyle={{marginTop: 10}}
                         />
                       </View>
-                    )}
-                    {secondPotfolio?.length && (
+                    ) : null}
+                    {secondPotfolio?.length ? (
                       <View style={tw`w-full mt-3`}>
                         <View style={tw` `}>
                           <Textcomp
@@ -639,9 +537,8 @@ const ServiceProviderProfile = () => {
                           contentContainerStyle={{marginTop: 10}}
                         />
                       </View>
-                    )}
+                    ) : null}
                   </View>
->>>>>>> Stashed changes
                 </View>
               ) : null}
 

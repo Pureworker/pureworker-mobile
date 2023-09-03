@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -19,12 +19,31 @@ import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import {color} from 'react-native-reanimated';
 import colors from '../../constants/colors';
 import Modal from 'react-native-modal/dist/modal';
+import { addUserData } from '../../store/reducer/mainSlice';
+import { getUser } from '../../utils/api/func';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Wallet = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [InfoModal, setInfoModal] = useState(false);
   const [ContactAgent, setContactAgent] = useState(false);
+  const userData = useSelector((state: any) => state.user.userData);
+  const [isLoading, setisLoading] = useState(false);
+  const initGetUsers = async () => {
+    setisLoading(true);
+    const res: any = await getUser('');
+    console.log('dddddddd', res);
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addUserData(res?.data?.user));
+    }
+    setisLoading(false);
+    // setloading(false);
+  };
+  useEffect(() => {
+    initGetUsers();
+  }, [dispatch, navigation]);
+
   return (
     <>
       <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -83,7 +102,7 @@ const Wallet = () => {
                 </View>
                 <TouchableOpacity
                   style={tw``}
-                  onPress={() => navigation.goBack()}>
+                  onPress={() =>initGetUsers()}>
                   <Image
                     source={images.refresh}
                     style={{height: 17, width: 17, tintColor: 'black'}}
@@ -162,7 +181,7 @@ const Wallet = () => {
                   </View>
                   <View style={[tw``, {marginTop: perHeight(5)}]}>
                     <Textcomp
-                      text={'₦ --,----'}
+                      text={`₦ ${userData?.wallet?.availableBalance}`}
                       size={14}
                       lineHeight={16}
                       color={'#FFFFFF'}
@@ -340,6 +359,7 @@ const Wallet = () => {
             </View>
           </View>
         </ScrollView>
+        <Spinner visible={isLoading} />
       </View>
       <Modal
         isVisible={InfoModal}

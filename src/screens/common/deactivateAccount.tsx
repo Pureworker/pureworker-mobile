@@ -22,7 +22,7 @@ const DeactivateAccount = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
 
-  const [deactivateAccount, setdeactivateAccount] = useState(false);
+  const [deactivateAccount, setdeactivateAccount] = useState('');
   const [deleteAccount, setdeleteAccount] = useState(false);
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -71,7 +71,10 @@ const DeactivateAccount = () => {
             />
           </View>
 
-          <View
+          <TouchableOpacity
+            onPress={() => {
+              setdeactivateAccount('deactivtate');
+            }}
             style={[
               tw`bg-[${colors.darkPurple}] p-4 flex flex-row  mx-auto`,
               {
@@ -83,11 +86,13 @@ const DeactivateAccount = () => {
             ]}>
             <TouchableOpacity
               onPress={() => {
-                setdeactivateAccount(!deactivateAccount);
+                setdeactivateAccount('deactivtate');
               }}
               style={[
                 tw`rounded-full ${
-                  deactivateAccount ? `bg-[${colors.primary}]` : ''
+                  deactivateAccount === 'deactivtate'
+                    ? `bg-[${colors.primary}]`
+                    : ''
                 } border border-[${colors.primary}]`,
                 {width: 15, height: 15},
               ]}
@@ -114,8 +119,11 @@ const DeactivateAccount = () => {
                 />
               </View>
             </View>
-          </View>
-          <View
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setdeactivateAccount('delete');
+            }}
             style={[
               tw`bg-[${colors.darkPurple}] p-4 flex flex-row  mx-auto`,
               {
@@ -127,11 +135,11 @@ const DeactivateAccount = () => {
             ]}>
             <TouchableOpacity
               onPress={() => {
-                setdeactivateAccount(!deactivateAccount); 
+                setdeactivateAccount('delete');
               }}
               style={[
                 tw`rounded-full ${
-                  !deactivateAccount ? `bg-[${colors.primary}]` : ''
+                  deactivateAccount === 'delete' ? `bg-[${colors.primary}]` : ''
                 } border border-[${colors.primary}]`,
                 {width: 15, height: 15},
               ]}
@@ -158,26 +166,26 @@ const DeactivateAccount = () => {
                 />
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
         <View style={tw`mt-auto mb-[20%]`}>
-            <TouchableOpacity
-              onPress={() => {
-                // navigation.navigate('PaymentConfirmed');
-              }}
-              style={[
-                tw`bg-[${colors.darkPurple}] items-center rounded-lg justify-center mx-auto py-3`,
-                {width: perWidth(260)},
-              ]}>
-              <Textcomp
-                text={'Continue'}
-                size={14}
-                lineHeight={15}
-                color={colors.primary}
-                fontFamily={'Inter-Bold'}
-              />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            onPress={() => {
+              // navigation.navigate('PaymentConfirmed');
+            }}
+            style={[
+              tw`bg-[${colors.darkPurple}] items-center rounded-lg justify-center mx-auto py-3`,
+              {width: perWidth(260)},
+            ]}>
+            <Textcomp
+              text={'Continue'}
+              size={14}
+              lineHeight={15}
+              color={colors.primary}
+              fontFamily={'Inter-Bold'}
+            />
+          </TouchableOpacity>
+        </View>
         <View style={tw`h-0.5 w-full bg-black absolute  bottom-[3%]`} />
       </ScrollView>
     </View>

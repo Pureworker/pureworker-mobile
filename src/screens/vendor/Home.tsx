@@ -32,6 +32,7 @@ const Home = ({navigation}: any) => {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
   const [InfoModal, setInfoModal] = useState(false);
+  const [ContactAgent, setContactAgent] = useState(false);
 
   const data = [
     {id: '1', title: 'Item 1'},
@@ -51,7 +52,7 @@ const Home = ({navigation}: any) => {
   useEffect(() => {
     const initGetUsers = async () => {
       const res: any = await getUser('');
-      console.log('dddddddd', res?.data);
+      console.log('dddddddd', res?.data?.user);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addUserData(res?.data?.user));
       }
@@ -178,7 +179,7 @@ const Home = ({navigation}: any) => {
                   {borderTopRightRadius: 20, borderTopLeftRadius: 20},
                 ]}>
                 <Textcomp
-                  text={'8'}
+                  text={'0'}
                   size={36}
                   lineHeight={36}
                   color={'#000413'}
@@ -277,7 +278,7 @@ const Home = ({navigation}: any) => {
                   {borderTopRightRadius: 20, borderTopLeftRadius: 20},
                 ]}>
                 <Textcomp
-                  text={'NGN249,0000'}
+                  text={'NGN0'}
                   size={20}
                   lineHeight={20}
                   color={'#000413'}

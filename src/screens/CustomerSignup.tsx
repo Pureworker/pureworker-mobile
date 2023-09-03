@@ -92,6 +92,7 @@ export default function CustomerSignup() {
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
+        setisLoading(false);
         return;
       } else {
         const loginData = {
@@ -157,6 +158,7 @@ export default function CustomerSignup() {
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
+      setisLoading(false);
     }
   };
 
@@ -175,13 +177,16 @@ export default function CustomerSignup() {
             width: 20,
             marginLeft: 25,
             marginBottom: 10,
-            marginTop: StatusBar.currentHeight && StatusBar.currentHeight + 40,
+            marginTop:
+            Platform.OS === 'ios'
+              ? 20
+              : StatusBar.currentHeight && StatusBar.currentHeight + 40,
           }}
           resizeMode="contain"
         />
       </TouchableOpacity>
 
-      <ScrollView>
+      <ScrollView >
         <MyStatusBar
           translucent
           barStyle="light-content"
@@ -191,8 +196,9 @@ export default function CustomerSignup() {
         <View style={{flex: 1}}>
           <View style={{marginHorizontal: 50}}>
             <Text
+            numberOfLines={1}
               style={{
-                fontSize: 36,
+                fontSize: 32,
                 fontFamily: commonStyle.fontFamily.bold,
                 color: '#fff',
                 marginTop: 10,

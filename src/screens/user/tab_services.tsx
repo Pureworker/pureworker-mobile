@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -34,6 +34,18 @@ const TabServices = () => {
   const getUser = getUserData ?? [];
   const {data: getCategoryData, isLoading, isError} = useGetCategoryQuery();
   const getCategory = getCategoryData ?? [];
+  const _getCategory = useSelector((state: any) => state.user.category);
+
+  const [openDropdownId, setOpenDropdownId] = useState(null);
+
+  const handleDropdownClick = (catId: React.SetStateAction<null>) => {
+    if (catId === openDropdownId) {
+      setOpenDropdownId(null); // Close the dropdown if it's already open
+    } else {
+      setOpenDropdownId(catId); // Open the clicked dropdown
+    }
+  };
+
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView>
@@ -80,7 +92,7 @@ const TabServices = () => {
               fontFamily={'Inter'}
             />
           </View>
-          <View style={tw``}>
+          {/* <View style={tw``}>
             <ScrollView
               scrollEnabled={false}
               style={tw`w-full `}
@@ -126,6 +138,36 @@ const TabServices = () => {
                   </Text>
                 )}
               />
+            </ScrollView>
+          </View> */}
+
+          <View style={tw`w-full mt-4`}>
+            <ScrollView
+              scrollEnabled={false}
+              style={tw`w-full `}
+              contentContainerStyle={tw`w-[92%] mx-auto`}
+              horizontal>
+              <ScrollView scrollEnabled={false}>
+                {_getCategory?.map((item, index) => {
+                  // console.log(item);
+                  return (
+                    <ScrollView scrollEnabled={false}>
+                    {_getCategory?.map((item, index) => {
+                      // console.log(item);
+                      return (
+                        <CategoryList2
+                          key={index}
+                          categoryName={item?.name}
+                          catId={item?.id}
+                          isOpen={item?.id === openDropdownId}
+                          onDropdownClick={handleDropdownClick}
+                        />
+                      );
+                    })}
+                  </ScrollView>
+                  );
+                })}
+              </ScrollView>
             </ScrollView>
           </View>
         </View>

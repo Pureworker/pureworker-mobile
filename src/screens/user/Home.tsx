@@ -81,7 +81,7 @@ const Home = () => {
     const initGetCategory = async () => {
       setisLoading(true);
       const res: any = await getCategory('');
-      console.log('aaaaaaaaa', res?.data?.data);
+      // console.log('aaaaaaaaa', res?.data?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addSCategory(res?.data?.data));
       }
@@ -134,6 +134,15 @@ const Home = () => {
 
   console.log(getServiceProviderProfile[0]);
   const [ContactAgent, setContactAgent] = useState(false);
+  const [openDropdownId, setOpenDropdownId] = useState(null);
+
+  const handleDropdownClick = (catId: React.SetStateAction<null>) => {
+    if (catId === openDropdownId) {
+      setOpenDropdownId(null); // Close the dropdown if it's already open
+    } else {
+      setOpenDropdownId(catId); // Open the clicked dropdown
+    }
+  };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
@@ -285,7 +294,7 @@ const Home = () => {
 
           <View style={{flex: 1}}>
             <FlatList
-              data={_popularServices}
+              data={_popularServices.slice(0, 10)}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               renderItem={(item: any) => {
@@ -294,6 +303,7 @@ const Home = () => {
                     navigation={navigation}
                     item={item.item}
                     index={item.index}
+                    key={item?.index}
                   />
                 );
               }}
@@ -379,8 +389,11 @@ const Home = () => {
                     // console.log(item);
                     return (
                       <CategoryList2
+                        key={index}
                         categoryName={item?.name}
                         catId={item?.id}
+                        isOpen={item?.id === openDropdownId}
+                        onDropdownClick={handleDropdownClick}
                       />
                     );
                   })}

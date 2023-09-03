@@ -7,6 +7,7 @@ import {
   Platform,
   ScrollView,
   TouchableOpacity,
+  PermissionsAndroid,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
@@ -21,17 +22,30 @@ import {
   useGetCategoryQuery,
 } from '../../store/slice/api';
 import colors from '../../constants/colors';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {WIDTH_WINDOW, generalStyles} from '../../constants/generalStyles';
 import ProfileStepWrapper from '../../components/ProfileStepWrapper';
 import TextInputs from '../../components/TextInputs';
 import DropDownPicker from 'react-native-dropdown-picker';
 import PotfolioWrapper from '../../components/PotfolioWrapper';
-import {allCountry, launchImageLibrary} from '../../constants/utils';
+import {
+  allCities,
+  allCountry,
+  // launchCamera,
+  // launchImageLibrary,
+} from '../../constants/utils';
 import Snackbar from 'react-native-snackbar';
 import storage from '@react-native-firebase/storage';
 import Portfoliocomp from '../../components/Portfolio';
-import {perWidth} from '../../utils/position/sizes';
+import {SIZES, perWidth} from '../../utils/position/sizes';
+import {uploadAssetsDOCorIMG} from '../../utils/api/func';
+import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {addcompleteProfile} from '../../store/reducer/mainSlice';
+import FastImage from 'react-native-fast-image';
+import ServiceIntroComp from '../../components/serviceIntro';
+import ServicePriceComp from '../../components/servicePrice';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const PRofileStep2 = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -44,11 +58,12 @@ const PRofileStep2 = () => {
   const [allPotfolio, setAllPotfolio] = useState<any>([]);
   const [key, setKey] = useState<any>(1);
   const [editkey, setEditKey] = useState<any>(null);
+  const [isLoading, setisLoading] = useState(false);
 
-  const category = useSelector((state: any) => state.user.category);
+  const category = useSelector((state: any) => state.user.pickedServices);
   const [servicesDescription, setServicesDescription] = useState<any>([]); // State to store input values
   const [servicePrice, setServicePrice] = useState<any>([]); // State to store input values
-  const [createService, {isLoading}] = useCreateServiceMutation();
+  const [createService] = useCreateServiceMutation();
   const [potfolioImageLoading, setPotfolioImageLoading] = useState(false);
   const [profileImageLoading, setProfileImageLoading] = useState(false);
 
@@ -57,39 +72,93 @@ const PRofileStep2 = () => {
   const [nationalityItems, setNationalityItems] = useState<any>([]);
   let potfolioPicture = useRef('');
   let profilePicture = useRef('');
-  console.log('nationalityItems', nationalityItems);
-
+  // console.log('nationalityItems', nationalityItems);
+  console.log('--ggggggg', nationalityValue);
   const [portfolioToServiceCount, setportfolioToServiceCount] = useState([]);
-
+  const completeProfileData = useSelector(
+    (state: any) => state.user.completeProfileData,
+  );
+  console.error('yeap', completeProfileData);
   useEffect(() => {
     setNationalityItems([...allCountry]);
   }, []);
+  const currentServiceIntro = useSelector(
+    (state: any) => state.user.completeProfileData?.serviceIntro,
+  );
+  console.log(category);
 
   useEffect(() => {
     if (category?.length) {
       const updatedInputValues = category.map((service: string) => ({
-        serviceName: service,
-        value: '',
+        service: service?.name,
+        description: '',
       }));
-      setServicesDescription([...updatedInputValues]);
+      const updatedServiceIntro = [
+        ...(currentServiceIntro || []), // Use an empty array if currentServiceIntro is undefined
+        ...(updatedInputValues || []).filter(
+          updatedItem =>
+            !(currentServiceIntro || []).some(
+              currentItem => currentItem.service === updatedItem.service,
+            ),
+        ),
+      ];
+      // Update the Redux store with the updated array
+      setServicesDescription([...updatedServiceIntro]);
+      dispatch(addcompleteProfile({serviceIntro: updatedServiceIntro}));
     }
   }, [category]);
 
   useEffect(() => {
+
+
     if (category?.length) {
       const updatedInputValues = category.map((service: string) => ({
-        serviceName: service,
-        priceMin: '',
-        priceMax: '',
+        serviceName: service?.name,
+        service: service?.id,
+        maxPrice: '',
+        minPrice: '',
       }));
-      setServicePrice([...updatedInputValues]);
+
+      // Retrieve the current state of priceRange from Redux
+      // const currentPriceRange = getState().yourSliceName.priceRange;
+      // Create a new array with updated and existing values
+      const updatedPriceRange = [
+        ...(currentPriceRange || []),
+        ...updatedInputValues.filter(
+          updatedItem =>
+            // !currentPriceRange.some(
+            !(currentPriceRange || []).some(
+              currentItem => currentItem.service === updatedItem.service,
+            ),
+        ),
+      ];
+
+      // Update the Redux store with the updated array
+      setServicePrice([...updatedPriceRange]);
+      dispatch(addcompleteProfile({priceRange: updatedPriceRange}));
     }
+    setDescription(completeProfileData?.description);
   }, [category]);
+  const currentPriceRange = useSelector(
+    (state: any) => state.user.completeProfileData?.priceRange,
+  );
 
   const handleInputChange = (index: number, value: string) => {
     const updatedInputValues: any = [...servicesDescription];
     updatedInputValues[index] = {...updatedInputValues[index], value};
     setServicesDescription(updatedInputValues);
+  };
+  const handleDescriptionChange = (item: any) => {
+    const newArray = servicesDescription.map((service: {service: any}) => {
+      if (service.service === item?.service) {
+        return {
+          ...service,
+          description: item?.description,
+        };
+      }
+      setServicesDescription(newArray);
+      return service;
+    });
   };
   const handleServicePriceMinChange = (index: number, priceMin: string) => {
     const updatedInputValues: any = [...servicePrice];
@@ -103,6 +172,8 @@ const PRofileStep2 = () => {
   };
   const {data: getCategoryData, isError} = useGetCategoryQuery();
   const getCategory = getCategoryData ?? [];
+
+  const dispatch = useDispatch();
 
   const handleProfileSetup = () => {
     if (
@@ -145,6 +216,117 @@ const PRofileStep2 = () => {
         backgroundColor: '#88087B',
       });
     }
+  };
+
+  //image upload
+  const options = {mediaType: 'photo', selectionLimit: 1};
+  const openLibraryfordp = () => {
+    console.log('called logo');
+    launchImageLibrary(options, async (resp: unknown) => {
+      if (resp?.assets?.length > 0) {
+        // console.log('resp', resp?.assets);
+        console.log('resp', resp?.assets[0]);
+        // setPhotoUri(resp?.assets[0].uri);
+        setImageUrl(resp?.assets[0].uri);
+        // initUploadProfilePics(resp?.assets[0]);
+        const data = await uploadImgorDoc(resp?.assets[0]);
+        console.warn('processed pic', data);
+        dispatch(addcompleteProfile({profilePic: data}));
+      }
+    });
+    // launchCamera
+  };
+  const opencamerafordp = async () => {
+    const options = {
+      mediaType: 'photo',
+      selectionLimit: 1,
+      cameraType: 'front',
+    };
+    console.log('called logo');
+    try {
+      if (Platform.OS === 'ios') {
+        const openCamera = async () => {
+          const cameraStatus = await check(PERMISSIONS.IOS.CAMERA);
+
+          if (cameraStatus === RESULTS.GRANTED) {
+            // Camera permission is granted, open camera here
+            console.log('Camera permission granted');
+            await launchCamera(options, async (resp: unknown) => {
+              if (resp?.assets?.length > 0) {
+                console.log('resp', resp?.assets[0]);
+                setImageUrl(resp?.assets[0].uri);
+                const data = await uploadImgorDoc(resp?.assets[0]);
+                console.log('processed pic', data);
+              }
+            });
+          } else {
+            // Camera permission is not granted, request it
+            const newCameraStatus = await request(PERMISSIONS.IOS.CAMERA);
+            if (newCameraStatus === RESULTS.GRANTED) {
+              // Camera permission granted after request, open camera
+              console.log('Camera permission granted after request');
+              await launchCamera(options, async (resp: unknown) => {
+                if (resp?.assets?.length > 0) {
+                  console.log('resp', resp?.assets[0]);
+                  setImageUrl(resp?.assets[0].uri);
+                  const data = await uploadImgorDoc(resp?.assets[0]);
+                  console.log('processed pic', data);
+                }
+              });
+            } else {
+              // Camera permission denied
+              console.log('Camera permission denied');
+            }
+          }
+        };
+        openCamera();
+      } else {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'App Camera Permission',
+            message: 'Pureworker needs access to your camera to takee picture',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Camera permission given');
+          await launchCamera(options, async (resp: unknown) => {
+            if (resp?.assets?.length > 0) {
+              console.log('resp', resp?.assets[0]);
+              setPhotoUri(resp?.assets[0].uri);
+              const data = await uploadImgorDoc(resp?.assets[0]);
+              console.log('processed pic', data);
+              const res = await initUploadProfilePics2(data);
+            }
+          });
+        } else {
+          console.log('Camera permission denied2');
+        }
+      }
+    } catch (error) {}
+    // launchCamera
+  };
+
+  const uploadImgorDoc = async (param: {
+    uri: string;
+    name: string | null;
+    copyError: string | undefined;
+    fileCopyUri: string | null;
+    type: string | null;
+    size: number | null;
+  }) => {
+    setisLoading(true);
+    const res: any = await uploadAssetsDOCorIMG(param);
+    if (res?.status === 201 || res?.status === 200) {
+      console.log('ApartmentType', res?.data);
+
+      setisLoading(false);
+      return res?.data.url;
+    }
+    setisLoading(false);
   };
 
   return (
@@ -192,7 +374,8 @@ const PRofileStep2 = () => {
               ]}>
               {!profileImageLoading ? (
                 <>
-                  {!imageUrl ? (
+                  {/* {!imageUrl ? ( */}
+                  {!completeProfileData?.profilePic ? (
                     <TextWrapper
                       children="Upload Profile Photo"
                       fontType={'semiBold'}
@@ -203,9 +386,25 @@ const PRofileStep2 = () => {
                       }}
                     />
                   ) : (
-                    <Image
-                      source={{uri: imageUrl}}
-                      style={{width: 145, height: 145, borderRadius: 145}}
+                    // <Image
+                    //   source={{uri: completeProfileData?.profilePic || imageUrl}}
+                    //   style={{width: 145, height: 145, borderRadius: 145}}
+                    // />
+                    <FastImage
+                      style={[
+                        tw``,
+                        {
+                          width: 145,
+                          height: 145,
+                          borderRadius: 145,
+                        },
+                      ]}
+                      source={{
+                        uri: completeProfileData?.profilePic || imageUrl,
+                        headers: {Authorization: 'someAuthToken'},
+                        priority: FastImage.priority.normal,
+                      }}
+                      resizeMode={FastImage.resizeMode.cover}
                     />
                   )}
                 </>
@@ -226,39 +425,40 @@ const PRofileStep2 = () => {
               }}>
               <TouchableOpacity
                 onPress={async () => {
-                  try {
-                    const response: any = await launchImageLibrary();
-                    setProfileImageLoading(true);
-                    if (response) {
-                      const filename = response?.uri.substring(
-                        response?.uri.lastIndexOf('/') + 1,
-                      );
-                      const uploadUri =
-                        Platform.OS === 'ios'
-                          ? response?.uri.replace('file://', '')
-                          : response.uri;
-                      const task = await storage()
-                        .ref(filename)
-                        .putFile(uploadUri);
-                      if (task.metadata) {
-                        profilePicture.current = task.metadata.fullPath;
-                      }
-                      let url = '';
-                      if (profilePicture.current) {
-                        url = await storage()
-                          .ref(profilePicture.current)
-                          .getDownloadURL();
-                      }
-                      setImageUrl(url);
-                      profilePicture.current = '';
-                      setProfileImageLoading(false);
-                    } else {
-                      setProfileImageLoading(false);
-                    }
-                  } catch (error) {
-                    console.log('error', error);
-                    setProfileImageLoading(false);
-                  }
+                  // try {
+                  //   const response: any = await launchImageLibrary();
+                  //   setProfileImageLoading(true);
+                  //   if (response) {
+                  //     const filename = response?.uri.substring(
+                  //       response?.uri.lastIndexOf('/') + 1,
+                  //     );
+                  //     const uploadUri =
+                  //       Platform.OS === 'ios'
+                  //         ? response?.uri.replace('file://', '')
+                  //         : response.uri;
+                  //     const task = await storage()
+                  //       .ref(filename)
+                  //       .putFile(uploadUri);
+                  //     if (task.metadata) {
+                  //       profilePicture.current = task.metadata.fullPath;
+                  //     }
+                  //     let url = '';
+                  //     if (profilePicture.current) {
+                  //       url = await storage()
+                  //         .ref(profilePicture.current)
+                  //         .getDownloadURL();
+                  //     }
+                  //     setImageUrl(url);
+                  //     profilePicture.current = '';
+                  //     setProfileImageLoading(false);
+                  //   } else {
+                  //     setProfileImageLoading(false);
+                  //   }
+                  // } catch (error) {
+                  //   console.log('error', error);
+                  //   setProfileImageLoading(false);
+                  // }
+                  openLibraryfordp();
                 }}>
                 <Image
                   source={images.edit}
@@ -310,7 +510,10 @@ const PRofileStep2 = () => {
                 'Introduce yourself and enter your profile description.'
               }
               state={description}
-              setState={setDescription}
+              setState={text => {
+                setDescription(text);
+                dispatch(addcompleteProfile({description: description}));
+              }}
               multiline={true}
               nbLines={5}
             />
@@ -331,50 +534,57 @@ const PRofileStep2 = () => {
           {servicesDescription?.length
             ? servicesDescription?.map((item: any, index: any) => {
                 return (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      width: WIDTH_WINDOW - 40,
-                      justifyContent: 'space-between',
-                      marginBottom: 13,
-                    }}>
-                    <View
-                      key={index}
-                      style={{
-                        paddingHorizontal: 10,
-                        justifyContent: 'center',
-                        backgroundColor: colors.lightBlack,
-                        height: 50,
-                        width: 120,
-                        borderRadius: 5,
-                      }}>
-                      <TextWrapper
-                        numberOfLines={1}
-                        fontType={'semiBold'}
-                        style={{
-                          fontSize: 12,
-                          color: '#fff',
-                        }}>
-                        {item?.serviceName}
-                      </TextWrapper>
-                    </View>
-                    <TextInput
-                      style={{
-                        width: '60%',
-                        paddingHorizontal: 10,
-                        backgroundColor: colors.lightBlack,
-                        borderRadius: 5,
-                        color: '#fff',
-                        height: Platform.OS === 'ios' ? 50 : 50,
-                      }}
-                      placeholderTextColor={colors.grey}
-                      placeholder="Enter service description"
-                      key={index}
-                      value={item.value} // Assign value from state
-                      onChangeText={value => handleInputChange(index, value)}
-                    />
-                  </View>
+                  // <View
+                  //   key={index}
+                  //   style={{
+                  //     flexDirection: 'row',
+                  //     alignItems: 'center',
+                  //     width: WIDTH_WINDOW - 40,
+                  //     justifyContent: 'space-between',
+                  //     marginBottom: 13,
+                  //   }}>
+                  //   <View
+                  //     key={index}
+                  //     style={{
+                  //       paddingHorizontal: 10,
+                  //       justifyContent: 'center',
+                  //       backgroundColor: colors.lightBlack,
+                  //       height: 50,
+                  //       width: 120,
+                  //       borderRadius: 5,
+                  //     }}>
+                  //     <TextWrapper
+                  //       numberOfLines={1}
+                  //       fontType={'semiBold'}
+                  //       style={{
+                  //         fontSize: 12,
+                  //         color: '#fff',
+                  //       }}>
+                  //       {item?.service}
+                  //     </TextWrapper>
+                  //   </View>
+                  //   <TextInput
+                  //     style={{
+                  //       width: '60%',
+                  //       paddingHorizontal: 10,
+                  //       backgroundColor: colors.lightBlack,
+                  //       borderRadius: 5,
+                  //       color: '#fff',
+                  //       height: Platform.OS === 'ios' ? 50 : 50,
+                  //     }}
+                  //     placeholderTextColor={colors.grey}
+                  //     placeholder="Enter service description"
+                  //     key={index}
+                  //     value={item.value} // Assign value from state
+                  //     onChangeText={value => {
+                  //       // handleInputChange(index, value)
+                  //       // setServicesDescription(item);
+                  //       handleDescriptionChange(item);
+                  //       // dispatch(addcompleteProfile({serviceIntro: servicesDescription}));
+                  //     }}
+                  //   />
+                  // </View>
+                  <ServiceIntroComp key={index} item={item} index={index} />
                 );
               })
             : null}
@@ -394,83 +604,85 @@ const PRofileStep2 = () => {
           {servicePrice?.length
             ? servicePrice?.map((item: any, index: any) => {
                 return (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      width: WIDTH_WINDOW - 40,
-                      justifyContent: 'space-between',
-                      marginBottom: 13,
-                    }}>
-                    <View
-                      key={index}
-                      style={{
-                        paddingHorizontal: 10,
-                        justifyContent: 'center',
-                        backgroundColor: colors.lightBlack,
-                        height: 50,
-                        width: 120,
-                        borderRadius: 5,
-                      }}>
-                      <TextWrapper
-                        numberOfLines={1}
-                        fontType={'semiBold'}
-                        style={{
-                          fontSize: 12,
-                          color: '#fff',
-                        }}>
-                        {item?.serviceName}
-                      </TextWrapper>
-                    </View>
+                  // <View
+                  //   key={index}
+                  //   style={{
+                  //     flexDirection: 'row',
+                  //     alignItems: 'center',
+                  //     width: WIDTH_WINDOW - 40,
+                  //     justifyContent: 'space-between',
+                  //     marginBottom: 13,
+                  //   }}>
+                  //   <View
+                  //     key={index}
+                  //     style={{
+                  //       paddingHorizontal: 10,
+                  //       justifyContent: 'center',
+                  //       backgroundColor: colors.lightBlack,
+                  //       height: 50,
+                  //       width: 120,
+                  //       borderRadius: 5,
+                  //     }}>
+                  //     <TextWrapper
+                  //       numberOfLines={1}
+                  //       fontType={'semiBold'}
+                  //       style={{
+                  //         fontSize: 12,
+                  //         color: '#fff',
+                  //       }}>
+                  //       {item?.serviceName}
+                  //     </TextWrapper>
+                  //   </View>
 
-                    <View style={[generalStyles.rowCenter]}>
-                      <TextInput
-                        style={{
-                          width: 80,
-                          paddingHorizontal: 10,
-                          backgroundColor: colors.lightBlack,
-                          borderRadius: 5,
-                          color: '#fff',
-                          height: Platform.OS === 'ios' ? 50 : 50,
-                        }}
-                        placeholderTextColor={colors.grey}
-                        placeholder="N"
-                        keyboardType="number-pad"
-                        key={index}
-                        value={item.value} // Assign value from state
-                        onChangeText={value =>
-                          handleServicePriceMinChange(index, value)
-                        }
-                      />
-                      <TextWrapper
-                        fontType={'semiBold'}
-                        style={{
-                          fontSize: 12,
-                          color: colors.black,
-                          marginHorizontal: 10,
-                        }}>
-                        to
-                      </TextWrapper>
-                      <TextInput
-                        style={{
-                          width: 80,
-                          paddingHorizontal: 10,
-                          backgroundColor: colors.lightBlack,
-                          borderRadius: 5,
-                          color: '#fff',
-                          height: Platform.OS === 'ios' ? 50 : 50,
-                        }}
-                        placeholderTextColor={colors.grey}
-                        placeholder="N"
-                        keyboardType="number-pad"
-                        key={index}
-                        value={item.value} // Assign value from state
-                        onChangeText={value =>
-                          handleServicePriceMaxChange(index, value)
-                        }
-                      />
-                    </View>
-                  </View>
+                  //   <View style={[generalStyles.rowCenter]}>
+                  //     <TextInput
+                  //       style={{
+                  //         width: 80,
+                  //         paddingHorizontal: 10,
+                  //         backgroundColor: colors.lightBlack,
+                  //         borderRadius: 5,
+                  //         color: '#fff',
+                  //         height: Platform.OS === 'ios' ? 50 : 50,
+                  //       }}
+                  //       placeholderTextColor={colors.grey}
+                  //       placeholder="N"
+                  //       keyboardType="number-pad"
+                  //       key={index}
+                  //       value={item.value} // Assign value from state
+                  //       onChangeText={value =>
+                  //         handleServicePriceMinChange(index, value)
+                  //       }
+                  //     />
+                  //     <TextWrapper
+                  //       fontType={'semiBold'}
+                  //       style={{
+                  //         fontSize: 12,
+                  //         color: colors.black,
+                  //         marginHorizontal: 10,
+                  //       }}>
+                  //       to
+                  //     </TextWrapper>
+                  //     <TextInput
+                  //       style={{
+                  //         width: 80,
+                  //         paddingHorizontal: 10,
+                  //         backgroundColor: colors.lightBlack,
+                  //         borderRadius: 5,
+                  //         color: '#fff',
+                  //         height: Platform.OS === 'ios' ? 50 : 50,
+                  //       }}
+                  //       placeholderTextColor={colors.grey}
+                  //       placeholder="N"
+                  //       keyboardType="number-pad"
+                  //       key={index}
+                  //       value={item.value} // Assign value from state
+                  //       onChangeText={value =>
+                  //         handleServicePriceMaxChange(index, value)
+                  //       }
+                  //     />
+                  //   </View>
+                  // </View>
+                  <ServicePriceComp key={index} item={item} index={index} />
                 );
               })
             : null}
@@ -495,7 +707,7 @@ const PRofileStep2 = () => {
               <DropDownPicker
                 open={nationalityOpen}
                 value={nationalityValue}
-                items={nationalityItems}
+                items={allCities}
                 setOpen={setNationalityOpen}
                 setValue={setNationalityValue}
                 setItems={setNationalityItems}
@@ -523,6 +735,7 @@ const PRofileStep2 = () => {
                   backgroundColor: colors.lightBlack,
                   borderColor: colors.primary,
                   borderWidth: 2,
+                  width: SIZES.width * 0.9,
                 }}
                 listMode="FLATLIST"
                 showTickIcon={false}
@@ -569,6 +782,7 @@ const PRofileStep2 = () => {
             {allPotfolio.map((item: any, index: number) => {
               return (
                 <PotfolioWrapper
+                  key={index}
                   index={index}
                   item={item}
                   allPotfolio={allPotfolio}
@@ -602,11 +816,13 @@ const PRofileStep2 = () => {
 
             <View>
               {portfolioToServiceCount?.map((item, index) => {
-                return <Portfoliocomp servicePrice={servicePrice}/>;
+                return (
+                  <Portfoliocomp key={index} servicePrice={servicePrice} />
+                );
               })}
             </View>
 
-            {allPotfolio.length == 3 && (
+            {allPotfolio.length === 3 && (
               <View
                 style={{
                   backgroundColor: colors.greyLight1,
@@ -831,6 +1047,13 @@ const PRofileStep2 = () => {
                     // handleProfileSetup();
                     // navigation.navigate('ProfileStep3', {serviceId: data?.serviceId});
                     navigation.navigate('ProfileStep3', {serviceId: 'id_here'});
+                    // dispatch(
+                    //   addcompleteProfile({
+                    //     description: description,
+                    //     serviceIntro: [],
+                    //   }),
+                    // );
+                    dispatch(addcompleteProfile({city: nationalityValue}));
                   }}
                   style={{
                     marginBottom: 20,
@@ -853,6 +1076,7 @@ const PRofileStep2 = () => {
         </View>
         <View style={tw`h-30`} />
       </ScrollView>
+      <Spinner visible={isLoading} />
     </View>
   );
 };

@@ -110,7 +110,7 @@ const EditAccount = () => {
           </View>
           <View
             style={[
-              tw`bg-[${colors.darkPurple}] mt-4 pl-5 justify-center`,
+              tw`bg-[${colors.darkPurple}] pt-4 mt-4 pl-5 justify-center`,
               {height: perHeight(60)},
             ]}>
             <View>

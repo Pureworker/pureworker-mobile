@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -24,18 +24,37 @@ import TextWrapper from '../../components/TextWrapper';
 import {generalStyles} from '../../constants/generalStyles';
 import {launchImageLibrary} from 'react-native-image-picker';
 import storage from 'redux-persist/es/storage';
+import {addProfileData, addUserData} from '../../store/reducer/mainSlice';
+import {getProfile, getUser} from '../../utils/api/func';
 
 const Account = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
 
   //
-  const [profileImageLoading, setProfileImageLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState('');
-  let profilePicture = useRef('');
-  const [description, setDescription] = useState('');
+  const profileData = useSelector((state: any) => state.user.profileData);
+  //
 
-  const category = useSelector((state: any) => state.user.category);
+  //
+  const [profileImageLoading, setProfileImageLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState(profileData?.profilePic || '');
+  let profilePicture = useRef('');
+  const [description, setDescription] = useState( profileData?.description || '');
+
+  const category = useSelector((state: any) => state.user.pickedServices);
+  const userData = useSelector((state: any) => state.user.userData);
+
+  useEffect(() => {
+    const initGetProfile = async () => {
+      const res: any = await getProfile(userData?._id);
+      console.log('dddddddd', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addProfileData(res?.data?.profile));
+      }
+    };
+    initGetProfile();
+  }, [dispatch]);
+
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView>
@@ -72,7 +91,6 @@ const Account = () => {
             />
           </View>
         </View>
-
         <View style={tw`px-[5%]`}>
           <TextWrapper
             children=""
@@ -128,39 +146,39 @@ const Account = () => {
               }}>
               <TouchableOpacity
                 onPress={async () => {
-                  try {
-                    const response: any = await launchImageLibrary();
-                    setProfileImageLoading(true);
-                    if (response) {
-                      const filename = response?.uri.substring(
-                        response?.uri.lastIndexOf('/') + 1,
-                      );
-                      const uploadUri =
-                        Platform.OS === 'ios'
-                          ? response?.uri.replace('file://', '')
-                          : response.uri;
-                      const task = await storage()
-                        .ref(filename)
-                        .putFile(uploadUri);
-                      if (task.metadata) {
-                        profilePicture.current = task.metadata.fullPath;
-                      }
-                      let url = '';
-                      if (profilePicture.current) {
-                        url = await storage()
-                          .ref(profilePicture.current)
-                          .getDownloadURL();
-                      }
-                      setImageUrl(url);
-                      profilePicture.current = '';
-                      setProfileImageLoading(false);
-                    } else {
-                      setProfileImageLoading(false);
-                    }
-                  } catch (error) {
-                    console.log('error', error);
-                    setProfileImageLoading(false);
-                  }
+                  // try {
+                  //   const response: any = await launchImageLibrary();
+                  //   setProfileImageLoading(true);
+                  //   if (response) {
+                  //     const filename = response?.uri.substring(
+                  //       response?.uri.lastIndexOf('/') + 1,
+                  //     );
+                  //     const uploadUri =
+                  //       Platform.OS === 'ios'
+                  //         ? response?.uri.replace('file://', '')
+                  //         : response.uri;
+                  //     const task = await storage()
+                  //       .ref(filename)
+                  //       .putFile(uploadUri);
+                  //     if (task.metadata) {
+                  //       profilePicture.current = task.metadata.fullPath;
+                  //     }
+                  //     let url = '';
+                  //     if (profilePicture.current) {
+                  //       url = await storage()
+                  //         .ref(profilePicture.current)
+                  //         .getDownloadURL();
+                  //     }
+                  //     setImageUrl(url);
+                  //     profilePicture.current = '';
+                  //     setProfileImageLoading(false);
+                  //   } else {
+                  //     setProfileImageLoading(false);
+                  //   }
+                  // } catch (error) {
+                  //   console.log('error', error);
+                  //   setProfileImageLoading(false);
+                  // }
                 }}>
                 <Image
                   source={images.edit}
@@ -254,13 +272,14 @@ const Account = () => {
                             fontSize: 12,
                             color: '#fff',
                           }}>
-                          {item}
+                          {/* {item} */}
+                          {item?.name}
                         </TextWrapper>
                       </View>
                       <TouchableOpacity
                         onPress={() => {
                           // dispatch(removeCategory(item));
-                          navigation.navigate('EditService');
+                          navigation.navigate('EditService', {index: index, name: item?.name});
                         }}>
                         <Image
                           source={images.edit}
@@ -278,18 +297,18 @@ const Account = () => {
                 })
               : null}
             <Button
-            onClick={() => {
-              navigation.navigate('AddServices');
-              // handleProfileSetup();
-            }}
-            style={{
-              width: SIZES.width * 0.9,
-              backgroundColor: colors.lightBlack,
-              marginTop: 20,
-            }}
-            textStyle={{color: colors.primary}}
-            text={'Add Services'}
-          />
+              onClick={() => {
+                navigation.navigate('AddServices');
+                // handleProfileSetup();
+              }}
+              style={{
+                width: SIZES.width * 0.9,
+                backgroundColor: colors.lightBlack,
+                marginTop: 20,
+              }}
+              textStyle={{color: colors.primary}}
+              text={'Add Services'}
+            />
           </View>
         </View>
         <View style={tw`h-30`} />

@@ -41,11 +41,12 @@ const TokenVerification = () => {
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const [verification, {isLoading}] = useVerifyOtpMutation();
+  // const [verification, {isLoading}] = useVerifyOtpMutation();
   const [createOtp] = useCreateOtpMutation();
   const [resetOtp] = useResetOtpMutation();
 
   const [seconds, setSeconds] = useState(30);
+  const [isLoading, setisLoading] = useState(false)
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -58,7 +59,7 @@ const TokenVerification = () => {
 
   useEffect(() => {
     if (seconds === 0) {
-      resetOTP();
+      // resetOTP();
     }
   }, [seconds]);
 
@@ -103,6 +104,7 @@ const TokenVerification = () => {
   };
 
   const veriFyOTP = async () => {
+    setisLoading(true);
     if (code.length < 6) {
       Alert.alert('Alert!!', 'Enter a valid OTP.');
       return;
@@ -153,8 +155,10 @@ const TokenVerification = () => {
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
+        setisLoading(false);
       }
     }
+    setisLoading(false);
 
 
     // verification(loginData)
@@ -278,7 +282,7 @@ const TokenVerification = () => {
             <TouchableOpacity
               style={{marginTop: 25}}
               onPress={() => {
-                resendOTP();
+                // resendOTP();
               }}>
               <Text style={{color: colors.primary}}>Resend</Text>
             </TouchableOpacity>
@@ -298,7 +302,7 @@ const TokenVerification = () => {
               style={{
                 backgroundColor: colors.parpal,
                 marginHorizontal: 25,
-                marginTop: 312,
+                marginTop: 252,
               }}
             />
           </View>

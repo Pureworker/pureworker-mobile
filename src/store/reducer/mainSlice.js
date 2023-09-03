@@ -13,13 +13,23 @@ const persistConfig = {
 const initialState = {
   isLoggedIn: null,
   category: [],
+  pickedServices: [],
+  pickedServicesId: [],
   subcategory: [],
   popularServices: [],
+  completeProfileData: {
+    services: [],
+  },
+
 
   //frontend Temporary data
   serviceView: null,
   //
   userData: null,
+  profileData: null,
+  editServiceView: null,
+  transactions: [],
+  categorizedTransdata: {},
 };
 
 export const mainSlice = createSlice({
@@ -31,7 +41,15 @@ export const mainSlice = createSlice({
         token: action.payload.token,
         userType: action.payload.type,
       };
-      state.userData =  null;
+      state.userData = null;
+      state.completeProfileData = {
+        services: [],
+      };
+      state.pickedServices = [];
+      state.pickedServicesId = [];
+      state.subcategory = [];
+      state.popularServices = [];
+      state.transactions = [];
     },
 
     logout: state => {
@@ -40,17 +58,41 @@ export const mainSlice = createSlice({
 
     addCategory: (state, action) => {
       let text = [];
-      text.push(...state.category, action.payload);
-      state.category = [...text];
+      let text2 = [];
+      text.push(...state.pickedServices, action.payload);
+      text2.push(...state.pickedServicesId, action.payload.id);
+      state.pickedServices = [...text];
+      state.pickedServicesId = [...text2];
     },
 
     emptyCategory: state => {
-      state.category = [];
+      state.pickedServices = [];
+      state.pickedServicesId = [];
     },
 
     removeCategory: (state, action) => {
-      var arr = state.category.filter(text => text !== action.payload);
-      state.category = arr;
+      console.log(action.payload);
+      // var arr = state.pickedServices.filter(
+      //   text => text !== action.payload,
+      // );
+      // var arr2 = state.pickedServicesId.filter(
+      //   text => text !== action.payload.id,
+      // );
+      // console.log(action.payload, arr);
+
+      const nameToRemove = action.payload.name;
+      const idToRemove = action.payload.id;
+
+      const updatedPickedServices = state.pickedServices.filter(
+        text => text.name !== nameToRemove,
+      );
+
+      const updatedPickedServicesId = state.pickedServicesId.filter(
+        text => text !== idToRemove,
+      );
+
+      state.pickedServices = updatedPickedServices;
+      state.pickedServicesId = updatedPickedServicesId;
     },
     addserviceView: (state, action) => {
       var arr = state.category.filter(text => text !== action.payload);
@@ -68,10 +110,48 @@ export const mainSlice = createSlice({
     addPopularServices: (state, action) => {
       state.popularServices = action.payload;
     },
+    addProfileData: (state, action) => {
+      state.profileData = action.payload;
+    },
+    // addcompleteProfile: (state, action) => {
+    //   var list = {...state.completeProfileData, ...action.payload};
+    //   state.completeProfileData = list;
+    // },
+    addcompleteProfile: (state, action) => {
+      const newFields = action.payload;
+      state.completeProfileData = {
+        ...state.completeProfileData,
+        ...newFields,
+      };
+      console.log('Done', state.completeProfileData);
+    },
+    addEditServiceView: (state, action) => {
+      state.editServiceView = action.payload;
+    },
+    addTransactions: (state, action) => {
+      state.transactions = action.payload;
+    },
+    addcategorizedTransdata: (state, action) => {
+      state.categorizedTransdata = action.payload;
+    },
   },
 });
 
-export const {loggedIn, logout, addCategory, removeCategory, emptyCategory,addUserData, addSCategory,addSubcategory,addPopularServices} =
-  mainSlice.actions;
+export const {
+  loggedIn,
+  logout,
+  addCategory,
+  removeCategory,
+  emptyCategory,
+  addUserData,
+  addSCategory,
+  addSubcategory,
+  addPopularServices,
+  addcompleteProfile,
+  addProfileData,
+  addEditServiceView,
+  addTransactions,
+  addcategorizedTransdata,
+} = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);

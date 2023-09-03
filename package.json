@@ -44,11 +44,13 @@
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.9.0",
     "react-native-image-picker": "^5.6.1",
+    "react-native-loading-spinner-overlay": "^3.0.1",
     "react-native-maps": "^1.7.1",
     "react-native-modal": "^13.0.1",
     "react-native-otp-inputs": "^7.4.0",
     "react-native-paper": "^5.9.1",
     "react-native-paystack-webview": "^4.0.3",
+    "react-native-permissions": "^3.8.4",
     "react-native-popup-menu": "^0.16.1",
     "react-native-ratings": "^8.1.0",
     "react-native-reanimated": "2.17.0",
@@ -85,5 +87,15 @@
   },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "reactNativePermissionsIOS": [
+    "Calendars",
+    "Camera",
+    "LocationAccuracy",
+    "LocationAlways",
+    "LocationWhenInUse",
+    "MediaLibrary",
+    "Notifications",
+    "PhotoLibrary"
+  ]
 }

@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   StatusBar,
   ScrollView,
+  Platform,
 } from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import images from '../constants/images';
@@ -87,6 +88,7 @@ export default function BusinessSignup() {
           backgroundColor: '#88087B',
         });
       } else {
+        setisLoading(true);
         const loginData = {
           email: email.toLowerCase().trim(),
           firstName: firstName,
@@ -160,6 +162,7 @@ export default function BusinessSignup() {
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
+      setisLoading(false);
     }
   };
 
@@ -168,7 +171,12 @@ export default function BusinessSignup() {
   }, []);
 
   return (
-    <View style={{flex: 1, backgroundColor: '#000'}}>
+    <View
+      style={{
+        flex: 1,
+        paddingTop: Platform.OS === 'ios' ? 30 : 0,
+        backgroundColor: '#000',
+      }}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <Image
           source={images.cross}
@@ -195,7 +203,7 @@ export default function BusinessSignup() {
           <View style={{marginHorizontal: 50}}>
             <Text
               style={{
-                fontSize: 36,
+                fontSize: 32,
                 fontFamily: commonStyle.fontFamily.bold,
                 color: '#fff',
                 marginTop: 10,
