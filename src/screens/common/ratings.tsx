@@ -7,6 +7,7 @@ import {
   Platform,
   StatusBar,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
@@ -25,8 +26,8 @@ const Ratings = () => {
   const [deactivateAccount, setdeactivateAccount] = useState(false);
   const [deleteAccount, setdeleteAccount] = useState(false);
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
-      <View
+    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+      {/* <View
         style={{
           marginTop:
             Platform.OS === 'ios'
@@ -34,13 +35,14 @@ const Ratings = () => {
               : StatusBar.currentHeight &&
                 StatusBar.currentHeight + getStatusBarHeight(true),
         }}
-      />
+      /> */}
       <View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
           marginHorizontal: 20,
+          marginTop: 20,
         }}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
@@ -62,7 +64,7 @@ const Ratings = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{minHeight: SIZES.height}}>
-        <View style={[tw` flex-1`]}>
+        <View style={[tw``]}>
           <View style={tw`mx-auto mt-[5%]`}>
             <Textcomp
               text={'How your Rating is calculated'}
@@ -152,7 +154,7 @@ In some situations, we understand that you may need to cancel a service request.
         <View style={tw`h-40`} />
       </ScrollView>
       <View style={tw`h-0.5 w-full bg-black absolute  bottom-[3%]`} />
-    </View>
+    </SafeAreaView>
   );
 };
 

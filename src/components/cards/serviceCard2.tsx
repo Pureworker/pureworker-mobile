@@ -10,12 +10,21 @@ import colors from '../../constants/colors';
 import {Rating, AirbnbRating} from 'react-native-ratings';
 import Review from '../Review';
 
-const ServiceCard2 = ({item, index, navigation}: any) => {
+const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
   const [saved, setsaved] = useState(false);
+  const portfolio = item?.portfolio?.filter(_item => _item?.service === id);
+  const price = item?.priceRange?.filter(_item => _item?.service === id);
+  console.log('pased', price);
+
+  // console.log(
+  //   item?.portfolio.filter(
+  //     _item => _item?.service === id,
+  //   ),
+  // );
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('ServiceProviderProfile');
+        navigation.navigate('ServiceProviderProfile', {item: item, serviceName: serviceName, id: id});
       }}
       style={[
         tw` mt-4 mx-auto bg-[${colors.darkPurple}]`,
@@ -51,7 +60,7 @@ const ServiceCard2 = ({item, index, navigation}: any) => {
           <View style={[tw`flex flex-row justify-between`, {}]}>
             <View style={[tw``, {}]}>
               <Textcomp
-                text={'$15'}
+                text={`₦ ${price?.[0]?.minPrice}`}
                 size={12}
                 lineHeight={14}
                 color={colors.white}
@@ -74,9 +83,7 @@ const ServiceCard2 = ({item, index, navigation}: any) => {
           </View>
           <View style={[tw``, {width: perWidth(252), marginTop: perHeight(4)}]}>
             <Textcomp
-              text={
-                'Plumber with many years of experience fixing pipes, washers and all form of...s'
-              }
+              text={portfolio?.[0]?.description}
               size={12}
               lineHeight={14}
               color={colors.white}
@@ -98,7 +105,7 @@ const ServiceCard2 = ({item, index, navigation}: any) => {
       <View>
         <View style={[tw``, {width: perWidth(105), marginTop: perWidth(4)}]}>
           <Textcomp
-            text={'Steven W.s'}
+            text={`${item?.user?.fullName}`}
             size={12}
             lineHeight={14}
             color={colors.white}
@@ -155,7 +162,7 @@ const ServiceCard2 = ({item, index, navigation}: any) => {
             readonly={true}
             startingValue={2}
           /> */}
-          <Review value={4} editable={false}/>
+          <Review value={0} editable={false} />
         </View>
       </View>
     </TouchableOpacity>

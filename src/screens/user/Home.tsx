@@ -69,10 +69,11 @@ const Home = () => {
     : [];
   const [isLoading, setisLoading] = useState(false);
 
+
   useEffect(() => {
     const initGetUsers = async () => {
       const res: any = await getUser('');
-      console.log('dddddddd', res);
+      console.log('dddddddd', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addUserData(res?.data?.user));
       }
@@ -90,7 +91,7 @@ const Home = () => {
     const initGetPopularServices = async () => {
       setisLoading(true);
       const res: any = await getPopularService('');
-      console.log('ppppppppp', res?.data?.data);
+      // console.log('ppppppppp', res?.data?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addPopularServices(res?.data?.data));
       }
@@ -106,6 +107,8 @@ const Home = () => {
   const _getCategory = useSelector((state: any) => state.user.category);
   const _popularServices = useSelector((state: any) => state.user.popularServices);
   // console.log(userData);
+
+  console.log('dddddddd', userData);
 
   // const filterBySearchProduct = useMemo(() => {
   //   var searchArray = [];

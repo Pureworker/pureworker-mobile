@@ -189,18 +189,18 @@ const ProfileStep5 = () => {
   };
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
+      <Header
+        style={{backgroundColor: colors.greyLight}}
+        imageStyle={{tintColor: colors.black}}
+        textStyle={{
+          color: colors.black,
+          fontFamily: commonStyle.fontFamily.semibold,
+        }}
+        title={'Complete your Registration'}
+        image={images.back}
+      />
+      <ProfileStepWrapper active={'five'} />
       <ScrollView>
-        <Header
-          style={{backgroundColor: colors.greyLight}}
-          imageStyle={{tintColor: colors.black}}
-          textStyle={{
-            color: colors.black,
-            fontFamily: commonStyle.fontFamily.semibold,
-          }}
-          title={'Complete your Registration'}
-          image={images.back}
-        />
-        <ProfileStepWrapper active={'five'} />
         <View style={{marginHorizontal: 20}}>
           <TextWrapper
             children="Schedule a Face to Face Meeting"

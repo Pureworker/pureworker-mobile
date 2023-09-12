@@ -103,8 +103,7 @@ const PRofileStep1 = () => {
   };
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
-      <ScrollView>
-        <Header
+              <Header
           style={{backgroundColor: colors.greyLight}}
           imageStyle={{tintColor: colors.black}}
           textStyle={{
@@ -114,7 +113,8 @@ const PRofileStep1 = () => {
           title={'Complete your Registration'}
           image={images.back}
         />
-        <ProfileStepWrapper active={'one'} />
+                <ProfileStepWrapper active={'one'} />
+      <ScrollView>
         <View style={{marginHorizontal: 20}}>
           <TextWrapper
             children="Add Services"

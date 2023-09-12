@@ -23,8 +23,20 @@ import CategoryList2 from '../../components/CategoryList2';
 import commonStyle from '../../constants/commonStyle';
 import {useGetCategoryQuery} from '../../store/slice/api';
 import Modal from 'react-native-modal/dist/modal';
-import { getCategory, getPopularService, getUser } from '../../utils/api/func';
-import { addPopularServices, addSCategory, addUserData } from '../../store/reducer/mainSlice';
+import {
+  getCategory,
+  getPopularService,
+  getProviderOrders,
+  getUser,
+} from '../../utils/api/func';
+import {
+  addPopularServices,
+  addSCategory,
+  addUserData,
+  addproviderOrders,
+} from '../../store/reducer/mainSlice';
+import ClosetoYou3 from '../../components/cards/CloseToYou3';
+import {formatAmount} from '../../utils/validations';
 
 const Home = ({navigation}: any) => {
   //   const navigation = useNavigation<StackNavigation>();
@@ -33,6 +45,9 @@ const Home = ({navigation}: any) => {
   const [loading, setLoading] = useState(false);
   const [InfoModal, setInfoModal] = useState(false);
   const [ContactAgent, setContactAgent] = useState(false);
+
+  const [OinProgress, setOinProgress] = useState([]);
+  const [OinPending, setOinPending] = useState([]);
 
   const data = [
     {id: '1', title: 'Item 1'},
@@ -80,11 +95,34 @@ const Home = ({navigation}: any) => {
     // initGetCategory();
     // initGetPopularServices();
   }, [dispatch]);
+  const providerOrders = useSelector((state: any) => state.user.providerOrders);
+  useEffect(() => {
+    const initGetOrders = async () => {
+      setisLoading(true);
+      const res: any = await getProviderOrders('64f20fb6ee98ab7912406b14');
+      console.log('oooooooo', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addproviderOrders(res?.data?.data));
+        let inProgress = providerOrders?.filter(
+          item => item?.status === 'INPROGRESS',
+        );
+        let pending = providerOrders?.filter(
+          item => item?.status === 'PENDING',
+        );
+        setOinProgress(inProgress);
+        setOinPending(pending);
+      }
+      setisLoading(false);
+    };
+    initGetOrders();
+  }, []);
 
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
   const _getCategory = useSelector((state: any) => state.user.category);
-  const _popularServices = useSelector((state: any) => state.user.popularServices);
+  const _popularServices = useSelector(
+    (state: any) => state.user.popularServices,
+  );
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
@@ -179,7 +217,7 @@ const Home = ({navigation}: any) => {
                   {borderTopRightRadius: 20, borderTopLeftRadius: 20},
                 ]}>
                 <Textcomp
-                  text={'0'}
+                  text={`${providerOrders?.length}`}
                   size={36}
                   lineHeight={36}
                   color={'#000413'}
@@ -226,7 +264,7 @@ const Home = ({navigation}: any) => {
                   {borderTopRightRadius: 20, borderTopLeftRadius: 20},
                 ]}>
                 <Textcomp
-                  text={'8'}
+                  text={`${OinPending?.length}`}
                   size={36}
                   lineHeight={36}
                   color={'#000413'}
@@ -278,7 +316,9 @@ const Home = ({navigation}: any) => {
                   {borderTopRightRadius: 20, borderTopLeftRadius: 20},
                 ]}>
                 <Textcomp
-                  text={'NGN0'}
+                  text={`NGN${formatAmount(
+                    userData?.wallet?.availableBalance,
+                  )}`}
                   size={20}
                   lineHeight={20}
                   color={'#000413'}
@@ -315,7 +355,10 @@ const Home = ({navigation}: any) => {
                   {borderTopRightRadius: 20, borderTopLeftRadius: 20},
                 ]}>
                 <Textcomp
-                  text={'NGN249,0000'}
+                  // text={'NGN249,0000'}
+                  text={`NGN${formatAmount(
+                    userData?.wallet?.availableBalance,
+                  )}`}
                   size={20}
                   lineHeight={20}
                   color={'#000413'}
@@ -363,32 +406,36 @@ const Home = ({navigation}: any) => {
                 />
               </TouchableOpacity>
             </View>
-            <View style={{flex: 1}}>
-              <FlatList
-                data={data}
-                horizontal={true}
-                renderItem={(item: any) => {
-                  return <ClosetoYou item={{price: 0}} index={item.index} />;
-                }}
-                keyExtractor={item => item.id}
-              />
-            </View>
-            <View style={[tw``, {marginLeft: perWidth(27)}]}>
-              <Textcomp
-                text={'You have no orders in progress'}
-                size={18}
-                lineHeight={18}
-                color={'#88087B'}
-                fontFamily={'Inter-SemiBold'}
-              />
-            </View>
+
+            {OinProgress?.length < 1 ? (
+              <View style={[tw`mt-4`, {marginLeft: perWidth(27)}]}>
+                <Textcomp
+                  text={'You have no orders in progress'}
+                  size={18}
+                  lineHeight={18}
+                  color={'#88087B'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </View>
+            ) : (
+              <View style={{flex: 1}}>
+                <FlatList
+                  data={OinProgress}
+                  horizontal={true}
+                  renderItem={(item: any) => {
+                    return <ClosetoYou3 item={item?.item} index={item.index} />;
+                  }}
+                  keyExtractor={item => item.id}
+                />
+              </View>
+            )}
           </View>
           {/* Pending Orders */}
           <View>
             <View
               style={[
                 tw`flex flex-row items-center justify-between`,
-                {marginLeft: perWidth(18), marginTop: perHeight(22)},
+                {marginLeft: perWidth(18), marginTop: perHeight(28)},
               ]}>
               <View style={[tw``]}>
                 <Textcomp
@@ -409,25 +456,29 @@ const Home = ({navigation}: any) => {
                 />
               </TouchableOpacity>
             </View>
-            <View style={{flex: 1}}>
-              <FlatList
-                data={data}
-                horizontal={true}
-                renderItem={(item: any) => {
-                  return <ClosetoYou item={{price: 0}} index={item.index} />;
-                }}
-                keyExtractor={item => item.id}
-              />
-            </View>
-            <View style={[tw``, {marginLeft: perWidth(27)}]}>
-              <Textcomp
-                text={'You have no orders in pending'}
-                size={18}
-                lineHeight={18}
-                color={'#88087B'}
-                fontFamily={'Inter-SemiBold'}
-              />
-            </View>
+
+            {OinPending?.length < 1 ? (
+              <View style={[tw`mt-4`, {marginLeft: perWidth(27)}]}>
+                <Textcomp
+                  text={'You have no orders in pending'}
+                  size={18}
+                  lineHeight={18}
+                  color={'#88087B'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </View>
+            ) : (
+              <View style={{flex: 1}}>
+                <FlatList
+                  data={OinPending}
+                  horizontal={true}
+                  renderItem={(item: any) => {
+                    return <ClosetoYou3 item={item?.item} index={item.index} />;
+                  }}
+                  keyExtractor={item => item.id}
+                />
+              </View>
+            )}
           </View>
 
           <TouchableOpacity

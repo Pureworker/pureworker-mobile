@@ -105,7 +105,7 @@ export const getPopularService = async (param: any) => {
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
     if (response.status === 201) {
-      console.log('response data:', response?.data);
+      // console.log('response data:', response?.data);
     }
     console.log(response?.data);
     return response;
@@ -136,7 +136,6 @@ export const uploadAssetsDOCorIMG = async (param: any) => {
       headers: {
         Authorization: `Bearer ${AuthToken}`,
         'Content-Type': 'multipart/form-data',
-        
       },
     });
 
@@ -195,6 +194,364 @@ export const getTransactions = async (param: any) => {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const getProviderByService = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getProviderByService func started', param);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/profile/get-provider-by-service/${param}`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const getProviderByCategory = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getProviderByService func started', param);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/profile/get-provider-by-category/${param}`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+export const getProviderAllReview = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getProviderAllReview func started', param);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/profile/get-all-reviews/${param}`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const createOrder = async (param: any) => {
+  console.log('createOrder func started', param);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  try {
+    const response = await axios({
+      method: 'post',
+      url: `${API_BASE_URL}/order/create`,
+      data: param,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
+
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const cancelOrder = async (param: any, data:any) => {
+  console.log('cancelOrder func started', param);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${API_BASE_URL}/order/cancel/${param}`,
+      data: data,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
+
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+export const completedOrder = async (param: any) => {
+  console.log('completedOrder func started', param);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${API_BASE_URL}/order/completed/${param}`,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
+
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+export const updateOrder = async (param: any, data:any) => {
+  console.log('updateOrder func started', param);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${API_BASE_URL}/order/${param}`,
+      data: data,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
+
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+export const updateStatusOrder = async (param: any, data:any) => {
+  console.log('updateStatusOrder func started', param,data);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${API_BASE_URL}/order/status/${param}/${data}`,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
+
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+export const addFeedbackOrder = async (param: any, data:any) => {
+  console.log('addFeedbackOrder func started', param);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${API_BASE_URL}/order/add-feedback/${param}`,
+      data: data,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
+
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+export const addRatingOrder = async (param: any, data:any) => {
+  console.log('addRatingOrder func started', param);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${API_BASE_URL}/order/add-rating/${param}`,
+      data: data,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
+
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const getUserOrders = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getUserOrders func started', param);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/order/user-orders`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+export const getProviderOrders = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getProviderOrders func started', param);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/order/provider-orders/${param}`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const getProviderJobs = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getProviderJobs func started', param);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/order/provider-orders/${param}/?status=COMPLETED`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const addPushToken = async (param: any) => {
+  console.log('addPushToken func started', param);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${API_BASE_URL}/user/me`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+      data: param,
+    });
+
+    if (response.status === 200) {
+      console.log('response data:', response?.data);
+    }
+    console.log('response', response);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);

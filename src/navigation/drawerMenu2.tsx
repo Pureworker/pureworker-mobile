@@ -16,6 +16,8 @@ import Account from '../screens/vendor/account';
 import Ratings from '../screens/common/ratings';
 import DeactivateAccount from '../screens/common/deactivateAccount';
 import PrivacyPolicy from '../screens/common/privacyPolicy';
+import Chat from '../screens/user/chat/index';
+import Index from '../screens/user/notification';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -62,7 +64,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Chats"
-        component={HomeScreen}
+        component={Chat}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
@@ -72,7 +74,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Notifications"
-        component={HomeScreen}
+        component={Index}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (

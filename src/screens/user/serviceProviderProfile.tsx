@@ -10,7 +10,7 @@ import {
   FlatList,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -26,15 +26,31 @@ import {
   useGetSingleProviderAllServiceQuery,
   useGetSingleProviderServiceQuery,
 } from '../../store/slice/api';
+import {getProviderAllReview} from '../../utils/api/func';
+import {addprovidersReviews} from '../../store/reducer/mainSlice';
 
 const ServiceProviderProfile = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [activeSection, setActiveSection] = useState('About');
   const [imageModal, setimageModal] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
 
   const [saved, setsaved] = useState(false);
   const route: any = useRoute();
+  const profileData = route.params?.item;
+  const serviceName = route.params?.serviceName;
+  const id = route.params?.id;
+  const portfolio = profileData?.portfolio.filter(
+    _item => _item?.service === id,
+  );
+  const price = profileData?.priceRange.filter(_item => _item?.service === id);
+  const providersReviews = useSelector(
+    (state: any) => state.user.providersReviews,
+  );
+
+  console.log(profileData);
+
   const {data: getSingleProviderServiceData, isLoading: isLoadingUser} =
     useGetSingleProviderServiceQuery(route.params?.id);
   const getSingleProviderService = getSingleProviderServiceData ?? [];
@@ -42,9 +58,9 @@ const ServiceProviderProfile = () => {
   const {data: getSingleProviderAllServiceData} =
     useGetSingleProviderAllServiceQuery(route.params?.id);
   const getSingleProviderAllService = getSingleProviderAllServiceData ?? [];
-  const price = getSingleProviderService?.price
-    ? JSON.parse(getSingleProviderService?.price)
-    : [];
+  // const price = getSingleProviderService?.price
+  //   ? JSON.parse(getSingleProviderService?.price)
+  //   : [];
   const serviceDetail = getSingleProviderService?.serviceDetail
     ? JSON.parse(getSingleProviderService?.serviceDetail)
     : [];
@@ -57,6 +73,29 @@ const ServiceProviderProfile = () => {
       ? JSON.parse(getSingleProviderService?.ServicePotfolio[1]?.potfolioImages)
       : [];
   // const thirdPotfolio = getSingleProviderService?.ServicePotfolio?.length > 2 ? JSON.parse(getSingleProviderService?.ServicePotfolio[2]?.potfolioImages) : []
+
+  // const dispatch = useDispatch();
+
+  useEffect(() => {
+    const initProviderRevie = async () => {
+      setisLoading(true);
+      const res: any = await getProviderAllReview(profileData?._id);
+      console.log('pppppppp', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addprovidersReviews(res?.data?.data));
+      }
+      setisLoading(false);
+      // setloading(false);
+    };
+    initProviderRevie();
+  }, [dispatch, navigation, profileData?._id]);
+  function getDaysAgo(dateString) {
+    const currentDate = new Date();
+    const givenDate = new Date(dateString);
+    const timeDifference = currentDate - givenDate;
+    const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    return daysAgo;
+  }
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -97,7 +136,7 @@ const ServiceProviderProfile = () => {
         <FastImage
           style={[tw``, {width: SIZES.width, height: 200}]}
           source={{
-            uri: getSingleProviderService?.profilePicture,
+            uri: profileData?.profilePic,
             headers: {Authorization: 'someAuthToken'},
             priority: FastImage.priority.normal,
           }}
@@ -160,7 +199,7 @@ const ServiceProviderProfile = () => {
         <View style={tw``}>
           <View style={tw`mx-auto pt-2`}>
             <Textcomp
-              text={getSingleProviderService?.User?.firstName}
+              text={profileData?.user?.fullName}
               size={20}
               lineHeight={24}
               color={'#000413'}
@@ -169,7 +208,7 @@ const ServiceProviderProfile = () => {
           </View>
           <View style={tw`mx-auto `}>
             <Textcomp
-              text={'Pumber'}
+              text={`${serviceName}`}
               size={12}
               lineHeight={14.5}
               color={'#88087B'}
@@ -252,10 +291,10 @@ const ServiceProviderProfile = () => {
                 </View>
               </View>
               <View style={tw`border-b border-[#FFF] pb-4 mx-2`}>
-                <View style={tw` pt-2`}>
+                <View style={tw` pt-3`}>
                   <Textcomp
-                    text={getSingleProviderService?.description}
-                    size={12}
+                    text={profileData?.description}
+                    size={13}
                     lineHeight={14}
                     color={'#FFFFFF'}
                     fontFamily={'Inter-SemiBold'}
@@ -319,7 +358,7 @@ const ServiceProviderProfile = () => {
                   </View>
                   <View style={[tw` `, {marginTop: perHeight(5)}]}>
                     <Textcomp
-                      text={price[0]?.priceMax}
+                      text={`₦${price?.[0]?.minPrice} - ₦${price?.[0]?.maxPrice}`}
                       size={12}
                       lineHeight={15}
                       color={'#FFFFFF'}
@@ -413,7 +452,7 @@ const ServiceProviderProfile = () => {
                   <View style={tw`w-full`}>
                     <FlatList
                       scrollEnabled={false}
-                      data={serviceDetail}
+                      data={profileData?.services}
                       renderItem={({item, index}) => {
                         return (
                           <View
@@ -423,7 +462,7 @@ const ServiceProviderProfile = () => {
                               {marginTop: perHeight(5)},
                             ]}>
                             <Textcomp
-                              text={item?.serviceName}
+                              text={item?.name}
                               size={9}
                               lineHeight={12}
                               color={'#000000'}
@@ -729,7 +768,7 @@ const ServiceProviderProfile = () => {
                     />
                   </View>
                   <View style={tw` pt-2`}>
-                    <Review value={2} editable={false} />
+                    <Review value={profileData?.rating || 0} editable={false} />
                   </View>
                 </View>
                 <View style={tw`flex mt-auto flex-row justify-between`}>
@@ -743,7 +782,10 @@ const ServiceProviderProfile = () => {
                     />
                   </View>
                   <View style={tw` pt-2`}>
-                    <Review value={3} editable={false} />
+                    <Review
+                      value={profileData?.communicationRating || 0}
+                      editable={false}
+                    />
                   </View>
                 </View>
                 <View style={tw`flex mt-auto flex-row justify-between`}>
@@ -757,7 +799,10 @@ const ServiceProviderProfile = () => {
                     />
                   </View>
                   <View style={tw` pt-2`}>
-                    <Review value={4} editable={false} />
+                    <Review
+                      value={profileData?.recommendRating || 0}
+                      editable={false}
+                    />
                   </View>
                 </View>
                 <View style={tw`flex mt-auto flex-row justify-between`}>
@@ -771,15 +816,20 @@ const ServiceProviderProfile = () => {
                     />
                   </View>
                   <View style={tw` pt-2`}>
-                    <Review value={2} editable={false} />
+                    <Review
+                      value={profileData?.serviceAsDescribedRating || 0}
+                      editable={false}
+                    />
                   </View>
                 </View>
               </View>
 
               <FlatList
                 scrollEnabled={true}
-                data={[0, 1, 2, 3, 4, 5, 6]}
+                data={providersReviews}
                 renderItem={(item, index) => {
+                  console.log(item);
+
                   return (
                     <View
                       style={[
@@ -841,7 +891,10 @@ const ServiceProviderProfile = () => {
                               />
                             </View>
                             <View style={tw` pt-2`}>
-                              <Review value={2} editable={false} />
+                              <Review
+                                value={item.item?.recommend}
+                                editable={false}
+                              />
                             </View>
                           </View>
                           <View
@@ -859,7 +912,9 @@ const ServiceProviderProfile = () => {
                             />
                             <View style={[tw`ml-auto`, {}]}>
                               <Textcomp
-                                text={'4 days ago'}
+                                text={`${getDaysAgo(
+                                  item?.item?.createdAt,
+                                )} days ago`}
                                 size={12}
                                 lineHeight={16}
                                 color={'#FFFFFF80'}
@@ -876,9 +931,7 @@ const ServiceProviderProfile = () => {
                             {width: perWidth(252), marginTop: perWidth(5)},
                           ]}>
                           <Textcomp
-                            text={
-                              'He is very good plumber with years of experience as stated in his profile. His job was quick and delivered as discussed, I will recommend him for any job here.'
-                            }
+                            text={item?.item?.comment}
                             size={12}
                             lineHeight={14}
                             color={colors.white}
@@ -902,7 +955,7 @@ const ServiceProviderProfile = () => {
       </View>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('OrderDetails', {data: null});
+          navigation.navigate('OrderDetails', {data: profileData});
         }}
         style={[
           tw`bg-[#FFF] absolute bottom-[11%] right-[5%] rounded-full items-center justify-center`,

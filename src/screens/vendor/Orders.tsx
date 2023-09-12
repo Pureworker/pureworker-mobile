@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Header from '../../components/Header';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -21,6 +21,8 @@ import {perHeight} from '../../utils/position/sizes';
 import TextInputs from '../../components/TextInput2';
 import CloseToYouCard2 from '../../components/cards/closeToYou2';
 import Orderscomponent2 from '../../components/Orderscomponent2';
+import { addproviderOrders } from '../../store/reducer/mainSlice';
+import { getProviderOrders, getUserOrders } from '../../utils/api/func';
 
 const Orders = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -28,8 +30,23 @@ const Orders = () => {
   const [searchModal, setsearchModal] = useState(false);
   const [searchInput, setsearchInput] = useState('');
   const [activeSection, setactiveSection] = useState('Active');
+  const [isLoading, setisLoading] = useState(false);
+  const providerOrders = useSelector((state: any) => state.user.providerOrders);
 
   const orders = [0, 1, 2, 3];
+
+  useEffect(() => {
+    const initGetOrders = async () => {
+      setisLoading(true);
+      const res: any = await getProviderOrders('64f20fb6ee98ab7912406b14');
+      console.log('oooooooo', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addproviderOrders(res?.data?.data));
+      }
+      setisLoading(false);
+    };
+    initGetOrders();
+  }, [dispatch]);
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -156,7 +173,7 @@ const Orders = () => {
             />
           </TouchableOpacity>
         </View>
-        {orders.length < 1 ? (
+        {providerOrders.length < 1 ? (
           <View style={[tw`flex-1 items-center`, {}]}>
             <View style={[tw``, {marginTop: perHeight(90)}]}>
               <Image
@@ -213,7 +230,7 @@ const Orders = () => {
               <View style={[tw`items-center`, {flex: 1}]}>
                 <ScrollView horizontal>
                   <FlatList
-                    data={orders}
+                    data={providerOrders}
                     horizontal={false}
                     scrollEnabled={false}
                     renderItem={(item: any, index: any) => {
@@ -223,7 +240,8 @@ const Orders = () => {
                           navigation={navigation}
                           item={item.item}
                           index={item.index}
-                          status={index % 3 === 0 ? 'Pending' : 'Inprogress'}
+                          status ={item?.item?.status}
+                          // status={index % 3 === 0 ? 'Pending' : 'Inprogress'}
                         />
                       );
                     }}
@@ -238,7 +256,7 @@ const Orders = () => {
                 <ScrollView horizontal>
                   <FlatList
                     scrollEnabled={false}
-                    data={orders}
+                    data={providerOrders?.filter((item)=> item?.status === 'COMPLETED')}
                     horizontal={false}
                     renderItem={(item: any, index: any) => {
                       return (

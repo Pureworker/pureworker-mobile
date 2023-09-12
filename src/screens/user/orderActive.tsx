@@ -40,6 +40,8 @@ const OrderActive = ({route}: any) => {
   const [activeSection, setactiveSection] = useState('Active');
 
   const orders = [0, 1, 2, 3];
+  const passedData = route.params.data;
+  console.log(route.params.data);
 
   //modals
   const [serviceProviderModal, setserviceProviderModal] = useState(false);
@@ -296,13 +298,18 @@ const OrderActive = ({route}: any) => {
                 </ScrollView> */}
                 <Orderscomponent
                   navigation={navigation}
-                  item={item.item}
-                  index={item.index}
-                  status={'Inprogress'}
+                  // item={item.item}
+                  // index={item.index}
                   editable={true}
+                  item={passedData}
+                  index={item?.index}
+                  status={passedData?.status}
                 />
                 <View
-                  style={[tw`bg-[#2D303C] rounded p-4 mt-1`, {width: perWidth(355)}]}>
+                  style={[
+                    tw`bg-[#2D303C] rounded p-4 mt-1`,
+                    {width: perWidth(355)},
+                  ]}>
                   {links?.map((item, index) => {
                     return (
                       <>

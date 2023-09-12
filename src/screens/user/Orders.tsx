@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Header from '../../components/Header';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -30,6 +30,9 @@ import OrderDelivered from '../../components/modals/orderDelivered';
 import OrderInProgress from '../../components/modals/OrderinProgress';
 import OrderPlaced from '../../components/modals/orderPlaced';
 import ScheduledDeliveryDate from '../../components/modals/scheduledDeliveryDate';
+import {addcustomerOrders} from '../../store/reducer/mainSlice';
+import {getProviderByService, getUserOrders} from '../../utils/api/func';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Orders = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -37,8 +40,10 @@ const Orders = () => {
   const [searchModal, setsearchModal] = useState(false);
   const [searchInput, setsearchInput] = useState('');
   const [activeSection, setactiveSection] = useState('Active');
+  const [isLoading, setisLoading] = useState(false);
 
   const orders = [0, 1, 2, 3];
+  const customerOrders = useSelector((state: any) => state.user.customerOrders);
 
   //modals
   const [serviceProviderModal, setserviceProviderModal] = useState(false);
@@ -54,6 +59,22 @@ const Orders = () => {
   useEffect(() => {
     // setorderDelivered(true);
   }, []);
+
+  useEffect(() => {
+    const initGetOrders = async () => {
+      setisLoading(true);
+      const res: any = await getUserOrders('');
+      console.log('oooooooo', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addcustomerOrders(res?.data?.data));
+      }
+      // setloading(false);
+      setisLoading(false);
+    };
+    initGetOrders();
+  }, []);
+
+  // console.log(customerOrders);
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -180,7 +201,7 @@ const Orders = () => {
             />
           </TouchableOpacity>
         </View>
-        {orders.length < 1 ? (
+        {customerOrders.length < 1 ? (
           <View style={[tw`flex-1 items-center`, {}]}>
             <View style={[tw``, {marginTop: perHeight(90)}]}>
               <Image
@@ -237,7 +258,7 @@ const Orders = () => {
               <View style={[tw`items-center`, {flex: 1}]}>
                 <ScrollView horizontal>
                   <FlatList
-                    data={orders}
+                    data={customerOrders}
                     horizontal={false}
                     scrollEnabled={false}
                     renderItem={(item: any, index: any) => {
@@ -247,7 +268,8 @@ const Orders = () => {
                           navigation={navigation}
                           item={item.item}
                           index={item.index}
-                          status={index % 3 === 0 ? 'Pending' : 'Inprogress'}
+                          status={item.item?.status}
+                          // index % 3 === 0 ? 'Pending' : 'Inprogress'
                         />
                       );
                     }}
@@ -262,7 +284,9 @@ const Orders = () => {
                 <ScrollView horizontal>
                   <FlatList
                     scrollEnabled={false}
-                    data={orders}
+                    data={customerOrders?.filter(
+                      item => item?.status === 'COMPLETED',
+                    )}
                     horizontal={false}
                     renderItem={(item: any, index: any) => {
                       return (
@@ -271,7 +295,8 @@ const Orders = () => {
                           navigation={navigation}
                           item={item.item}
                           index={item.index}
-                          status={index % 3 === 0 ? 'Pending' : 'Completed'}
+                          status={item.item?.status}
+                          // status={index % 3 === 0 ? 'Pending' : 'Completed'}
                         />
                       );
                     }}
@@ -348,6 +373,7 @@ const Orders = () => {
         }}
         visible={scheduledDeliveryDate}
       />
+      <Spinner visible={isLoading} />
     </View>
   );
 };

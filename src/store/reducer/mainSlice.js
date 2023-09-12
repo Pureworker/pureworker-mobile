@@ -21,7 +21,6 @@ const initialState = {
     services: [],
   },
 
-
   //frontend Temporary data
   serviceView: null,
   //
@@ -30,6 +29,11 @@ const initialState = {
   editServiceView: null,
   transactions: [],
   categorizedTransdata: {},
+  providersByService: [],
+  providersByCateegory: [],
+  providersReviews: [],
+  customerOrders: [],
+  providerOrders: [],
 };
 
 export const mainSlice = createSlice({
@@ -50,6 +54,7 @@ export const mainSlice = createSlice({
       state.subcategory = [];
       state.popularServices = [];
       state.transactions = [];
+      state.providerOrders = [];
     },
 
     logout: state => {
@@ -134,6 +139,21 @@ export const mainSlice = createSlice({
     addcategorizedTransdata: (state, action) => {
       state.categorizedTransdata = action.payload;
     },
+    addprovidersByService: (state, action) => {
+      state.providersByService = action.payload;
+    },
+    addprovidersByCateegory: (state, action) => {
+      state.providersByCateegory = action.payload;
+    },
+    addprovidersReviews: (state, action) => {
+      state.providersReviews = action.payload;
+    },
+    addcustomerOrders: (state, action) => {
+      state.customerOrders = action.payload;
+    },
+    addproviderOrders: (state, action) => {
+      state.providerOrders = action.payload;
+    },
   },
 });
 
@@ -152,6 +172,11 @@ export const {
   addEditServiceView,
   addTransactions,
   addcategorizedTransdata,
+  addprovidersByService,
+  addprovidersByCateegory,
+  addprovidersReviews,
+  addcustomerOrders,
+  addproviderOrders,
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);

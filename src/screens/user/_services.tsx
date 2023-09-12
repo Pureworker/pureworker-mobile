@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Header from '../../components/Header';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -22,17 +22,44 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {perHeight} from '../../utils/position/sizes';
 import ServiceCard2 from '../../components/cards/serviceCard2';
 import TextInputs from '../../components/TextInput2';
+import {
+  getProviderByCategory,
+  getProviderByService,
+  getUser,
+} from '../../utils/api/func';
+import {addprovidersByCateegory} from '../../store/reducer/mainSlice';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const _Services = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
-  const passedService = route.params.service.name;
-  console.log(passedService);
+  const passedService = route.params?.service?.name;
+  const id = route.params?.service?._id;
+  console.log('--kk-passed', route.params.service?.id);
 
+  const _providersByCateegory = useSelector(
+    (state: any) => state.user.providersByCateegory,
+  );
   const dummyData = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   const [activeSection, setactiveSection] = useState('All');
   const [searchModal, setsearchModal] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
   const [searchInput, setsearchInput] = useState('');
+
+  useEffect(() => {
+    const initGetUsers = async () => {
+      setisLoading(true);
+      const res: any = await getProviderByService(id);
+      console.log('dddddddd', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addprovidersByCateegory(res?.data?.data));
+      }
+      // setloading(false);
+      setisLoading(false);
+    };
+    initGetUsers();
+  }, [dispatch, id]);
+
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView>
@@ -159,82 +186,97 @@ const _Services = ({route}: any) => {
             </TouchableOpacity>
           </View>
 
-          {dummyData.length < 1 ? (
-            <View
-              style={[
-                tw`bg-[#D9D9D9] flex flex-col rounded justify-items align-items mt-3 mx-2`,
-                {height: perHeight(80)},
-              ]}>
-              <View style={tw`my-auto pl-8`}>
-                <Textcomp
-                  text={'Service Provider Not Found...'}
-                  size={17}
-                  lineHeight={17}
-                  color={'black'}
-                  fontFamily={'Inter-SemiBold'}
-                />
-              </View>
-            </View>
-          ) : (
-            <>
-              {activeSection === 'All' && (
-                <>
-                  <View style={[tw`items-center`, {flex: 1}]}>
-                    <ScrollView scrollEnabled={false} horizontal>
-                      <FlatList
-                        style={{flex: 1}}
-                        data={dummyData}
-                        scrollEnabled={false}
-                        horizontal={false}
-                        renderItem={(item: any, index) => {
-                          return (
-                            <ServiceCard2
-                              key={index}
-                              navigation={navigation}
-                              item={item.item}
-                              index={item.index}
-                            />
-                          );
-                        }}
-                        keyExtractor={item => item?.id}
-                        ListFooterComponent={() => <View style={tw`h-20`} />}
-                        contentContainerStyle={{paddingBottom: 20}}
+          <>
+            {!isLoading && (
+              <>
+                {_providersByCateegory.length < 1 ? (
+                  <View
+                    style={[
+                      tw`bg-[#D9D9D9] flex flex-col rounded justify-items mt-3 mx-2`,
+                      {height: perHeight(80)},
+                    ]}>
+                    <View style={tw`my-auto pl-8`}>
+                      <Textcomp
+                        text={'Service Provider Not Found...'}
+                        size={17}
+                        lineHeight={17}
+                        color={'black'}
+                        fontFamily={'Inter-SemiBold'}
                       />
-                    </ScrollView>
+                    </View>
                   </View>
-                </>
-              )}
-              {activeSection === 'Saved' && (
-                <View style={[tw`items-center`, {flex: 1}]}>
-                  <ScrollView scrollEnabled={false} horizontal>
-                    <FlatList
-                      data={dummyData.slice(0, 3)}
-                      horizontal={false}
-                      scrollEnabled={false}
-                      renderItem={(item: any, index) => {
-                        return (
-                          <TouchableOpacity>
-                            <ServiceCard2
-                              key={index}
-                              navigation={navigation}
-                              item={item.item}
-                              index={item.index}
+                ) : (
+                  <>
+                    {activeSection === 'All' && (
+                      <>
+                        <View style={[tw`items-center`, {flex: 1}]}>
+                          <ScrollView scrollEnabled={false} horizontal>
+                            <FlatList
+                              style={{flex: 1}}
+                              data={_providersByCateegory}
+                              scrollEnabled={false}
+                              horizontal={false}
+                              renderItem={(item: any, index: any) => {
+                                return (
+                                  <ServiceCard2
+                                    key={index}
+                                    navigation={navigation}
+                                    item={item.item}
+                                    index={item.index}
+                                    id={id}
+                                    serviceName={passedService}
+                                  />
+                                );
+                              }}
+                              keyExtractor={item => item?.id}
+                              ListFooterComponent={() => (
+                                <View style={tw`h-20`} />
+                              )}
+                              contentContainerStyle={{paddingBottom: 20}}
                             />
-                          </TouchableOpacity>
-                        );
-                      }}
-                      keyExtractor={item => item?.id}
-                      ListFooterComponent={() => <View style={tw`h-20`} />}
-                      contentContainerStyle={{paddingBottom: 20}}
-                    />
-                  </ScrollView>
-                </View>
-              )}
-            </>
-          )}
+                          </ScrollView>
+                        </View>
+                      </>
+                    )}
+                    {activeSection === 'Saved' && (
+                      <View style={[tw`items-center`, {flex: 1}]}>
+                        <ScrollView scrollEnabled={false} horizontal>
+                          <FlatList
+                            data={_providersByCateegory}
+                            horizontal={false}
+                            scrollEnabled={false}
+                            renderItem={(item: any, index: any) => {
+                              return (
+                                <TouchableOpacity>
+                                  <ServiceCard2
+                                    key={index}
+                                    navigation={navigation}
+                                    item={item.item}
+                                    index={item.index}
+                                    id={id}
+                                    serviceName={passedService}
+                                  />
+                                </TouchableOpacity>
+                              );
+                            }}
+                            keyExtractor={item => item?.id}
+                            ListFooterComponent={() => (
+                              <View style={tw`h-20`} />
+                            )}
+                            contentContainerStyle={{paddingBottom: 20}}
+                          />
+                        </ScrollView>
+                      </View>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+          </>
         </View>
         <View style={tw`h-20`} />
       </ScrollView>
+      <Spinner visible={isLoading} />
     </View>
   );
 };

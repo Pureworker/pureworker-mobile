@@ -23,8 +23,14 @@ end
 target 'pure_worker' do
   pod 'Firebase', :modular_headers => true
   pod 'FirebaseCoreInternal', :modular_headers => true
-  pod 'FirebaseCore', :modular_headers => true
+  # pod 'FirebaseCore', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
+  pod 'FirebaseAppCheckInterop', :modular_headers => true
+  pod 'FirebaseAuthInterop', :modular_headers => true
+  pod 'FirebaseCoreExtension', :modular_headers => true
+  # pod 'FirebaseStorageInternal', :modular_headers => true
+  pod 'GTMSessionFetcher', :modular_headers => true
+  pod 'React-RCTText', :path => '../node_modules/react-native/Libraries/Text', :modular_headers => true
   # use_frameworks! :linkage => :static
   config = use_native_modules!
   use_frameworks! :linkage => :static

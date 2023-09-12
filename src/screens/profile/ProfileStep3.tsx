@@ -168,8 +168,7 @@ const ProfileStep3 = () => {
 
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
-      <ScrollView>
-        <Header
+              <Header
           style={{backgroundColor: colors.greyLight}}
           imageStyle={{tintColor: colors.black}}
           textStyle={{
@@ -180,6 +179,7 @@ const ProfileStep3 = () => {
           image={images.back}
         />
         <ProfileStepWrapper active={'three'} />
+      <ScrollView>
         <View style={{marginHorizontal: 20}}>
           <TextWrapper
             children="References"

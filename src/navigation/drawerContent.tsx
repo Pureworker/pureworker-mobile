@@ -80,13 +80,13 @@ const DrawerContent = () => {
             <TouchableOpacity
               style={[tw`bg-red-300 rounded-full`, {width: 50, height: 50}]}
               onPress={() => {
-                // openLibraryfordp();
-                if (
-                  userType.userType === BUSINESS ||
-                  userType.userType === FREELANCER
-                ) {
-                  navigation.navigate('ProfileStep1');
-                }
+                openLibraryfordp();
+                // if (
+                //   userType.userType === BUSINESS ||
+                //   userType.userType === FREELANCER
+                // ) {
+                //   navigation.navigate('ProfileStep1');
+                // }
               }}>
               <Image
                 resizeMode="cover"

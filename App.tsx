@@ -11,6 +11,12 @@ import {navigationRef} from './RootNavigation';
 import CustomerNavigation from './src/navigation/customerNavigation';
 import VendorNavigation from './src/navigation/vendorNavigation';
 import OnboardingStack from './src/navigation/OnboardStack';
+import {
+  GetFCMToken,
+  NotificationListner,
+  requestUserPermission,
+} from './src/utils/pushnotification_helper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createStackNavigator();
 const {width} = Dimensions.get('screen');
@@ -20,6 +26,17 @@ export default () => {
 
   useEffect(() => {
     SplashScreen.hide();
+  }, []);
+
+  const get = async () => {
+    let _fcmtoken = await AsyncStorage.getItem('fcmtoken');
+    console.log(_fcmtoken);
+  };
+  useEffect(() => {
+    requestUserPermission();
+    GetFCMToken();
+    NotificationListner();
+    get();
   }, []);
 
   // async function onAuthStateChanged(user) {

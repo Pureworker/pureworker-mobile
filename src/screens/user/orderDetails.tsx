@@ -8,8 +8,9 @@ import {
   StatusBar,
   ScrollView,
   TextInput,
+  Alert,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {
   AndroidMode,
@@ -29,9 +30,15 @@ import TextInputs from '../../components/TextInput2';
 import {Calendar} from 'react-native-calendars';
 import Modal from 'react-native-modal/dist/modal';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Snackbar from 'react-native-snackbar';
+import {createOrder} from '../../utils/api/func';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const OrderDetails = () => {
   const navigation = useNavigation<StackNavigation>();
+  const route: any = useRoute();
+  const providerData = route.params?.data;
+  // console.log('service_provider_data', providerData);
   const dispatch = useDispatch();
   const [locationItems, setLocationItems] = useState([
     {label: 'Online(Job will be done virtually)', value: 'Online'},
@@ -42,10 +49,15 @@ const OrderDetails = () => {
   const [locationValue, setLocationValue] = useState(null);
   const [description, setDescription] = useState('');
   const [showDate, setshowDate] = useState(false);
+  const [price, setPrice] = useState(0);
+  const [address, setaddress] = useState('');
+  const [scheduleTime, setscheduleTime] = useState('');
 
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState<IOSMode | AndroidMode>('date');
+  const [mode2, setMode2] = useState<IOSMode | AndroidMode>('time');
   const [show, setShow] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
 
   const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || date;
@@ -54,9 +66,45 @@ const OrderDetails = () => {
     // updateDate(currentDate);
   };
 
+  console.log(providerData);
+  
+
   const showMode = (currentMode: any) => {
     setShow(true);
     setMode(currentMode);
+  };
+
+  const handleCreate = async () => {
+    // setisLoading(true);
+    const Data = {
+      serviceProvider: providerData?.user?._id,
+      totalPrice: price,
+      description: description,
+      scheduledDeliveryDate: date,
+      scheduledDeliveryTime: scheduleTime,
+      location: `${locationValue}`.toUpperCase(),
+      address: address,
+      paymentStatus: 'PAID',
+    };
+    console.log(Data);
+    if (
+      providerData?._id &&
+      price &&
+      description &&
+      scheduleTime &&
+      locationValue
+    ) {
+      navigation.navigate('OrderReview', Data);
+    } else {
+      Snackbar.show({
+        text: 'Please fill all fields',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      // setisLoading(false);
+    }
+    // setisLoading(false);
   };
 
   const showDatePicker = () => {
@@ -134,7 +182,6 @@ const OrderDetails = () => {
               fontType={'semiBold'}
               style={{fontSize: 16, marginTop: 20, color: colors.black}}
             />
-
             <View
               style={{
                 height: 130,
@@ -191,7 +238,9 @@ const OrderDetails = () => {
                   {fontFamily: 'Inter-Medium'},
                 ]}
                 keyboardType="numeric"
-                onChangeText={() => {}}
+                onChangeText={text => {
+                  setPrice(text);
+                }}
               />
             </View>
           </View>
@@ -269,56 +318,52 @@ const OrderDetails = () => {
                 tw`flex flex-row items-center  rounded-lg mt-5`,
                 {height: perHeight(40)},
               ]}>
-              <TouchableOpacity
-                onPress={() => setshowDate(true)}
-                style={[
-                  tw`flex flex-row rounded-lg`,
-                  {width: perWidth(200), backgroundColor: colors.greyLight1},
-                ]}>
-                <View style={tw`border-r w-1/3  flex-1`}>
-                  <TextInput
-                    style={[
-                      tw`  my-auto flex-1 px-4 text-black`,
-                      {fontFamily: 'Inter-Medium'},
-                    ]}
-                    keyboardType="numeric"
-                    onChangeText={() => {}}
-                    // editable={false}
-                  />
-                </View>
-                <View style={tw`border-r w-1/3  flex-1`}>
-                  <TextInput
-                    style={[
-                      tw`  my-auto flex-1 px-4 text-black`,
-                      {fontFamily: 'Inter-Medium'},
-                    ]}
-                    keyboardType="numeric"
-                    onChangeText={() => {}}
-                    // editable={false}
-                  />
-                </View>
-                <View style={tw` w-1/3`}>
-                  <TextInput
-                    style={[
-                      tw` py-4 ml-3 text-black`,
-                      {fontFamily: 'Inter-Medium'},
-                    ]}
-                    keyboardType="numeric"
-                    onChangeText={() => {}}
-                    // editable={false}
-                  />
-                </View>
-              </TouchableOpacity>
               <View
                 style={[
-                  tw`ml-1 rounded-lg flex  flex-row`,
+                  tw`items-center`,
                   {
-                    width: perWidth(130),
-                    height: perHeight(40),
-                    backgroundColor: colors.greyLight1,
+                    minHeight: 50,
+                    // marginHorizontal: perWidth(25),
+                    width: perWidth(150),
+                    // backgroundColor: 'red',
                   },
                 ]}>
-                <View style={tw`border-r w-1/2  flex-1`}>
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date}
+                  mode={mode}
+                  // is24Hour={false}
+                  display="default"
+                  onChange={onChange}
+                  style={{
+                    flex: 1,
+                  }}
+                />
+              </View>
+              <View
+              // style={[
+              //   tw`ml-1 rounded-lg flex items-center  flex-row`,
+              //   {
+              //     width: perWidth(130),
+              //     height: perHeight(40),
+              //     backgroundColor: colors.greyLight1,
+              //   },
+              // ]}
+              >
+                <DateTimePicker
+                  testID="clock"
+                  value={date}
+                  mode={mode2}
+                  // is24Hour={false}
+                  display="default"
+                  onChange={text => {
+                    setscheduleTime(text);
+                  }}
+                  style={{
+                    flex: 1,
+                  }}
+                />
+                {/* <View style={tw`border-r w-1/2  flex-1`}>
                   <TextInput
                     style={[
                       tw`  my-auto flex-1 px-4 text-black`,
@@ -337,7 +382,7 @@ const OrderDetails = () => {
                     keyboardType="numeric"
                     onChangeText={() => {}}
                   />
-                </View>
+                </View> */}
               </View>
             </View>
           </View>
@@ -440,7 +485,9 @@ const OrderDetails = () => {
                   {fontFamily: 'Inter-Medium'},
                 ]}
                 keyboardType="numeric"
-                onChangeText={() => {}}
+                onChangeText={text => {
+                  setaddress(text);
+                }}
               />
             </View>
           </View>
@@ -469,7 +516,8 @@ const OrderDetails = () => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('OrderReview');
+                // navigation.navigate('OrderReview');
+                handleCreate();
               }}
               style={[
                 tw`bg-[${colors.primary}] items-center justify-center`,
@@ -493,6 +541,7 @@ const OrderDetails = () => {
         </View>
         <View style={tw`h-30`} />
       </ScrollView>
+      <Spinner visible={isLoading} />
       <View style={tw`h-1 w-full mb-5 bg-black`} />
     </View>
   );

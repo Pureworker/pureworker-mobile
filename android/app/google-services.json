@@ -1,44 +1,26 @@
 {
   "project_info": {
-    "project_number": "862574758458",
-    "project_id": "pure-worker-apps",
-    "storage_bucket": "pure-worker-apps.appspot.com"
+    "project_number": "1026555538015",
+    "project_id": "pureworker-ed217",
+    "storage_bucket": "pureworker-ed217.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:862574758458:android:eb0208d1707ea43f610303",
+        "mobilesdk_app_id": "1:1026555538015:android:fd96f01322a8fa3a1489ea",
         "android_client_info": {
           "package_name": "com.pure_worker_app"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "862574758458-fer1pt5a4s92mgufubkjuumml15mq17r.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.pure_worker_app",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
-          }
-        },
-        {
-          "client_id": "862574758458-msr5kdidk3bt4ch0jgdm00rqhnav8j50.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBBbtB2IMd-VNeiMglMdEV5W7XZENgindo"
+          "current_key": "AIzaSyBWfGD9Aq3CMAWAQx-jeey-h1rZtNpSnug"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "862574758458-msr5kdidk3bt4ch0jgdm00rqhnav8j50.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

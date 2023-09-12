@@ -8,12 +8,41 @@ import colors from '../constants/colors';
 import {Rating, AirbnbRating} from 'react-native-ratings';
 import Modal from 'react-native-modal';
 import {WIDTH_WINDOW} from '../constants/generalStyles';
+import {useDispatch} from 'react-redux';
+import {getUserOrders} from '../utils/api/func';
+import {addcustomerOrders} from '../store/reducer/mainSlice';
 
 const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
   const [saved, setsaved] = useState(false);
   const [InfoModal, setInfoModal] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
 
   const [modalSection, setmodalSection] = useState('All');
+
+  console.log(item);
+
+  function formatDateToCustomFormat(dateString) {
+    const options = {year: 'numeric', month: 'short', day: 'numeric'};
+    const formattedDate = new Date(dateString).toLocaleDateString(
+      undefined,
+      options,
+    );
+    return formattedDate;
+  }
+
+  const dispatch = useDispatch();
+
+  const initGetOrders = async () => {
+    setisLoading(true);
+    const res: any = await getUserOrders('');
+    console.log('oooooooo', res?.data);
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addcustomerOrders(res?.data?.data));
+    }
+    // setloading(false);
+    setisLoading(false);
+  };
+
   return (
     <>
       <>
@@ -53,7 +82,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
               <View style={[tw`flex flex-row justify-between`, {}]}>
                 <View style={[tw``, {}]}>
                   <Textcomp
-                    text={'$ 10'}
+                    text={`₦ ${item?.totalPrice}`}
                     size={14}
                     lineHeight={16}
                     color={colors.white}
@@ -64,9 +93,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
               <View
                 style={[tw``, {width: perWidth(252), marginTop: perHeight(4)}]}>
                 <Textcomp
-                  text={
-                    'Be your social media manager and provide shares and signals'
-                  }
+                  text={`${item?.description}`}
                   size={12}
                   lineHeight={14}
                   color={colors.white}
@@ -75,7 +102,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                 />
               </View>
               <View style={tw`ml-auto`}>
-                {status === 'Inprogress' && (
+                {status === 'INPROGRESS' && (
                   <View style={[tw``, {}]}>
                     <Textcomp
                       text={'IN PROGRESS'}
@@ -86,7 +113,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                     />
                   </View>
                 )}
-                {status === 'Pending' && (
+                {status === 'PENDING' && (
                   <View style={[tw``, {}]}>
                     <Textcomp
                       text={'PENDING'}
@@ -97,7 +124,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                     />
                   </View>
                 )}
-                {status === 'Accepted' && (
+                {status === 'ACCEPTED' && (
                   <View style={[tw``, {}]}>
                     <Textcomp
                       text={'ACCEPTED'}
@@ -119,7 +146,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                     />
                   </View>
                 )}
-                {status === 'Declined' && (
+                {status === 'DECLINED' && (
                   <View style={[tw``, {}]}>
                     <Textcomp
                       text={'DECLINED'}
@@ -137,7 +164,11 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
             <View
               style={[tw``, {width: perWidth(105), marginTop: perWidth(4)}]}>
               <Textcomp
-                text={'Jennifer A.'}
+                text={`${
+                  item?.serviceProvider?.firstName +
+                  ' ' +
+                  item?.serviceProvider?.lastName?.charAt(0)
+                }.`}
                 size={12}
                 lineHeight={14}
                 color={colors.white}
@@ -148,7 +179,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
           <View style={tw`flex flex-row mt-auto justify-between`}>
             <View>
               <Textcomp
-                text={'Jan 3, 2023'}
+                text={`${formatDateToCustomFormat(item?.createdAt)}`}
                 size={14}
                 lineHeight={16}
                 color={colors.white}

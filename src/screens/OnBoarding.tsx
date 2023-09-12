@@ -137,6 +137,7 @@ export default function OnBoarding() {
       <ScrollView
         style={{flex: 4}}
         ref={excerciseScrollRef}
+        scrollEventThrottle={16}
         horizontal
         decelerationRate={'fast'}
         onLayout={e => {

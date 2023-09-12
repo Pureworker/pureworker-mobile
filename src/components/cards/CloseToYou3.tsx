@@ -9,10 +9,15 @@ import colors from '../../constants/colors';
 import Review from '../Review';
 import FastImage from 'react-native-fast-image';
 
-const ClosetoYou = ({item, index, navigation}: any) => {
+const ClosetoYou3 = ({item, index, navigation}: any) => {
   const price = 0;
 
   console.log('on-order', item);
+  function formatDate(dateString) {
+    const options = {year: 'numeric', month: 'short', day: 'numeric'};
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', options);
+  }
 
   // JSON.parse(item?.price || '');
   return (
@@ -92,7 +97,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
           <View style={[tw``, {width: perWidth(105), marginTop: perWidth(4)}]}>
             <Textcomp
               // text={`$${price[0]?.priceMax ? price[0]?.priceMax : 0}/hr`}
-              text={'$000'}
+              text={`₦ ${item?.totalPrice}`}
               size={12}
               lineHeight={14}
               color={colors.white}
@@ -132,8 +137,14 @@ const ClosetoYou = ({item, index, navigation}: any) => {
           </View>
         </View>
 
-        <View style={[tw``, {width: perWidth(80), marginTop: perWidth(1)}]}>
-          <Review value={2} editable={false} />
+        <View style={[tw``, {width: perWidth(70), marginTop: perWidth(1)}]}>
+          <Textcomp
+            text={formatDate(item?.createdAt)}
+            size={11}
+            lineHeight={14}
+            color={colors.white}
+            fontFamily={'Inter-Medium'}
+          />
         </View>
         {/*  <StarRating
           style={{width: perWidth(40)}}
@@ -163,4 +174,4 @@ const ClosetoYou = ({item, index, navigation}: any) => {
   );
 };
 
-export default ClosetoYou;
+export default ClosetoYou3;
