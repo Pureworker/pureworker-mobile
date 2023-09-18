@@ -26,6 +26,7 @@ import ViewLocation from '../screens/user/viewLocation';
 import EditAccount from '../screens/user/editAccount';
 import TipServiceProvider from '../screens/user/TipServiceProvider';
 import OrderActive from '../screens/user/orderActive';
+import Inbox from '../screens/user/chat/inbox';
 
 const Stack = createNativeStackNavigator();
 
@@ -150,6 +151,11 @@ export default function CustomerNavigation() {
       <Stack.Screen
         name="OrderActive"
         component={OrderActive}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="Inbox"
+        component={Inbox}
         options={{headerShown: false, animationEnabled: false}}
       />
     </Stack.Navigator>

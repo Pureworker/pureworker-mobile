@@ -15,7 +15,7 @@ import images from '../../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import { perHeight, perWidth } from '../../../utils/position/sizes';
+import {perHeight, perWidth} from '../../../utils/position/sizes';
 import colors from '../../../constants/colors';
 
 const Index = () => {
@@ -41,15 +41,15 @@ const Index = () => {
             marginHorizontal: 20,
           }}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-          <View style={tw``}>
-            <Textcomp
-              text={'Edit'}
-              size={17}
-              lineHeight={17}
-              color={'#000413'}
-              fontFamily={'Inter-SemiBold'}
-            />
-          </View>
+            <View style={tw``}>
+              <Textcomp
+                text={'Edit'}
+                size={17}
+                lineHeight={17}
+                color={'#000413'}
+                fontFamily={'Inter-SemiBold'}
+              />
+            </View>
           </TouchableOpacity>
           <View style={tw`mx-auto mt-3`}>
             <Textcomp
@@ -69,6 +69,44 @@ const Index = () => {
           </TouchableOpacity>
         </View>
 
+        <View style={[tw``, {}]}>
+          <View style={[tw`flex flex-row justify-between`, {}]}>
+            <Image
+              source={images.back}
+              style={{height: 25, width: 25}}
+              resizeMode="contain"
+            />
+            <View style={[tw`flex flex-col`, {}]}>
+              <View style={[tw``, {}]}>
+                <Textcomp
+                  text={'22 Aug 2023'}
+                  size={17}
+                  lineHeight={17}
+                  color={'#000413'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </View>
+              <View style={[tw``, {}]}>
+                <Textcomp
+                  text={'22 Aug 2023'}
+                  size={17}
+                  lineHeight={17}
+                  color={'#000413'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </View>
+            </View>
+          </View>
+          <View style={[tw``, {}]}>
+            <Textcomp
+              text={'22 Aug 2023'}
+              size={17}
+              lineHeight={17}
+              color={'#000413'}
+              fontFamily={'Inter-SemiBold'}
+            />
+          </View>
+        </View>
       </ScrollView>
     </View>
   );

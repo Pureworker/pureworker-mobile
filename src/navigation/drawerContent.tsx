@@ -7,7 +7,7 @@ import {SIZES, perHeight, perWidth} from '../utils/position/sizes';
 import images from '../constants/images';
 import Textcomp from '../components/Textcomp';
 import {useDispatch, useSelector} from 'react-redux';
-import {logout} from '../store/reducer/mainSlice';
+import {addUserData, logout} from '../store/reducer/mainSlice';
 import {useGetUserDetailQuery} from '../store/slice/api';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation} from '@react-navigation/native';
@@ -15,6 +15,15 @@ import {StackNavigation} from '../constants/navigation';
 import {BUSINESS, FREELANCER} from '../constants/userType';
 import Modal from 'react-native-modal/dist/modal';
 import colors from '../constants/colors';
+import {
+  updateProfilePic2,
+  updateUserData,
+  uploadAssetsDOCorIMG,
+} from '../utils/api/func';
+import Snackbar from 'react-native-snackbar';
+import Spinner from 'react-native-loading-spinner-overlay';
+import Toast from 'react-native-toast-message';
+import FastImage from 'react-native-fast-image';
 
 const DrawerContent = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -35,6 +44,7 @@ const DrawerContent = () => {
   const dispatch = useDispatch();
   const [InfoModal, setInfoModal] = useState(false);
   const [ContactAgent, setContactAgent] = useState(false);
+  const [loading, setloading] = useState(false);
 
   const handleNavigation = (route: string) => {
     if (route === 'Logout') {
@@ -46,6 +56,8 @@ const DrawerContent = () => {
   const userType = useSelector((state: any) => state.user.isLoggedIn);
   const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
   const getUser = getUserData ?? [];
+  //
+  const userData = useSelector((state: any) => state.user.userData);
 
   const [PhotoUri, setPhotoUri] = useState('');
   const options = {mediaType: 'photo', selectionLimit: 1};
@@ -56,12 +68,79 @@ const DrawerContent = () => {
         // console.log('resp', resp?.assets);
         console.log('resp', resp?.assets[0]);
         setPhotoUri(resp?.assets[0].uri);
+        //
+        const data = await uploadImgorDoc(resp?.assets[0]);
+        console.log('processed pic', data);
+        // const res = await updateUserData({profilePic: data});
+        // await initUpdate({profilePic: data});
       }
     });
   };
+  const initGetUsers = async () => {
+    const res: any = await getUser('');
+    console.log('dddddddd', res?.data?.user);
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addUserData(res?.data?.user));
+      setPhotoUri(userData?.profilePic);
+    }
+    // setloading(false);
+  };
 
-  //
-  const userData = useSelector((state: any) => state.user.userData);
+  console.log(userData?.profilePic);
+
+  const initUpdate = async (param: any) => {
+    setloading(true);
+    const res = await updateUserData(param);
+    console.log(res);
+    if ([200, 201].includes(res?.status)) {
+      // await initGetData();
+      await initGetUsers();
+      Toast.show({
+        type: 'success',
+        text1: 'Picture uploaded successfully 🚀. ',
+      });
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: `${
+          res?.error?.message ? res?.error?.message : 'Oops! An error occured!'
+        } 🚀. `,
+      });
+    }
+    setloading(false);
+  };
+
+  const uploadImgorDoc = async (param: {
+    uri: string;
+    name: string | null;
+    copyError: string | undefined;
+    fileCopyUri: string | null;
+    type: string | null;
+    size: number | null;
+  }) => {
+    setloading(true);
+    const res: any = await uploadAssetsDOCorIMG(param);
+
+    if (res?.status === 201 || res?.statuss === 200) {
+      console.log('image:', res);
+
+      setloading(false);
+      await initUpdate({profilePic: res?.data.url});
+      // return res?.data.url;
+    } else {
+      Snackbar.show({
+        text: res?.error?.message
+          ? res?.error?.message
+          : res?.error?.data?.message
+          ? res?.error?.data?.message
+          : 'Oops!, an error occured',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+    }
+    setloading(false);
+  };
   return (
     <>
       <DrawerContentScrollView
@@ -78,7 +157,7 @@ const DrawerContent = () => {
               {marginTop: perHeight(10), height: perHeight(88)},
             ]}>
             <TouchableOpacity
-              style={[tw`bg-red-300 rounded-full`, {width: 50, height: 50}]}
+              style={[tw`rounded-full`, {width: 50, height: 50}]}
               onPress={() => {
                 openLibraryfordp();
                 // if (
@@ -88,10 +167,14 @@ const DrawerContent = () => {
                 //   navigation.navigate('ProfileStep1');
                 // }
               }}>
-              <Image
-                resizeMode="cover"
+              <FastImage
                 style={{width: 50, height: 50, borderRadius: 25}}
-                source={PhotoUri.length > 5 ? {uri: PhotoUri} : images.profile}
+                source={{
+                  uri: 'https://res.cloudinary.com/dr0pef3mn/image/upload/v1694546301/pure/1694546297671-profile-picture.png.png',
+                  headers: {Authorization: 'someAuthToken'},
+                  priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
               />
             </TouchableOpacity>
             <View style={tw``}>
@@ -310,6 +393,7 @@ const DrawerContent = () => {
           )}
         </View>
       </Modal>
+      <Spinner visible={loading} />
     </>
   );
 };

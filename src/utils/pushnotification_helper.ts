@@ -4,9 +4,11 @@ import Toast from 'react-native-toast-message';
 import {Alert, PermissionsAndroid, Platform} from 'react-native';
 import {ToastLong} from './validations';
 import {addPushToken} from './api/func';
+import { useSelector } from 'react-redux';
 
 //
 // import inAppMessaging from '@react-native-firebase/in-app-messaging';
+
 async function requestUserPermission() {
   const _enabled = await messaging().hasPermission();
   if (_enabled) {
@@ -28,7 +30,7 @@ async function requestUserPermission() {
   }
 }
 
-const GetFCMToken = async () => {
+const GetFCMToken = async (userData:any) => {
   let _fcmtoken = await AsyncStorage.getItem('fcmtoken');
   // await messaging().setAPNSToken('74657374696E67746F6B656E', 'unknown');
   //   await messaging().registerDeviceForRemoteMessages();
@@ -53,8 +55,8 @@ const GetFCMToken = async () => {
     if (!fcmtoken) {
     } else {
       const _token = await AsyncStorage.getItem('fcmtoken');
-      // if (_token === fcmtoken) {
-      // } else {
+      if (userData?.fcmToken === fcmtoken) {
+      } else {
         await AsyncStorage.setItem('fcmtoken', fcmtoken);
         const initToken = async (param: any) => {
           const res = await addPushToken(param);
@@ -73,7 +75,7 @@ const GetFCMToken = async () => {
         };
         await initToken({fcmToken: fcmtoken});
       }
-    // }
+    }
   } catch (error) {
     console.log(error, 'error in fcmtoken');
   }

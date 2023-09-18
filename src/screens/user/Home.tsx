@@ -36,8 +36,14 @@ import Modal from 'react-native-modal';
 import {StackNavigation} from '../../constants/navigation';
 import {useNavigation} from '@react-navigation/native';
 import {useGetUserDataQuery} from '../../store/slice/api2';
-import {addCategory, addPopularServices, addSCategory, addUserData, } from '../../store/reducer/mainSlice';
+import {
+  addCategory,
+  addPopularServices,
+  addSCategory,
+  addUserData,
+} from '../../store/reducer/mainSlice';
 import {getCategory, getPopularService, getUser} from '../../utils/api/func';
+import FastImage from 'react-native-fast-image';
 
 const Home = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -68,7 +74,6 @@ const Home = () => {
       )
     : [];
   const [isLoading, setisLoading] = useState(false);
-
 
   useEffect(() => {
     const initGetUsers = async () => {
@@ -105,7 +110,9 @@ const Home = () => {
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
   const _getCategory = useSelector((state: any) => state.user.category);
-  const _popularServices = useSelector((state: any) => state.user.popularServices);
+  const _popularServices = useSelector(
+    (state: any) => state.user.popularServices,
+  );
   // console.log(userData);
 
   console.log('dddddddd', userData);
@@ -170,10 +177,18 @@ const Home = () => {
               },
             ]}>
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Image
-                source={images.profile}
-                style={{height: 40, width: 40}}
-                resizeMode="contain"
+              <FastImage
+                style={{width: 50, height: 50, borderRadius: 25}}
+                source={
+                  userData?.profilePic
+                    ? {
+                        uri: userData?.profilePic,
+                        headers: {Authorization: 'someAuthToken'},
+                        priority: FastImage.priority.normal,
+                      }
+                    : images.profile
+                }
+                resizeMode={FastImage.resizeMode.cover}
               />
             </TouchableOpacity>
             <TextInputs

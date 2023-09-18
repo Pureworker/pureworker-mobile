@@ -15,6 +15,7 @@ import TransactionHistory from '../screens/user/transactionHistory';
 import AddServices from '../screens/vendor/addServices';
 import Congratulations from '../screens/profile/congratulations';
 import Withdraw from '../screens/vendor/withdraw';
+import Inbox from '../screens/user/chat/inbox';
 
 const Stack = createNativeStackNavigator();
 
@@ -84,6 +85,11 @@ export default function VendorNavigation() {
       <Stack.Screen
         name="Withdraw"
         component={Withdraw}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="Inbox"
+        component={Inbox}
         options={{headerShown: false, animationEnabled: false}}
       />
     </Stack.Navigator>

@@ -37,6 +37,7 @@ import {
 } from '../../store/reducer/mainSlice';
 import ClosetoYou3 from '../../components/cards/CloseToYou3';
 import {formatAmount} from '../../utils/validations';
+import FastImage from 'react-native-fast-image';
 
 const Home = ({navigation}: any) => {
   //   const navigation = useNavigation<StackNavigation>();
@@ -139,10 +140,23 @@ const Home = ({navigation}: any) => {
               },
             ]}>
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Image
+              {/* <Image
                 source={images.profile}
                 style={{height: 40, width: 40}}
                 resizeMode="contain"
+              /> */}
+              <FastImage
+                style={{width: 50, height: 50, borderRadius: 25}}
+                source={
+                  userData?.profilePic
+                    ? {
+                        uri: userData?.profilePic,
+                        headers: {Authorization: 'someAuthToken'},
+                        priority: FastImage.priority.normal,
+                      }
+                    : images.profile
+                }
+                resizeMode={FastImage.resizeMode.cover}
               />
             </TouchableOpacity>
             <TextInputs

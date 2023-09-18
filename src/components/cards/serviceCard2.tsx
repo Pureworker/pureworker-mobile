@@ -14,7 +14,13 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
   const [saved, setsaved] = useState(false);
   const portfolio = item?.portfolio?.filter(_item => _item?.service === id);
   const price = item?.priceRange?.filter(_item => _item?.service === id);
-  console.log('pased', price);
+  console.log('pased', price, item?.description);
+
+  function metersToKilometers(meters) {
+    const kilometers = meters / 1000; // Convert meters to kilometers
+    const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
+    return `${roundedKilometers}km`;
+  }
 
   // console.log(
   //   item?.portfolio.filter(
@@ -105,7 +111,7 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
       <View>
         <View style={[tw``, {width: perWidth(105), marginTop: perWidth(4)}]}>
           <Textcomp
-            text={`${item?.user?.fullName}`}
+            text={`${item?.user?.firstName} ${item?.user?.lastName}`}
             size={12}
             lineHeight={14}
             color={colors.white}
@@ -135,7 +141,7 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
           <View
             style={[tw`ml-1`, {width: perWidth(80), marginTop: perWidth(1)}]}>
             <Textcomp
-              text={'2Km away'}
+              text={`${metersToKilometers(item?.distance)} away`}
               size={12}
               lineHeight={14}
               color={colors.primary}

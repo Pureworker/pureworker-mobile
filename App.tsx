@@ -32,9 +32,10 @@ export default () => {
     let _fcmtoken = await AsyncStorage.getItem('fcmtoken');
     console.log(_fcmtoken);
   };
+
   useEffect(() => {
     requestUserPermission();
-    GetFCMToken();
+    // GetFCMToken(userData);
     NotificationListner();
     get();
   }, []);
@@ -194,8 +195,16 @@ export default () => {
   //   );
   // }
 
+  // eslint-disable-next-line react/no-unstable-nested-components
   const MainStack = () => {
     const loggedIn = useSelector((state: any) => state.user.isLoggedIn);
+    const userData = useSelector((state: any) => state.user.userData);
+    useEffect(() => {
+      requestUserPermission();
+      GetFCMToken(userData);
+      NotificationListner();
+      get();
+    }, [userData]);
 
     if (loggedIn && loggedIn.token) {
       return <HomeStack />;
