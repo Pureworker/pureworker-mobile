@@ -150,21 +150,30 @@ const TabServices = () => {
               <ScrollView scrollEnabled={false}>
                 {_getCategory?.map((item, index) => {
                   // console.log(item);
+                  // return (
+                  //   <ScrollView scrollEnabled={false}>
+                  //   {_getCategory?.map((item, index) => {
+                  //     // console.log(item);
+                  //     return (
+                  //       <CategoryList2
+                  //         key={index}
+                  //         categoryName={item?.name}
+                  //         catId={item?.id}
+                  //         isOpen={item?.id === openDropdownId}
+                  //         onDropdownClick={handleDropdownClick}
+                  //       />
+                  //     );
+                  //   })}
+                  // </ScrollView>
+                  // );
                   return (
-                    <ScrollView scrollEnabled={false}>
-                    {_getCategory?.map((item, index) => {
-                      // console.log(item);
-                      return (
-                        <CategoryList2
-                          key={index}
-                          categoryName={item?.name}
-                          catId={item?.id}
-                          isOpen={item?.id === openDropdownId}
-                          onDropdownClick={handleDropdownClick}
-                        />
-                      );
-                    })}
-                  </ScrollView>
+                    <CategoryList2
+                      key={index}
+                      categoryName={item?.name}
+                      catId={item?.id}
+                      isOpen={item?.id === openDropdownId}
+                      onDropdownClick={handleDropdownClick}
+                    />
                   );
                 })}
               </ScrollView>

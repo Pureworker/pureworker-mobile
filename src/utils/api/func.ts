@@ -1,6 +1,8 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const API_BASE_URL = 'https://pureworker.onrender.com';
+// const API_BASE_URL = 'https://pureworker.onrender.com';
+const API_BASE_URL = 'http://167.86.66.12/api';
+
 
 //
 export const getUser = async (param: any) => {
@@ -55,7 +57,7 @@ export const getCategory = async (param: any) => {
   try {
     const response = await axios({
       method: 'get',
-      url: `${API_BASE_URL}/get-all-categories`,
+      url: `${API_BASE_URL}/service/get-all-categories`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
     if (response.status === 201) {
@@ -78,7 +80,7 @@ export const getSubCategory = async (param: any) => {
   try {
     const response = await axios({
       method: 'get',
-      url: `${API_BASE_URL}/get-category/${param}`,
+      url: `${API_BASE_URL}/service/get-category/${param}`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
     if (response.status === 201) {
@@ -101,7 +103,7 @@ export const getPopularService = async (param: any) => {
   try {
     const response = await axios({
       method: 'get',
-      url: `${API_BASE_URL}/get-popular-services`,
+      url: `${API_BASE_URL}/service/get-popular-services`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
     if (response.status === 201) {
@@ -693,3 +695,55 @@ export const getUserNotification = async (param: any) => {
     };
   }
 };
+
+
+//orders
+export const sendPrivateFeedback = async (param: any, data:any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('sendPrivateFeedback func started', param, data);
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${API_BASE_URL}/order/add-feedback/${param}`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+      data: data,
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+export const sendRatings = async (param: any, data: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('sendRatings func started', param, data);
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${API_BASE_URL}/order/add-rating/${param}`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+      data: data,
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+

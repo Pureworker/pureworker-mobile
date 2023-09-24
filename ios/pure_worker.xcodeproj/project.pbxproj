@@ -530,7 +530,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = pure_worker/pure_worker.entitlements;
-				CURRENT_PROJECT_VERSION = 4.1;
+				CURRENT_PROJECT_VERSION = 4.2;
 				DEVELOPMENT_TEAM = 9Z54W9ANG9;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = pure_worker/Info.plist;
@@ -538,7 +538,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.041;
+				MARKETING_VERSION = 1.042;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -560,14 +560,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = pure_worker/pure_worker.entitlements;
-				CURRENT_PROJECT_VERSION = 4.1;
+				CURRENT_PROJECT_VERSION = 4.2;
 				DEVELOPMENT_TEAM = 9Z54W9ANG9;
 				INFOPLIST_FILE = pure_worker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.041;
+				MARKETING_VERSION = 1.042;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

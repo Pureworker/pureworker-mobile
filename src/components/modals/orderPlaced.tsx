@@ -8,7 +8,7 @@ import colors from '../../constants/colors';
 import {WIDTH_WINDOW} from '../../constants/generalStyles';
 import Modal from 'react-native-modal/dist/modal';
 
-export default function OrderPlaced({navigation, visible, func}: any) {
+export default function OrderPlaced({navigation, visible, func, item}: any) {
   const [InfoModal, setInfoModal] = useState(visible);
   return (
     <Modal
@@ -24,10 +24,7 @@ export default function OrderPlaced({navigation, visible, func}: any) {
       onSwipeComplete={() => func(false)}
       onBackButtonPress={() => func(false)}>
       <View style={tw` h-full w-full bg-black bg-opacity-5`}>
-        <TouchableOpacity
-          onPress={() => func(false)}
-          style={tw`flex-1`}
-        />
+        <TouchableOpacity onPress={() => func(false)} style={tw`flex-1`} />
         <View style={tw`h-[30.5%] mt-auto bg-[#D9D9D9]`}>
           <TouchableOpacity
             onPress={() => {
@@ -47,7 +44,7 @@ export default function OrderPlaced({navigation, visible, func}: any) {
             </View>
             <View style={[tw`px-[7.5%] mt-2.5`, {}]}>
               <Textcomp
-                text={'Job Description: XXXXXXXXXXXXX'}
+                text={`Job Description: ${item?.description}`}
                 size={14}
                 lineHeight={17}
                 color={'#000000'}
@@ -56,7 +53,7 @@ export default function OrderPlaced({navigation, visible, func}: any) {
             </View>
             <View style={[tw`px-[7.5%] mt-2.5`, {}]}>
               <Textcomp
-                text={'Scheduled Delivery: XXXXXXXXXXXXX'}
+                text={`Scheduled Delivery: ${item?.scheduledDeliveryDate}`}
                 size={14}
                 lineHeight={17}
                 color={'#000000'}
@@ -65,7 +62,7 @@ export default function OrderPlaced({navigation, visible, func}: any) {
             </View>
             <View style={[tw`px-[7.5%] mt-2.5`, {}]}>
               <Textcomp
-                text={'Location: XXXXXXXXXXXXX'}
+                text={`Location: ${item?.location}`}
                 size={14}
                 lineHeight={17}
                 color={'#000000'}
@@ -74,7 +71,7 @@ export default function OrderPlaced({navigation, visible, func}: any) {
             </View>
             <View style={[tw`px-[7.5%] mt-2.5`, {}]}>
               <Textcomp
-                text={'Address: XXXXXXXXXXXXX'}
+                text={`Address: ${item?.address}`}
                 size={14}
                 lineHeight={17}
                 color={'#000000'}
@@ -83,7 +80,7 @@ export default function OrderPlaced({navigation, visible, func}: any) {
             </View>
             <View style={[tw`px-[7.5%] mt-2.5`, {}]}>
               <Textcomp
-                text={'Price: XXXXXXXXXXXXX'}
+                text={`Price: ₦ ${item?.totalPrice}`}
                 size={14}
                 lineHeight={17}
                 color={'#000000'}

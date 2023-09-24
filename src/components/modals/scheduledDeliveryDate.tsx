@@ -12,8 +12,33 @@ export default function ScheduledDeliveryDate({
   navigation,
   visible,
   func,
+  item,
 }: any) {
   const [InfoModal, setInfoModal] = useState(visible);
+
+  function getTimeDifference(targetDate: string | number | Date) {
+    const currentDate: any = new Date();
+    const targetDateObj: any = new Date(targetDate);
+
+    // Calculate the time difference in milliseconds
+    const timeDifference = targetDateObj - currentDate;
+
+    // Calculate days, hours, and minutes
+    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(
+      (timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+    );
+    const minutes = Math.floor(
+      (timeDifference % (1000 * 60 * 60)) / (1000 * 60),
+    );
+
+    return {days, hours, minutes};
+  }
+
+  const {days, hours, minutes} = getTimeDifference(item?.scheduledDeliveryDate);
+
+  console.log(days);
+
   return (
     <Modal
       isVisible={visible}
@@ -28,10 +53,7 @@ export default function ScheduledDeliveryDate({
       onSwipeComplete={() => func(false)}
       onBackButtonPress={() => func(false)}>
       <View style={tw` h-full w-full bg-black bg-opacity-5`}>
-        <TouchableOpacity
-          onPress={() => func(false)}
-          style={tw`flex-1`}
-        />
+        <TouchableOpacity onPress={() => func(false)} style={tw`flex-1`} />
         <View style={tw`h-[37.5%] mt-auto bg-[#D9D9D9]`}>
           <TouchableOpacity
             onPress={() => {
@@ -59,11 +81,14 @@ export default function ScheduledDeliveryDate({
               />
             </View>
             <View
-              style={[tw`mx-[7.5%] bg-[#EBEBEB] flex flex-row justify-between px-6 rounded-full mt-6 py-2.5 items-center`, {}]}>
+              style={[
+                tw`mx-[7.5%] bg-[#EBEBEB] flex flex-row justify-between px-6 rounded-full mt-6 py-2.5 items-center`,
+                {},
+              ]}>
               <View style={tw`items-center`}>
                 <View>
                   <Textcomp
-                    text={'1'}
+                    text={`${days}`}
                     size={14}
                     lineHeight={17}
                     color={'#000000'}
@@ -83,7 +108,7 @@ export default function ScheduledDeliveryDate({
               <View style={tw`items-center`}>
                 <View>
                   <Textcomp
-                    text={'1'}
+                    text={`${hours}`}
                     size={14}
                     lineHeight={17}
                     color={'#000000'}
@@ -103,7 +128,7 @@ export default function ScheduledDeliveryDate({
               <View style={tw`items-center`}>
                 <View>
                   <Textcomp
-                    text={'1'}
+                    text={`${minutes}`}
                     size={14}
                     lineHeight={17}
                     color={'#000000'}

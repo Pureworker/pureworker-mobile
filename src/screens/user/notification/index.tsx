@@ -140,7 +140,7 @@ const Index = () => {
             </TouchableOpacity>
           </View>
 
-          <View
+          {/* <View
             style={[
               tw` bg-[#E0E0E0] items-center justify-between px-4 mx-auto mt-4 rounded flex flex-row`,
               {width: perWidth(348), height: perHeight(50)},
@@ -202,9 +202,11 @@ const Index = () => {
                 fontFamily={'Inter'}
               />
             </View>
-          </View>
+          </View> */}
 
-          {notifications !== null && notifications.length < 1 && (
+        
+
+          {notifications !== null && notifications.length > 0 && (
             <View
               style={[
                 tw`mx-auto`,
@@ -214,7 +216,7 @@ const Index = () => {
                   width: perWidth(348),
                 },
               ]}>
-              {[1, 2, 3, 4].map((item, index): any => {
+              {notifications?.map((item, index): any => {
                 let seen = false;
                 if (viewedNotification?.includes(item.date)) {
                   seen = true;

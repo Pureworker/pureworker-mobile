@@ -11,6 +11,38 @@ import images from '../../../constants/images';
 
 export default function NotificationComp({item, seen, seen_}: any) {
   const [NModal, setNModal] = useState(false);
+
+  function convertToRelativeTime(timestamp: any) {
+    const currentDate:any = new Date();
+    const targetDate:any = new Date(timestamp);
+
+    const timeDifferenceInMilliseconds = currentDate - targetDate;
+
+    const millisecondsPerMinute = 60 * 1000;
+    const millisecondsPerHour = 60 * millisecondsPerMinute;
+    const millisecondsPerDay = 24 * millisecondsPerHour;
+
+    if (timeDifferenceInMilliseconds < millisecondsPerHour) {
+      // Less than an hour ago
+      const minutesAgo = Math.floor(
+        timeDifferenceInMilliseconds / millisecondsPerMinute,
+      );
+      return `${minutesAgo}m`;
+    } else if (timeDifferenceInMilliseconds < millisecondsPerDay) {
+      // Less than a day ago
+      const hoursAgo = Math.floor(
+        timeDifferenceInMilliseconds / millisecondsPerHour,
+      );
+      return `${hoursAgo}h`;
+    } else {
+      // More than a day ago
+      const daysAgo = Math.floor(
+        timeDifferenceInMilliseconds / millisecondsPerDay,
+      );
+      return `${daysAgo}d`;
+    }
+  }
+
   return (
     <>
       <TouchableOpacity
@@ -28,7 +60,7 @@ export default function NotificationComp({item, seen, seen_}: any) {
           />
           <View style={[tw`flex  `, {width: perWidth(270)}]}>
             <Textcomp
-              text={'hellow world'}
+              text={item?.title}
               size={14}
               lineHeight={16}
               color={'#000413'}
@@ -43,7 +75,7 @@ export default function NotificationComp({item, seen, seen_}: any) {
                   fontSize: 11,
                 },
               ]}>
-              here's the message
+              {item?.message}
             </Text>
           </View>
         </View>
@@ -51,7 +83,7 @@ export default function NotificationComp({item, seen, seen_}: any) {
           <View style={tw``}>
             <Textcomp
               //   text={moment(`${item?.date}`).fromNow()}
-              text={'2h'}
+              text={convertToRelativeTime(item?.createdAt)}
               size={17}
               lineHeight={17}
               color={'#000413'}

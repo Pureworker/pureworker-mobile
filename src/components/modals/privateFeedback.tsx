@@ -7,9 +7,54 @@ import images from '../../constants/images';
 import colors from '../../constants/colors';
 import {WIDTH_WINDOW} from '../../constants/generalStyles';
 import Modal from 'react-native-modal/dist/modal';
+import {sendPrivateFeedback} from '../../utils/api/func';
+import {ActivityIndicator} from 'react-native-paper';
+import Snackbar from 'react-native-snackbar';
 
-export default function PrivateFeedback({navigation, visible, func}: any) {
+export default function PrivateFeedback({
+  navigation,
+  visible,
+  func,
+  item,
+}: any) {
   const [InfoModal, setInfoModal] = useState(visible);
+  const [isLoading, setisLoading] = useState(false);
+
+  const [feedback, setfeedback] = useState('');
+
+  console.log(item?._id);
+  const id = item?._id;
+
+  const initSendFeedback = async () => {
+    setisLoading(true);
+    const data = {
+      emoji: 'sad',
+      comment: 'You offered a very bad service!!!',
+    };
+    const res = await sendPrivateFeedback(id, data);
+    console.log(res);
+    if (res?.status === 201 || res?.status === 200) {
+      Snackbar.show({
+        text: 'Feedback sent!.',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      func(false);
+    } else {
+      Snackbar.show({
+        text: res?.error?.message
+          ? res?.error?.message
+          : res?.error?.data?.message
+          ? res?.error?.data?.message
+          : 'Oops!, an error occured',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+    }
+    setisLoading(false);
+  };
   return (
     <Modal
       isVisible={visible}
@@ -24,10 +69,7 @@ export default function PrivateFeedback({navigation, visible, func}: any) {
       onSwipeComplete={() => func(false)}
       onBackButtonPress={() => func(false)}>
       <View style={tw` h-full w-full bg-black bg-opacity-5`}>
-        <TouchableOpacity
-          onPress={() => func(false)}
-          style={tw`flex-1`}
-        />
+        <TouchableOpacity onPress={() => func(false)} style={tw`flex-1`} />
         <View style={tw`h-[50%]  mt-auto bg-[#D9D9D9]`}>
           <TouchableOpacity
             onPress={() => {
@@ -56,17 +98,39 @@ export default function PrivateFeedback({navigation, visible, func}: any) {
                 fontFamily={'Inter-Regular'}
               />
             </View>
-            <View style={[tw`px-[7.5%] mt-4 flex flex-row w-[60%] justify-between mx-auto`, {}]}>
-              <Image source={images.profile} style={[tw``, {width: 40, height: 40}]} />
-              <Image source={images.profile} style={[tw``, {width: 40, height: 40}]} />
-              <Image source={images.profile} style={[tw``, {width: 40, height: 40}]} />
+            <View
+              style={[
+                tw`px-[7.5%] mt-4 flex flex-row w-[60%] justify-between mx-auto`,
+                {},
+              ]}>
+              <Image
+                source={images.profile}
+                style={[tw``, {width: 40, height: 40}]}
+              />
+              <Image
+                source={images.profile}
+                style={[tw``, {width: 40, height: 40}]}
+              />
+              <Image
+                source={images.profile}
+                style={[tw``, {width: 40, height: 40}]}
+              />
             </View>
             <View style={[tw`px-[7.5%] mt-4`, {}]}>
-              <TextInput multiline style={[tw`bg-[#EBEBEB] px-4 rounded-lg`,  {height: perHeight(80)}]} />
+              <TextInput
+                multiline
+                style={[
+                  tw`bg-[#EBEBEB] px-4 rounded-lg`,
+                  {height: perHeight(80)},
+                ]}
+                onChangeText={text => {
+                  setfeedback(text);
+                }}
+              />
             </View>
             <TouchableOpacity
               onPress={() => {
-                func(false);
+                initSendFeedback();
               }}
               style={[
                 {
@@ -80,13 +144,17 @@ export default function PrivateFeedback({navigation, visible, func}: any) {
                 },
                 tw`mx-auto`,
               ]}>
-              <Textcomp
-                text={'Done'}
-                size={14}
-                lineHeight={17}
-                color={'#FFC727'}
-                fontFamily={'Inter-SemiBold'}
-              />
+              {isLoading ? (
+                <ActivityIndicator color="white" size={'small'} />
+              ) : (
+                <Textcomp
+                  text={'Done'}
+                  size={14}
+                  lineHeight={17}
+                  color={'#FFC727'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              )}
             </TouchableOpacity>
           </View>
           <View

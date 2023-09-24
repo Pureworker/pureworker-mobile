@@ -7,8 +7,14 @@ import images from '../../constants/images';
 import colors from '../../constants/colors';
 import {WIDTH_WINDOW} from '../../constants/generalStyles';
 import Modal from 'react-native-modal/dist/modal';
+import socket from '../../utils/socket';
 
-export default function OrderInProgress({navigation, visible, func}: any) {
+export default function OrderInProgress({
+  navigation,
+  visible,
+  func,
+  item,
+}: any) {
   const [InfoModal, setInfoModal] = useState(visible);
   return (
     <Modal
@@ -24,10 +30,7 @@ export default function OrderInProgress({navigation, visible, func}: any) {
       onSwipeComplete={() => func(false)}
       onBackButtonPress={() => func(false)}>
       <View style={tw` h-full w-full bg-black bg-opacity-5`}>
-        <TouchableOpacity
-          onPress={() => func(false)}
-          style={tw`flex-1`}
-        />
+        <TouchableOpacity onPress={() => func(false)} style={tw`flex-1`} />
         <View style={tw`h-[30.5%] mt-auto bg-[#D9D9D9]`}>
           <TouchableOpacity
             onPress={() => {
@@ -58,6 +61,11 @@ export default function OrderInProgress({navigation, visible, func}: any) {
             <TouchableOpacity
               onPress={() => {
                 func(false);
+                socket.connect();
+                navigation.navigate('Inbox', {
+                  id: item?.serviceProvider?._id,
+                  name: `${item?.serviceProvider?.firstName} ${item?.serviceProvider?.lastName}`,
+                });
               }}
               style={[
                 {

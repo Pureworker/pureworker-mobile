@@ -200,6 +200,7 @@ const TipServiceProvider = () => {
                 placeholderTextColor={'#00000080'}
                 keyboardType="numeric"
                 style={[tw`border-b pb-2 `, {width: perWidth(311)}]}
+                value={`${amount}`}
               />
             </View>
 

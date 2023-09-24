@@ -135,7 +135,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                     />
                   </View>
                 )}
-                {status === 'Completed' && (
+                {status === 'COMPLETED' && (
                   <View style={[tw``, {}]}>
                     <Textcomp
                       text={'COMPLETED'}
@@ -150,6 +150,17 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                   <View style={[tw``, {}]}>
                     <Textcomp
                       text={'DECLINED'}
+                      size={14}
+                      lineHeight={16}
+                      color={'#EB001B'}
+                      fontFamily={'Inter-Bold'}
+                    />
+                  </View>
+                )}
+                {status === 'CANCELLED' && (
+                  <View style={[tw``, {}]}>
+                    <Textcomp
+                      text={'CANCELLED'}
                       size={14}
                       lineHeight={16}
                       color={'#EB001B'}

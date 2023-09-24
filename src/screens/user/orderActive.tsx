@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Header from '../../components/Header';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -41,7 +41,7 @@ const OrderActive = ({route}: any) => {
 
   const orders = [0, 1, 2, 3];
   const passedData = route.params.data;
-  console.log(route.params.data);
+  // console.log(route.params.data);
 
   //modals
   const [serviceProviderModal, setserviceProviderModal] = useState(false);
@@ -54,6 +54,10 @@ const OrderActive = ({route}: any) => {
   const [orderPlacing, setorderPlacing] = useState(false);
   const [scheduledDeliveryDate, setscheduledDeliveryDate] = useState(false);
 
+  const userData = useSelector((state: any) => state.user.userData);
+
+  console.log('data:', userData);
+
   useEffect(() => {
     // setorderDelivered(true);
   }, []);
@@ -61,6 +65,48 @@ const OrderActive = ({route}: any) => {
   const item = route.params.data;
 
   const links = [
+    {
+      title: 'Order Placed',
+      func: () => setorderPlacing(true),
+    },
+    {
+      title: 'Order In Progress',
+      func: () => setorderInProgress(true),
+    },
+    {
+      title: 'Order Delivered',
+      func: () => setorderDelivered(true),
+    },
+    {
+      title: 'Order Completed',
+      func: () => setorderCompleted(true),
+    },
+    {
+      title: 'Order Dispute',
+      func: () => setorderDispute(true),
+    },
+    {
+      title: 'Rate your experince',
+      func: () => setrateYourExperience(true),
+    },
+    {
+      title: 'Private Feedback',
+      func: function () {
+        setprivateFeedback(!privateFeedback);
+        console.log('hey', privateFeedback);
+      },
+    },
+    {
+      title: 'Service Provider Review',
+      func: () => setserviceProviderModal(true),
+    },
+    {
+      title: 'Scheduled Delivery Date',
+      func: () => setscheduledDeliveryDate(true),
+    },
+  ];
+
+  const providerLinks = [
     {
       title: 'Private Feedback',
       func: function () {
@@ -311,39 +357,337 @@ const OrderActive = ({route}: any) => {
                     {width: perWidth(355)},
                   ]}>
                   {links?.map((item, index) => {
-                    return (
-                      <>
-                        <TouchableOpacity
-                          key={index}
-                          style={[tw`flex flex-row items-center `, {}]}
-                          onPress={() => {
-                            item.func();
-                          }}>
-                          <View
-                            style={[
-                              tw`rounded-full mr-4 border border-[${colors.primary}]`,
-                              {width: 10, height: 10},
-                            ]}
-                          />
-                          <Textcomp
-                            text={item?.title}
-                            size={14.5}
-                            lineHeight={16.5}
-                            color={'#FFFFFF'}
-                            fontFamily={'Inter-Bold'}
-                            style={{textAlign: 'center'}}
-                          />
-                        </TouchableOpacity>
-                        {index < links.length - 1 && (
-                          <View
-                            style={[
-                              tw`border-l-2  ml-1 border-[${colors.primary}] w-full`,
-                              {height: 14},
-                            ]}
-                          />
-                        )}
-                      </>
-                    );
+                    if (item?.title === 'Service Provider Review') {
+                      if (userData?.accountType === 'customer') {
+                      } else {
+                        return (
+                          <>
+                            <TouchableOpacity
+                              key={index}
+                              style={[tw`flex flex-row items-center `, {}]}
+                              onPress={() => {
+                                item.func();
+                              }}>
+                              <View
+                                style={[
+                                  tw`rounded-full mr-4 border border-[${colors.primary}]`,
+                                  {width: 10, height: 10},
+                                ]}
+                              />
+                              <Textcomp
+                                text={item?.title}
+                                size={14.5}
+                                lineHeight={16.5}
+                                color={'#FFFFFF'}
+                                fontFamily={'Inter-Bold'}
+                                style={{textAlign: 'center'}}
+                              />
+                            </TouchableOpacity>
+                            {index < links.length - 1 && (
+                              <View
+                                style={[
+                                  tw`border-l-2  ml-1 border-[${colors.primary}] w-full`,
+                                  {height: 14},
+                                ]}
+                              />
+                            )}
+                          </>
+                        );
+                      }
+                    } else if (item.title === 'Order Completed') {
+                      if (passedData?.status === 'COMPLETED') {
+                        return (
+                          <>
+                            <TouchableOpacity
+                              key={index}
+                              style={[tw`flex flex-row items-center `, {}]}
+                              onPress={() => {
+                                item.func();
+                              }}>
+                              <View
+                                style={[
+                                  tw`rounded-full mr-4 border border-[${colors.primary}]`,
+                                  {width: 10, height: 10},
+                                ]}
+                              />
+                              <Textcomp
+                                text={item?.title}
+                                size={14.5}
+                                lineHeight={16.5}
+                                color={'#FFFFFF'}
+                                fontFamily={'Inter-Bold'}
+                                style={{textAlign: 'center'}}
+                              />
+                            </TouchableOpacity>
+                            {index < links.length - 1 && (
+                              <View
+                                style={[
+                                  tw`border-l-2  ml-1 border-[${colors.primary}] w-full`,
+                                  {height: 14},
+                                ]}
+                              />
+                            )}
+                          </>
+                        );
+                      }
+                    }
+                    else if (item.title === 'Order In Progress') {
+                      if (passedData?.status === 'INPROGRESS') {
+                        return (
+                          <>
+                            <TouchableOpacity
+                              key={index}
+                              style={[tw`flex flex-row items-center `, {}]}
+                              onPress={() => {
+                                item.func();
+                              }}>
+                              <View
+                                style={[
+                                  tw`rounded-full mr-4 border border-[${colors.primary}]`,
+                                  {width: 10, height: 10},
+                                ]}
+                              />
+                              <Textcomp
+                                text={item?.title}
+                                size={14.5}
+                                lineHeight={16.5}
+                                color={'#FFFFFF'}
+                                fontFamily={'Inter-Bold'}
+                                style={{textAlign: 'center'}}
+                              />
+                            </TouchableOpacity>
+                            {index < links.length - 1 && (
+                              <View
+                                style={[
+                                  tw`border-l-2  ml-1 border-[${colors.primary}] w-full`,
+                                  {height: 14},
+                                ]}
+                              />
+                            )}
+                          </>
+                        );
+                      }
+                    }
+                    else if (item.title === 'Order Delivered') {
+                      if (passedData?.status === 'COMPLETED') {
+                        return (
+                          <>
+                            <TouchableOpacity
+                              key={index}
+                              style={[tw`flex flex-row items-center `, {}]}
+                              onPress={() => {
+                                item.func();
+                              }}>
+                              <View
+                                style={[
+                                  tw`rounded-full mr-4 border border-[${colors.primary}]`,
+                                  {width: 10, height: 10},
+                                ]}
+                              />
+                              <Textcomp
+                                text={item?.title}
+                                size={14.5}
+                                lineHeight={16.5}
+                                color={'#FFFFFF'}
+                                fontFamily={'Inter-Bold'}
+                                style={{textAlign: 'center'}}
+                              />
+                            </TouchableOpacity>
+                            {index < links.length - 1 && (
+                              <View
+                                style={[
+                                  tw`border-l-2  ml-1 border-[${colors.primary}] w-full`,
+                                  {height: 14},
+                                ]}
+                              />
+                            )}
+                          </>
+                        );
+                      }
+                    }
+                    else if (item.title === 'Order Dispute') {
+                      if (passedData?.status === 'DISPUTE' || passedData?.status === 'CANCELLED') {
+                        return (
+                          <>
+                            <TouchableOpacity
+                              key={index}
+                              style={[tw`flex flex-row items-center `, {}]}
+                              onPress={() => {
+                                item.func();
+                              }}>
+                              <View
+                                style={[
+                                  tw`rounded-full mr-4 border border-[${colors.primary}]`,
+                                  {width: 10, height: 10},
+                                ]}
+                              />
+                              <Textcomp
+                                text={item?.title}
+                                size={14.5}
+                                lineHeight={16.5}
+                                color={'#FFFFFF'}
+                                fontFamily={'Inter-Bold'}
+                                style={{textAlign: 'center'}}
+                              />
+                            </TouchableOpacity>
+                            {index < links.length - 1 && (
+                              <View
+                                style={[
+                                  tw`border-l-2  ml-1 border-[${colors.primary}] w-full`,
+                                  {height: 14},
+                                ]}
+                              />
+                            )}
+                          </>
+                        );
+                      }
+                    }
+                    else if (item.title === 'Rate your experince') {
+                      if (passedData?.status === 'COMPLETED') {
+                        return (
+                          <>
+                            <TouchableOpacity
+                              key={index}
+                              style={[tw`flex flex-row items-center `, {}]}
+                              onPress={() => {
+                                item.func();
+                              }}>
+                              <View
+                                style={[
+                                  tw`rounded-full mr-4 border border-[${colors.primary}]`,
+                                  {width: 10, height: 10},
+                                ]}
+                              />
+                              <Textcomp
+                                text={item?.title}
+                                size={14.5}
+                                lineHeight={16.5}
+                                color={'#FFFFFF'}
+                                fontFamily={'Inter-Bold'}
+                                style={{textAlign: 'center'}}
+                              />
+                            </TouchableOpacity>
+                            {index < links.length - 1 && (
+                              <View
+                                style={[
+                                  tw`border-l-2  ml-1 border-[${colors.primary}] w-full`,
+                                  {height: 14},
+                                ]}
+                              />
+                            )}
+                          </>
+                        );
+                      }
+                    }
+                    else if (item.title === 'Private Feedback') {
+                      if (passedData?.status === 'COMPLETED') {
+                        return (
+                          <>
+                            <TouchableOpacity
+                              key={index}
+                              style={[tw`flex flex-row items-center `, {}]}
+                              onPress={() => {
+                                item.func();
+                              }}>
+                              <View
+                                style={[
+                                  tw`rounded-full mr-4 border border-[${colors.primary}]`,
+                                  {width: 10, height: 10},
+                                ]}
+                              />
+                              <Textcomp
+                                text={item?.title}
+                                size={14.5}
+                                lineHeight={16.5}
+                                color={'#FFFFFF'}
+                                fontFamily={'Inter-Bold'}
+                                style={{textAlign: 'center'}}
+                              />
+                            </TouchableOpacity>
+                            {index < links.length - 1 && (
+                              <View
+                                style={[
+                                  tw`border-l-2  ml-1 border-[${colors.primary}] w-full`,
+                                  {height: 14},
+                                ]}
+                              />
+                            )}
+                          </>
+                        );
+                      }
+                    }
+                    else if (item.title === 'Scheduled Delivery Date') {
+                      if (passedData?.status === 'PENDING' || passedData?.status === 'ACCEPTED') {
+                        return (
+                          <>
+                            <TouchableOpacity
+                              key={index}
+                              style={[tw`flex flex-row items-center `, {}]}
+                              onPress={() => {
+                                item.func();
+                              }}>
+                              <View
+                                style={[
+                                  tw`rounded-full mr-4 border border-[${colors.primary}]`,
+                                  {width: 10, height: 10},
+                                ]}
+                              />
+                              <Textcomp
+                                text={item?.title}
+                                size={14.5}
+                                lineHeight={16.5}
+                                color={'#FFFFFF'}
+                                fontFamily={'Inter-Bold'}
+                                style={{textAlign: 'center'}}
+                              />
+                            </TouchableOpacity>
+                            {index < links.length - 1 && (
+                              <View
+                                style={[
+                                  tw`border-l-2  ml-1 border-[${colors.primary}] w-full`,
+                                  {height: 14},
+                                ]}
+                              />
+                            )}
+                          </>
+                        );
+                      }
+                    }
+                     else {
+                      return (
+                        <>
+                          <TouchableOpacity
+                            key={index}
+                            style={[tw`flex flex-row items-center `, {}]}
+                            onPress={() => {
+                              item.func();
+                            }}>
+                            <View
+                              style={[
+                                tw`rounded-full mr-4 border border-[${colors.primary}]`,
+                                {width: 10, height: 10},
+                              ]}
+                            />
+                            <Textcomp
+                              text={item?.title}
+                              size={14.5}
+                              lineHeight={16.5}
+                              color={'#FFFFFF'}
+                              fontFamily={'Inter-Bold'}
+                              style={{textAlign: 'center'}}
+                            />
+                          </TouchableOpacity>
+                          {index < links.length - 1 && (
+                            <View
+                              style={[
+                                tw`border-l-2  ml-1 border-[${colors.primary}] w-full`,
+                                {height: 14},
+                              ]}
+                            />
+                          )}
+                        </>
+                      );
+                    }
                   })}
                 </View>
               </View>
@@ -358,6 +702,7 @@ const OrderActive = ({route}: any) => {
           setserviceProviderModal(text);
         }}
         visible={serviceProviderModal}
+        item={item}
       />
       <PrivateFeedback
         navigation={navigation}
@@ -365,6 +710,7 @@ const OrderActive = ({route}: any) => {
           setprivateFeedback(text);
         }}
         visible={privateFeedback}
+        item={item}
       />
       <RateyourExperience
         navigation={navigation}
@@ -372,6 +718,7 @@ const OrderActive = ({route}: any) => {
           setrateYourExperience(text);
         }}
         visible={rateYourExperience}
+        item={item}
       />
       <OrderCompleted
         navigation={navigation}
@@ -379,6 +726,7 @@ const OrderActive = ({route}: any) => {
           setorderCompleted(text);
         }}
         visible={orderCompleted}
+        item={item}
       />
       <OrderDispute
         navigation={navigation}
@@ -386,6 +734,7 @@ const OrderActive = ({route}: any) => {
           setorderDispute(text);
         }}
         visible={orderDispute}
+        item={item}
       />
       <OrderDelivered
         navigation={navigation}
@@ -393,6 +742,7 @@ const OrderActive = ({route}: any) => {
           setorderDelivered(text);
         }}
         visible={orderDelivered}
+        item={item}
       />
       <OrderInProgress
         navigation={navigation}
@@ -400,6 +750,7 @@ const OrderActive = ({route}: any) => {
           setorderInProgress(text);
         }}
         visible={orderInProgress}
+        item={item}
       />
       <OrderPlaced
         navigation={navigation}
@@ -407,6 +758,7 @@ const OrderActive = ({route}: any) => {
           setorderPlacing(text);
         }}
         visible={orderPlacing}
+        item={item}
       />
       <ScheduledDeliveryDate
         navigation={navigation}
@@ -414,6 +766,7 @@ const OrderActive = ({route}: any) => {
           setscheduledDeliveryDate(text);
         }}
         visible={scheduledDeliveryDate}
+        item={item}
       />
     </View>
   );

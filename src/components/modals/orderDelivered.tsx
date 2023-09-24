@@ -8,7 +8,7 @@ import colors from '../../constants/colors';
 import {WIDTH_WINDOW} from '../../constants/generalStyles';
 import Modal from 'react-native-modal/dist/modal';
 
-export default function OrderDelivered({navigation, visible, func}: any) {
+export default function OrderDelivered({navigation, visible, func, item}: any) {
   const [InfoModal, setInfoModal] = useState(visible);
   return (
     <Modal
@@ -48,7 +48,7 @@ export default function OrderDelivered({navigation, visible, func}: any) {
             <View style={[tw`px-[7.5%] mt-1`, {}]}>
               <Textcomp
                 text={
-                  'Becky has completed the service.\nPlease review.'
+                  `${item?.serviceProvider?.firstName} ${item?.serviceProvider?.lastName} has completed the service.\nPlease review.`
                 }
                 size={14}
                 lineHeight={17}
@@ -61,7 +61,7 @@ export default function OrderDelivered({navigation, visible, func}: any) {
               <View style={tw`mb-2`}>
                 <Textcomp
                   text={
-                    'You can request a modification by contacting Becky. '
+                    `You can request a modification by contacting ${item?.serviceProvider?.firstName} ${item?.serviceProvider?.lastName}. `
                   }
                   size={12}
                   lineHeight={14}
