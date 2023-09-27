@@ -1,23 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
-  Platform,
-  StatusBar,
   ScrollView,
   SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
-import colors from '../../constants/colors';
+import { getFAQ } from '../../utils/api/func';
+import { addfaq } from '../../store/reducer/mainSlice';
 
 const Ratings = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -25,6 +22,22 @@ const Ratings = () => {
 
   const [deactivateAccount, setdeactivateAccount] = useState(false);
   const [deleteAccount, setdeleteAccount] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
+  const faq = useSelector((state: any) => state.user.faq);
+
+  useEffect(() => {
+    const initGetOrders = async () => {
+      setisLoading(true);
+      const res: any = await getFAQ('');
+      console.log('fffffff', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addfaq(res?.data?.data));
+      }
+      // setloading(false);
+      setisLoading(false);
+    };
+    initGetOrders();
+  }, []);
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       {/* <View

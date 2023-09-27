@@ -81,12 +81,12 @@ const _Services = ({route}: any) => {
 
         {!searchModal ? (
           <View
-            style={{
+            style={[tw`items-center`,{
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
               marginHorizontal: 20,
-            }}>
+            }]}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Image
                 source={images.back}
@@ -94,13 +94,14 @@ const _Services = ({route}: any) => {
                 resizeMode="contain"
               />
             </TouchableOpacity>
-            <View style={tw`mx-auto`}>
+            <View style={tw`mx-auto w-3/4  items-center`}>
               <Textcomp
                 text={`${passedService}`}
-                size={17}
+                size={16}
                 lineHeight={17}
                 color={'#000413'}
                 fontFamily={'Inter-SemiBold'}
+                style={{textAlign: 'center'}}
               />
             </View>
             <TouchableOpacity
@@ -154,7 +155,7 @@ const _Services = ({route}: any) => {
             </TouchableOpacity>
           </View>
         )}
-        <View style={tw`mt-3 mb-3`}>
+        <View style={tw`mt-4 mb-3`}>
           <View style={tw`flex flex-row`}>
             <TouchableOpacity
               onPress={() => {

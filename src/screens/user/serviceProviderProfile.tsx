@@ -41,7 +41,7 @@ const ServiceProviderProfile = () => {
   const profileData = route.params?.item;
   const serviceName = route.params?.serviceName;
   const id = route.params?.id;
-  const portfolio = profileData?.portfolio.filter(
+  const portfolio = profileData?.portfolio?.filter(
     _item => _item?.service === id,
   );
   const price = profileData?.priceRange.filter(_item => _item?.service === id);

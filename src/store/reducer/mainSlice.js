@@ -38,6 +38,8 @@ const initialState = {
   chatData: [],
   notifications: [],
   viewedNotifications: [],
+  faq: [],
+  closeProvider: [],
 };
 
 export const mainSlice = createSlice({
@@ -170,6 +172,12 @@ export const mainSlice = createSlice({
     addviewedNotifications: (state, action) => {
       state.viewedNotifications = action.payload;
     },
+    addfaq: (state, action) => {
+      state.faq = action.payload;
+    },
+    addcloseProvider: (state, action) => {
+      state.closeProvider = action.payload;
+    },
   },
 });
 
@@ -197,6 +205,8 @@ export const {
   addchatData,
   addnotifications,
   addviewedNotifications,
+  addfaq,
+  addcloseProvider,
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);

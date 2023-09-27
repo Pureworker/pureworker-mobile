@@ -41,8 +41,14 @@ import {
   addPopularServices,
   addSCategory,
   addUserData,
+  addcloseProvider,
 } from '../../store/reducer/mainSlice';
-import {getCategory, getPopularService, getUser} from '../../utils/api/func';
+import {
+  getCategory,
+  getPopularService,
+  getProviderByProximity,
+  getUser,
+} from '../../utils/api/func';
 import FastImage from 'react-native-fast-image';
 
 const Home = () => {
@@ -102,9 +108,19 @@ const Home = () => {
       }
       setisLoading(false);
     };
+    const initGetProviderByProximity = async () => {
+      setisLoading(true);
+      const res: any = await getProviderByProximity(userData?._id);
+      console.warn('proximity', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addcloseProvider(res?.data?.data));
+      }
+      setisLoading(false);
+    };
     initGetUsers();
     initGetCategory();
     initGetPopularServices();
+    initGetProviderByProximity();
   }, []);
 
   //selectors
@@ -113,9 +129,10 @@ const Home = () => {
   const _popularServices = useSelector(
     (state: any) => state.user.popularServices,
   );
+  const closeProvider = useSelector((state: any) => state.user.closeProvider);
   // console.log(userData);
 
-  console.log('dddddddd', userData);
+  console.log('daaaaattttttaaaa', userData, 'here:', closeProvider);
 
   // const filterBySearchProduct = useMemo(() => {
   //   var searchArray = [];
@@ -360,23 +377,24 @@ const Home = () => {
             </TouchableOpacity>
           </View>
 
-          {/* <View style={{flex: 1}}>
+          <View style={{flex: 1}}>
             <FlatList
-              data={getServiceProviderProfile}
+              data={closeProvider}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
-              renderItem={(item: any) => {
+              renderItem={(item: any, index: any) => {
                 return (
                   <ClosetoYou
                     navigation={navigation}
-                    item={item.item}
-                    index={item.index}
+                    item={item?.item}
+                    index={index}
                   />
                 );
               }}
+              style={{paddingLeft: 20}}
               keyExtractor={item => item.id}
             />
-          </View> */}
+          </View>
 
           {/* Service Ctagories */}
           <View>

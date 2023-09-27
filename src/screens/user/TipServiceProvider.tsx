@@ -10,7 +10,7 @@ import {
   FlatList,
   TextInput,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {Route, useNavigation, useRoute} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
@@ -21,12 +21,17 @@ import colors from '../../constants/colors';
 import {perHeight, perWidth} from '../../utils/position/sizes';
 import {HEIGHT_WINDOW, WIDTH_WINDOW} from '../../constants/generalStyles';
 import {PLATFORMS} from 'twrnc/dist/esm/types';
+import {tipProvider} from '../../utils/api/func';
+import Snackbar from 'react-native-snackbar';
+import {ActivityIndicator} from 'react-native-paper';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const TipServiceProvider = () => {
   const navigation = useNavigation<StackNavigation>();
+  const route: Route = useRoute();
+  const [isLoading, setisLoading] = useState(false);
   const dispatch = useDispatch();
   const [amount, setamount] = useState(0);
-
   const amountList = [
     {
       amount: 100,
@@ -54,6 +59,27 @@ const TipServiceProvider = () => {
     },
   ];
 
+  const item = route.params?.item;
+  const handleTip = async () => {
+    setisLoading(true);
+    const _data = {
+      amount: Number(amount),
+      providerID: item?.serviceProvider?._id,
+      orderID: item?._id,
+    };
+    const res: any = await tipProvider(_data);
+    console.log('tippppp', res?.data);
+    if (res?.status === 201 || res?.status === 200) {
+      Snackbar.show({
+        text: 'Successful ',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      navigation.navigate('Orders');
+    }
+    setisLoading(false);
+  };
   //   <FastImage
   //   onTouchStart={() => setimageModal(true)}
   //   style={[
@@ -207,8 +233,10 @@ const TipServiceProvider = () => {
             <View>
               <View style={tw`flex mt-5 flex-row justify-between`}>
                 <TouchableOpacity
+                  disabled={isLoading}
                   onPress={() => {
                     // func(false);
+                    handleTip();
                   }}
                   style={[
                     {
@@ -222,13 +250,17 @@ const TipServiceProvider = () => {
                     },
                     tw`mx-auto`,
                   ]}>
-                  <Textcomp
-                    text={'Confirm Tip'}
-                    size={14}
-                    lineHeight={17}
-                    color={'#FFC727'}
-                    fontFamily={'Inter-Bold'}
-                  />
+                  {isLoading ? (
+                    <ActivityIndicator size={'small'} color="white" />
+                  ) : (
+                    <Textcomp
+                      text={'Confirm Tip'}
+                      size={14}
+                      lineHeight={17}
+                      color={'#FFC727'}
+                      fontFamily={'Inter-Bold'}
+                    />
+                  )}
                 </TouchableOpacity>
               </View>
             </View>
@@ -241,6 +273,7 @@ const TipServiceProvider = () => {
           ]}
         />
       </ScrollView>
+      <Spinner visible={isLoading} />
     </View>
   );
 };

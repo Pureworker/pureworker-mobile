@@ -34,7 +34,7 @@ export const getProfile = async (param: any) => {
   try {
     const response = await axios({
       method: 'get',
-      url: `${API_BASE_URL}/profile/get-profile/${param}`,
+      url: `${API_BASE_URL}/provider/get-profile/${param}`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
     if (response.status === 201) {
@@ -161,7 +161,7 @@ export const completeProfile = async (param: any) => {
   try {
     const response = await axios({
       method: 'post',
-      url: `${API_BASE_URL}/profile/create-profile`,
+      url: `${API_BASE_URL}/provider/create-profile`,
       data: param,
       headers: {
         Authorization: `Bearer ${AuthToken}`,
@@ -213,7 +213,7 @@ export const getProviderByService = async (param: any) => {
   try {
     const response = await axios({
       method: 'get',
-      url: `${API_BASE_URL}/profile/get-provider-by-service/${param}`,
+      url: `${API_BASE_URL}/provider/get-provider-by-service/${param}`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
     if (response.status === 201) {
@@ -237,7 +237,7 @@ export const getProviderByCategory = async (param: any) => {
   try {
     const response = await axios({
       method: 'get',
-      url: `${API_BASE_URL}/profile/get-provider-by-category/${param}`,
+      url: `${API_BASE_URL}/provider/get-provider-by-category/${param}`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
     if (response.status === 201) {
@@ -260,7 +260,7 @@ export const getProviderAllReview = async (param: any) => {
   try {
     const response = await axios({
       method: 'get',
-      url: `${API_BASE_URL}/profile/get-all-reviews/${param}`,
+      url: `${API_BASE_URL}/provider/get-all-reviews/${param}`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
     if (response.status === 201) {
@@ -729,6 +729,104 @@ export const sendRatings = async (param: any, data: any) => {
     const response = await axios({
       method: 'patch',
       url: `${API_BASE_URL}/order/add-rating/${param}`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+      data: data,
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const getFAQ = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getFAQ func started', param);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/get-faq`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const getProviderByProximity = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getProviderByProximity func started', param);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/provider/get-provider-by-proximity/${param}`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const tipProvider = async (data: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('tipProvider func started', data);
+  try {
+    const response = await axios({
+      method: 'post',
+      url: `${API_BASE_URL}/transaction/tip-provider`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+      data: data,
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const f_deactivateAccount = async (data: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('f_deactivateAccount func started', data);
+  try {
+    const response = await axios({
+      method: 'post',
+      url: `${API_BASE_URL}/admin/change-active-status`,
       headers: {Authorization: `Bearer ${AuthToken}`},
       data: data,
     });

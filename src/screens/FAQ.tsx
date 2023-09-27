@@ -12,11 +12,32 @@ import images from '../constants/images';
 import commonStyle from '../constants/commonStyle';
 import Header from '../components/Header';
 import tw from 'twrnc';
+import { useDispatch, useSelector } from 'react-redux';
+import { addfaq } from '../store/reducer/mainSlice';
+import { getFAQ } from '../utils/api/func';
+import { StackNavigation } from '../constants/navigation';
 
 const {width, height} = Dimensions.get('screen');
 
 export default function FAQ() {
   const data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const navigation = useNavigation<StackNavigation>();
+  const dispatch = useDispatch();
+  const [isLoading, setisLoading] = useState(false);
+  const faq = useSelector((state: any) => state.user.faq);
+  useEffect(() => {
+    const initFaq = async () => {
+      setisLoading(true);
+      const res: any = await getFAQ('');
+      // console.log('fffffff', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addfaq(res?.data?.data));
+      }
+      setisLoading(false);
+    };
+    initFaq();
+  }, [dispatch]);
+  
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
       <Header
@@ -28,7 +49,7 @@ export default function FAQ() {
       />
       <ScrollView>
         <View style={{backgroundColor: '#000', height: 2}} />
-        {data.map((item, index) => {
+        {faq.map((item, index) => {
           return (
             <View
               key={index}
@@ -51,7 +72,7 @@ export default function FAQ() {
                     color: '#FFCE1F',
                     fontWeight: '700',
                   }}>
-                  What is Pureworker?
+                        {item?.question}
                 </Text>
                 <Image
                   source={images.polygon}
@@ -68,8 +89,7 @@ export default function FAQ() {
                   fontWeight: '700',
                   marginTop: 18,
                 }}>
-                Pureworker is a platform that connects customers with
-                freelancers and businesses for various services
+                {item?.answer}
               </Text>
             </View>
           );

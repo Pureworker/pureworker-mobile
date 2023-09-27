@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -17,6 +17,9 @@ import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
+import Snackbar from 'react-native-snackbar';
+import {f_deactivateAccount} from '../../utils/api/func';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const DeactivateAccount = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -24,6 +27,30 @@ const DeactivateAccount = () => {
 
   const [deactivateAccount, setdeactivateAccount] = useState('');
   const [deleteAccount, setdeleteAccount] = useState(false);
+
+  //store
+  const userData = useSelector((state: any) => state.user.userData);
+
+  const [isLoading, setisLoading] = useState(false);
+  const handleDelete = async () => {
+    setisLoading(true);
+    const _data = {
+      userID: userData?._id,
+      status: false,
+    };
+    const res: any = await f_deactivateAccount(_data);
+    console.log('request', res?.data);
+    if (res?.status === 201 || res?.status === 200) {
+      Snackbar.show({
+        text: 'Request Successful.',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      navigation.navigate('Orders');
+    }
+    setisLoading(false);
+  };
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView contentContainerStyle={{height: SIZES.height}}>
@@ -172,6 +199,7 @@ const DeactivateAccount = () => {
           <TouchableOpacity
             onPress={() => {
               // navigation.navigate('PaymentConfirmed');
+              handleDelete();
             }}
             style={[
               tw`bg-[${colors.darkPurple}] items-center rounded-lg justify-center mx-auto py-3`,
@@ -188,6 +216,7 @@ const DeactivateAccount = () => {
         </View>
         <View style={tw`h-0.5 w-full bg-black absolute  bottom-[3%]`} />
       </ScrollView>
+      <Spinner visible={isLoading} />
     </View>
   );
 };

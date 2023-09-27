@@ -8,7 +8,7 @@ import colors from '../../constants/colors';
 import {WIDTH_WINDOW} from '../../constants/generalStyles';
 import Modal from 'react-native-modal/dist/modal';
 
-export default function OrderCompleted({navigation, visible, func}: any) {
+export default function OrderCompleted({navigation, visible, func, item}: any) {
   const [InfoModal, setInfoModal] = useState(visible);
   return (
     <Modal
@@ -75,7 +75,7 @@ export default function OrderCompleted({navigation, visible, func}: any) {
               <TouchableOpacity
                 onPress={() => {
                   func(false);
-                  navigation.navigate('TipServiceProvider');
+                  navigation.navigate('TipServiceProvider', {item: item });
                   func(false);
                 }}
                 style={[
