@@ -12,7 +12,7 @@ import FastImage from 'react-native-fast-image';
 const ClosetoYou = ({item, index, navigation}: any) => {
   const price = 0;
 
-  console.log('on-order', item);
+  // console.log('on-order', item);
 
   // JSON.parse(item?.price || '');
   return (

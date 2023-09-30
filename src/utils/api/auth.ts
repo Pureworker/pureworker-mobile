@@ -1,6 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const API_BASE_URL = 'https://pureworker.onrender.com';
+// const API_BASE_URL = 'https://pureworker.onrender.com';
+const API_BASE_URL = 'http://167.86.66.12/api';
 
 //
 export const verifyLogin = async (param: any) => {
@@ -84,7 +85,7 @@ export const verifyUser = async (param: any) => {
       },
     });
     const storeTokenData = async (res: any) => {
-      console.log('responsetoken here lets destructure:', res?.data.token);
+      console.log('responsetoken here lets destructure:', res?.data);
       try {
         await AsyncStorage.setItem('AuthToken', res?.data?.message?.token);
         await AsyncStorage.setItem('Role', res?.data?.message?.user.accountType);

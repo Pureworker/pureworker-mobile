@@ -25,6 +25,7 @@ import colors from '../constants/colors';
 import {validateEmail} from '../constants/utils';
 import {StackNavigation} from '../constants/navigation';
 import {signIn} from '../utils/api/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -64,7 +65,7 @@ export default function Login() {
           email: email.toLowerCase().trim(),
           // password: password,
         };
-        const res = await signIn(loginData);
+        const res:any = await signIn(loginData);
 
         if (res?.status === 200 || res?.status === 201) {
           navigation.navigate('TokenVerification', {
@@ -72,16 +73,34 @@ export default function Login() {
             type: 'login',
           });
         } else {
-          Snackbar.show({
-            text: res?.error?.message
-              ? res?.error?.message
-              : res?.error?.data?.message
-              ? res?.error?.data?.message
-              : 'Oops!, an error occured',
-            duration: Snackbar.LENGTH_SHORT,
-            textColor: '#fff',
-            backgroundColor: '#88087B',
-          });
+          console.log('error here:', res?.error, res?.error?.error);
+          if (
+            res?.error?.message === 'Account has not been verified' ||
+            res?.error?.data?.message === 'Account has not been verified'
+          ) {
+            Snackbar.show({
+              text: 'Signup Process Incomplete. Please verify your email.',
+              duration: Snackbar.LENGTH_SHORT,
+              textColor: '#fff',
+              backgroundColor: '#88087B',
+            });
+            await AsyncStorage.setItem('AuthToken2', `${res?.error?.error?.data}`);
+            navigation.navigate('TokenVerification', {
+              email: email,
+              type: 'signup',
+            });
+          } else {
+            Snackbar.show({
+              text: res?.error?.message
+                ? res?.error?.message
+                : res?.error?.data?.message
+                ? res?.error?.data?.message
+                : 'Oops!, an error occured',
+              duration: Snackbar.LENGTH_SHORT,
+              textColor: '#fff',
+              backgroundColor: '#88087B',
+            });
+          }
         }
         // login(loginData).unwrap()
         //   .then((data: any) => {

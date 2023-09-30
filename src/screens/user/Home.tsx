@@ -132,7 +132,7 @@ const Home = () => {
   const closeProvider = useSelector((state: any) => state.user.closeProvider);
   // console.log(userData);
 
-  console.log('daaaaattttttaaaa', userData, 'here:', closeProvider);
+  console.log('daaaaattttttaaaa','here:', closeProvider);
 
   // const filterBySearchProduct = useMemo(() => {
   //   var searchArray = [];
