@@ -43,13 +43,17 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Pureworker requires access to the camera.</string>
+	<string>Pureworker requires access to the camera to capture images for user verification.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Pureworker requires access your location for provider mapping.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Pureworker requires access your location for provider mapping.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Pureworker requires access to the photo library to upload pictures.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Pureworker requires access to the photo library to upload pictures.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Pureworker requires access to your calendar for order scheduling.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Inter-Bold.ttf</string>

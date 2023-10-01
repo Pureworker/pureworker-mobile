@@ -50,6 +50,7 @@ import {
   getUser,
 } from '../../utils/api/func';
 import FastImage from 'react-native-fast-image';
+import socket from '../../utils/socket';
 
 const Home = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -533,7 +534,13 @@ const Home = () => {
 
               <TouchableOpacity
                 onPress={() => {
-                  setContactAgent(true);
+                  // setContactAgent(true);
+                  socket.connect();
+                  setInfoModal(false);
+                  navigation.navigate('Inbox', {
+                    id: '65172267a03a2a2150478ca3',
+                    name:' Support',
+                  });
                 }}
                 style={{
                   width: perWidth(316),
