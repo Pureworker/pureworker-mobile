@@ -34,7 +34,7 @@ import {
 
 import Modal from 'react-native-modal';
 import {StackNavigation} from '../../constants/navigation';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {useGetUserDataQuery} from '../../store/slice/api2';
 import {
   addCategory,
@@ -51,6 +51,7 @@ import {
 } from '../../utils/api/func';
 import FastImage from 'react-native-fast-image';
 import socket from '../../utils/socket';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Home = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -81,6 +82,39 @@ const Home = () => {
       )
     : [];
   const [isLoading, setisLoading] = useState(false);
+
+  useFocusEffect(() => {
+    const initGetUsers = async () => {
+      const res: any = await getUser('');
+      console.log('dddddddd', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addUserData(res?.data?.user));
+      }
+    };
+    const initGetCategory = async () => {
+      const res: any = await getCategory('');
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addSCategory(res?.data?.data));
+      }
+    };
+    const initGetPopularServices = async () => {
+      const res: any = await getPopularService('');
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addPopularServices(res?.data?.data));
+      }
+    };
+    const initGetProviderByProximity = async () => {
+      const res: any = await getProviderByProximity(userData?._id);
+      console.warn('proximity', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addcloseProvider(res?.data?.data));
+      }
+    };
+    initGetUsers();
+    initGetCategory();
+    initGetPopularServices();
+    initGetProviderByProximity();
+  });
 
   useEffect(() => {
     const initGetUsers = async () => {
@@ -122,7 +156,7 @@ const Home = () => {
     initGetCategory();
     initGetPopularServices();
     initGetProviderByProximity();
-  }, []);
+  }, [dispatch, userData?._id]);
 
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
@@ -133,7 +167,7 @@ const Home = () => {
   const closeProvider = useSelector((state: any) => state.user.closeProvider);
   // console.log(userData);
 
-  console.log('daaaaattttttaaaa','here:', closeProvider);
+  console.log('daaaaattttttaaaa', 'here:', closeProvider);
 
   // const filterBySearchProduct = useMemo(() => {
   //   var searchArray = [];
@@ -531,7 +565,6 @@ const Home = () => {
                   fontFamily={'Inter-SemiBold'}
                 />
               </TouchableOpacity>
-
               <TouchableOpacity
                 onPress={() => {
                   // setContactAgent(true);
@@ -539,7 +572,7 @@ const Home = () => {
                   setInfoModal(false);
                   navigation.navigate('Inbox', {
                     id: '65172267a03a2a2150478ca3',
-                    name:' Support',
+                    name: ' Support',
                   });
                 }}
                 style={{
@@ -578,6 +611,7 @@ const Home = () => {
           )}
         </View>
       </Modal>
+      {/* <Spinner visible={isLoading} /> */}
     </SafeAreaView>
   );
 };

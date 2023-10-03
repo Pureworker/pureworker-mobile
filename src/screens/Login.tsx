@@ -10,6 +10,7 @@ import {
   StatusBar,
   ScrollView,
   Platform,
+  Alert,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import images from '../constants/images';
@@ -50,6 +51,88 @@ export default function Login() {
     return () => clearInterval(timer);
   }, [seconds]);
 
+  // const handleLogin = async () => {
+  //   setisLoading(true);
+  //   if (email) {
+  //     if (!validateEmail(email)) {
+  //       Snackbar.show({
+  //         text: 'Please enter a valid email',
+  //         duration: Snackbar.LENGTH_SHORT,
+  //         textColor: '#fff',
+  //         backgroundColor: '#88087B',
+  //       });
+  //     } else {
+  //       const loginData = {
+  //         email: email.toLowerCase().trim(),
+  //         // password: password,
+  //       };
+  //       // Alert.alert(`loginData: ${loginData.email}`);
+  //       const res: any = await signIn(loginData);
+  //       // Alert.alert(
+  //       //   `res: ${res?.status}, error: ${res?.error?.message} error: ${res?.err}`,
+  //       // );
+  //       if (res?.status === 200 || res?.status === 201) {
+  //         navigation.navigate('TokenVerification', {
+  //           email: email,
+  //           type: 'login',
+  //         });
+  //       } else {
+  //         console.log('error here:', res?.error?.message);
+  // if (
+  //   res?.error?.message === 'Account has not been verified' ||
+  //   res?.error?.data?.message === 'Account has not been verified'
+  // ) {
+  //   Snackbar.show({
+  //     text: 'Signup Process Incomplete. Please verify your email.',
+  //     duration: Snackbar.LENGTH_SHORT,
+  //     textColor: '#fff',
+  //     backgroundColor: '#88087B',
+  //   });
+  //   await AsyncStorage.setItem('AuthToken2', `${res?.error?.error?.data}`);
+  //   navigation.navigate('TokenVerification', {
+  //     email: email,
+  //     type: 'signup',
+  //   });
+  // } else {
+  //         Snackbar.show({
+  //           text: res?.error?.message
+  //             ? res?.error?.message
+  //             : res?.error?.data?.message
+  //             ? res?.error?.data?.message
+  //             : res?.err
+  //             ? `${res?.err}`
+  //             : 'Oops!, an error occured',
+  //           duration: Snackbar.LENGTH_SHORT,
+  //           textColor: '#fff',
+  //           backgroundColor: '#88087B',
+  //         });
+  //         // }
+  //       }
+  //       // login(loginData).unwrap()
+  //       //   .then((data: any) => {
+  //       //     if (data) {
+  //       //       navigation.navigate('TokenVerification', { email: email })
+  //       //     }
+  //       //   })
+  //       //   .catch((error: any) => {
+  //       //     console.log('err', error);
+  //       // Snackbar.show({
+  //       //   text: error.data.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#88087B',
+  //       // });
+  //       //   });
+  //       setisLoading(false);
+  //     }
+  //   } else {
+  //     Snackbar.show({
+  //       text: 'Please fill all fields',
+  //       duration: Snackbar.LENGTH_SHORT,
+  //       textColor: '#fff',
+  //       backgroundColor: '#88087B',
+  //     });
+  //     setisLoading(false);
+  //   }
+  //   setisLoading(false);
+  // };
   const handleLogin = async () => {
     setisLoading(true);
     if (email) {
@@ -65,7 +148,7 @@ export default function Login() {
           email: email.toLowerCase().trim(),
           // password: password,
         };
-        const res:any = await signIn(loginData);
+        const res = await signIn(loginData);
 
         if (res?.status === 200 || res?.status === 201) {
           navigation.navigate('TokenVerification', {
@@ -73,7 +156,6 @@ export default function Login() {
             type: 'login',
           });
         } else {
-          console.log('error here:', res?.error, res?.error?.error);
           if (
             res?.error?.message === 'Account has not been verified' ||
             res?.error?.data?.message === 'Account has not been verified'
@@ -84,7 +166,10 @@ export default function Login() {
               textColor: '#fff',
               backgroundColor: '#88087B',
             });
-            await AsyncStorage.setItem('AuthToken2', `${res?.error?.error?.data}`);
+            await AsyncStorage.setItem(
+              'AuthToken2',
+              `${res?.error?.error?.data}`,
+            );
             navigation.navigate('TokenVerification', {
               email: email,
               type: 'signup',
@@ -102,18 +187,6 @@ export default function Login() {
             });
           }
         }
-        // login(loginData).unwrap()
-        //   .then((data: any) => {
-        //     if (data) {
-        //       navigation.navigate('TokenVerification', { email: email })
-        //     }
-        //   })
-        //   .catch((error: any) => {
-        //     console.log('err', error);
-        // Snackbar.show({
-        //   text: error.data.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#88087B',
-        // });
-        //   });
         setisLoading(false);
       }
     } else {
@@ -167,7 +240,7 @@ export default function Login() {
                   marginTop: 65,
                   marginLeft: 25,
                 }}>
-                Login
+                Login --Test
               </Text>
               <Text
                 style={{

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // const API_BASE_URL = 'https://pureworker.onrender.com';
-const API_BASE_URL = 'http://167.86.66.12/api';
+// const API_BASE_URL = 'http://167.86.66.12/api';
+const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
 
 
 //
@@ -556,7 +557,7 @@ export const addPushToken = async (param: any) => {
     console.log('response', response);
     return response;
   } catch (error) {
-    console.log(error, error?.response?.data);
+    console.log('addPushToken',error, error?.response?.data);
     return {
       status: 400,
       err: error,

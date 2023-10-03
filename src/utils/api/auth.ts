@@ -1,7 +1,9 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// const API_BASE_URL = 'https://pureworker.onrender.com';
-const API_BASE_URL = 'http://167.86.66.12/api';
+import { Alert } from 'react-native';
+const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
+// 'https://pureworker.onrender.com';
+// const API_BASE_URL = 'http://167.86.66.12/api';
 
 //
 export const verifyLogin = async (param: any) => {
@@ -137,6 +139,43 @@ export const resendOtp = async (param: any) => {
     };
   }
 };
+
+// export const signIn = async (param: any) => {
+//   console.log('signIn func started');
+//   try {
+//     const response = await axios({
+//       method: 'post',
+//       url: `${API_BASE_URL}/auth/log-in`,
+//       data: {
+//         email: param.email,
+//       },
+//     });
+//     // const storeTokenData = async (res: any) => {
+//     //   console.log('responsetoken here lets destructure:', res?.data.token);
+//     //   try {
+//     //     await AsyncStorage.setItem('AuthToken', res?.data?.token);
+//     //     await AsyncStorage.setItem('Role', res?.data?.user.accountType);
+//     //   } catch (e) {
+//     //     // saving error
+//     //     console.log('Error Saving Token data.');
+//     //   }
+//     // };
+//     // await storeTokenData(response);
+
+//     if (response.status === 201) {
+//       console.log('response data:', response?.data);
+//     }
+//     console.log(response?.data);
+//     return response;
+//   } catch (error) {
+//     console.log('login ERROR:', error?.response?.data);
+//     return {
+//       status: 400,
+//       err: error,
+//       error: error?.response?.data || error?.response?.message,
+//     };
+//   }
+// };
 
 export const signIn = async (param: any) => {
   console.log('signIn func started');
