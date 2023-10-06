@@ -240,7 +240,7 @@ export default function Login() {
                   marginTop: 65,
                   marginLeft: 25,
                 }}>
-                Login --Test
+                Login
               </Text>
               <Text
                 style={{

@@ -83,38 +83,38 @@ const Home = () => {
     : [];
   const [isLoading, setisLoading] = useState(false);
 
-  useFocusEffect(() => {
-    const initGetUsers = async () => {
-      const res: any = await getUser('');
-      console.log('dddddddd', res?.data);
-      if (res?.status === 201 || res?.status === 200) {
-        dispatch(addUserData(res?.data?.user));
-      }
-    };
-    const initGetCategory = async () => {
-      const res: any = await getCategory('');
-      if (res?.status === 201 || res?.status === 200) {
-        dispatch(addSCategory(res?.data?.data));
-      }
-    };
-    const initGetPopularServices = async () => {
-      const res: any = await getPopularService('');
-      if (res?.status === 201 || res?.status === 200) {
-        dispatch(addPopularServices(res?.data?.data));
-      }
-    };
-    const initGetProviderByProximity = async () => {
-      const res: any = await getProviderByProximity(userData?._id);
-      console.warn('proximity', res?.data);
-      if (res?.status === 201 || res?.status === 200) {
-        dispatch(addcloseProvider(res?.data?.data));
-      }
-    };
-    initGetUsers();
-    initGetCategory();
-    initGetPopularServices();
-    initGetProviderByProximity();
-  });
+  // useFocusEffect(() => {
+  //   const initGetUsers = async () => {
+  //     const res: any = await getUser('');
+  //     console.log('dddddddd', res?.data);
+  //     if (res?.status === 201 || res?.status === 200) {
+  //       dispatch(addUserData(res?.data?.user));
+  //     }
+  //   };
+  //   const initGetCategory = async () => {
+  //     const res: any = await getCategory('');
+  //     if (res?.status === 201 || res?.status === 200) {
+  //       dispatch(addSCategory(res?.data?.data));
+  //     }
+  //   };
+  //   const initGetPopularServices = async () => {
+  //     const res: any = await getPopularService('');
+  //     if (res?.status === 201 || res?.status === 200) {
+  //       dispatch(addPopularServices(res?.data?.data));
+  //     }
+  //   };
+  //   const initGetProviderByProximity = async () => {
+  //     const res: any = await getProviderByProximity(userData?._id);
+  //     console.warn('proximity', res?.data);
+  //     if (res?.status === 201 || res?.status === 200) {
+  //       dispatch(addcloseProvider(res?.data?.data));
+  //     }
+  //   };
+  //   initGetUsers();
+  //   initGetCategory();
+  //   initGetPopularServices();
+  //   initGetProviderByProximity();
+  // });
 
   useEffect(() => {
     const initGetUsers = async () => {
@@ -156,7 +156,7 @@ const Home = () => {
     initGetCategory();
     initGetPopularServices();
     initGetProviderByProximity();
-  }, [dispatch, userData?._id]);
+  }, [dispatch]);
 
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
