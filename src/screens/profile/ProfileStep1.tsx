@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   Text,
@@ -25,6 +25,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   addCategory,
   addcompleteProfile,
+  addprovider_id,
   removeCategory,
 } from '../../store/reducer/mainSlice';
 import {generalStyles} from '../../constants/generalStyles';
@@ -39,7 +40,10 @@ import {
 } from 'accordion-collapse-react-native';
 import axios from 'axios';
 import Snackbar from 'react-native-snackbar';
-import {getSubCategory} from '../../utils/api/func';
+import {completeProfile, getSubCategory} from '../../utils/api/func';
+import {RouteContext} from '../../utils/context/route_context';
+import CustomLoading from '../../components/customLoading';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const PRofileStep1 = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -101,19 +105,68 @@ const PRofileStep1 = () => {
     }
     // setisLoading(false);
   };
+
+  const {currentState, setCurrentState} = useContext(RouteContext);
+
+  console.log(currentState);
+
+  const [isLoading, setisLoading] = useState(false);
+  const handleProfileSetup = async () => {
+    setisLoading(true);
+    if (categoryId) {
+      const res = await completeProfile({services: categoryId});
+      console.log('result', res?.data);
+
+      if (res?.status === 200 || res?.status === 201) {
+        dispatch(addprovider_id(res?.data?.profile?.id));
+        setCurrentState('2');
+        navigation.navigate('ProfileStep2');
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+    } else {
+      Snackbar.show({
+        text: 'Please fill all fields',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      setisLoading(false);
+    }
+    setisLoading(false);
+  };
+
+  const handleNext = async () => {
+    await handleProfileSetup();
+    // const data = completeProfileData;
+    // data.services = category;
+    // console.log(data, category, categoryId);
+    // dispatch(addcompleteProfile({services: categoryId}));
+    // navigation.navigate('ProfileStep2');
+  };
+
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
-              <Header
-          style={{backgroundColor: colors.greyLight}}
-          imageStyle={{tintColor: colors.black}}
-          textStyle={{
-            color: colors.black,
-            fontFamily: commonStyle.fontFamily.semibold,
-          }}
-          title={'Complete your Registration'}
-          image={images.back}
-        />
-                <ProfileStepWrapper active={'one'} />
+      <Header
+        style={{backgroundColor: colors.greyLight}}
+        imageStyle={{tintColor: colors.black}}
+        textStyle={{
+          color: colors.black,
+          fontFamily: commonStyle.fontFamily.semibold,
+        }}
+        title={'Complete your Registration'}
+        image={images.back}
+      />
+      <ProfileStepWrapper active={'one'} />
       <ScrollView>
         <View style={{marginHorizontal: 20}}>
           <TextWrapper
@@ -451,11 +504,12 @@ const PRofileStep1 = () => {
           /> */}
           <Button
             onClick={() => {
-              const data = completeProfileData;
-              data.services = category;
-              console.log(data, category, categoryId);
-              dispatch(addcompleteProfile({services: categoryId}));
-              navigation.navigate('ProfileStep2');
+              // const data = completeProfileData;
+              // data.services = category;
+              // console.log(data, category, categoryId);
+              // dispatch(addcompleteProfile({services: categoryId}));
+              // navigation.navigate('ProfileStep2');
+              handleNext();
             }}
             style={[
               tw`ml-auto`,
@@ -518,6 +572,7 @@ const PRofileStep1 = () => {
             : null}
         </View>
       </ScrollView>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
   );
 };

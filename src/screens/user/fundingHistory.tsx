@@ -24,6 +24,7 @@ import {
 } from '../../store/reducer/mainSlice';
 import {getTransactions} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
 
 const FundingHistory = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -260,7 +261,7 @@ const FundingHistory = () => {
         </View>
         <View style={tw`h-30`} />
       </ScrollView>
-      <Spinner visible={isLoading} />
+      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
     </View>
   );
 };

@@ -39,7 +39,7 @@ const DrawerContent = () => {
       route: 'DeactivateAccount',
       icon: images.deactivte,
     },
-    {label: 'Privacy Policy', route: 'PrivacyPolicy', icon: images.support},
+    {label: 'Privacy Policy', route: 'AddAddress', icon: images.support},
   ];
   const dispatch = useDispatch();
   const [InfoModal, setInfoModal] = useState(false);

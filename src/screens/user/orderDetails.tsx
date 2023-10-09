@@ -33,6 +33,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Snackbar from 'react-native-snackbar';
 import {createOrder} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
 
 const OrderDetails = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -541,7 +542,7 @@ const OrderDetails = () => {
         </View>
         <View style={tw`h-30`} />
       </ScrollView>
-      <Spinner visible={isLoading} />
+      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
       <View style={tw`h-1 w-full mb-5 bg-black`} />
     </View>
   );

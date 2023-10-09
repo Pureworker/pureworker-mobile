@@ -237,6 +237,23 @@ export default function Inbox({navigation, route}: any) {
             </ScrollView>
           </View>
 
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('OrderDetails', {data: agentData});
+            }}
+            style={[
+              tw`bg-[#2D303C] absolute bottom-[11%] rounded-lg right-[5%]  items-center justify-center`,
+              {width: perWidth(90), aspectRatio: 1, height: perHeight(35)},
+            ]}>
+            <Textcomp
+              text={'Tap to Hire'}
+              size={14}
+              lineHeight={16.5}
+              color={'#FFC727'}
+              fontFamily={'Inter-SemiBold'}
+            />
+          </TouchableOpacity>
+
           <View
             style={[
               tw` w-full mx-auto mt-auto  px-[4%] border-t-4 border-black `,
@@ -261,14 +278,14 @@ export default function Inbox({navigation, route}: any) {
                 }}
                 value={message}
               />
-              {boxFocuss ? (
+              {boxFocuss || message?.length > 0 ? (
                 <TouchableOpacity
                   onPress={() => {
                     onSubmit();
                   }}>
                   <Image
                     resizeMode="contain"
-                    source={images.calendar}
+                    source={images.send2}
                     style={[
                       tw`w-full `,
                       {
@@ -279,10 +296,13 @@ export default function Inbox({navigation, route}: any) {
                   />
                 </TouchableOpacity>
               ) : (
-                <TouchableOpacity onPress={() => {}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    onSubmit();
+                  }}>
                   <Image
                     resizeMode="contain"
-                    source={images.info}
+                    source={images.camera}
                     style={[
                       tw`w-full `,
                       {

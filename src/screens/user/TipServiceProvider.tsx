@@ -25,6 +25,7 @@ import {tipProvider} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import {ActivityIndicator} from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
 
 const TipServiceProvider = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -273,7 +274,7 @@ const TipServiceProvider = () => {
           ]}
         />
       </ScrollView>
-      <Spinner visible={isLoading} />
+      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
     </View>
   );
 };

@@ -18,6 +18,8 @@ import DeactivateAccount from '../screens/common/deactivateAccount';
 import PrivacyPolicy from '../screens/common/privacyPolicy';
 import Chat from '../screens/user/chat/index';
 import Index from '../screens/user/notification';
+import VendorHomeStack from './vendorHome';
+import AddAddress from '../screens/common/addAddress';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -44,7 +46,8 @@ const TabNavigator = () => {
       }}>
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        // component={HomeScreen}
+        component={VendorHomeStack}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => (
@@ -129,6 +132,11 @@ const DrawerMenu = () => {
         <Drawer.Screen
           name="Rating"
           component={Ratings}
+          options={{headerShown: false}}
+        />
+        <Drawer.Screen
+          name="AddAddress"
+          component={AddAddress}
           options={{headerShown: false}}
         />
         {/* Add other drawer screens as needed */}

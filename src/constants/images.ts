@@ -1,4 +1,7 @@
 const images = {
+
+  send2: require('./../assets/images/send2.png'),
+  camera: require('./../assets/images/camera.png'),
   star_2: require('./../assets/images/star_2.png'),
   star: require('./../assets/images/star.png'),
   search: require('../assets/images/search.png'),
@@ -9,6 +12,7 @@ const images = {
   vender: require('../assets/images/vender.png'),
   welcome: require('../assets/images/welcome.png'),
   pureWorkerLogo: require('../assets/images/pureWorkerLogo.png'),
+  logo2: require('../assets/images/logo2.png'),
   heroPix: require('../assets/images/heroPix.png'),
   heroPix1: require('../assets/images/heroPix1.png'),
   heroPix2: require('../assets/images/heroPix2.png'),

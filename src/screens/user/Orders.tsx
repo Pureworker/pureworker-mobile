@@ -33,6 +33,7 @@ import ScheduledDeliveryDate from '../../components/modals/scheduledDeliveryDate
 import {addcustomerOrders} from '../../store/reducer/mainSlice';
 import {getProviderByService, getUserOrders} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
 
 const Orders = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -373,7 +374,7 @@ const Orders = () => {
         }}
         visible={scheduledDeliveryDate}
       />
-      <Spinner visible={isLoading} />
+      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
     </View>
   );
 };

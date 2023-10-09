@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
   View,
   Image,
@@ -38,7 +38,7 @@ import Snackbar from 'react-native-snackbar';
 import storage from '@react-native-firebase/storage';
 import Portfoliocomp from '../../components/Portfolio';
 import {SIZES, perWidth} from '../../utils/position/sizes';
-import {uploadAssetsDOCorIMG} from '../../utils/api/func';
+import {completeProfile, uploadAssetsDOCorIMG} from '../../utils/api/func';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {addcompleteProfile} from '../../store/reducer/mainSlice';
@@ -46,6 +46,8 @@ import FastImage from 'react-native-fast-image';
 import ServiceIntroComp from '../../components/serviceIntro';
 import ServicePriceComp from '../../components/servicePrice';
 import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
+import {RouteContext} from '../../utils/context/route_context';
 
 const PRofileStep2 = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -78,7 +80,7 @@ const PRofileStep2 = () => {
   const completeProfileData = useSelector(
     (state: any) => state.user.completeProfileData,
   );
-  console.error('yeap', completeProfileData);
+  // console.error('yeap', completeProfileData);
   useEffect(() => {
     setNationalityItems([...allCountry]);
   }, []);
@@ -109,8 +111,6 @@ const PRofileStep2 = () => {
   }, [category]);
 
   useEffect(() => {
-
-
     if (category?.length) {
       const updatedInputValues = category.map((service: string) => ({
         serviceName: service?.name,
@@ -217,6 +217,137 @@ const PRofileStep2 = () => {
       });
     }
   };
+  const {currentState, setCurrentState} = useContext(RouteContext);
+
+  const _handleFuncUpload = async () => {
+    if (
+      imageUrl &&
+      description &&
+      servicesDescription &&
+      servicePrice &&
+      nationalityValue
+    ) {
+      // const profileData = {
+      //   profilePicture: imageUrl,
+      //   description: description,
+      //   servicesDescription: JSON.stringify(servicesDescription),
+      //   servicePrice: JSON.stringify(servicePrice),
+      //   city: nationalityValue,
+      //   potfolios: allPotfolio,
+      //   serviceId: '',
+      // };
+      const profileData = {
+        profilePic: imageUrl,
+        description: completeProfileData?.description || description,
+        // servicesDescription: JSON.stringify(servicesDescription),
+        // servicePrice: JSON.stringify(servicePrice),
+        // city: nationalityValue,
+        // potfolios: allPotfolio,
+        // serviceId: '',
+        priceRange: completeProfileData.priceRange,
+        serviceIntro: completeProfileData.serviceIntro,
+        portfolio: null,
+      };
+
+      // const d = {
+      //   geoLocation: {
+      //     type: 'Point',
+      //     coordinates: [3.9368, 7.843],
+      //   },
+      //   profilePic:
+      //     'https://res.cloudinary.com/dr0pef3mn/image/upload/v1693319953/pure/1693319950720-pure%20worker%20logo.png.png',
+      //   description: 'I know my craft very well',
+      //   serviceIntro: [
+      //     {
+      //       service: '64eb9594d0ea85df8ffa4e97',
+      //       description: 'I know my craft very well',
+      //     },
+      //     {
+      //       service: '64eb9594d0ea85df8ffa4e9a',
+      //       description: 'I know my craft very well',
+      //     },
+      //   ],
+      //   priceRange: [
+      //     {
+      //       service: '64eb9594d0ea85df8ffa4e97',
+      //       maxPrice: 12000,
+      //       minPrice: 1000,
+      //     },
+      //     {
+      //       service: '64eb9594d0ea85df8ffa4e9a',
+      //       maxPrice: 12000,
+      //       minPrice: 1000,
+      //     },
+      //   ],
+      //   portfolio: [
+      //     {
+      //       service: '64eb9594d0ea85df8ffa4e97',
+      //       description: 'I know my craft very well',
+      //       images: [
+      //         'https://res.cloudinary.com/dr0pef3mn/image/upload/v1693319953/pure/1693319950720-pure%20worker%20logo.png.png',
+      //       ],
+      //     },
+      //     {
+      //       service: '64eb9594d0ea85df8ffa4e9a',
+      //       description: 'I know my craft very well',
+      //       images: [
+      //         'https://res.cloudinary.com/dr0pef3mn/image/upload/v1693319953/pure/1693319950720-pure%20worker%20logo.png.png',
+      //       ],
+      //     },
+      //   ],
+      //   contact: [
+      //     {
+      //       fullName: 'Shehu Shehu',
+      //       relationship: 'brother',
+      //       phoneNumber: '08012121212',
+      //       email: 'test@email.com',
+      //       address: 'oojo',
+      //     },
+      //     {
+      //       fullName: 'Shehu Shehu',
+      //       relationship: 'brother',
+      //       phoneNumber: '08012121212',
+      //       email: 'test@email.com',
+      //       address: 'oojo',
+      //     },
+      //   ],
+      //   identity: {
+      //     means: 'vNIN',
+      //     number: '12345678987',
+      //   },
+      //   meetingSchedule: {
+      //     date: 'Fri Sep 01 2023 01:00:00 GMT+0100 (West Africa Standard Time)',
+      //     time: '10:00 am',
+      //   },
+      // };
+
+      const res = await completeProfile({...profileData});
+      console.log('result', res?.data);
+
+      if (res?.status === 200 || res?.status === 201) {
+        setCurrentState('3');
+        navigation.navigate('ProfileStep3');
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+    } else {
+      Snackbar.show({
+        text: 'Please fill all fields',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+    }
+  };
 
   //image upload
   const options = {mediaType: 'photo', selectionLimit: 1};
@@ -224,14 +355,12 @@ const PRofileStep2 = () => {
     console.log('called logo');
     launchImageLibrary(options, async (resp: unknown) => {
       if (resp?.assets?.length > 0) {
-        // console.log('resp', resp?.assets);
         console.log('resp', resp?.assets[0]);
         // setPhotoUri(resp?.assets[0].uri);
         setImageUrl(resp?.assets[0].uri);
-        // initUploadProfilePics(resp?.assets[0]);
         const data = await uploadImgorDoc(resp?.assets[0]);
         console.warn('processed pic', data);
-        dispatch(addcompleteProfile({profilePic: data}));
+        // dispatch(addcompleteProfile({profilePic: data}));
       }
     });
     // launchCamera
@@ -331,17 +460,17 @@ const PRofileStep2 = () => {
 
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
-              <Header
-          style={{backgroundColor: colors.greyLight}}
-          imageStyle={{tintColor: colors.black}}
-          textStyle={{
-            color: colors.black,
-            fontFamily: commonStyle.fontFamily.semibold,
-          }}
-          title={'Complete your Registration'}
-          image={images.back}
-        />
-                <ProfileStepWrapper active={'two'} />
+      <Header
+        style={{backgroundColor: colors.greyLight}}
+        imageStyle={{tintColor: colors.black}}
+        textStyle={{
+          color: colors.black,
+          fontFamily: commonStyle.fontFamily.semibold,
+        }}
+        title={'Complete your Registration'}
+        image={images.back}
+      />
+      <ProfileStepWrapper active={'two'} />
       <ScrollView>
         <View style={{marginHorizontal: 20}}>
           <TextWrapper
@@ -375,7 +504,7 @@ const PRofileStep2 = () => {
               {!profileImageLoading ? (
                 <>
                   {/* {!imageUrl ? ( */}
-                  {!completeProfileData?.profilePic ? (
+                  {!completeProfileData?.profilePic && imageUrl?.length < 1 ? (
                     <TextWrapper
                       children="Upload Profile Photo"
                       fontType={'semiBold'}
@@ -1046,14 +1175,16 @@ const PRofileStep2 = () => {
                   onClick={() => {
                     // handleProfileSetup();
                     // navigation.navigate('ProfileStep3', {serviceId: data?.serviceId});
-                    navigation.navigate('ProfileStep3', {serviceId: 'id_here'});
+                    // navigation.navigate('ProfileStep3', {serviceId: 'id_here'});
                     // dispatch(
                     //   addcompleteProfile({
                     //     description: description,
                     //     serviceIntro: [],
                     //   }),
                     // );
-                    dispatch(addcompleteProfile({city: nationalityValue}));
+                    // dispatch(addcompleteProfile({city: nationalityValue}));
+
+                    console.log(completeProfileData, 'here', allPotfolio);
                   }}
                   style={{
                     marginBottom: 20,
@@ -1076,7 +1207,7 @@ const PRofileStep2 = () => {
         </View>
         <View style={tw`h-30`} />
       </ScrollView>
-      <Spinner visible={isLoading} />
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
   );
 };

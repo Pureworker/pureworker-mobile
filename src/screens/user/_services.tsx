@@ -29,6 +29,7 @@ import {
 } from '../../utils/api/func';
 import {addprovidersByCateegory} from '../../store/reducer/mainSlice';
 import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
 
 const _Services = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -283,7 +284,7 @@ const _Services = ({route}: any) => {
         </View>
         <View style={tw`h-20`} />
       </ScrollView>
-      <Spinner visible={isLoading} />
+      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
     </View>
   );
 };

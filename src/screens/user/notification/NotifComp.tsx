@@ -54,7 +54,7 @@ export default function NotificationComp({item, seen, seen_}: any) {
         <View style={tw`flex flex-row items-center`}>
           <View
             style={[
-              tw` ${seen_ ? `bg-[${colors.black}]` : 'bg-grey-400'}`,
+              tw` ${seen_ ? `bg-[${colors.black}]` : 'bg-gray-400'}`,
               {width: 8, height: 8, borderRadius: 5},
             ]}
           />

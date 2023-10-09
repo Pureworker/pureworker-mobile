@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect, useContext} from 'react';
 import {Dimensions} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -17,6 +17,7 @@ import {
   requestUserPermission,
 } from './src/utils/pushnotification_helper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {RouteContext} from './src/utils/context/route_context';
 
 const Stack = createStackNavigator();
 const {width} = Dimensions.get('screen');
@@ -212,14 +213,19 @@ export default () => {
       return <OnboardingStack />;
     }
   };
+  const [currentState, setCurrentState] = React.useState(
+    useContext(RouteContext).initState,
+  );
 
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <NavigationContainer ref={navigationRef}>
-          <MainStack />
-        </NavigationContainer>
-      </PersistGate>
-    </Provider>
+    <RouteContext.Provider value={{currentState, setCurrentState}}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <NavigationContainer ref={navigationRef}>
+            <MainStack />
+          </NavigationContainer>
+        </PersistGate>
+      </Provider>
+    </RouteContext.Provider>
   );
 };

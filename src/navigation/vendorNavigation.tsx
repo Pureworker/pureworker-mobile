@@ -37,7 +37,7 @@ export default function VendorNavigation() {
         component={FAQ}
         options={{headerShown: false, animationEnabled: false}}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="ProfileStep1"
         component={ProfileStep1}
         options={{headerShown: false, animationEnabled: false}}
@@ -61,7 +61,7 @@ export default function VendorNavigation() {
         name="ProfileStep5"
         component={ProfileStep5}
         options={{headerShown: false, animationEnabled: false}}
-      />
+      /> */}
       <Stack.Screen
         name="Congratulations"
         component={Congratulations}

@@ -611,7 +611,7 @@ const Home = () => {
           )}
         </View>
       </Modal>
-      {/* <Spinner visible={isLoading} /> */}
+      {/* <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/> */}
     </SafeAreaView>
   );
 };

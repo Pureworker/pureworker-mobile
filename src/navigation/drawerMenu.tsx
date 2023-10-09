@@ -21,8 +21,9 @@ import {Rating} from 'react-native-ratings';
 import Ratings from '../screens/common/ratings';
 import PrivacyPolicy from '../screens/common/privacyPolicy';
 import Index from '../screens/user/notification';
-import Chat from '../screens/user/chat/index'
+import Chat from '../screens/user/chat/index';
 import TabServices from '../screens/user/tab_services';
+import AddAddress from '../screens/common/addAddress';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -145,6 +146,11 @@ const DrawerMenu = () => {
         <Drawer.Screen
           name="Rating"
           component={Ratings}
+          options={{headerShown: false}}
+        />
+        <Drawer.Screen
+          name="AddAddress"
+          component={AddAddress}
           options={{headerShown: false}}
         />
         {/* Add other drawer screens as needed */}

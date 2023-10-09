@@ -21,6 +21,7 @@ import colors from '../../constants/colors';
 import {createOrder} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
 
 const OrderReview = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -375,7 +376,7 @@ const OrderReview = ({route}: any) => {
           <View style={tw`w-full h-0.5  bg-black  mb-[7.5%]`} />
         </View>
       </ScrollView>
-      <Spinner visible={isLoading} />
+      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
     </View>
   );
 };

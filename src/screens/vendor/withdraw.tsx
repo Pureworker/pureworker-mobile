@@ -34,6 +34,7 @@ import {
     CollapseBody,
   } from 'accordion-collapse-react-native';
 import colors from '../../constants/colors';
+import CustomLoading from '../../components/customLoading';
 
 const Withdraw = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -348,7 +349,7 @@ const Withdraw = () => {
         </View>
         <View style={tw`h-30`} />
       </ScrollView>
-      <Spinner visible={isLoading} />
+      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
     </View>
   );
 };

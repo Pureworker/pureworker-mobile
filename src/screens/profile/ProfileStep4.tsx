@@ -42,6 +42,7 @@ type Route = {
 const ProfileStep4 = () => {
   const navigation = useNavigation<StackNavigation>();
   const [idNumber, setIdNumber] = useState('');
+  const [idName, setidName] = useState('');
   const route: Route = useRoute();
 
   const category = useSelector((state: any) => state.user.pickedServices);
@@ -269,7 +270,7 @@ const ProfileStep4 = () => {
               />
             </>
           )}
-          {getUser?.user?.accountType?.toUpperCase() === 'BUSINESS' && (
+          {getUser?.user?.accountType?.toUpperCase() === 'PROVIDER' && (
             <>
               <>
                 <TextWrapper
@@ -279,10 +280,10 @@ const ProfileStep4 = () => {
                   style={{fontSize: 13, marginTop: 13, color: colors.black}}
                 />
                 <TextInputs
-                  style={{marginTop: 10, backgroundColor: colors.greyLight1}}
+                  style={{marginTop: 10, backgroundColor: colors.greyLight1, paddingHorizontal: 10}}
                   labelText={'Enter Business Name'}
-                  state={idNumber}
-                  setState={setIdNumber}
+                  state={idName}
+                  setState={setidName}
                 />
               </>
               <>
@@ -293,10 +294,11 @@ const ProfileStep4 = () => {
                   style={{fontSize: 13, marginTop: 13, color: colors.black}}
                 />
                 <TextInputs
-                  style={{marginTop: 10, backgroundColor: colors.greyLight1}}
+                  style={{marginTop: 10, backgroundColor: colors.greyLight1, paddingHorizontal: 10}}
                   labelText={'Enter CAC Number'}
                   state={idNumber}
                   setState={setIdNumber}
+                
                 />
               </>
             </>

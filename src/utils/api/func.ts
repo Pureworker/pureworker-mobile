@@ -132,10 +132,10 @@ export const uploadAssetsDOCorIMG = async (param: any) => {
     fieldname: 'profile-picture',
     // name: param.name || param?.fileName, // Adjust the filename as needed
   });
-  console.log('uploadAssetsDOCorIMG started', param, formData);
+  console.log('uploadAssetsDOCorIMG started', param, formData, AuthToken);
 
   try {
-    const response = await axios.post(`${API_BASE_URL}/upload`, formData, {
+    const response = await axios.post(`https://creatbase-dev.onrender.com/assets/upload`, formData, {
       headers: {
         Authorization: `Bearer ${AuthToken}`,
         'Content-Type': 'multipart/form-data',
@@ -147,7 +147,7 @@ export const uploadAssetsDOCorIMG = async (param: any) => {
     }
     return response;
   } catch (error) {
-    console.log(error, error?.response?.data);
+    console.log(error, error?.response, error?.response?.data);
     return {
       status: 400,
       err: error,
@@ -162,7 +162,7 @@ export const completeProfile = async (param: any) => {
   try {
     const response = await axios({
       method: 'post',
-      url: `${API_BASE_URL}/provider/create-profile`,
+      url: `${API_BASE_URL}/provider/create-profileN`,
       data: param,
       headers: {
         Authorization: `Bearer ${AuthToken}`,

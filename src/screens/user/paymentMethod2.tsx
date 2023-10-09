@@ -28,6 +28,7 @@ import PaystackWebView from '../../components/web';
 import {getUser} from '../../utils/api/func';
 import {addUserData} from '../../store/reducer/mainSlice';
 import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
 
 const PaymentMethod2 = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -319,7 +320,7 @@ const PaymentMethod2 = ({route}: any) => {
         billingName={userData?.fullName || ''}
         userID={userData?._id}
       />
-      <Spinner visible={isLoading} />
+      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
     </View>
   );
 };

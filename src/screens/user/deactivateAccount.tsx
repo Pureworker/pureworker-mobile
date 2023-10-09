@@ -16,6 +16,7 @@ import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
 
 const DeactivateAccount = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -58,7 +59,7 @@ const DeactivateAccount = () => {
           </View>
         </View>
       </ScrollView>
-      <Spinner visible={isLoading} />
+      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
     </View>
   );
 };

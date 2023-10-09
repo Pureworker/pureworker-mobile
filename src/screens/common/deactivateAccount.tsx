@@ -20,6 +20,7 @@ import colors from '../../constants/colors';
 import Snackbar from 'react-native-snackbar';
 import {f_deactivateAccount} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
 
 const DeactivateAccount = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -216,7 +217,7 @@ const DeactivateAccount = () => {
         </View>
         <View style={tw`h-0.5 w-full bg-black absolute  bottom-[3%]`} />
       </ScrollView>
-      <Spinner visible={isLoading} />
+      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
     </View>
   );
 };

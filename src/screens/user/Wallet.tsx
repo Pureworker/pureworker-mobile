@@ -22,6 +22,7 @@ import Modal from 'react-native-modal/dist/modal';
 import { addUserData } from '../../store/reducer/mainSlice';
 import { getUser } from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
 
 const Wallet = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -359,7 +360,7 @@ const Wallet = () => {
             </View>
           </View>
         </ScrollView>
-        <Spinner visible={isLoading} />
+        <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
       </View>
       <Modal
         isVisible={InfoModal}
