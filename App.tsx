@@ -213,12 +213,39 @@ export default () => {
       return <OnboardingStack />;
     }
   };
-  const [currentState, setCurrentState] = React.useState(
-    useContext(RouteContext).initState,
-  );
+  // const [currentState, setCurrentState] = React.useState(
+  //   useContext(RouteContext).initState,
+  // );
+  const [currentState, setCurrentState] = React.useState('1');
+
+  const updateState = async (newState: any) => {
+    // Update the state and save it to AsyncStorage
+    try {
+      await AsyncStorage.setItem('routeState', newState);
+      setCurrentState(newState);
+    } catch (error) {
+      console.error('Error saving state to AsyncStorage:', error);
+    }
+  };
+  // const {currentState, setCurrentState} = useContext(RouteContext);
+  useEffect(() => {
+    // Load the state from AsyncStorage during component mount
+    const loadState = async () => {
+      try {
+        const storedState = await AsyncStorage.getItem('routeState');
+        if (storedState !== null) {
+          setCurrentState(storedState);
+        }
+      } catch (error) {
+        console.error('Error loading state from AsyncStorage:', error);
+      }
+    };
+
+    loadState();
+  }, []); // Empty dependency array to run this effect once on component mount
 
   return (
-    <RouteContext.Provider value={{currentState, setCurrentState}}>
+    <RouteContext.Provider value={{currentState, setCurrentState: updateState}}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <NavigationContainer ref={navigationRef}>

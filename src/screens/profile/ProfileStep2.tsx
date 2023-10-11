@@ -48,6 +48,7 @@ import ServicePriceComp from '../../components/servicePrice';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import {RouteContext} from '../../utils/context/route_context';
+import Services from '../user/services';
 
 const PRofileStep2 = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -63,6 +64,7 @@ const PRofileStep2 = () => {
   const [isLoading, setisLoading] = useState(false);
 
   const category = useSelector((state: any) => state.user.pickedServices);
+  const categoryId = useSelector((state: any) => state.user.pickedServicesId);
   const [servicesDescription, setServicesDescription] = useState<any>([]); // State to store input values
   const [servicePrice, setServicePrice] = useState<any>([]); // State to store input values
   const [createService] = useCreateServiceMutation();
@@ -219,14 +221,24 @@ const PRofileStep2 = () => {
   };
   const {currentState, setCurrentState} = useContext(RouteContext);
 
+  console.log('here', categoryId);
+
   const _handleFuncUpload = async () => {
-    if (
-      imageUrl &&
-      description &&
-      servicesDescription &&
-      servicePrice &&
-      nationalityValue
-    ) {
+    if (completeProfileData) {
+      const duplicate = completeProfileData;
+      duplicate.serviceIntro?.map(
+        (item: {service: any}, index: string | number) => {
+          item.service = categoryId[index];
+        },
+      );
+      duplicate?.priceRange?.map((item, index) => {
+        item.maxPrice = item.priceMax;
+        item.minPrice = item.priceMin;
+      });
+      duplicate.serviceIntro = duplicate.serviceIntro?.filter(
+        (item: {service: undefined}) => item.service !== undefined,
+      );
+
       // const profileData = {
       //   profilePicture: imageUrl,
       //   description: description,
@@ -244,8 +256,8 @@ const PRofileStep2 = () => {
         // city: nationalityValue,
         // potfolios: allPotfolio,
         // serviceId: '',
-        priceRange: completeProfileData.priceRange,
-        serviceIntro: completeProfileData.serviceIntro,
+        priceRange: duplicate.priceRange,
+        serviceIntro: duplicate.serviceIntro,
         portfolio: null,
       };
 
@@ -279,22 +291,22 @@ const PRofileStep2 = () => {
       //       minPrice: 1000,
       //     },
       //   ],
-      //   portfolio: [
-      //     {
-      //       service: '64eb9594d0ea85df8ffa4e97',
-      //       description: 'I know my craft very well',
-      //       images: [
-      //         'https://res.cloudinary.com/dr0pef3mn/image/upload/v1693319953/pure/1693319950720-pure%20worker%20logo.png.png',
-      //       ],
-      //     },
-      //     {
-      //       service: '64eb9594d0ea85df8ffa4e9a',
-      //       description: 'I know my craft very well',
-      //       images: [
-      //         'https://res.cloudinary.com/dr0pef3mn/image/upload/v1693319953/pure/1693319950720-pure%20worker%20logo.png.png',
-      //       ],
-      //     },
-      //   ],
+      // portfolio: [
+      //   {
+      //     service: '64eb9594d0ea85df8ffa4e97',
+      //     description: 'I know my craft very well',
+      //     images: [
+      //       'https://res.cloudinary.com/dr0pef3mn/image/upload/v1693319953/pure/1693319950720-pure%20worker%20logo.png.png',
+      //     ],
+      //   },
+      //   {
+      //     service: '64eb9594d0ea85df8ffa4e9a',
+      //     description: 'I know my craft very well',
+      //     images: [
+      //       'https://res.cloudinary.com/dr0pef3mn/image/upload/v1693319953/pure/1693319950720-pure%20worker%20logo.png.png',
+      //     ],
+      //   },
+      // ],
       //   contact: [
       //     {
       //       fullName: 'Shehu Shehu',
@@ -320,13 +332,12 @@ const PRofileStep2 = () => {
       //     time: '10:00 am',
       //   },
       // };
-
       const res = await completeProfile({...profileData});
       console.log('result', res?.data);
 
       if (res?.status === 200 || res?.status === 201) {
-        setCurrentState('3');
         navigation.navigate('ProfileStep3');
+        setCurrentState('3');
       } else {
         Snackbar.show({
           text: res?.error?.message
@@ -1185,6 +1196,7 @@ const PRofileStep2 = () => {
                     // dispatch(addcompleteProfile({city: nationalityValue}));
 
                     console.log(completeProfileData, 'here', allPotfolio);
+                    _handleFuncUpload();
                   }}
                   style={{
                     marginBottom: 20,

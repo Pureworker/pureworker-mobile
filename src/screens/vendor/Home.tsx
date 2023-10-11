@@ -39,6 +39,7 @@ import ClosetoYou3 from '../../components/cards/CloseToYou3';
 import {formatAmount} from '../../utils/validations';
 import FastImage from 'react-native-fast-image';
 import {RouteContext} from '../../utils/context/route_context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = ({navigation}: any) => {
   //   const navigation = useNavigation<StackNavigation>();
@@ -500,24 +501,19 @@ const Home = ({navigation}: any) => {
 
           <TouchableOpacity
             onPress={() => {
-              // navigation.navigate('ProfileStep1');
-              if (currentState === '1') {
-                navigation.navigate('ProfileStep1');
-              } else if (currentState === '2') {
-                navigation.navigate('ProfileStep2');
-              }
-              else if (currentState === '3') {
-                navigation.navigate('ProfileStep3');
-              }
-              else if (currentState === '4') {
-                navigation.navigate('ProfileStep4');
-              }
-              // else if (currentState === '5') {
+              navigation.navigate('ProfileStep1');
+              // if (currentState === '1') {
+              //   navigation.navigate('ProfileStep1');
+              // } else if (currentState === '2') {
+              //   navigation.navigate('ProfileStep2');
+              // } else if (currentState === '3') {
+              //   navigation.navigate('ProfileStep3');
+              // } else if (currentState === '4') {
+              //   navigation.navigate('ProfileStep4');
+              // }
+              // else {
               //   navigation.navigate('ProfileStep5');
               // }
-               else {
-                navigation.navigate('ProfileStep5');
-              }
             }}
             style={[
               tw`bg-[#2D303C] mx-auto items-center justify-center`,

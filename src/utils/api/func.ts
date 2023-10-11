@@ -175,7 +175,7 @@ export const completeProfile = async (param: any) => {
     console.log(response?.data);
     return response;
   } catch (error) {
-    console.log(error);
+    console.log(error, error?.response?.data);
     return {
       status: 400,
       err: error,

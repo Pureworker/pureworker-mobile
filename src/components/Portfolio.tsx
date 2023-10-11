@@ -105,6 +105,20 @@ export default function Portfoliocomp({servicePrice}: any) {
       }
     });
   };
+
+  const alldata = {
+    service:
+      services?.filter(item => item?.label === nationalityValue)?.[0]
+        ?.service || null,
+    description: 'I know my craft very well',
+    images: [
+      'https://res.cloudinary.com/dr0pef3mn/image/upload/v1693319953/pure/1693319950720-pure%20worker%20logo.png.png',
+    ],
+  };
+  console.log('pirce-', servicePrice);
+
+  const [all_Array, setall_Array] = useState([]);
+
   return (
     <View style={{marginTop: 15}}>
       <View
@@ -166,9 +180,24 @@ export default function Portfoliocomp({servicePrice}: any) {
         </View>
       </View>
       {portfolioCount?.map((item, index) => {
-        return <Portfoliocomp2 servicePrice={servicePrice} index={index} />;
+        return (
+          <Portfoliocomp2
+            servicePrice={servicePrice}
+            service={
+              services?.filter(
+                (item: {label: null}) => item?.label === nationalityValue,
+              )?.[0]?.service
+            }
+            key={index}
+            index={index}
+            func={(item: any) => {
+              const olddata = all_Array;
+              const data: any = [...olddata, item];
+              setall_Array(data);
+            }}
+          />
+        );
       })}
-
       <Button
         onClick={() => {
           if (portfolioCount.length < 3) {

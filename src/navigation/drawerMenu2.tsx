@@ -20,6 +20,7 @@ import Chat from '../screens/user/chat/index';
 import Index from '../screens/user/notification';
 import VendorHomeStack from './vendorHome';
 import AddAddress from '../screens/common/addAddress';
+import TabServices from '../screens/user/tab_services';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -62,6 +63,16 @@ const TabNavigator = () => {
           headerShown: false,
           tabBarIcon: ({focused}) => (
             <TabIcon focused={focused} icon={images.orders} name={'Orders'} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Services"
+        component={TabServices}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <TabIcon focused={focused} icon={images.menu} name={'Services'} />
           ),
         }}
       />

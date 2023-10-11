@@ -119,8 +119,9 @@ const PRofileStep1 = () => {
 
       if (res?.status === 200 || res?.status === 201) {
         dispatch(addprovider_id(res?.data?.profile?.id));
-        setCurrentState('2');
+    
         navigation.navigate('ProfileStep2');
+        setCurrentState('2');
       } else {
         Snackbar.show({
           text: res?.error?.message

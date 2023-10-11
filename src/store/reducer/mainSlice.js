@@ -40,6 +40,9 @@ const initialState = {
   viewedNotifications: [],
   faq: [],
   closeProvider: [],
+  portfolio: {},
+  portfolio2: [],
+  portfolio3: {},
 
   //provider-profileID
   provider_id: null,
@@ -184,6 +187,9 @@ export const mainSlice = createSlice({
     addprovider_id : (state, action) => {
       state.provider_id = action.payload;
     },
+    addportfolio: (state, action) => {
+      state.portfolio3 = action.payload;
+    },
   },
 });
 
@@ -214,6 +220,7 @@ export const {
   addfaq,
   addcloseProvider,
   addprovider_id,
+  addportfolio,
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);
