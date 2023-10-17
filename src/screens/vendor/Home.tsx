@@ -102,7 +102,8 @@ const Home = ({navigation}: any) => {
   useEffect(() => {
     const initGetOrders = async () => {
       setisLoading(true);
-      const res: any = await getProviderOrders('64f20fb6ee98ab7912406b14');
+      // const res: any = await getProviderOrders('64f20fb6ee98ab7912406b14');
+      const res: any = await getProviderOrders(userData?._id);
       console.log('oooooooo', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addproviderOrders(res?.data?.data));
@@ -119,7 +120,7 @@ const Home = ({navigation}: any) => {
     };
     initGetOrders();
   }, []);
-
+ 
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
   const _getCategory = useSelector((state: any) => state.user.category);
@@ -128,6 +129,10 @@ const Home = ({navigation}: any) => {
   );
 
   const {currentState, setCurrentState} = useContext(RouteContext);
+  const formStage = useSelector((state: any) => state.user.formStage);
+
+  console.log('stage',formStage);
+  
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
@@ -501,19 +506,19 @@ const Home = ({navigation}: any) => {
 
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('ProfileStep1');
-              // if (currentState === '1') {
-              //   navigation.navigate('ProfileStep1');
-              // } else if (currentState === '2') {
-              //   navigation.navigate('ProfileStep2');
-              // } else if (currentState === '3') {
-              //   navigation.navigate('ProfileStep3');
-              // } else if (currentState === '4') {
-              //   navigation.navigate('ProfileStep4');
-              // }
-              // else {
-              //   navigation.navigate('ProfileStep5');
-              // }
+              // navigation.navigate('ProfileStep1');
+              if (formStage === 1) {
+                navigation.navigate('ProfileStep1');
+              } else if (formStage === 2) {
+                navigation.navigate('ProfileStep2');
+              } else if (formStage === 3) {
+                navigation.navigate('ProfileStep3');
+              } else if (formStage === 4) {
+                navigation.navigate('ProfileStep4');
+              }
+              else {
+                navigation.navigate('ProfileStep5');
+              }
             }}
             style={[
               tw`bg-[#2D303C] mx-auto items-center justify-center`,

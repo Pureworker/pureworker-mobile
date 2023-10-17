@@ -10,6 +10,8 @@ export default function ServiceIntroComp({item, index}: any) {
   const servicesDescription = useSelector(
     (state: any) => state.user.completeProfileData?.serviceIntro,
   );
+
+  console.log('item-here', item);
   const [value, setvalue] = useState(servicesDescription[index]?.description);
   console.log('SD', servicesDescription);
   const dispatch = useDispatch();

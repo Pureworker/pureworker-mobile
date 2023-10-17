@@ -16,7 +16,8 @@ import {useCreateServiceMutation} from '../../store/slice/api';
 import {validateEmail} from '../../constants/utils';
 import tw from 'twrnc';
 import {useDispatch, useSelector} from 'react-redux';
-import {addcompleteProfile} from '../../store/reducer/mainSlice';
+import {addcompleteProfile, addformStage} from '../../store/reducer/mainSlice';
+import {completeProfile} from '../../utils/api/func';
 type Route = {
   key: string;
   name: string;
@@ -65,9 +66,9 @@ const ProfileStep3 = () => {
 
   const dispatch = useDispatch();
 
-  const handleProfileSetup = () => {
+  const handleProfileSetup = async () => {
     if (
-      route?.params?.serviceId &&
+      // route?.params?.serviceId &&
       name1 &&
       name2 &&
       relation1 &&
@@ -97,65 +98,46 @@ const ProfileStep3 = () => {
         });
         return;
       }
-
+      const contact = [
+        {
+          fullName: name1,
+          relationship: relation1,
+          phoneNumber: phoneNumber1,
+          email: email1,
+          address: address1,
+        },
+        {
+          fullName: name2,
+          relationship: relation2,
+          phoneNumber: phoneNumber2,
+          email: email2,
+          address: address2,
+        },
+      ];
       dispatch(
         addcompleteProfile({
-          contact: [
-            {
-              fullName: name1,
-              relationship: relation1,
-              phoneNumber: phoneNumber1,
-              email: email1,
-              address: address1,
-            },
-            {
-              fullName: name2,
-              relationship: relation2,
-              phoneNumber: phoneNumber2,
-              email: email2,
-              address: address2,
-            },
-          ],
+          contact: contact,
         }),
       );
-      navigation.navigate('ProfileStep4', {
-        serviceId: route?.params?.serviceId,
-      });
-      // const profileData = {
-      //   addressFirst: address1,
-      //   fullNameFirst: name1,
-      //   relationFirst: relation1,
-      //   emailFirst: email1,
-      //   phoneNumberFirst: phoneNumber1,
-      //   fullNameSecond: name2,
-      //   relationSecond: relation2,
-      //   emailSecond: email2,
-      //   phoneNumberSecond: phoneNumber2,
-      //   addressSecond: address2,
-      //   idNumber: null,
-      //   scheduleDate: null,
-      //   appointmentTime: null,
-      //   potfolios: [],
-      //   serviceId: route?.params?.serviceId,
-      // };
-      // createService(profileData)
-      //   .unwrap()
-      //   .then((data: any) => {
-      //     if (data) {
-      //       navigation.navigate('ProfileStep4', {
-      //         serviceId: route?.params?.serviceId,
-      //       });
-      //     }
-      //   })
-      //   .catch((error: any) => {
-      //     console.log('error', error);
-      //     Snackbar.show({
-      //       text: JSON.stringify(error),
-      //       duration: Snackbar.LENGTH_SHORT,
-      //       textColor: '#fff',
-      //       backgroundColor: '#88087B',
-      //     });
-      //   });
+      const res: any = await completeProfile({contact: contact});
+      console.log('result', res?.data);
+      if (res?.status === 200 || res?.status === 201) {
+        navigation.navigate('ProfileStep4', {
+          serviceId: route?.params?.serviceId,
+        });
+        dispatch(addformStage(4));
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
     } else {
       Snackbar.show({
         text: 'Please fill all fields',
@@ -168,17 +150,17 @@ const ProfileStep3 = () => {
 
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
-              <Header
-          style={{backgroundColor: colors.greyLight}}
-          imageStyle={{tintColor: colors.black}}
-          textStyle={{
-            color: colors.black,
-            fontFamily: commonStyle.fontFamily.semibold,
-          }}
-          title={'Complete your Registration'}
-          image={images.back}
-        />
-        <ProfileStepWrapper active={'three'} />
+      <Header
+        style={{backgroundColor: colors.greyLight}}
+        imageStyle={{tintColor: colors.black}}
+        textStyle={{
+          color: colors.black,
+          fontFamily: commonStyle.fontFamily.semibold,
+        }}
+        title={'Complete your Registration'}
+        image={images.back}
+      />
+      <ProfileStepWrapper active={'three'} />
       <ScrollView>
         <View style={{marginHorizontal: 20}}>
           <TextWrapper

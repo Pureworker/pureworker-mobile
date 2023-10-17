@@ -61,7 +61,6 @@ const ProfileStep4 = () => {
   const [login] = useLoginMutation();
   const [createService, {isLoading}] = useCreateServiceMutation();
 
-
   // console.log('--pppp', completeProfileData);
 
   const dispatch = useDispatch();
@@ -126,25 +125,31 @@ const ProfileStep4 = () => {
     }
   };
 
+  const handleProfileSetup2 = async () => {
+
+  }
+
   const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
   const getUser = getUserData ?? [];
 
   // console.log(getUserData,'asdf', getUser, getUser?.userType);
   console.log('mmmm', getUser?.user?.accountType?.toUpperCase());
 
+  const [collapseState2, setcollapseState2] = useState(false);
+
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
-              <Header
-          style={{backgroundColor: colors.greyLight}}
-          imageStyle={{tintColor: colors.black}}
-          textStyle={{
-            color: colors.black,
-            fontFamily: commonStyle.fontFamily.semibold,
-          }}
-          title={'Complete your Registration'}
-          image={images.back}
-        />
-        <ProfileStepWrapper active={'four'} />
+      <Header
+        style={{backgroundColor: colors.greyLight}}
+        imageStyle={{tintColor: colors.black}}
+        textStyle={{
+          color: colors.black,
+          fontFamily: commonStyle.fontFamily.semibold,
+        }}
+        title={'Complete your Registration'}
+        image={images.back}
+      />
+      <ProfileStepWrapper active={'four'} />
       <ScrollView>
         <View style={{marginHorizontal: 20}}>
           <TextWrapper
@@ -160,8 +165,10 @@ const ProfileStep4 = () => {
                   if (!dataLoaded) {
                     setDataLoaded(true);
                   }
+                  setcollapseState2(!collapseState2);
                   setCollapseState(!collapseState);
                 }}
+                isExpanded={false}
                 style={{
                   justifyContent: 'center',
                   flexDirection: 'column',
@@ -235,6 +242,7 @@ const ProfileStep4 = () => {
                           <TouchableOpacity
                             onPress={() => {
                               setSelectedVerification(item);
+                              setcollapseState2(false);
                             }}
                             style={{marginTop: 8}}>
                             <TextWrapper
@@ -270,7 +278,7 @@ const ProfileStep4 = () => {
               />
             </>
           )}
-          {getUser?.user?.accountType?.toUpperCase() === 'PROVIDER' && (
+          {(getUser?.user?.accountType?.toUpperCase() === 'PROVIDER' || getUser?.user?.accountType?.toUpperCase() === 'BUSINESS') && (
             <>
               <>
                 <TextWrapper
@@ -280,7 +288,11 @@ const ProfileStep4 = () => {
                   style={{fontSize: 13, marginTop: 13, color: colors.black}}
                 />
                 <TextInputs
-                  style={{marginTop: 10, backgroundColor: colors.greyLight1, paddingHorizontal: 10}}
+                  style={{
+                    marginTop: 10,
+                    backgroundColor: colors.greyLight1,
+                    paddingHorizontal: 10,
+                  }}
                   labelText={'Enter Business Name'}
                   state={idName}
                   setState={setidName}
@@ -294,11 +306,14 @@ const ProfileStep4 = () => {
                   style={{fontSize: 13, marginTop: 13, color: colors.black}}
                 />
                 <TextInputs
-                  style={{marginTop: 10, backgroundColor: colors.greyLight1, paddingHorizontal: 10}}
+                  style={{
+                    marginTop: 10,
+                    backgroundColor: colors.greyLight1,
+                    paddingHorizontal: 10,
+                  }}
                   labelText={'Enter CAC Number'}
                   state={idNumber}
                   setState={setIdNumber}
-                
                 />
               </>
             </>

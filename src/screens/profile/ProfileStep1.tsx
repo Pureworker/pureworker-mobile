@@ -25,6 +25,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   addCategory,
   addcompleteProfile,
+  addformStage,
   addprovider_id,
   removeCategory,
 } from '../../store/reducer/mainSlice';
@@ -119,9 +120,10 @@ const PRofileStep1 = () => {
 
       if (res?.status === 200 || res?.status === 201) {
         dispatch(addprovider_id(res?.data?.profile?.id));
-    
+
         navigation.navigate('ProfileStep2');
         setCurrentState('2');
+        dispatch(addformStage(2));
       } else {
         Snackbar.show({
           text: res?.error?.message

@@ -46,6 +46,8 @@ const initialState = {
 
   //provider-profileID
   provider_id: null,
+
+  formStage: 1,
 };
 
 export const mainSlice = createSlice({
@@ -67,6 +69,7 @@ export const mainSlice = createSlice({
       state.popularServices = [];
       state.transactions = [];
       state.providerOrders = [];
+      state.formStage  = 1;
     },
 
     logout: state => {
@@ -190,6 +193,9 @@ export const mainSlice = createSlice({
     addportfolio: (state, action) => {
       state.portfolio3 = action.payload;
     },
+    addformStage: (state, action) => {
+      state.formStage = action.payload;
+    },
   },
 });
 
@@ -221,6 +227,7 @@ export const {
   addcloseProvider,
   addprovider_id,
   addportfolio,
+  addformStage,
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);

@@ -41,7 +41,7 @@ import {SIZES, perWidth} from '../../utils/position/sizes';
 import {completeProfile, uploadAssetsDOCorIMG} from '../../utils/api/func';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {addcompleteProfile} from '../../store/reducer/mainSlice';
+import {addcompleteProfile, addformStage} from '../../store/reducer/mainSlice';
 import FastImage from 'react-native-fast-image';
 import ServiceIntroComp from '../../components/serviceIntro';
 import ServicePriceComp from '../../components/servicePrice';
@@ -60,7 +60,7 @@ const PRofileStep2 = () => {
   const [potfolioEnable, setPotfolioEnable] = useState(false);
   const [allPotfolio, setAllPotfolio] = useState<any>([]);
   const [key, setKey] = useState<any>(1);
-  const [editkey, setEditKey] = useState<any>(null);
+  const [editkey, setEditKey] = useState<any>(null); 
   const [isLoading, setisLoading] = useState(false);
 
   const category = useSelector((state: any) => state.user.pickedServices);
@@ -82,7 +82,7 @@ const PRofileStep2 = () => {
   const completeProfileData = useSelector(
     (state: any) => state.user.completeProfileData,
   );
-  // console.error('yeap', completeProfileData);
+  console.error('yeap', completeProfileData);
   useEffect(() => {
     setNationalityItems([...allCountry]);
   }, []);
@@ -140,7 +140,7 @@ const PRofileStep2 = () => {
       dispatch(addcompleteProfile({priceRange: updatedPriceRange}));
     }
     setDescription(completeProfileData?.description);
-  }, [category]);
+  }, [category]); 
   const currentPriceRange = useSelector(
     (state: any) => state.user.completeProfileData?.priceRange,
   );
@@ -224,20 +224,36 @@ const PRofileStep2 = () => {
   console.log('here', categoryId);
 
   const _handleFuncUpload = async () => {
+    setisLoading(true);
     if (completeProfileData) {
       const duplicate = completeProfileData;
-      duplicate.serviceIntro?.map(
-        (item: {service: any}, index: string | number) => {
-          item.service = categoryId[index];
+      // duplicate.serviceIntro?.map(
+      //   (item: {service: any}, index: string | number) => {
+      //     item.service = categoryId[index];
+      //   },
+      // );
+      // duplicate?.priceRange?.map((item, index) => {
+      //   item.maxPrice = item.priceMax;
+      //   item.minPrice = item.priceMin;
+      // });
+      // duplicate.serviceIntro = duplicate.serviceIntro?.filter(
+      //   (item: {service: undefined}) => item.service !== undefined,
+      // );
+      duplicate?.priceRange?.map(
+        (item: {
+          maxPrice: any;
+          priceMax: any;
+          minPrice: any;
+          priceMin: any;
+        }) => {
+          item.maxPrice = item.priceMax;
+          item.minPrice = item.priceMin;
         },
       );
-      duplicate?.priceRange?.map((item, index) => {
-        item.maxPrice = item.priceMax;
-        item.minPrice = item.priceMin;
+      duplicate?.serviceIntro.map((item, index) => {
+        item.service = duplicate?.priceRange?.[index]?.service;
+        delete item.id;
       });
-      duplicate.serviceIntro = duplicate.serviceIntro?.filter(
-        (item: {service: undefined}) => item.service !== undefined,
-      );
 
       // const profileData = {
       //   profilePicture: imageUrl,
@@ -249,7 +265,7 @@ const PRofileStep2 = () => {
       //   serviceId: '',
       // };
       const profileData = {
-        profilePic: imageUrl,
+        profilePic: completeProfileData?.profilePic || imageUrl,
         description: completeProfileData?.description || description,
         // servicesDescription: JSON.stringify(servicesDescription),
         // servicePrice: JSON.stringify(servicePrice),
@@ -337,7 +353,8 @@ const PRofileStep2 = () => {
 
       if (res?.status === 200 || res?.status === 201) {
         navigation.navigate('ProfileStep3');
-        setCurrentState('3');
+        // setCurrentState('3');
+        dispatch(addformStage(3));
       } else {
         Snackbar.show({
           text: res?.error?.message
@@ -358,6 +375,7 @@ const PRofileStep2 = () => {
         backgroundColor: '#88087B',
       });
     }
+    setisLoading(false);
   };
 
   //image upload
@@ -371,7 +389,7 @@ const PRofileStep2 = () => {
         setImageUrl(resp?.assets[0].uri);
         const data = await uploadImgorDoc(resp?.assets[0]);
         console.warn('processed pic', data);
-        // dispatch(addcompleteProfile({profilePic: data}));
+        dispatch(addcompleteProfile({profilePic: data}));
       }
     });
     // launchCamera
@@ -436,10 +454,11 @@ const PRofileStep2 = () => {
           await launchCamera(options, async (resp: unknown) => {
             if (resp?.assets?.length > 0) {
               console.log('resp', resp?.assets[0]);
-              setPhotoUri(resp?.assets[0].uri);
+              // setPhotoUri(resp?.assets[0].uri);
               const data = await uploadImgorDoc(resp?.assets[0]);
               console.log('processed pic', data);
-              const res = await initUploadProfilePics2(data);
+              // const res = await initUploadProfilePics2(data);
+              dispatch(addcompleteProfile({profilePic: data}));
             }
           });
         } else {
@@ -449,7 +468,6 @@ const PRofileStep2 = () => {
     } catch (error) {}
     // launchCamera
   };
-
   const uploadImgorDoc = async (param: {
     uri: string;
     name: string | null;
@@ -464,7 +482,7 @@ const PRofileStep2 = () => {
       console.log('ApartmentType', res?.data);
 
       setisLoading(false);
-      return res?.data.url;
+      return res?.data?.doc?.url;
     }
     setisLoading(false);
   };
@@ -896,328 +914,50 @@ const PRofileStep2 = () => {
               />
             </ScrollView>
           </View>
-          <View style={{zIndex: nationalityOpen ? 0 : 2}}>
-            <TextWrapper
-              children="Portfolio  (You can add a maximum of 3 per service)"
-              isRequired={false}
-              fontType={'semiBold'}
-              style={{
-                fontSize: 16,
-                marginTop: 20,
-                marginBottom: 3,
-                color: colors.black,
-              }}
-            />
-            <TextWrapper
-              children="Click “Add a Portfolio” to showcase projects you’ve worked on"
-              isRequired={false}
-              fontType={'Regular'}
-              style={{
-                fontSize: 14,
-                marginTop: 0,
-                marginBottom: 13,
-                color: colors.black,
-              }}
-            />
-            {allPotfolio.map((item: any, index: number) => {
-              return (
-                <PotfolioWrapper
-                  key={index}
-                  index={index}
-                  item={item}
-                  allPotfolio={allPotfolio}
-                  setAllPotfolio={setAllPotfolio}
-                  setShortDescription={setShortDescription}
-                  setPotfolioImageUrl={setPotfolioImageUrl}
-                  setEditKey={setEditKey}
-                />
-              );
-            })}
-            <TouchableOpacity
-              style={[
-                tw`bg-[${colors.darkPurple}] py-3 rounded-lg ml-auto items-center justify-center`,
-                {width: perWidth(175)},
-              ]}
-              onPress={() => {
-                // if (allPotfolio.length < 3) {
-                //   setPotfolioEnable(true);
-                // }
-                setportfolioToServiceCount([...portfolioToServiceCount, 1]);
-              }}>
-              <TextWrapper
-                children={`Add ${
-                  portfolioToServiceCount.length === 0 ? 'a' : 'another'
-                } Portfolio`}
-                isRequired={false}
-                fontType={'semiBold'}
-                style={{fontSize: 16, color: colors.white}}
-              />
-            </TouchableOpacity>
-
-            <View>
-              {portfolioToServiceCount?.map((item, index) => {
-                return (
-                  <Portfoliocomp key={index} servicePrice={servicePrice} />
-                );
-              })}
-            </View>
-
-            {allPotfolio.length === 3 && (
-              <View
-                style={{
-                  backgroundColor: colors.greyLight1,
-                  height: 80,
-                  borderRadius: 5,
-                }}>
-                <Image
-                  source={images.cross}
-                  resizeMode="contain"
-                  style={{
-                    width: 10,
-                    height: 10,
-                    marginLeft: 20,
-                    marginTop: 10,
-                    tintColor: '#000',
-                  }}
-                />
-                <TextWrapper
-                  children="Maximum number of portfolios added."
-                  isRequired={false}
-                  fontType={'normal'}
-                  style={{
-                    textAlign: 'center',
-                    fontSize: 12,
-                    marginTop: 13,
-                    color: colors.black,
-                  }}
-                />
-              </View>
-            )}
-
-            {/* {potfolioEnable || shortDescription || potfolioImageUrl.length ? (
-              <View>
-                <TextWrapper
-                  children="Short Description"
-                  isRequired={false}
-                  fontType={'semiBold'}
-                  style={{fontSize: 16, marginTop: 0, color: colors.black}}
-                />
-                <TextInput
-                  style={{
-                    paddingHorizontal: 10,
-                    marginTop: 10,
-                    height: 70,
-                    backgroundColor: colors.greyLight1,
-                    borderRadius: 5,
-                    color: '#000',
-                  }}
-                  placeholderTextColor={colors.grey}
-                  placeholder="Breiefly talk about the portfolio.....Max: 20 words"
-                  value={shortDescription}
-                  onChangeText={setShortDescription}
-                />
-
-                {!potfolioImageLoading ? (
-                  <View>
-                    {potfolioImageUrl.length < 3 && (
-                      <>
-                        <TouchableOpacity
-                          onPress={async () => {
-                            try {
-                              const response: any = await launchImageLibrary();
-                              setPotfolioImageLoading(true);
-                              if (response) {
-                                const filename = response?.uri.substring(
-                                  response?.uri.lastIndexOf('/') + 1,
-                                );
-                                const uploadUri =
-                                  Platform.OS === 'ios'
-                                    ? response?.uri.replace('file://', '')
-                                    : response.uri;
-                                const task = await storage()
-                                  .ref(filename)
-                                  .putFile(uploadUri);
-                                if (task.metadata) {
-                                  potfolioPicture.current =
-                                    task.metadata.fullPath;
-                                }
-                                let url;
-                                if (potfolioPicture.current) {
-                                  url = await storage()
-                                    .ref(potfolioPicture.current)
-                                    .getDownloadURL();
-                                }
-                                setPotfolioImageUrl([...potfolioImageUrl, url]);
-                                potfolioPicture.current = '';
-                                setPotfolioImageLoading(false);
-                              } else {
-                                setPotfolioImageLoading(false);
-                              }
-                              setPotfolioImageUrl([...potfolioImageUrl, url]);
-                              potfolioPicture.current = '';
-                              setPotfolioImageLoading(false);
-                            } catch {
-                              setPotfolioImageLoading(false);
-                            }
-                          }}
-                          style={[
-                            generalStyles.contentCenter,
-                            {
-                              height: 25,
-                              width: 120,
-                              borderRadius: 5,
-                              marginTop: 13,
-                              backgroundColor: colors.lightBlack,
-                            },
-                          ]}>
-                          <TextWrapper
-                            children="Upload Images"
-                            isRequired={false}
-                            fontType={'semiBold'}
-                            style={{
-                              textAlign: 'center',
-                              fontSize: 12,
-                              color: colors.white,
-                            }}
-                          />
-                        </TouchableOpacity>
-                      </>
-                    )}
-
-                    <View style={[generalStyles.rowCenter, {marginRight: 20}]}>
-                      {potfolioImageUrl.map((item: any, index: number) => {
-                        return (
-                          <View
-                            key={index}
-                            style={[
-                              [generalStyles.rowCenter, {marginRight: 20}],
-                              {marginTop: 10},
-                            ]}>
-                            <TextWrapper
-                              children={item?.slice(-8)}
-                              isRequired={false}
-                              fontType={'semiBold'}
-                              style={{
-                                textAlign: 'center',
-                                fontSize: 12,
-                                color: colors.black,
-                              }}
-                            />
-                            <TouchableOpacity
-                              onPress={() => {
-                                setPotfolioImageUrl(
-                                  potfolioImageUrl.filter(
-                                    (text: any) => text !== item,
-                                  ),
-                                );
-                              }}>
-                              <Image
-                                source={images.cross}
-                                resizeMode="contain"
-                                style={{
-                                  width: 10,
-                                  height: 10,
-                                  marginLeft: 20,
-                                  tintColor: '#000',
-                                }}
-                              />
-                            </TouchableOpacity>
-                          </View>
-                        );
-                      })}
-                    </View>
-                    <Button
-                      onClick={() => {
-                        if (!shortDescription) {
-                          Snackbar.show({
-                            text: 'Please enter potfolio description',
-                            duration: Snackbar.LENGTH_SHORT,
-                            textColor: '#fff',
-                            backgroundColor: '#88087B',
-                          });
-                          return;
-                        }
-                        const data = {
-                          key: key,
-                          shortDescription: shortDescription,
-                          potfolioImages: potfolioImageUrl,
-                        };
-                        setKey(key + 1);
-                        if (editkey) {
-                          const objIndex = allPotfolio.findIndex(
-                            (obj: any) => obj.key == editkey,
-                          );
-                          allPotfolio[objIndex].potfolioImages =
-                            potfolioImageUrl;
-                          allPotfolio[objIndex].shortDescription =
-                            shortDescription;
-                          setAllPotfolio([...allPotfolio]);
-                        } else {
-                          setAllPotfolio([...allPotfolio, data]);
-                        }
-                        setEditKey(null);
-                        setShortDescription('');
-                        setPotfolioImageUrl([]);
-                        setPotfolioEnable(false);
-                      }}
-                      style={{
-                        width: 80,
-                        marginTop: 10,
-                        alignSelf: 'flex-end',
-                        backgroundColor: colors.lightBlack,
-                      }}
-                      textStyle={{color: colors.primary}}
-                      text={'Done'}
-                    />
-                  </View>
-                ) : (
-                  <ActivityIndicator
-                    style={{marginTop: 50}}
-                    size={'large'}
-                    color={colors.parpal}
-                  />
-                )}
-              </View>
-            ) : null} */}
-
-            {!isLoading ? (
-              <View style={{marginHorizontal: 25, marginTop: 75}}>
-                <Button
-                  onClick={() => {
-                    // handleProfileSetup();
-                    // navigation.navigate('ProfileStep3', {serviceId: data?.serviceId});
-                    // navigation.navigate('ProfileStep3', {serviceId: 'id_here'});
-                    // dispatch(
-                    //   addcompleteProfile({
-                    //     description: description,
-                    //     serviceIntro: [],
-                    //   }),
-                    // );
-                    // dispatch(addcompleteProfile({city: nationalityValue}));
-
-                    console.log(completeProfileData, 'here', allPotfolio);
-                    _handleFuncUpload();
-                  }}
-                  style={{
-                    marginBottom: 20,
-                    marginTop: 20,
-                    marginHorizontal: 40,
-                    backgroundColor: colors.lightBlack,
-                  }}
-                  textStyle={{color: colors.primary}}
-                  text={'Next'}
-                />
-              </View>
-            ) : (
-              <ActivityIndicator
-                style={{marginTop: 95, marginBottom: 40}}
-                size={'large'}
-                color={colors.parpal}
-              />
-            )}
-          </View>
         </View>
-        <View style={tw`h-30`} />
+        <View
+          style={{
+            zIndex: nationalityOpen ? 0 : 2,
+            marginTop: nationalityOpen ? 190 : 20,
+          }}>
+          {!isLoading ? (
+            <View style={{marginHorizontal: 25, marginTop: 75}}>
+              <Button
+                onClick={() => {
+                  // handleProfileSetup();
+                  // navigation.navigate('ProfileStep3', {serviceId: data?.serviceId});
+                  // navigation.navigate('ProfileStep3', {serviceId: 'id_here'});
+                  // dispatch(
+                  //   addcompleteProfile({
+                  //     description: description,
+                  //     serviceIntro: [],
+                  //   }),
+                  // );
+                  // dispatch(addcompleteProfile({city: nationalityValue}));
+                  console.log(completeProfileData, 'here', allPotfolio);
+                  console.log(nationalityValue);
+
+                  _handleFuncUpload();
+                }}
+                style={{
+                  marginBottom: 20,
+                  marginTop: 20,
+                  marginHorizontal: 40,
+                  backgroundColor: colors.lightBlack,
+                }}
+                textStyle={{color: colors.primary}}
+                text={'Next'}
+              />
+            </View>
+          ) : (
+            <ActivityIndicator
+              style={{marginTop: 95, marginBottom: 40}}
+              size={'large'}
+              color={colors.parpal}
+            />
+          )}
+        </View>
+        <View style={tw`h-60`} />
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
