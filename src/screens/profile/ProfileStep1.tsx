@@ -72,6 +72,8 @@ const PRofileStep1 = () => {
   const [selectCategory, setselectCategory] = useState('');
   const [subCategory, setsubCategory] = useState([]);
 
+  const [subLoading, setsubLoading] = useState(false);
+
   // const [getSubCategories] = useGetSubCategoriesQuery();
 
   const HandleGetSubCategory = async param => {
@@ -98,12 +100,14 @@ const PRofileStep1 = () => {
   const initSubGetCategory = async param => {
     // setisLoading(true);
     // console.log(param);
+    setsubLoading(true);
     const res: any = await getSubCategory(param);
     // console.log('ssssssss', res?.data?.data);
     if (res?.status === 201 || res?.status === 200) {
       // dispatch(addSubcategory(res?.data?.data?.services));
       set_getSubCategory(res?.data?.data?.services);
     }
+    setsubLoading(false);
     // setisLoading(false);
   };
 
@@ -360,59 +364,65 @@ const PRofileStep1 = () => {
                   </TextWrapper>
                 </CollapseHeader>
                 <CollapseBody>
-                  {_getSubCategory && _getSubCategory.length > 0 && (
-                    <View
-                      style={{
-                        borderColor: colors.primary,
-                        backgroundColor: colors.lightBlack,
-                        borderWidth: 2,
-                        flexDirection: 'row',
-                        flexWrap: 'wrap',
-                        width: '95%',
-                      }}>
-                      {_getSubCategory?.map((item: any, index: number) => {
-                        var offerStyle;
-                        if (index > 0) {
-                          offerStyle = {marginBottom: 25};
-                        }
-                        return (
-                          <TouchableOpacity
-                            key={index}
-                            onPress={() => {
-                              if (
-                                Array.isArray(category) &&
-                                category.length &&
-                                category.some(
-                                  catItem => catItem.name === item.name,
-                                )
-                              ) {
-                                dispatch(removeCategory(item));
-                              } else {
-                                dispatch(addCategory(item));
-                              }
-                              setCollapseState2(false);
-                              // console.log(category);
-                            }}
-                            style={{marginTop: 8}}>
-                            <TextWrapper
-                              fontType={'semiBold'}
-                              style={{
-                                color: category.some(
-                                  (catItem: {name: any}) =>
-                                    catItem.name === item.name,
-                                )
-                                  ? colors.primary
-                                  : colors.white,
-                                marginLeft: 11,
-                                marginRight: 8,
-                                marginBottom: 8,
-                              }}>
-                              {item?.name}
-                            </TextWrapper>
-                          </TouchableOpacity>
-                        );
-                      })}
-                    </View>
+                  {subLoading ? (
+                    <ActivityIndicator size={'large'} color={colors.primary} />
+                  ) : (
+                    <>
+                      {_getSubCategory && _getSubCategory.length > 0 && (
+                        <View
+                          style={{
+                            borderColor: colors.primary,
+                            backgroundColor: colors.lightBlack,
+                            borderWidth: 2,
+                            flexDirection: 'row',
+                            flexWrap: 'wrap',
+                            width: '95%',
+                          }}>
+                          {_getSubCategory?.map((item: any, index: number) => {
+                            var offerStyle;
+                            if (index > 0) {
+                              offerStyle = {marginBottom: 25};
+                            }
+                            return (
+                              <TouchableOpacity
+                                key={index}
+                                onPress={() => {
+                                  if (
+                                    Array.isArray(category) &&
+                                    category.length &&
+                                    category.some(
+                                      catItem => catItem.name === item.name,
+                                    )
+                                  ) {
+                                    dispatch(removeCategory(item));
+                                  } else {
+                                    dispatch(addCategory(item));
+                                  }
+                                  setCollapseState2(false);
+                                  // console.log(category);
+                                }}
+                                style={{marginTop: 8}}>
+                                <TextWrapper
+                                  fontType={'semiBold'}
+                                  style={{
+                                    color: category.some(
+                                      (catItem: {name: any}) =>
+                                        catItem.name === item.name,
+                                    )
+                                      ? colors.primary
+                                      : colors.white,
+                                    marginLeft: 11,
+                                    marginRight: 8,
+                                    marginBottom: 8,
+                                  }}>
+                                  {item?.name}
+                                </TextWrapper>
+                              </TouchableOpacity>
+                            );
+                          })}
+                        </View>
+                      )}
+                    </>
                   )}
                 </CollapseBody>
               </Collapse>

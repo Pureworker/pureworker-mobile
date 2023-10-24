@@ -20,10 +20,13 @@ import {getChatsbyuser} from '../../../utils/api/func';
 import {addchatList} from '../../../store/reducer/mainSlice';
 import socket from '../../../utils/socket';
 import ListComp from './ListComp';
+import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../../components/customLoading';
 
 const Index = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
+  const [isLoading, setisLoading] = useState(false);
 
   const chatList = useSelector((store: any) => store.user.chatList);
   const userData = useSelector((state: any) => state.user.userData);
@@ -32,11 +35,13 @@ const Index = () => {
   useEffect(() => {
     const handleFetch = async () => {
       // setloading(true);
+      setisLoading(true);
       const res: any = await getChatsbyuser('');
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addchatList(res?.data.chats));
         console.log(chatList);
       }
+      setisLoading(false);
       // setloading(false);
     };
     handleFetch();
@@ -215,6 +220,7 @@ const Index = () => {
           )}
         </View>
       </ScrollView>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
     </View>
   );
 };

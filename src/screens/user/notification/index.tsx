@@ -17,12 +17,17 @@ import Textcomp from '../../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import colors from '../../../constants/colors';
 import {SIZES, perHeight, perWidth} from '../../../utils/position/sizes';
-import {getProviderByService, getUserNotification} from '../../../utils/api/func';
+import {
+  getProviderByService,
+  getUserNotification,
+} from '../../../utils/api/func';
 import {
   addnotifications,
   addviewedNotifications,
 } from '../../../store/reducer/mainSlice';
 import NotificationComp from './NotifComp';
+import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../../components/customLoading';
 
 const Index = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -204,9 +209,9 @@ const Index = () => {
             </View>
           </View> */}
 
-        
+          <></>
 
-          {notifications !== null && notifications.length > 0 && (
+          {notifications !== null && notifications.length > 0 ? (
             <View
               style={[
                 tw`mx-auto`,
@@ -232,9 +237,31 @@ const Index = () => {
                 );
               })}
             </View>
+          ) : (
+            <>
+              <View style={[tw`flex-1 items-center`, {}]}>
+                <View style={[tw``, {marginTop: perHeight(90)}]}>
+                  <Image
+                    source={images.profile}
+                    style={{height: 120, width: 120}}
+                    resizeMode="contain"
+                  />
+                </View>
+                <View style={tw`mx-auto mt-8`}>
+                  <Textcomp
+                    text={'No Notifications'}
+                    size={14.5}
+                    lineHeight={16.5}
+                    color={'#000413'}
+                    fontFamily={'Inter-Bold'}
+                  />
+                </View>
+              </View>
+            </>
           )}
         </View>
       </ScrollView>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
   );
 };

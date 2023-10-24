@@ -846,3 +846,28 @@ export const f_deactivateAccount = async (data: any) => {
   }
 };
 
+export const _verifyID = async (data: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('verifyID func started', data);
+  try {
+    const response = await axios({
+      method: 'post',
+      url: `${API_BASE_URL}/provider/verify-business-identity`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+      data: data,
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+

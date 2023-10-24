@@ -63,6 +63,8 @@ const Congratulations = () => {
           />
           <Button
             onClick={() => {
+              navigation.navigate('Index');
+              navigation.navigate('Index');
               navigation.navigate('Home');
             }}
             style={{

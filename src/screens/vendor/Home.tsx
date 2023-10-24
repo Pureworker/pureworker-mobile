@@ -120,7 +120,7 @@ const Home = ({navigation}: any) => {
     };
     initGetOrders();
   }, []);
- 
+
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
   const _getCategory = useSelector((state: any) => state.user.category);
@@ -131,8 +131,8 @@ const Home = ({navigation}: any) => {
   const {currentState, setCurrentState} = useContext(RouteContext);
   const formStage = useSelector((state: any) => state.user.formStage);
 
-  console.log('stage',formStage);
-  
+  console.log('stage', formStage);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
@@ -504,39 +504,40 @@ const Home = ({navigation}: any) => {
             )}
           </View>
 
-          <TouchableOpacity
-            onPress={() => {
-              // navigation.navigate('ProfileStep1');
-              if (formStage === 1) {
-                navigation.navigate('ProfileStep1');
-              } else if (formStage === 2) {
-                navigation.navigate('ProfileStep2');
-              } else if (formStage === 3) {
-                navigation.navigate('ProfileStep3');
-              } else if (formStage === 4) {
-                navigation.navigate('ProfileStep4');
-              }
-              else {
-                navigation.navigate('ProfileStep5');
-              }
-            }}
-            style={[
-              tw`bg-[#2D303C] mx-auto items-center justify-center`,
-              {
-                width: perWidth(309),
-                height: perHeight(30),
-                borderRadius: 7,
-                marginTop: perHeight(43),
-              },
-            ]}>
-            <Textcomp
-              text={'Complete your registration to accept orders'}
-              size={14}
-              lineHeight={16}
-              color={colors.primary}
-              fontFamily={'Inter-Medium'}
-            />
-          </TouchableOpacity>
+          {formStage === 6 ? null : (
+            <TouchableOpacity
+              onPress={() => {
+                // navigation.navigate('ProfileStep4');
+                if (formStage === 1) {
+                  navigation.navigate('ProfileStep1');
+                } else if (formStage === 2) {
+                  navigation.navigate('ProfileStep2');
+                } else if (formStage === 3) {
+                  navigation.navigate('ProfileStep3');
+                } else if (formStage === 4) {
+                  navigation.navigate('ProfileStep4');
+                } else if (formStage === 5) {
+                  navigation.navigate('ProfileStep5');
+                }
+              }}
+              style={[
+                tw`bg-[#2D303C] mx-auto items-center justify-center`,
+                {
+                  width: perWidth(309),
+                  height: perHeight(30),
+                  borderRadius: 7,
+                  marginTop: perHeight(43),
+                },
+              ]}>
+              <Textcomp
+                text={'Complete your registration to accept orders'}
+                size={14}
+                lineHeight={16}
+                color={colors.primary}
+                fontFamily={'Inter-Medium'}
+              />
+            </TouchableOpacity>
+          )}
           <View style={tw`h-20`} />
         </ScrollView>
       </View>

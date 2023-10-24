@@ -30,7 +30,10 @@ import {
   CollapseBody,
 } from 'accordion-collapse-react-native';
 import Snackbar from 'react-native-snackbar';
-import {addcompleteProfile} from '../../store/reducer/mainSlice';
+import {addcompleteProfile, addformStage} from '../../store/reducer/mainSlice';
+import {_verifyID, completeProfile} from '../../utils/api/func';
+import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
 type Route = {
   key: string;
   name: string;
@@ -44,26 +47,84 @@ const ProfileStep4 = () => {
   const [idNumber, setIdNumber] = useState('');
   const [idName, setidName] = useState('');
   const route: Route = useRoute();
+const [isLoading, setisLoading] = useState(false);
 
   const category = useSelector((state: any) => state.user.pickedServices);
   const [collapseState, setCollapseState] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [selectedVerification, setSelectedVerification] = useState('');
   const [nationalityItems, setNationalityItems] = useState([
-    'Int. Passport',
-    'Drivers License',
-    'vNIN',
-    'Voters Card',
+    'NIN',
     'Bank Verification Number',
-    'Others',
+    // 'Int. Passport',
+    // 'Drivers License',
+    // 'Voters Card',
+    // 'Others',
   ]);
 
   const [login] = useLoginMutation();
-  const [createService, {isLoading}] = useCreateServiceMutation();
+  const [createService] = useCreateServiceMutation();
 
   // console.log('--pppp', completeProfileData);
 
   const dispatch = useDispatch();
+
+  const verifyID = async () => {
+    setisLoading(true);
+    const data = {
+      type: 'bvn',
+      number: idNumber,
+    };
+    const res = await _verifyID(data);
+    console.log(res, 'data-here', res?.data);
+
+    if (
+      (res?.status === 200 || res?.status === 201) &&
+      res?.data?.status === 'success'
+    ) {
+      dispatch(
+        addcompleteProfile({
+          identity: {
+            means:
+              selectedVerification === 'Bank Verification Number'
+                ? 'bvn'
+                : 'vNIN',
+            number: idNumber,
+          },
+        }),
+      );
+      //then save to db
+      const resp: any = await completeProfile({
+        identity: {
+          means:
+            selectedVerification === 'Bank Verification Number'
+              ? 'bvn'
+              : 'vNIN',
+          number: idNumber,
+        },
+      });
+      console.log('result', res?.data);
+      if (resp?.status === 200 || resp?.status === 201) {
+        // navigation.navigate('ProfileStep5', {
+        //   serviceId: route?.params?.serviceId,
+        // });
+        navigation.navigate('Congratulations');
+        dispatch(addformStage(6));
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+    }
+    setisLoading(false);
+  };
   const handleProfileSetup = () => {
     if (idNumber && selectedVerification) {
       const profileData = {
@@ -125,12 +186,11 @@ const ProfileStep4 = () => {
     }
   };
 
-  const handleProfileSetup2 = async () => {
-
-  }
+  const handleProfileSetup2 = async () => {};
 
   const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
   const getUser = getUserData ?? [];
+  const userData = useSelector((state: any) => state.user.userData);
 
   // console.log(getUserData,'asdf', getUser, getUser?.userType);
   console.log('mmmm', getUser?.user?.accountType?.toUpperCase());
@@ -158,17 +218,21 @@ const ProfileStep4 = () => {
             style={{fontSize: 20, marginTop: 30, color: colors.black}}
           />
           {/* For freelancers  */}
-          {getUser?.user?.accountType?.toUpperCase() === 'FREELANCER' && (
+          {(getUser?.user?.accountType?.toUpperCase() === 'FREELANCER' ||
+            userData?.accountType?.toUpperCase() === 'FREELANCER') && (
             <>
               <Collapse
+                // onToggle={() => {
+                //   if (!dataLoaded) {
+                //     setDataLoaded(true);
+                //   }
+                //   setcollapseState2(!collapseState2);
+                //   setCollapseState(!collapseState);
+                // }}
                 onToggle={() => {
-                  if (!dataLoaded) {
-                    setDataLoaded(true);
-                  }
                   setcollapseState2(!collapseState2);
-                  setCollapseState(!collapseState);
                 }}
-                isExpanded={false}
+                isExpanded={collapseState2}
                 style={{
                   justifyContent: 'center',
                   flexDirection: 'column',
@@ -195,7 +259,9 @@ const ProfileStep4 = () => {
                         fontSize: 14,
                         color: '#fff',
                       }}>
-                      Select a valid means of ID
+                      {selectedVerification
+                        ? selectedVerification
+                        : 'Select a valid means of ID'}
                     </TextWrapper>
                   </View>
                   {collapseState ? (
@@ -271,14 +337,19 @@ const ProfileStep4 = () => {
                 style={{fontSize: 13, marginTop: 25, color: colors.black}}
               />
               <TextInputs
-                style={{marginTop: 10, backgroundColor: colors.greyLight1}}
+                style={{
+                  marginTop: 10,
+                  backgroundColor: colors.greyLight1,
+                  paddingHorizontal: 10,
+                }}
                 labelText={''}
                 state={idNumber}
                 setState={setIdNumber}
               />
             </>
           )}
-          {(getUser?.user?.accountType?.toUpperCase() === 'PROVIDER' || getUser?.user?.accountType?.toUpperCase() === 'BUSINESS') && (
+          {(getUser?.user?.accountType?.toUpperCase() === 'PROVIDER' ||
+            getUser?.user?.accountType?.toUpperCase() === 'BUSINESS') && (
             <>
               <>
                 <TextWrapper
@@ -322,7 +393,8 @@ const ProfileStep4 = () => {
           {!isLoading ? (
             <Button
               onClick={() => {
-                handleProfileSetup();
+                // handleProfileSetup();
+                verifyID();
                 // navigation.navigate('ProfileStep5', {
                 //   serviceId: route?.params?.serviceId,
                 // });
@@ -344,6 +416,7 @@ const ProfileStep4 = () => {
           )}
         </View>
       </ScrollView>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
   );
 };

@@ -108,14 +108,6 @@ const ProfileStep5 = () => {
   const handleProfileSetup = async () => {
     setisLoading(true);
     if (date && time) {
-      // const profileData = {
-      //   scheduleDate: date.getTime(),
-      //   appointmentTime: time.getTime(),
-      //   serviceId: route?.params?.serviceId,
-      //   potfolios: [],
-      // };
-      // means: selectedVerification,
-      // number: idNumber,
       dispatch(
         addcompleteProfile({
           meetingSchedule: {
@@ -124,27 +116,23 @@ const ProfileStep5 = () => {
           },
         }),
       );
-
-      const processedData = processProfileData(_completeProfileData, category);
-      console.log('processedData', processedData);
-
-      // const kk = tdata2?.serviceIntro?.map((item, index) => {
-      //   if (index > 1) {
-      //     arr.push(item);
-      //   }
-      // });
-      // let total_data = _completeProfileData;
-      // tdata.serviceIntro =  [
-      //   {description: 'hello', service: '64eb9586d0ea85df8ffa4e52'},
-      //   {description: 'yeaap', service: '64eb9585d0ea85df8ffa4e4f'},
-      // ]
-      // let ff = {
-      //   ...tdata2,
-      // };
-      // console.log('here',tdata2);
-
-      const res = await completeProfile({...processedData});
-      console.log('result', res);
+      const _d = {
+        meetingSchedule: {
+          date: formatDateToCustomString(date),
+          time: formatDateToTime(time),
+        },
+      };
+      console.log(_d);
+      // const processedData = processProfileData(_completeProfileData, category);
+      // console.log('processedData', processedData);
+      // const res = await completeProfile({...processedData});
+      // console.log('result', res);
+      const res = await completeProfile({
+        meetingSchedule: {
+          date: formatDateToCustomString(date),
+          time: formatDateToTime(time),
+        },
+      });
 
       if (res?.status === 200 || res?.status === 201) {
         navigation.navigate('Congratulations');
@@ -160,22 +148,6 @@ const ProfileStep5 = () => {
           backgroundColor: '#88087B',
         });
       }
-      // createService(profileData).unwrap()
-      //   .then((data: any) => {
-      //     if (data) {
-      //       dispatch(emptyCategory());
-      //       navigation.navigate('Homes');
-      //     }
-      //   })
-      //   .catch((error: any) => {
-      //     console.log('err', error);
-      //     Snackbar.show({
-      //       text: error.data.message,
-      //       duration: Snackbar.LENGTH_SHORT,
-      //       textColor: '#fff',
-      //       backgroundColor: '#88087B',
-      //     });
-      //   });
     } else {
       Snackbar.show({
         text: 'Please fill all fields',

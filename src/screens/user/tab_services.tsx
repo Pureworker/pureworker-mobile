@@ -48,7 +48,7 @@ const TabServices = () => {
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
             marginTop:
@@ -149,23 +149,6 @@ const TabServices = () => {
               horizontal>
               <ScrollView scrollEnabled={false}>
                 {_getCategory?.map((item, index) => {
-                  // console.log(item);
-                  // return (
-                  //   <ScrollView scrollEnabled={false}>
-                  //   {_getCategory?.map((item, index) => {
-                  //     // console.log(item);
-                  //     return (
-                  //       <CategoryList2
-                  //         key={index}
-                  //         categoryName={item?.name}
-                  //         catId={item?.id}
-                  //         isOpen={item?.id === openDropdownId}
-                  //         onDropdownClick={handleDropdownClick}
-                  //       />
-                  //     );
-                  //   })}
-                  // </ScrollView>
-                  // );
                   return (
                     <CategoryList2
                       key={index}
@@ -180,6 +163,7 @@ const TabServices = () => {
             </ScrollView>
           </View>
         </View>
+        <View style={tw`h-20`}/>
       </ScrollView>
     </View>
   );

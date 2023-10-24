@@ -18,6 +18,8 @@ import tw from 'twrnc';
 import {useDispatch, useSelector} from 'react-redux';
 import {addcompleteProfile, addformStage} from '../../store/reducer/mainSlice';
 import {completeProfile} from '../../utils/api/func';
+import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
 type Route = {
   key: string;
   name: string;
@@ -61,8 +63,9 @@ const ProfileStep3 = () => {
     completeProfileData?.contact?.[1]?.address || '',
   );
   const route: Route = useRoute();
+  const [isLoading, setisLoading] = useState(false);
 
-  const [createService, {isLoading}] = useCreateServiceMutation();
+  const [createService] = useCreateServiceMutation();
 
   const dispatch = useDispatch();
 
@@ -119,6 +122,7 @@ const ProfileStep3 = () => {
           contact: contact,
         }),
       );
+      setisLoading(true);
       const res: any = await completeProfile({contact: contact});
       console.log('result', res?.data);
       if (res?.status === 200 || res?.status === 201) {
@@ -138,6 +142,7 @@ const ProfileStep3 = () => {
           backgroundColor: '#88087B',
         });
       }
+      setisLoading(false);
     } else {
       Snackbar.show({
         text: 'Please fill all fields',
@@ -146,6 +151,7 @@ const ProfileStep3 = () => {
         backgroundColor: '#88087B',
       });
     }
+    setisLoading(false);
   };
 
   return (
@@ -389,6 +395,7 @@ const ProfileStep3 = () => {
           <View style={{height: 50}} />
         </View>
       </ScrollView>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
   );
 };

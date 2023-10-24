@@ -141,9 +141,10 @@ const TokenVerification = () => {
       if (res?.status === 200 || res?.status === 201) {
         dispatch(
           loggedIn({
-            token: res?.data?.message?.token,
-            // res?.message?.data?.token,
-            type: res?.data?.message?.user?.accountType?.toUpperCase(),
+            // token: res?.data?.message?.token,
+            // type: res?.data?.message?.user?.accountType?.toUpperCase(),
+            token: res?.data?.token,
+            type: res?.data?.user.accountType?.toUpperCase(),
           }),
         );
       } else {

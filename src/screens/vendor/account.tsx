@@ -25,13 +25,16 @@ import {generalStyles} from '../../constants/generalStyles';
 import {launchImageLibrary} from 'react-native-image-picker';
 import storage from 'redux-persist/es/storage';
 import {addProfileData, addUserData} from '../../store/reducer/mainSlice';
-import {getProfile, getUser} from '../../utils/api/func';
+import {getProfile, getUser, uploadAssetsDOCorIMG} from '../../utils/api/func';
+import FastImage from 'react-native-fast-image';
+import CustomLoading from '../../components/customLoading';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const Account = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
 
-  //
+  const [isLoading, setisLoading] = useState(false);
   const profileData = useSelector((state: any) => state.user.profileData);
   //
 
@@ -39,7 +42,7 @@ const Account = () => {
   const [profileImageLoading, setProfileImageLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(profileData?.profilePic || '');
   let profilePicture = useRef('');
-  const [description, setDescription] = useState( profileData?.description || '');
+  const [description, setDescription] = useState(profileData?.description);
 
   const category = useSelector((state: any) => state.user.pickedServices);
   const userData = useSelector((state: any) => state.user.userData);
@@ -47,13 +50,47 @@ const Account = () => {
   useEffect(() => {
     const initGetProfile = async () => {
       const res: any = await getProfile(userData?._id);
-      console.log('dddddddd', res?.data);
+      console.log('dddddddd-----', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addProfileData(res?.data?.profile));
       }
     };
     initGetProfile();
   }, [dispatch]);
+
+    //image upload
+    const options = {mediaType: 'photo', selectionLimit: 1};
+    const openLibraryfordp = () => {
+      console.log('called logo');
+      launchImageLibrary(options, async (resp: unknown) => {
+        if (resp?.assets?.length > 0) {
+          console.log('resp', resp?.assets[0]);
+          // setPhotoUri(resp?.assets[0].uri);
+          setImageUrl(resp?.assets[0].uri);
+          const data = await uploadImgorDoc(resp?.assets[0]);
+          console.warn('processed pic', data);
+          dispatch(addcompleteProfile({profilePic: data}));
+        }
+      });
+      // launchCamera
+    };
+    const uploadImgorDoc = async (param: {
+      uri: string;
+      name: string | null;
+      copyError: string | undefined;
+      fileCopyUri: string | null;
+      type: string | null;
+      size: number | null;
+    }) => {
+      setisLoading(true);
+      const res: any = await uploadAssetsDOCorIMG(param);
+      if (res?.status === 201 || res?.status === 200) {
+        console.log('ApartmentType', res?.data);
+        setisLoading(false);
+        return res?.data?.doc?.url;
+      }
+      setisLoading(false);
+    };
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -112,7 +149,8 @@ const Account = () => {
               ]}>
               {!profileImageLoading ? (
                 <>
-                  {!imageUrl ? (
+                  {!profileData?.profilePic && imageUrl?.length < 1 ? (
+                    
                     <TextWrapper
                       children="Upload Profile Photo"
                       fontType={'semiBold'}
@@ -123,9 +161,21 @@ const Account = () => {
                       }}
                     />
                   ) : (
-                    <Image
-                      source={{uri: imageUrl}}
-                      style={{width: 145, height: 145, borderRadius: 145}}
+                    <FastImage
+                      style={[
+                        tw``,
+                        {
+                          width: 145,
+                          height: 145,
+                          borderRadius: 145,
+                        },
+                      ]}
+                      source={{
+                        uri: profileData?.profilePic || imageUrl,
+                        headers: {Authorization: 'someAuthToken'},
+                        priority: FastImage.priority.normal,
+                      }}
+                      resizeMode={FastImage.resizeMode.cover}
                     />
                   )}
                 </>
@@ -179,6 +229,7 @@ const Account = () => {
                   //   console.log('error', error);
                   //   setProfileImageLoading(false);
                   // }
+                  openLibraryfordp();
                 }}>
                 <Image
                   source={images.edit}
@@ -211,7 +262,6 @@ const Account = () => {
             fontType={'semiBold'}
             style={{fontSize: 16, marginTop: 20, color: colors.black}}
           />
-
           <View
             style={{
               height: 130,
@@ -279,7 +329,10 @@ const Account = () => {
                       <TouchableOpacity
                         onPress={() => {
                           // dispatch(removeCategory(item));
-                          navigation.navigate('EditService', {index: index, name: item?.name});
+                          navigation.navigate('EditService', {
+                            index: index,
+                            name: item?.name,
+                          });
                         }}>
                         <Image
                           source={images.edit}
@@ -313,6 +366,7 @@ const Account = () => {
         </View>
         <View style={tw`h-30`} />
       </ScrollView>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
   );
 };

@@ -60,7 +60,7 @@ const PRofileStep2 = () => {
   const [potfolioEnable, setPotfolioEnable] = useState(false);
   const [allPotfolio, setAllPotfolio] = useState<any>([]);
   const [key, setKey] = useState<any>(1);
-  const [editkey, setEditKey] = useState<any>(null); 
+  const [editkey, setEditKey] = useState<any>(null);
   const [isLoading, setisLoading] = useState(false);
 
   const category = useSelector((state: any) => state.user.pickedServices);
@@ -77,19 +77,19 @@ const PRofileStep2 = () => {
   let potfolioPicture = useRef('');
   let profilePicture = useRef('');
   // console.log('nationalityItems', nationalityItems);
-  console.log('--ggggggg', nationalityValue);
+  // console.log('--ggggggg', nationalityValue);
   const [portfolioToServiceCount, setportfolioToServiceCount] = useState([]);
   const completeProfileData = useSelector(
     (state: any) => state.user.completeProfileData,
   );
-  console.error('yeap', completeProfileData);
+  // console.error('yeap', completeProfileData);
   useEffect(() => {
     setNationalityItems([...allCountry]);
   }, []);
   const currentServiceIntro = useSelector(
     (state: any) => state.user.completeProfileData?.serviceIntro,
   );
-  console.log(category);
+  // console.log(category);
 
   useEffect(() => {
     if (category?.length) {
@@ -140,7 +140,7 @@ const PRofileStep2 = () => {
       dispatch(addcompleteProfile({priceRange: updatedPriceRange}));
     }
     setDescription(completeProfileData?.description);
-  }, [category]); 
+  }, [category]);
   const currentPriceRange = useSelector(
     (state: any) => state.user.completeProfileData?.priceRange,
   );
@@ -227,18 +227,6 @@ const PRofileStep2 = () => {
     setisLoading(true);
     if (completeProfileData) {
       const duplicate = completeProfileData;
-      // duplicate.serviceIntro?.map(
-      //   (item: {service: any}, index: string | number) => {
-      //     item.service = categoryId[index];
-      //   },
-      // );
-      // duplicate?.priceRange?.map((item, index) => {
-      //   item.maxPrice = item.priceMax;
-      //   item.minPrice = item.priceMin;
-      // });
-      // duplicate.serviceIntro = duplicate.serviceIntro?.filter(
-      //   (item: {service: undefined}) => item.service !== undefined,
-      // );
       duplicate?.priceRange?.map(
         (item: {
           maxPrice: any;
@@ -254,6 +242,8 @@ const PRofileStep2 = () => {
         item.service = duplicate?.priceRange?.[index]?.service;
         delete item.id;
       });
+
+      duplicate.serviceIntro = duplicate.serviceIntro.filter(item => item.service !== undefined);
 
       // const profileData = {
       //   profilePicture: imageUrl,
@@ -276,7 +266,6 @@ const PRofileStep2 = () => {
         serviceIntro: duplicate.serviceIntro,
         portfolio: null,
       };
-
       // const d = {
       //   geoLocation: {
       //     type: 'Point',
@@ -339,16 +328,17 @@ const PRofileStep2 = () => {
       //       address: 'oojo',
       //     },
       //   ],
-      //   identity: {
-      //     means: 'vNIN',
-      //     number: '12345678987',
-      //   },
-      //   meetingSchedule: {
-      //     date: 'Fri Sep 01 2023 01:00:00 GMT+0100 (West Africa Standard Time)',
-      //     time: '10:00 am',
-      //   },
+        // identity: {
+        //   means: 'vNIN',
+        //   number: '12345678987',
+        // },
+        // meetingSchedule: {
+        //   date: 'Fri Sep 01 2023 01:00:00 GMT+0100 (West Africa Standard Time)',
+        //   time: '10:00 am',
+        // },
       // };
-      const res = await completeProfile({...profileData});
+      console.log('res-data', profileData);
+      const res = await completeProfile(profileData);
       console.log('result', res?.data);
 
       if (res?.status === 200 || res?.status === 201) {
@@ -377,7 +367,6 @@ const PRofileStep2 = () => {
     }
     setisLoading(false);
   };
-
   //image upload
   const options = {mediaType: 'photo', selectionLimit: 1};
   const openLibraryfordp = () => {
@@ -934,8 +923,9 @@ const PRofileStep2 = () => {
                   //   }),
                   // );
                   // dispatch(addcompleteProfile({city: nationalityValue}));
-                  console.log(completeProfileData, 'here', allPotfolio);
-                  console.log(nationalityValue);
+
+                  // console.log(completeProfileData, 'here', allPotfolio);
+                  // console.log(nationalityValue);
 
                   _handleFuncUpload();
                 }}
