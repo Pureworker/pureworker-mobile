@@ -1,10 +1,13 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
   View,
-  ActivityIndicator,
   Image,
+  ActivityIndicator,
+  TextInput,
+  Platform,
   ScrollView,
   TouchableOpacity,
+  PermissionsAndroid,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
@@ -13,25 +16,55 @@ import images from '../../constants/images';
 import Button from '../../components/Button';
 import TextWrapper from '../../components/TextWrapper';
 import commonStyle from '../../constants/commonStyle';
+import tw from 'twrnc';
 import {
   useCreateServiceMutation,
   useGetCategoryQuery,
   useGetUserDetailQuery,
-  useLoginMutation,
 } from '../../store/slice/api';
 import colors from '../../constants/colors';
 import {useDispatch, useSelector} from 'react-redux';
+import {
+  HEIGHT_SCREEN,
+  WIDTH_WINDOW,
+  generalStyles,
+} from '../../constants/generalStyles';
 import ProfileStepWrapper from '../../components/ProfileStepWrapper';
 import TextInputs from '../../components/TextInputs';
-
+import DropDownPicker from 'react-native-dropdown-picker';
+import PotfolioWrapper from '../../components/PotfolioWrapper';
 import {
-  Collapse,
-  CollapseHeader,
-  CollapseBody,
-} from 'accordion-collapse-react-native';
+  allCities,
+  allCountry,
+  // launchCamera,
+  // launchImageLibrary,
+} from '../../constants/utils';
 import Snackbar from 'react-native-snackbar';
-import {addcompleteProfile} from '../../store/reducer/mainSlice';
-import {perWidth} from '../../utils/position/sizes';
+import storage from '@react-native-firebase/storage';
+import Portfoliocomp from '../../components/Portfolio';
+import {SIZES, perWidth} from '../../utils/position/sizes';
+import {
+  completeProfile,
+  getProfile,
+  uploadAssetsDOCorIMG,
+} from '../../utils/api/func';
+import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {
+  addProfileData,
+  addcompleteProfile,
+  addformStage,
+} from '../../store/reducer/mainSlice';
+import FastImage from 'react-native-fast-image';
+import ServiceIntroComp from '../../components/serviceIntro';
+import ServicePriceComp from '../../components/servicePrice';
+import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
+import {RouteContext} from '../../utils/context/route_context';
+import Services from '../user/services';
+import {FlatList} from 'react-native-gesture-handler';
+import PortComp from './comp/portComp';
+import {ToastShort} from '../../utils/utils';
 type Route = {
   key: string;
   name: string;
@@ -40,7 +73,7 @@ type Route = {
   };
 };
 
-const ProfileStep4 = () => {
+const ProfileStep21 = () => {
   const navigation = useNavigation<StackNavigation>();
   const [idNumber, setIdNumber] = useState('');
   const [idName, setidName] = useState('');
@@ -58,82 +91,139 @@ const ProfileStep4 = () => {
     'Bank Verification Number',
     'Others',
   ]);
-
-  const [login] = useLoginMutation();
-  const [createService, {isLoading}] = useCreateServiceMutation();
-
-  // console.log('--pppp', completeProfileData);
-
+  const [allPotfolio, setAllPotfolio] = useState<any>([]);
+  const [description, setDescription] = useState('');
+  const [shortDescription, setShortDescription] = useState('');
+  const [imageObject, setImageObject] = useState({});
+  const [potfolioImageUrl, setPotfolioImageUrl] = useState<any>([]);
+  const [isLoading, setisLoading] = useState(false);
+  const [createService] = useCreateServiceMutation();
   const dispatch = useDispatch();
-  const handleProfileSetup = () => {
-    if (idNumber && selectedVerification) {
-      const profileData = {
-        serviceId: route?.params?.serviceId,
-        idNumber: idNumber,
-        potfolios: [],
-        scheduleDate: null,
-        appointmentTime: null,
-      };
+  const handleProfileSetup = async () => {
+    if (portfolioToServiceCount?.length > 0) {
+      const payload_data = portfolioToServiceCount;
+      const payload_data2 = payload_data;
+      const payload_data1 = payload_data;
 
-      if (getUser?.user?.accountType?.toUpperCase() === 'FREELANCER') {
-        dispatch(
-          addcompleteProfile({
-            identity: {
-              means: selectedVerification,
-              number: idNumber,
-            },
-          }),
-        );
+      if (serviceList?.length < 1 || !serviceList) {
+        ToastShort('ServiceList is null');
+        return;
       }
-      if (getUser?.user?.accountType?.toUpperCase() === 'BUSINESS') {
-        dispatch(
-          addcompleteProfile({
-            identity: {
-              businessName: selectedVerification,
-              cac: idNumber,
-            },
-          }),
+      payload_data1?.map((item, index) => {
+        const name = item.service;
+        const filteredObject = serviceList?.filter(
+          (obj: any) => obj?.label === name,
         );
-      }
-      navigation.navigate('ProfileStep5', {
-        serviceId: route?.params?.serviceId,
+        // console.log('here', filteredObject);
+        if (filteredObject?.[0]?._id) {
+          payload_data2[index].service = filteredObject?.[0]?._id;
+        } else {
+          console.error('error on modification', filteredObject);
+        }
       });
-      // createService(profileData)
-      //   .unwrap()
-      //   .then((data: any) => {
-      //     if (data) {
-      //       navigation.navigate('ProfileStep5', {
-      //         serviceId: route?.params?.serviceId,
-      //       });
-      //     }
-      //   })
-      //   .catch((error: any) => {
-      //     console.log('err', error);
-      //     Snackbar.show({
-      //       text: error.data.message,
-      //       duration: Snackbar.LENGTH_SHORT,
-      //       textColor: '#fff',
-      //       backgroundColor: '#88087B',
-      //     });
-      //   });
+      console.log(payload_data2);
+      //
+      setisLoading(true);
+      const res: any = await completeProfile({portfolio: payload_data});
+      console.log('result', res?.data);
+      if (res?.status === 200 || res?.status === 201) {
+        navigation.navigate('ProfileStep3');
+        dispatch(addformStage(3));
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+      setisLoading(false);
+
+      //
     } else {
       Snackbar.show({
-        text: 'Please fill all fields',
+        text: 'Please fill add atleast 1 portfolio',
         duration: Snackbar.LENGTH_SHORT,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
     }
   };
-
-  const handleProfileSetup2 = async () => {};
-
   const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
   const getUser = getUserData ?? [];
+  const [nationalityOpen, setNationalityOpen] = useState(false);
+  const [portfolioToServiceCount, setportfolioToServiceCount] = useState([
+    {
+      service: '',
+      description: '',
+      images: [],
+    },
+  ]);
+  const completeProfileData = useSelector(
+    (state: any) => state.user.completeProfileData,
+  );
+  const [serviceList, setserviceList] = useState([]);
+  const [pictures, setpictures] = useState([]);
+  const [desp1, setdesp1] = useState('');
+  const options = {mediaType: 'photo', selectionLimit: 3};
+  const openLibraryfordp = () => {
+    launchImageLibrary(options, async (resp: unknown) => {
+      if (resp?.assets?.length > 0) {
+        console.log('resp', resp?.assets);
+        let arr = [];
+        resp?.assets?.map(item => {
+          arr.push(item?.uri);
+        });
 
-  // console.log(getUserData,'asdf', getUser, getUser?.userType);
-  console.log('mmmm', getUser?.user?.accountType?.toUpperCase());
-
+        setpictures(arr);
+        // setPhotoUri(resp?.assets[0].uri);
+        // setImageUrl(resp?.assets[0].uri);
+        // const data = await uploadImgorDoc(resp?.assets[0]);
+        // console.warn('processed pic', data);
+        // dispatch(addcompleteProfile({profilePic: data}));
+        // const res: any = await completeProfile({profilePic: data});
+      }
+    });
+    // launchCamera
+  };
+  const [genderItems, setGenderItems] = useState([
+    {label: 'Male', value: 'Male'},
+    {label: 'Female', value: 'Female'},
+    {label: 'Choose not to answer', value: 'Choose not to answer'},
+  ]);
+  const userData = useSelector((state: any) => state.user.userData);
+  useEffect(() => {
+    const initGetProfile = async () => {
+      const res: any = await getProfile(userData?._id);
+      console.log(
+        'profile-----',
+        res?.data,
+        'services:',
+        res?.data?.profile?.services,
+      );
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addProfileData(res?.data?.profile));
+        let arr = [];
+        res?.data?.profile?.services?.map(item => {
+          arr.push({...item, label: item?.name});
+        });
+        setserviceList(arr);
+      }
+    };
+    initGetProfile();
+  }, []);
+  // Function to handle changes in a portfolio item
+  const handlePortfolioItemChange = (index: any, updatedData: any) => {
+    // Create a copy of the current portfolio data
+    const updatedPortfolioData = [...portfolioToServiceCount];
+    updatedPortfolioData[index] = updatedData; // Update the data at the specified index
+    setportfolioToServiceCount(updatedPortfolioData); // Update the state with the new data
+    console.log('All Data here', updatedPortfolioData);
+  };
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
       <Header
@@ -150,7 +240,7 @@ const ProfileStep4 = () => {
       <ScrollView>
         <View style={{marginHorizontal: 20}}>
           <TextWrapper
-            children="Identity Verification"
+            children="Portfolio Upload"
             fontType={'semiBold'}
             style={{fontSize: 20, marginTop: 30, color: colors.black}}
           />
@@ -191,16 +281,38 @@ const ProfileStep4 = () => {
                 />
               );
             })}
+
+            <View>
+              {portfolioToServiceCount?.map((item, index) => {
+                return (
+                  <PortComp
+                    key={index}
+                    lindex={index}
+                    dlist={serviceList}
+                    portfolioData={portfolioToServiceCount}
+                    handlePortfolioItemChange={(i: any, data: any) =>
+                      handlePortfolioItemChange(index, data)
+                    }
+                  />
+                );
+              })}
+            </View>
+
             <TouchableOpacity
               style={[
-                tw`bg-[${colors.darkPurple}] py-3 rounded-lg ml-auto items-center justify-center`,
+                tw`bg-[${colors.darkPurple}] py-3 mt-4 rounded-lg ml-auto items-center justify-center`,
                 {width: perWidth(175)},
               ]}
               onPress={() => {
-                // if (allPotfolio.length < 3) {
-                //   setPotfolioEnable(true);
-                // }
-                setportfolioToServiceCount([...portfolioToServiceCount, 1]);
+                const newPortfolioItem = {
+                  service: '',
+                  description: '',
+                  images: [],
+                };
+                setportfolioToServiceCount([
+                  ...portfolioToServiceCount,
+                  newPortfolioItem,
+                ]);
               }}>
               <TextWrapper
                 children={`Add ${
@@ -211,14 +323,6 @@ const ProfileStep4 = () => {
                 style={{fontSize: 16, color: colors.white}}
               />
             </TouchableOpacity>
-
-            <View>
-              {portfolioToServiceCount?.map((item, index) => {
-                return (
-                  <Portfoliocomp key={index} servicePrice={servicePrice} />
-                );
-              })}
-            </View>
 
             {allPotfolio.length === 3 && (
               <View
@@ -259,15 +363,12 @@ const ProfileStep4 = () => {
                     // handleProfileSetup();
                     // navigation.navigate('ProfileStep3', {serviceId: data?.serviceId});
                     // navigation.navigate('ProfileStep3', {serviceId: 'id_here'});
-                    // dispatch(
-                    //   addcompleteProfile({
-                    //     description: description,
-                    //     serviceIntro: [],
-                    //   }),
-                    // );
                     // dispatch(addcompleteProfile({city: nationalityValue}));
                     //   console.log(completeProfileData, 'here', allPotfolio);
                     //   _handleFuncUpload();
+                    handleProfileSetup();
+                    // console.log('chech-here', portfolioToServiceCount);
+                    console.log('modified data2', portfolioToServiceCount);
                   }}
                   style={{
                     marginBottom: 20,
@@ -288,7 +389,7 @@ const ProfileStep4 = () => {
             )}
           </View>
 
-          {!isLoading ? (
+          {/* {!isLoading ? (
             <Button
               onClick={() => {
                 handleProfileSetup();
@@ -310,11 +411,11 @@ const ProfileStep4 = () => {
               size={'large'}
               color={colors.parpal}
             />
-          )}
+          )} */}
         </View>
       </ScrollView>
     </View>
   );
 };
 
-export default ProfileStep4;
+export default ProfileStep21;

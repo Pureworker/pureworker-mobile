@@ -53,7 +53,30 @@ import FastImage from 'react-native-fast-image';
 import socket from '../../utils/socket';
 import Spinner from 'react-native-loading-spinner-overlay';
 
+import Geolocation from 'react-native-geolocation-service';
+import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 const Home = () => {
+  useEffect(() => {
+    //Request location permission
+    request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+      .then(result => {
+        if (result === RESULTS.GRANTED) {
+          // Permission granted, get user's location
+          Geolocation.getCurrentPosition(
+            (position: any) => {
+              const {latitude, longitude} = position.coords;
+              console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+            },
+            (error: any) => console.error(error),
+            {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+          );
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [search, setSearch] = useState('');

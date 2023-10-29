@@ -241,7 +241,6 @@ const AddServices = () => {
             ),
         ),
       ];
-
       // Update the Redux store with the updated array
       setServicePrice([...updatedPriceRange]);
       dispatch(addcompleteProfile({priceRange: updatedPriceRange}));

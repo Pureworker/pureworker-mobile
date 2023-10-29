@@ -226,7 +226,8 @@ const PRofileStep2 = () => {
   const _handleFuncUpload = async () => {
     setisLoading(true);
     if (completeProfileData) {
-      const duplicate = completeProfileData;
+      const dup = completeProfileData;
+      let duplicate = dup;
       duplicate?.priceRange?.map(
         (item: {
           maxPrice: any;
@@ -243,7 +244,9 @@ const PRofileStep2 = () => {
         delete item.id;
       });
 
-      duplicate.serviceIntro = duplicate.serviceIntro.filter(item => item.service !== undefined);
+      duplicate.serviceIntro = duplicate.serviceIntro.filter(
+        item => item.service !== undefined,
+      );
 
       // const profileData = {
       //   profilePicture: imageUrl,
@@ -256,16 +259,23 @@ const PRofileStep2 = () => {
       // };
       const profileData = {
         profilePic: completeProfileData?.profilePic || imageUrl,
-        description: completeProfileData?.description || description,
+        description: description
+          ? description
+          : completeProfileData?.description
+          ? completeProfileData?.description
+          : '',
+        priceRange: duplicate.priceRange,
+        serviceIntro: duplicate.serviceIntro,
         // servicesDescription: JSON.stringify(servicesDescription),
         // servicePrice: JSON.stringify(servicePrice),
         // city: nationalityValue,
         // potfolios: allPotfolio,
         // serviceId: '',
-        priceRange: duplicate.priceRange,
-        serviceIntro: duplicate.serviceIntro,
-        portfolio: null,
+        // portfolio: null,
       };
+
+      console.log('All Item Here', profileData);
+
       // const d = {
       //   geoLocation: {
       //     type: 'Point',
@@ -328,23 +338,25 @@ const PRofileStep2 = () => {
       //       address: 'oojo',
       //     },
       //   ],
-        // identity: {
-        //   means: 'vNIN',
-        //   number: '12345678987',
-        // },
-        // meetingSchedule: {
-        //   date: 'Fri Sep 01 2023 01:00:00 GMT+0100 (West Africa Standard Time)',
-        //   time: '10:00 am',
-        // },
+      // identity: {
+      //   means: 'vNIN',
+      //   number: '12345678987',
+      // },
+      // meetingSchedule: {
+      //   date: 'Fri Sep 01 2023 01:00:00 GMT+0100 (West Africa Standard Time)',
+      //   time: '10:00 am',
+      // },
       // };
       console.log('res-data', profileData);
       const res = await completeProfile(profileData);
       console.log('result', res?.data);
 
       if (res?.status === 200 || res?.status === 201) {
-        navigation.navigate('ProfileStep3');
+        // navigation.navigate('ProfileStep3');
+        navigation.navigate('ProfileStep21');
         // setCurrentState('3');
-        dispatch(addformStage(3));
+        // dispatch(addformStage(3));
+        dispatch(addformStage(21));
       } else {
         Snackbar.show({
           text: res?.error?.message
@@ -370,7 +382,6 @@ const PRofileStep2 = () => {
   //image upload
   const options = {mediaType: 'photo', selectionLimit: 1};
   const openLibraryfordp = () => {
-    console.log('called logo');
     launchImageLibrary(options, async (resp: unknown) => {
       if (resp?.assets?.length > 0) {
         console.log('resp', resp?.assets[0]);
@@ -379,6 +390,7 @@ const PRofileStep2 = () => {
         const data = await uploadImgorDoc(resp?.assets[0]);
         console.warn('processed pic', data);
         dispatch(addcompleteProfile({profilePic: data}));
+        const res: any = await completeProfile({profilePic: data});
       }
     });
     // launchCamera
@@ -389,7 +401,6 @@ const PRofileStep2 = () => {
       selectionLimit: 1,
       cameraType: 'front',
     };
-    console.log('called logo');
     try {
       if (Platform.OS === 'ios') {
         const openCamera = async () => {
@@ -397,7 +408,6 @@ const PRofileStep2 = () => {
 
           if (cameraStatus === RESULTS.GRANTED) {
             // Camera permission is granted, open camera here
-            console.log('Camera permission granted');
             await launchCamera(options, async (resp: unknown) => {
               if (resp?.assets?.length > 0) {
                 console.log('resp', resp?.assets[0]);
@@ -411,7 +421,6 @@ const PRofileStep2 = () => {
             const newCameraStatus = await request(PERMISSIONS.IOS.CAMERA);
             if (newCameraStatus === RESULTS.GRANTED) {
               // Camera permission granted after request, open camera
-              console.log('Camera permission granted after request');
               await launchCamera(options, async (resp: unknown) => {
                 if (resp?.assets?.length > 0) {
                   console.log('resp', resp?.assets[0]);
@@ -928,6 +937,19 @@ const PRofileStep2 = () => {
                   // console.log(nationalityValue);
 
                   _handleFuncUpload();
+
+                  // const profileData = {
+                  //   profilePic: completeProfileData?.profilePic || imageUrl,
+                  //   description: description
+                  //     ? description
+                  //     : completeProfileData?.description
+                  //     ? completeProfileData?.description
+                  //     : '',
+
+                  //   priceRange: completeProfileData.priceRange,
+                  //   serviceIntro: completeProfileData.serviceIntro,
+                  // };
+                  // console.log(profileData);
                 }}
                 style={{
                   marginBottom: 20,

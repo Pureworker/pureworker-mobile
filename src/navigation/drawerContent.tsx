@@ -39,10 +39,12 @@ const DrawerContent = () => {
       route: 'DeactivateAccount',
       icon: images.deactivte,
     },
-    {label: 'Privacy Policy', 
-    // route: 'AddAddress', 
-    route: 'PrivacyPolicy',
-    icon: images.support},
+    {
+      label: 'Privacy Policy',
+      // route: 'AddAddress',
+      route: 'PrivacyPolicy',
+      icon: images.support,
+    },
   ];
   const dispatch = useDispatch();
   const [InfoModal, setInfoModal] = useState(false);
@@ -81,7 +83,7 @@ const DrawerContent = () => {
   };
   const initGetUsers = async () => {
     const res: any = await getUser('');
-    console.log('dddddddd', res?.data?.user);
+    console.log('drawerdata', res?.data?.user);
     if (res?.status === 201 || res?.status === 200) {
       dispatch(addUserData(res?.data?.user));
       setPhotoUri(userData?.profilePic);
@@ -173,7 +175,9 @@ const DrawerContent = () => {
               <FastImage
                 style={{width: 50, height: 50, borderRadius: 25}}
                 source={{
-                  uri: 'https://res.cloudinary.com/dr0pef3mn/image/upload/v1694546301/pure/1694546297671-profile-picture.png.png',
+                  uri:
+                    userData?.profilePic ||
+                    'https://res.cloudinary.com/dr0pef3mn/image/upload/v1694546301/pure/1694546297671-profile-picture.png.png',
                   headers: {Authorization: 'someAuthToken'},
                   priority: FastImage.priority.normal,
                 }}

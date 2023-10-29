@@ -62,18 +62,13 @@ const PRofileStep1 = () => {
     (state: any) => state.user.completeProfileData,
   );
   const dispatch = useDispatch();
-
   console.log(completeProfileData, category);
-
   //
   const [collapseState, setCollapseState] = useState(false);
   const [collapseState2, setCollapseState2] = useState(false);
-
   const [selectCategory, setselectCategory] = useState('');
   const [subCategory, setsubCategory] = useState([]);
-
   const [subLoading, setsubLoading] = useState(false);
-
   // const [getSubCategories] = useGetSubCategoriesQuery();
 
   const HandleGetSubCategory = async param => {
@@ -153,6 +148,7 @@ const PRofileStep1 = () => {
   };
 
   const handleNext = async () => {
+    console.log(categoryId);
     await handleProfileSetup();
     // const data = completeProfileData;
     // data.services = category;

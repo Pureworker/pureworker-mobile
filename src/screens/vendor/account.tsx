@@ -24,11 +24,21 @@ import TextWrapper from '../../components/TextWrapper';
 import {generalStyles} from '../../constants/generalStyles';
 import {launchImageLibrary} from 'react-native-image-picker';
 import storage from 'redux-persist/es/storage';
-import {addProfileData, addUserData} from '../../store/reducer/mainSlice';
-import {getProfile, getUser, uploadAssetsDOCorIMG} from '../../utils/api/func';
+import {
+  addProfileData,
+  addUserData,
+  addcompleteProfile,
+} from '../../store/reducer/mainSlice';
+import {
+  completeProfile,
+  getProfile,
+  getUser,
+  uploadAssetsDOCorIMG,
+} from '../../utils/api/func';
 import FastImage from 'react-native-fast-image';
 import CustomLoading from '../../components/customLoading';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Snackbar from 'react-native-snackbar';
 
 const Account = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -58,39 +68,59 @@ const Account = () => {
     initGetProfile();
   }, [dispatch]);
 
-    //image upload
-    const options = {mediaType: 'photo', selectionLimit: 1};
-    const openLibraryfordp = () => {
-      console.log('called logo');
-      launchImageLibrary(options, async (resp: unknown) => {
-        if (resp?.assets?.length > 0) {
-          console.log('resp', resp?.assets[0]);
-          // setPhotoUri(resp?.assets[0].uri);
-          setImageUrl(resp?.assets[0].uri);
-          const data = await uploadImgorDoc(resp?.assets[0]);
-          console.warn('processed pic', data);
-          dispatch(addcompleteProfile({profilePic: data}));
-        }
-      });
-      // launchCamera
-    };
-    const uploadImgorDoc = async (param: {
-      uri: string;
-      name: string | null;
-      copyError: string | undefined;
-      fileCopyUri: string | null;
-      type: string | null;
-      size: number | null;
-    }) => {
-      setisLoading(true);
-      const res: any = await uploadAssetsDOCorIMG(param);
-      if (res?.status === 201 || res?.status === 200) {
-        console.log('ApartmentType', res?.data);
-        setisLoading(false);
-        return res?.data?.doc?.url;
+  //image upload
+  const options = {mediaType: 'photo', selectionLimit: 1};
+  const openLibraryfordp = () => {
+    console.log('called logo');
+    launchImageLibrary(options, async (resp: unknown) => {
+      if (resp?.assets?.length > 0) {
+        console.log('resp', resp?.assets[0]);
+        // setPhotoUri(resp?.assets[0].uri);
+        setImageUrl(resp?.assets[0].uri);
+        const data = await uploadImgorDoc(resp?.assets[0]);
+        console.warn('processed pic', data);
+        // dispatch(addcompleteProfile({profilePic: data}));
+        await upload(data);
       }
+    });
+    // launchCamera
+  };
+
+  const upload = async (param: string) => {
+    const res: any = await completeProfile({profilePic: param});
+    console.log('result', res?.data);
+    if (res?.status === 200 || res?.status === 201) {
+    } else {
+      Snackbar.show({
+        text: res?.error?.message
+          ? res?.error?.message
+          : res?.error?.data?.message
+          ? res?.error?.data?.message
+          : 'Oops!, an error occured',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+    }
+    setisLoading(false);
+  };
+  const uploadImgorDoc = async (param: {
+    uri: string;
+    name: string | null;
+    copyError: string | undefined;
+    fileCopyUri: string | null;
+    type: string | null;
+    size: number | null;
+  }) => {
+    setisLoading(true);
+    const res: any = await uploadAssetsDOCorIMG(param);
+    if (res?.status === 201 || res?.status === 200) {
+      console.log('ApartmentType', res?.data);
       setisLoading(false);
-    };
+      return res?.data?.doc?.url;
+    }
+    setisLoading(false);
+  };
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -150,7 +180,6 @@ const Account = () => {
               {!profileImageLoading ? (
                 <>
                   {!profileData?.profilePic && imageUrl?.length < 1 ? (
-                    
                     <TextWrapper
                       children="Upload Profile Photo"
                       fontType={'semiBold'}

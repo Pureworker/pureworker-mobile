@@ -25,6 +25,7 @@ import colors from '../../../constants/colors';
 import images from '../../../constants/images';
 import {HEIGHT_SCREEN, HEIGHT_WINDOW} from '../../../constants/generalStyles';
 import Textcomp from '../../../components/Textcomp';
+import {ToastShort} from '../../../utils/utils';
 
 export default function Inbox({navigation, route}: any) {
   const userId = route.params?.id;
@@ -69,6 +70,7 @@ export default function Inbox({navigation, route}: any) {
     dispatch(addchatData(_data));
     socket.emit('message', data, async () => {
       console.log('message sent', data);
+      ToastShort('Message sent');
       // const _data = [...chatData, data];
       // dispatch(addchatData(_data));
     });

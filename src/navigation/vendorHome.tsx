@@ -9,6 +9,7 @@ import ProfileStep4 from '../screens/profile/ProfileStep4';
 import ProfileStep5 from '../screens/profile/ProfileStep5';
 import ProfileStep1 from '../screens/profile/ProfileStep1';
 import Home from '../screens/vendor/Home';
+import ProfileStep21 from '../screens/profile/profileStep21';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,11 @@ export default function VendorHomeStack() {
       <Stack.Screen
         name="ProfileStep2"
         component={PRofileStep2}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+            <Stack.Screen
+        name="ProfileStep21"
+        component={ProfileStep21}
         options={{headerShown: false, animationEnabled: false}}
       />
       <Stack.Screen

@@ -64,7 +64,13 @@ const EditServices = ({route}:any) => {
   const [nationalityItems, setNationalityItems] = useState<any>([]);
   let potfolioPicture = useRef('');
   let profilePicture = useRef('');
+
+  const [minPrice, setminPrice] = useState(profileData?.priceRange?.[passed_index]?.minPrice ||  0);
+  const [maxPrice, setmaxPrice] = useState(profileData?.priceRange?.[passed_index]?.maxPrice ||  0);
   // console.log('nationalityItems', nationalityItems);
+
+  console.log('kk',profileData?.serviceIntro?.[passed_index]);
+  
 
   const [portfolioToServiceCount, setportfolioToServiceCount] = useState([]);
 
@@ -227,7 +233,9 @@ const EditServices = ({route}:any) => {
               // key={index}
               // value={item.value} // Assign value from state
               value={description}
-              onChangeText={value => handleInputChange(index, value)}
+              onChangeText={value => {
+                handleInputChange(index, value)
+              }}
             />
           </View>
 
@@ -284,11 +292,14 @@ const EditServices = ({route}:any) => {
                 placeholderTextColor={colors.grey}
                 placeholder="N"
                 keyboardType="number-pad"
-                value=""
+                value={`${minPrice}`}
                 // key={index}
                 // value={item.value} // Assign value from state
                 onChangeText={value =>
-                  handleServicePriceMinChange(index, value)
+                  {
+                    setminPrice(Number(value));
+                    handleServicePriceMinChange(passed_index, value);
+                  }
                 }
               />
               <TextWrapper
@@ -312,11 +323,12 @@ const EditServices = ({route}:any) => {
                 placeholderTextColor={colors.grey}
                 placeholder="N"
                 keyboardType="number-pad"
-                value=""
-                // key={index}
+                value={`${maxPrice}`}
                 // value={item.value} // Assign value from state
-                onChangeText={value =>
-                  handleServicePriceMaxChange(index, value)
+                onChangeText={value =>{
+                  setmaxPrice(Number(value));
+                  handleServicePriceMaxChange(passed_index, value);
+                }
                 }
               />
             </View>

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
-const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
+// const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
+const API_BASE_URL = 'https://api.pureworker.com/api';
 // 'https://pureworker.onrender.com';
 // const API_BASE_URL = 'http://167.86.66.12/api';
 

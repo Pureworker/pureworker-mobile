@@ -40,8 +40,32 @@ import {formatAmount} from '../../utils/validations';
 import FastImage from 'react-native-fast-image';
 import {RouteContext} from '../../utils/context/route_context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import socket from '../../utils/socket';
+import Geolocation from 'react-native-geolocation-service';
+import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 
 const Home = ({navigation}: any) => {
+  useEffect(() => {
+    //Request location permission
+    request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+      .then(result => {
+        if (result === RESULTS.GRANTED) {
+          // Permission granted, get user's location
+          Geolocation.getCurrentPosition(
+            (position: any) => {
+              const {latitude, longitude} = position.coords;
+              console.error(`Latitude: ${latitude}, Longitude: ${longitude}`);
+            },
+            (error: any) => console.error(error),
+            {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+          );
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+
   //   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [search, setSearch] = useState('');
@@ -59,14 +83,7 @@ const Home = ({navigation}: any) => {
     {id: '4', title: 'Item 4'},
     {id: '5', title: 'Item 5'},
   ];
-
-  // const {data: getCategoryData, isLoading, isError} = useGetCategoryQuery();
-  // const getCategory = getCategoryData ?? [];
-  // console.log(getCategory);
-
-  //
   const [isLoading, setisLoading] = useState(false);
-
   useEffect(() => {
     const initGetUsers = async () => {
       const res: any = await getUser('');
@@ -507,18 +524,18 @@ const Home = ({navigation}: any) => {
           {formStage === 6 ? null : (
             <TouchableOpacity
               onPress={() => {
-                // navigation.navigate('ProfileStep4');
-                if (formStage === 1) {
-                  navigation.navigate('ProfileStep1');
-                } else if (formStage === 2) {
-                  navigation.navigate('ProfileStep2');
-                } else if (formStage === 3) {
-                  navigation.navigate('ProfileStep3');
-                } else if (formStage === 4) {
-                  navigation.navigate('ProfileStep4');
-                } else if (formStage === 5) {
-                  navigation.navigate('ProfileStep5');
-                }
+                navigation.navigate('ProfileStep21');
+                // if (formStage === 1) {
+                //   navigation.navigate('ProfileStep1');
+                // } else if (formStage === 2) {
+                //   navigation.navigate('ProfileStep2');
+                // } else if (formStage === 3) {
+                //   navigation.navigate('ProfileStep3');
+                // } else if (formStage === 4) {
+                //   navigation.navigate('ProfileStep4');
+                // } else if (formStage === 5) {
+                //   navigation.navigate('ProfileStep5');
+                // }
               }}
               style={[
                 tw`bg-[#2D303C] mx-auto items-center justify-center`,
@@ -585,10 +602,15 @@ const Home = ({navigation}: any) => {
                   fontFamily={'Inter-SemiBold'}
                 />
               </TouchableOpacity>
-
               <TouchableOpacity
                 onPress={() => {
-                  setContactAgent(true);
+                  // setContactAgent(true);
+                  socket.connect();
+                  setInfoModal(false);
+                  navigation.navigate('Inbox', {
+                    id: '65172267a03a2a2150478ca3',
+                    name: ' Support',
+                  });
                 }}
                 style={{
                   width: perWidth(316),
