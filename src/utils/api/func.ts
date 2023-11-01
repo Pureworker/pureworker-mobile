@@ -3,8 +3,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // const API_BASE_URL = 'https://pureworker.onrender.com';
 // const API_BASE_URL = 'http://167.86.66.12/api';
 const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
-
-
 //
 export const getUser = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');

@@ -24,6 +24,7 @@ import Index from '../screens/user/notification';
 import Chat from '../screens/user/chat/index';
 import TabServices from '../screens/user/tab_services';
 import AddAddress from '../screens/common/addAddress';
+import Referrals from '../screens/common/referrals';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -146,6 +147,11 @@ const DrawerMenu = () => {
         <Drawer.Screen
           name="Rating"
           component={Ratings}
+          options={{headerShown: false}}
+        />
+        <Drawer.Screen
+          name="Referrals"
+          component={Referrals}
           options={{headerShown: false}}
         />
         <Drawer.Screen

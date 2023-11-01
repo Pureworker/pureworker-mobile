@@ -1,0 +1,246 @@
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  SafeAreaView,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {StackNavigation} from '../../constants/navigation';
+import images from '../../constants/images';
+import tw from 'twrnc';
+import Textcomp from '../../components/Textcomp';
+import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
+import {getFAQ} from '../../utils/api/func';
+import {addfaq} from '../../store/reducer/mainSlice';
+import {WIDTH_WINDOW} from '../../constants/generalStyles';
+import Modal from 'react-native-modal';
+import colors from '../../constants/colors';
+
+const Referrals = () => {
+  const navigation = useNavigation<StackNavigation>();
+  const dispatch = useDispatch();
+
+  const [deactivateAccount, setdeactivateAccount] = useState(false);
+  const [deleteAccount, setdeleteAccount] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
+  const faq = useSelector((state: any) => state.user.faq);
+
+  const [isVisible, setisVisible] = useState(false);
+
+  useEffect(() => {
+    const initGetOrders = async () => {
+      setisLoading(true);
+      const res: any = await getFAQ('');
+      console.log('fffffff', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addfaq(res?.data?.data));
+      }
+      // setloading(false);
+      setisLoading(false);
+    };
+    initGetOrders();
+  }, []);
+  return (
+    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+      {/* <View
+        style={{
+          marginTop:
+            Platform.OS === 'ios'
+              ? getStatusBarHeight(true)
+              : StatusBar.currentHeight &&
+                StatusBar.currentHeight + getStatusBarHeight(true),
+        }}
+      /> */}
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginHorizontal: 20,
+          marginTop: 20,
+        }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            source={images.back}
+            style={{height: 25, width: 25}}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
+        <View style={tw`mx-auto`}>
+          <Textcomp
+            text={'Referrals'}
+            size={17}
+            lineHeight={17}
+            color={'#000413'}
+            fontFamily={'Inter-SemiBold'}
+          />
+        </View>
+      </View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{minHeight: SIZES.height}}>
+        <View style={[tw``]}>
+          <View style={[tw``]}>
+            <Image
+              resizeMode="contain"
+              source={images.heroPix1}
+              style={[
+                tw` mx-auto mt-4`,
+                {height: perHeight(200), width: WIDTH_WINDOW * 0.5},
+              ]}
+            />
+          </View>
+
+          <View
+            style={[
+              tw`bg-[#2D303C] items-center justify-center`,
+              {height: perHeight(150)},
+            ]}>
+            <View style={tw`flex flex-row items-center`}>
+              <Textcomp
+                text={'CD-XTHGFDR-HTG'}
+                size={18}
+                lineHeight={17}
+                color={'white'}
+                fontFamily={'Inter-SemiBold'}
+              />
+              <TouchableOpacity style={tw``}>
+                <Image
+                  resizeMode="contain"
+                  source={images.camera}
+                  style={[tw``, {height: 25, width: 25}]}
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View style={tw`flex flex-row mt-5 items-center mx-auto`}>
+              <Textcomp
+                text={' Invite a friend and get'}
+                size={14}
+                lineHeight={17}
+                color={'white'}
+                fontFamily={'Inter-SemiBold'}
+              />
+              <Textcomp
+                text={' N500 '}
+                size={17}
+                lineHeight={17}
+                color={'white'}
+                fontFamily={'Inter-Bold'}
+              />
+              <Textcomp
+                text={'on their first transaction.'}
+                size={14}
+                lineHeight={17}
+                color={'white'}
+                fontFamily={'Inter-SemiBold'}
+              />
+            </View>
+          </View>
+
+          <View style={tw`px-6 mt-4`}>
+            <TouchableOpacity
+              onPress={() => {
+                setisVisible(true);
+              }}
+              style={[
+                tw`flex flex-row items-center`,
+                {marginTop: perHeight(15)},
+              ]}>
+              <View>
+                <Image
+                  source={images.transactionHistory}
+                  style={{
+                    height: 25,
+                    width: 27,
+                  }}
+                  resizeMode="contain"
+                />
+              </View>
+              <View style={tw`ml-3`}>
+                <Textcomp
+                  text={'View Referral History'}
+                  size={13}
+                  lineHeight={14}
+                  color={'#000000'}
+                  fontFamily={'Inter-Medium'}
+                />
+              </View>
+              <View style={tw`ml-auto`}>
+                <Image
+                  source={images.arrow_right}
+                  style={{
+                    height: 22,
+                    width: 22,
+                  }}
+                  resizeMode="contain"
+                />
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+        {/* <View style={tw`h-40`} /> */}
+      </ScrollView>
+      <View style={tw`h-0.5 w-full bg-black absolute  bottom-[3%]`} />
+
+      <Modal
+        isVisible={isVisible}
+        onModalHide={() => {
+          setisVisible(false);
+        }}
+        style={{width: SIZES.width, marginHorizontal: 0}}
+        deviceWidth={SIZES.width}
+        onBackdropPress={() => setisVisible(false)}
+        swipeThreshold={200}
+        swipeDirection={['down']}
+        onSwipeComplete={() => setisVisible(false)}
+        onBackButtonPress={() => setisVisible(false)}>
+        <View style={tw`h-full w-full bg-black bg-opacity-5`}>
+          <TouchableOpacity
+            onPress={() => setisVisible(false)}
+            style={tw`flex-1`}
+          />
+          <View style={tw`h-[30.5%] mt-auto bg-[#D9D9D9]`}>
+            <TouchableOpacity
+              onPress={() => {
+                setisVisible(false);
+              }}
+              style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
+            />
+            <View>
+              <View style={[tw` py-4`, {marginLeft: perWidth(30)}]}>
+                <Textcomp
+                  text={'Referral History'}
+                  size={17}
+                  lineHeight={17}
+                  color={'#000000'}
+                  fontFamily={'Inter-Bold'}
+                />
+              </View>
+              <View style={[tw`px-[7.5%] mt-1`, {}]}>
+                <Textcomp
+                  text={'Your order is currently in progress.'}
+                  size={14}
+                  lineHeight={17}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+            </View>
+            <View
+              style={[
+                tw`bg-black mt-auto mb-4`,
+                {height: 2, width: WIDTH_WINDOW * 0.95},
+              ]}
+            />
+          </View>
+        </View>
+      </Modal>
+    </SafeAreaView>
+  );
+};
+
+export default Referrals;

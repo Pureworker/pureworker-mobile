@@ -31,6 +31,7 @@ const DrawerContent = () => {
     {label: 'Wallet', route: 'Wallet', icon: images.wallet},
     {label: 'Support', route: 'Support', icon: images.help},
     {label: 'Account Info', route: 'Account', icon: images.info},
+    {label: 'Referrals', route: 'Referrals', icon: images.info},
   ];
   const navLinks2 = [
     {label: 'Log out', route: 'Logout', icon: images.wallet},

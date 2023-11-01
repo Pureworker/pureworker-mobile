@@ -21,6 +21,7 @@ import Index from '../screens/user/notification';
 import VendorHomeStack from './vendorHome';
 import AddAddress from '../screens/common/addAddress';
 import TabServices from '../screens/user/tab_services';
+import Referrals from '../screens/common/referrals';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -148,6 +149,11 @@ const DrawerMenu = () => {
         <Drawer.Screen
           name="AddAddress"
           component={AddAddress}
+          options={{headerShown: false}}
+        />
+                <Drawer.Screen
+          name="Referrals"
+          component={Referrals}
           options={{headerShown: false}}
         />
         {/* Add other drawer screens as needed */}

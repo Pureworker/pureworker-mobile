@@ -503,14 +503,6 @@ const PRofileStep1 = () => {
             generalStyles.rowBetween,
             {marginHorizontal: 20, marginBottom: 35},
           ]}>
-          {/* <Button
-            onClick={() => {
-              setIsAddService(!isAddService);
-            }}
-            style={{width: 130, backgroundColor: colors.lightBlack}}
-            textStyle={{color: colors.primary}}
-            text={'Add another'}
-          /> */}
           <Button
             onClick={() => {
               // const data = completeProfileData;
