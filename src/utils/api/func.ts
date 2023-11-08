@@ -2,7 +2,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // const API_BASE_URL = 'https://pureworker.onrender.com';
 // const API_BASE_URL = 'http://167.86.66.12/api';
-const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
+// const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
+const API_BASE_URL = 'https://api.pureworker.com/api';
 //
 export const getUser = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
@@ -869,3 +870,27 @@ export const _verifyID = async (data: any) => {
   }
 };
 
+
+export const getReferralDetails = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getReferralDetails func started', param);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/user/referral`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};

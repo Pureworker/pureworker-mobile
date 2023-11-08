@@ -48,6 +48,7 @@ const initialState = {
   provider_id: null,
 
   formStage: 1,
+  referralDetails: null,
 };
 
 export const mainSlice = createSlice({
@@ -196,6 +197,9 @@ export const mainSlice = createSlice({
     addformStage: (state, action) => {
       state.formStage = action.payload;
     },
+    addReferralDetails: (state, action) => {
+      state.referralDetails = action.payload;
+    },
   },
 });
 
@@ -228,6 +232,7 @@ export const {
   addprovider_id,
   addportfolio,
   addformStage,
+  addReferralDetails,
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);

@@ -1,5 +1,6 @@
 const images = {
 
+  refferalImg: require('./../assets/images/referralImg.png'),
   send2: require('./../assets/images/send2.png'),
   camera: require('./../assets/images/camera.png'),
   star_2: require('./../assets/images/star_2.png'),

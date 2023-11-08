@@ -111,7 +111,7 @@ const Home = ({navigation}: any) => {
       }
       setisLoading(false);
     };
-    initGetUsers();
+    initGetUsers(); 
     // initGetCategory();
     // initGetPopularServices();
   }, [dispatch]);
@@ -137,7 +137,7 @@ const Home = ({navigation}: any) => {
     };
     initGetOrders();
   }, []);
-
+ 
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
   const _getCategory = useSelector((state: any) => state.user.category);

@@ -13,8 +13,8 @@ import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
-import {getFAQ} from '../../utils/api/func';
-import {addfaq} from '../../store/reducer/mainSlice';
+import {getFAQ, getReferralDetails} from '../../utils/api/func';
+import {addReferralDetails, addfaq} from '../../store/reducer/mainSlice';
 import {WIDTH_WINDOW} from '../../constants/generalStyles';
 import Modal from 'react-native-modal';
 import colors from '../../constants/colors';
@@ -29,6 +29,13 @@ const Referrals = () => {
   const faq = useSelector((state: any) => state.user.faq);
 
   const [isVisible, setisVisible] = useState(false);
+  //selectors
+  const userData = useSelector((state: any) => state.user.userData);
+  const referralDetails = useSelector(
+    (state: any) => state.user.referralDetails,
+  );
+
+  console.log(userData);
 
   useEffect(() => {
     const initGetOrders = async () => {
@@ -38,10 +45,20 @@ const Referrals = () => {
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addfaq(res?.data?.data));
       }
-      // setloading(false);
+      setisLoading(false);
+    };
+
+    const initReferralDetails = async () => {
+      setisLoading(true);
+      const res: any = await getReferralDetails('');
+      console.log('rrrDetails', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addReferralDetails(res?.data?.data));
+      }
       setisLoading(false);
     };
     initGetOrders();
+    initReferralDetails();
   }, []);
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -86,7 +103,7 @@ const Referrals = () => {
           <View style={[tw``]}>
             <Image
               resizeMode="contain"
-              source={images.heroPix1}
+              source={images.refferalImg}
               style={[
                 tw` mx-auto mt-4`,
                 {height: perHeight(200), width: WIDTH_WINDOW * 0.5},
@@ -96,30 +113,37 @@ const Referrals = () => {
 
           <View
             style={[
-              tw`bg-[#2D303C] items-center justify-center`,
-              {height: perHeight(150)},
+              tw`bg-[#2D303C] items-center mt-[-15] justify-center`,
+              {height: perHeight(130)},
             ]}>
             <View style={tw`flex flex-row items-center`}>
               <Textcomp
-                text={'CD-XTHGFDR-HTG'}
+                text={`${userData?.referralCode}`}
                 size={18}
                 lineHeight={17}
                 color={'white'}
                 fontFamily={'Inter-SemiBold'}
               />
-              <TouchableOpacity style={tw``}>
+              <TouchableOpacity style={tw`ml-3 border-r border-[#BDBDBD] pr-3`}>
                 <Image
                   resizeMode="contain"
                   source={images.camera}
-                  style={[tw``, {height: 25, width: 25}]}
+                  style={[tw``, {height: 20, width: 20, tintColor: '#BDBDBD'}]}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity style={tw`pl-3`}>
+                <Image
+                  resizeMode="contain"
+                  source={images.camera}
+                  style={[tw``, {height: 20, width: 20, tintColor: '#BDBDBD'}]}
                 />
               </TouchableOpacity>
             </View>
 
-            <View style={tw`flex flex-row mt-5 items-center mx-auto`}>
+            <View style={tw`flex flex-row mt-5 items-center mx-auto `}>
               <Textcomp
                 text={' Invite a friend and get'}
-                size={14}
+                size={13}
                 lineHeight={17}
                 color={'white'}
                 fontFamily={'Inter-SemiBold'}
@@ -133,7 +157,7 @@ const Referrals = () => {
               />
               <Textcomp
                 text={'on their first transaction.'}
-                size={14}
+                size={13}
                 lineHeight={17}
                 color={'white'}
                 fontFamily={'Inter-SemiBold'}
@@ -203,7 +227,7 @@ const Referrals = () => {
             onPress={() => setisVisible(false)}
             style={tw`flex-1`}
           />
-          <View style={tw`h-[30.5%] mt-auto bg-[#D9D9D9]`}>
+          <View style={tw`h-[40.5%] mt-auto bg-[#D9D9D9]`}>
             <TouchableOpacity
               onPress={() => {
                 setisVisible(false);
@@ -211,7 +235,7 @@ const Referrals = () => {
               style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
             />
             <View>
-              <View style={[tw` py-4`, {marginLeft: perWidth(30)}]}>
+              <View style={[tw` py-4 pt-8`, {marginLeft: perWidth(25)}]}>
                 <Textcomp
                   text={'Referral History'}
                   size={17}
@@ -220,13 +244,77 @@ const Referrals = () => {
                   fontFamily={'Inter-Bold'}
                 />
               </View>
-              <View style={[tw`px-[7.5%] mt-1`, {}]}>
+
+              <View style={tw`flex flex-row px-6`}>
+                <View
+                  style={tw`flex flex-col w-1/2 border-r border-[#6D6F76] `}>
+                  <Textcomp
+                    text={'TOTAL CASH EARNED'}
+                    size={10}
+                    lineHeight={17}
+                    color={'#00041380'}
+                    fontFamily={'Inter-Regular'}
+                  />
+
+                  <View style={tw`mt-4`}>
+                    <Textcomp
+                      text={`N ${Number(referralDetails?.completedNumber) * 500}`}
+                      size={14}
+                      lineHeight={17}
+                      color={'#000000'}
+                      fontFamily={'Inter-Bold'}
+                    />
+                  </View>
+                </View>
+                <View style={tw`flex flex-col w-1/2 border-[#6D6F76] px-4`}>
+                  <Textcomp
+                    text={'FRIENDS WHO YOU REFERRED'}
+                    size={9}
+                    lineHeight={17}
+                    color={'#00041380'}
+                    fontFamily={'Inter-Regular'}
+                  />
+
+                  <View style={tw`mt-4`}>
+                    <Textcomp
+                      text={`${referralDetails?.totalNumber}`}
+                      size={14}
+                      lineHeight={17}
+                      color={'#000000'}
+                      fontFamily={'Inter-Bold'}
+                    />
+                  </View>
+                </View>
+              </View>
+              <View style={[tw`px-6 mt-6`, {}]}>
                 <Textcomp
-                  text={'Your order is currently in progress.'}
+                  text={'FRIENDS WHO HAVE MADE A TRANSACTION'}
+                  size={10}
+                  lineHeight={17}
+                  color={'#00041380'}
+                  fontFamily={'Inter-Regular'}
+                />
+
+                <View style={tw`mt-3`}>
+                  <Textcomp
+                    text={`${referralDetails?.completedNumber}`}
+                    size={17}
+                    lineHeight={17}
+                    color={'#000000'}
+                    fontFamily={'Inter-Bold'}
+                  />
+                </View>
+              </View>
+
+              <View style={tw`mt-6 px-6`}>
+                <Textcomp
+                  text={
+                    'Get 500 naria when a friend signs up with your referral code and makes a transaction.'
+                  }
                   size={14}
                   lineHeight={17}
                   color={'#000000'}
-                  fontFamily={'Inter-Regular'}
+                  fontFamily={'Inter-semiBold'}
                 />
               </View>
             </View>
