@@ -105,6 +105,11 @@ export default function PortComp({
     (state: any) => state.user.completeProfileData,
   );
   const [serviceList, setserviceList] = useState(dlist);
+
+  useEffect(() => {
+    setserviceList(dlist);
+  }, [dlist]);
+
   const [pictures, setpictures] = useState([]);
   const options = {mediaType: 'photo', selectionLimit: 3};
   const openLibraryfordp = () => {
@@ -197,8 +202,8 @@ export default function PortComp({
               <DropDownPicker
                 open={dropdownOpen}
                 value={service_}
-                // items={serviceList}
-                items={tempdata}
+                items={serviceList}
+                // items={tempdata}
                 setOpen={setdropdownOpen}
                 // setValue={item => {
                 //   console.log('set-here', item);

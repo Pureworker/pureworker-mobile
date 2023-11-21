@@ -68,7 +68,6 @@ const OrderDetails = () => {
   };
 
   console.log(providerData);
-  
 
   const showMode = (currentMode: any) => {
     setShow(true);
@@ -542,7 +541,7 @@ const OrderDetails = () => {
         </View>
         <View style={tw`h-30`} />
       </ScrollView>
-      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
       <View style={tw`h-1 w-full mb-5 bg-black`} />
     </View>
   );

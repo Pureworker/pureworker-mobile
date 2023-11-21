@@ -172,7 +172,7 @@ export default function Login() {
             );
             navigation.navigate('TokenVerification', {
               email: email,
-              type: 'signup',
+              type: 'login',
             });
           } else {
             Snackbar.show({

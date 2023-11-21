@@ -46,13 +46,13 @@ const _Services = ({route}: any) => {
   const [searchModal, setsearchModal] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const [searchInput, setsearchInput] = useState('');
-  
+
   function metersToKilometers(meters) {
     const kilometers = meters / 1000; // Convert meters to kilometers
     const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
     return `${roundedKilometers} km`;
   }
-  
+
   useEffect(() => {
     const initGetUsers = async () => {
       setisLoading(true);
@@ -82,12 +82,15 @@ const _Services = ({route}: any) => {
 
         {!searchModal ? (
           <View
-            style={[tw`items-center`,{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginHorizontal: 20,
-            }]}>
+            style={[
+              tw`items-center`,
+              {
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginHorizontal: 20,
+              },
+            ]}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Image
                 source={images.back}
@@ -284,7 +287,7 @@ const _Services = ({route}: any) => {
         </View>
         <View style={tw`h-20`} />
       </ScrollView>
-      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
   );
 };

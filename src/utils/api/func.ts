@@ -158,6 +158,8 @@ export const uploadAssetsDOCorIMG = async (param: any) => {
 export const completeProfile = async (param: any) => {
   console.log('completeProfile func started', param);
   const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log(AuthToken);
+  
   try {
     const response = await axios({
       method: 'post',

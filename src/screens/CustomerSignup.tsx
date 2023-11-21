@@ -28,7 +28,7 @@ import {StackNavigation} from '../constants/navigation';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import {generalStyles} from '../constants/generalStyles';
 import {SIZES} from '../utils/position/sizes';
-import { Signup } from '../utils/api/auth';
+import {Signup} from '../utils/api/auth';
 
 const {width, height} = Dimensions.get('window');
 export default function CustomerSignup() {
@@ -40,6 +40,7 @@ export default function CustomerSignup() {
   const [address, setAddress] = useState('');
   const [userType, setUserType] = useState('CUSTOMER');
   const [date, setDate] = useState(new Date());
+  const [referralCode, setReferralCode] = useState('');
   const setDateTime = (dateTime: any) => {
     setDate(dateTime);
   };
@@ -95,7 +96,7 @@ export default function CustomerSignup() {
         setisLoading(false);
         return;
       } else {
-        const loginData = {
+        const loginData: any = {
           email: email.toLowerCase().trim(),
           firstName: firstName,
           lastName: lastName,
@@ -107,6 +108,10 @@ export default function CustomerSignup() {
           nationality: nationalityValue,
           accountType: 'customer',
         };
+
+        if (referralCode && referralCode?.length > 2) {
+          loginData.referralCode = referralCode;
+        }
 
         console.log('here');
         const res = await Signup(loginData);
@@ -178,15 +183,15 @@ export default function CustomerSignup() {
             marginLeft: 25,
             marginBottom: 10,
             marginTop:
-            Platform.OS === 'ios'
-              ? 20
-              : StatusBar.currentHeight && StatusBar.currentHeight + 40,
+              Platform.OS === 'ios'
+                ? 20
+                : StatusBar.currentHeight && StatusBar.currentHeight + 40,
           }}
           resizeMode="contain"
         />
       </TouchableOpacity>
 
-      <ScrollView >
+      <ScrollView>
         <MyStatusBar
           translucent
           barStyle="light-content"
@@ -196,7 +201,7 @@ export default function CustomerSignup() {
         <View style={{flex: 1}}>
           <View style={{marginHorizontal: 50}}>
             <Text
-            numberOfLines={1}
+              numberOfLines={1}
               style={{
                 fontSize: 32,
                 fontFamily: commonStyle.fontFamily.bold,
@@ -570,6 +575,22 @@ export default function CustomerSignup() {
                 state={email}
                 setState={setEmail}
                 keyBoardType={'email-address'}
+              />
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: commonStyle.fontFamily.medium,
+                  color: '#fff',
+                  marginTop: 15,
+                }}>
+                Referral(optional)
+              </Text>
+              <TextInputs
+                style={{marginTop: 17}}
+                labelText={'Enter Referral Code'}
+                state={referralCode}
+                setState={setReferralCode}
+      
               />
               {/* <Text style={{ fontSize: 16, fontFamily: commonStyle.fontFamily.medium, color: '#fff', marginTop: 15 }}>Password</Text>
               <TextInputs style={{ marginTop: 10 }} secure={true} labelText={'Enter Password'} state={password} setState={setPassword} /> */}

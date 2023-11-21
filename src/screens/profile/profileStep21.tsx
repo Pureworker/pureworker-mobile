@@ -107,16 +107,22 @@ const ProfileStep21 = () => {
 
       if (serviceList?.length < 1 || !serviceList) {
         ToastShort('ServiceList is null');
+        console.log('====================================');
+        console.log(categoryId);
+        console.log('====================================');
         return;
       }
       payload_data1?.map((item, index) => {
         const name = item.service;
-        const filteredObject = serviceList?.filter(
-          (obj: any) => obj?.label === name,
+        // const filteredObject = serviceList?.filter(
+        //   (obj: any) => obj?.label === name,
+        // );
+        const filteredObject = serviceList.find(
+          (obj: any) => obj.name === item.service,
         );
-        // console.log('here', filteredObject);
-        if (filteredObject?.[0]?._id) {
-          payload_data2[index].service = filteredObject?.[0]?._id;
+        console.log('here', filteredObject, serviceList);
+        if (filteredObject?._id) {
+          payload_data2[index].service = filteredObject?._id;
         } else {
           console.error('error on modification', filteredObject);
         }
@@ -124,7 +130,7 @@ const ProfileStep21 = () => {
       console.log(payload_data2);
       //
       setisLoading(true);
-      const res: any = await completeProfile({portfolio: payload_data});
+      const res: any = await completeProfile({portfolio: payload_data2});
       console.log('result', res?.data);
       if (res?.status === 200 || res?.status === 201) {
         navigation.navigate('ProfileStep3');
@@ -196,11 +202,12 @@ const ProfileStep21 = () => {
     {label: 'Choose not to answer', value: 'Choose not to answer'},
   ]);
   const userData = useSelector((state: any) => state.user.userData);
+  const categoryId = useSelector((state: any) => state.user.pickedServicesId);
   useEffect(() => {
     const initGetProfile = async () => {
       const res: any = await getProfile(userData?._id);
       console.log(
-        'profile-----',
+        'mmmmmmmmmmm',
         res?.data,
         'services:',
         res?.data?.profile?.services,

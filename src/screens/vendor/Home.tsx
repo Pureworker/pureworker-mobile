@@ -524,18 +524,21 @@ const Home = ({navigation}: any) => {
           {formStage === 6 ? null : (
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('ProfileStep21');
-                // if (formStage === 1) {
-                //   navigation.navigate('ProfileStep1');
-                // } else if (formStage === 2) {
-                //   navigation.navigate('ProfileStep2');
-                // } else if (formStage === 3) {
-                //   navigation.navigate('ProfileStep3');
-                // } else if (formStage === 4) {
-                //   navigation.navigate('ProfileStep4');
-                // } else if (formStage === 5) {
-                //   navigation.navigate('ProfileStep5');
-                // }
+                // navigation.navigate('ProfileStep21');
+                if (formStage === 1) {
+                  navigation.navigate('ProfileStep1');
+                } else if (formStage === 2) {
+                  navigation.navigate('ProfileStep2');
+                } else if (formStage === 3) {
+                  navigation.navigate('ProfileStep3');
+                } else if (formStage === 4) {
+                  navigation.navigate('ProfileStep4');
+                } else if (formStage === 5) {
+                  navigation.navigate('ProfileStep5');
+                }
+                else if (formStage === 21) {
+                  navigation.navigate('ProfileStep21');
+                }
               }}
               style={[
                 tw`bg-[#2D303C] mx-auto items-center justify-center`,

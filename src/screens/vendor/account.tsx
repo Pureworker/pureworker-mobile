@@ -39,6 +39,7 @@ import FastImage from 'react-native-fast-image';
 import CustomLoading from '../../components/customLoading';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Snackbar from 'react-native-snackbar';
+import {ToastLong} from '../../utils/utils';
 
 const Account = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -122,6 +123,25 @@ const Account = () => {
     setisLoading(false);
   };
 
+  const updateProfile = async (param: any) => {
+    const res: any = await completeProfile(param);
+    console.log('Update result:', res?.data);
+    if (res?.status === 200 || res?.status === 201) {
+      ToastLong('Profile Updated');
+    } else {
+      Snackbar.show({
+        text: res?.error?.message
+          ? res?.error?.message
+          : res?.error?.data?.message
+          ? res?.error?.data?.message
+          : 'Oops!, an error occured',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+    }
+    setisLoading(false);
+  };
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView>
@@ -315,7 +335,7 @@ const Account = () => {
             />
           </View>
 
-          <View style={tw`  mt-[5%]`}>
+          <View style={tw`mt-[5%]`}>
             <TextWrapper
               children="Services"
               fontType={'semiBold'}
@@ -392,6 +412,20 @@ const Account = () => {
               text={'Add Services'}
             />
           </View>
+
+          <TouchableOpacity
+            onPress={() => {
+              updateProfile({description: description});
+            }}
+            style={tw`mx-auto mt-8 py-4 w-full items-center justify-center`}>
+            <Textcomp
+              text={'Save Profile'}
+              size={17}
+              lineHeight={17}
+              color={'#000413'}
+              fontFamily={'Inter-SemiBold'}
+            />
+          </TouchableOpacity>
         </View>
         <View style={tw`h-30`} />
       </ScrollView>

@@ -47,7 +47,7 @@ const ProfileStep4 = () => {
   const [idNumber, setIdNumber] = useState('');
   const [idName, setidName] = useState('');
   const route: Route = useRoute();
-const [isLoading, setisLoading] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
 
   const category = useSelector((state: any) => state.user.pickedServices);
   const [collapseState, setCollapseState] = useState(false);
@@ -72,12 +72,11 @@ const [isLoading, setisLoading] = useState(false);
   const verifyID = async () => {
     setisLoading(true);
     const data = {
-      type: 'bvn',
+      type: selectedVerification === 'NIN' ? 'nin' : 'bvn',
       number: idNumber,
     };
     const res = await _verifyID(data);
     console.log(res, 'data-here', res?.data);
-
     if (
       (res?.status === 200 || res?.status === 201) &&
       res?.data?.status === 'success'
@@ -88,7 +87,7 @@ const [isLoading, setisLoading] = useState(false);
             means:
               selectedVerification === 'Bank Verification Number'
                 ? 'bvn'
-                : 'vNIN',
+                : 'nin',
             number: idNumber,
           },
         }),

@@ -171,7 +171,9 @@ const Home = () => {
       const res: any = await getProviderByProximity(userData?._id);
       console.warn('proximity', res?.data);
       if (res?.status === 201 || res?.status === 200) {
-        dispatch(addcloseProvider(res?.data?.data));
+        if (res?.data?.data) {
+          dispatch(addcloseProvider(res?.data?.data));
+        }
       }
       setisLoading(false);
     };

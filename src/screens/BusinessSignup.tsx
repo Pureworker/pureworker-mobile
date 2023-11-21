@@ -89,7 +89,7 @@ export default function BusinessSignup() {
         });
       } else {
         setisLoading(true);
-        const loginData = {
+        const loginData: any = {
           email: email.toLowerCase().trim(),
           firstName: firstName,
           lastName: lastName,
@@ -105,7 +105,7 @@ export default function BusinessSignup() {
           accountType: userType?.toLowerCase(),
         };
 
-        const fl_data = {
+        const fl_data: any = {
           email: email.toLowerCase().trim(),
           firstName: firstName,
           lastName: lastName,
@@ -117,6 +117,11 @@ export default function BusinessSignup() {
           // userType: userType.toLowerCase(),
           accountType: userType?.toLowerCase(),
         };
+
+        if (referralCode && referralCode?.length > 2) {
+          loginData.referralCode = referralCode;
+          fl_data.referralCode = referralCode;
+        }
 
         const res = await Signup(userType === FREELANCER ? fl_data : loginData);
 
@@ -169,6 +174,7 @@ export default function BusinessSignup() {
   useEffect(() => {
     setNationalityItems([...allCountry]);
   }, []);
+  const [referralCode, setReferralCode] = useState('');
 
   return (
     <View
@@ -504,6 +510,21 @@ export default function BusinessSignup() {
                   setState={setEmail}
                   keyBoardType={'email-address'}
                 />
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: commonStyle.fontFamily.medium,
+                    color: '#fff',
+                    marginTop: 15,
+                  }}>
+                  Referral(optional)
+                </Text>
+                <TextInputs
+                  style={{marginTop: 17}}
+                  labelText={'Enter Referral Code'}
+                  state={referralCode}
+                  setState={setReferralCode}
+                />
               </View>
             </View>
           ) : (
@@ -762,6 +783,21 @@ export default function BusinessSignup() {
                   labelText={'Enter Address'}
                   state={address}
                   setState={setAddress}
+                />
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: commonStyle.fontFamily.medium,
+                    color: '#fff',
+                    marginTop: 15,
+                  }}>
+                  Referral(optional)
+                </Text>
+                <TextInputs
+                  style={{marginTop: 17}}
+                  labelText={'Enter Referral Code'}
+                  state={referralCode}
+                  setState={setReferralCode}
                 />
               </View>
             </View>

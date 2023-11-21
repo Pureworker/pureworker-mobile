@@ -115,7 +115,7 @@ const PRofileStep1 = () => {
     setisLoading(true);
     if (categoryId) {
       const res = await completeProfile({services: categoryId});
-      console.log('result', res?.data);
+      console.error('RESULT', res?.data);
 
       if (res?.status === 200 || res?.status === 201) {
         dispatch(addprovider_id(res?.data?.profile?.id));
