@@ -1,14 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
   Platform,
   StatusBar,
   ScrollView,
-  FlatList,
-  ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -18,14 +15,12 @@ import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import CategoryList2 from '../../components/CategoryList2';
-import commonStyle from '../../constants/commonStyle';
 import {
   useGetCategoryQuery,
   useGetUserDetailQuery,
 } from '../../store/slice/api';
-import colors from '../../constants/colors';
 
-const TabServices = () => {
+const TabServices2 = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [search, setSearch] = useState('');
@@ -45,9 +40,10 @@ const TabServices = () => {
       setOpenDropdownId(catId); // Open the clicked dropdown
     }
   };
+
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <>
         <View
           style={{
             marginTop:
@@ -81,6 +77,8 @@ const TabServices = () => {
             />
           </View>
         </View>
+      </>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={tw``}>
           <View style={tw`mr-auto px-[5%] mt-4`}>
             <Textcomp
@@ -162,10 +160,10 @@ const TabServices = () => {
             </ScrollView>
           </View>
         </View>
-        <View style={tw`h-20`}/>
+        <View style={tw`h-20`} />
       </ScrollView>
     </View>
   );
 };
 
-export default TabServices;
+export default TabServices2;

@@ -16,6 +16,7 @@ import AddServices from '../screens/vendor/addServices';
 import Congratulations from '../screens/profile/congratulations';
 import Withdraw from '../screens/vendor/withdraw';
 import Inbox from '../screens/user/chat/inbox';
+import _Services from '../screens/vendor/_services';
 
 const Stack = createNativeStackNavigator();
 
@@ -90,6 +91,11 @@ export default function VendorNavigation() {
       <Stack.Screen
         name="Inbox"
         component={Inbox}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="_VServices"
+        component={_Services}
         options={{headerShown: false, animationEnabled: false}}
       />
     </Stack.Navigator>

@@ -3,7 +3,8 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 require_relative '../node_modules/react-native-permissions/scripts/setup'
 
 
-platform :ios, min_ios_version_supported
+# platform :ios, min_ios_version_supported
+platform :ios, '13.0'
 prepare_react_native_project!
 
 setup_permissions([
@@ -55,6 +56,8 @@ target 'pure_worker' do
   pod 'GTMSessionFetcher', :modular_headers => true
   pod 'React-RCTText', :path => '../node_modules/react-native/Libraries/Text', :modular_headers => true
   # use_frameworks! :linkage => :static
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
   config = use_native_modules!
   use_frameworks! :linkage => :static
   $RNFirebaseAsStaticFramework = true

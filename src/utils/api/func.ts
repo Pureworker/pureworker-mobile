@@ -828,6 +828,7 @@ export const f_deactivateAccount = async (data: any) => {
   try {
     const response = await axios({
       method: 'post',
+      // url: `${API_BASE_URL}/admin/change-active-status`,
       url: `${API_BASE_URL}/admin/change-active-status`,
       headers: {Authorization: `Bearer ${AuthToken}`},
       data: data,
@@ -881,6 +882,60 @@ export const getReferralDetails = async (param: any) => {
       method: 'get',
       url: `${API_BASE_URL}/user/referral`,
       headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const deleteAccount  = async () => {
+  console.log('deleteAccount func started');
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  try {
+    const response = await axios({
+      method: 'delete',
+      url: `${API_BASE_URL}/user/delete-account`,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
+
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+
+export const _deactivateAccount = async (data: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('f_deactivateAccount func started', data);
+  try {
+    const response = await axios({
+      method: 'patch',
+      // url: `${API_BASE_URL}/admin/change-active-status`,
+      url: `${API_BASE_URL}/user/deactivate-account`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+      // data: data,
     });
     if (response.status === 201) {
       console.log('response data:', response?.data);

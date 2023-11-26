@@ -2,6 +2,7 @@
 #import <Firebase.h>
 #import <React/RCTBundleURLProvider.h>
 #import "RNSplashScreen.h"
+#import <GoogleMaps/GoogleMaps.h>
 
 @implementation AppDelegate
 
@@ -10,13 +11,13 @@
   if([FIRApp defaultApp] == nil){
     [FIRApp configure];
   }
+  [GMSServices provideAPIKey:@"AIzaSyAe8qTphM92ztqlo38R7HXNHc35egThjfQ"]; 
   self.moduleName = @"pure_worker";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
   
   bool didFinish=[super application:application didFinishLaunchingWithOptions:launchOptions];
-  
   [RNSplashScreen show];  // here
   return didFinish;
   return [super application:application didFinishLaunchingWithOptions:launchOptions];

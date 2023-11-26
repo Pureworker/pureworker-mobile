@@ -20,7 +20,7 @@ import Chat from '../screens/user/chat/index';
 import Index from '../screens/user/notification';
 import VendorHomeStack from './vendorHome';
 import AddAddress from '../screens/common/addAddress';
-import TabServices from '../screens/user/tab_services';
+import TabServices from '../screens/user/tab_servicess2';
 import Referrals from '../screens/common/referrals';
 
 const Drawer = createDrawerNavigator();

@@ -7,6 +7,7 @@ import {
   StatusBar,
   TextInput,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 // import {COLORS, FONTS} from '../../constants/colors';
 
@@ -26,17 +27,14 @@ import {PERMISSIONS, request} from 'react-native-permissions';
 // import Buttonreactive from '../../components/common/Buttonreactive';
 import axios from 'axios';
 import images from '../../constants/images';
+import {updateUserData} from '../../utils/api/func';
+import Snackbar from 'react-native-snackbar';
+import Button from '../../components/Button';
+import {ToastLong} from '../../utils/utils';
 
 const AddAddress = ({navigation}: any) => {
-  // const homePlace = {
-  //   description: 'Home',
-  //   geometry: {location: {lat: 48.8152937, lng: 2.4597668}},
-  // };
-  // const workPlace = {
-  //   description: 'Work',
-  //   geometry: {location: {lat: 48.8496818, lng: 2.2940881}},
-  // };
   const [description, setdescription] = useState('');
+  const [isLoading, setisLoading] = useState(false);
   const markers = [
     {id: 1, latitude: 37.78825, longitude: -122.4324, title: 'Marker 1'},
     {id: 2, latitude: 37.75825, longitude: -122.4624, title: 'Marker 2'},
@@ -50,7 +48,6 @@ const AddAddress = ({navigation}: any) => {
   const maxLong = Math.max(...longitudes);
   const latitudeDelta = maxLat - minLat;
   const longitudeDelta = maxLong - minLong;
-
   // Set the initial region
   const initialRegion = {
     latitude: (maxLat + minLat) / 2,
@@ -164,6 +161,35 @@ const AddAddress = ({navigation}: any) => {
     };
   }
 
+  const upload = async (param: string) => {
+    if (!selectedLocation) {
+      ToastLong('Please pick an address!.');
+      return;
+    }
+    const res: any = await updateUserData({
+      geoLocation: {
+        type: 'Point',
+        coordinates: [selectedLocation?.latitude, selectedLocation?.longitude],
+      },
+    });
+    console.log('result', res?.data);
+    if (res?.status === 200 || res?.status === 201) {
+      navigation.goBack();
+    } else {
+      Snackbar.show({
+        text: res?.error?.message
+          ? res?.error?.message
+          : res?.error?.data?.message
+          ? res?.error?.data?.message
+          : 'Oops!, an error occured',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+    }
+    setisLoading(false);
+  };
+
   const [regionParam, setregionParam] = useState({
     latitude: selectedLocation ? selectedLocation?.latitude : 0,
     longitude: selectedLocation ? selectedLocation?.longitude : 0,
@@ -192,17 +218,6 @@ const AddAddress = ({navigation}: any) => {
             latitudeDelta: 0.02,
             longitudeDelta: 0.035,
           }}>
-          {/* {bookrideState.location && (
-            <Marker
-              coordinate={{
-                latitude: bookrideState.location.lat,
-                longitude: bookrideState.location.lng,
-              }}
-              title="Destination"
-              description={bookrideState.description}
-              identifier="Origin"
-            />
-          )} */}
           {selectedLocation && <Marker coordinate={selectedLocation} />}
           {location && location.latitude && (
             <Marker
@@ -217,27 +232,6 @@ const AddAddress = ({navigation}: any) => {
               identifier="Origin"
             />
           )}
-          {/* {bookrideState.location ? (
-            location ? (
-              location?.latitude ? (
-                <MapViewDirections
-                  apikey={'AIzaSyDp32iWaShk9E_wTNtJbAkNXqdishmZnE8'}
-                  origin={{
-                    latitude: 6.524674,
-                    longitude: 3.3792,
-                  }}
-                  destination={{
-                    latitude: bookrideState.location.lat,
-                    longitude: bookrideState.location.lng,
-                  }}
-                  strokeWidth={3}
-                  strokeColor={'#FF7A00'}
-                  mode={'DRIVING'}
-                />
-              ) : null
-            ) : null
-          ) : null} */}
-
           <Marker
             coordinate={{
               latitude: 1.3456,
@@ -258,7 +252,6 @@ const AddAddress = ({navigation}: any) => {
                 size={20}
                 lineHeight={20}
                 color={'#172A3A'}
-                // fontFamily="Roboto-Bold"
                 style={[tw`  `, {fontWeight: '500'}]}
               />
             </View>
@@ -269,7 +262,7 @@ const AddAddress = ({navigation}: any) => {
                 size={14}
                 color={colors.primary}
                 lineHeight={16}
-                fontFamily={'Roboto-Medium'}
+                fontFamily={'Inter-Medium'}
                 style={[tw` `]}
               />
             </View>
@@ -336,7 +329,6 @@ const AddAddress = ({navigation}: any) => {
             size={14}
             color={colors.primary}
             lineHeight={16}
-            // fontFamily={'Roboto-Regular'}
             style={[tw` `]}
           />
           <View style={tw`w-[80%] `}>
@@ -345,7 +337,6 @@ const AddAddress = ({navigation}: any) => {
               size={14}
               color={colors.primary}
               lineHeight={16}
-              // fontFamily={'Roboto-Bold'}
               style={[tw`ml-2 `]}
             />
           </View>
@@ -353,16 +344,13 @@ const AddAddress = ({navigation}: any) => {
 
         <View style={[tw`mx-auto mt-4`, {width: perWidth(364)}]}>
           <TextInput
-            style={[tw`bg-[#F2F2F2] px-4  mx-4 rounded-lg`, {height: perHeight(85)}]}
+            style={[
+              tw`bg-[#F2F2F2] px-4  mx-4 rounded-lg`,
+              {height: perHeight(85)},
+            ]}
             placeholder="Enter Extra Info"
           />
         </View>
-        {/* <View style={[tw`mx-auto mt-4`, {width: perWidth(364)}]}>
-          <TextInput
-            style={[tw`bg-[#F2F2F2] px-4 rounded-lg`, {height: perHeight(50)}]}
-            placeholder="Address label (e.g chill spot) "
-          />
-        </View> */}
         <View style={tw`bg-white mt-4`}>
           {/* <Buttonreactive
             condition={true}
@@ -371,6 +359,30 @@ const AddAddress = ({navigation}: any) => {
             margin={0.03}
           /> */}
         </View>
+
+        {!isLoading ? (
+          <View style={{marginHorizontal: 25, marginTop: 75}}>
+            <Button
+              onClick={() => {
+                upload('');
+              }}
+              style={{
+                marginBottom: 20,
+                marginTop: 20,
+                marginHorizontal: 40,
+                backgroundColor: colors.lightBlack,
+              }}
+              textStyle={{color: colors.primary}}
+              text={'Save'}
+            />
+          </View>
+        ) : (
+          <ActivityIndicator
+            style={{marginTop: 95, marginBottom: 40}}
+            size={'large'}
+            color={colors.parpal}
+          />
+        )}
       </View>
 
       <SafeAreaView
@@ -386,20 +398,6 @@ const AddAddress = ({navigation}: any) => {
           {/* <Mapbackicon /> */}
           <Image source={images.back} style={{width: 20, height: 20}} />
         </TouchableOpacity>
-        {/* <TouchableOpacity
-            style={tw``}
-            onPress={() => {
-              setmenumodal(!menumodal);
-            }}>
-            <Image
-              resizeMode="cover"
-              source={require('../../assets/icons/mapmenu.png')}
-              style={{
-                width: 50,
-                height: 50,
-              }}
-            />
-          </TouchableOpacity> */}
         <View
           style={[
             tw`w-1/2 ${

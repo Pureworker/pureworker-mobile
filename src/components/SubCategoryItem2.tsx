@@ -10,9 +10,13 @@ import {
   removeCategory,
 } from '../store/reducer/mainSlice';
 import {getProviderByService} from '../utils/api/func';
+import {useNavigation} from '@react-navigation/native';
 
 const SubCategoryItem = ({style, itemDetail, index}: any) => {
   const category = useSelector((state: any) => state.user.category);
+  const providersByCateegory = useSelector(
+    (state: any) => state.user.providersByCateegory,
+  );
   const title = itemDetail.value;
   const dispatch = useDispatch();
 
@@ -24,20 +28,26 @@ const SubCategoryItem = ({style, itemDetail, index}: any) => {
   const initFecthProviders = async (id: any) => {
     setisLoading(true);
     const res: any = await getProviderByService(id);
-    console.log('dddddddd', res?.data);
+    console.log('service-dddddddd', res?.data);
     if (res?.status === 201 || res?.status === 200) {
       dispatch(addprovidersByCateegory(res?.data?.data));
     }
+    navigation.navigate('_VServices', {service: itemDetail});
     setisLoading(false);
   };
+  const navigation = useNavigation();
 
   return (
     <TouchableOpacity
       onPress={() => {
-        console.log('====================================');
+        console.log(
+          '====================================',
+          providersByCateegory,
+        );
         console.log(itemDetail);
         console.log('====================================');
         initFecthProviders(itemDetail?._id);
+
         // if (
         //   Array.isArray(category) &&
         //   category.length &&

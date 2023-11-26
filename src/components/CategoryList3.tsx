@@ -123,4 +123,4 @@ const CategoryList3 = ({categoryName, catId}: SubCategoryListPRops) => {
     </View>
   );
 };
-export default CategoryList;
+export default CategoryList3;

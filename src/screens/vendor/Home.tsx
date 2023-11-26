@@ -43,6 +43,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import socket from '../../utils/socket';
 import Geolocation from 'react-native-geolocation-service';
 import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import { ToastLong } from '../../utils/utils';
 
 const Home = ({navigation}: any) => {
   useEffect(() => {
@@ -90,6 +91,13 @@ const Home = ({navigation}: any) => {
       console.log('dddddddd', res?.data?.user);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addUserData(res?.data?.user));
+      }
+
+      if (userData?.geoLocation) {
+        
+      }else{
+        navigation.navigate('AddAddress');
+        ToastLong('Address is required');
       }
       // setloading(false);
     };
