@@ -61,20 +61,41 @@ export const mainSlice = createSlice({
         userType: action.payload.type,
       };
       state.userData = null;
+      state.profileData = null;
       state.completeProfileData = {
         services: [],
       };
       state.pickedServices = [];
+      state.chatData = [];
+      state.chatList = [];
+      state.notifications = [];
       state.pickedServicesId = [];
       state.subcategory = [];
       state.popularServices = [];
       state.transactions = [];
       state.providerOrders = [];
-      state.formStage  = 1;
+      state.formStage = 1;
+      state.serviceView = null;
     },
 
     logout: state => {
       state.isLoggedIn = null;
+      state.userData = null;
+      state.profileData = null;
+      state.completeProfileData = {
+        services: [],
+      };
+      state.pickedServices = [];
+      state.chatData = [];
+      state.chatList = [];
+      state.notifications = [];
+      state.pickedServicesId = [];
+      state.subcategory = [];
+      state.popularServices = [];
+      state.transactions = [];
+      state.providerOrders = [];
+      state.formStage = 1;
+      state.serviceView = null;
     },
 
     addCategory: (state, action) => {
@@ -188,7 +209,7 @@ export const mainSlice = createSlice({
     addcloseProvider: (state, action) => {
       state.closeProvider = action.payload;
     },
-    addprovider_id : (state, action) => {
+    addprovider_id: (state, action) => {
       state.provider_id = action.payload;
     },
     addportfolio: (state, action) => {

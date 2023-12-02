@@ -298,6 +298,7 @@ const AddAddress = ({navigation}: any) => {
               // key: 'AIzaSyBh4G4L8MGiDDxJcSDRPj9jI-BzdiaQo2U',
               key: 'AIzaSyBGv53NEoMm3uPyA9U45ibSl3pOlqkHWN8',
               language: 'en',
+              components: 'country:NG',
               // components: 'country:ng',
               // strictbounds: false,
             }}

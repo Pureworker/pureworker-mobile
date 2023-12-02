@@ -89,8 +89,8 @@ export const verifyUser = async (param: any) => {
     const storeTokenData = async (res: any) => {
       console.log('responsetoken here lets destructure:', res?.data);
       try {
-        await AsyncStorage.setItem('AuthToken', res?.data?.message?.token);
-        await AsyncStorage.setItem('Role', res?.data?.message?.user.accountType);
+        await AsyncStorage.setItem('AuthToken', res?.data?.token);
+        await AsyncStorage.setItem('Role', res?.data?.user.accountType);
       } catch (e) {
         // saving error
         console.log('Error Saving Token data.');
