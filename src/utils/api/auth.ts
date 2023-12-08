@@ -5,7 +5,6 @@ import { Alert } from 'react-native';
 const API_BASE_URL = 'https://api.pureworker.com/api';
 // 'https://pureworker.onrender.com';
 // const API_BASE_URL = 'http://167.86.66.12/api';
-//
 export const verifyLogin = async (param: any) => {
   console.log('verifyLogin func started', param);
   try {
