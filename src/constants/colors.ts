@@ -10,5 +10,4 @@ export default {
   lightBlack: '#000413CF',
   darkPurple: '#2D303C',
   green: '#29D31A',
-
 }

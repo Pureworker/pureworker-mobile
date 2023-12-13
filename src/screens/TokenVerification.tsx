@@ -277,7 +277,7 @@ const TokenVerification = () => {
             alignItems: 'center',
           }}>
           <Text style={{color: '#fff', alignSelf: 'center', marginTop: 24}}>
-            Don't receive your code?{' '}
+            Didn't receive your code?{' '}
           </Text>
           {seconds === 0 && (
             <TouchableOpacity
