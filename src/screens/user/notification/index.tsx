@@ -221,13 +221,14 @@ const Index = () => {
                   width: perWidth(348),
                 },
               ]}>
-              {notifications?.map((item, index): any => {
+              {notifications?.map((item: any, index: any) => {
                 let seen = false;
                 if (viewedNotification?.includes(item.date)) {
                   seen = true;
                 }
                 return (
                   <NotificationComp
+                    key={index}
                     item={item}
                     seen={() => {
                       seenNotification(item.date);

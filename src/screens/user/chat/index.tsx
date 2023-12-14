@@ -153,7 +153,7 @@ const Index = () => {
             </View>
           ) : (
             <>
-              {chatList.map((item, index) => {
+              {chatList.map((item: any, index: any) => {
                 return (
                   <ListComp item={item} key={index} navigation={navigation}/>
                   // <TouchableOpacity

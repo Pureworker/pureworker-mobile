@@ -796,7 +796,6 @@ export const getProviderByProximity = async (param: any) => {
     };
   }
 };
-
 export const tipProvider = async (data: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   console.log('tipProvider func started', data);

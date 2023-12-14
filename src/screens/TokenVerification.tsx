@@ -10,14 +10,12 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-
 import {useNavigation, useRoute} from '@react-navigation/native';
 import OtpInputs from 'react-native-otp-inputs';
 import {useDispatch} from 'react-redux';
 import Snackbar from 'react-native-snackbar';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import tw from 'twrnc';
-
 import Loading from '../components/SpinnerScreen';
 import Button from '../components/Button';
 import colors from '../constants/colors';
@@ -46,7 +44,7 @@ const TokenVerification = () => {
   const [resetOtp] = useResetOtpMutation();
 
   const [seconds, setSeconds] = useState(30);
-  const [isLoading, setisLoading] = useState(false)
+  const [isLoading, setisLoading] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -126,10 +124,10 @@ const TokenVerification = () => {
       } else {
         Snackbar.show({
           text: res?.error?.message
-          ? res?.error?.message
-          : res?.error?.data?.message
-          ? res?.error?.data?.message
-          : 'Oops!, an error occured',
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
           duration: Snackbar.LENGTH_SHORT,
           textColor: '#fff',
           backgroundColor: '#88087B',
@@ -160,7 +158,6 @@ const TokenVerification = () => {
       }
     }
     setisLoading(false);
-
 
     // verification(loginData)
     //   .unwrap()
@@ -254,7 +251,6 @@ const TokenVerification = () => {
           autofillFromClipboard={false}
           //focusStyles={{borderBottomWidth:2,borderBottomColor:PRIMARY_COLOR3}}
         /> */}
-
         <View style={tw`mx-auto  items-center  mt-4`}>
           <OTPInputView
             style={{width: '87.5%', height: 200}}
@@ -269,7 +265,6 @@ const TokenVerification = () => {
             // onCodeFilled={setCode}
           />
         </View>
-
         <View
           style={{
             flexDirection: 'row',

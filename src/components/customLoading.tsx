@@ -6,7 +6,6 @@ import images from '../constants/images';
 
 const CustomLoading = () => {
   const transform = useRef(new Animated.Value(0.5)).current;
-
   useEffect(() => {
     Animated.loop(
       Animated.parallel([
@@ -31,18 +30,16 @@ const CustomLoading = () => {
       ]),
     ).start();
   }, []);
-
   const scale = {
     scale: transform,
   };
-
   return (
     <Animated.View style={[styles.container, {transform: [scale]}]}>
       <Animated.Image
         source={images.logo2}
         style={{
           width: '100%',
-          height: 100,
+          height: 60,
           opacity: transform,
         }}
         resizeMode="contain"
@@ -50,7 +47,6 @@ const CustomLoading = () => {
     </Animated.View>
   );
 };
-
 export default CustomLoading;
 
 const styles = StyleSheet.create({

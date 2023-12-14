@@ -97,7 +97,6 @@ const Home = () => {
   // const getUser = getUserData ?? [];
   // const {data: getCategoryData, isLoading, isError} = useGetCategoryQuery();
   // const getCategory = getCategoryData ?? [];
-
   const [InfoModal, setInfoModal] = useState(false);
   const filteredData = !_.isEmpty(getServiceProviderPotfolioData)
     ? getServiceProviderPotfolioData.filter((item: {description: string}) =>
@@ -105,7 +104,6 @@ const Home = () => {
       )
     : [];
   const [isLoading, setisLoading] = useState(false);
-
   // useFocusEffect(() => {
   //   const initGetUsers = async () => {
   //     const res: any = await getUser('');
@@ -138,7 +136,6 @@ const Home = () => {
   //   initGetPopularServices();
   //   initGetProviderByProximity();
   // });
-
   useEffect(() => {
     const initGetUsers = async () => {
       const res: any = await getUser('');
@@ -182,7 +179,6 @@ const Home = () => {
     initGetPopularServices();
     initGetProviderByProximity();
   }, [dispatch]);
-
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
   const _getCategory = useSelector((state: any) => state.user.category);
@@ -190,10 +186,7 @@ const Home = () => {
     (state: any) => state.user.popularServices,
   );
   const closeProvider = useSelector((state: any) => state.user.closeProvider);
-  // console.log(userData);
-
   console.log('daaaaattttttaaaa', 'here:', closeProvider);
-
   // const filterBySearchProduct = useMemo(() => {
   //   var searchArray = [];
   //   console.log("🚀 ~ file: Home.tsx:64 ~ filterBySearchProduct ~ getServiceProviderProfile:", getServiceProviderProfile)
@@ -218,11 +211,9 @@ const Home = () => {
   //     return [];
   //   }
   // }, [search, getServiceProviderProfile]);
-
   console.log(getServiceProviderProfile[0]);
   const [ContactAgent, setContactAgent] = useState(false);
   const [openDropdownId, setOpenDropdownId] = useState(null);
-
   const handleDropdownClick = (catId: React.SetStateAction<null>) => {
     if (catId === openDropdownId) {
       setOpenDropdownId(null); // Close the dropdown if it's already open
@@ -230,7 +221,6 @@ const Home = () => {
       setOpenDropdownId(catId); // Open the clicked dropdown
     }
   };
-
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
@@ -305,7 +295,6 @@ const Home = () => {
               />
             </TouchableOpacity>
           </View>
-
           <View
             style={[
               tw``,
@@ -349,7 +338,6 @@ const Home = () => {
               />
             </TouchableOpacity>
           </View>
-
           {/* <View
             style={[
               tw`ml-4 mt-4 border-[#FFC727]`,
@@ -386,7 +374,6 @@ const Home = () => {
               </View>
             </View>
           </View> */}
-
           <View style={{flex: 1}}>
             <FlatList
               data={_popularServices.slice(0, 10)}
@@ -405,7 +392,6 @@ const Home = () => {
               keyExtractor={item => item.id}
             />
           </View>
-
           {/*Close to You Section */}
           <View
             style={[
@@ -436,7 +422,6 @@ const Home = () => {
               />
             </TouchableOpacity>
           </View>
-
           <View style={{flex: 1}}>
             <FlatList
               data={closeProvider}
@@ -455,7 +440,6 @@ const Home = () => {
               keyExtractor={item => item.id}
             />
           </View>
-
           {/* Service Ctagories */}
           <View>
             <View
