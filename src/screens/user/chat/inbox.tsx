@@ -255,7 +255,6 @@ export default function Inbox({navigation, route}: any) {
               fontFamily={'Inter-SemiBold'}
             />
           </TouchableOpacity>
-
           <View
             style={[
               tw` w-full mx-auto mt-auto  px-[4%] border-t-4 border-black `,
@@ -319,7 +318,6 @@ export default function Inbox({navigation, route}: any) {
           </View>
         </View>
       </KeyboardAvoidingView>
-
       {/* <View
           style={[
             tw` w-full mx-auto absolute  `,

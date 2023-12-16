@@ -224,8 +224,8 @@ const CloseToYou = () => {
           {getServiceProviderProfile.length < 1 ? (
             <View
               style={[
-                tw`bg-[#D9D9D9] flex flex-col rounded justify-items  mt-3 mx-2`,
-                { height: perHeight(80) },
+                tw`bg-[#D9D9D9] flex flex-col rounded  mt-3 mx-2`,
+                { height: perHeight(80), alignItems: 'center' },
               ]}>
               <View style={tw`my-auto pl-8`}>
                 <Textcomp

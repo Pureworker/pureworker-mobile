@@ -25,6 +25,9 @@ const SubCategoryItem = ({style, itemDetail, index}: any) => {
   //   ();
   // }, [dispatch, id]);
   const [isLoading, setisLoading] = useState(false);
+
+  const userType = useSelector((state: any) => state.user.isLoggedIn);
+
   const initFecthProviders = async (id: any) => {
     setisLoading(true);
     const res: any = await getProviderByService(id);
@@ -32,7 +35,13 @@ const SubCategoryItem = ({style, itemDetail, index}: any) => {
     if (res?.status === 201 || res?.status === 200) {
       dispatch(addprovidersByCateegory(res?.data?.data));
     }
-    navigation.navigate('_VServices', {service: itemDetail});
+
+    //if customer navigate to _service , if provide navigate to _VService
+    if (userType.userType === 'CUSTOMER') {
+      navigation.navigate('_Services', {service: itemDetail});
+    } else {
+      navigation.navigate('_VServices', {service: itemDetail});
+    }
     setisLoading(false);
   };
   const navigation = useNavigation();
