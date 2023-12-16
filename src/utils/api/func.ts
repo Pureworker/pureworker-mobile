@@ -785,7 +785,7 @@ export const getProviderByProximity = async (param: any) => {
     if (response.status === 201) {
       console.log('response data:', response?.data);
     }
-    console.log(response?.data);
+    console.log('GETPROVIDERBYPROXIMITY',response?.data);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);

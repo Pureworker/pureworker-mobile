@@ -619,7 +619,7 @@ const Home = ({navigation}: any) => {
                   socket.connect();
                   setInfoModal(false);
                   navigation.navigate('Inbox', {
-                    id: '65172267a03a2a2150478ca3',
+                    id: '657c4896a2c18a6ba377d05e',
                     name: ' Support',
                   });
                 }}
