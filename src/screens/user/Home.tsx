@@ -31,7 +31,6 @@ import {
   useGetCategoryQuery,
   useGetUserDetailQuery,
 } from '../../store/slice/api';
-
 import Modal from 'react-native-modal';
 import {StackNavigation} from '../../constants/navigation';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -52,9 +51,11 @@ import {
 import FastImage from 'react-native-fast-image';
 import socket from '../../utils/socket';
 import Spinner from 'react-native-loading-spinner-overlay';
-
 import Geolocation from 'react-native-geolocation-service';
 import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import * as Sentry from '@sentry/react-native';
+
+
 const Home = () => {
   useEffect(() => {
     //Request location permission
@@ -171,6 +172,9 @@ const Home = () => {
         if (res?.data?.data) {
           dispatch(addcloseProvider(res?.data?.data));
         }
+        if (res?.data === undefined) {
+          dispatch(addcloseProvider([]));
+        }
       }
       setisLoading(false);
     };
@@ -221,6 +225,7 @@ const Home = () => {
       setOpenDropdownId(catId); // Open the clicked dropdown
     }
   };
+  Sentry.nativeCrash();
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />

@@ -3,6 +3,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import "RNSplashScreen.h"
 #import <GoogleMaps/GoogleMaps.h>
+#import <CodePush/CodePush.h>
 
 @implementation AppDelegate
 
@@ -23,13 +24,21 @@
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
+// - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
+// {
+// #if DEBUG
+//   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
+// #else
+//   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+// #endif
+// }
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
-#if DEBUG
-  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
-#else
-  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
-#endif
+  #if DEBUG
+    return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
+  #else
+    return [CodePush bundleURL];
+  #endif
 }
 
 /// This method controls whether the `concurrentRoot`feature of React18 is turned on or off.

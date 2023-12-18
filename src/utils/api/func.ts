@@ -779,7 +779,7 @@ export const getProviderByProximity = async (param: any) => {
   try {
     const response = await axios({
       method: 'get',
-      url: `${API_BASE_URL}/provider/get-provider-by-proximity/${param}`,
+      url: `${API_BASE_URL}/provider/get-provider-by-proximity`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
     if (response.status === 201) {

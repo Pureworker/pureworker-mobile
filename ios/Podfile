@@ -6,6 +6,7 @@ require_relative '../node_modules/react-native-permissions/scripts/setup'
 # platform :ios, min_ios_version_supported
 platform :ios, '13.0'
 prepare_react_native_project!
+#"7e5752e9-b760-4d48-8da1-50f2e4d96e88" //appcenter app secret
 
 setup_permissions([
   # 'AppTrackingTransparency',

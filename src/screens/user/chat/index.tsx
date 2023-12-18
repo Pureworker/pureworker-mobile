@@ -73,7 +73,7 @@ const Index = () => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <View style={tw``}>
             <Textcomp
-              text={'Edit'}
+              text={'.'}
               size={17}
               lineHeight={17}
               color={'#000413'}

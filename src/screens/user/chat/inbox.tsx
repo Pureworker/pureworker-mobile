@@ -61,6 +61,7 @@ export default function Inbox({navigation, route}: any) {
       from: agentData?._id,
       to: `${userId}`,
       body: message,
+      // isNewChat: chatData?.length === 0 ? true : false,
     };
     setmessage('');
     console.log(data);

@@ -18,11 +18,17 @@ import {
 } from './src/utils/pushnotification_helper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RouteContext} from './src/utils/context/route_context';
+import * as Sentry from '@sentry/react-native';
+import codePush from 'react-native-code-push';
+
+Sentry.init({
+  dsn: 'https://aaf6ecb52ce579d3e2a85f314f1773ad@o4506399508725760.ingest.sentry.io/4506410437509120',
+});
 
 const Stack = createStackNavigator();
 const {width} = Dimensions.get('screen');
 
-export default () => {
+const App = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -240,10 +246,8 @@ export default () => {
         console.error('Error loading state from AsyncStorage:', error);
       }
     };
-
     loadState();
   }, []); // Empty dependency array to run this effect once on component mount
-
   return (
     <RouteContext.Provider value={{currentState, setCurrentState: updateState}}>
       <Provider store={store}>
@@ -256,3 +260,12 @@ export default () => {
     </RouteContext.Provider>
   );
 };
+
+// const codePushOptions = {
+//   checkFrequency:
+//     codePush.CheckFrequency.ON_APP_RESUME |
+//     codePush.CheckFrequency.ON_APP_START,
+//   installMode: codePush.InstallMode.IMMEDIATE,
+// };
+// export default codePush(codePushOptions)(App);
+export default App;

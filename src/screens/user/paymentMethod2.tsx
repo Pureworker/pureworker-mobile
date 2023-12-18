@@ -29,6 +29,7 @@ import {getUser} from '../../utils/api/func';
 import {addUserData} from '../../store/reducer/mainSlice';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
+import {ToastLong} from '../../utils/utils';
 
 const PaymentMethod2 = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -37,6 +38,19 @@ const PaymentMethod2 = ({route}: any) => {
   const [isLoading, setisLoading] = useState(false);
   console.log(route.params);
 
+  const initGetUsers = async () => {
+    setisLoading(true);
+    const res: any = await getUser('');
+    console.log('dddddddd', res);
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addUserData(res?.data?.user));
+    }
+    setisLoading(false);
+    // setloading(false);
+  };
+  // useEffect(() => {
+  //   initGetUsers();
+  // }, [dispatch, navigation]);
   //flutter wave Integration
 
   interface RedirectParams {
@@ -44,10 +58,11 @@ const PaymentMethod2 = ({route}: any) => {
     transaction_id?: string;
     tx_ref: string;
   }
-
   /* An example function called when transaction is completed successfully or canceled */
-  const handleOnRedirect = (data: RedirectParams) => {
+  const handleOnRedirect = async data => {
     console.log(data);
+    await initGetUsers();
+    ToastLong('Funding Successful!');
   };
   const generateTransactionRef = (length: number) => {
     var result = '';
@@ -60,18 +75,14 @@ const PaymentMethod2 = ({route}: any) => {
     return `flw_tx_ref_${result}`;
   };
   const userData = useSelector((state: any) => state.user.userData);
-
   console.log(userData);
-
   //paystack
   const paystackWebViewRef = useRef<paystackProps.PayStackRef>();
   const [webviewVisible, setWebviewVisible] = useState(false);
   const paystackPaymentLink = 'YOUR_PAYSTACK_PAYMENT_LINK_HERE'; // Replace with your actual Paystack payment link
-
   const handleOpenWebview = async () => {
     setWebviewVisible(true);
   };
-
   const handleCloseWebview = () => {
     // if (!_storeuserData?._id) {
     //   Toast.show({
@@ -82,7 +93,6 @@ const PaymentMethod2 = ({route}: any) => {
     // }
     setWebviewVisible(false);
   };
-
   return (
     <View style={[{flex: 1, backgroundColor: colors.darkPurple}]}>
       <ScrollView>
@@ -119,7 +129,6 @@ const PaymentMethod2 = ({route}: any) => {
             />
           </View>
         </View>
-
         <View style={[tw`flex-1`, {}]}>
           {/* <TouchableOpacity
             onPress={() => {}}
@@ -200,7 +209,6 @@ const PaymentMethod2 = ({route}: any) => {
                 fontFamily={'Inter-SemiBold'}
               />
             </View>
-
             <View
               style={tw`flex flex-row bg-white items-center px-4 bg-white mt-4 rounded-lg w-9/10`}>
               <View style={tw``}>
@@ -248,11 +256,14 @@ const PaymentMethod2 = ({route}: any) => {
                   amount: amount,
                   currency: 'NGN',
                   payment_options: 'card',
+                  meta: {
+                    userId: userData?.id, // Replace with the actual field in userData
+                    email: userData?.email,
+                  },
                 }}
               />
             </View>
           )}
-
           {amount >= 100 && (
             <View>
               <TouchableOpacity
@@ -308,7 +319,6 @@ const PaymentMethod2 = ({route}: any) => {
             setisLoading(false);
             navigation.goBack();
           }, 10000);
-
         }}
         paymentLink={''}
         billingEmail={userData?.email}
@@ -320,7 +330,7 @@ const PaymentMethod2 = ({route}: any) => {
         billingName={userData?.fullName || ''}
         userID={userData?._id}
       />
-      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
   );
 };
