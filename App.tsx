@@ -121,7 +121,6 @@ const App = () => {
     </RouteContext.Provider>
   );
 };
-
 const codePushOptions = {
   checkFrequency:
     codePush.CheckFrequency.ON_APP_RESUME |
