@@ -1,5 +1,5 @@
 {
-  "name": "pure_worker_app",
+  "name": "pure_worker",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -15,7 +15,8 @@
     "iosPush": "appcenter codepush release-react -a pureworkerapp-gmail.com/Pureworker-Ios -d Staging",
     "iosPush2": "appcenter codepush release-react -a pureworkerapp-gmail.com/Pureworker-Ios -d Production",
     "androidPush": "appcenter codepush release-react -a pureworkerapp-gmail.com/Pureworker-android -d Staging",
-    "androidPush2": "appcenter codepush release-react -a pureworkerapp-gmail.com/Pureworker-android -d Production"
+    "androidPush2": "appcenter codepush release-react -a pureworkerapp-gmail.com/Pureworker-android -d Production",
+    "codepushall": "yarn iosPush && yarn androidPush"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.18.1",

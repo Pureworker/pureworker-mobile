@@ -153,7 +153,6 @@ const ProfileStep3 = () => {
     }
     setisLoading(false);
   };
-
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
       <Header
@@ -199,7 +198,6 @@ const ProfileStep3 = () => {
               // console.log(text);
             }}
           />
-
           <TextWrapper
             children="Relationship to you"
             isRequired={true}
@@ -212,7 +210,6 @@ const ProfileStep3 = () => {
             state={relation1}
             setState={setRelation1}
           />
-
           <TextWrapper
             children="Phone Number"
             isRequired={true}
@@ -224,9 +221,9 @@ const ProfileStep3 = () => {
             keyBoardType="number-pad"
             labelText={''}
             state={phoneNumber1}
+            maxLength={11}
             setState={setPhoneNumber1}
           />
-
           <TextWrapper
             children="Email Address"
             isRequired={true}

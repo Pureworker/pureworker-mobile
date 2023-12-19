@@ -51,7 +51,6 @@ const Index = () => {
     const date = new Date(dateString);
     return new Intl.DateTimeFormat('en-US', options).format(date);
   }
-
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View

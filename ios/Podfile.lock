@@ -19,7 +19,7 @@ PODS:
     - AppCenter/Core (= 5.0.3)
   - Base64 (1.1.2)
   - boost (1.76.0)
-  - CodePush (8.1.0):
+  - CodePush (8.0.2):
     - Base64 (~> 1.1)
     - JWT (~> 3.0.0-beta.12)
     - React-Core
@@ -923,7 +923,7 @@ SPEC CHECKSUMS:
   AppCenterReactNativeShared: 01df23849b1c3c6eb8c4049f54322635650e98f0
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
-  CodePush: 255d7607f428dcbec39085f81a206b170e01d012
+  CodePush: 9eddecce05cd10491e2673b259c85885a462be33
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: a89a0525bc7ca174675045c2b492b5280d5a2470
   FBReactNativeSpec: 7714e6bc1e9ea23df6c4cb42f0b2fd9c6a3a559c
@@ -1016,6 +1016,6 @@ SPEC CHECKSUMS:
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   Yoga: d56980c8914db0b51692f55533409e844b66133c
 
-PODFILE CHECKSUM: 627f6d764434c7bb8b96904db18c2de69646e626
+PODFILE CHECKSUM: 6cc07be5b2fde353269a8c86b6fb9394ad993932
 
 COCOAPODS: 1.12.1

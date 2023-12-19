@@ -296,7 +296,6 @@ const DrawerContent = () => {
               </TouchableOpacity>
             ))}
           </View>
-
           {userType.userType === 'CUSTOMER' && (
             <TouchableOpacity
               onPress={() => {
@@ -314,13 +313,13 @@ const DrawerContent = () => {
               />
             </TouchableOpacity>
           )}
-          <View style={[tw`mt-4`, {}]}>
+          <View style={[tw`mt-4 ml-3`, {}]}>
             <Textcomp
-              text={`Version: ${Platform.OS === 'ios' ? '1.0.0' : '1.0.0'}`}
+              text={`Version: ${Platform.OS === 'ios' ? '1.0.1' : '1.0.1'}`}
               size={14}
               color={'#000000'}
               style={[
-                tw`ml-3 text-center`,
+                tw`ml-3 text-left`,
                 {lineHeight: 14},
                 {fontWeight: '900'},
               ]}

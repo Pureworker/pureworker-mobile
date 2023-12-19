@@ -19,7 +19,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RouteContext} from './src/utils/context/route_context';
 import * as Sentry from '@sentry/react-native';
-import codePush from 'react-native-code-push';
+import codePush from "react-native-code-push";
 
 Sentry.init({
   dsn: 'https://aaf6ecb52ce579d3e2a85f314f1773ad@o4506399508725760.ingest.sentry.io/4506410437509120',
@@ -122,11 +122,11 @@ const App = () => {
   );
 };
 
-// const codePushOptions = {
-//   // checkFrequency:
-//   //   codePush.CheckFrequency.ON_APP_RESUME |
-//   //   codePush.CheckFrequency.ON_APP_START,
-//   installMode: codePush.InstallMode.IMMEDIATE,
-// };
-// export default codePush(App);
-export default App;
+const codePushOptions = {
+  checkFrequency:
+    codePush.CheckFrequency.ON_APP_RESUME |
+    codePush.CheckFrequency.ON_APP_START,
+  installMode: codePush.InstallMode.IMMEDIATE,
+};
+// export default App;
+export default codePush(codePushOptions)(App);

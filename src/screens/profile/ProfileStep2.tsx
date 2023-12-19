@@ -271,7 +271,7 @@ const PRofileStep2 = () => {
         // city: nationalityValue,
         // potfolios: allPotfolio,
         // serviceId: '',
-        // portfolio: null,
+        // portfolio: null,   
       };
 
       console.log('All Item Here', profileData);

@@ -28,7 +28,7 @@ export default function ListComp({navigation, item}: any) {
   }
   const userData = useSelector((state: any) => state.user.userData);
   const [visible, setvisible] = useState(false);
-  return (
+  return ( 
     <>
       <TouchableOpacity
         onLongPress={() => setvisible(true)}
@@ -57,9 +57,9 @@ export default function ListComp({navigation, item}: any) {
               <Textcomp
                 text={
                   item?.userA?._id === userData?._id
-                    ? item?.userB.fullName
+                    ? item?.userB?.fullName
                     : item?.userB?._id === userData?._id
-                    ? item?.userA.fullName
+                    ? item?.userA?.fullName
                     : null
                 }
                 size={17}
@@ -124,9 +124,9 @@ export default function ListComp({navigation, item}: any) {
                 <Textcomp
                   text={
                     item?.userA?._id === userData?._id
-                      ? item?.userB.fullName
+                      ? item?.userB?.fullName
                       : item?.userB?._id === userData?._id
-                      ? item?.userA.fullName
+                      ? item?.userA?.fullName
                       : null
                   }
                   size={17}
