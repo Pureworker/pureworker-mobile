@@ -18,9 +18,9 @@ import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {perHeight, perWidth} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
-import { useGetUserDetailQuery } from '../../store/slice/api';
-import { addUserData } from '../../store/reducer/mainSlice';
-import { getUser } from '../../utils/api/func';
+import {useGetUserDetailQuery} from '../../store/slice/api';
+import {addUserData} from '../../store/reducer/mainSlice';
+import {getUser} from '../../utils/api/func';
 
 const Account = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -44,6 +44,21 @@ const Account = () => {
   const userData = useSelector((state: any) => state.user.userData);
 
   // console.log(getUser);
+  function convertTimestampToFormattedDate(timestamp) {
+    // Create a new Date object from the timestamp
+    const date = new Date(timestamp);
+
+    // Extract the day, month, and year
+    const day = date.getUTCDate();
+    const month = date.toLocaleString('default', {month: 'short'});
+    const year = date.getUTCFullYear();
+
+    // Format the result
+    const formattedDate = `${day} ${month} ${year}`;
+
+    return formattedDate;
+  }
+
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
@@ -168,7 +183,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                   text={`${userData?.email}`}
+                  text={`${userData?.email}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}
@@ -246,7 +261,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                  text={`${getUser?.nationality}`}
+                  text={`${userData?.nationality}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}
@@ -272,7 +287,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                  text={`${userData?.dob}`}
+                  text={`${convertTimestampToFormattedDate(userData?.dob)}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}
@@ -298,7 +313,7 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                 text={`${userData?.gender}`}
+                  text={`${userData?.gender}`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}

@@ -225,7 +225,7 @@ const Home = () => {
       setOpenDropdownId(catId); // Open the clicked dropdown
     }
   };
-  Sentry.nativeCrash();
+  // Sentry.nativeCrash();
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />

@@ -11,7 +11,11 @@
     "bundle": "npx react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle  --assets-dest android/app/src/main/res/",
     "release-apk": "npm run bundle && cd android && ./gradlew assembleRelease",
     "release-bundle": "npm run bundle && cd android && ./gradlew bundleRelease",
-    "release": "cd android && ./gradlew assembleRelease"
+    "release": "cd android && ./gradlew assembleRelease",
+    "iosPush": "appcenter codepush release-react -a pureworkerapp-gmail.com/Pureworker-Ios -d Staging",
+    "iosPush2": "appcenter codepush release-react -a pureworkerapp-gmail.com/Pureworker-Ios -d Production",
+    "androidPush": "appcenter codepush release-react -a pureworkerapp-gmail.com/Pureworker-android -d Staging",
+    "androidPush2": "appcenter codepush release-react -a pureworkerapp-gmail.com/Pureworker-android -d Production"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.18.1",
@@ -46,7 +50,7 @@
     "react": "18.2.0",
     "react-native": "0.71.7",
     "react-native-calendars": "^1.1300.0",
-    "react-native-code-push": "^8.1.0",
+    "react-native-code-push": "8.0.2",
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-fast-image": "^8.6.3",
     "react-native-geolocation-service": "^5.3.1",

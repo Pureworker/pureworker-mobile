@@ -31,6 +31,13 @@ const {width} = Dimensions.get('screen');
 const App = () => {
   const [user, setUser] = useState(null);
 
+  // useEffect(() => {
+  //   codePush.sync({
+  //     // updateDialog: true,
+  //     installMode: codePush.InstallMode.IMMEDIATE,
+  //   });
+  // }, []);
+
   useEffect(() => {
     SplashScreen.hide();
   }, []);
@@ -47,115 +54,6 @@ const App = () => {
     get();
   }, []);
 
-  // async function onAuthStateChanged(user) {
-  //   setUser(user);
-  //   console.log('fofof', user);
-  // }295860
-
-  // useEffect(() => {
-  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-  //   return subscriber; // unsubscribe on unmount
-  // }, []);
-
-  // useEffect(() => {
-  //   const handleDynamicLink = async (link) => {
-  //     // Check and handle if the link is a email login link
-  //     console.log('link', link);
-  //     if (auth().isSignInWithEmailLink(link.url)) {
-
-  //       try {
-  //         // use the email we saved earlier
-  //         const email = await AsyncStorage.getItem('emailForSignIn');
-  //         // store.dispatch(startLoginLoading())
-
-  //         const checkLink = await auth().signInWithEmailLink(email, link.url);
-  //         const uid = auth().currentUser?.uid
-  //         const userEmail = auth().currentUser?.email
-  //         if (uid && userEmail) {
-  //           // store.dispatch(createUser())
-  //           // create user in database sql
-  //         }
-  //         // handleState()
-
-  //         /* You can now navigate to your initial authenticated screen
-  //           You can also parse the `link.url` and use the `continueurl` param to go to another screen
-  //           The `continueurl` would be the `url` passed to the action code settings */
-  //       }
-  //       catch (e) {
-  //         console.log('err', e);
-  //         Snackbar.show({
-  //           text: 'Expired link',
-  //           duration: Snackbar.LENGTH_SHORT,
-  //         });
-  //         // store.dispatch(createUserSuccess())
-  //       }
-  //     }
-  //   };
-
-  //   const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
-
-  //   /* When the app is not running and is launched by a magic link the `onLink`
-  //      method won't fire, we can handle the app being launched by a magic link like this */
-  //   dynamicLinks().getInitialLink()
-  //     .then(link => link && handleDynamicLink(link));
-
-  //   // When the component is unmounted, remove the listener
-  //   return () => unsubscribe();
-  // }, []);
-
-  // function AppStack() {
-  //   return (
-  //     <>
-  //       <Drawer.Navigator
-
-  //         style={{ flex: 1 }}
-  //         drawerContent={(props) => <CustomDrawerContent {...props} />}
-  //         drawerStyle={{
-  //           backgroundColor: 'white',
-  //           width: width * 0.8,
-
-  //         }}
-  //         screenOptions={{
-  //           activeTintcolor: 'white',
-  //           inactiveTintColor: '#000',
-  //           activeBackgroundColor: 'transparent',
-  //           itemStyle: {
-  //             width: width * 0.75,
-  //             backgroundColor: 'transparent',
-  //             paddingVertical: 16,
-  //             paddingHorizonal: 12,
-  //             justifyContent: 'center',
-  //             alignContent: 'center',
-  //             alignItems: 'center',
-  //             overflow: 'hidden',
-  //           },
-  //           labelStyle: {
-  //             fontSize: 18,
-  //             marginLeft: 12,
-  //             fontWeight: 'normal',
-  //           },
-  //         }}
-  //         initialRouteName="Home"
-
-  //       >
-  //         <Drawer.Screen name="Home" component={Home}  options={{ headerShown: false }} />
-  //         <Drawer.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
-  //         <Drawer.Screen name="PastOrders" component={PastOrders} options={{ headerShown: false }} />
-
-  //         <Stack.Screen name="OrderDetails" component={OrderDetails} options={{manimationEnabled: false, headerShown: false}} />
-  //         <Stack.Screen name="AddOrder" component={AddOrder} options={{manimationEnabled: false, headerShown: false}} />
-  //         <Stack.Screen name="EditOrder" component={EditOrder} options={{manimationEnabled: false, headerShown: false}} />
-  //         <Stack.Screen name="Checkout" component={Checkout} options={{manimationEnabled: false, headerShown: false}} />
-  //         <Stack.Screen name="CompleteOrder" component={CompleteOrder} options={{manimationEnabled: false, headerShown: false}} />
-  //         <Drawer.Screen name="DeliveryStatus" component={DeliveryStatus} options={{manimationEnabled: false, headerShown: false}} />
-  //         <Stack.Screen name="Message" component={Message} options={{manimationEnabled: false, headerShown: false}} />
-  //         <Stack.Screen name="MessageList" component={MessagesList} options={{manimationEnabled: false, headerShown: false}} />
-  //       </Drawer.Navigator>
-
-  //     </>
-  //   );
-  // }
-
   function HomeStack() {
     const userType = useSelector((state: any) => state.user.isLoggedIn);
     console.log('user_', userType);
@@ -165,43 +63,6 @@ const App = () => {
       return <VendorNavigation />;
     }
   }
-  // function OnboardingStack() {
-  //   return (
-  //     <Stack.Navigator initialRouteName="OnBoarding1">
-  //       <Stack.Screen
-  //         name="Signup"
-  //         component={Signup}
-  //         options={{headerShown: false, animationEnabled: false}}
-  //       />
-  //       <Stack.Screen
-  //         name="Login"
-  //         component={Login}
-  //         options={{headerShown: false, animationEnabled: false}}
-  //       />
-  //       <Stack.Screen
-  //         name="BusinessSignup"
-  //         component={BusinessSignup}
-  //         options={{headerShown: false, animationEnabled: false}}
-  //       />
-  //       <Stack.Screen
-  //         name="CustomerSignup"
-  //         component={CustomerSignup}
-  //         options={{headerShown: false, animationEnabled: false}}
-  //       />
-  //       <Stack.Screen
-  //         name="OnBoarding1"
-  //         component={OnBoarding}
-  //         options={{headerShown: false, animationEnabled: false}}
-  //       />
-  //       <Stack.Screen
-  //         name="TokenVerification"
-  //         component={TokenVerification}
-  //         options={{headerShown: false, animationEnabled: false}}
-  //       />
-  //     </Stack.Navigator>
-  //   );
-  // }
-
   // eslint-disable-next-line react/no-unstable-nested-components
   const MainStack = () => {
     const loggedIn = useSelector((state: any) => state.user.isLoggedIn);
@@ -262,10 +123,10 @@ const App = () => {
 };
 
 // const codePushOptions = {
-//   checkFrequency:
-//     codePush.CheckFrequency.ON_APP_RESUME |
-//     codePush.CheckFrequency.ON_APP_START,
+//   // checkFrequency:
+//   //   codePush.CheckFrequency.ON_APP_RESUME |
+//   //   codePush.CheckFrequency.ON_APP_START,
 //   installMode: codePush.InstallMode.IMMEDIATE,
 // };
-// export default codePush(codePushOptions)(App);
+// export default codePush(App);
 export default App;

@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TouchableOpacity, Image, Platform} from 'react-native';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import tw from 'twrnc';
 // import {useStoreActions, useStoreState} from 'easy-peasy';
@@ -267,7 +267,7 @@ const DrawerContent = () => {
           <View
             style={[
               tw`bg-[#2D303C] px-2 w-[90%] pb-6 pt-3 mx-auto rounded-lg`,
-              {marginTop: perHeight(60)},
+              {marginTop: perHeight(50)},
             ]}>
             {navLinks2.map((link, index) => (
               <TouchableOpacity
@@ -304,7 +304,7 @@ const DrawerContent = () => {
               }}
               style={[
                 tw`bg-[#2D303C] px-2 py-4 w-[90%] mx-auto `,
-                {marginTop: perHeight(40), borderRadius: 5},
+                {marginTop: perHeight(30), borderRadius: 5},
               ]}>
               <Textcomp
                 text={'Become a Service Provider'}
@@ -314,6 +314,18 @@ const DrawerContent = () => {
               />
             </TouchableOpacity>
           )}
+          <View style={[tw`mt-4`, {}]}>
+            <Textcomp
+              text={`Version: ${Platform.OS === 'ios' ? '1.0.0' : '1.0.0'}`}
+              size={14}
+              color={'#000000'}
+              style={[
+                tw`ml-3 text-center`,
+                {lineHeight: 14},
+                {fontWeight: '900'},
+              ]}
+            />
+          </View>
         </View>
       </DrawerContentScrollView>
       <Modal
