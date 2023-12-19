@@ -273,9 +273,7 @@ const PRofileStep2 = () => {
         // serviceId: '',
         // portfolio: null,   
       };
-
       console.log('All Item Here', profileData);
-
       // const d = {
       //   geoLocation: {
       //     type: 'Point',
