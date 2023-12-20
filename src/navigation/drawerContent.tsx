@@ -24,6 +24,7 @@ import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
 import FastImage from 'react-native-fast-image';
+import socket from '../utils/socket';
 
 const DrawerContent = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -64,6 +65,7 @@ const DrawerContent = () => {
   const getUser = getUserData ?? [];
   //
   const userData = useSelector((state: any) => state.user.userData);
+  const supportUser = useSelector((store: any) => store.user.supportUser);
 
   const [PhotoUri, setPhotoUri] = useState('');
   const options = {mediaType: 'photo', selectionLimit: 1};
@@ -375,6 +377,12 @@ const DrawerContent = () => {
               <TouchableOpacity
                 onPress={() => {
                   setContactAgent(true);
+                  socket.connect();
+                  setInfoModal(false);
+                  navigation.navigate('Inbox', {
+                    id: supportUser?._id || supportUser?.id,
+                    name: 'Support',
+                  });
                 }}
                 style={{
                   width: perWidth(316),
@@ -416,5 +424,4 @@ const DrawerContent = () => {
     </>
   );
 };
-
 export default DrawerContent;
