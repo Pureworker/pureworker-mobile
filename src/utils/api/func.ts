@@ -1,5 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {store} from '../../store/store';
+import {addsupportUser} from '../../store/reducer/mainSlice';
 // const API_BASE_URL = 'https://pureworker.onrender.com';
 // const API_BASE_URL = 'http://167.86.66.12/api';
 // const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
@@ -134,12 +136,16 @@ export const uploadAssetsDOCorIMG = async (param: any) => {
   console.log('uploadAssetsDOCorIMG started', param, formData, AuthToken);
 
   try {
-    const response = await axios.post(`https://creatbase-dev.onrender.com/assets/upload`, formData, {
-      headers: {
-        Authorization: `Bearer ${AuthToken}`,
-        'Content-Type': 'multipart/form-data',
+    const response = await axios.post(
+      'https://creatbase-dev.onrender.com/assets/upload',
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${AuthToken}`,
+          'Content-Type': 'multipart/form-data',
+        },
       },
-    });
+    );
 
     if (response.status === 201) {
       console.log('uploadAssetsDOCorIMG', response?.data);
@@ -159,11 +165,11 @@ export const completeProfile = async (param: any) => {
   console.log('completeProfile func started', param);
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   console.log(AuthToken);
-  
+
   try {
     const response = await axios({
       method: 'post',
-      url: `${API_BASE_URL}/provider/create-profileN`,
+      url: `${API_BASE_URL}/provider/create-profile`,
       data: param,
       headers: {
         Authorization: `Bearer ${AuthToken}`,
@@ -308,7 +314,7 @@ export const createOrder = async (param: any) => {
   }
 };
 
-export const cancelOrder = async (param: any, data:any) => {
+export const cancelOrder = async (param: any, data: any) => {
   console.log('cancelOrder func started', param);
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   try {
@@ -361,7 +367,7 @@ export const completedOrder = async (param: any) => {
     };
   }
 };
-export const updateOrder = async (param: any, data:any) => {
+export const updateOrder = async (param: any, data: any) => {
   console.log('updateOrder func started', param);
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   try {
@@ -388,8 +394,8 @@ export const updateOrder = async (param: any, data:any) => {
     };
   }
 };
-export const updateStatusOrder = async (param: any, data:any) => {
-  console.log('updateStatusOrder func started', param,data);
+export const updateStatusOrder = async (param: any, data: any) => {
+  console.log('updateStatusOrder func started', param, data);
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   try {
     const response = await axios({
@@ -414,7 +420,7 @@ export const updateStatusOrder = async (param: any, data:any) => {
     };
   }
 };
-export const addFeedbackOrder = async (param: any, data:any) => {
+export const addFeedbackOrder = async (param: any, data: any) => {
   console.log('addFeedbackOrder func started', param);
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   try {
@@ -441,7 +447,7 @@ export const addFeedbackOrder = async (param: any, data:any) => {
     };
   }
 };
-export const addRatingOrder = async (param: any, data:any) => {
+export const addRatingOrder = async (param: any, data: any) => {
   console.log('addRatingOrder func started', param);
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   try {
@@ -558,7 +564,7 @@ export const addPushToken = async (param: any) => {
     console.log('response', response);
     return response;
   } catch (error) {
-    console.log('addPushToken',error, error?.response?.data);
+    console.log('addPushToken', error, error?.response?.data);
     return {
       status: 400,
       err: error,
@@ -697,9 +703,8 @@ export const getUserNotification = async (param: any) => {
   }
 };
 
-
 //orders
-export const sendPrivateFeedback = async (param: any, data:any) => {
+export const sendPrivateFeedback = async (param: any, data: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   console.log('sendPrivateFeedback func started', param, data);
   try {
@@ -784,7 +789,7 @@ export const getProviderByProximity = async (param: any) => {
     if (response.status === 201) {
       console.log('response data:', response?.data);
     }
-    console.log('GETPROVIDERBYPROXIMITY',response?.data);
+    console.log('GETPROVIDERBYPROXIMITY', response?.data);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -871,7 +876,6 @@ export const _verifyID = async (data: any) => {
   }
 };
 
-
 export const getReferralDetails = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   console.log('getReferralDetails func started', param);
@@ -896,7 +900,7 @@ export const getReferralDetails = async (param: any) => {
   }
 };
 
-export const deleteAccount  = async () => {
+export const deleteAccount = async () => {
   console.log('deleteAccount func started');
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   try {
@@ -923,7 +927,6 @@ export const deleteAccount  = async () => {
   }
 };
 
-
 export const _deactivateAccount = async (data: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   console.log('f_deactivateAccount func started', data);
@@ -941,6 +944,33 @@ export const _deactivateAccount = async (data: any) => {
     console.log(response?.data);
     return response;
   } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+export const getSupportUser = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getSupportUser func started', AuthToken);
+
+  try {
+    const response = await axios({
+      method: 'get',
+      url: 'https://api.pureworker.com/api/get-support-user',
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
+    if (response.status === 201 || response.status === 200) {
+      console.log('response data:', response?.data);
+      store.dispatch(addsupportUser(response?.data?.data));
+    }
+    //   console.log("res", response);
+    return response;
+  } catch (error: any) {
     console.log(error, error?.response?.data);
     return {
       status: 400,

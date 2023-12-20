@@ -27,6 +27,7 @@ import {
   getCategory,
   getPopularService,
   getProviderOrders,
+  getSupportUser,
   getUser,
 } from '../../utils/api/func';
 import {
@@ -119,6 +120,7 @@ const Home = ({navigation}: any) => {
       setisLoading(false);
     };
     initGetUsers();
+    getSupportUser('');
     // initGetCategory();
     // initGetPopularServices();
   }, [dispatch]);
@@ -154,6 +156,7 @@ const Home = ({navigation}: any) => {
 
   const {currentState, setCurrentState} = useContext(RouteContext);
   const formStage = useSelector((state: any) => state.user.formStage);
+  const supportUser = useSelector((store: any) => store.user.supportUser);
 
   console.log('stage', formStage);
 
@@ -616,8 +619,9 @@ const Home = ({navigation}: any) => {
                   // setContactAgent(true);
                   socket.connect();
                   setInfoModal(false);
+                  console.log('ERRRRRRRRRRRRR', supportUser);
                   navigation.navigate('Inbox', {
-                    id: '657c4896a2c18a6ba377d05e',
+                    id: supportUser?._id || supportUser?.id,
                     name: ' Support',
                   });
                 }}
@@ -625,7 +629,7 @@ const Home = ({navigation}: any) => {
                   width: perWidth(316),
                   height: perHeight(40),
                   borderRadius: 13,
-                  justifyContent: 'center',
+                  justifyContent: 'center', 
                   alignItems: 'center',
                   backgroundColor: colors.darkPurple,
                   marginTop: 10,

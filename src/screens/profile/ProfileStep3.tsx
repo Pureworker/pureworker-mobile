@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, ActivityIndicator, ScrollView} from 'react-native';
+import {View, ActivityIndicator, ScrollView, Text} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
 import Header from '../../components/Header';
@@ -20,6 +20,8 @@ import {addcompleteProfile, addformStage} from '../../store/reducer/mainSlice';
 import {completeProfile} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
+import * as yup from 'yup';
+import {useFormik} from 'formik';
 type Route = {
   key: string;
   name: string;
@@ -27,6 +29,26 @@ type Route = {
     serviceId: string;
   };
 };
+
+const validationSchema = yup.object().shape({
+  name1: yup.string().required('Full Name is required'),
+  relation1: yup.string().required('Relationship is required'),
+  phoneNumber1: yup.string().required('Phone Number is required'),
+  email1: yup
+    .string()
+    .email('Enter a valid email')
+    .required('Email is required'),
+  address1: yup.string().required('Address is required'),
+  name2: yup.string().required('Full Name is required'),
+  relation2: yup.string().required('Relationship is required'),
+  phoneNumber2: yup.string().required('Phone Number is required'),
+  email2: yup
+    .string()
+    .email('Enter a valid email')
+    .required('Email is required'),
+  address2: yup.string().required('Address is required'),
+});
+
 const ProfileStep3 = () => {
   const navigation = useNavigation<StackNavigation>();
   const completeProfileData = useSelector(
@@ -69,21 +91,55 @@ const ProfileStep3 = () => {
 
   const dispatch = useDispatch();
 
-  const handleProfileSetup = async () => {
+  const formik = useFormik({
+    initialValues: {
+      name1: completeProfileData?.contact?.[0]?.fullName || '',
+      relation1: completeProfileData?.contact?.[0]?.relationship || '',
+      phoneNumber1: completeProfileData?.contact?.[0]?.phoneNumber || '',
+      email1: completeProfileData?.contact?.[0]?.email || '',
+      address1: completeProfileData?.contact?.[0]?.address || '',
+      name2: completeProfileData?.contact?.[1]?.fullName || '',
+      relation2: completeProfileData?.contact?.[1]?.relationship || '',
+      phoneNumber2: completeProfileData?.contact?.[1]?.phoneNumber || '',
+      email2: completeProfileData?.contact?.[1]?.email || '',
+      address2: completeProfileData?.contact?.[1]?.address || '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: async values => {
+      console.log('hello');
+
+      handleProfileSetup(values);
+    },
+  });
+
+  const handleProfileSetup = async (values: {
+    name1: any;
+    relation1: any;
+    phoneNumber1: any;
+    email1: any;
+    address1: any;
+    name2: any;
+    relation2: any;
+    phoneNumber2: any;
+    email2: any;
+    address2: any;
+  }) => {
+    console.log('Started');
+
     if (
       // route?.params?.serviceId &&
-      name1 &&
-      name2 &&
-      relation1 &&
-      relation2 &&
-      phoneNumber1 &&
-      phoneNumber2 &&
-      email1 &&
-      email2 &&
-      address1 &&
-      address2
+      values.name1 &&
+      values.name2 &&
+      values.relation1 &&
+      values.relation2 &&
+      values.phoneNumber1 &&
+      values.phoneNumber2 &&
+      values.email1 &&
+      values.email2 &&
+      values.address1 &&
+      values.address2
     ) {
-      if (!validateEmail(email1)) {
+      if (!validateEmail(values.email1)) {
         Snackbar.show({
           text: 'Please enter a valid email',
           duration: Snackbar.LENGTH_SHORT,
@@ -92,7 +148,7 @@ const ProfileStep3 = () => {
         });
         return;
       }
-      if (!validateEmail(email2)) {
+      if (!validateEmail(values.email2)) {
         Snackbar.show({
           text: 'Please enter a valid email',
           duration: Snackbar.LENGTH_SHORT,
@@ -101,20 +157,36 @@ const ProfileStep3 = () => {
         });
         return;
       }
+      // const contact = [
+      //   {
+      //     fullName: name1,
+      //     relationship: relation1,
+      //     phoneNumber: phoneNumber1,
+      //     email: email1,
+      //     address: address1,
+      //   },
+      //   {
+      //     fullName: name2,
+      //     relationship: relation2,
+      //     phoneNumber: phoneNumber2,
+      //     email: email2,
+      //     address: address2,
+      //   },
+      // ];
       const contact = [
         {
-          fullName: name1,
-          relationship: relation1,
-          phoneNumber: phoneNumber1,
-          email: email1,
-          address: address1,
+          fullName: values.name1,
+          relationship: values.relation1,
+          phoneNumber: values.phoneNumber1,
+          email: values.email1,
+          address: values.address1,
         },
         {
-          fullName: name2,
-          relationship: relation2,
-          phoneNumber: phoneNumber2,
-          email: email2,
-          address: address2,
+          fullName: values.name2,
+          relationship: values.relation2,
+          phoneNumber: values.phoneNumber2,
+          email: values.email2,
+          address: values.address2,
         },
       ];
       dispatch(
@@ -192,12 +264,18 @@ const ProfileStep3 = () => {
           <TextInputs
             style={{marginTop: 10, backgroundColor: colors.greyLight1}}
             labelText={''}
-            state={name1}
-            setState={text => {
-              setName1(text);
-              // console.log(text);
-            }}
+            // state={name1}
+            // setState={text => {
+            //   setName1(text);
+            //   // console.log(text);
+            // }}
+            state={formik.values.name1}
+            setState={formik.handleChange('name1')}
+            error={formik.errors.name1}
           />
+          {formik.touched.name1 && formik.errors.name1 && (
+            <Text style={{color: 'red'}}>{formik.errors.name1}</Text>
+          )}
           <TextWrapper
             children="Relationship to you"
             isRequired={true}
@@ -207,9 +285,14 @@ const ProfileStep3 = () => {
           <TextInputs
             style={{marginTop: 10, backgroundColor: colors.greyLight1}}
             labelText={''}
-            state={relation1}
-            setState={setRelation1}
+            state={formik.values.relation1}
+            // setState={setRelation1}
+            setState={formik.handleChange('relation1')}
+            error={formik.errors.relation1}
           />
+          {formik.touched.relation1 && formik.errors.relation1 && (
+            <Text style={{color: 'red'}}>{formik.errors.relation1}</Text>
+          )}
           <TextWrapper
             children="Phone Number"
             isRequired={true}
@@ -220,10 +303,15 @@ const ProfileStep3 = () => {
             style={{marginTop: 10, backgroundColor: colors.greyLight1}}
             keyBoardType="number-pad"
             labelText={''}
-            state={phoneNumber1}
+            state={formik.values.phoneNumber1}
             maxLength={11}
-            setState={setPhoneNumber1}
+            // setState={setPhoneNumber1}
+            setState={formik.handleChange('phoneNumber1')}
+            error={formik.errors.phoneNumber1}
           />
+          {formik.touched.name1 && formik.errors.name1 && (
+            <Text style={{color: 'red'}}>{formik.errors.name1}</Text>
+          )}
           <TextWrapper
             children="Email Address"
             isRequired={true}
@@ -234,9 +322,15 @@ const ProfileStep3 = () => {
             style={{marginTop: 10, backgroundColor: colors.greyLight1}}
             labelText={''}
             keyBoardType={'email-address'}
-            state={email1}
-            setState={setEmail1}
+            // state={email1}
+            state={formik.values.email1}
+            // setState={setEmail1}
+            setState={formik.handleChange('email1')}
+            error={formik.errors.email1}
           />
+          {formik.touched.name1 && formik.errors.name1 && (
+            <Text style={{color: 'red'}}>{formik.errors.name1}</Text>
+          )}
 
           <TextWrapper
             children="Address"
@@ -255,11 +349,16 @@ const ProfileStep3 = () => {
               styleInput={{color: colors.black, paddingHorizontal: 18}}
               style={{marginTop: 0, backgroundColor: colors.greyLight1}}
               labelText={'Enter address'}
-              state={address1}
-              setState={setAddress1}
+              state={formik.values.address1}
+              // setState={setAddress1}
+              setState={formik.handleChange('address1')}
               multiline={true}
               nbLines={5}
+              error={formik.errors.address1}
             />
+            {formik.touched.address1 && formik.errors.address1 && (
+              <Text style={{color: 'red'}}>{formik.errors.address1}</Text>
+            )}
           </View>
           <TextWrapper
             children="Contact 2"
@@ -279,15 +378,22 @@ const ProfileStep3 = () => {
               display: 'none',
             }}
             labelText={''}
-            state={name2}
-            setState={setName2}
+            // state={name2}
+            // setState={setName2}
+            state={formik.values.name2}
+            setState={formik.handleChange('name2')}
           />
           <TextInputs
             style={{marginTop: 10, backgroundColor: colors.greyLight1}}
             labelText={''}
-            state={name2}
-            setState={setName2}
+            // state={name2}
+            // setState={setName2}
+            state={formik.values.name2}
+            setState={formik.handleChange('name2')}
           />
+          {formik.touched.name2 && formik.errors.name2 && (
+            <Text style={{color: 'red'}}>{formik.errors.name2}</Text>
+          )}
 
           <TextWrapper
             children="Relationship to you"
@@ -298,10 +404,15 @@ const ProfileStep3 = () => {
           <TextInputs
             style={{marginTop: 10, backgroundColor: colors.greyLight1}}
             labelText={''}
-            state={relation2}
-            setState={setRelation2}
+            // state={relation2}
+            state={formik.values.relation2}
+            // setState={setRelation2}
+            setState={formik.handleChange('relation2')}
+            error={formik.errors.relation2}
           />
-
+          {formik.touched.relation2 && formik.errors.relation2 && (
+            <Text style={{color: 'red'}}>{formik.errors.relation2}</Text>
+          )}
           <TextWrapper
             children="Phone Number"
             isRequired={true}
@@ -312,9 +423,16 @@ const ProfileStep3 = () => {
             style={{marginTop: 10, backgroundColor: colors.greyLight1}}
             keyBoardType="number-pad"
             labelText={''}
-            state={phoneNumber2}
-            setState={setPhoneNumber2}
+            // state={phoneNumber2}
+            state={formik.values.phoneNumber2}
+            maxLength={11}
+            // setState={setPhoneNumber2}
+            setState={formik.handleChange('phoneNumber2')}
+            error={formik.errors.phoneNumber2}
           />
+          {formik.touched.phoneNumber2 && formik.errors.phoneNumber2 && (
+            <Text style={{color: 'red'}}>{formik.errors.phoneNumber2}</Text>
+          )}
 
           <TextWrapper
             children="Email Address"
@@ -326,9 +444,15 @@ const ProfileStep3 = () => {
             style={{marginTop: 10, backgroundColor: colors.greyLight1}}
             keyBoardType="email-address"
             labelText={''}
-            state={email2}
-            setState={setEmail2}
+            // state={email2}
+            state={formik.values.email2}
+            // setState={setEmail2}
+            setState={formik.handleChange('email2')}
+            error={formik.errors.email2}
           />
+          {formik.touched.email2 && formik.errors.email2 && (
+            <Text style={{color: 'red'}}>{formik.errors.email2}</Text>
+          )}
 
           <TextWrapper
             children="Address"
@@ -347,12 +471,18 @@ const ProfileStep3 = () => {
               styleInput={{color: colors.black, paddingHorizontal: 18}}
               style={{marginTop: 0, backgroundColor: colors.greyLight1}}
               labelText={'Enter address'}
-              state={address2}
-              setState={setAddress2}
+              // state={address2}
+              state={formik.values.address2}
+              // setState={setAddress2}
+              setState={formik.handleChange('address2')}
               multiline={true}
               nbLines={5}
+              error={formik.errors.address2}
             />
           </View>
+          {formik.touched.address2 && formik.errors.address2 && (
+            <Text style={{color: 'red'}}>{formik.errors.address2}</Text>
+          )}
 
           <View
             style={[
@@ -368,12 +498,13 @@ const ProfileStep3 = () => {
 
             {!isLoading ? (
               <Button
-                onClick={() => {
-                  // navigation.navigate('ProfileStep4', {
-                  //   serviceId: route?.params?.serviceId,
-                  // });
-                  handleProfileSetup();
-                }}
+                // onClick={() => {
+                //   // navigation.navigate('ProfileStep4', {
+                //   //   serviceId: route?.params?.serviceId,
+                //   // });
+                //   handleProfileSetup();
+                // }}
+                onClick={formik.handleSubmit}
                 style={[
                   tw`ml-auto`,
                   {width: 90, backgroundColor: colors.lightBlack},

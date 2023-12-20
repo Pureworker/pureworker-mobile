@@ -43,6 +43,7 @@ const initialState = {
   portfolio: {},
   portfolio2: [],
   portfolio3: {},
+  supportUser: null,
 
   //provider-profileID
   provider_id: null,
@@ -221,6 +222,10 @@ export const mainSlice = createSlice({
     addReferralDetails: (state, action) => {
       state.referralDetails = action.payload;
     },
+    addsupportUser: (state, action) => {
+      console.log('addsupportUser', action.payload);
+      state.supportUser = action.payload;
+    },
   },
 });
 
@@ -254,6 +259,7 @@ export const {
   addportfolio,
   addformStage,
   addReferralDetails,
+  addsupportUser,
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);

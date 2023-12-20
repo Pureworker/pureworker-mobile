@@ -46,6 +46,7 @@ import {
   getCategory,
   getPopularService,
   getProviderByProximity,
+  getSupportUser,
   getUser,
 } from '../../utils/api/func';
 import FastImage from 'react-native-fast-image';
@@ -55,7 +56,6 @@ import Geolocation from 'react-native-geolocation-service';
 import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import * as Sentry from '@sentry/react-native';
 import {ToastLong} from '../../utils/utils';
-
 
 const Home = () => {
   useEffect(() => {
@@ -156,6 +156,7 @@ const Home = () => {
     initGetCategory();
     initGetPopularServices();
     initGetProviderByProximity();
+    getSupportUser('');
   }, [dispatch]);
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
@@ -163,6 +164,7 @@ const Home = () => {
   const _popularServices = useSelector(
     (state: any) => state.user.popularServices,
   );
+  const supportUser = useSelector((store: any) => store.user.supportUser);
   const closeProvider = useSelector((state: any) => state.user.closeProvider);
   console.log('daaaaattttttaaaa', 'here:', closeProvider);
   // const filterBySearchProduct = useMemo(() => {
@@ -559,7 +561,7 @@ const Home = () => {
                   socket.connect();
                   setInfoModal(false);
                   navigation.navigate('Inbox', {
-                    id: '657c4896a2c18a6ba377d05e',
+                    id: supportUser?._id || supportUser?.id,
                     name: ' Support',
                   });
                 }}

@@ -248,8 +248,10 @@ const PaymentMethod2 = ({route}: any) => {
                 options={{
                   tx_ref: generateTransactionRef(10),
                   // tx_ref: Math.floor(Date.now() / 1000),
-                  authorization:
-                    'FLWPUBK_TEST-cf38ec06f5d38e1724ad6b4fe75c0195-X',
+                  authorization: 'FLWPUBK_TEST-3974735cc249821fd3631b0fade1a87d-X',
+                  //test FLWPUBK_TEST-3974735cc249821fd3631b0fade1a87d-X
+                    // 'FLWPUBK_TEST-cf38ec06f5d38e1724ad6b4fe75c0195-X',
+                    // live  FLWPUBK-663cbe9358e0215f374f1d1b613ed1b9-X
                   customer: {
                     email: userData?.email,
                   },

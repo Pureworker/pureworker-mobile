@@ -15,6 +15,7 @@ type TextInputsProps = {
   disable?: boolean;
   maxLength?: number;
   styleInput?: any;
+  error?: any;
 };
 
 const TextInputs = ({
@@ -31,6 +32,7 @@ const TextInputs = ({
   disable,
   maxLength,
   styleInput,
+  error,
 }: TextInputsProps) => {
   const [focuse, setFocuse] = useState(false);
   const [secureText, setSecureTextEntry] = useState(true);
@@ -93,6 +95,7 @@ const TextInputs = ({
           placeholder={labelText}
           maxLength={maxLength}
           placeholderTextColor={'#757575'}
+          error={error}
           style={[
             {
               // marginTop: multiline ? -10 : -11,

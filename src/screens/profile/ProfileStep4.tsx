@@ -342,6 +342,7 @@ const ProfileStep4 = () => {
                   paddingHorizontal: 10,
                 }}
                 labelText={''}
+                maxLength={11}
                 state={idNumber}
                 setState={setIdNumber}
               />

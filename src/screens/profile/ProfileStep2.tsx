@@ -49,6 +49,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import {RouteContext} from '../../utils/context/route_context';
 import Services from '../user/services';
+import {SelectList} from 'react-native-dropdown-select-list';
 
 const PRofileStep2 = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -271,7 +272,7 @@ const PRofileStep2 = () => {
         // city: nationalityValue,
         // potfolios: allPotfolio,
         // serviceId: '',
-        // portfolio: null,   
+        // portfolio: null,
       };
       console.log('All Item Here', profileData);
       // const d = {
@@ -754,7 +755,6 @@ const PRofileStep2 = () => {
               color: colors.black,
             }}
           />
-
           {servicePrice?.length
             ? servicePrice?.map((item: any, index: any) => {
                 return (
@@ -840,7 +840,126 @@ const PRofileStep2 = () => {
                 );
               })
             : null}
-          <View
+
+          <View style={[tw`flex bg`, {width: WIDTH_WINDOW * 0.9}]}>
+            {/* <SelectList
+                setSelected={setValue}
+                onSelect={(item) => {
+                  if (value !== status) {
+                    // console.log("hey =========", value, status);
+                    updateStatus(value);
+                  }
+                }}
+                fontFamily="Raleway-Bold"
+                data={filterStatus}
+                save="key"
+                placeholder="OPEN"
+                arrowicon={
+                  <View
+                    style={[
+                      tw`items-center justify-center bg-[${printTicketStatus(
+                        status.toLowerCase()
+                      )}]`,
+                      {
+                        borderLeftWidth:
+                          status === "resolved" || status === "closed" ? 0 : 2,
+                        borderLeftColor: colors.white,
+                        width: perHeight(50),
+                        height: 40,
+                      },
+                    ]}
+                  >
+                    {isUpdating ? (
+                      <ActivityIndicator size="small" color={colors.white} />
+                    ) : (
+                      <Entypo
+                        name="chevron-down"
+                        size={32}
+                        color={
+                          status === "resolved" || status === "closed"
+                            ? printTicketStatus(status.toLowerCase())
+                            : colors.white
+                        }
+                        style={tw`self-center`}
+                      />
+                    )}
+                  </View>
+                }
+                search={false}
+                boxStyles={[
+                  // styles.dropdown,
+                  tw`bg-[${printTicketStatus(
+                    status.toLowerCase()
+                  )}] w-[82%] items-center flex-row justify-between flex-1`,
+                  {
+                    height: 40,
+                    borderWidth: 0,
+                    paddingRight: 5,
+                    borderRadius: 8,
+                  },
+                ]}
+                inputStyles={[
+                  tw`bg-[${printTicketStatus(
+                    status.toLowerCase()
+                  )}] items-center flex-row justify-center flex-1`,
+                  {
+                    height: 40,
+                    textAlignVertical: "center",
+                    fontSize: 14,
+                    textTransform: "uppercase",
+                    color: colors.white,
+                    borderRadius: 8,
+                  },
+                ]}
+                dropdownStyles={[
+                  tw`flex flex-row w-[82%]`,
+                  styles.statesDropdown,
+                ]}
+                dropdownTextStyles={styles.statusDropdownText}
+                // maxHeight={200}
+                defaultOption={{ key: status, value: status }}
+              /> */}
+            <TextWrapper
+              children="What City do you offer your Services?"
+              isRequired={true}
+              fontType={'semiBold'}
+              style={{
+                fontSize: 16,
+                marginTop: 20,
+                marginBottom: 13,
+                color: colors.black,
+              }}
+            />
+            <SelectList
+              setSelected={(val: any) => setNationalityValue(val)}
+              data={allCities}
+              save="value"
+              boxStyles={[
+                tw` w-full items-center flex-row justify-between flex-1`,
+                {
+                  paddingRight: 5,
+                  borderRadius: 8,
+                  backgroundColor: colors.lightBlack,
+                  borderColor: colors.primary,
+                  borderWidth: 2,
+                },
+              ]}
+              inputStyles={[
+                tw`items-center flex-row justify-center flex-1`,
+                {
+                  height: 30,
+                  textAlignVertical: 'center',
+                  fontSize: 14,
+                  textTransform: 'uppercase',
+                  color: colors.white,
+                  borderRadius: 8,
+                },
+              ]}
+              placeholder="Select a city"
+            />
+          </View>
+
+          {/* <View
             style={{
               minHeight: 500,
               marginBottom: -400,
@@ -909,7 +1028,7 @@ const PRofileStep2 = () => {
                 }}
               />
             </ScrollView>
-          </View>
+          </View> */}
         </View>
         <View
           style={{
