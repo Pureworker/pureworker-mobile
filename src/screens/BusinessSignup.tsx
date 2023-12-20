@@ -29,6 +29,7 @@ import {StackNavigation} from '../constants/navigation';
 import {generalStyles} from '../constants/generalStyles';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import {Signup} from '../utils/api/auth';
+import { isValidPhoneNumber } from '../utils/utils';
 
 const {width, height} = Dimensions.get('window');
 export default function BusinessSignup() {
@@ -87,7 +88,18 @@ export default function BusinessSignup() {
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
-      } else {
+      }
+      else if (!isValidPhoneNumber(phoneName)) {
+        Snackbar.show({
+          text: 'Please enter a valid phone number',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+        setisLoading(false);
+        return;
+      } 
+       else {
         setisLoading(true);
         const loginData: any = {
           email: email.toLowerCase().trim(),
@@ -492,6 +504,7 @@ export default function BusinessSignup() {
                   labelText={'Enter Phone'}
                   state={phoneName}
                   setState={setPhoneName}
+                  maxLength={11}
                   keyBoardType={'number-pad'}
                 />
                 <Text
@@ -573,6 +586,7 @@ export default function BusinessSignup() {
                 labelText={'Enter Phone'}
                 state={phoneName}
                 setState={setPhoneName}
+                maxLength={11}
                 keyBoardType={'number-pad'}
               />
               <Text

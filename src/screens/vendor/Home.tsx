@@ -43,7 +43,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import socket from '../../utils/socket';
 import Geolocation from 'react-native-geolocation-service';
 import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
-import { ToastLong } from '../../utils/utils';
+import {ToastLong} from '../../utils/utils';
 
 const Home = ({navigation}: any) => {
   useEffect(() => {
@@ -94,8 +94,7 @@ const Home = ({navigation}: any) => {
       }
 
       if (userData?.geoLocation) {
-        
-      }else{
+      } else {
         navigation.navigate('AddAddress');
         ToastLong('Address is required');
       }
@@ -119,7 +118,7 @@ const Home = ({navigation}: any) => {
       }
       setisLoading(false);
     };
-    initGetUsers(); 
+    initGetUsers();
     // initGetCategory();
     // initGetPopularServices();
   }, [dispatch]);
@@ -145,7 +144,7 @@ const Home = ({navigation}: any) => {
     };
     initGetOrders();
   }, []);
- 
+
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
   const _getCategory = useSelector((state: any) => state.user.category);
@@ -543,8 +542,7 @@ const Home = ({navigation}: any) => {
                   navigation.navigate('ProfileStep4');
                 } else if (formStage === 5) {
                   navigation.navigate('ProfileStep5');
-                }
-                else if (formStage === 21) {
+                } else if (formStage === 21) {
                   navigation.navigate('ProfileStep21');
                 }
               }}

@@ -29,6 +29,7 @@ import Tooltip from 'react-native-walkthrough-tooltip';
 import {generalStyles} from '../constants/generalStyles';
 import {SIZES} from '../utils/position/sizes';
 import {Signup} from '../utils/api/auth';
+import { isValidPhoneNumber } from '../utils/utils';
 
 const {width, height} = Dimensions.get('window');
 export default function CustomerSignup() {
@@ -60,9 +61,7 @@ export default function CustomerSignup() {
   const [toolTipRightVisible, setToolTipRightVisible] = useState(false);
 
   const [isLoading, setisLoading] = useState(false);
-
   const navigation = useNavigation<StackNavigation>();
-
   useEffect(() => {
     setNationalityItems([...allCountry]);
   }, []);
@@ -89,6 +88,15 @@ export default function CustomerSignup() {
       if (!validateEmail(email)) {
         Snackbar.show({
           text: 'Please enter a valid email',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+        setisLoading(false);
+        return;
+      } else if (!isValidPhoneNumber(phoneName)) {
+        Snackbar.show({
+          text: 'Please enter a valid phone number',
           duration: Snackbar.LENGTH_SHORT,
           textColor: '#fff',
           backgroundColor: '#88087B',
@@ -166,7 +174,6 @@ export default function CustomerSignup() {
       setisLoading(false);
     }
   };
-
   return (
     <View
       style={{
@@ -190,14 +197,12 @@ export default function CustomerSignup() {
           resizeMode="contain"
         />
       </TouchableOpacity>
-
       <ScrollView>
         <MyStatusBar
           translucent
           barStyle="light-content"
           backgroundColor="#000"
         />
-
         <View style={{flex: 1}}>
           <View style={{marginHorizontal: 50}}>
             <Text
@@ -262,7 +267,6 @@ export default function CustomerSignup() {
                 <Image source={images.info} style={{width: 15, height: 15}} />
               </TouchableOpacity>
             </Tooltip>
-
             <Tooltip
               isVisible={toolTipRightVisible}
               content={
@@ -344,7 +348,6 @@ export default function CustomerSignup() {
               }}
             />
           </View>
-
           <View style={{marginHorizontal: 25}}>
             <Text
               style={{
@@ -390,6 +393,7 @@ export default function CustomerSignup() {
               labelText={'Enter Phone'}
               state={phoneName}
               setState={setPhoneName}
+              maxLength={11}
               keyBoardType={'number-pad'}
             />
             <Text
@@ -514,9 +518,6 @@ export default function CustomerSignup() {
                   fontSize: 14,
                   color: '#000',
                 }}
-                // arrowIconStyle={{
-
-                // }}
                 placeholderStyle={{
                   fontFamily: commonStyle.fontFamily.regular,
                   fontSize: 14,
@@ -590,7 +591,6 @@ export default function CustomerSignup() {
                 labelText={'Enter Referral Code'}
                 state={referralCode}
                 setState={setReferralCode}
-      
               />
               {/* <Text style={{ fontSize: 16, fontFamily: commonStyle.fontFamily.medium, color: '#fff', marginTop: 15 }}>Password</Text>
               <TextInputs style={{ marginTop: 10 }} secure={true} labelText={'Enter Password'} state={password} setState={setPassword} /> */}

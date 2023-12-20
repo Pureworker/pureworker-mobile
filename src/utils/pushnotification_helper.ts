@@ -128,10 +128,10 @@ const NotificationListner = () => {
 
   messaging().onMessage(async remoteMessage => {
     console.log('Notification on foreground state.....', remoteMessage);
-    Alert.alert('Push gotten here', remoteMessage?.data?.service);
+    // Alert.alert('Push gotten here', remoteMessage?.data?.service);
+    ToastLong('Notification Received!, Please check.');
     console.log('app opened');
   });
-
   /*
    * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
    * */
@@ -143,7 +143,6 @@ const NotificationListner = () => {
   //       // showAlert(title, body);
   //       console.warn('notificationOpen', ios._notification);
   //     });
-
   //in app messaging
   // const inapp = async () => {
   //   await inAppMessaging().setMessagesDisplaySuppressed(true);

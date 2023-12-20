@@ -611,7 +611,7 @@ export const updateUserData = async (param: any) => {
     }
     return response;
   } catch (error) {
-    console.log(error);
+    console.log(error, error?.response?.data);
     return {
       status: 400,
       err: error,
@@ -619,7 +619,6 @@ export const updateUserData = async (param: any) => {
     };
   }
 };
-
 //chats
 export const getChatsbyuser = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
