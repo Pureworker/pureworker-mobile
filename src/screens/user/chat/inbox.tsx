@@ -260,9 +260,6 @@ export default function Inbox({navigation, route}: any) {
             style={[
               tw` w-full mx-auto mt-auto  px-[4%] border-t-4 border-black `,
               {height: HEIGHT_SCREEN * 0.085, marginBottom: 0},
-              // {
-              //   bottom: HEIGHT_SCREEN * 0.05,
-              // },
             ]}>
             <View style={tw`flex flex-row mt-3 py-2 px-2 bg-[#D9D9D9]`}>
               <TextInput

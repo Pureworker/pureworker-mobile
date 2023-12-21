@@ -147,6 +147,7 @@ const ServiceProviderProfile = () => {
               {paddingHorizontal: perWidth(15), marginTop: perHeight(10)},
             ]}>
             <TouchableOpacity
+              style={tw`bg-white p-1 rounded-full`}
               onPress={() => {
                 navigation.goBack();
               }}>
@@ -164,14 +165,15 @@ const ServiceProviderProfile = () => {
               />
             </TouchableOpacity> */}
             <TouchableOpacity
+              style={tw`bg-white p-1.5 rounded-full items-center justify-center`}
               onPress={() => {
                 setsaved(!saved);
               }}>
               <Image
                 resizeMode="contain"
                 style={{
-                  width: perWidth(20),
-                  height: perWidth(20),
+                  width: 20,
+                  height: 20,
                   tintColor: saved ? '#C0392B' : 'black',
                 }}
                 source={saved ? images.saved : images.save}
@@ -179,11 +181,13 @@ const ServiceProviderProfile = () => {
             </TouchableOpacity>
           </View>
           <View style={tw`mt-auto pb-4 ml-auto mr-4`}>
-            <TouchableOpacity style={tw`items-center`}>
+            <TouchableOpacity
+            onPress={()=>{}}
+              style={tw`bg-white p-1.5 rounded-lg items-center justify-center`}>
               <Image
                 source={images.chat}
                 resizeMode="contain"
-                style={{width: 20, height: 20}}
+                style={{width: 20, height: 20, tintColor: 'black'}}
               />
               <Textcomp
                 text={'Chat'}
@@ -391,7 +395,7 @@ const ServiceProviderProfile = () => {
                   </View>
                   <View style={[tw` `, {marginTop: perHeight(5)}]}>
                     <Textcomp
-                      text={'Abuja, Nigeria'}
+                      text={'- -'}
                       size={12}
                       lineHeight={15}
                       color={'#FFFFFF'}

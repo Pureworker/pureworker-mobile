@@ -41,17 +41,24 @@ const _Services = ({route}: any) => {
   const _providersByCateegory = useSelector(
     (state: any) => state.user.providersByCateegory,
   );
+  const userData = useSelector((state: any) => state.user.userData);
   const dummyData = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   const [activeSection, setactiveSection] = useState('All');
   const [searchModal, setsearchModal] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const [searchInput, setsearchInput] = useState('');
 
+  const [savedProviders, setsavedProviders] = useState([]);
+
+
+
   function metersToKilometers(meters) {
     const kilometers = meters / 1000; // Convert meters to kilometers
     const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
     return `${roundedKilometers} km`;
   }
+
+  console.log('BOOKMARK', userData?.bookmarks);
 
   useEffect(() => {
     const initGetUsers = async () => {
@@ -61,6 +68,10 @@ const _Services = ({route}: any) => {
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addprovidersByCateegory(res?.data?.data));
       }
+
+      //run check here; 
+
+
       // setloading(false);
       setisLoading(false);
     };
@@ -253,7 +264,7 @@ const _Services = ({route}: any) => {
                       <View style={[tw`items-center`, {flex: 1}]}>
                         <ScrollView scrollEnabled={false} horizontal>
                           <FlatList
-                            data={_providersByCateegory}
+                            data={savedProviders}
                             horizontal={false}
                             scrollEnabled={false}
                             renderItem={(item: any, index: any) => {

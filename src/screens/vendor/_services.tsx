@@ -53,6 +53,8 @@ const _Services = ({route}: any) => {
     return `${roundedKilometers} km`;
   }
 
+  const [savedProviders, setsavedProviders] = useState([]);
+
   useEffect(() => {
     const initGetUsers = async () => {
       setisLoading(true);
@@ -250,34 +252,57 @@ const _Services = ({route}: any) => {
                       </>
                     )}
                     {activeSection === 'Saved' && (
-                      <View style={[tw`items-center`, {flex: 1}]}>
-                        <ScrollView scrollEnabled={false} horizontal>
-                          <FlatList
-                            data={_providersByCateegory}
-                            horizontal={false}
-                            scrollEnabled={false}
-                            renderItem={(item: any, index: any) => {
-                              return (
-                                <TouchableOpacity>
-                                  <ServiceCard2
-                                    key={index}
-                                    navigation={navigation}
-                                    item={item.item}
-                                    index={item.index}
-                                    id={id}
-                                    serviceName={passedService}
-                                  />
-                                </TouchableOpacity>
-                              );
-                            }}
-                            keyExtractor={item => item?.id}
-                            ListFooterComponent={() => (
-                              <View style={tw`h-20`} />
-                            )}
-                            contentContainerStyle={{paddingBottom: 20}}
-                          />
-                        </ScrollView>
-                      </View>
+                      <>
+                        {savedProviders?.length < 1 ? (
+                          <View style={[tw`flex-1 items-center`, {}]}>
+                            <View style={[tw``, {marginTop: perHeight(120)}]}>
+                              <Image
+                                source={images.profile}
+                                style={{height: 120, width: 120}}
+                                resizeMode="contain"
+                              />
+                            </View>
+                            <View style={tw`mx-auto mt-3`}>
+                              <Textcomp
+                                text={'No Saved Provider'}
+                                size={14.5}
+                                lineHeight={16.5}
+                                color={'#000413'}
+                                fontFamily={'Inter-Bold'}
+                              />
+                            </View>
+                          </View>
+                        ) : (
+                          <View style={[tw`items-center`, {flex: 1}]}>
+                            <ScrollView scrollEnabled={false} horizontal>
+                              <FlatList
+                                data={savedProviders}
+                                horizontal={false}
+                                scrollEnabled={false}
+                                renderItem={(item: any, index: any) => {
+                                  return (
+                                    <TouchableOpacity>
+                                      <ServiceCard2
+                                        key={index}
+                                        navigation={navigation}
+                                        item={item.item}
+                                        index={item.index}
+                                        id={id}
+                                        serviceName={passedService}
+                                      />
+                                    </TouchableOpacity>
+                                  );
+                                }}
+                                keyExtractor={item => item?.id}
+                                ListFooterComponent={() => (
+                                  <View style={tw`h-20`} />
+                                )}
+                                contentContainerStyle={{paddingBottom: 20}}
+                              />
+                            </ScrollView>
+                          </View>
+                        )}
+                      </>
                     )}
                   </>
                 )}

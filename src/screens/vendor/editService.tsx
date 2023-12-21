@@ -125,7 +125,6 @@ const EditServices = ({route}: any) => {
   };
   const {data: getCategoryData, isError} = useGetCategoryQuery();
   const getCategory = getCategoryData ?? [];
-
   const handleProfileSetup = () => {
     if (
       imageUrl &&
