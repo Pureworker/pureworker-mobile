@@ -32,17 +32,23 @@ import Snackbar from 'react-native-snackbar';
 import storage from '@react-native-firebase/storage';
 import Portfoliocomp from '../../components/Portfolio';
 import {SIZES, perWidth} from '../../utils/position/sizes';
+import { ToastLong } from '../../utils/utils';
 
-const EditServices = ({route}:any) => {
+const EditServices = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
   //
   const passed_index = route.params?.index;
   const name = route.params?.name;
   console.log(passed_index, name);
   const profileData = useSelector((state: any) => state.user.profileData);
-  console.log(profileData?.serviceIntro?.[passed_index], profileData?.priceRange?.[passed_index]);
+  console.log(
+    profileData?.serviceIntro?.[passed_index],
+    profileData?.priceRange?.[passed_index],
+  );
   //
-  const [description, setDescription] = useState(profileData?.serviceIntro?.[passed_index]?.description ||  '');
+  const [description, setDescription] = useState(
+    profileData?.serviceIntro?.[passed_index]?.description || '',
+  );
   const [shortDescription, setShortDescription] = useState('');
   const [imageObject, setImageObject] = useState({});
   const [imageUrl, setImageUrl] = useState('');
@@ -65,12 +71,15 @@ const EditServices = ({route}:any) => {
   let potfolioPicture = useRef('');
   let profilePicture = useRef('');
 
-  const [minPrice, setminPrice] = useState(profileData?.priceRange?.[passed_index]?.minPrice ||  0);
-  const [maxPrice, setmaxPrice] = useState(profileData?.priceRange?.[passed_index]?.maxPrice ||  0);
+  const [minPrice, setminPrice] = useState(
+    profileData?.priceRange?.[passed_index]?.minPrice || 0,
+  );
+  const [maxPrice, setmaxPrice] = useState(
+    profileData?.priceRange?.[passed_index]?.maxPrice || 0,
+  );
   // console.log('nationalityItems', nationalityItems);
 
-  console.log('kk',profileData?.serviceIntro?.[passed_index]);
-  
+  console.log('kk', profileData?.serviceIntro?.[passed_index]);
 
   const [portfolioToServiceCount, setportfolioToServiceCount] = useState([]);
 
@@ -159,7 +168,6 @@ const EditServices = ({route}:any) => {
       });
     }
   };
-
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
       <ScrollView>
@@ -216,7 +224,7 @@ const EditServices = ({route}:any) => {
                   color: '#fff',
                 }}>
                 {/* {item?.serviceName} */}
-              {name}
+                {name}
               </TextWrapper>
             </View>
             <TextInput
@@ -234,7 +242,7 @@ const EditServices = ({route}:any) => {
               // value={item.value} // Assign value from state
               value={description}
               onChangeText={value => {
-                handleInputChange(index, value)
+                handleInputChange(index, value);
               }}
             />
           </View>
@@ -295,12 +303,10 @@ const EditServices = ({route}:any) => {
                 value={`${minPrice}`}
                 // key={index}
                 // value={item.value} // Assign value from state
-                onChangeText={value =>
-                  {
-                    setminPrice(Number(value));
-                    handleServicePriceMinChange(passed_index, value);
-                  }
-                }
+                onChangeText={value => {
+                  setminPrice(Number(value));
+                  handleServicePriceMinChange(passed_index, value);
+                }}
               />
               <TextWrapper
                 fontType={'semiBold'}
@@ -325,11 +331,10 @@ const EditServices = ({route}:any) => {
                 keyboardType="number-pad"
                 value={`${maxPrice}`}
                 // value={item.value} // Assign value from state
-                onChangeText={value =>{
+                onChangeText={value => {
                   setmaxPrice(Number(value));
                   handleServicePriceMaxChange(passed_index, value);
-                }
-                }
+                }}
               />
             </View>
           </View>
@@ -691,7 +696,8 @@ const EditServices = ({route}:any) => {
                   onClick={() => {
                     // handleProfileSetup();
                     // navigation.navigate('ProfileStep3', {serviceId: data?.serviceId});
-                    navigation.navigate('ProfileStep3', {serviceId: 'id_here'});
+                    // navigation.navigate('ProfileStep3', {serviceId: 'id_here'});
+                    ToastLong('Service Uploaded successfully!.');
                   }}
                   style={{
                     marginBottom: 20,

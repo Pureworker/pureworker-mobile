@@ -93,9 +93,7 @@ const DrawerContent = () => {
     }
     // setloading(false);
   };
-
   console.log(userData?.profilePic);
-
   const initUpdate = async (param: any) => {
     setloading(true);
     const res = await updateUserData(param);
@@ -317,7 +315,7 @@ const DrawerContent = () => {
           )}
           <View style={[tw`mt-4 ml-3`, {}]}>
             <Textcomp
-              text={`Version: ${Platform.OS === 'ios' ? '1.0.2' : '1.0.2'}`}
+              text={`Version: ${Platform.OS === 'ios' ? '1.0.3' : '1.0.3'}`}
               size={14}
               color={'#000000'}
               style={[
