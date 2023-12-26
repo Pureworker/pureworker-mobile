@@ -110,10 +110,22 @@ const Home = () => {
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addUserData(res?.data?.user));
       }
-      if (!userData?.geoLocation || userData?.geoLocation === undefined || userData?.geoLocation === null) {
+      // if (!userData?.geoLocation || userData?.geoLocation === undefined || userData?.geoLocation === null) {
+      //   navigation.navigate('AddAddress');
+      //   ToastLong('Address is required');
+      // } else {
+      // }
+      // Check if userData exists and has valid geoLocation coordinates
+      const userData = res?.data?.user;
+      if (
+        !userData?.geoLocation ||
+        !userData.geoLocation.coordinates ||
+        !userData.geoLocation.coordinates.length
+      ) {
         navigation.navigate('AddAddress');
         ToastLong('Address is required');
       } else {
+        // Continue with your logic if geoLocation is valid
       }
       // setloading(false);
     };

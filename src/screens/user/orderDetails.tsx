@@ -34,6 +34,11 @@ import Snackbar from 'react-native-snackbar';
 import {createOrder} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
+import {
+  HEIGHT_WINDOW,
+  WIDTH_SCREEN,
+  WIDTH_WINDOW,
+} from '../../constants/generalStyles';
 
 const OrderDetails = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -53,20 +58,18 @@ const OrderDetails = () => {
   const [price, setPrice] = useState(0);
   const [address, setaddress] = useState('');
   const [scheduleTime, setscheduleTime] = useState('');
-
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState<IOSMode | AndroidMode>('date');
   const [mode2, setMode2] = useState<IOSMode | AndroidMode>('time');
   const [show, setShow] = useState(false);
   const [isLoading, setisLoading] = useState(false);
-
   const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
+    // setShow(Platform.OS === 'ios');
     setDate(currentDate);
+    setandroidshowDate(false);
     // updateDate(currentDate);
   };
-
   console.log(providerData);
 
   const showMode = (currentMode: any) => {
@@ -108,8 +111,38 @@ const OrderDetails = () => {
   };
 
   const showDatePicker = () => {
-    showMode(type);
+    setMode('date');
+    setShow(true);
   };
+
+  const showTimePicker = () => {
+    setMode('time');
+    setShow(true);
+  };
+
+  const hidePicker = () => {
+    setShow(false);
+  };
+
+  const handleDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
+
+  const handleTimeChange = (event, selectedTime) => {
+    setShow(Platform.OS === 'ios');
+    if (selectedTime !== undefined) {
+      // Handle the time change logic if needed
+      // For now, we're just setting the time
+      setscheduleTime(selectedTime);
+      setandroidshowTime(false);
+    }
+  };
+
+  const [androidshowTime, setandroidshowTime] = useState(false);
+  const [androidshowDate, setandroidshowDate] = useState(false);
+
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
@@ -256,136 +289,233 @@ const OrderDetails = () => {
               style={{fontSize: 16, marginTop: 20, color: colors.black}}
             />
 
+            {/* <TouchableOpacity onPress={showDatePicker}>
+              <Text>Open Date Picker</Text>
+            </TouchableOpacity> */}
+
             {showDate && (
               <DateTimePicker
                 testID="dateTimePicker"
                 value={date}
                 mode={mode}
-                // is24Hour={false}
                 display="default"
                 onChange={onChange}
               />
             )}
 
-            {/* {showDate && (
-              <Modal
-                isVisible={true}
-                onBackButtonPress={() => setshowDate(false)}
-                onBackdropPress={() => setshowDate(false)}
-                swipeThreshold={200}
-                style={{
-                  width: WIDTH_SCREEN,
-                  padding: 0,
-                  margin: 0,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                onSwipeComplete={() => setshowDate(false)}>
+            {Platform.OS === 'ios' && (
+              <View
+                style={[
+                  tw`flex flex-row items-center  rounded-lg mt-5`,
+                  {height: perHeight(40)},
+                ]}>
                 <View
                   style={[
-                    tw`, w-[95%] bg-white`,
-                    {height: HEIGHT_WINDOW * 0.325},
+                    tw`items-center`,
+                    {
+                      minHeight: 50,
+                      width: perWidth(150),
+                    },
                   ]}>
-                  <View style={tw``}>
-                    <Calendar
-                      // markedDates={bookedDates}
-                      onDayPress={day => {
-                        // Implement your logic here when a day is pressed
-                        console.log('Selected day:', day);
-                      }}
-                    />
-                  </View>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setshowDate(false);
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode={mode}
+                    // is24Hour={false}
+                    display="default"
+                    onChange={onChange}
+                    style={{
+                      flex: 1,
                     }}
-                    style={tw`bg-[${colors.primary}] rounded-xl mx-auto p-4 px-6`}>
+                    disabled={false}
+                  />
+                </View>
+                <View>
+                  <DateTimePicker
+                    testID="clock"
+                    value={date}
+                    mode={mode2}
+                    display="default"
+                    onChange={text => {
+                      setscheduleTime(text);
+                    }}
+                    style={{
+                      flex: 1,
+                    }}
+                  />
+                </View>
+              </View>
+            )}
+
+            {Platform.OS === 'android' && (
+              <>
+                <View style={tw`flex flex-row items-center`}>
+                  <TouchableOpacity
+                    style={[
+                      tw`bg-[${colors.greyLight}] px-3 py-2  rounded-lg `,
+                      {
+                        backgroundColor: colors.greyLight1,
+                        maxWidth: WIDTH_WINDOW * 0.5,
+                      },
+                    ]}
+                    onPress={() => {
+                      setandroidshowDate(!androidshowDate);
+                    }}>
                     <Textcomp
-                      text={'Select'}
-                      fontSize={18}
-                      color={'#FFFFFF'}
-                      style={[tw`text-left mt-2`, {fontWeight: '400'}]}
+                      text={`${date ? date : 'Date'}`}
+                      // fontSize={18}
+                      size={18}
+                      color={'#000000'}
+                      style={[tw`text-left mt-2`, {fontWeight: '600'}]}
+                      family={'Inter'}
+                      lineHeight={19}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      tw`bg-[${colors.greyLight}] px-4 py-2 rounded-lg ml-4 `,
+                      {backgroundColor: colors.greyLight1},
+                    ]}
+                    onPress={() => {
+                      setandroidshowTime(!androidshowTime);
+                    }}>
+                    <Textcomp
+                      text={`${scheduleTime ? scheduleTime : '00:00'}`}
+                      // fontSize={18}
+                      size={18}
+                      color={'#000000'}
+                      style={[tw`text-left mt-2`, {fontWeight: '600'}]}
                       family={'Inter'}
                       lineHeight={19}
                     />
                   </TouchableOpacity>
                 </View>
-              </Modal>
-            )} */}
 
-            <View
-              style={[
-                tw`flex flex-row items-center  rounded-lg mt-5`,
-                {height: perHeight(40)},
-              ]}>
-              <View
-                style={[
-                  tw`items-center`,
-                  {
-                    minHeight: 50,
-                    // marginHorizontal: perWidth(25),
-                    width: perWidth(150),
-                    // backgroundColor: 'red',
-                  },
-                ]}>
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  value={date}
-                  mode={mode}
-                  // is24Hour={false}
-                  display="default"
-                  onChange={onChange}
-                  style={{
-                    flex: 1,
-                  }}
-                />
-              </View>
-              <View
-              // style={[
-              //   tw`ml-1 rounded-lg flex items-center  flex-row`,
-              //   {
-              //     width: perWidth(130),
-              //     height: perHeight(40),
-              //     backgroundColor: colors.greyLight1,
-              //   },
-              // ]}
-              >
-                <DateTimePicker
-                  testID="clock"
-                  value={date}
-                  mode={mode2}
-                  // is24Hour={false}
-                  display="default"
-                  onChange={text => {
-                    setscheduleTime(text);
-                  }}
-                  style={{
-                    flex: 1,
-                  }}
-                />
-                {/* <View style={tw`border-r w-1/2  flex-1`}>
-                  <TextInput
-                    style={[
-                      tw`  my-auto flex-1 px-4 text-black`,
-                      {fontFamily: 'Inter-Medium'},
-                    ]}
-                    keyboardType="numeric"
-                    onChangeText={() => {}}
-                  />
-                </View>
-                <View style={tw` w-1/2`}>
-                  <TextInput
-                    style={[
-                      tw`flex-1 py-2  px-4 text-black`,
-                      {fontFamily: 'Inter-Medium'},
-                    ]}
-                    keyboardType="numeric"
-                    onChangeText={() => {}}
-                  />
-                </View> */}
-              </View>
-            </View>
+                {androidshowDate && (
+                  <Modal
+                    isVisible={true}
+                    onBackButtonPress={() => {
+                      setandroidshowDate(!androidshowDate);
+                    }}
+                    onBackdropPress={() => {
+                      setandroidshowDate(!androidshowDate);
+                    }}
+                    style={{
+                      width: WIDTH_SCREEN,
+                      padding: 0,
+                      margin: 0,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                    onSwipeComplete={hidePicker}>
+                    <View
+                      style={[
+                        tw`, w-[95%] bg-white`,
+                        {height: HEIGHT_WINDOW * 0.325},
+                      ]}>
+                      {/* <Calendar
+                        onDayPress={day => {
+                          handleDateChange(null, new Date(day.timestamp));
+                          hidePicker();
+                        }}
+                      /> */}
+                      <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode={mode}
+                        display="default"
+                        onChange={onChange}
+                        style={{
+                          flex: 1,
+                        }}
+                        disabled={false}
+                      />
+
+                      {/* {mode === 'time' && (
+                        <DateTimePicker
+                          testID="timePicker"
+                          value={date}
+                          mode="time"
+                          is24Hour={true}
+                          display="spinner"
+                          onChange={(event, selectedTime) => {
+                            handleTimeChange(event, selectedTime);
+                            hidePicker();
+                          }}
+                        />
+                      )} */}
+                      <TouchableOpacity
+                        onPress={() => {
+                          setandroidshowDate(false);
+                          setandroidshowTime(false);
+                        }}
+                        style={tw`bg-[${colors.primary}] rounded-xl mx-auto p-4 px-6`}>
+                        <Textcomp
+                          text={'Select'}
+                          // fontSize={18}
+                          size={18}
+                          color={'#FFFFFF'}
+                          style={[tw`text-left mt-2`, {fontWeight: '400'}]}
+                          family={'Inter'}
+                          lineHeight={19}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </Modal>
+                )}
+                {androidshowTime && (
+                  <Modal
+                    isVisible={true}
+                    onBackButtonPress={() => {
+                      setandroidshowTime(!androidshowTime);
+                    }}
+                    onBackdropPress={() => {
+                      setandroidshowTime(!androidshowTime);
+                    }}
+                    style={{
+                      width: WIDTH_SCREEN,
+                      padding: 0,
+                      margin: 0,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                    onSwipeComplete={hidePicker}>
+                    <View
+                      style={[
+                        tw`, w-[95%] bg-white`,
+                        {height: HEIGHT_WINDOW * 0.325},
+                      ]}>
+                      <DateTimePicker
+                        testID="timePicker"
+                        value={date}
+                        mode="time"
+                        is24Hour={true}
+                        display="spinner"
+                        onChange={(event, selectedTime) => {
+                          handleTimeChange(event, selectedTime);
+                          hidePicker();
+                        }}
+                      />
+                      <TouchableOpacity
+                        onPress={hidePicker}
+                        style={tw`bg-[${colors.primary}] rounded-xl mx-auto p-4 px-6`}>
+                        <Textcomp
+                          text={'Select'}
+                          // fontSize={18}
+                          size={18}
+                          color={'#FFFFFF'}
+                          style={[tw`text-left mt-2`, {fontWeight: '400'}]}
+                          family={'Inter'}
+                          lineHeight={19}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </Modal>
+                )}
+              </>
+            )}
           </View>
+
           <View
             style={{
               zIndex: 1,
@@ -484,7 +614,7 @@ const OrderDetails = () => {
                   tw`flex-1 py-2 ml-3 text-black`,
                   {fontFamily: 'Inter-Medium'},
                 ]}
-                keyboardType="numeric"
+                keyboardType="default"
                 onChangeText={text => {
                   setaddress(text);
                 }}

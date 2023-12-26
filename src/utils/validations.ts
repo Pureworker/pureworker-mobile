@@ -8,7 +8,6 @@ export function formatAmount(amount: string | number) {
       return 'Invalid amount';
     }
   }
-
   // Use toLocaleString to format the number with commas as thousands separators
   return amount.toLocaleString(undefined, {
     minimumFractionDigits: 0,

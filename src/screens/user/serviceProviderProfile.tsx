@@ -21,7 +21,6 @@ import FastImage from 'react-native-fast-image';
 import colors from '../../constants/colors';
 import Modal from 'react-native-modal';
 import Review from '../../components/Review';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {
   useGetSingleProviderAllServiceQuery,
   useGetSingleProviderServiceQuery,
