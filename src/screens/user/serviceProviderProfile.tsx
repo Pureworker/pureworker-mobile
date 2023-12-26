@@ -73,9 +73,7 @@ const ServiceProviderProfile = () => {
       ? JSON.parse(getSingleProviderService?.ServicePotfolio[1]?.potfolioImages)
       : [];
   // const thirdPotfolio = getSingleProviderService?.ServicePotfolio?.length > 2 ? JSON.parse(getSingleProviderService?.ServicePotfolio[2]?.potfolioImages) : []
-
   // const dispatch = useDispatch();
-
   useEffect(() => {
     const initProviderRevie = async () => {
       setisLoading(true);
@@ -96,7 +94,6 @@ const ServiceProviderProfile = () => {
     const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
     return daysAgo;
   }
-
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View>
