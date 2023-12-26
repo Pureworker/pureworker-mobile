@@ -428,7 +428,8 @@ const ServiceProviderProfile = () => {
                   </View>
                   <View style={[tw` `, {marginTop: perHeight(5)}]}>
                     <Textcomp
-                      text={'Abuja, Nigeria'}
+                      // text={'Abuja, Nigeria'}
+                      text={profileData?.user?.lastOnline}
                       size={12}
                       lineHeight={15}
                       color={'#FFFFFF'}
@@ -610,10 +611,9 @@ const ServiceProviderProfile = () => {
                   />
                 </View>
               </View> */}
-
               <FlatList
                 scrollEnabled={false}
-                data={[0, 1, 2]}
+                data={[0]}
                 renderItem={(item, index) => {
                   return (
                     <View

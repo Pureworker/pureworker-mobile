@@ -17,9 +17,7 @@ import images from '../../constants/images';
 import TextInputs from '../../components/TextInput2';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
-
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
-
 import colors from '../../constants/colors';
 import ServiceCard from '../../components/cards/serviceCard';
 import ClosetoYou from '../../components/cards/closeToYou';
@@ -56,7 +54,6 @@ import Geolocation from 'react-native-geolocation-service';
 import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import * as Sentry from '@sentry/react-native';
 import {ToastLong} from '../../utils/utils';
-
 const Home = () => {
   useEffect(() => {
     //Request location permission
@@ -117,7 +114,6 @@ const Home = () => {
         navigation.navigate('AddAddress');
         ToastLong('Address is required');
       } else {
-
       }
       // setloading(false);
     };

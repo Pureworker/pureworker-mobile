@@ -160,6 +160,23 @@ const Home = ({navigation}: any) => {
 
   console.log('stage', formStage);
 
+  useEffect(() => {
+    const emitProviderOnlineStatus = () => {
+      // Emit an event to the backend indicating that the customer is still connected
+      socket.emit('provideronlinestatus', {
+        customerId: userData?.id || userData?._id,
+      });
+    };
+    // Initial emit and set up the interval to emit every 30 seconds
+    emitProviderOnlineStatus();
+    const intervalId = setInterval(emitProviderOnlineStatus, 30000);
+    return () => {
+      // Clean up the interval when the component is unmounted
+      clearInterval(intervalId);
+      socket.disconnect();
+    };
+  }, []);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
@@ -629,7 +646,7 @@ const Home = ({navigation}: any) => {
                   width: perWidth(316),
                   height: perHeight(40),
                   borderRadius: 13,
-                  justifyContent: 'center', 
+                  justifyContent: 'center',
                   alignItems: 'center',
                   backgroundColor: colors.darkPurple,
                   marginTop: 10,

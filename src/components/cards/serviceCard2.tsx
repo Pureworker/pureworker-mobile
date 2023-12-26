@@ -9,6 +9,7 @@ import colors from '../../constants/colors';
 
 import {Rating, AirbnbRating} from 'react-native-ratings';
 import Review from '../Review';
+import FastImage from 'react-native-fast-image';
 
 const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
   const [saved, setsaved] = useState(false);
@@ -30,7 +31,11 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('ServiceProviderProfile', {item: item, serviceName: serviceName, id: id});
+        navigation.navigate('ServiceProviderProfile', {
+          item: item,
+          serviceName: serviceName,
+          id: id,
+        });
       }}
       style={[
         tw` mt-4 mx-auto bg-[${colors.darkPurple}]`,
@@ -46,7 +51,7 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
       ]}>
       <View style={tw`flex flex-row `}>
         <View style={[tw``, {width: perWidth(50), height: perWidth(50)}]}>
-          <Image
+          {/* <Image
             resizeMode="cover"
             style={{
               width: perWidth(50),
@@ -54,7 +59,19 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
               borderRadius: perWidth(50) / 2,
             }}
             source={images.welcome}
-          />
+          /> */}
+          <FastImage
+            style={{
+              width: perWidth(50),
+              height: perWidth(50),
+              borderRadius: perWidth(50) / 2,
+            }}
+            source={{
+              uri: item?.profilePic,
+              headers: {Authorization: 'someAuthToken'},
+              priority: FastImage.priority.normal,
+            }}
+            resizeMode={FastImage.resizeMode.cover}/>
           <View
             style={[
               tw`absolute bottom-0 border-2 right-1 rounded-full`,
@@ -141,7 +158,9 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
           <View
             style={[tw`ml-1`, {width: perWidth(80), marginTop: perWidth(1)}]}>
             <Textcomp
-              text={`${item?.distance ?  metersToKilometers(item?.distance) : '0Km'} away`}
+              text={`${
+                item?.distance ? metersToKilometers(item?.distance) : '0Km'
+              } away`}
               size={12}
               lineHeight={14}
               color={colors.primary}
