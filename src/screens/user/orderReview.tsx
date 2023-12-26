@@ -22,6 +22,7 @@ import {createOrder} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
+import {ToastShort} from '../../utils/utils';
 
 const OrderReview = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -34,7 +35,9 @@ const OrderReview = ({route}: any) => {
     const date = new Date(timestamp);
     const hours = date.getHours();
     const minutes = date.getMinutes();
-    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes
+      .toString()
+      .padStart(2, '0')}`;
     return formattedTime;
   }
 
@@ -45,38 +48,56 @@ const OrderReview = ({route}: any) => {
       totalPrice: Number(_data.totalPrice),
       description: _data.description,
       scheduledDeliveryDate: `${_data.scheduledDeliveryDate}`,
-      scheduledDeliveryTime: formatTimestampToTime(_data.scheduledDeliveryTime?.nativeEvent.timestamp),
+      scheduledDeliveryTime: formatTimestampToTime(
+        _data.scheduledDeliveryTime?.nativeEvent.timestamp,
+      ),
       location: `${_data.location}`.toUpperCase(),
       address: _data.address,
       paymentStatus: 'PAID',
     };
     console.log(Data);
-    if (Data?.serviceProvider) {
-      const res = await createOrder(Data);
-      if (res?.status === 200 || res?.status === 201) {
-        navigation.navigate('PaymentConfirmed');
+
+    try {
+      if (Data?.serviceProvider) {
+        const res = await createOrder(Data);
+        if (res?.status === 200 || res?.status === 201) {
+          navigation.navigate('PaymentConfirmed');
+        } else {
+          Snackbar.show({
+            text: res?.error?.message
+              ? res?.error?.message
+              : res?.error?.data?.message
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured',
+            duration: Snackbar.LENGTH_SHORT,
+            textColor: '#fff',
+            backgroundColor: '#88087B',
+          });
+          ToastShort(
+            `${
+              res?.error?.message
+                ? res?.error?.message
+                : res?.error?.data?.message
+                ? res?.error?.data?.message
+                : 'Oops!, an error occured'
+            }`,
+          );
+        }
+        setisLoading(false);
       } else {
         Snackbar.show({
-          text: res?.error?.message
-            ? res?.error?.message
-            : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured',
+          text: 'Please fill all fields',
           duration: Snackbar.LENGTH_SHORT,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
+        ToastShort('Please fill all fields');
+        setisLoading(false);
       }
-      setisLoading(false);
-    } else {
-      Snackbar.show({
-        text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_SHORT,
-        textColor: '#fff',
-        backgroundColor: '#88087B',
-      });
-      setisLoading(false);
+    } catch (error) {
+      ToastShort(`Error: ${error}`);
     }
+
     setisLoading(false);
   };
   return (
@@ -335,7 +356,9 @@ const OrderReview = ({route}: any) => {
             </View>
             <View style={tw``}>
               <Textcomp
-                text={`₦${Number(_data?.totalPrice) + Number(_data?.totalPrice * 0.075)}`}
+                text={`₦${
+                  Number(_data?.totalPrice) + Number(_data?.totalPrice * 0.075)
+                }`}
                 size={14}
                 lineHeight={15}
                 color={'#000413'}
@@ -376,7 +399,7 @@ const OrderReview = ({route}: any) => {
           <View style={tw`w-full h-0.5  bg-black  mb-[7.5%]`} />
         </View>
       </ScrollView>
-      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
   );
 };
