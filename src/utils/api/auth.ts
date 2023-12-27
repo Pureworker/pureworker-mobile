@@ -1,8 +1,10 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
-// const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
-const API_BASE_URL = 'https://api.pureworker.com/api';
+//<<<<<<<<<<<<<<<--------------Staging------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>
+const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
+//<<<<<<<<<<<<<<<--------------Production------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// const API_BASE_URL = 'https://api.pureworker.com/api';
 // 'https://pureworker.onrender.com';
 // const API_BASE_URL = 'http://167.86.66.12/api';
 export const verifyLogin = async (param: any) => {
@@ -38,7 +40,6 @@ export const verifyLogin = async (param: any) => {
     };
   }
 };
-
 export const Signup = async (param: any) => {
   console.log('Signup func started', param);
   try {
@@ -72,7 +73,6 @@ export const Signup = async (param: any) => {
     };
   }
 };
-
 export const verifyUser = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken2');
   console.log('verifyUser func started', param, AuthToken);
@@ -138,7 +138,6 @@ export const resendOtp = async (param: any) => {
     };
   }
 };
-
 // export const signIn = async (param: any) => {
 //   console.log('signIn func started');
 //   try {
@@ -175,7 +174,6 @@ export const resendOtp = async (param: any) => {
 //     };
 //   }
 // };
-
 export const signIn = async (param: any) => {
   console.log('signIn func started');
   try {
@@ -212,7 +210,6 @@ export const signIn = async (param: any) => {
     };
   }
 };
-
 export const forgotPassword = async (param: any) => {
   console.log('forgotpassword func started', param);
 
@@ -239,7 +236,6 @@ export const forgotPassword = async (param: any) => {
     };
   }
 };
-
 export const resetPassword = async (param: any) => {
   console.log('forgotpassword func started');
 

@@ -1,11 +1,11 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {store} from '../../store/store';
-import {addsupportUser} from '../../store/reducer/mainSlice';
+import {addbanks, addsupportUser} from '../../store/reducer/mainSlice';
 // const API_BASE_URL = 'https://pureworker.onrender.com';
 // const API_BASE_URL = 'http://167.86.66.12/api';
-// const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
-const API_BASE_URL = 'https://api.pureworker.com/api';
+const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
+// const API_BASE_URL = 'https://api.pureworker.com/api';
 //
 export const getUser = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
@@ -967,6 +967,34 @@ export const getSupportUser = async (param: any) => {
     if (response.status === 201 || response.status === 200) {
       console.log('response data:', response?.data);
       store.dispatch(addsupportUser(response?.data?.data));
+    }
+    //   console.log("res", response);
+    return response;
+  } catch (error: any) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const getBanks = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getBanks func started', AuthToken);
+
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/transaction/get-banks-from-flutterwave`,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
+    if (response.status === 201 || response.status === 200) {
+      console.log('Banks data:', response?.data);
+      store.dispatch(addbanks(response?.data?.data));
     }
     //   console.log("res", response);
     return response;

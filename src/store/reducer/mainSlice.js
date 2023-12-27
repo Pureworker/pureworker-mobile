@@ -44,6 +44,7 @@ const initialState = {
   portfolio2: [],
   portfolio3: {},
   supportUser: null,
+  banks: [],
 
   //provider-profileID
   provider_id: null,
@@ -77,6 +78,7 @@ export const mainSlice = createSlice({
       state.providerOrders = [];
       state.formStage = 1;
       state.serviceView = null;
+      state.banks = [];
     },
 
     logout: state => {
@@ -97,6 +99,7 @@ export const mainSlice = createSlice({
       state.providerOrders = [];
       state.formStage = 1;
       state.serviceView = null;
+      state.banks = [];
     },
 
     addCategory: (state, action) => {
@@ -226,6 +229,10 @@ export const mainSlice = createSlice({
       console.log('addsupportUser', action.payload);
       state.supportUser = action.payload;
     },
+    addbanks: (state, action) => {
+      console.log('addbanks', action.payload);
+      state.banks = action.payload;
+    },
   },
 });
 
@@ -260,6 +267,7 @@ export const {
   addformStage,
   addReferralDetails,
   addsupportUser,
+  addbanks,
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);

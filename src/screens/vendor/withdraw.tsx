@@ -23,18 +23,20 @@ import {
   addTransactions,
   addcategorizedTransdata,
 } from '../../store/reducer/mainSlice';
-import {getTransactions} from '../../utils/api/func';
+import {getBanks, getTransactions} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Button from '../../components/Button';
 import TextInputs from '../../components/TextInput2';
 import TextWrapper from '../../components/TextWrapper';
 import {
-    Collapse,
-    CollapseHeader,
-    CollapseBody,
-  } from 'accordion-collapse-react-native';
+  Collapse,
+  CollapseHeader,
+  CollapseBody,
+} from 'accordion-collapse-react-native';
 import colors from '../../constants/colors';
 import CustomLoading from '../../components/customLoading';
+import {SelectList} from 'react-native-dropdown-select-list';
+import {ToastShort} from '../../utils/utils';
 
 const Withdraw = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -45,24 +47,39 @@ const Withdraw = () => {
   //filter  transaction datat to get months
   const months = ['May', 'Apr', 'Feb'];
   const transactions = useSelector((state: any) => state.user.transactions);
+  const banks = useSelector((state: any) => state.user.banks);
   const categorizedData = useSelector(
     (state: any) => state.user.categorizedTransdata,
   );
   console.log(transactions);
 
+  const [bankList, setbankList] = useState([]);
+
   useEffect(() => {
     const initGetUsers = async () => {
       setisLoading(true);
-      const res: any = await getTransactions('');
-      // console.log('dddddddd', res?.data);
-      if (res?.status === 201 || res?.status === 200) {
-        dispatch(addTransactions(res?.data?.data));
-        sort(transactions);
+      const res: any = await getBanks('');
+
+      if (res?.data?.data) {
+        let list: any = [];
+        res?.data?.data?.map(item => {
+          let obj = {
+            label: item?.name,
+            value: item?.name,
+          };
+          list.push(obj);
+        });
+        setbankList(list);
       }
+      // console.log('banks', res?.data);
+      // if (res?.status === 201 || res?.status === 200) {
+      //   dispatch(addTransactions(res?.data?.data));
+      //   sort(transactions);
+      // }
       // setloading(false);
       setisLoading(false);
     };
-    // initGetUsers();
+    initGetUsers();
   }, []);
 
   // const categorizedData: any = {};
@@ -88,7 +105,6 @@ const Withdraw = () => {
     console.log('here', _categorizedData);
     dispatch(addcategorizedTransdata(_categorizedData));
   };
-
   function formatDate(inputDate) {
     // Split the input date by '-'
     const dateParts = inputDate.split('-');
@@ -117,14 +133,11 @@ const Withdraw = () => {
 
     return formattedDate;
   }
-
   const [collapseState, setCollapseState] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
-
   const [accountNumber, setaccountNumber] = useState('');
   const [accountName, setaccountName] = useState('');
   const [bank, setbank] = useState('');
-
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView>
@@ -178,7 +191,7 @@ const Withdraw = () => {
             </View>
           </View> */}
 
-          <ScrollView>
+          <ScrollView scrollEnabled={false}>
             <View style={{marginHorizontal: 20}}>
               <TextWrapper
                 children="Withdraw Request"
@@ -186,7 +199,7 @@ const Withdraw = () => {
                 style={{fontSize: 20, marginTop: 30, color: colors.black}}
               />
               {/* For freelancers  */}
-              <>
+              {/* <>
                 <Collapse
                   onToggle={() => {
                     if (!dataLoaded) {
@@ -248,7 +261,7 @@ const Withdraw = () => {
                     </TextWrapper>
                   </CollapseHeader>
                   <CollapseBody>
-                    {/* {nationalityItems && (
+                    {banks && (
                       <View
                         style={{
                           borderColor: colors.primary,
@@ -258,34 +271,37 @@ const Withdraw = () => {
                           flexWrap: 'wrap',
                           width: '95%',
                         }}>
-                        {nationalityItems.map((item: any, index: number) => {
+                        {banks.map((item: any, index: number) => {
                           var offerStyle;
                           if (index > 0) {
                             offerStyle = {marginBottom: 25};
                           }
                           return (
                             <TouchableOpacity
+                            key={index}
                               onPress={() => {
-                                setSelectedVerification(item);
+                                // setSelectedVerification(item);
+                                setbank(item);
                               }}
                               style={{marginTop: 8}}>
                               <TextWrapper
                                 fontType={'semiBold'}
                                 style={{
-                                  color: selectedVerification.includes(item)
-                                    ? colors.primary
-                                    : colors.white,
+                                  color:
+                                    bank === item
+                                      ? colors.primary
+                                      : colors.white,
                                   marginLeft: 11,
                                   marginRight: 8,
                                   marginBottom: 8,
                                 }}>
-                                {item}
+                                {item?.name}
                               </TextWrapper>
                             </TouchableOpacity>
                           );
                         })}
                       </View>
-                    )} */}
+                    )}
                   </CollapseBody>
                 </Collapse>
                 <TextWrapper
@@ -300,24 +316,81 @@ const Withdraw = () => {
                   state={accountNumber}
                   setState={setaccountNumber}
                 />
+              </> */}
+              <View style={[tw`mb-4`, {
+                // minHeight: 100
+              }]}>
+                <SelectList
+                  setSelected={(val: any) => {
+                    console.log(val);
+                    setbank(val);
+                  }}
+                  data={bankList}
+                  save="value"
+                  boxStyles={[
+                    tw` w-full items-center flex-row justify-between flex-1`,
+                    {
+                      paddingRight: 5,
+                      borderRadius: 8,
+                      // backgroundColor: colors.lightBlack,
+                      borderColor: colors.black,
+                      borderWidth: 2,
+                    },
+                  ]}
+                  inputStyles={[
+                    tw`items-center flex-row justify-center flex-1`,
+                    {
+                      height: 40,
+                      textAlignVertical: 'center',
+                      fontSize: 14,
+                      textTransform: 'uppercase',
+                      color: colors.white,
+                      borderRadius: 8,
+                    },
+                  ]}
+                  placeholder="Select a Bank"
+                />
+              </View>
+              <>
+                <TextWrapper
+                  children="Account Number"
+                  isRequired={true}
+                  fontType={'semiBold'}
+                  style={{fontSize: 13, marginTop: 20, color: colors.black}}
+                />
+                <TextInputs
+                  style={{
+                    marginTop: 10,
+                    backgroundColor: colors.greyLight1,
+                    borderRadius: 2,
+                    padding: 5,
+                    width: '100%',
+                  }}
+                  labelText={'Enter account number'}
+                  state={accountName}
+                  setState={setaccountName}
+                  disable={false}
+                />
               </>
               <>
                 <TextWrapper
                   children="Account Name"
                   isRequired={true}
                   fontType={'semiBold'}
-                  style={{fontSize: 13, marginTop: 13, color: colors.black}}
+                  style={{fontSize: 13, marginTop: 20, color: colors.black}}
                 />
                 <TextInputs
                   style={{
                     marginTop: 10,
                     backgroundColor: colors.greyLight1,
+                    borderRadius: 2,
+                    padding: 5,
+                    width: '100%',
                   }}
-                  labelText={'John doe'}
+                  labelText={'Name here'}
                   state={accountName}
                   setState={setaccountName}
                   disable={false}
-                  
                 />
               </>
 
@@ -328,6 +401,7 @@ const Withdraw = () => {
                     // navigation.navigate('ProfileStep5', {
                     //   serviceId: route?.params?.serviceId,
                     // });
+                    ToastShort('Withdrawal is coming!.');
                   }}
                   style={{
                     marginHorizontal: 40,
@@ -349,7 +423,7 @@ const Withdraw = () => {
         </View>
         <View style={tw`h-30`} />
       </ScrollView>
-      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
   );
 };

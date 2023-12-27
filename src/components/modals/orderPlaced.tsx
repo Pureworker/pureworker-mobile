@@ -1,4 +1,4 @@
-import {View, TouchableOpacity, Image, TextInput} from 'react-native';
+import {View, TouchableOpacity, Image, TextInput, Platform} from 'react-native';
 import React, {useState} from 'react';
 import tw from 'twrnc';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
@@ -25,7 +25,10 @@ export default function OrderPlaced({navigation, visible, func, item}: any) {
       onBackButtonPress={() => func(false)}>
       <View style={tw` h-full w-full bg-black bg-opacity-5`}>
         <TouchableOpacity onPress={() => func(false)} style={tw`flex-1`} />
-        <View style={tw`h-[30.5%] mt-auto bg-[#D9D9D9]`}>
+        <View
+          style={tw`h-[${
+            Platform.OS === 'ios' ? '30.5%' : '35%'
+          }] mt-auto bg-[#D9D9D9]`}>
           <TouchableOpacity
             onPress={() => {
               func(false);
