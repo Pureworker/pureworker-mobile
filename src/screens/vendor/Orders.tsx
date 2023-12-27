@@ -32,13 +32,14 @@ const Orders = () => {
   const [activeSection, setactiveSection] = useState('Active');
   const [isLoading, setisLoading] = useState(false);
   const providerOrders = useSelector((state: any) => state.user.providerOrders);
+  const userData = useSelector((state: any) => state.user.userData);
 
   const orders = [0, 1, 2, 3];
 
   useEffect(() => {
     const initGetOrders = async () => {
       setisLoading(true);
-      const res: any = await getProviderOrders('64f20fb6ee98ab7912406b14');
+      const res: any = await getProviderOrders(userData?._id);
       console.log('oooooooo', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addproviderOrders(res?.data?.data));

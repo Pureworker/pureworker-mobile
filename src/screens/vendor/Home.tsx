@@ -94,10 +94,21 @@ const Home = ({navigation}: any) => {
         dispatch(addUserData(res?.data?.user));
       }
 
-      if (userData?.geoLocation) {
-      } else {
+      // if (userData?.geoLocation) {
+      // } else {
+      //   navigation.navigate('AddAddress');
+      //   ToastLong('Address is required');
+      // }
+      const userData = res?.data?.user;
+      if (
+        !userData?.geoLocation ||
+        !userData.geoLocation.coordinates ||
+        !userData.geoLocation.coordinates.length
+      ) {
         navigation.navigate('AddAddress');
         ToastLong('Address is required');
+      } else {
+        // Continue with your logic if geoLocation is valid
       }
       // setloading(false);
     };

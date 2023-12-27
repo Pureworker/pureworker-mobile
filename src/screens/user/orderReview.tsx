@@ -46,10 +46,11 @@ const OrderReview = ({route}: any) => {
     const Data = {
       serviceProvider: _data.serviceProvider,
       totalPrice: Number(_data.totalPrice),
+      amount: Number(_data.totalPrice),
       description: _data.description,
       scheduledDeliveryDate: `${_data.scheduledDeliveryDate}`,
       scheduledDeliveryTime: formatTimestampToTime(
-        _data.scheduledDeliveryTime?.nativeEvent.timestamp,
+        _data.scheduledDeliveryTime?.nativeEvent?.timestamp,
       ),
       location: `${_data.location}`.toUpperCase(),
       address: _data.address,
@@ -62,6 +63,7 @@ const OrderReview = ({route}: any) => {
         const res = await createOrder(Data);
         if (res?.status === 200 || res?.status === 201) {
           navigation.navigate('PaymentConfirmed');
+          ToastShort('Your Order has been Placed.');
         } else {
           Snackbar.show({
             text: res?.error?.message
@@ -96,6 +98,8 @@ const OrderReview = ({route}: any) => {
       }
     } catch (error) {
       ToastShort(`Error: ${error}`);
+      setisLoading(false);
+      setisLoading(false);
     }
 
     setisLoading(false);

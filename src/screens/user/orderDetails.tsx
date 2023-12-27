@@ -80,8 +80,10 @@ const OrderDetails = () => {
   const handleCreate = async () => {
     // setisLoading(true);
     const Data = {
-      serviceProvider: providerData?.user?._id,
+      serviceProvider:
+        providerData?._id || providerData?.id || providerData?.user?._id,
       totalPrice: price,
+      amount: Number(price),
       description: description,
       scheduledDeliveryDate: date,
       scheduledDeliveryTime: scheduleTime,
@@ -89,7 +91,7 @@ const OrderDetails = () => {
       address: address,
       paymentStatus: 'PAID',
     };
-    console.log(Data);
+    console.log('WWWWW', Data, providerData);
     if (
       providerData?._id &&
       price &&
