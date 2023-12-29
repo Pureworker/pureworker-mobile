@@ -116,15 +116,12 @@ export default function CustomerSignup() {
           nationality: nationalityValue,
           accountType: 'customer',
         };
-
         if (referralCode && referralCode?.length > 2) {
           loginData.referralCode = referralCode;
         }
-
         console.log('here');
         const res = await Signup(loginData);
         console.log('here----', res);
-
         if (
           res?.status === 200 ||
           res?.status === 201 ||

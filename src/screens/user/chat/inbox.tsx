@@ -93,10 +93,8 @@ export default function Inbox({navigation, route}: any) {
       if (!groupedMessages[dateKey]) {
         groupedMessages[dateKey] = [];
       }
-
       groupedMessages[dateKey].push(message);
     }
-
     return groupedMessages;
   }
   const groupedMessages = groupMessagesByDate(chatData);

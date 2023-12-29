@@ -70,16 +70,13 @@ const Index = () => {
           marginHorizontal: 20,
         }}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <View style={tw``}>
-            <Textcomp
-              text={'.'}
-              size={17}
-              lineHeight={17}
-              color={'#000413'}
-              fontFamily={'Inter-SemiBold'}
-            />
-          </View>
+          <Image
+            source={images.back}
+            style={{height: 25, width: 25}}
+            resizeMode="contain"
+          />
         </TouchableOpacity>
+
         <View style={tw`mx-auto mt-3`}>
           <Textcomp
             text={'Inbox'}
@@ -89,12 +86,16 @@ const Index = () => {
             fontFamily={'Inter-SemiBold'}
           />
         </View>
-        <TouchableOpacity onPress={() => {}}>
-          <Image
-            source={images.back}
-            style={{height: 25, width: 25}}
-            resizeMode="contain"
-          />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <View style={tw``}>
+            <Textcomp
+              text={'. . .'}
+              size={17}
+              lineHeight={17}
+              color={'#000413'}
+              fontFamily={'Inter-SemiBold'}
+            />
+          </View>
         </TouchableOpacity>
       </View>
       <ScrollView>
@@ -154,7 +155,7 @@ const Index = () => {
             <>
               {chatList.map((item: any, index: any) => {
                 return (
-                  <ListComp item={item} key={index} navigation={navigation}/>
+                  <ListComp item={item} key={index} navigation={navigation} />
                   // <TouchableOpacity
                   //   onPress={() => {
                   //     socket.connect();
@@ -219,7 +220,7 @@ const Index = () => {
           )}
         </View>
       </ScrollView>
-      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
   );
 };
