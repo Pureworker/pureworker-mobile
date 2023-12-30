@@ -190,7 +190,6 @@ const Wallet = () => {
                       fontFamily={'Inter-Bold'}
                     />
                   </View>
-
                   <TouchableOpacity
                     onPress={() => {
                       navigation.navigate('Withdraw');
