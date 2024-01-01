@@ -190,12 +190,13 @@ const Wallet = () => {
                     />
                   </View>
 
+                  <View style={tw`flex flex-row`}>
                   <TouchableOpacity
                     onPress={() => {
                       navigation.navigate('PaymentMethod2');
                     }}
                     style={[
-                      tw`bg-black items-center justify-center rounded-full mr-auto`,
+                      tw`bg-black items-center justify-center rounded-full`,
                       {
                         marginTop: perHeight(20),
                         width: perWidth(100),
@@ -210,6 +211,30 @@ const Wallet = () => {
                       fontFamily={'Inter-Bold'}
                     />
                   </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('Withdraw');
+                    }}
+                    style={[
+                      tw`bg-black items-center justify-center rounded-full ml-4`,
+                      {
+                        marginTop: perHeight(20),
+                        width: perWidth(100),
+                        height: perHeight(21),
+                      },
+                    ]}>
+                    <Textcomp
+                      text={'Withdraw'}
+                      size={14}
+                      lineHeight={16}
+                      color={colors.primary}
+                      fontFamily={'Inter-Bold'}
+                    />
+                  </TouchableOpacity>
+
+                  </View>
+
+
                 </View>
               </View>
               <View

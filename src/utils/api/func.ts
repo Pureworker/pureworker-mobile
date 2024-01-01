@@ -1007,3 +1007,32 @@ export const getBanks = async (param: any) => {
     };
   }
 };
+
+export const withdraw = async (param: any) => {
+  console.log('withdraw func started');
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  try {
+    const response = await axios({
+      method: 'post',
+      // url: `${API_BASE_URL}/transaction/pay-provider`,
+      url: `${API_BASE_URL}/transaction/flutterwave-withdrawal`,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+      data: param,
+    });
+
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};

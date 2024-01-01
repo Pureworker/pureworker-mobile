@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
   Platform,
   StatusBar,
   ScrollView,
-  FlatList,
   ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
@@ -16,50 +14,32 @@ import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
-import FastImage from 'react-native-fast-image';
-import {
-  addTransactions,
-  addcategorizedTransdata,
-} from '../../store/reducer/mainSlice';
-import {getBanks, getTransactions} from '../../utils/api/func';
+import {getBanks, withdraw} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Button from '../../components/Button';
 import TextInputs from '../../components/TextInput2';
 import TextWrapper from '../../components/TextWrapper';
-import {
-  Collapse,
-  CollapseHeader,
-  CollapseBody,
-} from 'accordion-collapse-react-native';
 import colors from '../../constants/colors';
 import CustomLoading from '../../components/customLoading';
 import {SelectList} from 'react-native-dropdown-select-list';
-import {ToastShort} from '../../utils/utils';
+import {ToastLong, ToastShort} from '../../utils/utils';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {addbanks} from '../../store/reducer/mainSlice';
+import Toast from 'react-native-toast-message';
 
 const Withdraw = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [isLoading, setisLoading] = useState(false);
-  // const [categorizedData, setcategorizedData] = useState({});
-
-  //filter  transaction datat to get months
-  const months = ['May', 'Apr', 'Feb'];
-  const transactions = useSelector((state: any) => state.user.transactions);
   const banks = useSelector((state: any) => state.user.banks);
   const categorizedData = useSelector(
     (state: any) => state.user.categorizedTransdata,
   );
-  console.log(transactions);
-
   const [bankList, setbankList] = useState([]);
-
   useEffect(() => {
     const initGetUsers = async () => {
       setisLoading(true);
       const res: any = await getBanks('');
-
       if (res?.data?.data) {
         let list: any = [];
         res?.data?.data?.map(item => {
@@ -71,73 +51,67 @@ const Withdraw = () => {
         });
         setbankList(list);
       }
-      // console.log('banks', res?.data);
-      // if (res?.status === 201 || res?.status === 200) {
-      //   dispatch(addTransactions(res?.data?.data));
-      //   sort(transactions);
-      // }
-      // setloading(false);
       setisLoading(false);
     };
     initGetUsers();
   }, []);
-
-  // const categorizedData: any = {};
-  const sort = (data: any[]) => {
-    // Create an object to store categorized data
-    // Iterate through the data and categorize it by month
-    const _categorizedData: any = {};
-    data.forEach(item => {
-      const createdAt = new Date(item.createdAt);
-      const monthYear = `${createdAt.getFullYear()}-${(createdAt.getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}`; // Format: YYYY-MM
-
-      // Create an array for the month if it doesn't exist
-      if (!_categorizedData[monthYear]) {
-        _categorizedData[monthYear] = [];
-      }
-
-      // Push the item into the corresponding month
-      _categorizedData[monthYear].push(item);
-    });
-    // setcategorizedData(categorizedData);
-    console.log('here', _categorizedData);
-    dispatch(addcategorizedTransdata(_categorizedData));
-  };
-  function formatDate(inputDate) {
-    // Split the input date by '-'
-    const dateParts = inputDate.split('-');
-
-    // Map the month number to its abbreviation
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-
-    // Get the month abbreviation
-    const monthAbbr = months[parseInt(dateParts[1]) - 1];
-
-    // Create the formatted date string
-    const formattedDate = `${monthAbbr} ${dateParts[0]}`;
-
-    return formattedDate;
-  }
   const [collapseState, setCollapseState] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [accountNumber, setaccountNumber] = useState('');
   const [accountName, setaccountName] = useState('');
   const [bank, setbank] = useState('');
+  const [selectedBank, setselectedBank] = useState(null);
+
+  const [amount, setamount] = useState(0);
+  const [loading, setloading] = useState(false);
+
+  const handleWithdraw = async () => {
+    setloading(true);
+    const param = {
+      account_number: accountNumber,
+      account_bank: selectedBank?.code,
+      amount: amount,
+      narration: 'Withdrawal',
+    };
+    try {
+      setisLoading(true);
+      const res = await withdraw(param);
+      console.log('WITHDRAW:', res);
+      if ([200, 201].includes(res?.status)) {
+        // Toast.show({
+        //   type: 'success',
+        //   text1: 'Withdraw successfully 🚀. ',
+        // });
+        ToastShort('Withdraw successfully 🚀.');
+      } else {
+        // Toast.show({
+        //   type: 'error',
+        //   text1: `${
+        //     res?.error?.message
+        //       ? res?.error?.message
+        //       : 'Oops! An error occurred!'
+        //   } 🚀. `,
+        // });
+        ToastShort(
+          `${
+            res?.error?.message
+              ? res?.error?.message
+              : 'Oops! An error occurred!'
+          } 🚀. `,
+        );
+      }
+    } catch (error) {
+      console.error('Error with Withdraw Request:', error);
+      Toast.show({
+        type: 'error',
+        text1: 'An unexpected error occurred 🚀.',
+      });
+    } finally {
+      setloading(false);
+      setisLoading(false);
+    }
+  };
+
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView>
@@ -190,140 +164,22 @@ const Withdraw = () => {
               />
             </View>
           </View> */}
-
           <ScrollView scrollEnabled={false}>
-            <View style={{marginHorizontal: 20}}>
+            <View style={{marginHorizontal: 20, marginTop: 50}}>
               <TextWrapper
-                children="Withdraw Request"
+                children="Bank"
+                isRequired={true}
                 fontType={'semiBold'}
-                style={{fontSize: 20, marginTop: 30, color: colors.black}}
+                style={{fontSize: 13, marginTop: 20, color: colors.black}}
               />
-              {/* For freelancers  */}
-              {/* <>
-                <Collapse
-                  onToggle={() => {
-                    if (!dataLoaded) {
-                      setDataLoaded(true);
-                    }
-                    setCollapseState(!collapseState);
-                  }}
-                  style={{
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                  }}>
-                  <CollapseHeader
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      backgroundColor: colors.lightBlack,
-                      marginVertical: 10,
-                      borderRadius: 5,
-                      height: 35,
-                      width: '95%',
-                      borderColor: colors.primary,
-                      borderWidth: 2,
-                      paddingHorizontal: 15,
-                      // marginHorizontal: 20
-                    }}>
-                    <View style={{}}>
-                      <TextWrapper
-                        fontType={'semiBold'}
-                        style={{
-                          fontSize: 14,
-                          color: '#fff',
-                        }}>
-                        Select Bank
-                      </TextWrapper>
-                    </View>
-                    {collapseState ? (
-                      <Image
-                        source={images.polygonDown}
-                        resizeMode={'contain'}
-                        style={{width: 15, height: 15}}
-                      />
-                    ) : (
-                      <Image
-                        source={images.polygonForward}
-                        resizeMode={'contain'}
-                        style={{width: 15, height: 15}}
-                      />
-                    )}
-                    <TextWrapper
-                      fontType={'semiBold'}
-                      style={{
-                        fontSize: 35,
-                        color: '#D20713',
-                        position: 'absolute',
-                        right: -25,
-                      }}>
-                      {'*'}
-                    </TextWrapper>
-                  </CollapseHeader>
-                  <CollapseBody>
-                    {banks && (
-                      <View
-                        style={{
-                          borderColor: colors.primary,
-                          backgroundColor: colors.lightBlack,
-                          borderWidth: 2,
-                          flexDirection: 'row',
-                          flexWrap: 'wrap',
-                          width: '95%',
-                        }}>
-                        {banks.map((item: any, index: number) => {
-                          var offerStyle;
-                          if (index > 0) {
-                            offerStyle = {marginBottom: 25};
-                          }
-                          return (
-                            <TouchableOpacity
-                            key={index}
-                              onPress={() => {
-                                // setSelectedVerification(item);
-                                setbank(item);
-                              }}
-                              style={{marginTop: 8}}>
-                              <TextWrapper
-                                fontType={'semiBold'}
-                                style={{
-                                  color:
-                                    bank === item
-                                      ? colors.primary
-                                      : colors.white,
-                                  marginLeft: 11,
-                                  marginRight: 8,
-                                  marginBottom: 8,
-                                }}>
-                                {item?.name}
-                              </TextWrapper>
-                            </TouchableOpacity>
-                          );
-                        })}
-                      </View>
-                    )}
-                  </CollapseBody>
-                </Collapse>
-                <TextWrapper
-                  children="Enter account Number"
-                  isRequired={true}
-                  fontType={'semiBold'}
-                  style={{fontSize: 13, marginTop: 25, color: colors.black}}
-                />
-                <TextInputs
-                  style={{marginTop: 10, backgroundColor: colors.greyLight1}}
-                  labelText={''}
-                  state={accountNumber}
-                  setState={setaccountNumber}
-                />
-              </> */}
-              <View style={[tw`mb-4`, {
-                // minHeight: 100
-              }]}>
+              <View style={[tw`mb-4`, {}]}>
                 <SelectList
                   setSelected={(val: any) => {
                     console.log(val);
                     setbank(val);
+                    const fil = banks?.filter(item => item.label === val);
+                    setselectedBank(fil);
+                    console.log(fil);
                   }}
                   data={bankList}
                   save="value"
@@ -332,19 +188,23 @@ const Withdraw = () => {
                     {
                       paddingRight: 5,
                       borderRadius: 8,
+                      marginTop: 20,
                       // backgroundColor: colors.lightBlack,
                       borderColor: colors.black,
                       borderWidth: 2,
+                      // backgroundColor: 'red',
+                      // minHeight: 40,
+                      height: 50,
                     },
                   ]}
                   inputStyles={[
                     tw`items-center flex-row justify-center flex-1`,
                     {
-                      height: 40,
+                      // height: 40,
                       textAlignVertical: 'center',
                       fontSize: 14,
                       textTransform: 'uppercase',
-                      color: colors.white,
+                      color: colors.black,
                       borderRadius: 8,
                     },
                   ]}
@@ -367,9 +227,9 @@ const Withdraw = () => {
                     width: '100%',
                   }}
                   labelText={'Enter account number'}
-                  state={accountName}
-                  setState={setaccountName}
-                  disable={false}
+                  state={accountNumber}
+                  setState={setaccountNumber}
+                  disable={true}
                 />
               </>
               <>
@@ -393,7 +253,27 @@ const Withdraw = () => {
                   disable={false}
                 />
               </>
-
+              <>
+                <TextWrapper
+                  children="Amount"
+                  isRequired={true}
+                  fontType={'semiBold'}
+                  style={{fontSize: 13, marginTop: 20, color: colors.black}}
+                />
+                <TextInputs
+                  style={{
+                    marginTop: 10,
+                    backgroundColor: colors.greyLight1,
+                    borderRadius: 2,
+                    padding: 5,
+                    width: '100%',
+                  }}
+                  labelText={'Enter Amount'}
+                  state={amount}
+                  setState={setamount}
+                  disable={true}
+                />
+              </>
               {!isLoading ? (
                 <Button
                   onClick={() => {
@@ -401,7 +281,8 @@ const Withdraw = () => {
                     // navigation.navigate('ProfileStep5', {
                     //   serviceId: route?.params?.serviceId,
                     // });
-                    ToastShort('Withdrawal is coming!.');
+                    handleWithdraw();
+                    // ToastShort('Withdrawal is coming!.');
                   }}
                   style={{
                     marginHorizontal: 40,
