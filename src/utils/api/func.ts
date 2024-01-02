@@ -1,7 +1,12 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {store} from '../../store/store';
-import {addbanks, addprovidersByCateegory, addsupportUser} from '../../store/reducer/mainSlice';
+import {
+  addUserData,
+  addbanks,
+  addprovidersByCateegory,
+  addsupportUser,
+} from '../../store/reducer/mainSlice';
 // const API_BASE_URL = 'https://pureworker.onrender.com';
 // const API_BASE_URL = 'http://167.86.66.12/api';
 // const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
@@ -41,6 +46,9 @@ export const getProfile = async (param: any) => {
     });
     if (response.status === 201) {
       console.log('response data:', response?.data);
+      if (response?.data?.user) {
+        store.dispatch(addUserData(response?.data?.user));
+      }
     }
     console.log(response?.data);
     return response;

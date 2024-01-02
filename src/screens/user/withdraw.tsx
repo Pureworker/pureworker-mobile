@@ -14,7 +14,7 @@ import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
-import {getBanks, withdraw} from '../../utils/api/func';
+import {getBanks, getUser, withdraw} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Button from '../../components/Button';
 import TextInputs from '../../components/TextInput2';
@@ -24,7 +24,7 @@ import CustomLoading from '../../components/customLoading';
 import {SelectList} from 'react-native-dropdown-select-list';
 import {ToastLong, ToastShort} from '../../utils/utils';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {addbanks} from '../../store/reducer/mainSlice';
+import {addUserData, addbanks} from '../../store/reducer/mainSlice';
 import Toast from 'react-native-toast-message';
 
 const Withdraw = () => {
@@ -36,8 +36,15 @@ const Withdraw = () => {
     (state: any) => state.user.categorizedTransdata,
   );
   const [bankList, setbankList] = useState([]);
+
+  const initGetUsers = async () => {
+    setisLoading(true);
+    const res: any = await getUser('');
+    setisLoading(false);
+    // setloading(false);
+  };
   useEffect(() => {
-    const initGetUsers = async () => {
+    const initGetBanks = async () => {
       setisLoading(true);
       const res: any = await getBanks('');
       if (res?.data?.data) {
@@ -53,7 +60,7 @@ const Withdraw = () => {
       }
       setisLoading(false);
     };
-    initGetUsers();
+    initGetBanks();
   }, []);
   const [collapseState, setCollapseState] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -68,12 +75,15 @@ const Withdraw = () => {
   const handleWithdraw = async () => {
     setloading(true);
 
-    if (!selectedBank?.code) {
+    if (!selectedBank?.[0]?.code) {
       ToastShort('Please Select Bank.');
+    }
+    if (!accountNumber) {
+      ToastShort('Please Enter Account Number.');
     }
     const param = {
       account_number: accountNumber,
-      account_bank: selectedBank?.code,
+      account_bank: selectedBank?.[0]?.code,
       amount: amount,
       narration: 'Withdrawal',
     };
@@ -82,20 +92,12 @@ const Withdraw = () => {
       const res = await withdraw(param);
       console.log('WITHDRAW:', res);
       if ([200, 201].includes(res?.status)) {
-        // Toast.show({
-        //   type: 'success',
-        //   text1: 'Withdraw successfully 🚀. ',
-        // });
-        ToastShort('Withdraw successfully 🚀.');
+        ToastShort(
+          res?.data?.data ||
+            'Your withdrawal request is being processed!!! 🚀.',
+        );
+        navigation.navigate('Home');
       } else {
-        // Toast.show({
-        //   type: 'error',
-        //   text1: `${
-        //     res?.error?.message
-        //       ? res?.error?.message
-        //       : 'Oops! An error occurred!'
-        //   } 🚀. `,
-        // });
         ToastShort(
           `${
             res?.error?.message
@@ -111,6 +113,7 @@ const Withdraw = () => {
         text1: 'An unexpected error occurred 🚀.',
       });
     } finally {
+      await initGetUsers();
       setloading(false);
       setisLoading(false);
     }
@@ -179,12 +182,12 @@ const Withdraw = () => {
               <View style={[tw`mb-4`, {}]}>
                 <SelectList
                   setSelected={(val: any) => {
-                    console.log(val);
+                    console.log('hello', val);
                     setbank(val);
-                    const fil = banks?.filter(item => item.label === val);
-
+                    const fil = banks?.filter(item => item.name === val);
                     setselectedBank(fil);
                     console.log(fil);
+                    setselectedBank(fil);
                   }}
                   data={bankList}
                   save="value"
@@ -235,6 +238,7 @@ const Withdraw = () => {
                   state={accountNumber}
                   setState={setaccountNumber}
                   disable={true}
+                  maxLength={11}
                 />
               </>
               <>
