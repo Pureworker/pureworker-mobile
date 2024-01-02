@@ -1,6 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native';
+import {store} from '../../store/store';
+import {addprovidersByCateegory} from '../../store/reducer/mainSlice';
 //<<<<<<<<<<<<<<<--------------Staging------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
 //<<<<<<<<<<<<<<<--------------Production------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -28,6 +29,7 @@ export const verifyLogin = async (param: any) => {
     await storeTokenData(response);
     if (response.status === 201) {
       console.log('response data:', response?.data);
+      store.dispatch(addprovidersByCateegory([]));
     }
     console.log(response?.data);
     return response;
@@ -265,4 +267,3 @@ export const resetPassword = async (param: any) => {
     };
   }
 };
-

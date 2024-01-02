@@ -14,9 +14,10 @@ import EditServices from '../screens/vendor/editService';
 import TransactionHistory from '../screens/user/transactionHistory';
 import AddServices from '../screens/vendor/addServices';
 import Congratulations from '../screens/profile/congratulations';
-import Withdraw from '../screens/vendor/withdraw';
+// import Withdraw from '../screens/vendor/withdraw';
 import Inbox from '../screens/user/chat/inbox';
 import _Services from '../screens/vendor/_services';
+import Withdraw from '../screens/user/withdraw';
 
 const Stack = createNativeStackNavigator();
 

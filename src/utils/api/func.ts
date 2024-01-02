@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {store} from '../../store/store';
-import {addbanks, addsupportUser} from '../../store/reducer/mainSlice';
+import {addbanks, addprovidersByCateegory, addsupportUser} from '../../store/reducer/mainSlice';
 // const API_BASE_URL = 'https://pureworker.onrender.com';
 // const API_BASE_URL = 'http://167.86.66.12/api';
 // const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
@@ -226,6 +226,7 @@ export const getProviderByService = async (param: any) => {
     });
     if (response.status === 201) {
       console.log('response data:', response?.data);
+      store.dispatch(addprovidersByCateegory(response?.data?.data));
     }
     console.log(response?.data);
     return response;
@@ -241,7 +242,7 @@ export const getProviderByService = async (param: any) => {
 
 export const getProviderByCategory = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
-  console.log('getProviderByService func started', param);
+  console.log('getProviderByCategory func started', param);
   try {
     const response = await axios({
       method: 'get',
@@ -959,7 +960,7 @@ export const getSupportUser = async (param: any) => {
   try {
     const response = await axios({
       method: 'get',
-      url: 'https://api.pureworker.com/api/get-support-user',
+      url: `${API_BASE_URL}/get-support-user`,
       headers: {
         Authorization: `Bearer ${AuthToken}`,
       },

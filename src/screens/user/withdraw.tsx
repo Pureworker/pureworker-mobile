@@ -67,6 +67,10 @@ const Withdraw = () => {
 
   const handleWithdraw = async () => {
     setloading(true);
+
+    if (!selectedBank?.code) {
+      ToastShort('Please Select Bank.');
+    }
     const param = {
       account_number: accountNumber,
       account_bank: selectedBank?.code,
@@ -97,7 +101,7 @@ const Withdraw = () => {
             res?.error?.message
               ? res?.error?.message
               : 'Oops! An error occurred!'
-          } 🚀. `,
+          } 🚀.`,
         );
       }
     } catch (error) {
@@ -178,6 +182,7 @@ const Withdraw = () => {
                     console.log(val);
                     setbank(val);
                     const fil = banks?.filter(item => item.label === val);
+
                     setselectedBank(fil);
                     console.log(fil);
                   }}
