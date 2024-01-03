@@ -34,7 +34,7 @@ export const getUser = async (param: any) => {
       error: error?.response?.data,
     };
   }
-};
+}; 
 export const getProfile = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   console.log('getProfile func started', param);
