@@ -241,7 +241,7 @@ const Orders = () => {
               />
             </View>
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={() => {navigation.navigate('Services');}}
               style={[tw`mx-auto `, {marginTop: perHeight(29)}]}>
               <Textcomp
                 text={'Explore services'}

@@ -106,7 +106,7 @@ const DeactivateAccount = () => {
           </TouchableOpacity>
           <View style={tw`mx-auto`}>
             <Textcomp
-              text={'DeactivateAccount'}
+              text={'Deactivate Account'}
               size={17}
               lineHeight={17}
               color={'#000413'}
@@ -117,7 +117,7 @@ const DeactivateAccount = () => {
         <View style={[tw` flex-1`]}>
           <View style={tw`mx-auto mt-[7.5%]`}>
             <Textcomp
-              text={'Deactivate or delete your Pure worker account'}
+              text={'Deactivate or delete your Pureworker account'}
               size={14}
               lineHeight={17}
               color={'#000413'}

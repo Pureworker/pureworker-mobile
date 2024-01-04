@@ -117,7 +117,7 @@ const Orders = () => {
           </TouchableOpacity>
           <TextInputs
             style={{marginTop: 10, width: '70%'}}
-            labelText={'Search for service provider'}
+            labelText={'Search for customer'}
             state={searchInput}
             setState={setsearchInput}
           />
@@ -213,7 +213,7 @@ const Orders = () => {
               />
             </View>
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={() => {navigation.navigate('Services');}}
               style={[tw`mx-auto `, {marginTop: perHeight(29)}]}>
               <Textcomp
                 text={'Explore services'}

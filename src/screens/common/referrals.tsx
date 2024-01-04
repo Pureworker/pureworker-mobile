@@ -149,7 +149,7 @@ const Referrals = () => {
                 fontFamily={'Inter-SemiBold'}
               />
               <Textcomp
-                text={' N500 '}
+                text={'₦500 '}
                 size={17}
                 lineHeight={17}
                 color={'white'}
@@ -258,7 +258,7 @@ const Referrals = () => {
 
                   <View style={tw`mt-4`}>
                     <Textcomp
-                      text={`N ${Number(referralDetails?.completedNumber) * 500}`}
+                      text={`₦ ${Number(referralDetails?.completedNumber) * 500}`}
                       size={14}
                       lineHeight={17}
                       color={'#000000'}

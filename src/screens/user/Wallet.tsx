@@ -237,7 +237,7 @@ const Wallet = () => {
 
                 </View>
               </View>
-              <View
+              {/* <View
                 style={[
                   tw`border-t  border-b`,
                   {marginTop: perHeight(36), height: perHeight(95)},
@@ -294,7 +294,7 @@ const Wallet = () => {
                     </View>
                   </View>
                 </View>
-              </View>
+              </View> */}
               <View
                 style={[
                   tw`  border-b`,

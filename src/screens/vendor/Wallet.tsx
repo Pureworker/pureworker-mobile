@@ -226,7 +226,7 @@ const Wallet = () => {
                     fontFamily={'Inter-Bold'}
                   />
                 </View>
-                <View style={[tw`flex flex-row items-center  mt-4`, {}]}>
+                {/* <View style={[tw`flex flex-row items-center  mt-4`, {}]}>
                   <View style={tw``}>
                     <Image
                       source={images.wallet2}
@@ -268,7 +268,7 @@ const Wallet = () => {
                       </View>
                     </View>
                   </View>
-                </View>
+                </View> */}
               </View>
               <View
                 style={[

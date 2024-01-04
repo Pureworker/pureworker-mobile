@@ -40,7 +40,7 @@ export default function BusinessSignup() {
   const [name, setName] = useState('');
   const [cacNo, setCacNo] = useState('');
   const [address, setAddress] = useState('');
-  const [userType, setUserType] = useState('BUSINESS');
+  const [userType, setUserType] = useState('FREELANCER');
   const [locationOpen, setLocationOpen] = useState(false);
   const [locationValue, setLocationValue] = useState('');
   const [date, setDate] = useState(new Date());
