@@ -23,6 +23,7 @@ import { addUserData } from '../../store/reducer/mainSlice';
 import { getUser } from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
+import socket from '../../utils/socket';
 
 const Wallet = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -44,6 +45,7 @@ const Wallet = () => {
   useEffect(() => {
     initGetUsers();
   }, [dispatch, navigation]);
+  const supportUser = useSelector((store: any) => store.user.supportUser);
 
   return (
     <>
@@ -129,7 +131,13 @@ const Wallet = () => {
                 </View>
                 <TouchableOpacity
                   onPress={() => {
-                    setInfoModal(true);
+                    // setInfoModal(true);
+                    socket.connect();
+                    setInfoModal(false);
+                    navigation.navigate('Inbox', {
+                      id: supportUser?._id || supportUser?.id,
+                      name: 'Support',
+                    });
                   }}
                   style={tw`ml-3`}>
                   <View style={tw``}>

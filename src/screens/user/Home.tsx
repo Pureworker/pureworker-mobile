@@ -571,7 +571,7 @@ const Home = () => {
                   setInfoModal(false);
                   navigation.navigate('Inbox', {
                     id: supportUser?._id || supportUser?.id,
-                    name: ' Support',
+                    name: 'Support',
                   });
                 }}
                 style={{

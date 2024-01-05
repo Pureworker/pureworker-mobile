@@ -47,8 +47,11 @@ const OrderDetails = () => {
   // console.log('service_provider_data', providerData);
   const dispatch = useDispatch();
   const [locationItems, setLocationItems] = useState([
-    {label: 'Online(Job will be done virtually)', value: 'Online'},
-    {label: 'Offline(Job will be done at your location)', value: 'Offline'},
+    // {label: 'Online(Job will be done virtually)', value: 'Online'},
+    // {label: 'Offline(Job will be done at your location)', value: 'Offline'},
+    // {label: 'Both', value: 'Both'},
+    {label: 'Online (your business renders services online)', value: 'Online'},
+    {label: 'Offline (your business renders services at the customer’s location)', value: 'Offline'},
     {label: 'Both', value: 'Both'},
   ]);
   const [locationOpen, setLocationOpen] = useState(false);

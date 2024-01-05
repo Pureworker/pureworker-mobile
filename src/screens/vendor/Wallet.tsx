@@ -28,6 +28,7 @@ const Wallet = () => {
   const dispatch = useDispatch();
   const [InfoModal, setInfoModal] = useState(false);
   const [ContactAgent, setContactAgent] = useState(false);
+  const supportUser = useSelector((store: any) => store.user.supportUser);
 
   const userData = useSelector((state: any) => state.user.userData);
   const [isLoading, setisLoading] = useState(false);
@@ -128,7 +129,13 @@ const Wallet = () => {
                 </View>
                 <TouchableOpacity
                   onPress={() => {
-                    setInfoModal(true);
+                    // setInfoModal(true);
+
+                    setInfoModal(false);
+                    navigation.navigate('Inbox', {
+                      id: supportUser?._id || supportUser?.id,
+                      name: 'Support',
+                    });
                   }}
                   style={tw`ml-3`}>
                   <View style={tw``}>

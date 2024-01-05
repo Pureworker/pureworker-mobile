@@ -48,8 +48,8 @@ export default function BusinessSignup() {
     setDate(dateTime);
   };
   const [locationItems, setLocationItems] = useState([
-    {label: 'Online', value: 'Online'},
-    {label: 'Offline', value: 'Offline'},
+    {label: 'Online (your business renders services online)', value: 'Online'},
+    {label: 'Offline (your business renders services at the customer’s location)', value: 'Offline'},
     {label: 'Both', value: 'Both'},
   ]);
   const [genderOpen, setGenderOpen] = useState(false);
