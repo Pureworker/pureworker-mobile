@@ -156,7 +156,9 @@ export default function Inbox({navigation, route}: any) {
                       lineHeight: 14,
                     },
                   ]}>
-                  2d ago
+                  {
+                    userName === 'Support Support' ? '' : 'Xd ago'
+                  }
                 </Text>
               </View>
             </View>

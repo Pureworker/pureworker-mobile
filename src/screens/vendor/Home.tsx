@@ -635,7 +635,7 @@ const Home = ({navigation}: any) => {
                   marginTop: 18,
                 }}>
                 <Textcomp
-                  text={'FAQ'}
+                  text={'FAQs'}
                   size={14}
                   lineHeight={17}
                   color={'#FFC727'}
