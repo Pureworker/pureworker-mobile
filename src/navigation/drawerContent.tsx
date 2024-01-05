@@ -30,22 +30,27 @@ const DrawerContent = () => {
   const navigation = useNavigation<StackNavigation>();
   const navLinks = [
     {label: 'Wallet', route: 'Wallet', icon: images.wallet},
-    {label: 'Support', route: 'Support', icon: images.help},
-    {label: 'Account Info', route: 'Account', icon: images.info},
+    {label: 'Support', route: 'Support', icon: images.support},
+    {label: 'Account Info', route: 'Account', icon: images.accountinfo},
     {label: 'Referrals', route: 'Referrals', icon: images.info},
   ];
   const navLinks2 = [
-    {label: 'Log out', route: 'Logout', icon: images.wallet},
+    {label: 'Log out', route: 'Logout', icon: images.logout},
     {
       label: 'Deactivate Account',
       route: 'DeactivateAccount',
-      icon: images.deactivte,
+      icon: images.deactivate,
     },
     {
       label: 'Privacy Policy',
       // route: 'AddAddress',
       route: 'PrivacyPolicy',
-      icon: images.support,
+      icon: images.privacy,
+    },
+    {
+      label: 'Rate Our App',
+      route: 'PrivacyPolicy',
+      icon: images.privacy,
     },
   ];
   const dispatch = useDispatch();
@@ -203,7 +208,7 @@ const DrawerContent = () => {
                   style={tw`mt-3 flex flex-row`}>
                   <View style={tw``}>
                     <Textcomp
-                      text={'4.8 '}
+                      text={'0.0 '}
                       size={14}
                       color={'#FFCD1E'}
                       style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '500'}]}
@@ -231,8 +236,8 @@ const DrawerContent = () => {
 
           <View
             style={[
-              tw`bg-[#2D303C] px-2 w-[90%] pb-6 pt-3 mx-auto rounded-lg`,
-              {marginTop: perHeight(70)},
+              tw` px-2 w-[90%] pb-6 pt-3 mx-auto rounded-lg`,
+              {marginTop: perHeight(40)},
             ]}>
             {navLinks.map((link, index) => (
               <TouchableOpacity
@@ -251,15 +256,15 @@ const DrawerContent = () => {
                 {
                   <Image
                     resizeMode="contain"
-                    style={{width: 20, height: 20}}
+                    style={{width: 20, height: 20, tintColor: '#000000'}}
                     source={link.icon}
                   />
                 }
                 <Textcomp
                   text={link.label}
                   size={14}
-                  color={'#FFFFFF'}
-                  style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '500'}]}
+                  color={'#000000'}
+                  style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '600'}]}
                 />
               </TouchableOpacity>
             ))}
@@ -267,8 +272,8 @@ const DrawerContent = () => {
 
           <View
             style={[
-              tw`bg-[#2D303C] px-2 w-[90%] pb-6 pt-3 mx-auto rounded-lg`,
-              {marginTop: perHeight(50)},
+              tw` px-2 w-[90%] border-t pb-6 pt-10 mx-auto rounded-lg`,
+              {marginTop: perHeight(20)},
             ]}>
             {navLinks2.map((link, index) => (
               <TouchableOpacity
@@ -283,7 +288,7 @@ const DrawerContent = () => {
                 {
                   <Image
                     resizeMode="contain"
-                    style={{width: 20, height: 20}}
+                    style={{width: 20, height: 20, tintColor: '#000000'}}
                     // source={images.info}
                     source={link.icon}
                   />
@@ -291,8 +296,8 @@ const DrawerContent = () => {
                 <Textcomp
                   text={link.label}
                   size={14}
-                  color={'#FFFFFF'}
-                  style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '500'}]}
+                  color={'#000000'}
+                  style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '600'}]}
                 />
               </TouchableOpacity>
             ))}

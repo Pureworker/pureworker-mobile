@@ -60,5 +60,12 @@ const images = {
   fundingHistory: require('../assets/images/fundingHistory.png'),
   transactionHistory: require('../assets/images/transactionHistory.png'),
   refresh: require('../assets/images/refresh.png'),
+
+  privacy: require('../assets/images/privacy.png'),
+  deactivate: require('../assets/images/deactivate.png'),
+  logout: require('../assets/images/logout.png'),
+  accountinfo: require('../assets/images/accountinfo.png'),
+  shareicon: require('../assets/images/shareicon.png'),
+  copyicon: require('../assets/images/copyicon.png'),
 };
 export default images;

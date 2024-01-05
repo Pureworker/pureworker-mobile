@@ -127,14 +127,14 @@ const Referrals = () => {
               <TouchableOpacity style={tw`ml-3 border-r border-[#BDBDBD] pr-3`}>
                 <Image
                   resizeMode="contain"
-                  source={images.camera}
+                  source={images.copyicon}
                   style={[tw``, {height: 20, width: 20, tintColor: '#BDBDBD'}]}
                 />
               </TouchableOpacity>
               <TouchableOpacity style={tw`pl-3`}>
                 <Image
                   resizeMode="contain"
-                  source={images.camera}
+                  source={images.shareicon}
                   style={[tw``, {height: 20, width: 20, tintColor: '#BDBDBD'}]}
                 />
               </TouchableOpacity>
