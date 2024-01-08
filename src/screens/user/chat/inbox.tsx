@@ -283,7 +283,23 @@ export default function Inbox({navigation, route}: any) {
                 }}
                 value={message}
               />
-              {boxFocuss || message?.length > 0 ? (
+              <TouchableOpacity
+                onPress={() => {
+                  onSubmit();
+                }}>
+                <Image
+                  resizeMode="contain"
+                  source={images.send2}
+                  style={[
+                    tw`w-full `,
+                    {
+                      height: 30,
+                      width: 30,
+                    },
+                  ]}
+                />
+              </TouchableOpacity>
+              {/* {boxFocuss || message?.length > 0 ? (
                 <TouchableOpacity
                   onPress={() => {
                     onSubmit();
@@ -317,7 +333,7 @@ export default function Inbox({navigation, route}: any) {
                     ]}
                   />
                 </TouchableOpacity>
-              )}
+              )} */}
             </View>
           </View>
         </View>

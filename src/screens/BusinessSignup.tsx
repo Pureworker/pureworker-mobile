@@ -11,7 +11,7 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import images from '../constants/images';
 
 import commonStyle from '../constants/commonStyle';
@@ -21,7 +21,6 @@ import colors from '../constants/colors';
 import TextInputs from '../components/TextInputs';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Snackbar from 'react-native-snackbar';
-import {useSignupMutation} from '../store/slice/api';
 import {allCountry, validateEmail} from '../constants/utils';
 import {BUSINESS, FREELANCER} from '../constants/userType';
 import DateTimesPicker from '../components/DatePicker';
@@ -29,9 +28,7 @@ import {StackNavigation} from '../constants/navigation';
 import {generalStyles} from '../constants/generalStyles';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import {Signup} from '../utils/api/auth';
-import { isValidPhoneNumber } from '../utils/utils';
-
-const {width, height} = Dimensions.get('window');
+import {isValidPhoneNumber} from '../utils/utils';
 export default function BusinessSignup() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -49,7 +46,11 @@ export default function BusinessSignup() {
   };
   const [locationItems, setLocationItems] = useState([
     {label: 'Online (your business renders services online)', value: 'Online'},
-    {label: 'Offline (your business renders services at the customer’s location)', value: 'Offline'},
+    {
+      label:
+        'Offline (your business renders services at the customer’s location)',
+      value: 'Offline',
+    },
     {label: 'Both', value: 'Both'},
   ]);
   const [genderOpen, setGenderOpen] = useState(false);
@@ -88,8 +89,7 @@ export default function BusinessSignup() {
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
-      }
-      else if (!isValidPhoneNumber(phoneName)) {
+      } else if (!isValidPhoneNumber(phoneName)) {
         Snackbar.show({
           text: 'Please enter a valid phone number',
           duration: Snackbar.LENGTH_SHORT,
@@ -98,8 +98,7 @@ export default function BusinessSignup() {
         });
         setisLoading(false);
         return;
-      } 
-       else {
+      } else {
         setisLoading(true);
         const loginData: any = {
           email: email.toLowerCase().trim(),

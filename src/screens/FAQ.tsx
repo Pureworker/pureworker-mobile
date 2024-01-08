@@ -1,12 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  Image,
-  ScrollView,
-} from 'react-native';
+import {StyleSheet, Text, View, Image, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import images from '../constants/images';
 import commonStyle from '../constants/commonStyle';
@@ -17,9 +10,7 @@ import {addfaq} from '../store/reducer/mainSlice';
 import {getFAQ} from '../utils/api/func';
 import {StackNavigation} from '../constants/navigation';
 
-const {width, height} = Dimensions.get('screen');
 export default function FAQ() {
-  const data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [isLoading, setisLoading] = useState(false);
@@ -28,7 +19,6 @@ export default function FAQ() {
     const initFaq = async () => {
       setisLoading(true);
       const res: any = await getFAQ('');
-      // console.log('fffffff', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addfaq(res?.data?.data));
       }

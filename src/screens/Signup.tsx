@@ -1,12 +1,10 @@
 import React from 'react';
-import {StyleSheet, Text, View, Dimensions} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Button from '../components/Button';
 import commonStyle from '../constants/commonStyle';
 import MyStatusBar from '../components/MyStatusBar';
 import {StackNavigation} from '../constants/navigation';
-const {width, height} = Dimensions.get('window');
-
 export default function Signup() {
   const navigation = useNavigation<StackNavigation>();
 

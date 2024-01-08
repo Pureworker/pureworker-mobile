@@ -30,8 +30,6 @@ import {generalStyles} from '../constants/generalStyles';
 import {SIZES} from '../utils/position/sizes';
 import {Signup} from '../utils/api/auth';
 import { isValidPhoneNumber } from '../utils/utils';
-
-const {width, height} = Dimensions.get('window');
 export default function CustomerSignup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

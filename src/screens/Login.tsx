@@ -1,37 +1,30 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  StyleSheet,
   Text,
   View,
-  Dimensions,
   Image,
   ActivityIndicator,
   TouchableOpacity,
   StatusBar,
   ScrollView,
-  Platform,
-  Alert,
+  Platform
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import images from '../constants/images';
 
 import TextInputs from '../components/TextInputs';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import commonStyle from '../constants/commonStyle';
 import Button from '../components/Button';
 import Snackbar from 'react-native-snackbar';
 import MyStatusBar from '../components/MyStatusBar';
-import {useLoginMutation} from '../store/slice/api';
 import colors from '../constants/colors';
-import {validateEmail} from '../constants/utils';
-import {StackNavigation} from '../constants/navigation';
-import {signIn} from '../utils/api/auth';
+import { validateEmail } from '../constants/utils';
+import { StackNavigation } from '../constants/navigation';
+import { signIn } from '../utils/api/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const {width, height} = Dimensions.get('screen');
-
 export default function Login() {
-  const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [seconds, setSeconds] = useState(30);
 
@@ -148,7 +141,7 @@ export default function Login() {
           email: email.toLowerCase().trim(),
           // password: password,
         };
-        const res = await signIn(loginData);
+        const res:any = await signIn(loginData);
 
         if (res?.status === 200 || res?.status === 201) {
           navigation.navigate('TokenVerification', {
@@ -316,9 +309,3 @@ export default function Login() {
     </View>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
-});
