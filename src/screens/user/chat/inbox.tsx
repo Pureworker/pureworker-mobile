@@ -104,17 +104,17 @@ export default function Inbox({navigation, route}: any) {
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // Use "padding" for iOS, "height" for Android
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -150} // Adjust as needed
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 50} // Adjust as needed
       >
         <View style={tw`w-full h-full `}>
           <View
             style={[
-              tw`px-[3%] shadow-lg  border-b border-[#262C550F]`,
+              tw`px-[3%]   border-b justify-center border-[#262C550F]`,
               {height: perHeight(40)},
-              styles.shadowProp,
+              Platform.OS === 'ios' && styles.shadowProp,
             ]}>
             <View
-              style={tw`px-2 py-2 my-auto mb-3 flex flex-row justify-between items-center`}>
+              style={tw`px-2  my-auto mb-3 flex flex-row justify-between items-center`}>
               <View style={tw`flex flex-row`}>
                 <TouchableOpacity
                   onPress={() => {
@@ -156,9 +156,7 @@ export default function Inbox({navigation, route}: any) {
                       lineHeight: 14,
                     },
                   ]}>
-                  {
-                    userName === 'Support Support' ? '' : 'Xd ago'
-                  }
+                  {userName === 'Support Support' ? '' : 'Xd ago'}
                 </Text>
               </View>
             </View>
@@ -259,11 +257,19 @@ export default function Inbox({navigation, route}: any) {
           <View
             style={[
               tw` w-full mx-auto mt-auto  px-[4%] border-t-4 border-black `,
-              {height: HEIGHT_SCREEN * 0.085, marginBottom: 0},
+              {
+                height: HEIGHT_SCREEN * 0.085,
+                marginBottom: Platform.OS === 'ios' ? 0 : 5,
+              },
             ]}>
             <View style={tw`flex flex-row mt-3 py-2 px-2 bg-[#D9D9D9]`}>
               <TextInput
-                style={[tw`py-2  flex-1 text-black`, {}]}
+                style={[
+                  tw`${
+                    Platform.OS === 'ios' ? 'py-2' : 'py-0'
+                  }  flex-1 text-black`,
+                  {},
+                ]}
                 placeholder={'Write a message...'}
                 placeholderTextColor={'#000000'}
                 onChangeText={text => {

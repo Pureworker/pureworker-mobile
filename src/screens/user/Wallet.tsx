@@ -305,8 +305,8 @@ const Wallet = () => {
               </View> */}
               <View
                 style={[
-                  tw`  border-b`,
-                  {marginTop: perHeight(0), height: perHeight(115)},
+                  tw` `,
+                  {marginTop: perHeight(20), height: perHeight(115)},
                 ]}>
                 <View style={[tw``, {marginTop: perHeight(13)}]}>
                   <Textcomp
@@ -322,8 +322,8 @@ const Wallet = () => {
                     navigation.navigate('FundingHistory');
                   }}
                   style={[
-                    tw`flex flex-row items-center`,
-                    {marginTop: perHeight(15)},
+                    tw`flex flex-row items-center bg-[#2D303C] px-3 rounded-full mr-auto`,
+                    {marginTop: perHeight(15), height: perHeight(40), width: perWidth(180) },
                   ]}>
                   <View>
                     <Image
@@ -331,6 +331,7 @@ const Wallet = () => {
                       style={{
                         height: 25,
                         width: 27,
+                        tintColor: '#FFCD1E'
                       }}
                       resizeMode="contain"
                     />
@@ -340,7 +341,7 @@ const Wallet = () => {
                       text={'Funding history'}
                       size={12}
                       lineHeight={14}
-                      color={'#000000'}
+                      color={'#FFCD1E'}
                       fontFamily={'Inter-Medium'}
                     />
                   </View>
@@ -350,8 +351,8 @@ const Wallet = () => {
                     navigation.navigate('TransactionHistory');
                   }}
                   style={[
-                    tw`flex flex-row items-center`,
-                    {marginTop: perHeight(15)},
+                    tw`flex flex-row items-center bg-[#2D303C] px-3 rounded-full `,
+                    {marginTop: perHeight(15), height: perHeight(40), width: perWidth(180) },
                   ]}>
                   <View>
                     <Image
@@ -359,6 +360,7 @@ const Wallet = () => {
                       style={{
                         height: 25,
                         width: 27,
+                        tintColor: '#FFCD1E'
                       }}
                       resizeMode="contain"
                     />
@@ -368,7 +370,7 @@ const Wallet = () => {
                       text={'Transaction history'}
                       size={13}
                       lineHeight={14}
-                      color={'#000000'}
+                      color={'#FFCD1E'}
                       fontFamily={'Inter-Medium'}
                     />
                   </View>
@@ -376,21 +378,7 @@ const Wallet = () => {
               </View>
             </View>
 
-            <View style={[tw``, {marginTop: perHeight(225)}]}>
-              <View
-                style={[
-                  tw`bg-[${colors.darkPurple}] items-center rounded-lg justify-center mx-auto py-3`,
-                  {width: perWidth(260)},
-                ]}>
-                <Textcomp
-                  text={'Back to Homepage'}
-                  size={14}
-                  lineHeight={15}
-                  color={colors.primary}
-                  fontFamily={'Inter-Bold'}
-                />
-              </View>
-            </View>
+
           </View>
         </ScrollView>
         <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>

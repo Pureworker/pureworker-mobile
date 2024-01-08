@@ -25,6 +25,8 @@ import {
 } from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
+import {ToastLong} from '../../utils/utils';
+import {logout} from '../../store/reducer/mainSlice';
 
 const DeactivateAccount = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -57,6 +59,7 @@ const DeactivateAccount = () => {
         backgroundColor: '#88087B',
       });
       navigation.navigate('Orders');
+      ToastLong('Deactivate Request Successful.');
     }
     setisLoading(false);
   };
@@ -72,7 +75,9 @@ const DeactivateAccount = () => {
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
-      navigation.navigate('Orders');
+      ToastLong('Delete Request Successful.');
+      navigation.navigate('Home');
+      dispatch(logout());
     }
     setisLoading(false);
   };

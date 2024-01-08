@@ -23,6 +23,8 @@ import CloseToYouCard2 from '../../components/cards/closeToYou2';
 import Orderscomponent2 from '../../components/Orderscomponent2';
 import { addproviderOrders } from '../../store/reducer/mainSlice';
 import { getProviderOrders, getUserOrders } from '../../utils/api/func';
+import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
 
 const Orders = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -279,6 +281,7 @@ const Orders = () => {
           </>
         )}
       </ScrollView>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
     </View>
   );
 };

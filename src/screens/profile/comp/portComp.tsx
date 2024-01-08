@@ -11,18 +11,13 @@ import {StackNavigation} from '../../../constants/navigation';
 import TextWrapper from '../../../components/TextWrapper';
 import commonStyle from '../../../constants/commonStyle';
 import tw from 'twrnc';
-import {useGetUserDetailQuery} from '../../../store/slice/api';
 import colors from '../../../constants/colors';
 import {useDispatch, useSelector} from 'react-redux';
 import {HEIGHT_SCREEN, WIDTH_WINDOW} from '../../../constants/generalStyles';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Snackbar from 'react-native-snackbar';
-import {getProfile} from '../../../utils/api/func';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {
-  addProfileData,
-  addcompleteProfile,
-} from '../../../store/reducer/mainSlice';
+import {addcompleteProfile} from '../../../store/reducer/mainSlice';
 import {FlatList} from 'react-native-gesture-handler';
 import {ToastShort} from '../../../utils/utils';
 export default function PortComp({
@@ -172,6 +167,13 @@ export default function PortComp({
     console.log('settttt', item);
     // Update the other state with the same value
     // setOtherState(item.value);
+  };
+
+  const handleRemovePortfolio = () => {
+    // Remove the selected portfolio item from the state
+    const updatedPortfolioData = [...portfolioData];
+    updatedPortfolioData.splice(lindex, 1);
+    handlePortfolioItemChange(lindex, updatedPortfolioData[lindex]);
   };
 
   return (

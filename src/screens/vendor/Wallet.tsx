@@ -22,6 +22,8 @@ import Modal from 'react-native-modal/dist/modal';
 import {addUserData} from '../../store/reducer/mainSlice';
 import {getUser} from '../../utils/api/func';
 import {formatAmount} from '../../utils/validations';
+import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
 
 const Wallet = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -42,6 +44,9 @@ const Wallet = () => {
     setisLoading(false);
     // setloading(false);
   };
+  useEffect(() => {
+    initGetUsers();
+  }, []);
   useEffect(() => {
     initGetUsers();
   }, [dispatch, navigation]);
@@ -101,9 +106,7 @@ const Wallet = () => {
                     fontFamily={'Inter-Bold'}
                   />
                 </View>
-                <TouchableOpacity
-                  style={tw``}
-                  onPress={() => navigation.goBack()}>
+                <TouchableOpacity style={tw``} onPress={() => initGetUsers()}>
                   <Image
                     source={images.refresh}
                     style={{height: 17, width: 17, tintColor: 'black'}}
@@ -130,7 +133,6 @@ const Wallet = () => {
                 <TouchableOpacity
                   onPress={() => {
                     // setInfoModal(true);
-
                     setInfoModal(false);
                     navigation.navigate('Inbox', {
                       id: supportUser?._id || supportUser?.id,
@@ -219,7 +221,7 @@ const Wallet = () => {
                   </TouchableOpacity>
                 </View>
               </View>
-              <View
+              {/* <View
                 style={[
                   tw`border-t  border-b`,
                   {marginTop: perHeight(36), height: perHeight(95)},
@@ -233,7 +235,7 @@ const Wallet = () => {
                     fontFamily={'Inter-Bold'}
                   />
                 </View>
-                {/* <View style={[tw`flex flex-row items-center  mt-4`, {}]}>
+                <View style={[tw`flex flex-row items-center  mt-4`, {}]}>
                   <View style={tw``}>
                     <Image
                       source={images.wallet2}
@@ -275,12 +277,12 @@ const Wallet = () => {
                       </View>
                     </View>
                   </View>
-                </View> */}
-              </View>
+                </View>
+              </View> */}
               <View
                 style={[
-                  tw`  border-b`,
-                  {marginTop: perHeight(0), height: perHeight(95)},
+                  tw` `,
+                  {marginTop: perHeight(20), height: perHeight(95)},
                 ]}>
                 <View style={[tw``, {marginTop: perHeight(13)}]}>
                   <Textcomp
@@ -291,7 +293,7 @@ const Wallet = () => {
                     fontFamily={'Inter-SemiBold'}
                   />
                 </View>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('TransactionHistory');
                   }}
@@ -318,11 +320,44 @@ const Wallet = () => {
                       fontFamily={'Inter-Medium'}
                     />
                   </View>
+                </TouchableOpacity> */}
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('TransactionHistory');
+                  }}
+                  style={[
+                    tw`flex flex-row items-center bg-[#2D303C] px-3 rounded-full `,
+                    {
+                      marginTop: perHeight(20),
+                      height: perHeight(40),
+                      width: perWidth(180),
+                    },
+                  ]}>
+                  <View>
+                    <Image
+                      source={images.transactionHistory}
+                      style={{
+                        height: 25,
+                        width: 27,
+                        tintColor: '#FFCD1E',
+                      }}
+                      resizeMode="contain"
+                    />
+                  </View>
+                  <View style={tw`ml-2`}>
+                    <Textcomp
+                      text={'Transaction history'}
+                      size={13}
+                      lineHeight={14}
+                      color={'#FFCD1E'}
+                      fontFamily={'Inter-Medium'}
+                    />
+                  </View>
                 </TouchableOpacity>
               </View>
             </View>
 
-            <View style={[tw``, {marginTop: perHeight(225)}]}>
+            {/* <View style={[tw``, {marginTop: perHeight(225)}]}>
               <View
                 style={[
                   tw`bg-[${colors.darkPurple}] items-center rounded-lg justify-center mx-auto py-3`,
@@ -336,7 +371,7 @@ const Wallet = () => {
                   fontFamily={'Inter-Bold'}
                 />
               </View>
-            </View>
+            </View> */}
           </View>
         </ScrollView>
       </View>
@@ -425,6 +460,7 @@ const Wallet = () => {
           )}
         </View>
       </Modal>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </>
   );
 };

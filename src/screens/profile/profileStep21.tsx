@@ -1,13 +1,11 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Image,
   ActivityIndicator,
-  TextInput,
-  Platform,
   ScrollView,
   TouchableOpacity,
-  PermissionsAndroid,
+  Alert,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
@@ -19,50 +17,17 @@ import commonStyle from '../../constants/commonStyle';
 import tw from 'twrnc';
 import {
   useCreateServiceMutation,
-  useGetCategoryQuery,
   useGetUserDetailQuery,
 } from '../../store/slice/api';
 import colors from '../../constants/colors';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  HEIGHT_SCREEN,
-  WIDTH_WINDOW,
-  generalStyles,
-} from '../../constants/generalStyles';
 import ProfileStepWrapper from '../../components/ProfileStepWrapper';
-import TextInputs from '../../components/TextInputs';
-import DropDownPicker from 'react-native-dropdown-picker';
 import PotfolioWrapper from '../../components/PotfolioWrapper';
-import {
-  allCities,
-  allCountry,
-  // launchCamera,
-  // launchImageLibrary,
-} from '../../constants/utils';
 import Snackbar from 'react-native-snackbar';
-import storage from '@react-native-firebase/storage';
-import Portfoliocomp from '../../components/Portfolio';
-import {SIZES, perWidth} from '../../utils/position/sizes';
-import {
-  completeProfile,
-  getProfile,
-  uploadAssetsDOCorIMG,
-} from '../../utils/api/func';
-import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {
-  addProfileData,
-  addcompleteProfile,
-  addformStage,
-} from '../../store/reducer/mainSlice';
-import FastImage from 'react-native-fast-image';
-import ServiceIntroComp from '../../components/serviceIntro';
-import ServicePriceComp from '../../components/servicePrice';
-import Spinner from 'react-native-loading-spinner-overlay';
-import CustomLoading from '../../components/customLoading';
-import {RouteContext} from '../../utils/context/route_context';
-import Services from '../user/services';
-import {FlatList} from 'react-native-gesture-handler';
+import {perWidth} from '../../utils/position/sizes';
+import {completeProfile, getProfile} from '../../utils/api/func';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {addProfileData, addformStage} from '../../store/reducer/mainSlice';
 import PortComp from './comp/portComp';
 import {ToastShort} from '../../utils/utils';
 type Route = {
@@ -316,10 +281,19 @@ const ProfileStep21 = () => {
                   description: '',
                   images: [],
                 };
-                setportfolioToServiceCount([
-                  ...portfolioToServiceCount,
-                  newPortfolioItem,
-                ]);
+                // setportfolioToServiceCount([
+                //   ...portfolioToServiceCount,
+                //   newPortfolioItem,
+                // ]);
+                if (portfolioToServiceCount.length < serviceList.length * 3) {
+                  setportfolioToServiceCount([
+                    ...portfolioToServiceCount,
+                    newPortfolioItem,
+                  ]);
+                } else {
+                  // Handle the case when the maximum number of portfolios is reached
+                  Alert.alert('Maximum portfolios reached for all services.');
+                }
               }}>
               <TextWrapper
                 children={`Add ${
@@ -395,30 +369,6 @@ const ProfileStep21 = () => {
               />
             )}
           </View>
-
-          {/* {!isLoading ? (
-            <Button
-              onClick={() => {
-                handleProfileSetup();
-                // navigation.navigate('ProfileStep5', {
-                //   serviceId: route?.params?.serviceId,
-                // });
-              }}
-              style={{
-                marginHorizontal: 40,
-                marginTop: 140,
-                backgroundColor: colors.lightBlack,
-              }}
-              textStyle={{color: colors.primary}}
-              text={'Verify'}
-            />
-          ) : (
-            <ActivityIndicator
-              style={{marginTop: 150}}
-              size={'large'}
-              color={colors.parpal}
-            />
-          )} */}
         </View>
       </ScrollView>
     </View>

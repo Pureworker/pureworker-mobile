@@ -142,7 +142,7 @@ const Referrals = () => {
 
             <View style={tw`flex flex-row mt-5 items-center mx-auto `}>
               <Textcomp
-                text={' Invite a friend and get'}
+                text={' Invite a friend and get  '}
                 size={13}
                 lineHeight={17}
                 color={'white'}

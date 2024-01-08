@@ -30,6 +30,7 @@ import {
 import {addprovidersByCateegory} from '../../store/reducer/mainSlice';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
+import { ToastShort } from '../../utils/utils';
 
 const _Services = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -112,7 +113,11 @@ const _Services = ({route}: any) => {
             </View>
             <TouchableOpacity
               onPress={() => {
-                setsearchModal(true);
+                if (_providersByCateegory.length < 1) {
+                  ToastShort('No Service Provider.')
+                } else {
+                  setsearchModal(true);
+                }
               }}>
               <Image
                 source={images.search}
@@ -180,7 +185,7 @@ const _Services = ({route}: any) => {
                 fontFamily={'Inter-SemiBold'}
               />
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 setactiveSection('Saved');
               }}
@@ -196,7 +201,7 @@ const _Services = ({route}: any) => {
                 color={activeSection === 'Saved' ? '#88087B' : '#000413'}
                 fontFamily={'Inter-SemiBold'}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
           <>
