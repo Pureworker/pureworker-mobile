@@ -1,28 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  Image,
+  View, Image,
   TouchableOpacity,
   Platform,
   StatusBar,
-  ScrollView,
-  FlatList,
+  ScrollView
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
-import {StackNavigation} from '../../constants/navigation';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { StackNavigation } from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
-import FastImage from 'react-native-fast-image';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { SIZES, perHeight, perWidth } from '../../utils/position/sizes';
 import {
   addTransactions,
   addcategorizedTransdata,
 } from '../../store/reducer/mainSlice';
-import {getTransactions} from '../../utils/api/func';
+import { getTransactions } from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 
@@ -88,7 +84,6 @@ const FundingHistory = () => {
   function formatDate(inputDate) {
     // Split the input date by '-'
     const dateParts = inputDate.split('-');
-
     // Map the month number to its abbreviation
     const months = [
       'Jan',
@@ -104,7 +99,6 @@ const FundingHistory = () => {
       'Nov',
       'Dec',
     ];
-
     // Get the month abbreviation
     const monthAbbr = months[parseInt(dateParts[1]) - 1];
 
