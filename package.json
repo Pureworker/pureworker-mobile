@@ -65,6 +65,7 @@
     "react-native-loading-spinner-overlay": "^3.0.1",
     "react-native-maps": "^1.7.1",
     "react-native-modal": "^13.0.1",
+    "react-native-otp-entry": "^1.4.0",
     "react-native-otp-inputs": "^7.4.0",
     "react-native-paper": "^5.9.1",
     "react-native-paystack-webview": "^4.0.3",

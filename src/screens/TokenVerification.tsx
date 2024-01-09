@@ -27,6 +27,8 @@ import {
 } from '../store/slice/api';
 import {loggedIn} from '../store/reducer/mainSlice';
 import {verifyLogin, verifyUser} from '../utils/api/auth';
+import OtpInputComponent from '../components/OtpInputs';
+import {perHeight} from '../utils/position/sizes';
 type Route = {
   key: string;
   name: string;
@@ -215,41 +217,7 @@ const TokenVerification = () => {
             {route.params?.email}
           </Text>
         </Text>
-        {/* <OtpInputs
-          style={{
-            flexDirection: 'row',
-            marginLeft: 15,
-            marginTop: 80,
-            alignSelf: 'center',
-          }}
-          inputContainerStyles={{
-            margin: 5,
-            borderRadius: 8,
-            backgroundColor: '#fff',
-            alignSelf: 'center',
-          }}
-          inputStyles={[
-            {
-              fontSize: 32,
-              height: 56,
-              width: 51,
-              color: '#000',
-              textAlign: 'center',
-              paddingHorizontal: 15,
-            },
-          ]}
-          //clearTextOnFocus
-          handleChange={setCode}
-          keyboardType="phone-pad"
-          numberOfInputs={6}
-          //underlineColorAndroid={PRIMARY_COLOR3}
-          selectionColor={'transparent'}
-          // importantForAutofill="yes"
-          //ref={otpRef}
-          autofillFromClipboard={false}
-          //focusStyles={{borderBottomWidth:2,borderBottomColor:PRIMARY_COLOR3}}
-        /> */}
-        <View style={tw`mx-auto  items-center  mt-4`}>
+        {/* <View style={tw`mx-auto  items-center  mt-4`}>
           <OTPInputView
             style={{width: '87.5%', height: 200}}
             pinCount={6}
@@ -261,7 +229,11 @@ const TokenVerification = () => {
             }}
             // onCodeFilled={setCode}
           />
+        </View> */}
+        <View style={[tw`px-[5%] `, {marginTop: perHeight(50)}]}>
+          <OtpInputComponent onTextChange={v => setCode(v)} />
         </View>
+
         <View
           style={{
             flexDirection: 'row',
@@ -284,7 +256,7 @@ const TokenVerification = () => {
         <Text style={{color: colors.primary, textAlign: 'center'}}>
           {'0' + minutes + ':' + valueOfMint}
         </Text>
-        {(!isLoading && code?.length >= 6) ? (
+        {!isLoading  ? (
           <View style={{}}>
             <Button
               onClick={() => {
@@ -297,15 +269,16 @@ const TokenVerification = () => {
                 marginHorizontal: 25,
                 marginTop: 252,
               }}
+              disable={code.length < 6}
             />
           </View>
-        ) : (
-          <ActivityIndicator
-            style={{marginTop: 332}}
-            size={'large'}
-            color={colors.parpal}
-          />
-        )}
+        ) : null
+        // <ActivityIndicator
+        //   style={{marginTop: 332}}
+        //   size={'large'}
+        //   color={colors.parpal}
+        // />
+        }
       </ScrollView>
       {isLoading && <Loading />}
     </KeyboardAvoidingView>

@@ -21,7 +21,12 @@ export default function ({
     <TouchableOpacity
       disabled={disable}
       onPress={onClick}
-      style={[styles.start, style, commonStyle.shadow]}>
+      style={[
+        styles.start,
+        style,
+        commonStyle.shadow,
+        {opacity: disable ? 0.5 : 1},
+      ]}>
       <Text
         style={[
           {

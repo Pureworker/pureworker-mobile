@@ -103,6 +103,8 @@ const Home = ({navigation}: any) => {
       if (
         !userData?.geoLocation ||
         !userData.geoLocation.coordinates ||
+        (userData.geoLocation.coordinates[0] === 0 &&
+          userData.geoLocation.coordinates[1] === 0) ||
         !userData.geoLocation.coordinates.length
       ) {
         navigation.navigate('AddAddress');
