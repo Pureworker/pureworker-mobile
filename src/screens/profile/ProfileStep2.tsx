@@ -516,7 +516,7 @@ const PRofileStep2 = () => {
           />
 
           <View>
-            <View
+            <TouchableOpacity onPress={()=>{openLibraryfordp()}}
               style={[
                 generalStyles.contentCenter,
                 {
@@ -528,7 +528,7 @@ const PRofileStep2 = () => {
                 },
               ]}>
               {!profileImageLoading ? (
-                <>
+                <TouchableOpacity>
                   {/* {!imageUrl ? ( */}
                   {!completeProfileData?.profilePic && imageUrl?.length < 1 ? (
                     <TextWrapper
@@ -562,7 +562,7 @@ const PRofileStep2 = () => {
                       resizeMode={FastImage.resizeMode.cover}
                     />
                   )}
-                </>
+                </TouchableOpacity>
               ) : (
                 <ActivityIndicator
                   style={{marginTop: 0}}
@@ -570,7 +570,7 @@ const PRofileStep2 = () => {
                   color={colors.parpal}
                 />
               )}
-            </View>
+            </TouchableOpacity>
             <View
               style={{
                 position: 'absolute',

@@ -285,7 +285,7 @@ const ProfileStep21 = () => {
                 //   ...portfolioToServiceCount,
                 //   newPortfolioItem,
                 // ]);
-                if (portfolioToServiceCount.length < serviceList.length * 3) {
+                if (portfolioToServiceCount.length < category.length * 3) {
                   setportfolioToServiceCount([
                     ...portfolioToServiceCount,
                     newPortfolioItem,

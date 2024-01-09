@@ -116,10 +116,13 @@ const Home = () => {
       // } else {
       // }
       // Check if userData exists and has valid geoLocation coordinates
+      console.error('GEOLOCATION::', res?.data?.user?.geoLocation);
       const userData = res?.data?.user;
       if (
         !userData?.geoLocation ||
         !userData.geoLocation.coordinates ||
+        (userData.geoLocation.coordinates[0] === 0 &&
+          userData.geoLocation.coordinates[1] === 0) ||
         !userData.geoLocation.coordinates.length
       ) {
         navigation.navigate('AddAddress');
@@ -127,12 +130,10 @@ const Home = () => {
       } else {
         // Continue with your logic if geoLocation is valid
       }
-      // setloading(false);
     };
     const initGetCategory = async () => {
       setisLoading(true);
       const res: any = await getCategory('');
-      // console.log('aaaaaaaaa', res?.data?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addSCategory(res?.data?.data));
       }

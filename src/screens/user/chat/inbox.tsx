@@ -143,7 +143,7 @@ export default function Inbox({navigation, route}: any) {
                     lineHeight: 14,
                   },
                 ]}>
-                {userName}
+                {userName === 'Support Support' ? 'Support' : userName}
               </Text>
               <View style={tw`flex flex-row`}>
                 <Text

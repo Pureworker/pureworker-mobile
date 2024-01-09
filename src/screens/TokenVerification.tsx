@@ -158,7 +158,6 @@ const TokenVerification = () => {
       }
     }
     setisLoading(false);
-
     // verification(loginData)
     //   .unwrap()
     //   .then((data: any) => {
@@ -181,7 +180,6 @@ const TokenVerification = () => {
     //     });
     //   });
   };
-
   const minutes = Math.floor((seconds % 3600) / 60);
   const secondss = seconds % 60;
   const condition: number = 10;
@@ -259,7 +257,6 @@ const TokenVerification = () => {
             codeInputFieldStyle={styles.underlineStyleBase}
             codeInputHighlightStyle={styles.underlineStyleHighLighted}
             onCodeFilled={code => {
-              // console.log(`Code is ${code}, you are good to go!`);
               setCode(code);
             }}
             // onCodeFilled={setCode}
@@ -287,7 +284,7 @@ const TokenVerification = () => {
         <Text style={{color: colors.primary, textAlign: 'center'}}>
           {'0' + minutes + ':' + valueOfMint}
         </Text>
-        {!isLoading ? (
+        {(!isLoading && code?.length >= 6) ? (
           <View style={{}}>
             <Button
               onClick={() => {
@@ -310,7 +307,7 @@ const TokenVerification = () => {
           />
         )}
       </ScrollView>
-      {loading && <Loading />}
+      {isLoading && <Loading />}
     </KeyboardAvoidingView>
   );
 };

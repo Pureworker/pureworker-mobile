@@ -33,7 +33,11 @@ type Route = {
 const validationSchema = yup.object().shape({
   name1: yup.string().required('Full Name is required'),
   relation1: yup.string().required('Relationship is required'),
-  phoneNumber1: yup.string().required('Phone Number is required'),
+  phoneNumber1: yup
+    .string()
+    .required('Phone Number is required')
+    .min(10, 'Invalid Phone number')
+    .max(10, 'Invalid Phone number'),
   email1: yup
     .string()
     .email('Enter a valid email')
@@ -41,7 +45,11 @@ const validationSchema = yup.object().shape({
   address1: yup.string().required('Address is required'),
   name2: yup.string().required('Full Name is required'),
   relation2: yup.string().required('Relationship is required'),
-  phoneNumber2: yup.string().required('Phone Number is required'),
+  phoneNumber2: yup
+    .string()
+    .required('Phone Number is required')
+    .min(10, 'Invalid Phone number')
+    .max(10, 'Invalid Phone number'),
   email2: yup
     .string()
     .email('Enter a valid email')
@@ -433,7 +441,6 @@ const ProfileStep3 = () => {
           {formik.touched.phoneNumber2 && formik.errors.phoneNumber2 && (
             <Text style={{color: 'red'}}>{formik.errors.phoneNumber2}</Text>
           )}
-
           <TextWrapper
             children="Email Address"
             isRequired={true}
@@ -489,13 +496,6 @@ const ProfileStep3 = () => {
               generalStyles.rowBetween,
               {marginTop: 40, marginBottom: 35},
             ]}>
-            {/* <Button
-              onClick={() => {}}
-              style={{width: 130, backgroundColor: colors.lightBlack}}
-              textStyle={{color: colors.primary}}
-              text={'Save'}
-            /> */}
-
             {!isLoading ? (
               <Button
                 // onClick={() => {

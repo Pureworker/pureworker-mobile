@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import images from '../constants/images';
-
 import commonStyle from '../constants/commonStyle';
 import Button from '../components/Button';
 import MyStatusBar from '../components/MyStatusBar';
