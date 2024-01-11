@@ -67,5 +67,8 @@ const images = {
   accountinfo: require('../assets/images/accountinfo.png'),
   shareicon: require('../assets/images/shareicon.png'),
   copyicon: require('../assets/images/copyicon.png'),
+
+  downtri: require('../assets/images/downtri.png'),
+  sidetri: require('../assets/images/sidetri.png'),
 };
 export default images;

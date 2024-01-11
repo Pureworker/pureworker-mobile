@@ -50,6 +50,7 @@ import CustomLoading from '../../components/customLoading';
 import {RouteContext} from '../../utils/context/route_context';
 import Services from '../user/services';
 import {SelectList} from 'react-native-dropdown-select-list';
+import {ToastShort} from '../../utils/utils';
 
 const PRofileStep2 = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -383,6 +384,15 @@ const PRofileStep2 = () => {
   const openLibraryfordp = () => {
     launchImageLibrary(options, async (resp: unknown) => {
       if (resp?.assets?.length > 0) {
+        const fileSize = resp.assets[0].fileSize; // File size in bytes
+        const fileSizeInMB = fileSize / (1024 * 1024); // Convert to megabytes
+        if (fileSizeInMB > 1) {
+          // console.warn('Image size exceeds 1MB. Please choose a smaller image.');
+          ToastShort('Image size exceeds 1MB. Please choose a smaller image.');
+          // You may want to display an error message or handle this case accordingly
+          return;
+        }
+
         console.log('resp', resp?.assets[0]);
         // setPhotoUri(resp?.assets[0].uri);
         setImageUrl(resp?.assets[0].uri);
@@ -514,9 +524,11 @@ const PRofileStep2 = () => {
             fontType={'semiBold'}
             style={{fontSize: 20, marginTop: 30, color: colors.black}}
           />
-
           <View>
-            <TouchableOpacity onPress={()=>{openLibraryfordp()}}
+            <TouchableOpacity
+              onPress={() => {
+                openLibraryfordp();
+              }}
               style={[
                 generalStyles.contentCenter,
                 {
@@ -646,7 +658,6 @@ const PRofileStep2 = () => {
             fontType={'semiBold'}
             style={{fontSize: 16, marginTop: 20, color: colors.black}}
           />
-
           <View
             style={{
               height: 130,
@@ -673,7 +684,6 @@ const PRofileStep2 = () => {
               nbLines={5}
             />
           </View>
-
           <TextWrapper
             children="Service Intro"
             isRequired={true}
@@ -685,7 +695,6 @@ const PRofileStep2 = () => {
               color: colors.black,
             }}
           />
-
           {servicesDescription?.length
             ? servicesDescription?.map((item: any, index: any) => {
                 return (

@@ -26,9 +26,12 @@ import {
   useVerifyOtpMutation,
 } from '../store/slice/api';
 import {loggedIn} from '../store/reducer/mainSlice';
-import {verifyLogin, verifyUser} from '../utils/api/auth';
+import {resendOtp, verifyLogin, verifyUser} from '../utils/api/auth';
 import OtpInputComponent from '../components/OtpInputs';
 import {perHeight} from '../utils/position/sizes';
+import {updateUserData} from '../utils/api/func';
+import Toast from 'react-native-toast-message';
+import {ToastShort} from '../utils/utils';
 type Route = {
   key: string;
   name: string;
@@ -47,6 +50,7 @@ const TokenVerification = () => {
 
   const [seconds, setSeconds] = useState(30);
   const [isLoading, setisLoading] = useState(false);
+  const [resendPressed, setResendPressed] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -62,7 +66,6 @@ const TokenVerification = () => {
       // resetOTP();
     }
   }, [seconds]);
-
   const resetOTP = () => {
     resetOtp({email: route.params?.email})
       .unwrap()
@@ -77,30 +80,42 @@ const TokenVerification = () => {
         });
       });
   };
-
-  const resendOTP = () => {
-    createOtp({email: route.params?.email})
-      .unwrap()
-      .then((data: any) => {
-        if (data) {
-          setSeconds(30);
-          Snackbar.show({
-            text: 'OTP has been sent',
-            duration: Snackbar.LENGTH_SHORT,
-            textColor: '#fff',
-            backgroundColor: '#88087B',
-          });
-        }
-      })
-      .catch((error: any) => {
-        console.log('err', error);
-        Snackbar.show({
-          text: error.data.message,
-          duration: Snackbar.LENGTH_SHORT,
-          textColor: '#fff',
-          backgroundColor: '#88087B',
+  const resetCountdown = () => {
+    setSeconds(30); // Reset the countdown time
+    setResendPressed(false); // Reset the resendPressed state
+  };
+  const resendOTP = async () => {
+    setLoading(true);
+    const param = {
+      email: route.params?.email?.toLowerCase(),
+      type: route.params?.type === 'login' ? 'signin' : 'signup',
+    };
+    try {
+      console.log('Before resendOTP API call');
+      const res = await resendOtp(param);
+      console.log('After resendOTP API call', res);
+      if ([200, 201].includes(res?.status)) {
+        ToastShort('OTP has been sent to your email');
+        resetCountdown();
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: `${
+            res?.error?.message
+              ? res?.error?.message
+              : 'Oops! An error occurred!'
+          } 🚀. `,
         });
+      }
+    } catch (error) {
+      console.error('Error requesting otp resend:', error);
+      Toast.show({
+        type: 'error',
+        text1: 'An unexpected error occurred 🚀.',
       });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const veriFyOTP = async () => {
@@ -247,7 +262,7 @@ const TokenVerification = () => {
             <TouchableOpacity
               style={{marginTop: 25}}
               onPress={() => {
-                // resendOTP();
+                resendOTP();
               }}>
               <Text style={{color: colors.primary}}>Resend</Text>
             </TouchableOpacity>
@@ -256,28 +271,29 @@ const TokenVerification = () => {
         <Text style={{color: colors.primary, textAlign: 'center'}}>
           {'0' + minutes + ':' + valueOfMint}
         </Text>
-        {!isLoading  ? (
-          <View style={{}}>
-            <Button
-              onClick={() => {
-                veriFyOTP();
-              }}
-              text={'Submit'}
-              textStyle={{color: '#fff'}}
-              style={{
-                backgroundColor: colors.parpal,
-                marginHorizontal: 25,
-                marginTop: 252,
-              }}
-              disable={code.length < 6}
-            />
-          </View>
-        ) : null
-        // <ActivityIndicator
-        //   style={{marginTop: 332}}
-        //   size={'large'}
-        //   color={colors.parpal}
-        // />
+        {
+          !isLoading ? (
+            <View style={{}}>
+              <Button
+                onClick={() => {
+                  veriFyOTP();
+                }}
+                text={'Submit'}
+                textStyle={{color: '#fff'}}
+                style={{
+                  backgroundColor: colors.parpal,
+                  marginHorizontal: 25,
+                  marginTop: 252,
+                }}
+                disable={code.length < 6}
+              />
+            </View>
+          ) : null
+          // <ActivityIndicator
+          //   style={{marginTop: 332}}
+          //   size={'large'}
+          //   color={colors.parpal}
+          // />
         }
       </ScrollView>
       {isLoading && <Loading />}

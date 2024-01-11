@@ -110,7 +110,7 @@ const Withdraw = () => {
       console.error('Error with Withdraw Request:', error);
       Toast.show({
         type: 'error',
-        text1: 'An unexpected error occurred 🚀.',
+        text1: 'An unexpected error occurred!.',
       });
     } finally {
       await initGetUsers();

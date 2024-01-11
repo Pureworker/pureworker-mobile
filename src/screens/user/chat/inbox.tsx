@@ -57,6 +57,9 @@ export default function Inbox({navigation, route}: any) {
   }, []);
   const [message, setmessage] = useState('');
   function onSubmit() {
+    if (message?.length < 1) {
+      return;
+    }
     const data = {
       from: agentData?._id,
       to: `${userId}`,

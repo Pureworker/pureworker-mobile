@@ -113,25 +113,21 @@ export const verifyUser = async (param: any) => {
   }
 };
 export const resendOtp = async (param: any) => {
-  //param either be verification or reset
   console.log('resendOtp func started');
-  const url = `${API_BASE_URL}/auth/resend-otp?type=${param}`;
-
   const AuthToken = await AsyncStorage.getItem('AuthTokentemp');
-  console.log(url, AuthToken);
+  // console.log(AuthToken);
   try {
     const response = await axios({
       method: 'post',
-      // url: 'https://crestbase-be.herokuapp.com/users/verify-user',
+      url: `${API_BASE_URL}/auth/resend-otp`,
       headers: {Authorization: `Bearer ${AuthToken}`},
-      url: `${API_BASE_URL}/auth/resend-otp?type=${param}`,
+      data: param,
     });
-
     if (response.status === 201) {
       console.log('otp response data:', response?.data);
     }
     return response;
-  } catch (error) {
+  } catch (error:any) {
     console.log(error, error?.response?.data);
     return {
       status: 400,

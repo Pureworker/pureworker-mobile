@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  Share,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -18,6 +19,8 @@ import {addReferralDetails, addfaq} from '../../store/reducer/mainSlice';
 import {WIDTH_WINDOW} from '../../constants/generalStyles';
 import Modal from 'react-native-modal';
 import colors from '../../constants/colors';
+import {ToastShort} from '../../utils/utils';
+import Clipboard from '@react-native-community/clipboard';
 
 const Referrals = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -60,6 +63,23 @@ const Referrals = () => {
     initGetOrders();
     initReferralDetails();
   }, []);
+
+  const handleCopy = async (contentToCopy: string) => {
+    await Clipboard.setString(contentToCopy);
+    console.log('Content copied to clipboard!');
+    ToastShort('Code copied to clipboard!');
+  };
+
+  const handleShare = async (contentToShare: any) => {
+    try {
+      await Share.share({
+        message: `I use Pureworker to hire any and all Artisans.  Use to the referral code ${contentToShare} `,
+      });
+    } catch (error) {
+      console.error('Error sharing content:', error.message);
+    }
+  };
+
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       {/* <View
@@ -124,14 +144,18 @@ const Referrals = () => {
                 color={'white'}
                 fontFamily={'Inter-SemiBold'}
               />
-              <TouchableOpacity style={tw`ml-3 border-r border-[#BDBDBD] pr-3`}>
+              <TouchableOpacity
+                onPress={() => handleCopy(`${userData?.referralCode}`)}
+                style={tw`ml-3 border-r border-[#BDBDBD] pr-3`}>
                 <Image
                   resizeMode="contain"
                   source={images.copyicon}
                   style={[tw``, {height: 20, width: 20, tintColor: '#BDBDBD'}]}
                 />
               </TouchableOpacity>
-              <TouchableOpacity style={tw`pl-3`}>
+              <TouchableOpacity
+                onPress={() => handleShare(`${userData?.referralCode}`)}
+                style={tw`pl-3`}>
                 <Image
                   resizeMode="contain"
                   source={images.shareicon}
@@ -258,7 +282,9 @@ const Referrals = () => {
 
                   <View style={tw`mt-4`}>
                     <Textcomp
-                      text={`₦ ${Number(referralDetails?.completedNumber) * 500}`}
+                      text={`₦ ${
+                        Number(referralDetails?.completedNumber) * 500
+                      }`}
                       size={14}
                       lineHeight={17}
                       color={'#000000'}
@@ -309,7 +335,7 @@ const Referrals = () => {
               <View style={tw`mt-6 px-6`}>
                 <Textcomp
                   text={
-                    'Get 500 naria when a friend signs up with your referral code and makes a transaction.'
+                    'Get 500 naira when a friend signs up with your referral code and makes a transaction.'
                   }
                   size={14}
                   lineHeight={17}

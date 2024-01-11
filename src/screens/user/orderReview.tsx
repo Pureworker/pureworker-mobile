@@ -30,7 +30,6 @@ const OrderReview = ({route}: any) => {
   const _data = route.params;
   console.log('here', _data);
   const dispatch = useDispatch();
-
   function formatTimestampToTime(timestamp) {
     const date = new Date(timestamp);
     const hours = date.getHours();
@@ -40,7 +39,6 @@ const OrderReview = ({route}: any) => {
       .padStart(2, '0')}`;
     return formattedTime;
   }
-
   const handleCreate = async () => {
     setisLoading(true);
     const Data = {
@@ -57,7 +55,6 @@ const OrderReview = ({route}: any) => {
       paymentStatus: 'PAID',
     };
     console.log(Data);
-
     try {
       if (Data?.serviceProvider) {
         const res = await createOrder(Data);
@@ -101,7 +98,6 @@ const OrderReview = ({route}: any) => {
       setisLoading(false);
       setisLoading(false);
     }
-
     setisLoading(false);
   };
   return (
