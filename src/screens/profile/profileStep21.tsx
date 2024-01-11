@@ -208,11 +208,11 @@ const ProfileStep21 = () => {
         title={'Complete your Registration'}
         image={images.back}
       />
-      <ProfileStepWrapper active={'four'} />
+      <ProfileStepWrapper active={'three'} />
       <ScrollView>
         <View style={{marginHorizontal: 20}}>
           <TextWrapper
-            children="Portfolio Upload"
+            children="Portfolio Upload (Optional)"
             fontType={'semiBold'}
             style={{fontSize: 20, marginTop: 30, color: colors.black}}
           />

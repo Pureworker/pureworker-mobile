@@ -33,15 +33,32 @@ type Route = {
 const validationSchema = yup.object().shape({
   name1: yup.string().required('Full Name is required'),
   relation1: yup.string().required('Relationship is required'),
-  phoneNumber1: yup
-    .string()
-    .required('Phone Number is required')
-    .min(10, 'Invalid Phone number')
-    .max(10, 'Invalid Phone number'),
   email1: yup
-    .string()
-    .email('Enter a valid email')
-    .required('Email is required'),
+  .string()
+  .email('Enter a valid email')
+  .required('Email is required')
+  .test('unique-emails', 'Emails must be different', function (value) {
+    const { email2 } = this.parent;
+    return value !== email2;
+  }),
+phoneNumber1: yup
+  .string()
+  .required('Phone Number is required')
+  .min(10, 'Invalid Phone number')
+  .max(10, 'Invalid Phone number')
+  .test('unique-phone-numbers', 'Phone Numbers must be different', function (value) {
+    const { phoneNumber2 } = this.parent;
+    return value !== phoneNumber2;
+  }),
+  // phoneNumber1: yup
+  //   .string()
+  //   .required('Phone Number is required')
+  //   .min(10, 'Invalid Phone number')
+  //   .max(10, 'Invalid Phone number'),
+  // email1: yup
+  //   .string()
+  //   .email('Enter a valid email')
+  //   .required('Email is required'),
   address1: yup.string().required('Address is required'),
   name2: yup.string().required('Full Name is required'),
   relation2: yup.string().required('Relationship is required'),
@@ -245,7 +262,7 @@ const ProfileStep3 = () => {
         title={'Complete your Registration'}
         image={images.back}
       />
-      <ProfileStepWrapper active={'three'} />
+      <ProfileStepWrapper active={'four'} />
       <ScrollView>
         <View style={{marginHorizontal: 20}}>
           <TextWrapper

@@ -21,7 +21,7 @@ export default function ({ active }: ProfileStepWrapperProps) {
           1
         </TextWrapper>
       </View>
-      <View style={{ height: 1, backgroundColor: colors.black, width: 15 }} />
+      <View style={{ height: 1, backgroundColor: colors.black, width: 20 }} />
       <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active === 'two' ? colors.parpal : colors.white }]}>
         <TextWrapper
           fontType={'semiBold'}
@@ -32,7 +32,7 @@ export default function ({ active }: ProfileStepWrapperProps) {
           2
         </TextWrapper>
       </View>
-      <View style={{ height: 1, backgroundColor: colors.black, width: 15 }} />
+      <View style={{ height: 1, backgroundColor: colors.black, width: 20 }} />
       <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active === 'three' ? colors.parpal : colors.white }]}>
         <TextWrapper
           fontType={'semiBold'}
@@ -43,7 +43,7 @@ export default function ({ active }: ProfileStepWrapperProps) {
           3
         </TextWrapper>
       </View>
-      <View style={{ height: 1, backgroundColor: colors.black, width: 15 }} />
+      <View style={{ height: 1, backgroundColor: colors.black, width: 20 }} />
       <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active === 'four' ? colors.parpal : colors.white }]}>
         <TextWrapper
           fontType={'semiBold'}
@@ -54,7 +54,7 @@ export default function ({ active }: ProfileStepWrapperProps) {
           4
         </TextWrapper>
       </View>
-      <View style={{ height: 1, backgroundColor: colors.black, width: 15 }} />
+      <View style={{ height: 1, backgroundColor: colors.black, width: 20 }} />
       <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active === 'five' ? colors.parpal : colors.white }]}>
         <TextWrapper
           fontType={'semiBold'}
@@ -63,6 +63,17 @@ export default function ({ active }: ProfileStepWrapperProps) {
             color: active === 'five' ? colors.primary : colors.black,
           }}>
           5
+        </TextWrapper>
+      </View>
+      <View style={{ height: 1, backgroundColor: colors.black, width: 20 }} />
+      <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active === 'six' ? colors.parpal : colors.white }]}>
+        <TextWrapper
+          fontType={'semiBold'}
+          style={{
+            fontSize: 12,
+            color: active === 'six' ? colors.primary : colors.black,
+          }}>
+          6
         </TextWrapper>
       </View>
     </View>

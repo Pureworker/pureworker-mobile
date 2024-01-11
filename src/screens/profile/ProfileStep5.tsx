@@ -171,7 +171,7 @@ const ProfileStep5 = () => {
         title={'Complete your Registration'}
         image={images.back}
       />
-      <ProfileStepWrapper active={'five'} />
+      <ProfileStepWrapper active={'six'} />
       <ScrollView>
         <View style={{marginHorizontal: 20}}>
           <TextWrapper
