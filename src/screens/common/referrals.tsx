@@ -6,6 +6,7 @@ import {
   ScrollView,
   SafeAreaView,
   Share,
+  Clipboard,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -20,7 +21,7 @@ import {WIDTH_WINDOW} from '../../constants/generalStyles';
 import Modal from 'react-native-modal';
 import colors from '../../constants/colors';
 import {ToastShort} from '../../utils/utils';
-import Clipboard from '@react-native-community/clipboard';
+// import Clipboard from '@react-native-community/clipboard';
 
 const Referrals = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -69,7 +70,6 @@ const Referrals = () => {
     console.log('Content copied to clipboard!');
     ToastShort('Code copied to clipboard!');
   };
-
   const handleShare = async (contentToShare: any) => {
     try {
       await Share.share({
@@ -79,7 +79,6 @@ const Referrals = () => {
       console.error('Error sharing content:', error.message);
     }
   };
-
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       {/* <View

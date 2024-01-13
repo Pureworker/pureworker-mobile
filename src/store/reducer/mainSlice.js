@@ -45,6 +45,7 @@ const initialState = {
   portfolio3: {},
   supportUser: null,
   banks: [],
+  welcomeModal: false,
 
   //provider-profileID
   provider_id: null,
@@ -233,6 +234,9 @@ export const mainSlice = createSlice({
       console.log('addbanks', action.payload);
       state.banks = action.payload;
     },
+    setwelcomeModal: (state, action) => {
+      state.welcomeModal = action.payload;
+    },
   },
 });
 
@@ -268,6 +272,7 @@ export const {
   addReferralDetails,
   addsupportUser,
   addbanks,
+  setwelcomeModal,
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);

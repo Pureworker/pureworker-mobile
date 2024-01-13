@@ -1045,3 +1045,28 @@ export const withdraw = async (param: any) => {
     };
   }
 };
+
+export const getSearchQuery = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getSearchQuery func started', param);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/service/get-all-services?name=${param}`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+

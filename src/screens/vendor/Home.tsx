@@ -269,7 +269,16 @@ const Home = ({navigation}: any) => {
               {marginLeft: perWidth(18), marginTop: perHeight(28)},
             ]}>
             <Textcomp
-              text={`Welcome ${userData?.firstName || userData?.businessName},`}
+              // text={`Welcome ${userData?.firstName || userData?.businessName},`}
+              text={`Welcome ${
+                userData?.firstName
+                  ? userData?.firstName !== undefined
+                    ? userData?.firstName
+                    : userData?.businessName !== undefined
+                    ? userData?.businessName
+                    : ''
+                  : ''
+              },`}
               size={17}
               lineHeight={17}
               color={'#000413'}

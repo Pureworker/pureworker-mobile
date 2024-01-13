@@ -39,6 +39,7 @@ import {
   addSCategory,
   addUserData,
   addcloseProvider,
+  setwelcomeModal,
 } from '../../store/reducer/mainSlice';
 import {
   getCategory,
@@ -54,6 +55,7 @@ import Geolocation from 'react-native-geolocation-service';
 import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import * as Sentry from '@sentry/react-native';
 import {ToastLong} from '../../utils/utils';
+import WelcomeModal from '../../components/SignupModal';
 const Home = () => {
   useEffect(() => {
     //Request location permission
@@ -177,6 +179,7 @@ const Home = () => {
   const supportUser = useSelector((store: any) => store.user.supportUser);
   const closeProvider = useSelector((state: any) => state.user.closeProvider);
   console.log('daaaaattttttaaaa', 'here:', closeProvider);
+  const welcomeModal = useSelector((state: any) => state.user.welcomeModal);
   // const filterBySearchProduct = useMemo(() => {
   //   var searchArray = [];
   //   console.log("🚀 ~ file: Home.tsx:64 ~ filterBySearchProduct ~ getServiceProviderProfile:", getServiceProviderProfile)
@@ -212,6 +215,7 @@ const Home = () => {
     }
   };
   // Sentry.nativeCrash();
+  const [welcomeshow, setwelcomeshow] = useState(true);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
@@ -249,7 +253,7 @@ const Home = () => {
                 resizeMode={FastImage.resizeMode.cover}
               />
             </TouchableOpacity>
-            <TextInputs
+            {/* <TextInputs
               style={{marginTop: 0, width: '70%'}}
               labelText={'Search'}
               state={search}
@@ -266,7 +270,7 @@ const Home = () => {
                   }}
                 />
               }
-            />
+            /> */}
             <TouchableOpacity
               onPress={() => {
                 setInfoModal(true);
@@ -292,7 +296,9 @@ const Home = () => {
               {marginLeft: perWidth(18), marginTop: perHeight(28)},
             ]}>
             <Textcomp
-              text={`Welcome ${userData?.firstName},`}
+              text={`Welcome ${
+                userData?.firstName !== undefined ? userData?.firstName : ''
+              },`}
               size={17}
               lineHeight={17}
               color={'#000413'}
@@ -611,7 +617,14 @@ const Home = () => {
           )}
         </View>
       </Modal>
-      {/* <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/> */}
+
+      {welcomeModal && (
+        <WelcomeModal
+          close={() => {
+            dispatch(setwelcomeModal(false));
+          }}
+        />
+      )}
     </SafeAreaView>
   );
 };

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -8,9 +8,10 @@ import {
   StatusBar,
   ScrollView,
   TextInput,
+  StyleSheet,
+  Alert,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import Header from '../../components/Header';
 import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
@@ -21,7 +22,6 @@ import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
 import commonStyle from '../../constants/commonStyle';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {useGetUserDetailQuery} from '../../store/slice/api';
 import {ToastLong} from '../../utils/utils';
 import Toast from 'react-native-toast-message';
@@ -29,6 +29,8 @@ import {addUserData} from '../../store/reducer/mainSlice';
 import {updateUserData} from '../../utils/api/func';
 import CustomLoading from '../../components/customLoading';
 import Spinner from 'react-native-loading-spinner-overlay';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {Dropdown} from 'react-native-element-dropdown';
 
 const EditAccount = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -39,9 +41,9 @@ const EditAccount = () => {
   const userData = useSelector((state: any) => state.user.userData);
 
   const [locationItems, setLocationItems] = useState([
-    {label: 'Male', value: 'Male'},
-    {label: 'Female', value: 'Female'},
-    {label: 'Others', value: 'Others'},
+    { label: 'Male', value: 'male' },
+    { label: 'Female', value: 'female' },
+    { label: 'Other', value: 'other' },
   ]);
   const [loading, setloading] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
@@ -55,15 +57,18 @@ const EditAccount = () => {
   const [nationality, setnationality] = useState(userData?.nationality || '');
   const [dob, setdob] = useState(userData?.dob || '');
   const [gender, setgender] = useState(userData?.gender || '');
-  console.log(locationValue);
-
   const initGetUsers = async () => {
-    const res: any = await getUser('');
-    console.log('dddddddd', res);
-    if (res?.status === 201 || res?.status === 200) {
-      dispatch(addUserData(res?.data?.user));
+    try {
+      const res = await getUser(/* pass a valid parameter here */);
+      console.log('dddddddd', res);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addUserData(res?.data?.user));
+      }
+    } catch (error) {
+      console.error('Error getting user data:', error, error?.response, error?.response?.data);
+      Alert.alert('Error');
+      // Handle error appropriately
     }
-    // setloading(false);
   };
   const initUpdate = async (param: any) => {
     setloading(true);
@@ -71,7 +76,6 @@ const EditAccount = () => {
       const res = await updateUserData(param);
       console.log(res);
       if ([200, 201].includes(res?.status)) {
-   
         Toast.show({
           type: 'success',
           text1: 'Picture uploaded successfully 🚀. ',
@@ -93,8 +97,9 @@ const EditAccount = () => {
         text1: 'An unexpected error occurred 🚀.',
       });
     } finally {
-      await initGetUsers();
       setloading(false);
+      await initGetUsers();
+      navigation.goBack();
     }
   };
 
@@ -119,6 +124,34 @@ const EditAccount = () => {
       setloading(false);
     }
   };
+  function convertTimestampToFormattedDate(timestamp) {
+    // Create a new Date object from the timestamp
+    const date = new Date(timestamp);
+
+    // Extract the day, month, and year
+    const day = date.getUTCDate();
+    const month = date.toLocaleString('default', {month: 'short'});
+    const year = date.getUTCFullYear();
+
+    // Format the result
+    const formattedDate = `${day} ${month} ${year}`;
+
+    return formattedDate;
+  }
+  const [isDatePickerVisible, setDatePickerVisible] = useState(false);
+
+  const handleDatePicker = () => {
+    setDatePickerVisible(true);
+  };
+
+  const handleDateConfirm = date => {
+    // Handle the selected date
+    console.log('Selected Date:', date);
+    setdob(date);
+    setDatePickerVisible(false);
+  };
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -336,7 +369,10 @@ const EditAccount = () => {
               />
             </View>
           </View>
-          <View
+          <TouchableOpacity
+            onPress={() => {
+              setDatePickerVisible(true);
+            }}
             style={[
               tw`bg-[${colors.darkPurple}] mt-4 pl-5 justify-center`,
               {height: perHeight(60)},
@@ -351,15 +387,17 @@ const EditAccount = () => {
                   fontFamily={'Inter-SemiBold'}
                 />
               </View>
-              <TextInput
-                style={[tw` text-white py-3 w-9/10`, {fontSize: 16}]}
-                onChangeText={text => {
-                  setdob(text);
-                }}
-                value={dob}
-              />
+              <View style={tw`mt-2`}>
+                <Textcomp
+                  text={`${convertTimestampToFormattedDate(dob)}`}
+                  size={14}
+                  lineHeight={15}
+                  color={'#FFFFFF'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </View>
             </View>
-          </View>
+          </TouchableOpacity>
           <ScrollView horizontal>
             <View
               style={[
@@ -384,7 +422,7 @@ const EditAccount = () => {
                   }}>
                   Gender
                 </Text>
-                <DropDownPicker
+                {/* <DropDownPicker
                   open={locationOpen}
                   value={locationValue}
                   items={locationItems}
@@ -442,6 +480,34 @@ const EditAccount = () => {
                     opacity: 1,
                     borderWidth: 0,
                   }}
+                /> */}
+                <Dropdown
+                  style={[
+                    styles.dropdown,
+                    isFocus && {borderColor: colors.darkPurple},
+                  ]}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  iconStyle={styles.iconStyle}
+                  data={locationItems}
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={!isFocus ? 'Select item' : '...'}
+                  searchPlaceholder="Search..."
+                  value={gender}
+                  onFocus={() => setIsFocus(true)}
+                  onBlur={() => setIsFocus(false)}
+                  onChange={item => {
+                    console.log(item.value);
+                    setValue(item.value);
+                    setgender(item.value);
+                    setIsFocus(false);
+                  }}
+                  // renderLeftIcon={() => (
+
+                  // )}
                 />
               </View>
             </View>
@@ -451,8 +517,58 @@ const EditAccount = () => {
       </ScrollView>
       <View style={tw`h-0.5 w-full bg-black absolute  bottom-[3%]`} />
       <Spinner visible={loading} customIndicator={<CustomLoading />} />
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleDateConfirm}
+        onCancel={() => setDatePickerVisible(false)}
+      />
     </View>
   );
 };
 
 export default EditAccount;
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    padding: 16,
+  },
+  dropdown: {
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    width: SIZES.width * 0.85,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  label: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+    color: 'white',
+  },
+  placeholderStyle: {
+    fontSize: 16,
+    color: 'white',
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+    color: 'white',
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+});

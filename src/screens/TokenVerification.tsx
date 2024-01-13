@@ -25,7 +25,7 @@ import {
   useResetOtpMutation,
   useVerifyOtpMutation,
 } from '../store/slice/api';
-import {loggedIn} from '../store/reducer/mainSlice';
+import {loggedIn, setwelcomeModal} from '../store/reducer/mainSlice';
 import {resendOtp, verifyLogin, verifyUser} from '../utils/api/auth';
 import OtpInputComponent from '../components/OtpInputs';
 import {perHeight} from '../utils/position/sizes';
@@ -162,6 +162,7 @@ const TokenVerification = () => {
             type: res?.data?.user.accountType?.toUpperCase(),
           }),
         );
+        dispatch(setwelcomeModal(true));
       } else {
         Snackbar.show({
           text: res?.error?.message

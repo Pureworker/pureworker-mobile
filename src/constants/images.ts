@@ -70,5 +70,7 @@ const images = {
 
   downtri: require('../assets/images/downtri.png'),
   sidetri: require('../assets/images/sidetri.png'),
+  cancelCircle: require('../assets/images/cancelCircle.png'),
+  rate: require('../assets/images/rate.png'),
 };
 export default images;

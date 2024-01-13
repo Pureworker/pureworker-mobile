@@ -29,6 +29,7 @@ import {generalStyles} from '../constants/generalStyles';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import {Signup} from '../utils/api/auth';
 import {isValidPhoneNumber} from '../utils/utils';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 export default function BusinessSignup() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -207,9 +208,14 @@ export default function BusinessSignup() {
           resizeMode="contain"
         />
       </TouchableOpacity>
-      <ScrollView
+      {/* <ScrollView
         contentContainerStyle={{}}
-        style={{flex: 1, backgroundColor: '#000'}}>
+        style={{flex: 1, backgroundColor: '#000'}}> */}
+      <KeyboardAwareScrollView
+        contentContainerStyle={{}}
+        style={{flex: 1, backgroundColor: '#000'}}
+        extraScrollHeight={Platform.OS === 'ios' ? 30 : 0} // Adjust as needed
+        enableOnAndroid={true}>
         <MyStatusBar
           translucent
           barStyle="light-content"
@@ -854,7 +860,8 @@ export default function BusinessSignup() {
             Login
           </Text>
         </Text>
-      </ScrollView>
+      </KeyboardAwareScrollView>
+      {/* </ScrollView> */}
     </View>
   );
 }
