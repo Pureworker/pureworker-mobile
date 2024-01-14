@@ -200,7 +200,7 @@ const TabServices = () => {
               />
             </TouchableOpacity>
             <TextInputs
-              style={{marginTop: 0, width: '75%', paddingHorizontal: 10}}
+              style={[tw`rounded-full`,{marginTop: 0, width: '75%', paddingHorizontal: 10}]}
               labelText={'Search for service'}
               state={searchInput}
               setState={text => {

@@ -163,7 +163,7 @@ const Services = () => {
               />
             </TouchableOpacity>
             <TextInputs
-              style={{marginTop: 0, width: '70%'}}
+              style={[tw`rounded-full`,{marginTop: 0, width: '70%'}]}
               labelText={'Search for service'}
               state={searchInput}
               setState={setsearchInput}
