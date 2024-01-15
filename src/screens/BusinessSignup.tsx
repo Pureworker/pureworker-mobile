@@ -1,19 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
   View,
-  Image,
-  Dimensions,
-  ActivityIndicator,
+  Image, ActivityIndicator,
   TouchableOpacity,
-  StatusBar,
-  ScrollView,
-  Platform,
+  StatusBar, Platform
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import images from '../constants/images';
-
+import tw from 'twrnc';
 import commonStyle from '../constants/commonStyle';
 import Button from '../components/Button';
 import MyStatusBar from '../components/MyStatusBar';
@@ -21,15 +17,17 @@ import colors from '../constants/colors';
 import TextInputs from '../components/TextInputs';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Snackbar from 'react-native-snackbar';
-import {allCountry, validateEmail} from '../constants/utils';
-import {BUSINESS, FREELANCER} from '../constants/userType';
+import { allCountry, validateEmail } from '../constants/utils';
+import { BUSINESS, FREELANCER } from '../constants/userType';
 import DateTimesPicker from '../components/DatePicker';
-import {StackNavigation} from '../constants/navigation';
-import {generalStyles} from '../constants/generalStyles';
+import { StackNavigation } from '../constants/navigation';
+import { generalStyles } from '../constants/generalStyles';
 import Tooltip from 'react-native-walkthrough-tooltip';
-import {Signup} from '../utils/api/auth';
-import {isValidPhoneNumber} from '../utils/utils';
+import { Signup } from '../utils/api/auth';
+import { isValidPhoneNumber } from '../utils/utils';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { SIZES } from '../utils/position/sizes';
+import { Dropdown } from 'react-native-element-dropdown';
 export default function BusinessSignup() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -159,18 +157,6 @@ export default function BusinessSignup() {
           });
         }
         setisLoading(false);
-        // signup(loginData).unwrap()
-        //   .then((data: any) => {
-        //     if (data) {
-        //       navigation.navigate('TokenVerification', { email: email })
-        //     }
-        //   })
-        //   .catch((error: any) => {
-        //     console.log('err', error);
-        //     Snackbar.show({
-        //       text: error.data.message, duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#88087B',
-        //     });
-        //   });
       }
     } else {
       Snackbar.show({
@@ -208,9 +194,6 @@ export default function BusinessSignup() {
           resizeMode="contain"
         />
       </TouchableOpacity>
-      {/* <ScrollView
-        contentContainerStyle={{}}
-        style={{flex: 1, backgroundColor: '#000'}}> */}
       <KeyboardAwareScrollView
         contentContainerStyle={{}}
         style={{flex: 1, backgroundColor: '#000'}}
@@ -709,7 +692,7 @@ export default function BusinessSignup() {
                   }}>
                   Nationality
                 </Text>
-                <DropDownPicker
+                {/* <DropDownPicker
                   open={nationalityOpen}
                   value={nationalityValue}
                   items={nationalityItems}
@@ -767,6 +750,35 @@ export default function BusinessSignup() {
                     borderColor: 'red',
                     opacity: 1,
                     borderWidth: 0,
+                  }}
+                /> */}
+                <Dropdown
+                  style={[
+                    tw``,
+                    {
+                      zIndex: 10,
+                      width: SIZES.width * 0.875,
+                      backgroundColor: '#F7F5F5',
+                      borderColor: '#9E9E9E14',
+                      height: 50,
+                      borderRadius: 10,
+                      paddingHorizontal: 10,
+                    },
+                  ]}
+                  data={nationalityItems}
+                  search
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={'Select item'}
+                  searchPlaceholder="Search..."
+                  value={nationalityValue}
+                  itemTextStyle={{
+                    color: 'black',
+                  }}
+                  onChange={item => {
+                    console.log(item.value);
+                    setNationalityValue(item.value);
                   }}
                 />
               </View>

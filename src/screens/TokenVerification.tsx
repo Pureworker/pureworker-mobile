@@ -176,27 +176,6 @@ const TokenVerification = () => {
       }
     }
     setisLoading(false);
-    // verification(loginData)
-    //   .unwrap()
-    //   .then((data: any) => {
-    //     if (data) {
-    // dispatch(
-    //   loggedIn({
-    //     token: data.token,
-    //     type: data.type,
-    //   }),
-    //       );
-    //     }
-    //   })
-    //   .catch((error: any) => {
-    //     console.log('err', error);
-    //     Snackbar.show({
-    //       text: error.data.message,
-    //       duration: Snackbar.LENGTH_SHORT,
-    //       textColor: '#fff',
-    //       backgroundColor: '#88087B',
-    //     });
-    //   });
   };
   const minutes = Math.floor((seconds % 3600) / 60);
   const secondss = seconds % 60;
@@ -233,7 +212,7 @@ const TokenVerification = () => {
             {route.params?.email}
           </Text>
         </Text>
-        {/* <View style={tw`mx-auto  items-center  mt-4`}>
+        <View style={tw`mx-auto  items-center  mt-4`}>
           <OTPInputView
             style={{width: '87.5%', height: 200}}
             pinCount={6}
@@ -245,10 +224,10 @@ const TokenVerification = () => {
             }}
             // onCodeFilled={setCode}
           />
-        </View> */}
-        <View style={[tw`px-[5%] `, {marginTop: perHeight(50)}]}>
-          <OtpInputComponent onTextChange={v => setCode(v)} />
         </View>
+        {/* <View style={[tw`px-[5%] `, {marginTop: perHeight(50)}]}>
+          <OtpInputComponent onTextChange={v => setCode(v)} />
+        </View> */}
 
         <View
           style={{

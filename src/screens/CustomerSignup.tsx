@@ -28,7 +28,9 @@ import Tooltip from 'react-native-walkthrough-tooltip';
 import {generalStyles} from '../constants/generalStyles';
 import {SIZES} from '../utils/position/sizes';
 import {Signup} from '../utils/api/auth';
-import { isValidPhoneNumber } from '../utils/utils';
+import {isValidPhoneNumber} from '../utils/utils';
+import {Dropdown} from 'react-native-element-dropdown';
+import tw from 'twrnc';
 export default function CustomerSignup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -168,6 +170,7 @@ export default function CustomerSignup() {
       setisLoading(false);
     }
   };
+  const [isFocus, setIsFocus] = useState(false);
   return (
     <View
       style={{
@@ -495,7 +498,7 @@ export default function CustomerSignup() {
                 }}>
                 Nationality
               </Text>
-              <DropDownPicker
+              {/* <DropDownPicker
                 open={nationalityOpen}
                 value={nationalityValue}
                 items={nationalityItems}
@@ -536,6 +539,38 @@ export default function CustomerSignup() {
                   borderColor: 'red',
                   opacity: 1,
                   borderWidth: 0,
+                }}
+              /> */}
+              <Dropdown
+                style={[
+                  tw``,
+                  {
+                    zIndex: 10,
+                    width: SIZES.width * 0.875,
+                    backgroundColor: '#F7F5F5',
+                    borderColor: '#9E9E9E14',
+                    height: 50,
+                    borderRadius: 10,
+                    paddingHorizontal: 10,
+                  },
+                ]}
+                data={nationalityItems}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus ? 'Select item' : '...'}
+                searchPlaceholder="Search..."
+                value={nationalityValue}
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+                itemTextStyle={{
+                  color: 'black',
+                }}
+                onChange={item => {
+                  console.log(item.value);
+                  setNationalityValue(item.value);
+                  setIsFocus(false);
                 }}
               />
             </View>
