@@ -48,11 +48,7 @@ const _Services = ({route}: any) => {
   const [isLoading, setisLoading] = useState(false);
   const [searchInput, setsearchInput] = useState('');
 
-  function metersToKilometers(meters) {
-    const kilometers = meters / 1000; // Convert meters to kilometers
-    const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
-    return `${roundedKilometers} km`;
-  }
+
 
   const [savedProviders, setsavedProviders] = useState([]);
 

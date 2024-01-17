@@ -8,6 +8,7 @@ import StarRating from 'react-native-star-rating-widget';
 import colors from '../../constants/colors';
 import Review from '../Review';
 import FastImage from 'react-native-fast-image';
+import { metersToKilometers } from '../../utils/utils';
 
 const ClosetoYou = ({item, index, navigation}: any) => {
   const price = 0;
@@ -70,7 +71,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
         <View style={[tw``, {marginLeft: perWidth(12)}]}>
           <View style={[tw``, {}]}>
             <Textcomp
-              text={`${item?.user?.firstName} ${item?.user?.lastName?.charAt(
+              text={`${item?.firstName} ${item?.lastName?.charAt(
                 0,
               )}.`}
               size={12}
@@ -123,7 +124,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
           <View
             style={[tw`ml-1`, {width: perWidth(70), marginTop: perWidth(1)}]}>
             <Textcomp
-              text={item?.address}
+              text={`${metersToKilometers(item?.distance)}`}
               size={12}
               lineHeight={14}
               color={colors.white}
@@ -133,7 +134,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
         </View>
 
         <View style={[tw``, {width: perWidth(80), marginTop: perWidth(1)}]}>
-          <Review value={2} editable={false} />
+          <Review value={1} editable={false} />
         </View>
         {/*  <StarRating
           style={{width: perWidth(40)}}
