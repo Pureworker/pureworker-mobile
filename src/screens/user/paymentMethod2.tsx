@@ -21,7 +21,6 @@ import colors from '../../constants/colors';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import {FlutterwaveButton, PayWithFlutterwave} from 'flutterwave-react-native';
 import Snackbar from 'react-native-snackbar';
-
 //paystack
 import {Paystack, paystackProps} from 'react-native-paystack-webview';
 import PaystackWebView from '../../components/web';
@@ -30,14 +29,12 @@ import {addUserData} from '../../store/reducer/mainSlice';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import {ToastLong} from '../../utils/utils';
-
 const PaymentMethod2 = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [amount, setamount] = useState(route?.params?.amount || 0);
   const [isLoading, setisLoading] = useState(false);
   console.log(route.params);
-
   const initGetUsers = async () => {
     setisLoading(true);
     const res: any = await getUser('');
@@ -46,12 +43,7 @@ const PaymentMethod2 = ({route}: any) => {
       dispatch(addUserData(res?.data?.user));
     }
     setisLoading(false);
-    // setloading(false);
   };
-  // useEffect(() => {
-  //   initGetUsers();
-  // }, [dispatch, navigation]);
-  //flutter wave Integration
 
   interface RedirectParams {
     status: 'successful' | 'cancelled';
@@ -63,6 +55,7 @@ const PaymentMethod2 = ({route}: any) => {
     console.log(data);
     await initGetUsers();
     ToastLong('Funding Successful!');
+    navigation.navigate('Home');
   };
   const generateTransactionRef = (length: number) => {
     var result = '';

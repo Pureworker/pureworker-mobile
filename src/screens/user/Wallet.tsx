@@ -19,8 +19,8 @@ import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import {color} from 'react-native-reanimated';
 import colors from '../../constants/colors';
 import Modal from 'react-native-modal/dist/modal';
-import { addUserData } from '../../store/reducer/mainSlice';
-import { getUser } from '../../utils/api/func';
+import {addUserData} from '../../store/reducer/mainSlice';
+import {getUser} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import socket from '../../utils/socket';
@@ -32,17 +32,18 @@ const Wallet = () => {
   const [ContactAgent, setContactAgent] = useState(false);
   const userData = useSelector((state: any) => state.user.userData);
   const [isLoading, setisLoading] = useState(false);
-  const initGetUsers = async () => {
-    setisLoading(true);
-    const res: any = await getUser('');
-    console.log('dddddddd', res);
-    if (res?.status === 201 || res?.status === 200) {
-      dispatch(addUserData(res?.data?.user));
-    }
-    setisLoading(false);
-    // setloading(false);
-  };
+
   useEffect(() => {
+    const initGetUsers = async () => {
+      setisLoading(true);
+      const res: any = await getUser('');
+      console.log('dddddddd', res);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addUserData(res?.data?.user));
+      }
+      setisLoading(false);
+      // setloading(false);
+    };
     initGetUsers();
   }, [dispatch, navigation]);
   const supportUser = useSelector((store: any) => store.user.supportUser);
@@ -103,9 +104,7 @@ const Wallet = () => {
                     fontFamily={'Inter-Bold'}
                   />
                 </View>
-                <TouchableOpacity
-                  style={tw``}
-                  onPress={() =>initGetUsers()}>
+                <TouchableOpacity style={tw``} onPress={() => initGetUsers()}>
                   <Image
                     source={images.refresh}
                     style={{height: 17, width: 17, tintColor: 'black'}}
@@ -199,50 +198,47 @@ const Wallet = () => {
                   </View>
 
                   <View style={tw`flex flex-row`}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('PaymentMethod2');
-                    }}
-                    style={[
-                      tw`bg-black items-center justify-center rounded-full`,
-                      {
-                        marginTop: perHeight(20),
-                        width: perWidth(100),
-                        height: perHeight(21),
-                      },
-                    ]}>
-                    <Textcomp
-                      text={'Fund wallet'}
-                      size={14}
-                      lineHeight={16}
-                      color={colors.primary}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('Withdraw');
-                    }}
-                    style={[
-                      tw`bg-black items-center justify-center rounded-full ml-4`,
-                      {
-                        marginTop: perHeight(20),
-                        width: perWidth(100),
-                        height: perHeight(21),
-                      },
-                    ]}>
-                    <Textcomp
-                      text={'Withdraw'}
-                      size={14}
-                      lineHeight={16}
-                      color={colors.primary}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </TouchableOpacity>
-
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('PaymentMethod2');
+                      }}
+                      style={[
+                        tw`bg-black items-center justify-center rounded-full`,
+                        {
+                          marginTop: perHeight(20),
+                          width: perWidth(100),
+                          height: perHeight(21),
+                        },
+                      ]}>
+                      <Textcomp
+                        text={'Fund wallet'}
+                        size={14}
+                        lineHeight={16}
+                        color={colors.primary}
+                        fontFamily={'Inter-Bold'}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('Withdraw');
+                      }}
+                      style={[
+                        tw`bg-black items-center justify-center rounded-full ml-4`,
+                        {
+                          marginTop: perHeight(20),
+                          width: perWidth(100),
+                          height: perHeight(21),
+                        },
+                      ]}>
+                      <Textcomp
+                        text={'Withdraw'}
+                        size={14}
+                        lineHeight={16}
+                        color={colors.primary}
+                        fontFamily={'Inter-Bold'}
+                      />
+                    </TouchableOpacity>
                   </View>
-
-
                 </View>
               </View>
               {/* <View
@@ -323,7 +319,11 @@ const Wallet = () => {
                   }}
                   style={[
                     tw`flex flex-row items-center bg-[#2D303C] px-3 rounded-full mr-auto`,
-                    {marginTop: perHeight(15), height: perHeight(40), width: perWidth(180) },
+                    {
+                      marginTop: perHeight(15),
+                      height: perHeight(40),
+                      width: perWidth(180),
+                    },
                   ]}>
                   <View>
                     <Image
@@ -331,7 +331,7 @@ const Wallet = () => {
                       style={{
                         height: 25,
                         width: 27,
-                        tintColor: '#FFCD1E'
+                        tintColor: '#FFCD1E',
                       }}
                       resizeMode="contain"
                     />
@@ -352,7 +352,11 @@ const Wallet = () => {
                   }}
                   style={[
                     tw`flex flex-row items-center bg-[#2D303C] px-3 rounded-full `,
-                    {marginTop: perHeight(15), height: perHeight(40), width: perWidth(180) },
+                    {
+                      marginTop: perHeight(15),
+                      height: perHeight(40),
+                      width: perWidth(180),
+                    },
                   ]}>
                   <View>
                     <Image
@@ -360,7 +364,7 @@ const Wallet = () => {
                       style={{
                         height: 25,
                         width: 27,
-                        tintColor: '#FFCD1E'
+                        tintColor: '#FFCD1E',
                       }}
                       resizeMode="contain"
                     />
@@ -377,11 +381,9 @@ const Wallet = () => {
                 </TouchableOpacity>
               </View>
             </View>
-
-
           </View>
         </ScrollView>
-        <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
+        <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
       </View>
       <Modal
         isVisible={InfoModal}

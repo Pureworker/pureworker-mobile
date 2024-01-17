@@ -26,9 +26,6 @@ import {ToastShort} from '../../utils/utils';
 const Referrals = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
-
-  const [deactivateAccount, setdeactivateAccount] = useState(false);
-  const [deleteAccount, setdeleteAccount] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const faq = useSelector((state: any) => state.user.faq);
 

@@ -145,21 +145,6 @@ const ClosetoYou = ({item, index, navigation}: any) => {
           onChange={() => {}}
         /> */}
       </View>
-      {/* <View
-      style={[
-        tw` flex-1`,
-        {borderBottomLeftRadius: 20, borderBottomRightRadius: 20},
-      ]}>
-      <View style={[tw``, {marginLeft: 10, marginTop: perHeight(6)}]}>
-        <Textcomp
-          text={'Plumbing'}
-          size={12}
-          lineHeight={14}
-          color={colors.white}
-          fontFamily={'Inter-SemiBold'}
-        />
-      </View>
-    </View> */}
     </TouchableOpacity>
   );
 };

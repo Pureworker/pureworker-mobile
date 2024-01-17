@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,6 @@ import {
   StatusBar,
   ScrollView,
   TextInput,
-  Alert,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
@@ -27,11 +26,9 @@ import commonStyle from '../../constants/commonStyle';
 import TextWrapper from '../../components/TextWrapper';
 import colors from '../../constants/colors';
 import TextInputs from '../../components/TextInput2';
-import {Calendar} from 'react-native-calendars';
 import Modal from 'react-native-modal/dist/modal';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Snackbar from 'react-native-snackbar';
-import {createOrder} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import {
@@ -44,14 +41,14 @@ const OrderDetails = () => {
   const navigation = useNavigation<StackNavigation>();
   const route: any = useRoute();
   const providerData = route.params?.data;
-  // console.log('service_provider_data', providerData);
   const dispatch = useDispatch();
   const [locationItems, setLocationItems] = useState([
-    // {label: 'Online(Job will be done virtually)', value: 'Online'},
-    // {label: 'Offline(Job will be done at your location)', value: 'Offline'},
-    // {label: 'Both', value: 'Both'},
     {label: 'Online (your business renders services online)', value: 'Online'},
-    {label: 'Offline (your business renders services at the customer’s location)', value: 'Offline'},
+    {
+      label:
+        'Offline (your business renders services at the customer’s location)',
+      value: 'Offline',
+    },
     {label: 'Both', value: 'Both'},
   ]);
   const [locationOpen, setLocationOpen] = useState(false);
@@ -71,7 +68,6 @@ const OrderDetails = () => {
     // setShow(Platform.OS === 'ios');
     setDate(currentDate);
     setandroidshowDate(false);
-    // updateDate(currentDate);
   };
   console.log(providerData);
 
@@ -201,7 +197,7 @@ const OrderDetails = () => {
             </View>
             <View style={tw``}>
               <Textcomp
-                text={'Confirm with John Pedro before hiring'}
+                text={'Confirm with John pedro before hiring'}
                 size={11}
                 lineHeight={14}
                 color={'#000413'}

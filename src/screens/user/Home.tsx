@@ -425,9 +425,9 @@ const Home = () => {
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               renderItem={(item: any, index: any) => {
-                console.log('====================================');
-                console.log(item?.item);
-                console.log('====================================');
+                // console.log('====================================');
+                // console.log(item?.item);
+                // console.log('====================================');
                 return (
                   <ClosetoYou
                     navigation={navigation}
@@ -471,7 +471,7 @@ const Home = () => {
                       <CategoryList2
                         key={index}
                         categoryName={item?.name}
-                        catId={item?.id}
+                        catId={item?._id || item?.id}
                         isOpen={item?.id === openDropdownId}
                         onDropdownClick={handleDropdownClick}
                       />
