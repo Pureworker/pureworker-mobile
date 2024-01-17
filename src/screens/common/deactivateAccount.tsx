@@ -63,12 +63,11 @@ const DeactivateAccount = () => {
     }
     setisLoading(false);
   };
-
   const handleDelete = async () => {
     setisLoading(true);
     const res: any = await deleteAccount();
-    console.log('request', res?.data);
-    if (res?.status === 201 || res?.status === 200) {
+    console.log('request', res, res?.data);
+    if (res?.status === 201 || res?.status === 200 || res?.status === 204) {
       Snackbar.show({
         text: 'Delete Request Successful.',
         duration: Snackbar.LENGTH_SHORT,

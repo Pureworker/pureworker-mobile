@@ -1,26 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  View, Image,
+  View,
+  Image,
   TouchableOpacity,
   Platform,
   StatusBar,
-  ScrollView
+  ScrollView,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { StackNavigation } from '../../constants/navigation';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
-import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { SIZES, perHeight, perWidth } from '../../utils/position/sizes';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import {
   addTransactions,
   addcategorizedTransdata,
 } from '../../store/reducer/mainSlice';
-import { getTransactions } from '../../utils/api/func';
+import {getTransactions} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
+import { formatDateHistory } from '../../utils/utils';
 
 const FundingHistory = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -108,6 +110,8 @@ const FundingHistory = () => {
     return formattedDate;
   }
 
+
+
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView>
@@ -193,21 +197,47 @@ const FundingHistory = () => {
                     />
                   </View>
                   {categorizedData[monthYear].map(
-                    (item: {id: React.Key | null | undefined}, index: number) => (
-                      <View
-                        style={tw`flex flex-row justify-between items-center px-4 mx-2 border-b border-[#00000033] ${
-                          index === 0 ? 'pb-4' : 'py-4'
-                        }`}>
-                        <View style={[tw`flex flex-row items-center  `, {}]}>
-                          <Image
-                            resizeMode="contain"
-                            source={images.pureWorkerLogo}
-                            style={{width: perWidth(25), aspectRatio: 1}}
-                          />
-                          <View style={tw`flex flex-col ml-4`}>
+                    (
+                      item: {id: React.Key | null | undefined},
+                      index: number,
+                    ) => {
+                      console.log('Item', item);
+                      return (
+                        <View
+                          style={tw`flex flex-row justify-between items-center px-4 mx-2 border-b border-[#00000033] ${
+                            index === 0 ? 'pb-4' : 'py-4'
+                          }`}>
+                          <View style={[tw`flex flex-row items-center  `, {}]}>
+                            <Image
+                              resizeMode="contain"
+                              source={images.pureWorkerLogo}
+                              style={{width: perWidth(25), aspectRatio: 1}}
+                            />
+                            <View style={tw`flex flex-col ml-4`}>
+                              <View style={[tw``, {marginTop: perHeight(0)}]}>
+                                <Textcomp
+                                  text={'Paystack'}
+                                  size={15}
+                                  lineHeight={17}
+                                  color={'#000413'}
+                                  fontFamily={'Inter-SemiBold'}
+                                />
+                              </View>
+                              <View style={[tw``, {marginTop: perHeight(4)}]}>
+                                <Textcomp
+                                  text={`${formatDateHistory(item.createdAt)}`}
+                                  size={13}
+                                  lineHeight={15}
+                                  color={'#00041380'}
+                                  fontFamily={'Inter'}
+                                />
+                              </View>
+                            </View>
+                          </View>
+                          <View style={tw`flex flex-col`}>
                             <View style={[tw``, {marginTop: perHeight(0)}]}>
                               <Textcomp
-                                text={'Paystack'}
+                                text={`₦${item?.amount}`}
                                 size={15}
                                 lineHeight={17}
                                 color={'#000413'}
@@ -216,37 +246,20 @@ const FundingHistory = () => {
                             </View>
                             <View style={[tw``, {marginTop: perHeight(4)}]}>
                               <Textcomp
-                                text={'4 may, 13:45'}
+                                text={`${
+                                  item?.type?.slice(0, 1)?.toUpperCase() +
+                                  item?.type?.slice(1)
+                                }`}
                                 size={13}
                                 lineHeight={15}
                                 color={'#00041380'}
-                                fontFamily={'Inter'}
+                                fontFamily={'Inter-SemiBold'}
                               />
                             </View>
                           </View>
                         </View>
-                        <View style={tw`flex flex-col`}>
-                          <View style={[tw``, {marginTop: perHeight(0)}]}>
-                            <Textcomp
-                              text={`₦${item?.amount}`}
-                              size={15}
-                              lineHeight={17}
-                              color={'#000413'}
-                              fontFamily={'Inter-SemiBold'}
-                            />
-                          </View>
-                          <View style={[tw``, {marginTop: perHeight(4)}]}>
-                            <Textcomp
-                              text={`${item?.type?.slice(0, 1)?.toUpperCase() + item?.type?.slice(1,) }`}
-                              size={13}
-                              lineHeight={15}
-                              color={'#00041380'}
-                              fontFamily={'Inter-SemiBold'}
-                            />
-                          </View>
-                        </View>
-                      </View>
-                    ),
+                      );
+                    },
                   )}
                 </View>
               ))}
@@ -255,7 +268,7 @@ const FundingHistory = () => {
         </View>
         <View style={tw`h-30`} />
       </ScrollView>
-      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
   );
 };

@@ -57,7 +57,7 @@ export default function ServicePriceComp({item, index}: any) {
           borderRadius: 5,
         }}>
         <TextWrapper
-          numberOfLines={1}
+          // numberOfLines={1}
           fontType={'semiBold'}
           style={{
             fontSize: 12,

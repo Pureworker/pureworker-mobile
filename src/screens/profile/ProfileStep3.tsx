@@ -44,8 +44,8 @@ const validationSchema = yup.object().shape({
 phoneNumber1: yup
   .string()
   .required('Phone Number is required')
-  .min(10, 'Invalid Phone number')
-  .max(10, 'Invalid Phone number')
+  .min(11, 'Invalid Phone number')
+  .max(11, 'Invalid Phone number')
   .test('unique-phone-numbers', 'Phone Numbers must be different', function (value) {
     const { phoneNumber2 } = this.parent;
     return value !== phoneNumber2;
@@ -65,8 +65,8 @@ phoneNumber1: yup
   phoneNumber2: yup
     .string()
     .required('Phone Number is required')
-    .min(10, 'Invalid Phone number')
-    .max(10, 'Invalid Phone number'),
+    .min(11, 'Invalid Phone number')
+    .max(11, 'Invalid Phone number'),
   email2: yup
     .string()
     .email('Enter a valid email')
@@ -334,8 +334,8 @@ const ProfileStep3 = () => {
             setState={formik.handleChange('phoneNumber1')}
             error={formik.errors.phoneNumber1}
           />
-          {formik.touched.name1 && formik.errors.name1 && (
-            <Text style={{color: 'red'}}>{formik.errors.name1}</Text>
+          {formik.touched.phoneNumber1 && formik.errors.phoneNumber1 && (
+            <Text style={{color: 'red'}}>{formik.errors.phoneNumber1}</Text>
           )}
           <TextWrapper
             children="Email Address"

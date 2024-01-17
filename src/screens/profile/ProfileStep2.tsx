@@ -1,9 +1,8 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   Image,
   ActivityIndicator,
-  TextInput,
   Platform,
   ScrollView,
   TouchableOpacity,
@@ -26,8 +25,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {WIDTH_WINDOW, generalStyles} from '../../constants/generalStyles';
 import ProfileStepWrapper from '../../components/ProfileStepWrapper';
 import TextInputs from '../../components/TextInputs';
-import DropDownPicker from 'react-native-dropdown-picker';
-import PotfolioWrapper from '../../components/PotfolioWrapper';
 import {
   allCities,
   allCountry,
@@ -35,9 +32,6 @@ import {
   // launchImageLibrary,
 } from '../../constants/utils';
 import Snackbar from 'react-native-snackbar';
-import storage from '@react-native-firebase/storage';
-import Portfoliocomp from '../../components/Portfolio';
-import {SIZES, perWidth} from '../../utils/position/sizes';
 import {completeProfile, uploadAssetsDOCorIMG} from '../../utils/api/func';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -48,7 +42,6 @@ import ServicePriceComp from '../../components/servicePrice';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import {RouteContext} from '../../utils/context/route_context';
-import Services from '../user/services';
 import {SelectList} from 'react-native-dropdown-select-list';
 import {ToastShort} from '../../utils/utils';
 
@@ -76,10 +69,8 @@ const PRofileStep2 = () => {
   const [nationalityOpen, setNationalityOpen] = useState(false);
   const [nationalityValue, setNationalityValue] = useState(null);
   const [nationalityItems, setNationalityItems] = useState<any>([]);
-  let potfolioPicture = useRef('');
-  let profilePicture = useRef('');
   // console.log('nationalityItems', nationalityItems);
-  // console.log('--ggggggg', nationalityValue);
+  console.log('--ggggggg', servicesDescription);
   const [portfolioToServiceCount, setportfolioToServiceCount] = useState([]);
   const completeProfileData = useSelector(
     (state: any) => state.user.completeProfileData,
@@ -93,14 +84,60 @@ const PRofileStep2 = () => {
   );
   // console.log(category);
 
+  // useEffect(() => {
+  //   if (category?.length) {
+  //     const updatedInputValues = category.map((service: string) => ({
+  //       service: service?.name,
+  //       description: '',
+  //     }));
+  //     const updatedServiceIntro = [
+  //       ...(currentServiceIntro || []), // Use an empty array if currentServiceIntro is undefined
+  //       ...(updatedInputValues || []).filter(
+  //         updatedItem =>
+  //           !(currentServiceIntro || []).some(
+  //             currentItem => currentItem.service === updatedItem.service,
+  //           ),
+  //       ),
+  //     ];
+  //     // Update the Redux store with the updated array
+  //     setServicesDescription([...updatedServiceIntro]);
+  //     dispatch(addcompleteProfile({serviceIntro: updatedServiceIntro}));
+  //   }
+  // }, [category]);
+
+  console.log('===========Cats=========================');
+  console.log(category);
+  console.log('====================================');
+  function isMongoObjectId(str) {
+    const objectIdRegex = /^[0-9a-fA-F]{24}$/;
+    return objectIdRegex.test(str);
+  }
+  let categoryWithNames: any[] = [];
+  const checkL = () => {
+    let arr: any[] = [];
+    category?.map(item => {
+      if (isMongoObjectId(item.service)) {
+      } else {
+        arr.push(item);
+      }
+    });
+    categoryWithNames = arr;
+  };
+  checkL();
+  console.log('==========categorywithNames==========================');
+  console.log(categoryWithNames);
+  console.log('====================================');
   useEffect(() => {
     if (category?.length) {
-      const updatedInputValues = category.map((service: string) => ({
-        service: service?.name,
+      // Filter out items with 'service' property
+      // const categoryWithNames = category.filter(service => service.name);
+
+      const updatedInputValues = categoryWithNames.map(service => ({
+        service: service.name,
         description: '',
       }));
       const updatedServiceIntro = [
-        ...(currentServiceIntro || []), // Use an empty array if currentServiceIntro is undefined
+        ...(currentServiceIntro || []),
         ...(updatedInputValues || []).filter(
           updatedItem =>
             !(currentServiceIntro || []).some(
@@ -108,77 +145,77 @@ const PRofileStep2 = () => {
             ),
         ),
       ];
+
       // Update the Redux store with the updated array
       setServicesDescription([...updatedServiceIntro]);
       dispatch(addcompleteProfile({serviceIntro: updatedServiceIntro}));
     }
   }, [category]);
 
+  // useEffect(() => {
+  //   if (category?.length) {
+  //     console.log('CATEGORY +HERE',category);
+  //     const updatedInputValues = category.map((service: string) => ({
+  //       serviceName: service?.name,
+  //       service: service?._id || service?.id,
+  //       maxPrice: '',
+  //       minPrice: '',
+  //     }));
+  //     // Retrieve the current state of priceRange from Redux
+  //     // const currentPriceRange = getState().yourSliceName.priceRange;
+  //     // Create a new array with updated and existing values
+  //     const updatedPriceRange = [
+  //       ...(currentPriceRange || []),
+  //       ...updatedInputValues.filter(
+  //         updatedItem =>
+  //           // !currentPriceRange.some(
+  //           !(currentPriceRange || []).some(
+  //             currentItem => currentItem.service === updatedItem.service,
+  //           ),
+  //       ),
+  //     ];
+  //     // Update the Redux store with the updated array
+  //     setServicePrice([...updatedPriceRange]);
+  //     dispatch(addcompleteProfile({priceRange: updatedPriceRange}));
+  //   }
+  //   setDescription(completeProfileData?.description);
+  // }, [category]);
   useEffect(() => {
     if (category?.length) {
-      const updatedInputValues = category.map((service: string) => ({
+      const updatedInputValues = category.map(service => ({
         serviceName: service?.name,
-        service: service?.id,
+        service: service?._id || service?.id,
         maxPrice: '',
         minPrice: '',
       }));
 
-      // Retrieve the current state of priceRange from Redux
-      // const currentPriceRange = getState().yourSliceName.priceRange;
-      // Create a new array with updated and existing values
-      const updatedPriceRange = [
-        ...(currentPriceRange || []),
-        ...updatedInputValues.filter(
-          updatedItem =>
-            // !currentPriceRange.some(
-            !(currentPriceRange || []).some(
-              currentItem => currentItem.service === updatedItem.service,
-            ),
-        ),
-      ];
+      // Create a map for faster lookup
+      const existingServicesMap = new Map(
+        (currentPriceRange || []).map(item => [item.service, item]),
+      );
+
+      // Update existing items or add new items
+      const updatedPriceRange = updatedInputValues.map(updatedItem =>
+        existingServicesMap.has(updatedItem.service)
+          ? {...existingServicesMap.get(updatedItem.service), ...updatedItem}
+          : updatedItem,
+      );
 
       // Update the Redux store with the updated array
       setServicePrice([...updatedPriceRange]);
       dispatch(addcompleteProfile({priceRange: updatedPriceRange}));
     }
+
     setDescription(completeProfileData?.description);
   }, [category]);
+
   const currentPriceRange = useSelector(
     (state: any) => state.user.completeProfileData?.priceRange,
   );
-
-  const handleInputChange = (index: number, value: string) => {
-    const updatedInputValues: any = [...servicesDescription];
-    updatedInputValues[index] = {...updatedInputValues[index], value};
-    setServicesDescription(updatedInputValues);
-  };
-  const handleDescriptionChange = (item: any) => {
-    const newArray = servicesDescription.map((service: {service: any}) => {
-      if (service.service === item?.service) {
-        return {
-          ...service,
-          description: item?.description,
-        };
-      }
-      setServicesDescription(newArray);
-      return service;
-    });
-  };
-  const handleServicePriceMinChange = (index: number, priceMin: string) => {
-    const updatedInputValues: any = [...servicePrice];
-    updatedInputValues[index] = {...updatedInputValues[index], priceMin};
-    setServicePrice(updatedInputValues);
-  };
-  const handleServicePriceMaxChange = (index: number, priceMax: string) => {
-    const updatedInputValues: any = [...servicePrice];
-    updatedInputValues[index] = {...updatedInputValues[index], priceMax};
-    setServicePrice(updatedInputValues);
-  };
   const {data: getCategoryData, isError} = useGetCategoryQuery();
   const getCategory = getCategoryData ?? [];
 
   const dispatch = useDispatch();
-
   const handleProfileSetup = () => {
     if (
       imageUrl &&
@@ -222,23 +259,34 @@ const PRofileStep2 = () => {
     }
   };
   const {currentState, setCurrentState} = useContext(RouteContext);
-
   console.log('here', categoryId);
-
   const _handleFuncUpload = async () => {
     setisLoading(true);
     if (completeProfileData) {
       const dup = completeProfileData;
+      // const duplicate = dup;
+      // duplicate.serviceIntro = duplicate.serviceIntro.filter(
+      //   item => item.service !== undefined,
+      // );
+      // duplicate.serviceIntro = duplicate.serviceIntro.filter(item => !isMongoObjectId(item.service));
+      // console.log('dup',duplicate);
+      // setisLoading(false);
+      // return;
       let duplicate = dup;
       duplicate?.priceRange?.map(
-        (item: {
-          maxPrice: any;
-          priceMax: any;
-          minPrice: any;
-          priceMin: any;
-        }) => {
+        (
+          item: {
+            maxPrice: any;
+            priceMax: any;
+            minPrice: any;
+            priceMin: any;
+            service: any;
+          },
+          index: any,
+        ) => {
           item.maxPrice = item.priceMax;
           item.minPrice = item.priceMin;
+          item.service = categoryId?.[index];
         },
       );
       duplicate?.serviceIntro.map((item, index) => {
@@ -249,7 +297,7 @@ const PRofileStep2 = () => {
       duplicate.serviceIntro = duplicate.serviceIntro.filter(
         item => item.service !== undefined,
       );
-
+      duplicate.serviceIntro = duplicate.serviceIntro.filter(item => !isMongoObjectId(item.service));
       // const profileData = {
       //   profilePicture: imageUrl,
       //   description: description,
@@ -350,14 +398,19 @@ const PRofileStep2 = () => {
       console.log('res-data', profileData);
       const res = await completeProfile(profileData);
       console.log('result', res?.data);
-
       if (res?.status === 200 || res?.status === 201) {
-        // navigation.navigate('ProfileStep3');
         navigation.navigate('ProfileStep21');
-        // setCurrentState('3');
-        // dispatch(addformStage(3));
         dispatch(addformStage(21));
       } else {
+        console.log('====================================');
+        console.log(
+          res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+        );
+        console.log('====================================');
         Snackbar.show({
           text: res?.error?.message
             ? res?.error?.message
@@ -698,61 +751,10 @@ const PRofileStep2 = () => {
           {servicesDescription?.length
             ? servicesDescription?.map((item: any, index: any) => {
                 return (
-                  // <View
-                  //   key={index}
-                  //   style={{
-                  //     flexDirection: 'row',
-                  //     alignItems: 'center',
-                  //     width: WIDTH_WINDOW - 40,
-                  //     justifyContent: 'space-between',
-                  //     marginBottom: 13,
-                  //   }}>
-                  //   <View
-                  //     key={index}
-                  //     style={{
-                  //       paddingHorizontal: 10,
-                  //       justifyContent: 'center',
-                  //       backgroundColor: colors.lightBlack,
-                  //       height: 50,
-                  //       width: 120,
-                  //       borderRadius: 5,
-                  //     }}>
-                  //     <TextWrapper
-                  //       numberOfLines={1}
-                  //       fontType={'semiBold'}
-                  //       style={{
-                  //         fontSize: 12,
-                  //         color: '#fff',
-                  //       }}>
-                  //       {item?.service}
-                  //     </TextWrapper>
-                  //   </View>
-                  //   <TextInput
-                  //     style={{
-                  //       width: '60%',
-                  //       paddingHorizontal: 10,
-                  //       backgroundColor: colors.lightBlack,
-                  //       borderRadius: 5,
-                  //       color: '#fff',
-                  //       height: Platform.OS === 'ios' ? 50 : 50,
-                  //     }}
-                  //     placeholderTextColor={colors.grey}
-                  //     placeholder="Enter service description"
-                  //     key={index}
-                  //     value={item.value} // Assign value from state
-                  //     onChangeText={value => {
-                  //       // handleInputChange(index, value)
-                  //       // setServicesDescription(item);
-                  //       handleDescriptionChange(item);
-                  //       // dispatch(addcompleteProfile({serviceIntro: servicesDescription}));
-                  //     }}
-                  //   />
-                  // </View>
                   <ServiceIntroComp key={index} item={item} index={index} />
                 );
               })
             : null}
-
           <TextWrapper
             children="Price Range"
             isRequired={true}
@@ -766,168 +768,17 @@ const PRofileStep2 = () => {
           />
           {servicePrice?.length
             ? servicePrice?.map((item: any, index: any) => {
+                console.log(servicePrice);
                 return (
-                  // <View
-                  //   key={index}
-                  //   style={{
-                  //     flexDirection: 'row',
-                  //     alignItems: 'center',
-                  //     width: WIDTH_WINDOW - 40,
-                  //     justifyContent: 'space-between',
-                  //     marginBottom: 13,
-                  //   }}>
-                  //   <View
-                  //     key={index}
-                  //     style={{
-                  //       paddingHorizontal: 10,
-                  //       justifyContent: 'center',
-                  //       backgroundColor: colors.lightBlack,
-                  //       height: 50,
-                  //       width: 120,
-                  //       borderRadius: 5,
-                  //     }}>
-                  //     <TextWrapper
-                  //       numberOfLines={1}
-                  //       fontType={'semiBold'}
-                  //       style={{
-                  //         fontSize: 12,
-                  //         color: '#fff',
-                  //       }}>
-                  //       {item?.serviceName}
-                  //     </TextWrapper>
-                  //   </View>
-
-                  //   <View style={[generalStyles.rowCenter]}>
-                  //     <TextInput
-                  //       style={{
-                  //         width: 80,
-                  //         paddingHorizontal: 10,
-                  //         backgroundColor: colors.lightBlack,
-                  //         borderRadius: 5,
-                  //         color: '#fff',
-                  //         height: Platform.OS === 'ios' ? 50 : 50,
-                  //       }}
-                  //       placeholderTextColor={colors.grey}
-                  //       placeholder="N"
-                  //       keyboardType="number-pad"
-                  //       key={index}
-                  //       value={item.value} // Assign value from state
-                  //       onChangeText={value =>
-                  //         handleServicePriceMinChange(index, value)
-                  //       }
-                  //     />
-                  //     <TextWrapper
-                  //       fontType={'semiBold'}
-                  //       style={{
-                  //         fontSize: 12,
-                  //         color: colors.black,
-                  //         marginHorizontal: 10,
-                  //       }}>
-                  //       to
-                  //     </TextWrapper>
-                  //     <TextInput
-                  //       style={{
-                  //         width: 80,
-                  //         paddingHorizontal: 10,
-                  //         backgroundColor: colors.lightBlack,
-                  //         borderRadius: 5,
-                  //         color: '#fff',
-                  //         height: Platform.OS === 'ios' ? 50 : 50,
-                  //       }}
-                  //       placeholderTextColor={colors.grey}
-                  //       placeholder="N"
-                  //       keyboardType="number-pad"
-                  //       key={index}
-                  //       value={item.value} // Assign value from state
-                  //       onChangeText={value =>
-                  //         handleServicePriceMaxChange(index, value)
-                  //       }
-                  //     />
-                  //   </View>
-                  // </View>
-                  <ServicePriceComp key={index} item={item} index={index} />
+                  <ServicePriceComp
+                    key={item.service || item.serviceName}
+                    item={item}
+                    index={index}
+                  />
                 );
               })
             : null}
-
           <View style={[tw`flex bg`, {width: WIDTH_WINDOW * 0.9}]}>
-            {/* <SelectList
-                setSelected={setValue}
-                onSelect={(item) => {
-                  if (value !== status) {
-                    // console.log("hey =========", value, status);
-                    updateStatus(value);
-                  }
-                }}
-                fontFamily="Raleway-Bold"
-                data={filterStatus}
-                save="key"
-                placeholder="OPEN"
-                arrowicon={
-                  <View
-                    style={[
-                      tw`items-center justify-center bg-[${printTicketStatus(
-                        status.toLowerCase()
-                      )}]`,
-                      {
-                        borderLeftWidth:
-                          status === "resolved" || status === "closed" ? 0 : 2,
-                        borderLeftColor: colors.white,
-                        width: perHeight(50),
-                        height: 40,
-                      },
-                    ]}
-                  >
-                    {isUpdating ? (
-                      <ActivityIndicator size="small" color={colors.white} />
-                    ) : (
-                      <Entypo
-                        name="chevron-down"
-                        size={32}
-                        color={
-                          status === "resolved" || status === "closed"
-                            ? printTicketStatus(status.toLowerCase())
-                            : colors.white
-                        }
-                        style={tw`self-center`}
-                      />
-                    )}
-                  </View>
-                }
-                search={false}
-                boxStyles={[
-                  // styles.dropdown,
-                  tw`bg-[${printTicketStatus(
-                    status.toLowerCase()
-                  )}] w-[82%] items-center flex-row justify-between flex-1`,
-                  {
-                    height: 40,
-                    borderWidth: 0,
-                    paddingRight: 5,
-                    borderRadius: 8,
-                  },
-                ]}
-                inputStyles={[
-                  tw`bg-[${printTicketStatus(
-                    status.toLowerCase()
-                  )}] items-center flex-row justify-center flex-1`,
-                  {
-                    height: 40,
-                    textAlignVertical: "center",
-                    fontSize: 14,
-                    textTransform: "uppercase",
-                    color: colors.white,
-                    borderRadius: 8,
-                  },
-                ]}
-                dropdownStyles={[
-                  tw`flex flex-row w-[82%]`,
-                  styles.statesDropdown,
-                ]}
-                dropdownTextStyles={styles.statusDropdownText}
-                // maxHeight={200}
-                defaultOption={{ key: status, value: status }}
-              /> */}
             <TextWrapper
               children="What City do you offer your Services?"
               isRequired={true}
@@ -967,77 +818,6 @@ const PRofileStep2 = () => {
               placeholder="Select a city"
             />
           </View>
-
-          {/* <View
-            style={{
-              minHeight: 500,
-              marginBottom: -400,
-              zIndex: 1,
-            }}>
-            <TextWrapper
-              children="What City do you offer your Services?"
-              isRequired={true}
-              fontType={'semiBold'}
-              style={{
-                fontSize: 16,
-                marginTop: 20,
-                marginBottom: 13,
-                color: colors.black,
-              }}
-            />
-            <ScrollView horizontal>
-              <DropDownPicker
-                open={nationalityOpen}
-                value={nationalityValue}
-                items={allCities}
-                setOpen={setNationalityOpen}
-                setValue={setNationalityValue}
-                setItems={setNationalityItems}
-                showArrowIcon={false}
-                zIndex={10}
-                dropDownContainerStyle={{
-                  borderWidth: 0,
-                }}
-                labelStyle={{
-                  fontFamily: commonStyle.fontFamily.regular,
-                  fontSize: 14,
-                  color: colors.white,
-                }}
-                arrowIconStyle={
-                  {
-                    // backgroundColor: 'red'
-                  }
-                }
-                placeholderStyle={{
-                  fontFamily: commonStyle.fontFamily.regular,
-                  fontSize: 14,
-                  color: '#9E9E9E',
-                }}
-                style={{
-                  backgroundColor: colors.lightBlack,
-                  borderColor: colors.primary,
-                  borderWidth: 2,
-                  width: SIZES.width * 0.9,
-                }}
-                listMode="FLATLIST"
-                showTickIcon={false}
-                textStyle={{
-                  color: colors.white,
-                }}
-                listParentLabelStyle={{
-                  color: '#000',
-                  fontSize: 16,
-                  fontFamily: commonStyle.fontFamily.regular,
-                }}
-                listItemContainerStyle={{
-                  backgroundColor: '#F1F1F1',
-                  borderColor: 'red',
-                  opacity: 1,
-                  borderWidth: 0,
-                }}
-              />
-            </ScrollView>
-          </View> */}
         </View>
         <View
           style={{
@@ -1061,7 +841,6 @@ const PRofileStep2 = () => {
 
                   // console.log(completeProfileData, 'here', allPotfolio);
                   // console.log(nationalityValue);
-
                   _handleFuncUpload();
 
                   // const profileData = {

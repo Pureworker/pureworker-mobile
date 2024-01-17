@@ -248,7 +248,7 @@ const AddAddress = ({navigation}: any) => {
           <View style={[tw`px-[5%]`, {}]}>
             <View style={{}}>
               <Text1
-                text={'Add your  address'}
+                text={'Add your address'}
                 size={20}
                 lineHeight={20}
                 color={'#172A3A'}
@@ -346,7 +346,7 @@ const AddAddress = ({navigation}: any) => {
         <View style={[tw`mx-auto mt-4`, {width: perWidth(364)}]}>
           <TextInput
             style={[
-              tw`bg-[#F2F2F2] px-4  mx-4 rounded-lg`,
+              tw`bg-[#F2F2F2] text-black px-4  mx-4 rounded-lg`,
               {height: perHeight(85)},
             ]}
             placeholder="Enter Extra Info"

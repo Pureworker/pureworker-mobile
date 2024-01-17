@@ -34,7 +34,7 @@ export const getUser = async (param: any) => {
       error: error?.response?.data,
     };
   }
-}; 
+};
 export const getProfile = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   console.log('getProfile func started', param);
@@ -190,7 +190,7 @@ export const completeProfile = async (param: any) => {
     console.log(response?.data);
     return response;
   } catch (error) {
-    console.log(error, error?.response?.data);
+    console.log(error, error?.response?.data, param);
     return {
       status: 400,
       err: error,
@@ -921,7 +921,11 @@ export const deleteAccount = async () => {
       },
     });
 
-    if (response.status === 201) {
+    if (
+      response.status === 201 ||
+      response.status === 200 ||
+      response.status === 204
+    ) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -1069,4 +1073,3 @@ export const getSearchQuery = async (param: any) => {
     };
   }
 };
-

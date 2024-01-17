@@ -26,7 +26,7 @@ import {useGetUserDetailQuery} from '../../store/slice/api';
 import {ToastLong} from '../../utils/utils';
 import Toast from 'react-native-toast-message';
 import {addUserData} from '../../store/reducer/mainSlice';
-import {updateUserData} from '../../utils/api/func';
+import {getUser, updateUserData} from '../../utils/api/func';
 import CustomLoading from '../../components/customLoading';
 import Spinner from 'react-native-loading-spinner-overlay';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -37,7 +37,6 @@ const EditAccount = () => {
   const dispatch = useDispatch();
 
   const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
-  const getUser = getUserData ?? [];
   const userData = useSelector((state: any) => state.user.userData);
 
   const [locationItems, setLocationItems] = useState([
@@ -59,7 +58,7 @@ const EditAccount = () => {
   const [gender, setgender] = useState(userData?.gender || '');
   const initGetUsers = async () => {
     try {
-      const res = await getUser(/* pass a valid parameter here */);
+      const res = await getUser('');
       console.log('dddddddd', res);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addUserData(res?.data?.user));
@@ -70,6 +69,7 @@ const EditAccount = () => {
       // Handle error appropriately
     }
   };
+
   const initUpdate = async (param: any) => {
     setloading(true);
     try {

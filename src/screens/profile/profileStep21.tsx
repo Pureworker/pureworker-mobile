@@ -24,12 +24,14 @@ import {useDispatch, useSelector} from 'react-redux';
 import ProfileStepWrapper from '../../components/ProfileStepWrapper';
 import PotfolioWrapper from '../../components/PotfolioWrapper';
 import Snackbar from 'react-native-snackbar';
-import {perWidth} from '../../utils/position/sizes';
+import {SIZES, perWidth} from '../../utils/position/sizes';
 import {completeProfile, getProfile} from '../../utils/api/func';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {addProfileData, addformStage} from '../../store/reducer/mainSlice';
-import PortComp from './comp/portComp';
 import {ToastShort} from '../../utils/utils';
+import Modal from 'react-native-modal/dist/modal';
+import Textcomp from '../../components/Textcomp';
+import PortComp from './comp/PortComp';
 type Route = {
   key: string;
   name: string;
@@ -43,23 +45,9 @@ const ProfileStep21 = () => {
   const [idNumber, setIdNumber] = useState('');
   const [idName, setidName] = useState('');
   const route: Route = useRoute();
-
   const category = useSelector((state: any) => state.user.pickedServices);
-  const [collapseState, setCollapseState] = useState(false);
-  const [dataLoaded, setDataLoaded] = useState(false);
-  const [selectedVerification, setSelectedVerification] = useState('');
-  const [nationalityItems, setNationalityItems] = useState([
-    'Int. Passport',
-    'Drivers License',
-    'vNIN',
-    'Voters Card',
-    'Bank Verification Number',
-    'Others',
-  ]);
   const [allPotfolio, setAllPotfolio] = useState<any>([]);
-  const [description, setDescription] = useState('');
   const [shortDescription, setShortDescription] = useState('');
-  const [imageObject, setImageObject] = useState({});
   const [potfolioImageUrl, setPotfolioImageUrl] = useState<any>([]);
   const [isLoading, setisLoading] = useState(false);
   const [createService] = useCreateServiceMutation();
@@ -128,11 +116,11 @@ const ProfileStep21 = () => {
   const getUser = getUserData ?? [];
   const [nationalityOpen, setNationalityOpen] = useState(false);
   const [portfolioToServiceCount, setportfolioToServiceCount] = useState([
-    {
-      service: '',
-      description: '',
-      images: [],
-    },
+    // {
+    //   service: '',
+    //   description: '',
+    //   images: [],
+    // },
   ]);
   const completeProfileData = useSelector(
     (state: any) => state.user.completeProfileData,
@@ -196,6 +184,8 @@ const ProfileStep21 = () => {
     setportfolioToServiceCount(updatedPortfolioData); // Update the state with the new data
     console.log('All Data here', updatedPortfolioData);
   };
+
+  const [addModal, setaddModal] = useState(false);
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
       <Header
@@ -281,10 +271,7 @@ const ProfileStep21 = () => {
                   description: '',
                   images: [],
                 };
-                // setportfolioToServiceCount([
-                //   ...portfolioToServiceCount,
-                //   newPortfolioItem,
-                // ]);
+                // setaddModal(true);
                 if (portfolioToServiceCount.length < category.length * 3) {
                   setportfolioToServiceCount([
                     ...portfolioToServiceCount,
@@ -341,14 +328,7 @@ const ProfileStep21 = () => {
               <View style={{marginHorizontal: 25, marginTop: 75}}>
                 <Button
                   onClick={() => {
-                    // handleProfileSetup();
-                    // navigation.navigate('ProfileStep3', {serviceId: data?.serviceId});
-                    // navigation.navigate('ProfileStep3', {serviceId: 'id_here'});
-                    // dispatch(addcompleteProfile({city: nationalityValue}));
-                    //   console.log(completeProfileData, 'here', allPotfolio);
-                    //   _handleFuncUpload();
                     handleProfileSetup();
-                    // console.log('chech-here', portfolioToServiceCount);
                     console.log('modified data2', portfolioToServiceCount);
                   }}
                   style={{
@@ -371,6 +351,74 @@ const ProfileStep21 = () => {
           </View>
         </View>
       </ScrollView>
+
+      <Modal
+        isVisible={addModal}
+        onModalHide={() => {}}
+        style={{width: SIZES.width, marginHorizontal: 0}}
+        deviceWidth={SIZES.width}>
+        <View
+          style={[
+            tw`bg-[#EBEBEB] w-9/10 mx-auto  p-4 pb-8`,
+            {borderRadius: 20},
+          ]}>
+          <View style={tw`mx-auto`} />
+          <View style={[tw``]}>
+            <View style={[tw` mt-4`]}>
+              <Textcomp
+                text={'Add Portfolio'}
+                size={16}
+                lineHeight={16}
+                color={'#000413'}
+                fontFamily={'Inter-Bold'}
+              />
+            </View>
+            <View style={[tw` mt-1`]}>
+              <Textcomp
+                text={'Follow the steps below to order a portfolio.'}
+                size={10}
+                lineHeight={12}
+                color={'#000413'}
+                fontFamily={'Inter-Regular'}
+              />
+            </View>
+          </View>
+          <View>
+            <PortComp
+              lindex={0}
+              dlist={serviceList}
+              pdata={{
+                service: '',
+                description: '',
+                images: [],
+              }}
+              portfolioData={portfolioToServiceCount}
+              handlePortfolioItemChange={(i: any, data: any) =>
+                handlePortfolioItemChange(0, data)
+              }
+              close={() => {
+                setaddModal(false);
+              }}
+            />
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              setaddModal(false);
+            }}
+            style={tw`absolute right-0 top-[-2]`}>
+            <Image
+              resizeMode="contain"
+              source={images.cancelCircle}
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: '#000413',
+                marginLeft: 5,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };

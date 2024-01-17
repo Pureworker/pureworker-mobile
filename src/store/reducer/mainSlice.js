@@ -107,7 +107,7 @@ export const mainSlice = createSlice({
       let text = [];
       let text2 = [];
       text.push(...state.pickedServices, action.payload);
-      text2.push(...state.pickedServicesId, action.payload.id);
+      text2.push(...state.pickedServicesId, action.payload._id);
       state.pickedServices = [...text];
       state.pickedServicesId = [...text2];
     },

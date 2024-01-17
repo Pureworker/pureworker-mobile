@@ -127,13 +127,23 @@ export default function BusinessSignup() {
           // userType: userType.toLowerCase(),
           accountType: userType?.toLowerCase(),
         };
+        const b_data ={
+          businessName: name,
+          cacNo: cacNo,
+          location: locationValue?.toLowerCase(),
+          address: address,
+          phoneNumber: phoneName,
+          email: email.toLowerCase().trim(),
+          accountType: userType?.toLowerCase(),
+          gender: genderValue?.toLowerCase().trim(),
+        }
 
         if (referralCode && referralCode?.length > 2) {
           loginData.referralCode = referralCode;
           fl_data.referralCode = referralCode;
         }
 
-        const res = await Signup(userType === FREELANCER ? fl_data : loginData);
+        const res = await Signup(userType === FREELANCER ? fl_data : b_data);
 
         if (
           res?.status === 200 ||

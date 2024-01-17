@@ -1,12 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
   SafeAreaView,
   FlatList,
-  ActivityIndicator,
   StatusBar,
   ScrollView,
 } from 'react-native';
@@ -17,11 +15,6 @@ import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
-import ServiceCard from '../../components/cards/serviceCard';
-import ClosetoYou from '../../components/cards/closeToYou';
-import CategoryList2 from '../../components/CategoryList2';
-import commonStyle from '../../constants/commonStyle';
-import {useGetCategoryQuery} from '../../store/slice/api';
 import Modal from 'react-native-modal/dist/modal';
 import {
   getCategory,
@@ -35,16 +28,17 @@ import {
   addSCategory,
   addUserData,
   addproviderOrders,
+  setwelcomeModal,
 } from '../../store/reducer/mainSlice';
 import ClosetoYou3 from '../../components/cards/CloseToYou3';
 import {formatAmount} from '../../utils/validations';
 import FastImage from 'react-native-fast-image';
 import {RouteContext} from '../../utils/context/route_context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import socket from '../../utils/socket';
 import Geolocation from 'react-native-geolocation-service';
 import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {ToastLong} from '../../utils/utils';
+import WelcomeModal from '../../components/SignupModal';
 
 const Home = ({navigation}: any) => {
   useEffect(() => {
@@ -67,24 +61,12 @@ const Home = ({navigation}: any) => {
         console.error(error);
       });
   }, []);
-
-  //   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [search, setSearch] = useState('');
-  const [loading, setLoading] = useState(false);
   const [InfoModal, setInfoModal] = useState(false);
   const [ContactAgent, setContactAgent] = useState(false);
-
   const [OinProgress, setOinProgress] = useState([]);
   const [OinPending, setOinPending] = useState([]);
-
-  const data = [
-    {id: '1', title: 'Item 1'},
-    {id: '2', title: 'Item 2'},
-    {id: '3', title: 'Item 3'},
-    {id: '4', title: 'Item 4'},
-    {id: '5', title: 'Item 5'},
-  ];
   const [isLoading, setisLoading] = useState(false);
   useEffect(() => {
     const initGetUsers = async () => {
@@ -93,12 +75,6 @@ const Home = ({navigation}: any) => {
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addUserData(res?.data?.user));
       }
-
-      // if (userData?.geoLocation) {
-      // } else {
-      //   navigation.navigate('AddAddress');
-      //   ToastLong('Address is required');
-      // }
       const userData = res?.data?.user;
       if (
         !userData?.geoLocation ||
@@ -159,20 +135,16 @@ const Home = ({navigation}: any) => {
     };
     initGetOrders();
   }, []);
-
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
   const _getCategory = useSelector((state: any) => state.user.category);
   const _popularServices = useSelector(
     (state: any) => state.user.popularServices,
   );
-
   const {currentState, setCurrentState} = useContext(RouteContext);
   const formStage = useSelector((state: any) => state.user.formStage);
   const supportUser = useSelector((store: any) => store.user.supportUser);
-
   console.log('stage', formStage);
-
   useEffect(() => {
     const emitProviderOnlineStatus = () => {
       // Emit an event to the backend indicating that the customer is still connected
@@ -189,7 +161,7 @@ const Home = ({navigation}: any) => {
       socket.disconnect();
     };
   }, []);
-
+  const welcomeModal = useSelector((state: any) => state.user.welcomeModal);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
@@ -405,7 +377,7 @@ const Home = ({navigation}: any) => {
                   {borderTopRightRadius: 20, borderTopLeftRadius: 20},
                 ]}>
                 <Textcomp
-                  text={`NGN${formatAmount(
+                  text={`₦${formatAmount(
                     userData?.wallet?.availableBalance,
                   )}`}
                   size={20}
@@ -573,7 +545,7 @@ const Home = ({navigation}: any) => {
           {formStage === 6 ? null : (
             <TouchableOpacity
               onPress={() => {
-                // navigation.navigate('ProfileStep21');
+                // navigation.navigate('ProfileStep1');
                 if (formStage === 1) {
                   navigation.navigate('ProfileStep1');
                 } else if (formStage === 2) {
@@ -697,6 +669,14 @@ const Home = ({navigation}: any) => {
                 />
               </View>
             </View>
+          )}
+
+          {welcomeModal && (
+            <WelcomeModal
+              close={() => {
+                dispatch(setwelcomeModal(false));
+              }}
+            />
           )}
         </View>
       </Modal>

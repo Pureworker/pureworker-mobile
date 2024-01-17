@@ -13,7 +13,7 @@ export default function ServiceIntroComp({item, index}: any) {
 
   console.log('item-here', item);
   const [value, setvalue] = useState(servicesDescription[index]?.description);
-  console.log('SD', servicesDescription);
+  // console.log('SD', servicesDescription);
   const dispatch = useDispatch();
   const handleDescriptionChange = (item: any, value: any) => {
     // const newArray = servicesDescription?.map((service: {service: any}) => {
@@ -31,10 +31,18 @@ export default function ServiceIntroComp({item, index}: any) {
       ...updatedInputValues[index],
       description: value,
     };
-    console.warn('here',updatedInputValues);
+    console.warn('here', updatedInputValues);
     dispatch(addcompleteProfile({serviceIntro: updatedInputValues}));
     // setServicesDescription(updatedInputValues);
   };
+
+  function isMongoObjectId(str) {
+    const objectIdRegex = /^[0-9a-fA-F]{24}$/;
+    return objectIdRegex.test(str);
+  }
+  if (isMongoObjectId(item.service) === true) {
+    return;
+  }
   return (
     <View
       style={{

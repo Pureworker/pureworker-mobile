@@ -26,6 +26,8 @@ import {ToastLong, ToastShort} from '../../utils/utils';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {addUserData, addbanks} from '../../store/reducer/mainSlice';
 import Toast from 'react-native-toast-message';
+import {Dropdown} from 'react-native-element-dropdown';
+import {SIZES} from '../../utils/position/sizes';
 
 const Withdraw = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -52,7 +54,7 @@ const Withdraw = () => {
         res?.data?.data?.map(item => {
           let obj = {
             label: item?.name,
-            value: item?.name,
+            value: item?.code,
           };
           list.push(obj);
         });
@@ -180,7 +182,7 @@ const Withdraw = () => {
                 style={{fontSize: 13, marginTop: 20, color: colors.black}}
               />
               <View style={[tw`mb-4`, {}]}>
-                <SelectList
+                {/* <SelectList
                   setSelected={(val: any) => {
                     console.log('hello', val);
                     setbank(val);
@@ -217,6 +219,42 @@ const Withdraw = () => {
                     },
                   ]}
                   placeholder="Select a Bank"
+                /> */}
+                <Dropdown
+                  style={[
+                    tw``,
+                    {
+                      zIndex: 10,
+                      width: SIZES.width * 0.875,
+                      backgroundColor: '#F7F5F5',
+                      borderColor: 'black',
+                      borderWidth: 1,
+                      height: 50,
+                      borderRadius: 10,
+                      paddingHorizontal: 10,
+                      marginTop: 15,
+                    },
+                  ]}
+                  data={bankList}
+                  search
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={'Select Bank'}
+                  searchPlaceholder="Search..."
+                  // value={nationalityValue}
+                  itemTextStyle={{
+                    color: 'black',
+                  }}
+                  onChange={item => {
+                    console.log(item.value);
+                    setbank(item.value);
+                    const d= `${item.value}`
+                    const fil = banks?.filter(item => item.code === d);
+                    setselectedBank(fil);
+                    console.log(fil);
+                    setselectedBank(fil);
+                  }}
                 />
               </View>
               <>

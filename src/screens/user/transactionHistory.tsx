@@ -25,6 +25,7 @@ import {
 import {getTransactions} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
+import { formatDateHistory } from '../../utils/utils';
 
 const TransactionHistory = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -310,7 +311,7 @@ const TransactionHistory = () => {
                                 </View>
                                 <View style={[tw``, {marginTop: perHeight(4)}]}>
                                   <Textcomp
-                                    text={'4 may, 13:45'}
+                                         text={`${formatDateHistory(item.createdAt)}`}
                                     size={13}
                                     lineHeight={15}
                                     color={'#00041380'}
@@ -322,7 +323,7 @@ const TransactionHistory = () => {
                             <View style={tw`flex flex-col`}>
                               <View style={[tw``, {marginTop: perHeight(0)}]}>
                                 <Textcomp
-                                  text={`NGN${item?.amount}`}
+                                  text={`₦${item?.amount}`}
                                   size={15}
                                   lineHeight={17}
                                   color={'#000413'}

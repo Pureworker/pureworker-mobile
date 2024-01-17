@@ -15,3 +15,21 @@ export const isValidPhoneNumber = (phoneNumber: any) => {
 
   return phoneRegex.test(phoneNumber);
 };
+
+export function formatDateHistory(inputDateStr) {
+  const inputDate = new Date(inputDateStr);
+
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const dayOfWeek = daysOfWeek[inputDate.getUTCDay()];
+
+  const dayOfMonth = inputDate.getUTCDate();
+
+  // Adjust the hours and minutes to your desired format
+  const hours = inputDate.getUTCHours();
+  const minutes = inputDate.getUTCMinutes();
+
+  // Format the output string
+  const formattedDate = `${dayOfWeek} ${dayOfMonth}, ${hours}:${minutes}`;
+
+  return formattedDate;
+}

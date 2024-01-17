@@ -201,7 +201,10 @@ export default function CustomerSignup() {
           backgroundColor="#000"
         />
         <View style={{flex: 1}}>
-          <View style={{marginHorizontal: 50}}>
+          <View
+            style={{
+              marginHorizontal: Platform.OS === 'ios' ? 50 : 20,
+            }}>
             <Text
               numberOfLines={1}
               style={{
@@ -229,6 +232,16 @@ export default function CustomerSignup() {
               generalStyles.rowBetween,
               {marginHorizontal: 25, marginTop: 45},
             ]}>
+            {/* <Tooltip
+              isVisible={toolTipLeftVisible}
+              content={<Text>Check this out!</Text>}
+              placement="top"
+              onClose={() => setToolTipLeftVisible(false)}
+              >
+              <TouchableOpacity onPress={() => {}}>
+                <Text style={{color: 'white'}}>Press me</Text>
+              </TouchableOpacity>
+            </Tooltip> */}
             <Tooltip
               isVisible={toolTipLeftVisible}
               content={
@@ -242,7 +255,7 @@ export default function CustomerSignup() {
                 width: 200,
                 height: 'auto',
                 marginLeft: -8,
-                marginTop: 1,
+                marginTop: 0,
               }}
               arrowSize={{
                 height: 30,
@@ -664,7 +677,7 @@ export default function CustomerSignup() {
             Login
           </Text>
         </Text>
-        <View style={{height: 40}} />
+        <View style={{height: 150}} />
       </ScrollView>
     </View>
   );
