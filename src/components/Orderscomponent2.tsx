@@ -140,6 +140,39 @@ const Orderscomponent2 = ({item, index, status}: any) => {
     setisLoading(false);
   };
 
+  const handleAccept = async () => {
+    setisLoading(true);
+    if (item?._id) {
+      const res = await completedOrder(item?._id);
+      if (res?.status === 200 || res?.status === 201) {
+        // navigation.navigate('PaymentConfirmed');
+        await initGetOrders();
+        Alert.alert('successful');
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+      setisLoading(false);
+    } else {
+      Snackbar.show({
+        text: 'Please fill all fields',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      setisLoading(false);
+    }
+    setisLoading(false);
+  };
+
   return (
     <>
       <View

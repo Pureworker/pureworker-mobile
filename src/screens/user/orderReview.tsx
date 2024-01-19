@@ -28,33 +28,44 @@ const OrderReview = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
   const [isLoading, setisLoading] = useState(false);
   const _data = route.params;
-  console.log('here', _data);
+  console.log('here', `${_data?.scheduledDeliveryDate}`, _data);
   const dispatch = useDispatch();
   function formatTimestampToTime(timestamp) {
     const date = new Date(timestamp);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
+    const hours = date.getUTCHours();
+    const minutes = date.getUTCMinutes();
     const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes
       .toString()
       .padStart(2, '0')}`;
     return formattedTime;
   }
+
+  console.log(
+    formatTimestampToTime(_data.scheduledDeliveryTime?.nativeEvent?.timestamp),
+  );
+
   const handleCreate = async () => {
-    setisLoading(true);
+    // setisLoading(true);
+
+    const scheduledDeliveryDate = new Date(_data.scheduledDeliveryDate);
+    const formattedScheduledDate = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(scheduledDeliveryDate);
+
     const Data = {
       serviceProvider: _data.serviceProvider,
       totalPrice: Number(_data.totalPrice),
       amount: Number(_data.totalPrice),
       description: _data.description,
-      scheduledDeliveryDate: `${_data.scheduledDeliveryDate}`,
-      scheduledDeliveryTime: formatTimestampToTime(
-        _data.scheduledDeliveryTime?.nativeEvent?.timestamp,
-      ),
+      scheduledDeliveryDateTime: _data.date,
       location: `${_data.location}`.toUpperCase(),
       address: _data.address,
       paymentStatus: 'PAID',
     };
     console.log(Data);
+    return;
     try {
       if (Data?.serviceProvider) {
         const res = await createOrder(Data);
@@ -136,7 +147,6 @@ const OrderReview = ({route}: any) => {
             />
           </View>
         </View>
-
         <View style={tw`flex-1  h-full`}>
           <View style={tw`border-b pb-3 border-[#0004132E] mx-[2%] `}>
             <View
@@ -186,7 +196,7 @@ const OrderReview = ({route}: any) => {
                   </View>
                   <View style={tw``}>
                     <Textcomp
-                      text={`${_data?.scheduledDeliveryDate}`}
+                      text={`${_data?.displayDate}`}
                       size={12}
                       lineHeight={14}
                       color={'#000413'}

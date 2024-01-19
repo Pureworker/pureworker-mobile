@@ -36,6 +36,8 @@ import {
   WIDTH_SCREEN,
   WIDTH_WINDOW,
 } from '../../constants/generalStyles';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {DateTime} from 'luxon';
 
 const OrderDetails = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -64,6 +66,8 @@ const OrderDetails = () => {
   const [mode2, setMode2] = useState<IOSMode | AndroidMode>('time');
   const [show, setShow] = useState(false);
   const [isLoading, setisLoading] = useState(false);
+
+  const [schdeuleIsoDate, setschdeuleIsoDate] = useState('');
   const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || date;
     // setShow(Platform.OS === 'ios');
@@ -91,13 +95,16 @@ const OrderDetails = () => {
       address: address,
       paymentStatus: 'PAID',
       service: service,
+      date: schdeuleIsoDate,
+      displayDate: displayDate
     };
     console.log('WWWWW', Data, providerData);
     if (
       providerData?._id &&
       price &&
       description &&
-      scheduleTime &&
+      schdeuleIsoDate &&
+      // scheduleTime &&
       locationValue
     ) {
       navigation.navigate('OrderReview', Data);
@@ -113,10 +120,10 @@ const OrderDetails = () => {
     // setisLoading(false);
   };
 
-  const showDatePicker = () => {
-    setMode('date');
-    setShow(true);
-  };
+  // const showDatePicker = () => {
+  //   setMode('date');
+  //   setShow(true);
+  // };
 
   const showTimePicker = () => {
     setMode('time');
@@ -145,6 +152,49 @@ const OrderDetails = () => {
 
   const [androidshowTime, setandroidshowTime] = useState(false);
   const [androidshowDate, setandroidshowDate] = useState(false);
+  const [displayDate, setdisplayDate] = useState('');
+
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+  // const handleConfirm = date => {
+  //   console.log(typeof date);
+  //   console.warn(
+  //     'A date has been picked: ',
+  //     date,
+  //     DateTime.fromISO(`${date}`).toISO()
+  //   );
+  //   hideDatePicker();
+  // };
+  const handleConfirm = (date: any) => {
+    const f = `${date}`;
+    const jsDate = new Date(f);
+    const luxonDateTime = DateTime.fromJSDate(jsDate);
+    const isoString = luxonDateTime.toISO();
+    console.log(isoString);
+    setschdeuleIsoDate(isoString);
+    setdisplayDate(f);
+    hideDatePicker();
+  };
+
+  function formatToCustomString(date) {
+    const jsDate = new Date(date);
+    const luxonDateTime = DateTime.fromJSDate(jsDate);
+
+    return luxonDateTime.toLocaleString({
+      weekday: 'short',
+      month: 'short',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -292,11 +342,31 @@ const OrderDetails = () => {
               style={{fontSize: 16, marginTop: 20, color: colors.black}}
             />
 
-            {/* <TouchableOpacity onPress={showDatePicker}>
-              <Text>Open Date Picker</Text>
-            </TouchableOpacity> */}
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="datetime"
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+            />
 
-            {showDate && (
+            <TouchableOpacity
+              onPress={() => {
+                setDatePickerVisibility(!isDatePickerVisible);
+              }}
+              style={[
+                tw`w-full px-4 justify-center rounded-lg mt-3`,
+                {backgroundColor: colors.greyLight1, height: perHeight(40)},
+              ]}>
+              <Textcomp
+                text={`${formatToCustomString(displayDate)}`}
+                size={17}
+                lineHeight={17}
+                color={'#000413'}
+                fontFamily={'Inter-SemiBold'}
+              />
+            </TouchableOpacity>
+
+            {/* {showDate && (
               <DateTimePicker
                 testID="dateTimePicker"
                 value={date}
@@ -416,12 +486,6 @@ const OrderDetails = () => {
                         tw`, w-[95%] bg-white`,
                         {height: HEIGHT_WINDOW * 0.325},
                       ]}>
-                      {/* <Calendar
-                        onDayPress={day => {
-                          handleDateChange(null, new Date(day.timestamp));
-                          hidePicker();
-                        }}
-                      /> */}
                       <DateTimePicker
                         testID="dateTimePicker"
                         value={date}
@@ -433,20 +497,6 @@ const OrderDetails = () => {
                         }}
                         disabled={false}
                       />
-
-                      {/* {mode === 'time' && (
-                        <DateTimePicker
-                          testID="timePicker"
-                          value={date}
-                          mode="time"
-                          is24Hour={true}
-                          display="spinner"
-                          onChange={(event, selectedTime) => {
-                            handleTimeChange(event, selectedTime);
-                            hidePicker();
-                          }}
-                        />
-                      )} */}
                       <TouchableOpacity
                         onPress={() => {
                           setandroidshowDate(false);
@@ -455,7 +505,6 @@ const OrderDetails = () => {
                         style={tw`bg-[${colors.primary}] rounded-xl mx-auto p-4 px-6`}>
                         <Textcomp
                           text={'Select'}
-                          // fontSize={18}
                           size={18}
                           color={'#FFFFFF'}
                           style={[tw`text-left mt-2`, {fontWeight: '400'}]}
@@ -516,7 +565,7 @@ const OrderDetails = () => {
                   </Modal>
                 )}
               </>
-            )}
+            )} */}
           </View>
 
           <View
