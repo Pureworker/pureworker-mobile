@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
   View,
-  Image, ActivityIndicator,
+  Image,
+  ActivityIndicator,
   TouchableOpacity,
-  StatusBar, Platform
+  StatusBar,
+  Platform,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import images from '../constants/images';
 import tw from 'twrnc';
 import commonStyle from '../constants/commonStyle';
@@ -17,17 +19,17 @@ import colors from '../constants/colors';
 import TextInputs from '../components/TextInputs';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Snackbar from 'react-native-snackbar';
-import { allCountry, validateEmail } from '../constants/utils';
-import { BUSINESS, FREELANCER } from '../constants/userType';
+import {allCountry, validateEmail} from '../constants/utils';
+import {BUSINESS, CUSTOMER, FREELANCER} from '../constants/userType';
 import DateTimesPicker from '../components/DatePicker';
-import { StackNavigation } from '../constants/navigation';
-import { generalStyles } from '../constants/generalStyles';
+import {StackNavigation} from '../constants/navigation';
+import {generalStyles} from '../constants/generalStyles';
 import Tooltip from 'react-native-walkthrough-tooltip';
-import { Signup } from '../utils/api/auth';
-import { isValidPhoneNumber } from '../utils/utils';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { SIZES } from '../utils/position/sizes';
-import { Dropdown } from 'react-native-element-dropdown';
+import {Signup} from '../utils/api/auth';
+import {isValidPhoneNumber} from '../utils/utils';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {SIZES} from '../utils/position/sizes';
+import {Dropdown} from 'react-native-element-dropdown';
 export default function BusinessSignup() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -113,8 +115,8 @@ export default function BusinessSignup() {
           nationality: nationalityValue,
           gender: genderValue?.toLowerCase().trim(),
           accountType: userType?.toLowerCase(),
+          state: 'lagos',
         };
-
         const fl_data: any = {
           email: email.toLowerCase().trim(),
           firstName: firstName,
@@ -126,8 +128,9 @@ export default function BusinessSignup() {
           address: address,
           // userType: userType.toLowerCase(),
           accountType: userType?.toLowerCase(),
+          state: 'lagos',
         };
-        const b_data ={
+        const b_data = {
           businessName: name,
           cacNo: cacNo,
           location: locationValue?.toLowerCase(),
@@ -136,14 +139,21 @@ export default function BusinessSignup() {
           email: email.toLowerCase().trim(),
           accountType: userType?.toLowerCase(),
           gender: genderValue?.toLowerCase().trim(),
-        }
+          state: 'lagos',
+        };
 
         if (referralCode && referralCode?.length > 2) {
           loginData.referralCode = referralCode;
           fl_data.referralCode = referralCode;
         }
 
-        const res = await Signup(userType === FREELANCER ? fl_data : b_data);
+        const res = await Signup(
+          userType === CUSTOMER
+            ? fl_data
+            : userType === FREELANCER
+            ? fl_data
+            : b_data,
+        );
 
         if (
           res?.status === 200 ||
