@@ -828,33 +828,10 @@ const PRofileStep2 = () => {
             <View style={{marginHorizontal: 25, marginTop: 75}}>
               <Button
                 onClick={() => {
-                  // handleProfileSetup();
-                  // navigation.navigate('ProfileStep3', {serviceId: data?.serviceId});
-                  // navigation.navigate('ProfileStep3', {serviceId: 'id_here'});
-                  // dispatch(
-                  //   addcompleteProfile({
-                  //     description: description,
-                  //     serviceIntro: [],
-                  //   }),
-                  // );
-                  // dispatch(addcompleteProfile({city: nationalityValue}));
+                  // _handleFuncUpload();
+                  navigation.navigate('ProfileStep21');
+                  dispatch(addformStage(21));
 
-                  // console.log(completeProfileData, 'here', allPotfolio);
-                  // console.log(nationalityValue);
-                  _handleFuncUpload();
-
-                  // const profileData = {
-                  //   profilePic: completeProfileData?.profilePic || imageUrl,
-                  //   description: description
-                  //     ? description
-                  //     : completeProfileData?.description
-                  //     ? completeProfileData?.description
-                  //     : '',
-
-                  //   priceRange: completeProfileData.priceRange,
-                  //   serviceIntro: completeProfileData.serviceIntro,
-                  // };
-                  // console.log(profileData);
                 }}
                 style={{
                   marginBottom: 20,

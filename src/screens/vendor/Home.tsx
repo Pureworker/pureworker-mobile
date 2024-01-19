@@ -545,7 +545,7 @@ const Home = ({navigation}: any) => {
           {formStage === 6 ? null : (
             <TouchableOpacity
               onPress={() => {
-                // navigation.navigate('ProfileStep1');
+                // navigation.navigate('ProfileStep21');
                 if (formStage === 1) {
                   navigation.navigate('ProfileStep1');
                 } else if (formStage === 2) {

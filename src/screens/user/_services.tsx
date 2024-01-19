@@ -50,8 +50,6 @@ const _Services = ({route}: any) => {
 
   const [savedProviders, setsavedProviders] = useState([]);
 
-
-
   function metersToKilometers(meters) {
     const kilometers = meters / 1000; // Convert meters to kilometers
     const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
@@ -59,7 +57,6 @@ const _Services = ({route}: any) => {
   }
 
   console.log('BOOKMARK', userData?.bookmarks);
-
   useEffect(() => {
     const initGetUsers = async () => {
       setisLoading(true);
@@ -68,11 +65,6 @@ const _Services = ({route}: any) => {
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addprovidersByCateegory(res?.data?.data));
       }
-
-      //run check here; 
-
-
-      // setloading(false);
       setisLoading(false);
     };
     initGetUsers();
@@ -215,7 +207,7 @@ const _Services = ({route}: any) => {
                   <View
                     style={[
                       tw`bg-[#D9D9D9] flex flex-col rounded  mt-3 mx-2`,
-                      {height: perHeight(80),  alignItems: 'center'},
+                      {height: perHeight(80), alignItems: 'center'},
                     ]}>
                     <View style={tw`my-auto pl-8`}>
                       <Textcomp
@@ -239,6 +231,9 @@ const _Services = ({route}: any) => {
                               scrollEnabled={false}
                               horizontal={false}
                               renderItem={(item: any, index: any) => {
+                                const ch = userData?.bookmarks?.filter(
+                                  s => s._id === item?.item?._id,
+                                );
                                 return (
                                   <ServiceCard2
                                     key={index}

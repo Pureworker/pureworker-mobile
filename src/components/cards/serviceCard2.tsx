@@ -15,19 +15,14 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
   const [saved, setsaved] = useState(false);
   const portfolio = item?.portfolio?.filter(_item => _item?.service === id);
   const price = item?.priceRange?.filter(_item => _item?.service === id);
-  console.log('pased', price, item?.description, item?.distance, 'item', item);
-
+  console.log('pased', price, item?.description, item?.distance, 'item:', item);
   function metersToKilometers(meters: any) {
     const kilometers = Number(meters) / 1000; // Convert meters to kilometers
     const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
     return `${roundedKilometers}km`;
   }
 
-  // console.log(
-  //   item?.portfolio.filter(
-  //     _item => _item?.service === id,
-  //   ),
-  // );
+  // console.log('BOOKMARK', userData?.bookmarks);
   return (
     <TouchableOpacity
       onPress={() => {
@@ -51,39 +46,51 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
       ]}>
       <View style={tw`flex flex-row `}>
         <View style={[tw``, {width: perWidth(50), height: perWidth(50)}]}>
-          {/* <Image
-            resizeMode="cover"
-            style={{
-              width: perWidth(50),
-              height: perWidth(50),
-              borderRadius: perWidth(50) / 2,
-            }}
-            source={images.welcome}
-          /> */}
-          <FastImage
-            style={{
-              width: perWidth(50),
-              height: perWidth(50),
-              borderRadius: perWidth(50) / 2,
-            }}
-            source={{
-              uri: item?.profilePic,
-              headers: {Authorization: 'someAuthToken'},
-              priority: FastImage.priority.normal,
-            }}
-            resizeMode={FastImage.resizeMode.cover}/>
-          <View
-            style={[
-              tw`absolute bottom-0 border-2 right-1 rounded-full`,
-              {width: 8, height: 8, backgroundColor: colors.green},
-            ]}
-          />
+          {/*  */}
+
+          {item?.profilePic ? (
+            <>
+              <FastImage
+                style={{
+                  width: perWidth(50),
+                  height: perWidth(50),
+                  borderRadius: perWidth(50) / 2,
+                }}
+                source={{
+                  uri: item?.profilePic,
+                  headers: {Authorization: 'someAuthToken'},
+                  priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+              />
+              <View
+                style={[
+                  tw`absolute bottom-0 border-2 right-1 rounded-full`,
+                  {width: 8, height: 8, backgroundColor: colors.green},
+                ]}
+              />{' '}
+            </>
+          ) : (
+            <Image
+              resizeMode="cover"
+              style={{
+                width: perWidth(50),
+                height: perWidth(50),
+                borderRadius: perWidth(50) / 2,
+              }}
+              source={images.welcome}
+            />
+          )}
         </View>
         <View style={[tw`flex-1`, {marginLeft: perWidth(12)}]}>
           <View style={[tw`flex flex-row justify-between`, {}]}>
             <View style={[tw``, {}]}>
               <Textcomp
-                text={`₦ ${price?.[0]?.minPrice}`}
+                text={`₦ ${
+                  price?.[0]?.minPrice === undefined
+                    ? '0'
+                    : price?.[0]?.minPrice
+                }`}
                 size={12}
                 lineHeight={14}
                 color={colors.white}
@@ -106,7 +113,7 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
           </View>
           <View style={[tw``, {width: perWidth(252), marginTop: perHeight(4)}]}>
             <Textcomp
-              text={portfolio?.[0]?.description}
+              text={item?.description}
               size={12}
               lineHeight={14}
               color={colors.white}

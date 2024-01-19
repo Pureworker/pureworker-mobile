@@ -41,6 +41,7 @@ const OrderDetails = () => {
   const navigation = useNavigation<StackNavigation>();
   const route: any = useRoute();
   const providerData = route.params?.data;
+  const service = route.params?.service;
   const dispatch = useDispatch();
   const [locationItems, setLocationItems] = useState([
     {label: 'Online (your business renders services online)', value: 'Online'},
@@ -89,6 +90,7 @@ const OrderDetails = () => {
       location: `${locationValue}`.toUpperCase(),
       address: address,
       paymentStatus: 'PAID',
+      service: service,
     };
     console.log('WWWWW', Data, providerData);
     if (

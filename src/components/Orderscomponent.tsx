@@ -228,7 +228,8 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
         swipeThreshold={200}
         swipeDirection={['down']}
         onSwipeComplete={() => setInfoModal(false)}
-        onBackButtonPress={() => setInfoModal(false)}>
+        onBackButtonPress={() => setInfoModal(false)}
+        >
         {modalSection === 'All' && (
           <View style={tw` h-full w-full bg-black bg-opacity-5`}>
             <TouchableOpacity

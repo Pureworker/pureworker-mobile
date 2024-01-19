@@ -119,10 +119,11 @@ const PRofileStep1 = () => {
 
       if (res?.status === 200 || res?.status === 201) {
         dispatch(addprovider_id(res?.data?.profile?.id));
-
-        navigation.navigate('ProfileStep2');
-        setCurrentState('2');
-        dispatch(addformStage(2));
+        // navigation.navigate('ProfileStep2');
+        // setCurrentState('2');
+        navigation.navigate('ProfileStep21');
+        setCurrentState('21');
+        dispatch(addformStage(21));
       } else {
         Snackbar.show({
           text: res?.error?.message
@@ -272,7 +273,7 @@ const PRofileStep1 = () => {
                           setselectCategory(item?.name);
                           setCollapseState(false);
                           // HandleGetSubCategory(item?.id);
-                          await initSubGetCategory(item?.id);
+                          await initSubGetCategory(item?._id || item?.id);
                         }}
                         style={{marginTop: 8}}>
                         <TextWrapper
@@ -424,43 +425,6 @@ const PRofileStep1 = () => {
               </Collapse>
             )}
           </View>
-
-          {/* <FlatList
-            style={{flex: 1}}
-            data={getCategory}
-            ListFooterComponent={() => {
-              return (
-                <View
-                  style={{
-                    flex: 1,
-                    marginTop: 40,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  {isLoading && (
-                    <ActivityIndicator size={'large'} color={colors.parpal} />
-                  )}
-                </View>
-              );
-            }}
-            showsVerticalScrollIndicator={false}
-            renderItem={({item, index}) => (
-              <CategoryList categoryName={item.name} catId={item?.id} />
-            )}
-            ListEmptyComponent={() => (
-              <Text
-                style={[
-                  {
-                    color: '#000',
-                    alignSelf: 'center',
-                    marginTop: 100,
-                    fontFamily: commonStyle.fontFamily.regular,
-                  },
-                ]}>
-                {!isLoading ? 'No service found' : ''}
-              </Text>
-            )}
-          /> */}
           {isAddService ? (
             <>
               <TextInputs
@@ -505,11 +469,6 @@ const PRofileStep1 = () => {
           ]}>
           <Button
             onClick={() => {
-              // const data = completeProfileData;
-              // data.services = category;
-              // console.log(data, category, categoryId);
-              // dispatch(addcompleteProfile({services: categoryId}));
-              // navigation.navigate('ProfileStep2');
               handleNext();
             }}
             style={[

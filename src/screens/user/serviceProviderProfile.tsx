@@ -40,6 +40,9 @@ const ServiceProviderProfile = () => {
   const profileData = route.params?.item;
   const serviceName = route.params?.serviceName;
   const id = route.params?.id;
+
+  console.log('service:', id);
+
   const portfolio = profileData?.portfolio?.filter(
     _item => _item?.service === id,
   );
@@ -132,7 +135,9 @@ const ServiceProviderProfile = () => {
         <FastImage
           style={[tw``, {width: SIZES.width, height: 200}]}
           source={{
-            uri: profileData?.profilePic,
+            uri: profileData?.profilePic
+              ? profileData?.profilePic
+              : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
             headers: {Authorization: 'someAuthToken'},
             priority: FastImage.priority.normal,
           }}
@@ -178,7 +183,7 @@ const ServiceProviderProfile = () => {
           </View>
           <View style={tw`mt-auto pb-4 ml-auto mr-4`}>
             <TouchableOpacity
-            onPress={()=>{}}
+              onPress={() => {}}
               style={tw`bg-white p-1.5 rounded-lg items-center justify-center`}>
               <Image
                 source={images.chat}
@@ -955,7 +960,7 @@ const ServiceProviderProfile = () => {
       </View>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('OrderDetails', {data: profileData});
+          navigation.navigate('OrderDetails', {data: profileData, service: id});
         }}
         style={[
           tw`bg-[#FFF] absolute bottom-[11%] right-[5%] rounded-full items-center justify-center`,

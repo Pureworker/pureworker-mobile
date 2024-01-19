@@ -225,7 +225,7 @@ export const getTransactions = async (param: any) => {
 
 export const getProviderByService = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
-  console.log('getProviderByService func started', param);
+  console.log('getProviderByService func started', param, AuthToken);
   try {
     const response = await axios({
       method: 'get',
@@ -301,7 +301,7 @@ export const createOrder = async (param: any) => {
   try {
     const response = await axios({
       method: 'post',
-      url: `${API_BASE_URL}/order/create`,
+      url: `${API_BASE_URL}/ordern/create`,
       data: param,
       headers: {
         Authorization: `Bearer ${AuthToken}`,
@@ -1057,6 +1057,60 @@ export const getSearchQuery = async (param: any) => {
     const response = await axios({
       method: 'get',
       url: `${API_BASE_URL}/service/get-all-services?name=${param}`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const addPortfolio = async (param: any) => {
+  console.log('addPortfolio func started', param);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log(AuthToken);
+
+  try {
+    const response = await axios({
+      method: 'post',
+      url: `${API_BASE_URL}/provider/add-portfolio`,
+      data: param,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
+
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data, param);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const getProviderNew = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getProviderNew func started', param);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/provider/get-profile-new/${param}`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
     if (response.status === 201) {

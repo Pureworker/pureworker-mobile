@@ -150,7 +150,7 @@ const TabServices2 = () => {
                     <CategoryList2
                       key={index}
                       categoryName={item?.name}
-                      catId={item?.id}
+                      catId={item?.id || item?._id}
                       isOpen={item?.id === openDropdownId}
                       onDropdownClick={handleDropdownClick}
                     />
