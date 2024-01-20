@@ -31,6 +31,7 @@ import SubPortComp from './subComp';
 import {Formik, FieldArray, Field, useFormikContext} from 'formik';
 import * as yup from 'yup';
 import {addPortfolio} from '../../../utils/api/func';
+import PlusIcon from '../../../assets/svg/PlusIcon';
 
 const validationSchema = yup.object().shape({
   serviceDescription: yup.string().required('Service description is required'),
@@ -421,15 +422,7 @@ export default function PortComp({
                     style={[
                       tw`flex flex-row ml-auto px-4 items-center  py-4 rounded-lg  mt-4`,
                     ]}>
-                    <Image
-                      source={images.cross}
-                      style={{
-                        width: 25,
-                        height: 25,
-                        marginRight: 10,
-                        tintColor: colors.darkPurple,
-                      }}
-                    />
+                    <PlusIcon />
                     <Textcomp
                       text={'Add Portfolio'}
                       size={16}
@@ -441,35 +434,6 @@ export default function PortComp({
                 </ScrollView>
               )}
             </FieldArray>
-
-            {/* <TouchableOpacity
-              onPress={() => {
-                const newPortfolioItem = {
-                  description: '',
-                  images: [],
-                };
-                setportfolioCount([...portfolioCount, newPortfolioItem]);
-              }}
-              style={[
-                tw`flex flex-row ml-auto px-4 items-center  py-4 rounded-lg  mt-4`,
-              ]}>
-              <Image
-                source={images.cross}
-                style={{
-                  width: 25,
-                  height: 25,
-                  marginRight: 10,
-                  tintColor: colors.darkPurple,
-                }}
-              />
-              <Textcomp
-                text={'Add Portfolio'}
-                size={16}
-                lineHeight={16}
-                color={colors.darkPurple}
-                fontFamily={'Inter-Bold'}
-              />
-            </TouchableOpacity> */}
             <TouchableOpacity
               onPress={() => {
                 handleSubmit();

@@ -405,7 +405,6 @@ export const cancelOrder = async (param: any, data: any) => {
   }
 };
 
-
 export const completedOrder = async (param: any) => {
   console.log('completedOrder func started', param);
   const AuthToken = await AsyncStorage.getItem('AuthToken');
@@ -1177,6 +1176,33 @@ export const getProviderNew = async (param: any) => {
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const fetchAccountDetails = async (param: any) => {
+  console.log('fetchAccountDetails func started', param);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log(AuthToken);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/transaction/fetch-account-details`,
+      data: param,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response,  error?.response?.data, param);
     return {
       status: 400,
       err: error,

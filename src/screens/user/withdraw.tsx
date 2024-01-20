@@ -15,7 +15,12 @@ import images from '../../constants/images';
 import tw from 'twrnc';
 import {Formik, Field} from 'formik';
 import * as Yup from 'yup';
-import {getBanks, getUser, withdraw} from '../../utils/api/func';
+import {
+  fetchAccountDetails,
+  getBanks,
+  getUser,
+  withdraw,
+} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Button from '../../components/Button';
 import TextInputs from '../../components/TextInput2';
@@ -72,6 +77,7 @@ const Withdraw = () => {
     const res: any = await getUser('');
     setisLoading(false);
   };
+  const [accountNumber, setaccountNumber] = useState('');
 
   const handleWithdraw = async values => {
     setisLoading(true);
@@ -102,6 +108,24 @@ const Withdraw = () => {
       ToastShort('An unexpected error occurred!.');
     } finally {
       await initGetUsers();
+      setisLoading(false);
+    }
+  };
+
+  const queryName = async num => {
+    const data = {
+      // account_number: num,
+      // account_bank: selectedBank?.[0]?.code,
+      "account_number": "0690000032",
+      "account_bank": "044"
+    };
+    try {
+      const res: any = await fetchAccountDetails(data);
+      console.log(res?.data);
+    } catch (error) {
+      console.error('Error querying bank:', error);
+      ToastShort('No match found');
+    } finally {
       setisLoading(false);
     }
   };
@@ -228,14 +252,19 @@ const Withdraw = () => {
                           }}
                           labelText={'Enter account number'}
                           state={field.value}
-                          setState={value => {
+                          setState={async value => {
+                            if (!selectedBank) {
+                              ToastShort('Select a bank');
+                              return;
+                            }
                             form.setFieldValue('accountNumber', value);
+                            await queryName(value);
                           }}
                           disable={true}
                           maxLength={11}
                           keyBoardType="numeric"
                         />
-                        {field.touched.accountNumber &&
+                        {field.touched?.accountNumber &&
                           field.errors.accountNumber && (
                             <Text style={{color: 'red'}}>
                               {field.errors.accountNumber}
