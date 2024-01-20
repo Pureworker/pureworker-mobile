@@ -1,23 +1,25 @@
 import {Image, View, TouchableOpacity, Platform, Alert} from 'react-native';
 import {SIZES, perHeight, perWidth} from '../utils/position/sizes';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import images from '../constants/images';
 import tw from 'twrnc';
 import Textcomp from './Textcomp';
 import colors from '../constants/colors';
 import {Rating, AirbnbRating} from 'react-native-ratings';
 import {
+  acceptOrder,
   cancelOrder,
   completedOrder,
   getProviderOrders,
+  startOrder,
   updateStatusOrder,
 } from '../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import OrderDispute from './modals/orderDispute';
 import RateyourExperience from './modals/rateyourexperience';
 import ScheduledDeliveryDate from './modals/scheduledDeliveryDate';
-import { useDispatch } from 'react-redux';
-import { addproviderOrders } from '../store/reducer/mainSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {addproviderOrders} from '../store/reducer/mainSlice';
 
 const Orderscomponent2 = ({item, index, status}: any) => {
   const [saved, setsaved] = useState(false);
@@ -28,19 +30,28 @@ const Orderscomponent2 = ({item, index, status}: any) => {
 
   console.log(item);
 
-  const dispatch = useDispatch();
+  useEffect(() => {
+    const initGetOrders2 = async () => {
+      setisLoading(true);
+      const res: any = await getProviderOrders(userData?._id);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addproviderOrders(res?.data?.data));
+      }
+      setisLoading(false);
+    };
+    initGetOrders2();
+  }, []);
 
+  const dispatch = useDispatch();
+  const userData = useSelector((state: any) => state.user.userData);
   const initGetOrders = async () => {
     setisLoading(true);
-    const res: any = await getProviderOrders('64f20fb6ee98ab7912406b14');
-    // console.log('oooooooo', res?.data);
+    const res: any = await getProviderOrders(userData?._id);
     if (res?.status === 201 || res?.status === 200) {
       dispatch(addproviderOrders(res?.data?.data));
     }
     setisLoading(false);
   };
-
-
   const handleUpdateStatus = async (param: any) => {
     setisLoading(true);
     if (item?._id) {
@@ -73,7 +84,6 @@ const Orderscomponent2 = ({item, index, status}: any) => {
     }
     setisLoading(false);
   };
-
   const handleCancel = async () => {
     setisLoading(true);
     if (item?._id) {
@@ -143,11 +153,43 @@ const Orderscomponent2 = ({item, index, status}: any) => {
   const handleAccept = async () => {
     setisLoading(true);
     if (item?._id) {
-      const res = await completedOrder(item?._id);
+      const res = await acceptOrder(item?._id);
       if (res?.status === 200 || res?.status === 201) {
         // navigation.navigate('PaymentConfirmed');
         await initGetOrders();
-        Alert.alert('successful');
+        Alert.alert('Order Accepted');
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+      setisLoading(false);
+    } else {
+      Snackbar.show({
+        text: 'Please fill all fields',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      setisLoading(false);
+    }
+    setisLoading(false);
+  };
+
+  const handleStart = async () => {
+    setisLoading(true);
+    if (item?._id) {
+      const res = await startOrder(item?._id);
+      if (res?.status === 200 || res?.status === 201) {
+        await initGetOrders();
+        Alert.alert('Order Now in progress!.');
       } else {
         Snackbar.show({
           text: res?.error?.message
@@ -356,7 +398,8 @@ const Orderscomponent2 = ({item, index, status}: any) => {
           <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
             <TouchableOpacity
               onPress={() => {
-                handleUpdateStatus('ACCEPTED');
+                // handleUpdateStatus('ACCEPTED');
+                handleAccept();
               }}
               style={[
                 tw`bg-[${colors.primary}] items-center justify-center`,
@@ -402,7 +445,9 @@ const Orderscomponent2 = ({item, index, status}: any) => {
         {status === 'ACCEPTED' && (
           <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={() => {
+                handleStart();
+              }}
               style={[
                 tw`bg-[${colors.primary}] items-center justify-center`,
                 {

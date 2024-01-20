@@ -97,10 +97,10 @@ const PRofileStep1 = () => {
     // console.log(param);
     setsubLoading(true);
     const res: any = await getSubCategory(param);
-    // console.log('ssssssss', res?.data?.data);
+    console.log('prssss', res?.data?.data);
     if (res?.status === 201 || res?.status === 200) {
       // dispatch(addSubcategory(res?.data?.data?.services));
-      set_getSubCategory(res?.data?.data?.services);
+      set_getSubCategory(res?.data?.data?.[0]?.services);
     }
     setsubLoading(false);
     // setisLoading(false);

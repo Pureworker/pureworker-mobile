@@ -96,7 +96,7 @@ const OrderDetails = () => {
       paymentStatus: 'PAID',
       service: service,
       date: schdeuleIsoDate,
-      displayDate: displayDate
+      displayDate: displayDate,
     };
     console.log('WWWWW', Data, providerData);
     if (
@@ -358,7 +358,9 @@ const OrderDetails = () => {
                 {backgroundColor: colors.greyLight1, height: perHeight(40)},
               ]}>
               <Textcomp
-                text={`${formatToCustomString(displayDate)}`}
+                text={`${
+                  displayDate ? formatToCustomString(displayDate) : 'Pick date'
+                }`}
                 size={17}
                 lineHeight={17}
                 color={'#000413'}

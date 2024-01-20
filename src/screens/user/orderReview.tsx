@@ -59,16 +59,17 @@ const OrderReview = ({route}: any) => {
       totalPrice: Number(_data.totalPrice),
       amount: Number(_data.totalPrice),
       description: _data.description,
-      scheduledDeliveryDateTime: _data.date,
-      location: `${_data.location}`.toUpperCase(),
+      scheduledDeliveryDate: _data.date,
+      location: `${_data.location}`.toLowerCase(),
       address: _data.address,
-      paymentStatus: 'PAID',
+      // paymentStatus: 'PAID',
+      service: _data?.service,
     };
     console.log(Data);
-    return;
     try {
       if (Data?.serviceProvider) {
         const res = await createOrder(Data);
+        console.log(res?.data);
         if (res?.status === 200 || res?.status === 201) {
           navigation.navigate('PaymentConfirmed');
           ToastShort('Your Order has been Placed.');

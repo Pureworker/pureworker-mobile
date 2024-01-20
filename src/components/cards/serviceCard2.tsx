@@ -13,7 +13,7 @@ import FastImage from 'react-native-fast-image';
 
 const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
   const [saved, setsaved] = useState(false);
-  const portfolio = item?.portfolio?.filter(_item => _item?.service === id);
+  // const portfolio = item?.portfolio?.filter(_item => _item?.service === id);
   const price = item?.priceRange?.filter(_item => _item?.service === id);
   console.log('pased', price, item?.description, item?.distance, 'item:', item);
   function metersToKilometers(meters: any) {
@@ -21,8 +21,6 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
     const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
     return `${roundedKilometers}km`;
   }
-
-  // console.log('BOOKMARK', userData?.bookmarks);
   return (
     <TouchableOpacity
       onPress={() => {
@@ -86,11 +84,7 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
           <View style={[tw`flex flex-row justify-between`, {}]}>
             <View style={[tw``, {}]}>
               <Textcomp
-                text={`₦ ${
-                  price?.[0]?.minPrice === undefined
-                    ? '0'
-                    : price?.[0]?.minPrice
-                }`}
+                text={`₦ ${item?.portfolio?.minPrice}`}
                 size={12}
                 lineHeight={14}
                 color={colors.white}
@@ -194,7 +188,7 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
             readonly={true}
             startingValue={2}
           /> */}
-          <Review value={0} editable={false} />
+          <Review value={item?.rating} editable={false} />
         </View>
       </View>
     </TouchableOpacity>

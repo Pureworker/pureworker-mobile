@@ -25,8 +25,11 @@ import {
   useGetSingleProviderAllServiceQuery,
   useGetSingleProviderServiceQuery,
 } from '../../store/slice/api';
-import {getProviderAllReview} from '../../utils/api/func';
-import {addprovidersReviews} from '../../store/reducer/mainSlice';
+import {getProviderAllReview, getProviderDataAll} from '../../utils/api/func';
+import {
+  addprovidersReviews,
+  setserviceProviderData,
+} from '../../store/reducer/mainSlice';
 
 const ServiceProviderProfile = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -43,15 +46,20 @@ const ServiceProviderProfile = () => {
 
   console.log('service:', id);
 
-  const portfolio = profileData?.portfolio?.filter(
-    _item => _item?.service === id,
-  );
-  const price = profileData?.priceRange.filter(_item => _item?.service === id);
+  const portfolio = {};
+  // profileData?.portfolio?.filter(
+  //   _item => _item?.service === id,
+  // );
+  const price = {};
+  // profileData?.priceRange.filter(_item => _item?.service === id);
   const providersReviews = useSelector(
     (state: any) => state.user.providersReviews,
   );
+  const serviceProviderData = useSelector(
+    (state: any) => state.user.serviceProviderData,
+  );
 
-  console.log(profileData);
+  console.log('passedDATA-------', profileData);
 
   const {data: getSingleProviderServiceData, isLoading: isLoadingUser} =
     useGetSingleProviderServiceQuery(route.params?.id);
@@ -60,9 +68,6 @@ const ServiceProviderProfile = () => {
   const {data: getSingleProviderAllServiceData} =
     useGetSingleProviderAllServiceQuery(route.params?.id);
   const getSingleProviderAllService = getSingleProviderAllServiceData ?? [];
-  // const price = getSingleProviderService?.price
-  //   ? JSON.parse(getSingleProviderService?.price)
-  //   : [];
   const serviceDetail = getSingleProviderService?.serviceDetail
     ? JSON.parse(getSingleProviderService?.serviceDetail)
     : [];
@@ -76,19 +81,36 @@ const ServiceProviderProfile = () => {
       : [];
   // const thirdPotfolio = getSingleProviderService?.ServicePotfolio?.length > 2 ? JSON.parse(getSingleProviderService?.ServicePotfolio[2]?.potfolioImages) : []
   // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   const initProviderRevie = async () => {
+  //     setisLoading(true);
+  //     const res: any = await getProviderAllReview(profileData?._id);
+  //     console.log('pppppppp', res?.data);
+  //     if (res?.status === 201 || res?.status === 200) {
+  //       dispatch(addprovidersReviews(res?.data?.data));
+  //     }
+  //     setisLoading(false);
+  //     // setloading(false);
+  //   };
+  //   initProviderRevie();
+  // }, [dispatch, navigation, profileData?._id]);
+
   useEffect(() => {
-    const initProviderRevie = async () => {
+    const initProvider = async () => {
       setisLoading(true);
-      const res: any = await getProviderAllReview(profileData?._id);
-      console.log('pppppppp', res?.data);
+      const res: any = await getProviderDataAll({
+        providerID: profileData?.portfolio?.provider,
+        serviceID: profileData?.portfolio?.service,
+      });
+      console.log('PROOOOOVVVIIIDERRR', res?.data?.['0']);
       if (res?.status === 201 || res?.status === 200) {
-        dispatch(addprovidersReviews(res?.data?.data));
+        dispatch(setserviceProviderData(res?.data?.['0']));
       }
       setisLoading(false);
       // setloading(false);
     };
-    initProviderRevie();
-  }, [dispatch, navigation, profileData?._id]);
+    initProvider();
+  }, []);
   function getDaysAgo(dateString) {
     const currentDate = new Date();
     const givenDate = new Date(dateString);
@@ -96,6 +118,7 @@ const ServiceProviderProfile = () => {
     const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
     return daysAgo;
   }
+
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View>
@@ -204,7 +227,7 @@ const ServiceProviderProfile = () => {
         <View style={tw``}>
           <View style={tw`mx-auto pt-2`}>
             <Textcomp
-              text={profileData?.user?.fullName}
+              text={`${profileData?.firstName} ${profileData?.lastName}`}
               size={20}
               lineHeight={24}
               color={'#000413'}
@@ -298,7 +321,7 @@ const ServiceProviderProfile = () => {
               <View style={tw`border-b border-[#FFF] pb-4 mx-2`}>
                 <View style={tw` pt-3`}>
                   <Textcomp
-                    text={profileData?.description}
+                    text={profileData?.portfolio?.description}
                     size={13}
                     lineHeight={14}
                     color={'#FFFFFF'}
@@ -330,7 +353,7 @@ const ServiceProviderProfile = () => {
                   </View>
                   <View style={[tw` `, {marginTop: perHeight(5)}]}>
                     <Textcomp
-                      text={getSingleProviderService?.city}
+                      text={`${serviceProviderData?.address}`}
                       size={12}
                       lineHeight={15}
                       color={'#FFFFFF'}
@@ -363,7 +386,7 @@ const ServiceProviderProfile = () => {
                   </View>
                   <View style={[tw` `, {marginTop: perHeight(5)}]}>
                     <Textcomp
-                      text={`₦${price?.[0]?.minPrice} - ₦${price?.[0]?.maxPrice}`}
+                      text={`₦${profileData?.portfolio.minPrice} - ₦${profileData?.portfolio.maxPrice}`}
                       size={12}
                       lineHeight={15}
                       color={'#FFFFFF'}
@@ -458,7 +481,7 @@ const ServiceProviderProfile = () => {
                   <View style={tw`w-full`}>
                     <FlatList
                       scrollEnabled={false}
-                      data={profileData?.services}
+                      data={serviceProviderData?.services}
                       renderItem={({item, index}) => {
                         return (
                           <View
@@ -484,6 +507,83 @@ const ServiceProviderProfile = () => {
                   </View>
                 </View>
               </View>
+
+              {profileData?.portfolio?.portfolio?.length < 1 ? (
+                <View style={tw`mt-[25%] mx-auto`}>
+                  <Textcomp
+                    text={'No portfolio Available!.'}
+                    size={18}
+                    lineHeight={18}
+                    color={'#FFFFFF80'}
+                    fontFamily={'Inter-Bold'}
+                  />
+                </View>
+              ) : (
+                <>
+                  <View
+                    style={[
+                      tw`border-b border-[#FFF] flex flex-row items-center pt-4 mx-2`,
+                      {paddingVertical: perHeight(11)},
+                    ]}>
+                    <View style={[tw` `, {marginLeft: perWidth(25)}]}>
+                      <View style={tw` `}>
+                        <Textcomp
+                          text={'PortFolio'}
+                          size={14}
+                          lineHeight={15}
+                          color={'#FFFFFF80'}
+                          fontFamily={'Inter-Bold'}
+                        />
+                      </View>
+                    </View>
+
+                    {profileData?.portfolio?.portfolio?.map((item, index) => {
+                      return (
+                        <View style={tw`w-full mt-3`} key={index}>
+                          <View style={tw` `}>
+                            <Textcomp
+                              text={`${item?.description}`}
+                              size={12}
+                              lineHeight={15}
+                              color={'#FFFFFF'}
+                              fontFamily={'Inter-Bold'}
+                            />
+                          </View>
+                          <FlatList
+                            scrollEnabled={false}
+                            data={item?.images}
+                            renderItem={({image, index}) => {
+                              return (
+                                <FastImage
+                                  onTouchStart={() => setimageModal(true)}
+                                  style={[
+                                    tw`mr-2`,
+                                    {
+                                      width: perWidth(95),
+                                      aspectRatio: 1,
+                                      borderRadius: 10,
+                                    },
+                                  ]}
+                                  source={{
+                                    uri: image,
+                                    headers: {Authorization: 'someAuthToken'},
+                                    priority: FastImage.priority.normal,
+                                  }}
+                                  resizeMode={FastImage.resizeMode.cover}
+                                />
+                              );
+                            }}
+                            //   keyExtractor={item => item.id}
+                            numColumns={3}
+                            contentContainerStyle={{marginTop: 10}}
+                          />
+                        </View>
+                      );
+                    })}
+                  </View>
+                </>
+              )}
+
               {firstPotfolio?.length || secondPotfolio?.length ? (
                 <View
                   style={[
@@ -591,109 +691,111 @@ const ServiceProviderProfile = () => {
             </ScrollView>
           )}
           {activeSection === 'Jobs' && (
-            <ScrollView
-              horizontal
-              contentContainerStyle={[
-                tw`mx-2 h-auto `,
-                {flex: 0, borderRadius: 5, marginTop: perHeight(1)},
-              ]}>
-              {/* <View
-                style={[
-                  tw`border-b border-[#FFF] pt-4 mx-2`,
-                  {paddingBottom: perHeight(11)},
-                ]}>
-                <View style={tw` pt-2`}>
+            <>
+              {serviceProviderData?.jobs?.length < 1 ? (
+                <View style={tw`mt-[40%] mx-auto`}>
                   <Textcomp
-                    text={'User Information'}
-                    size={16}
-                    lineHeight={17}
-                    color={'#FFFFFF'}
+                    text={'No Previous Jobs Yet.'}
+                    size={18}
+                    lineHeight={18}
+                    color={'#000000'}
                     fontFamily={'Inter-Bold'}
                   />
                 </View>
-              </View> */}
-              <FlatList
-                scrollEnabled={false}
-                data={[0]}
-                renderItem={(item, index) => {
-                  return (
-                    <View
-                      style={[
-                        tw` ${index === 0 ? 'mt-0' : 'mt-4'}  mx-auto bg-[${
-                          colors.darkPurple
-                        }]`,
-                        {
-                          height: perWidth(130),
-                          width: SIZES.width * 0.95,
-                          borderWidth: 0,
-                          borderRadius: 5,
-                          // marginLeft: index === 0 ? 10 : 3,
-                          paddingHorizontal: perWidth(16),
-                          paddingVertical: perWidth(14),
-                        },
-                      ]}>
-                      <View style={tw`flex flex-row `}>
+              ) : (
+                <ScrollView
+                  horizontal
+                  contentContainerStyle={[
+                    tw`mx-2 h-auto `,
+                    {flex: 0, borderRadius: 5, marginTop: perHeight(1)},
+                  ]}>
+                  <FlatList
+                    scrollEnabled={false}
+                    data={serviceProviderData?.jobs || []}
+                    renderItem={(item, index) => {
+                      return (
                         <View
                           style={[
-                            tw``,
-                            {width: perWidth(50), height: perWidth(50)},
+                            tw` ${index === 0 ? 'mt-0' : 'mt-4'}  mx-auto bg-[${
+                              colors.darkPurple
+                            }]`,
+                            {
+                              height: perWidth(130),
+                              width: SIZES.width * 0.95,
+                              borderWidth: 0,
+                              borderRadius: 5,
+                              // marginLeft: index === 0 ? 10 : 3,
+                              paddingHorizontal: perWidth(16),
+                              paddingVertical: perWidth(14),
+                            },
                           ]}>
-                          <FastImage
-                            style={[
-                              tw`mr-2`,
-                              {
-                                width: perWidth(50),
-                                height: perWidth(50),
-                                borderRadius: perWidth(50) / 2,
-                              },
-                            ]}
-                            source={{
-                              uri: 'https://res.cloudinary.com/dr0pef3mn/image/upload/v1691626246/Assets/1691626245707-Frame%2071.png.png',
-                              headers: {Authorization: 'someAuthToken'},
-                              priority: FastImage.priority.normal,
-                            }}
-                            resizeMode={FastImage.resizeMode.cover}
-                          />
-                          <View
-                            style={[
-                              tw`absolute bottom-0 border-2 right-1 rounded-full`,
-                              {
-                                width: 8,
-                                height: 8,
-                                backgroundColor: colors.green,
-                              },
-                            ]}
-                          />
-                        </View>
-                        <View style={[tw`flex-1`, {marginLeft: perWidth(12)}]}>
-                          <View style={[tw`flex flex-row justify-between`, {}]}>
-                            <View style={[tw``, {}]}>
-                              <Textcomp
-                                text={'$15'}
-                                size={14}
-                                lineHeight={16}
-                                color={colors.white}
-                                fontFamily={'Inter-Bold'}
+                          <View style={tw`flex flex-row `}>
+                            <View
+                              style={[
+                                tw``,
+                                {width: perWidth(50), height: perWidth(50)},
+                              ]}>
+                              <FastImage
+                                style={[
+                                  tw`mr-2`,
+                                  {
+                                    width: perWidth(50),
+                                    height: perWidth(50),
+                                    borderRadius: perWidth(50) / 2,
+                                  },
+                                ]}
+                                source={{
+                                  uri: 'https://res.cloudinary.com/dr0pef3mn/image/upload/v1691626246/Assets/1691626245707-Frame%2071.png.png',
+                                  headers: {Authorization: 'someAuthToken'},
+                                  priority: FastImage.priority.normal,
+                                }}
+                                resizeMode={FastImage.resizeMode.cover}
+                              />
+                              <View
+                                style={[
+                                  tw`absolute bottom-0 border-2 right-1 rounded-full`,
+                                  {
+                                    width: 8,
+                                    height: 8,
+                                    backgroundColor: colors.green,
+                                  },
+                                ]}
                               />
                             </View>
+                            <View
+                              style={[tw`flex-1`, {marginLeft: perWidth(12)}]}>
+                              <View
+                                style={[tw`flex flex-row justify-between`, {}]}>
+                                <View style={[tw``, {}]}>
+                                  <Textcomp
+                                    text={'$15'}
+                                    size={14}
+                                    lineHeight={16}
+                                    color={colors.white}
+                                    fontFamily={'Inter-Bold'}
+                                  />
+                                </View>
+                              </View>
+                              <View
+                                style={[
+                                  tw``,
+                                  {
+                                    width: perWidth(252),
+                                    marginTop: perHeight(4),
+                                  },
+                                ]}>
+                                <Textcomp
+                                  text={'description'}
+                                  size={12}
+                                  lineHeight={14}
+                                  color={colors.white}
+                                  fontFamily={'Inter-SemiBold'}
+                                  numberOfLines={2}
+                                />
+                              </View>
+                            </View>
                           </View>
-                          <View
-                            style={[
-                              tw``,
-                              {width: perWidth(252), marginTop: perHeight(4)},
-                            ]}>
-                            <Textcomp
-                              text={'description'}
-                              size={12}
-                              lineHeight={14}
-                              color={colors.white}
-                              fontFamily={'Inter-SemiBold'}
-                              numberOfLines={2}
-                            />
-                          </View>
-                        </View>
-                      </View>
-                      {/* <View>
+                          {/* <View>
                         <View
                           style={[
                             tw``,
@@ -708,42 +810,44 @@ const ServiceProviderProfile = () => {
                           />
                         </View>
                       </View> */}
-                      <View
-                        style={tw`mt-auto flex flex-row items-center justify-between`}>
-                        <View
-                          style={[
-                            tw``,
-                            {width: perWidth(105), marginTop: perWidth(4)},
-                          ]}>
-                          <Textcomp
-                            text={'Jan3, 2020'}
-                            size={12}
-                            lineHeight={14}
-                            color={colors.white}
-                            fontFamily={'Inter-SemiBold'}
-                          />
-                        </View>
+                          <View
+                            style={tw`mt-auto flex flex-row items-center justify-between`}>
+                            <View
+                              style={[
+                                tw``,
+                                {width: perWidth(105), marginTop: perWidth(4)},
+                              ]}>
+                              <Textcomp
+                                text={'Jan3, 2020'}
+                                size={12}
+                                lineHeight={14}
+                                color={colors.white}
+                                fontFamily={'Inter-SemiBold'}
+                              />
+                            </View>
 
-                        <View style={[tw``, {}]}>
-                          <Textcomp
-                            text={'IN PROGRESS'}
-                            size={12}
-                            lineHeight={14}
-                            color={colors.primary}
-                            fontFamily={'Inter-Bold'}
-                          />
+                            <View style={[tw``, {}]}>
+                              <Textcomp
+                                text={'IN PROGRESS'}
+                                size={12}
+                                lineHeight={14}
+                                color={colors.primary}
+                                fontFamily={'Inter-Bold'}
+                              />
+                            </View>
+                          </View>
                         </View>
-                      </View>
-                    </View>
-                  );
-                }}
-                //   keyExtractor={item => item.id}
-                numColumns={1}
-                contentContainerStyle={{marginTop: 10}}
-              />
+                      );
+                    }}
+                    //   keyExtractor={item => item.id}
+                    numColumns={1}
+                    contentContainerStyle={{marginTop: 10}}
+                  />
 
-              <View style={tw`h-150`} />
-            </ScrollView>
+                  <View style={tw`h-150`} />
+                </ScrollView>
+              )}
+            </>
           )}
           {activeSection === 'Reviews' && (
             <ScrollView
@@ -773,7 +877,10 @@ const ServiceProviderProfile = () => {
                     />
                   </View>
                   <View style={tw` pt-2`}>
-                    <Review value={profileData?.rating || 0} editable={false} />
+                    <Review
+                      value={serviceProviderData?.rating || 0}
+                      editable={false}
+                    />
                   </View>
                 </View>
                 <View style={tw`flex mt-auto flex-row justify-between`}>
@@ -788,7 +895,7 @@ const ServiceProviderProfile = () => {
                   </View>
                   <View style={tw` pt-2`}>
                     <Review
-                      value={profileData?.communicationRating || 0}
+                      value={serviceProviderData?.communicationRating || 0}
                       editable={false}
                     />
                   </View>
@@ -805,7 +912,7 @@ const ServiceProviderProfile = () => {
                   </View>
                   <View style={tw` pt-2`}>
                     <Review
-                      value={profileData?.recommendRating || 0}
+                      value={serviceProviderData?.recommendRating || 0}
                       editable={false}
                     />
                   </View>
@@ -822,7 +929,7 @@ const ServiceProviderProfile = () => {
                   </View>
                   <View style={tw` pt-2`}>
                     <Review
-                      value={profileData?.serviceAsDescribedRating || 0}
+                      value={serviceProviderData?.serviceAsDescribedRating || 0}
                       editable={false}
                     />
                   </View>
@@ -831,10 +938,9 @@ const ServiceProviderProfile = () => {
 
               <FlatList
                 scrollEnabled={true}
-                data={providersReviews}
+                data={serviceProviderData?.reviews || []}
                 renderItem={(item, index) => {
                   console.log(item);
-
                   return (
                     <View
                       style={[

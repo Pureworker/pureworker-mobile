@@ -114,6 +114,7 @@ export default function CustomerSignup() {
           gender: genderValue?.toLowerCase().trim(),
           nationality: nationalityValue,
           accountType: 'customer',
+          state: 'Lagos',
         };
         if (referralCode && referralCode?.length > 2) {
           loginData.referralCode = referralCode;

@@ -17,7 +17,7 @@ const SubCategoryItem = ({style, itemDetail, index}: any) => {
   const providersByCateegory = useSelector(
     (state: any) => state.user.providersByCateegory,
   );
-  const title = itemDetail.value;
+  const title = itemDetail.value || itemDetail?.name;
   const dispatch = useDispatch();
 
   // useEffect(() => {

@@ -425,9 +425,6 @@ const Home = () => {
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               renderItem={(item: any, index: any) => {
-                // console.log('====================================');
-                // console.log(item?.item);
-                // console.log('====================================');
                 return (
                   <ClosetoYou
                     navigation={navigation}

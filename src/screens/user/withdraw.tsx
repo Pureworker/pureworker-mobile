@@ -7,6 +7,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Text,
+  StatusBar,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -32,7 +33,6 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {Dropdown} from 'react-native-element-dropdown';
 import {SIZES} from '../../utils/position/sizes';
 import Textcomp from '../../components/Textcomp';
-
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
   bank: Yup.string().required('Please select a bank.'),
@@ -42,7 +42,6 @@ const validationSchema = Yup.object().shape({
     .required('Please enter the amount.')
     .min(1, 'Amount must be greater than 0.'),
 });
-
 const Withdraw = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
@@ -78,6 +77,7 @@ const Withdraw = () => {
     setisLoading(false);
   };
   const [accountNumber, setaccountNumber] = useState('');
+  const [accountName, setaccountName] = useState('');
 
   const handleWithdraw = async values => {
     setisLoading(true);
@@ -111,22 +111,26 @@ const Withdraw = () => {
       setisLoading(false);
     }
   };
-
+  const [processing, setprocessing] = useState(false);
   const queryName = async num => {
-    const data = {
-      // account_number: num,
-      // account_bank: selectedBank?.[0]?.code,
-      "account_number": "0690000032",
-      "account_bank": "044"
+    const _data = {
+      account_number: num,
+      account_bank: selectedBank?.[0]?.code,
     };
+    setprocessing(true);
     try {
-      const res: any = await fetchAccountDetails(data);
+      const res: any = await fetchAccountDetails(_data);
       console.log(res?.data);
+      if (res?.data?.data ) {
+        
+      }
+      setaccountName(res?.data?.data);
     } catch (error) {
       console.error('Error querying bank:', error);
       ToastShort('No match found');
     } finally {
       setisLoading(false);
+      setprocessing(false);
     }
   };
 
@@ -258,6 +262,7 @@ const Withdraw = () => {
                               return;
                             }
                             form.setFieldValue('accountNumber', value);
+                            setaccountNumber(value);
                             await queryName(value);
                           }}
                           disable={true}
@@ -270,6 +275,12 @@ const Withdraw = () => {
                               {field.errors.accountNumber}
                             </Text>
                           )}
+
+                        {processing && (
+                          <View style={tw`mr-auto mt-4`}>
+                            <ActivityIndicator size={'small'} color={'green'} />
+                          </View>
+                        )}
                       </>
                     )}
                   </Field>
@@ -295,7 +306,7 @@ const Withdraw = () => {
                             width: '100%',
                           }}
                           labelText={'Name here'}
-                          state={field.value}
+                          state={`${accountName?.account_name}`}
                           setState={form.setFieldValue}
                           disable={false}
                         />

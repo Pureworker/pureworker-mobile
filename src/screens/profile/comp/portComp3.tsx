@@ -422,7 +422,7 @@ export default function PortComp({
                     style={[
                       tw`flex flex-row ml-auto px-4 items-center  py-4 rounded-lg  mt-4`,
                     ]}>
-                    <PlusIcon />
+                    <PlusIcon style={{marginRight: 4}}/>
                     <Textcomp
                       text={'Add Portfolio'}
                       size={16}

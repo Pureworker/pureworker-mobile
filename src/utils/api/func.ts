@@ -323,14 +323,39 @@ export const createOrder = async (param: any) => {
   }
 };
 
-export const acceptOrder = async (param: any, data: any) => {
+export const acceptOrder = async (param: any) => {
   console.log('acceptOrder func started', param);
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   try {
     const response = await axios({
       method: 'patch',
       url: `${API_BASE_URL}/ordern/accept-order/${param}`,
-      data: data,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const startOrder = async (param: any) => {
+  console.log('startOrder func started', param);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${API_BASE_URL}/ordern/inprogress-order/${param}`,
       headers: {
         Authorization: `Bearer ${AuthToken}`,
       },
@@ -1062,7 +1087,7 @@ export const getBanks = async (param: any) => {
       },
     });
     if (response.status === 201 || response.status === 200) {
-      console.log('Banks data:', response?.data);
+      // console.log('Banks data:', response?.data);
       store.dispatch(addbanks(response?.data?.data));
     }
     //   console.log("res", response);
@@ -1185,15 +1210,67 @@ export const getProviderNew = async (param: any) => {
 };
 
 export const fetchAccountDetails = async (param: any) => {
-  console.log('fetchAccountDetails func started', param);
   const AuthToken = await AsyncStorage.getItem('AuthToken');
-  console.log(AuthToken);
+  console.log('fetchAccountDetails func started', param);
+  try {
+    const response = await axios({
+      method: 'post',
+      url: `${API_BASE_URL}/transaction/fetch-account-details`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+      data: param,
+    });
+    if (response.status === 201 || response.status === 200) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+// export const fetchAccountDetails = async (param: any) => {
+//   console.log('fetchAccountDetails func started', param);
+//   const AuthToken = await AsyncStorage.getItem('AuthToken');
+//   console.log(AuthToken);
+//   try {
+//     const response = await axios({
+//       method: 'get',
+//       url: `${API_BASE_URL}/transaction/fetch-account-details`,
+//       data: param,
+//       headers: {Authorization: `Bearer ${AuthToken}`},
+//     });
+
+//     if (response.status === 201) {
+//       console.log('response data:', response?.data);
+//     }
+//     console.log(response?.data);
+//     return response;
+//   } catch (error) {
+//     console.log(error, error?.response, error?.response?.data, param);
+//     return {
+//       status: 400,
+//       err: error,
+//       error: error?.response?.data,
+//     };
+//   }
+// };
+
+export const getProviderDataAll = async (param: any) => {
+  console.log('getProviderDataAll func started', param);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
   try {
     const response = await axios({
       method: 'get',
-      url: `${API_BASE_URL}/transaction/fetch-account-details`,
-      data: param,
-      headers: {Authorization: `Bearer ${AuthToken}`},
+      url: `${API_BASE_URL}/provider/get-provider-detail-by-service/${param?.providerID}/${param?.serviceID}`,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
     });
 
     if (response.status === 201) {
@@ -1202,7 +1279,7 @@ export const fetchAccountDetails = async (param: any) => {
     console.log(response?.data);
     return response;
   } catch (error) {
-    console.log(error, error?.response,  error?.response?.data, param);
+    console.log(error, error?.response?.data);
     return {
       status: 400,
       err: error,
