@@ -18,6 +18,11 @@ import Congratulations from '../screens/profile/congratulations';
 import Inbox from '../screens/user/chat/inbox';
 import _Services from '../screens/vendor/_services';
 import Withdraw from '../screens/user/withdraw';
+import ServiceProviderProfile from '../screens/user/serviceProviderProfile';
+import OrderDetails from '../screens/user/orderDetails';
+import OrderReview from '../screens/user/orderReview';
+import PaymentConfirmed from '../screens/user/paymentConfirmed';
+import FaceDetection from '../screens/faceDetection';
 
 const Stack = createNativeStackNavigator();
 
@@ -97,6 +102,31 @@ export default function VendorNavigation() {
       <Stack.Screen
         name="_VServices"
         component={_Services}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="ServiceProviderProfile"
+        component={ServiceProviderProfile}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="OrderDetails"
+        component={OrderDetails}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="OrderReview"
+        component={OrderReview}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="PaymentConfirmed"
+        component={PaymentConfirmed}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="FaceDetection"
+        component={FaceDetection}
         options={{headerShown: false, animationEnabled: false}}
       />
     </Stack.Navigator>

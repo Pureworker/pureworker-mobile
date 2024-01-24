@@ -10,6 +10,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {FlatList} from 'react-native-gesture-handler';
 import {ToastShort} from '../../../utils/utils';
 import images from '../../../constants/images';
+import CancelCircle2 from '../../../assets/svg/CancelCircle2';
 export default function SubPortComp({
   lindex,
   portfolioData,
@@ -78,11 +79,11 @@ export default function SubPortComp({
   return (
     <View
       style={[
-        tw`border-2 border-[${colors.parpal}] p-1 rounded-lg py-4`,
+        tw`border-2 border-[${colors.parpal}] p-1 rounded-lg py-4 px-4`,
         {marginTop: 30},
       ]}>
       <View style={tw`absolute top-[-5] ml-2 bg-[${colors.greyLight}]`}>
-        <TextWrapper
+        {/* <TextWrapper
           children={`Portfolio ${lindex}`}
           isRequired={false}
           fontType={'semiBold'}
@@ -90,24 +91,25 @@ export default function SubPortComp({
             tw`px-2 `,
             {fontSize: 16, marginTop: 0, color: colors.black, padding: 3},
           ]}
-        />
+        /> */}
       </View>
       <TextWrapper
         children="Short Description"
         isRequired={false}
         fontType={'semiBold'}
-        style={{fontSize: 16, marginTop: 15, color: colors.black}}
+        style={{fontSize: 16, marginTop: 0, color: colors.black}}
       />
       <TextInput
         style={{
           paddingHorizontal: 10,
           marginTop: 10,
-          height: 70,
+          height: 60,
           backgroundColor: colors.greyLight1,
           borderRadius: 5,
           color: '#000',
         }}
         placeholderTextColor={colors.grey}
+        multiline
         placeholder={'Briefly talk about the portfolio .....Max: 20 words'}
         value={shortDescription}
         onChangeText={text => {
@@ -123,11 +125,15 @@ export default function SubPortComp({
               openLibraryfordp();
             }}
             style={[
-              tw`border rounded-lg w-full mt-6 items-center justify-center mx-auto `,
-              {height: HEIGHT_SCREEN * 0.2},
+              tw`border rounded-lg w-full mt-4 items-center justify-center mx-auto `,
+              {
+                height: HEIGHT_SCREEN * 0.1,
+                borderStyle: 'dotted',
+                borderColor: colors.parpal,
+              },
             ]}>
             <TextWrapper
-              children="Add work Pictures"
+              children="Add work pictures"
               isRequired={false}
               fontType={'semiBold'}
               style={{
@@ -166,21 +172,13 @@ export default function SubPortComp({
         </View>
       )}
 
-      {/* <TouchableOpacity
-        style={tw`absolute right-[-3] top-[-4]`}
+      <TouchableOpacity
+        style={tw`absolute right-[-2] top-[-4]`}
         onPress={() => {
-          remove();
+          // remove();
         }}>
-        <Image
-          source={images.cancelCircle}
-          style={{
-            width: 25,
-            height: 25,
-            marginRight: 10,
-            tintColor: colors.darkPurple,
-          }}
-        />
-      </TouchableOpacity> */}
+        <CancelCircle2 />
+      </TouchableOpacity>
     </View>
   );
 }

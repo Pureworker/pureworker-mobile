@@ -16,6 +16,7 @@ import {BUSINESS, FREELANCER} from '../constants/userType';
 import Modal from 'react-native-modal/dist/modal';
 import colors from '../constants/colors';
 import {
+  getUser,
   updateProfilePic2,
   updateUserData,
   uploadAssetsDOCorIMG,
@@ -52,6 +53,11 @@ const DrawerContent = () => {
       route: 'PrivacyPolicy',
       icon: images.rate,
     },
+    {
+      label: 'FaceDetection',
+      route: 'FaceDetection',
+      icon: images.rate,
+    },
   ];
   const dispatch = useDispatch();
   const [InfoModal, setInfoModal] = useState(false);
@@ -67,7 +73,7 @@ const DrawerContent = () => {
   };
   const userType = useSelector((state: any) => state.user.isLoggedIn);
   const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
-  const getUser = getUserData ?? [];
+
   //
   const userData = useSelector((state: any) => state.user.userData);
   const supportUser = useSelector((store: any) => store.user.supportUser);
@@ -132,7 +138,7 @@ const DrawerContent = () => {
     setloading(true);
     const res: any = await uploadAssetsDOCorIMG(param);
 
-    if (res?.status === 201 || res?.statuss === 200) {
+    if (res?.status === 201 || res?.status === 200) {
       console.log('image:', res);
 
       setloading(false);
@@ -321,7 +327,7 @@ const DrawerContent = () => {
           )}
           <View style={[tw`mt-4 ml-3`, {}]}>
             <Textcomp
-              text={`Version: ${Platform.OS === 'ios' ? '1.0.8.x' : '1.0.8.x'}`}
+              text={`Version: ${Platform.OS === 'ios' ? '1.1.0.x' : '1.1.0.x'}`}
               size={14}
               color={'#000000'}
               style={[

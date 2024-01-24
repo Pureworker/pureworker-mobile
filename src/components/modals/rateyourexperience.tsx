@@ -74,7 +74,8 @@ export default function RateyourExperience({
       swipeThreshold={200}
       swipeDirection={['down']}
       onSwipeComplete={() => func(false)}
-      onBackButtonPress={() => func(false)}>
+      onBackButtonPress={() => func(false)}
+      >
       <View style={tw` h-full w-full bg-black bg-opacity-5`}>
         <TouchableOpacity onPress={() => func(false)} style={tw`flex-1`} />
         <View style={tw`h-[70%] mt-auto bg-[#D9D9D9]`}>

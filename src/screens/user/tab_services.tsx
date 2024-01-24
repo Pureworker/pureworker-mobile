@@ -258,7 +258,7 @@ const TabServices = () => {
                   </View>
                   <FlatList
                     data={searchResults}
-                    keyExtractor={item => item.id.toString()}
+                    keyExtractor={item => item.id?.toString()}
                     renderItem={({item}) => (
                       // Render each search result item
                       <TouchableOpacity

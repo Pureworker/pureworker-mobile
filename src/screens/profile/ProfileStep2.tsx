@@ -48,8 +48,6 @@ import {ToastShort} from '../../utils/utils';
 const PRofileStep2 = () => {
   const navigation = useNavigation<StackNavigation>();
   const [description, setDescription] = useState('');
-  const [shortDescription, setShortDescription] = useState('');
-  const [imageObject, setImageObject] = useState({});
   const [imageUrl, setImageUrl] = useState('');
   const [potfolioImageUrl, setPotfolioImageUrl] = useState<any>([]);
   const [potfolioEnable, setPotfolioEnable] = useState(false);

@@ -1,11 +1,9 @@
 import React, {useContext, useState} from 'react';
 import {
   View,
-  Text,
   ActivityIndicator,
   Image,
   ScrollView,
-  FlatList,
   TouchableOpacity,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
@@ -15,16 +13,10 @@ import images from '../../constants/images';
 import Button from '../../components/Button';
 import TextWrapper from '../../components/TextWrapper';
 import commonStyle from '../../constants/commonStyle';
-import CategoryList from '../../components/CategoryList';
-import {
-  useGetCategoryQuery,
-  useGetSubCategoriesQuery,
-} from '../../store/slice/api';
 import colors from '../../constants/colors';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   addCategory,
-  addcompleteProfile,
   addformStage,
   addprovider_id,
   removeCategory,

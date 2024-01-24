@@ -14,7 +14,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
-import {Formik, Field} from 'formik';
+import {Formik, Field, ErrorMessage} from 'formik';
 import * as Yup from 'yup';
 import {
   fetchAccountDetails,
@@ -36,7 +36,10 @@ import Textcomp from '../../components/Textcomp';
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
   bank: Yup.string().required('Please select a bank.'),
-  accountNumber: Yup.string().required('Please enter account number.'),
+  accountNumber: Yup.string()
+    .required('Please enter account number.')
+    .min(10)
+    .max(10),
   accountName: Yup.string().required('Account name is required.'),
   amount: Yup.number()
     .required('Please enter the amount.')
@@ -121,8 +124,7 @@ const Withdraw = () => {
     try {
       const res: any = await fetchAccountDetails(_data);
       console.log(res?.data);
-      if (res?.data?.data ) {
-        
+      if (res?.data?.data) {
       }
       setaccountName(res?.data?.data);
     } catch (error) {
@@ -181,7 +183,7 @@ const Withdraw = () => {
               }}
               validationSchema={validationSchema}
               onSubmit={values => handleWithdraw(values)}>
-              {({handleSubmit}) => (
+              {({handleSubmit, errors, touched}) => (
                 <View style={{marginHorizontal: 20, marginTop: 50}}>
                   <Field name="bank">
                     {({field, form}) => (
@@ -230,6 +232,11 @@ const Withdraw = () => {
                             //                     setselectedBank(fil);
                           }}
                         />
+                        {errors.bank && touched.bank && (
+                          <Text style={{color: 'red', marginTop: 5}}>
+                            {errors.bank}
+                          </Text>
+                        )}
                       </View>
                     )}
                   </Field>
@@ -263,7 +270,9 @@ const Withdraw = () => {
                             }
                             form.setFieldValue('accountNumber', value);
                             setaccountNumber(value);
-                            await queryName(value);
+                            if (value?.length > 7) {
+                              await queryName(value);
+                            }
                           }}
                           disable={true}
                           maxLength={11}
@@ -280,6 +289,11 @@ const Withdraw = () => {
                           <View style={tw`mr-auto mt-4`}>
                             <ActivityIndicator size={'small'} color={'green'} />
                           </View>
+                        )}
+                        {errors.accountNumber && touched.accountNumber && (
+                          <Text style={{color: 'red', marginTop: 5}}>
+                            {errors.accountNumber}
+                          </Text>
                         )}
                       </>
                     )}
@@ -306,7 +320,12 @@ const Withdraw = () => {
                             width: '100%',
                           }}
                           labelText={'Name here'}
-                          state={`${accountName?.account_name}`}
+                          state={`${
+                            accountName?.account_name === undefined ||
+                            accountName?.account_name === null
+                              ? ''
+                              : accountName?.account_name
+                          }`}
                           setState={form.setFieldValue}
                           disable={false}
                         />
@@ -343,9 +362,15 @@ const Withdraw = () => {
                           disable={true}
                           keyBoardType="numeric"
                         />
+                        {errors.amount && touched.amount && (
+                          <Text style={{color: 'red', marginTop: 5}}>
+                            {errors.amount}
+                          </Text>
+                        )}
                       </>
                     )}
                   </Field>
+
                   {!isLoading ? (
                     <Button
                       onClick={handleSubmit}

@@ -171,7 +171,7 @@ To send you important updates, notifications, and promotional messages related t
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{minHeight: SIZES.height}}>
-          {userType.userType === 'CUSTOMER' && (
+          {userType.userType && (
             <View style={[tw` flex-1`]}>
               <View style={tw`mx-auto mt-[5%]`}>
                 <Textcomp
@@ -182,7 +182,7 @@ To send you important updates, notifications, and promotional messages related t
                   fontFamily={'Inter-SemiBold'}
                 />
               </View>
-              <View style={[tw` mt-[5%] mx-auto`, {width: perWidth(332)}]}>
+              <View style={[tw` mt-[1%] mx-auto`, {width: perWidth(332)}]}>
                 <View style={tw``}>
                   <Textcomp
                     text={''}
@@ -234,6 +234,37 @@ To send you important updates, notifications, and promotional messages related t
             })} */}
             </View>
           )}
+          {userType.userType !== 'CUSTOMER' && (
+            <>
+              {data_customer.map((item, index) => {
+                return (
+                  <View
+                    key={index}
+                    style={[tw` mt-[5%] mx-auto`, {width: perWidth(332)}]}>
+                    <View style={tw``}>
+                      <Textcomp
+                        text={item?.title}
+                        size={16}
+                        lineHeight={17}
+                        color={'#000000'}
+                        fontFamily={'Inter-SemiBold'}
+                      />
+                    </View>
+                    <View style={tw`mt-1`}>
+                      <Textcomp
+                        text={item?.text}
+                        size={12}
+                        lineHeight={14.5}
+                        color={'#000000'}
+                        fontFamily={'Inter'}
+                      />
+                    </View>
+                  </View>
+                );
+              })}
+            </>
+          )}
+
           {userType.userType === 'CUSTOMER' && (
             //           <View style={[tw` flex-1`]}>
             //             <View style={tw`mx-auto mt-[5%]`}>

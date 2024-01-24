@@ -93,7 +93,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
           <View style={[tw``, {width: perWidth(105), marginTop: perWidth(4)}]}>
             <Textcomp
               // text={`$${price[0]?.priceMax ? price[0]?.priceMax : 0}/hr`}
-              text={'$000'}
+              text={'₦ 000'}
               size={12}
               lineHeight={14}
               color={colors.white}
@@ -102,7 +102,6 @@ const ClosetoYou = ({item, index, navigation}: any) => {
           </View>
         </View>
       </View>
-
       <View
         style={[
           tw`flex flex-row justify-between items-center `,

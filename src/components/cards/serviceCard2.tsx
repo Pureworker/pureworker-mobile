@@ -66,7 +66,7 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
                   tw`absolute bottom-0 border-2 right-1 rounded-full`,
                   {width: 8, height: 8, backgroundColor: colors.green},
                 ]}
-              />{' '}
+              />
             </>
           ) : (
             <Image
@@ -107,7 +107,7 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
           </View>
           <View style={[tw``, {width: perWidth(252), marginTop: perHeight(4)}]}>
             <Textcomp
-              text={item?.description}
+              text={`${item?.description}`}
               size={12}
               lineHeight={14}
               color={colors.white}

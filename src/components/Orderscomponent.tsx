@@ -11,6 +11,7 @@ import {WIDTH_WINDOW} from '../constants/generalStyles';
 import {useDispatch} from 'react-redux';
 import {getUserOrders} from '../utils/api/func';
 import {addcustomerOrders} from '../store/reducer/mainSlice';
+import socket from '../utils/socket';
 
 const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
   const [saved, setsaved] = useState(false);
@@ -19,7 +20,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
 
   const [modalSection, setmodalSection] = useState('All');
 
-  console.log(item);
+  console.log('OrderDetails',item);
 
   function formatDateToCustomFormat(dateString) {
     const options = {year: 'numeric', month: 'short', day: 'numeric'};
@@ -228,8 +229,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
         swipeThreshold={200}
         swipeDirection={['down']}
         onSwipeComplete={() => setInfoModal(false)}
-        onBackButtonPress={() => setInfoModal(false)}
-        >
+        onBackButtonPress={() => setInfoModal(false)}>
         {modalSection === 'All' && (
           <View style={tw` h-full w-full bg-black bg-opacity-5`}>
             <TouchableOpacity
@@ -271,6 +271,14 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
               </TouchableOpacity>
 
               <TouchableOpacity
+                onPress={() => {
+                  socket.connect();
+                  setInfoModal(false);
+                  navigation.navigate('Inbox', {
+                    id: item?.serviceProvider._id || item?.serviceProvider?.id,
+                    name: `${item?.serviceProvider?.firstName} ${item?.serviceProvider?.lastName}`,
+                  });
+                }}
                 style={[
                   tw`flex mt-10 flex-row`,
                   {marginHorizontal: perWidth(30), marginTop: perHeight(25)},

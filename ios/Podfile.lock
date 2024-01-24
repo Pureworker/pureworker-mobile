@@ -25,6 +25,9 @@ PODS:
     - React-Core
     - SSZipArchive (~> 2.2.2)
   - DoubleConversion (1.1.6)
+  - FaceCoreSDK (5.2.383)
+  - FaceSDK (5.2.1624):
+    - RegulaCommon (= 6.9.344)
   - FBLazyVector (0.71.7)
   - FBReactNativeSpec (0.71.7):
     - RCT-Folly (= 2021.07.22.00)
@@ -577,6 +580,7 @@ PODS:
     - React-jsi (= 0.71.7)
     - React-logger (= 0.71.7)
     - React-perflogger (= 0.71.7)
+  - RegulaCommon (6.9.344)
   - RNCAsyncStorage (1.19.3):
     - React-Core
   - RNCClipboard (1.13.2):
@@ -587,6 +591,12 @@ PODS:
     - React-Core
   - RNDateTimePicker (7.5.0):
     - React-Core
+  - RNFaceApi (5.2.4):
+    - FaceSDK (= 5.2.1624)
+    - React
+  - RNFaceCore (5.2.0):
+    - FaceCoreSDK (= 5.2.383)
+    - React
   - RNFastImage (8.6.3):
     - React-Core
     - SDWebImage (~> 5.11.1)
@@ -730,6 +740,8 @@ DEPENDENCIES:
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
+  - "RNFaceApi (from `../node_modules/@regulaforensics/react-native-face-api`)"
+  - "RNFaceCore (from `../node_modules/@regulaforensics/react-native-face-core`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
@@ -750,6 +762,8 @@ SPEC REPOS:
     - AppCenter
     - AppCenterReactNativeShared
     - Base64
+    - FaceCoreSDK
+    - FaceSDK
     - Firebase
     - FirebaseAnalytics
     - FirebaseAppCheckInterop
@@ -774,6 +788,7 @@ SPEC REPOS:
     - libwebp
     - nanopb
     - PromisesObjC
+    - RegulaCommon
     - SDWebImage
     - SDWebImageWebPCoder
     - Sentry
@@ -886,6 +901,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-picker/picker"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
+  RNFaceApi:
+    :path: "../node_modules/@regulaforensics/react-native-face-api"
+  RNFaceCore:
+    :path: "../node_modules/@regulaforensics/react-native-face-core"
   RNFastImage:
     :path: "../node_modules/react-native-fast-image"
   RNFBApp:
@@ -925,6 +944,8 @@ SPEC CHECKSUMS:
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   CodePush: 9eddecce05cd10491e2673b259c85885a462be33
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
+  FaceCoreSDK: 37db087f01600fb8904fb1ee27792c59a276814a
+  FaceSDK: ba72d58fbedb0badc8741388f522f4f3facde70c
   FBLazyVector: a89a0525bc7ca174675045c2b492b5280d5a2470
   FBReactNativeSpec: 7714e6bc1e9ea23df6c4cb42f0b2fd9c6a3a559c
   Firebase: 0219acf760880eeec8ce479895bd7767466d9f81
@@ -990,11 +1011,14 @@ SPEC CHECKSUMS:
   React-RCTVibration: 08f132cad9896458776f37c112e71d60aef1c6ae
   React-runtimeexecutor: c5c89f8f543842dd864b63ded1b0bbb9c9445328
   ReactCommon: 5307873a227ee34ddd3e7f2ec1086ebbfccc7618
+  RegulaCommon: 3421ad9a79af499cf3a0210ce15408f31032874f
   RNCAsyncStorage: c913ede1fa163a71cea118ed4670bbaaa4b511bb
   RNCClipboard: 60fed4b71560d7bfe40e9d35dea9762b024da86d
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 32ca102146bc7d34a8b93a998d9938d9f9ec7898
   RNDateTimePicker: b722c23030b744763cf51d80fc22f354653f65e0
+  RNFaceApi: 5947e29d422ebb1acfdbd3863004206555746b0c
+  RNFaceCore: eec95bbf03ae7fe2f25fafe3fe61432c4b416738
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFBApp: d59efa0872fff4e27de03cca3c528c203a436ae5
   RNFBAuth: 54e598bb1358a0cf6c0a187f43161cd1bde90455

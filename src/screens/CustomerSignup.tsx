@@ -21,7 +21,7 @@ import TextInputs from '../components/TextInputs';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Snackbar from 'react-native-snackbar';
 import {useSignupMutation} from '../store/slice/api';
-import {allCountry, validateEmail} from '../constants/utils';
+import {allCountry, allState, validateEmail} from '../constants/utils';
 import DateTimesPicker from '../components/DatePicker';
 import {StackNavigation} from '../constants/navigation';
 import Tooltip from 'react-native-walkthrough-tooltip';
@@ -55,6 +55,7 @@ export default function CustomerSignup() {
   const [nationalityOpen, setNationalityOpen] = useState(false);
   const [nationalityValue, setNationalityValue] = useState(null);
   const [nationalityItems, setNationalityItems] = useState<any>([]);
+  const [stateValue, setStateValue] = useState('');
   // const [signup, {isLoading}] = useSignupMutation();
   const [toolTipLeftVisible, setToolTipLeftVisible] = useState(false);
   const [toolTipRightVisible, setToolTipRightVisible] = useState(false);
@@ -82,7 +83,8 @@ export default function CustomerSignup() {
       phoneName &&
       address &&
       genderValue &&
-      nationalityValue
+      nationalityValue &&
+      stateValue
     ) {
       if (!validateEmail(email)) {
         Snackbar.show({
@@ -114,7 +116,7 @@ export default function CustomerSignup() {
           gender: genderValue?.toLowerCase().trim(),
           nationality: nationalityValue,
           accountType: 'customer',
-          state: 'Lagos',
+          state: stateValue,
         };
         if (referralCode && referralCode?.length > 2) {
           loginData.referralCode = referralCode;
@@ -493,6 +495,55 @@ export default function CustomerSignup() {
                 }}
               />
             </View>
+            <View
+              style={{
+                zIndex: genderOpen ? 0 : 2,
+                minHeight: 500,
+                marginBottom: -400,
+              }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: commonStyle.fontFamily.medium,
+                  color: '#fff',
+                  marginTop: 15,
+                  marginBottom: 15,
+                }}>
+                State of Residence
+              </Text>
+              <Dropdown
+                style={[
+                  tw``,
+                  {
+                    zIndex: 10,
+                    width: SIZES.width * 0.875,
+                    backgroundColor: '#F7F5F5',
+                    borderColor: '#9E9E9E14',
+                    height: 50,
+                    borderRadius: 10,
+                    paddingHorizontal: 10,
+                  },
+                ]}
+                data={allState}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus ? 'Select state' : '...'}
+                searchPlaceholder="Search..."
+                value={nationalityValue}
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+                itemTextStyle={{
+                  color: 'black',
+                }}
+                onChange={item => {
+                  console.log(item.value);
+                  setStateValue(item.value);
+                  setIsFocus(false);
+                }}
+              />
+            </View>
             {/* </ScrollView> */}
             <View
               style={{
@@ -573,9 +624,9 @@ export default function CustomerSignup() {
                 maxHeight={300}
                 labelField="label"
                 valueField="value"
-                placeholder={!isFocus ? 'Select item' : '...'}
+                placeholder={!isFocus ? 'Select nationality' : '...'}
                 searchPlaceholder="Search..."
-                value={nationalityValue}
+                value={stateValue}
                 onFocus={() => setIsFocus(true)}
                 onBlur={() => setIsFocus(false)}
                 itemTextStyle={{

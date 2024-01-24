@@ -13,8 +13,8 @@ import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
-import { getFAQ } from '../../utils/api/func';
-import { addfaq } from '../../store/reducer/mainSlice';
+import {getFAQ} from '../../utils/api/func';
+import {addfaq} from '../../store/reducer/mainSlice';
 
 const Ratings = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -142,17 +142,21 @@ const Ratings = () => {
                 fontFamily={'Inter-SemiBold'}
               />
             </View>
-            <View style={tw`mt-1`}>
+            {/* <View style={tw`mt-1`}>
               <Textcomp
                 text={`Here are some top tips on how to maintain a high customer rating score:
 - Be respectful and considerate
 We want customers and service providers to have a positive experience on the Pureworker platform. Please be mindful of your language and behavior while communicating with the service provider and always treat them with respect.
+
 - Provide clear instructions and timely feedback
 Be clear about what you want and provide specific instructions to the service provider. After the service is completed, leave timely and honest feedback on their performance.
+
 - Be punctual
 Respect the service provider's time and arrive on time for scheduled appointments. If you need to cancel or reschedule, give them sufficient notice.
+
 - Pay fairly and promptly
 Agree on a fair price with the service provider before they begin the work, and pay promptly after the service is completed. Avoid haggling or negotiating after the service is completed.
+
 - Avoid cancelling service requests (if possible)
 In some situations, we understand that you may need to cancel a service request. However, if you do this continuously or cancel just before the service provider arrives, you may receive a low rating.
                 `}
@@ -160,6 +164,108 @@ In some situations, we understand that you may need to cancel a service request.
                 lineHeight={14.5}
                 color={'#000000'}
                 fontFamily={'Inter'}
+              />
+            </View> */}
+            <View style={tw`mt-1`}>
+              <Textcomp
+                text={
+                  'Here are some top tips on how to maintain a high customer rating score:'
+                }
+                size={12}
+                lineHeight={14.5}
+                color={'#000000'}
+                fontFamily={'Inter'}
+                style={{fontWeight: 'bold'}}
+              />
+              <Textcomp
+                text={'\u2022 Be respectful and considerate'}
+                size={12}
+                lineHeight={14.5}
+                color={'#000000'}
+                fontFamily={'Inter-Bold'}
+                style={tw`mt-1`}
+              />
+              <Textcomp
+                text={
+                  'We want customers and service providers to have a positive experience on the Pureworker platform. Please be mindful of your language and behavior while communicating with the service provider and always treat them with respect.'
+                }
+                size={12}
+                lineHeight={14.5}
+                color={'#000000'}
+                fontFamily={'Inter'}
+                style={tw`mt-1`}
+              />
+              <Textcomp
+                text={'\u2022 Provide clear instructions and timely feedback'}
+                size={12}
+                lineHeight={14.5}
+                color={'#000000'}
+                fontFamily={'Inter-Bold'}
+                style={tw`mt-1`}
+              />
+              <Textcomp
+                text={
+                  'Be clear about what you want and provide specific instructions to the service provider. After the service is completed, leave timely and honest feedback on their performance.'
+                }
+                size={12}
+                lineHeight={14.5}
+                color={'#000000'}
+                fontFamily={'Inter'}
+                style={tw`mt-2`}
+              />
+              <Textcomp
+                text={'\u2022 Be punctual'}
+                size={12}
+                lineHeight={14.5}
+                color={'#000000'}
+                fontFamily={'Inter-Bold'}
+                style={tw`mt-2`}
+              />
+              <Textcomp
+                text={
+                  "Respect the service provider's time and arrive on time for scheduled appointments. If you need to cancel or reschedule, give them sufficient notice."
+                }
+                size={12}
+                lineHeight={14.5}
+                color={'#000000'}
+                fontFamily={'Inter'}
+                style={tw`mt-1`}
+              />
+              <Textcomp
+                text={'\u2022 Pay fairly and promptly'}
+                size={12}
+                lineHeight={14.5}
+                color={'#000000'}
+                fontFamily={'Inter-Bold'}
+                style={tw`mt-2`}
+              />
+              <Textcomp
+                text={
+                  'Agree on a fair price with the service provider before they begin the work, and pay promptly after the service is completed. Avoid haggling or negotiating after the service is completed.'
+                }
+                size={12}
+                lineHeight={14.5}
+                color={'#000000'}
+                fontFamily={'Inter'}
+                style={tw`mt-1`}
+              />
+              <Textcomp
+                text={'\u2022 Avoid cancelling service requests (if possible)'}
+                size={12}
+                lineHeight={14.5}
+                color={'#000000'}
+                fontFamily={'Inter-Bold'}
+                style={tw`mt-2`}
+              />
+              <Textcomp
+                text={
+                  'In some situations, we understand that you may need to cancel a service request. However, if you do this continuously or cancel just before the service provider arrives, you may receive a low rating.'
+                }
+                size={12}
+                lineHeight={14.5}
+                color={'#000000'}
+                fontFamily={'Inter'}
+                style={tw`mt-1`}
               />
             </View>
           </View>

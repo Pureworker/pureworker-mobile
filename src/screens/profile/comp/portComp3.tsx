@@ -32,6 +32,7 @@ import {Formik, FieldArray, Field, useFormikContext} from 'formik';
 import * as yup from 'yup';
 import {addPortfolio} from '../../../utils/api/func';
 import PlusIcon from '../../../assets/svg/PlusIcon';
+import AddCircle from '../../../assets/svg/AddCircle';
 
 const validationSchema = yup.object().shape({
   serviceDescription: yup.string().required('Service description is required'),
@@ -189,14 +190,14 @@ export default function PortComp({
             style={{}}
             extraScrollHeight={Platform.OS === 'ios' ? 30 : 0} // Adjust as needed
             enableOnAndroid={true}>
-            <ScrollView horizontal style={{width: '100%'}}>
+            {/* <ScrollView horizontal style={{width: '100%'}}>
               <>
                 <View
                   style={{
                     zIndex: 1,
                     height: 60,
                   }}>
-                  <View>
+                  <View style={tw``}>
                     <DropDownPicker
                       open={false}
                       value={service}
@@ -254,7 +255,27 @@ export default function PortComp({
                   </View>
                 </View>
               </>
-            </ScrollView>
+            </ScrollView> */}
+            <View
+              style={{
+                paddingHorizontal: 10,
+                justifyContent: 'center',
+                backgroundColor: colors.lightBlack,
+                height: 50,
+                width: '60%',
+                borderRadius: 5,
+                borderWidth: 2,
+                borderColor: colors.primary,
+              }}>
+              <TextWrapper
+                fontType={'semiBold'}
+                style={{
+                  fontSize: 12,
+                  color: colors.grey,
+                }}>
+                {`Service: ${service?.name}`}
+              </TextWrapper>
+            </View>
             <>
               <View
                 style={{
@@ -275,13 +296,14 @@ export default function PortComp({
                     borderRadius: 5,
                   }}>
                   <TextWrapper
-                    numberOfLines={1}
+                    // numberOfLines={1}
                     fontType={'semiBold'}
                     style={{
                       fontSize: 12,
                       color: '#fff',
                     }}>
-                    {service?.name}
+                    {/* {service?.name} */}
+                    Description
                   </TextWrapper>
                 </View>
                 <TextInput
@@ -320,16 +342,16 @@ export default function PortComp({
                     borderRadius: 5,
                   }}>
                   <TextWrapper
-                    numberOfLines={1}
+                    // numberOfLines={1}
                     fontType={'semiBold'}
                     style={{
                       fontSize: 12,
                       color: '#fff',
                     }}>
-                    {service?.name}
+                    {/* {service?.name} */}
+                    Price Range
                   </TextWrapper>
                 </View>
-
                 <View style={[generalStyles.rowCenter]}>
                   <TextInput
                     style={{
@@ -340,8 +362,8 @@ export default function PortComp({
                       color: '#fff',
                       height: Platform.OS === 'ios' ? 50 : 50,
                     }}
-                    placeholderTextColor={colors.grey}
-                    placeholder="N"
+                    placeholderTextColor={colors.white}
+                    placeholder="₦"
                     keyboardType="number-pad"
                     value={values.servicePriceMin}
                     onChangeText={handleChange('servicePriceMin')}
@@ -364,8 +386,8 @@ export default function PortComp({
                       color: '#fff',
                       height: Platform.OS === 'ios' ? 50 : 50,
                     }}
-                    placeholderTextColor={colors.grey}
-                    placeholder="N"
+                    placeholderTextColor={colors.white}
+                    placeholder="₦"
                     keyboardType="number-pad"
                     value={values.servicePriceMax}
                     onChangeText={handleChange('servicePriceMax')}
@@ -373,6 +395,30 @@ export default function PortComp({
                 </View>
               </View>
             </>
+            <View style={[tw`border-b`, {borderWidth: 2}]}></View>
+
+            <View style={[tw`mt-4`, {}]}>
+              <View style={[tw``, {}]}>
+                <Textcomp
+                  text={'Add Portfolio (Optional)'}
+                  size={18}
+                  lineHeight={20}
+                  color={colors.black}
+                  fontFamily={'Inter-Bold'}
+                />
+              </View>
+              <View style={[tw`mt-2`, {}]}>
+                <Textcomp
+                  text={
+                    'You can add portfolios (max of 3) to showcase previous work.'
+                  }
+                  size={12}
+                  lineHeight={16}
+                  color={colors.black}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+            </View>
 
             {/* {portfolioCount?.map((item, index) => {
               return (
@@ -395,7 +441,7 @@ export default function PortComp({
             <FieldArray name="portfolios">
               {({push, remove}) => (
                 <ScrollView
-                  style={{width: '100%'}}
+                  style={{width: '100%', paddingHorizontal: 4}}
                   showsVerticalScrollIndicator={false}>
                   {values.portfolios.map((_, index) => (
                     <SubPortComp
@@ -422,12 +468,12 @@ export default function PortComp({
                     style={[
                       tw`flex flex-row ml-auto px-4 items-center  py-4 rounded-lg  mt-4`,
                     ]}>
-                    <PlusIcon style={{marginRight: 4}}/>
+                    <AddCircle style={{marginRight: 4}} />
                     <Textcomp
                       text={'Add Portfolio'}
                       size={16}
                       lineHeight={16}
-                      color={colors.darkPurple}
+                      color={colors.parpal}
                       fontFamily={'Inter-Bold'}
                     />
                   </TouchableOpacity>
@@ -439,7 +485,7 @@ export default function PortComp({
                 handleSubmit();
               }}
               style={[
-                tw` w-3/4 items-center mb-30 py-4 mx-auto rounded-lg bg-[${colors.darkPurple}] mt-4`,
+                tw` w-6/10 items-center mb-30 py-4 mx-auto rounded-lg bg-[${colors.darkPurple}] mt-4`,
               ]}>
               <Textcomp
                 text={'Add'}

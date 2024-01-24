@@ -1924,6 +1924,16 @@
     redux-thunk "^2.4.2"
     reselect "^4.1.8"
 
+"@regulaforensics/react-native-face-api@^5.2.4":
+  version "5.2.4"
+  resolved "https://registry.yarnpkg.com/@regulaforensics/react-native-face-api/-/react-native-face-api-5.2.4.tgz#ba37d2378ae5003f48b2c3861c9e8077ed99151d"
+  integrity sha512-KfYNq3NBd/U9H9+K2SV5nemKDeqPDia2ujjqG3EBd10YddkbcsBynQs/oHji17eAe7XWl/uBsfHWXAGdXFwfSQ==
+
+"@regulaforensics/react-native-face-core@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@regulaforensics/react-native-face-core/-/react-native-face-core-5.2.0.tgz#358ffd937244c82c7af524fbcdbacaeaff3e621a"
+  integrity sha512-zX5RY3nO1ePhS0cJVO4di+yXgQuwTaG+3Mc+HOML4dN6wfXYgZ748T7nqezaVfUHvTPDlTcQEny/3BjmHHMNng==
+
 "@sentry-internal/tracing@7.81.1":
   version "7.81.1"
   resolved "https://registry.yarnpkg.com/@sentry-internal/tracing/-/tracing-7.81.1.tgz#1180365cd8a9e18cb0f92e1ea970161840ec0e2e"

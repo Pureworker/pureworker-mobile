@@ -1,17 +1,30 @@
 import React from 'react';
-import { TouchableOpacity, Text, View, StyleSheet, } from 'react-native';
-import { generalStyles } from '../constants/generalStyles';
+import {TouchableOpacity, Text, View, StyleSheet} from 'react-native';
+import {generalStyles} from '../constants/generalStyles';
 import TextWrapper from './TextWrapper';
 import colors from '../constants/colors';
 
 type ProfileStepWrapperProps = {
-  active: string
-}
+  active: string;
+};
 
-export default function ({ active }: ProfileStepWrapperProps) {
+export default function ({active}: ProfileStepWrapperProps) {
   return (
-    <View style={[generalStyles.rowCenter, { marginHorizontal: 20 }]}>
-      <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active === 'one' ? colors.parpal : colors.white }]}>
+    <View
+      style={[
+        generalStyles.rowCenter,
+        {marginHorizontal: 20, justifyContent: 'center'},
+      ]}>
+      <View
+        style={[
+          generalStyles.contentCenter,
+          {
+            width: 25,
+            height: 25,
+            borderRadius: 25,
+            backgroundColor: active === 'one' ? colors.parpal : colors.white,
+          },
+        ]}>
         <TextWrapper
           fontType={'semiBold'}
           style={{
@@ -21,8 +34,17 @@ export default function ({ active }: ProfileStepWrapperProps) {
           1
         </TextWrapper>
       </View>
-      <View style={{ height: 1, backgroundColor: colors.black, width: 20 }} />
-      <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active === 'two' ? colors.parpal : colors.white }]}>
+      <View style={{height: 1, backgroundColor: colors.black, width: 50}} />
+      <View
+        style={[
+          generalStyles.contentCenter,
+          {
+            width: 25,
+            height: 25,
+            borderRadius: 25,
+            backgroundColor: active === 'two' ? colors.parpal : colors.white,
+          },
+        ]}>
         <TextWrapper
           fontType={'semiBold'}
           style={{
@@ -32,8 +54,17 @@ export default function ({ active }: ProfileStepWrapperProps) {
           2
         </TextWrapper>
       </View>
-      <View style={{ height: 1, backgroundColor: colors.black, width: 20 }} />
-      <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active === 'three' ? colors.parpal : colors.white }]}>
+      <View style={{height: 1, backgroundColor: colors.black, width: 50}} />
+      <View
+        style={[
+          generalStyles.contentCenter,
+          {
+            width: 25,
+            height: 25,
+            borderRadius: 25,
+            backgroundColor: active === 'three' ? colors.parpal : colors.white,
+          },
+        ]}>
         <TextWrapper
           fontType={'semiBold'}
           style={{
@@ -43,7 +74,18 @@ export default function ({ active }: ProfileStepWrapperProps) {
           3
         </TextWrapper>
       </View>
-      <View style={{ height: 1, backgroundColor: colors.black, width: 20 }} />
+      <View style={{ height: 1, backgroundColor: colors.black, width: 50 }} />
+      <View style={[generalStyles.contentCenter, { width: 25, height: 25, borderRadius: 20, backgroundColor: active === 'four' ? colors.parpal : colors.white }]}>
+        <TextWrapper
+          fontType={'semiBold'}
+          style={{
+            fontSize: 12,
+            color: active === 'four' ? colors.primary : colors.black,
+          }}>
+          4
+        </TextWrapper>
+      </View>
+      {/* <View style={{ height: 1, backgroundColor: colors.black, width: 20 }} />
       <View style={[generalStyles.contentCenter, { width: 20, height: 20, borderRadius: 20, backgroundColor: active === 'four' ? colors.parpal : colors.white }]}>
         <TextWrapper
           fontType={'semiBold'}
@@ -75,7 +117,7 @@ export default function ({ active }: ProfileStepWrapperProps) {
           }}>
           6
         </TextWrapper>
-      </View>
+      </View> */}
     </View>
   );
 }

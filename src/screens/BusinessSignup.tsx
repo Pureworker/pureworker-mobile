@@ -19,7 +19,7 @@ import colors from '../constants/colors';
 import TextInputs from '../components/TextInputs';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Snackbar from 'react-native-snackbar';
-import {allCountry, validateEmail} from '../constants/utils';
+import {allCountry, allState, validateEmail} from '../constants/utils';
 import {BUSINESS, CUSTOMER, FREELANCER} from '../constants/userType';
 import DateTimesPicker from '../components/DatePicker';
 import {StackNavigation} from '../constants/navigation';
@@ -68,6 +68,7 @@ export default function BusinessSignup() {
   const [toolTipLeftVisible, setToolTipLeftVisible] = useState(false);
   const [toolTipRightVisible, setToolTipRightVisible] = useState(false);
   const [isLoading, setisLoading] = useState(false);
+  const [stateValue, setStateValue] = useState('');
 
   const navigation = useNavigation<StackNavigation>();
 
@@ -75,6 +76,24 @@ export default function BusinessSignup() {
     if (!email) {
       Snackbar.show({
         text: 'Please enter your email address',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      return;
+    }
+    if (userType === FREELANCER && !firstName) {
+      Snackbar.show({
+        text: 'Please enter your firstName',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      return;
+    }
+    if (userType === FREELANCER && !lastName) {
+      Snackbar.show({
+        text: 'Please enter your lastName',
         duration: Snackbar.LENGTH_SHORT,
         textColor: '#fff',
         backgroundColor: '#88087B',
@@ -115,7 +134,7 @@ export default function BusinessSignup() {
           nationality: nationalityValue,
           gender: genderValue?.toLowerCase().trim(),
           accountType: userType?.toLowerCase(),
-          state: 'lagos',
+          state: stateValue,
         };
         const fl_data: any = {
           email: email.toLowerCase().trim(),
@@ -128,7 +147,7 @@ export default function BusinessSignup() {
           address: address,
           // userType: userType.toLowerCase(),
           accountType: userType?.toLowerCase(),
-          state: 'lagos',
+          state: stateValue,
         };
         const b_data = {
           businessName: name,
@@ -139,7 +158,8 @@ export default function BusinessSignup() {
           email: email.toLowerCase().trim(),
           accountType: userType?.toLowerCase(),
           gender: genderValue?.toLowerCase().trim(),
-          state: 'lagos',
+          state: stateValue,
+          nationality: nationalityValue,
         };
 
         if (referralCode && referralCode?.length > 2) {
@@ -209,7 +229,7 @@ export default function BusinessSignup() {
             width: 20,
             marginLeft: 25,
             marginBottom: 10,
-            marginTop: StatusBar.currentHeight && StatusBar.currentHeight + 40,
+            marginTop: StatusBar.currentHeight && StatusBar.currentHeight + 45,
           }}
           resizeMode="contain"
         />
@@ -403,7 +423,7 @@ export default function BusinessSignup() {
                 state={cacNo}
                 setState={setCacNo}
               />
-              <View
+              {/* <View
                 style={{
                   zIndex: 1,
                   // marginTop: 15,
@@ -478,6 +498,144 @@ export default function BusinessSignup() {
                     borderColor: 'red',
                     opacity: 1,
                     borderWidth: 0,
+                  }}
+                />
+              </View> */}
+              <View
+                style={{
+                  zIndex: genderOpen ? 0 : 2,
+                  minHeight: 500,
+                  marginBottom: -400,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: commonStyle.fontFamily.medium,
+                    color: '#fff',
+                    marginTop: 15,
+                    marginBottom: 15,
+                  }}>
+                  Location
+                </Text>
+                <Dropdown
+                  style={[
+                    tw``,
+                    {
+                      zIndex: 10,
+                      width: SIZES.width * 0.875,
+                      backgroundColor: '#F7F5F5',
+                      borderColor: '#9E9E9E14',
+                      height: 50,
+                      borderRadius: 10,
+                      paddingHorizontal: 10,
+                    },
+                  ]}
+                  data={locationItems}
+                  search
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={'Select state'}
+                  searchPlaceholder="Search..."
+                  value={locationValue}
+                  itemTextStyle={{
+                    color: 'black',
+                  }}
+                  onChange={item => {
+                    console.log(item.value);
+                    setLocationValue(item.value);
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  zIndex: genderOpen ? 0 : 2,
+                  minHeight: 500,
+                  marginBottom: -400,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: commonStyle.fontFamily.medium,
+                    color: '#fff',
+                    marginTop: 15,
+                    marginBottom: 15,
+                  }}>
+                  State
+                </Text>
+                <Dropdown
+                  style={[
+                    tw``,
+                    {
+                      zIndex: 10,
+                      width: SIZES.width * 0.875,
+                      backgroundColor: '#F7F5F5',
+                      borderColor: '#9E9E9E14',
+                      height: 50,
+                      borderRadius: 10,
+                      paddingHorizontal: 10,
+                    },
+                  ]}
+                  data={allState}
+                  search
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={'Select state'}
+                  searchPlaceholder="Search..."
+                  value={stateValue}
+                  itemTextStyle={{
+                    color: 'black',
+                  }}
+                  onChange={item => {
+                    console.log(item.value);
+                    setStateValue(item.value);
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  zIndex: genderOpen ? 0 : 2,
+                  minHeight: 500,
+                  marginBottom: -400,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: commonStyle.fontFamily.medium,
+                    color: '#fff',
+                    marginTop: 15,
+                    marginBottom: 15,
+                  }}>
+                  Nationality
+                </Text>
+                <Dropdown
+                  style={[
+                    tw``,
+                    {
+                      zIndex: 10,
+                      width: SIZES.width * 0.875,
+                      backgroundColor: '#F7F5F5',
+                      borderColor: '#9E9E9E14',
+                      height: 50,
+                      borderRadius: 10,
+                      paddingHorizontal: 10,
+                    },
+                  ]}
+                  data={allCountry}
+                  search
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={'Select Nationality'}
+                  searchPlaceholder="Search..."
+                  value={nationalityValue}
+                  itemTextStyle={{
+                    color: 'black',
+                  }}
+                  onChange={item => {
+                    console.log(item.value);
+                    setNationalityValue(item.value);
                   }}
                 />
               </View>
@@ -691,6 +849,53 @@ export default function BusinessSignup() {
                     borderColor: 'red',
                     opacity: 1,
                     borderWidth: 0,
+                  }}
+                />
+              </View>
+
+              <View
+                style={{
+                  zIndex: genderOpen ? 0 : 2,
+                  minHeight: 500,
+                  marginBottom: -400,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: commonStyle.fontFamily.medium,
+                    color: '#fff',
+                    marginTop: 15,
+                    marginBottom: 15,
+                  }}>
+                  State of Residence
+                </Text>
+                <Dropdown
+                  style={[
+                    tw``,
+                    {
+                      zIndex: 10,
+                      width: SIZES.width * 0.875,
+                      backgroundColor: '#F7F5F5',
+                      borderColor: '#9E9E9E14',
+                      height: 50,
+                      borderRadius: 10,
+                      paddingHorizontal: 10,
+                    },
+                  ]}
+                  data={allState}
+                  search
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={'Select state'}
+                  searchPlaceholder="Search..."
+                  value={stateValue}
+                  itemTextStyle={{
+                    color: 'black',
+                  }}
+                  onChange={item => {
+                    console.log(item.value);
+                    setStateValue(item.value);
                   }}
                 />
               </View>

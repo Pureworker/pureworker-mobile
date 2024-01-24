@@ -34,6 +34,7 @@ export default function Inbox({navigation, route}: any) {
   const agentData = useSelector((state: any) => state.user.userData);
   const chatData = useSelector((store: any) => store.user.chatData);
   // console.log('datahere', agentData?._id);
+  console.log('passed:',route.params);
   useEffect(() => {
     socket.connect();
     console.log('-idid', socket.id);
@@ -146,7 +147,7 @@ export default function Inbox({navigation, route}: any) {
                     lineHeight: 14,
                   },
                 ]}>
-                {userName === 'Support Support' ? 'Support' : userName}
+                {(userName === 'Support Support' || userName === 'Support')  ? 'Support' : userName}
               </Text>
               <View style={tw`flex flex-row`}>
                 <Text
@@ -159,7 +160,7 @@ export default function Inbox({navigation, route}: any) {
                       lineHeight: 14,
                     },
                   ]}>
-                  {userName === 'Support Support' ? '' : 'Xd ago'}
+                  {(userName === 'Support Support' || userName === 'Support') ? '' : 'Xd ago'}
                 </Text>
               </View>
             </View>
@@ -236,27 +237,29 @@ export default function Inbox({navigation, route}: any) {
                       );
                     }
                   })}
-                </View>
+                </View> 
               ))}
             </ScrollView>
           </View>
 
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('OrderDetails', {data: agentData});
-            }}
-            style={[
-              tw`bg-[#2D303C] absolute bottom-[11%] rounded-lg right-[5%]  items-center justify-center`,
-              {width: perWidth(90), aspectRatio: 1, height: perHeight(35)},
-            ]}>
-            <Textcomp
-              text={'Tap to Hire'}
-              size={14}
-              lineHeight={16.5}
-              color={'#FFC727'}
-              fontFamily={'Inter-SemiBold'}
-            />
-          </TouchableOpacity>
+          {(userName === 'Support Support' || userName === 'Support') ? null : (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('OrderDetails', {data: agentData});
+              }}
+              style={[
+                tw`bg-[#2D303C] absolute bottom-[11%] rounded-lg right-[5%]  items-center justify-center`,
+                {width: perWidth(90), aspectRatio: 1, height: perHeight(35)},
+              ]}>
+              <Textcomp
+                text={'Tap to Hire'}
+                size={14}
+                lineHeight={16.5}
+                color={'#FFC727'}
+                fontFamily={'Inter-SemiBold'}
+              />
+            </TouchableOpacity>
+          )}
           <View
             style={[
               tw` w-full mx-auto mt-auto  px-[4%] border-t-4 border-black `,

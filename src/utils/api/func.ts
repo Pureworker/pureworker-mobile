@@ -130,7 +130,6 @@ export const getPopularService = async (param: any) => {
     };
   }
 };
-
 export const uploadAssetsDOCorIMG = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   const formData = new FormData();
@@ -141,20 +140,15 @@ export const uploadAssetsDOCorIMG = async (param: any) => {
     fieldname: 'profile-picture',
     // name: param.name || param?.fileName, // Adjust the filename as needed
   });
+  formData.append('folder', 'profile');
   console.log('uploadAssetsDOCorIMG started', param, formData, AuthToken);
-
   try {
-    const response = await axios.post(
-      'https://creatbase-dev.onrender.com/assets/upload',
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${AuthToken}`,
-          'Content-Type': 'multipart/form-data',
-        },
+    const response = await axios.post(`${API_BASE_URL}/upload`, formData, {
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+        'Content-Type': 'multipart/form-data',
       },
-    );
-
+    });
     if (response.status === 201) {
       console.log('uploadAssetsDOCorIMG', response?.data);
     }
@@ -991,7 +985,7 @@ export const getReferralDetails = async (param: any) => {
 };
 
 export const deleteAccount = async () => {
-  console.log('deleteAccount func started');
+  // console.log('deleteAccount func started');
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   try {
     const response = await axios({
@@ -1077,7 +1071,6 @@ export const getSupportUser = async (param: any) => {
 export const getBanks = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   console.log('getBanks func started', AuthToken);
-
   try {
     const response = await axios({
       method: 'get',
@@ -1088,6 +1081,7 @@ export const getBanks = async (param: any) => {
     });
     if (response.status === 201 || response.status === 200) {
       // console.log('Banks data:', response?.data);
+
       store.dispatch(addbanks(response?.data?.data));
     }
     //   console.log("res", response);

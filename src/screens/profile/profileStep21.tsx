@@ -239,7 +239,6 @@ const ProfileStep21 = () => {
     const res: any = await uploadAssetsDOCorIMG(param);
     if (res?.status === 201 || res?.status === 200) {
       console.log('ApartmentType', res?.data);
-
       setisLoading(false);
       return res?.data?.doc?.url;
     }
@@ -401,7 +400,16 @@ const ProfileStep21 = () => {
               fontType={'semiBold'}
               style={{fontSize: 16, marginTop: 20, color: colors.black}}
             />
-
+            <View style={tw`mt-2`}>
+              <Textcomp
+                text={'You can edit, delete or add a new service.'}
+                size={12}
+                lineHeight={16}
+                color={'#000413'}
+                fontFamily={'Inter-Regular'}
+                
+              />
+            </View>
             <View
               style={{flexDirection: 'row', flexWrap: 'wrap', marginTop: 20}}>
               {category?.length > 0
@@ -448,7 +456,7 @@ const ProfileStep21 = () => {
                         </View>
 
                         <TouchableOpacity
-                          style={tw``}
+                          style={tw`border bg-white rounded px-2 py-0.5`}
                           onPress={() => {
                             const newPortfolioItem = {
                               service: '',
@@ -459,7 +467,7 @@ const ProfileStep21 = () => {
                             setSelectedService(item);
                           }}>
                           <Textcomp
-                            text={d?.length > 0 ? 'Edit' : 'Complete'}
+                            text={d?.length > 0 ? 'Done' : 'Edit'}
                             size={16}
                             lineHeight={18.75}
                             color={colors.parpal}
@@ -566,9 +574,16 @@ const ProfileStep21 = () => {
       </ScrollView>
       <Modal
         isVisible={addModal}
-        onModalHide={() => {}}
+        onModalHide={() => {
+          setaddModal(false);
+        }}
         style={{width: SIZES.width, height: SIZES.height, marginHorizontal: 0}}
-        deviceWidth={SIZES.width}>
+        deviceWidth={SIZES.width}
+        onBackdropPress={() => setaddModal(false)}
+        swipeThreshold={200}
+        // swipeDirection={['down']}
+        // onSwipeComplete={() => setaddModal(false)}
+        onBackButtonPress={() => setaddModal(false)}>
         <View
           style={[
             tw`bg-[#EBEBEB]  mx-auto mt-auto   p-4 pb-8`,
@@ -587,7 +602,7 @@ const ProfileStep21 = () => {
             </View>
             <View style={[tw` mt-1`]}>
               <Textcomp
-                text={'Follow the steps below to add a service'}
+                text={'Customers need assurance of your service proficiency.'}
                 size={10}
                 lineHeight={12}
                 color={'#000413'}
