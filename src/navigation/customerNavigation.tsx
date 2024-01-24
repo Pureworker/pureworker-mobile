@@ -28,6 +28,7 @@ import TipServiceProvider from '../screens/user/TipServiceProvider';
 import OrderActive from '../screens/user/orderActive';
 import Inbox from '../screens/user/chat/inbox';
 import Withdraw from '../screens/user/withdraw';
+import FaceDetection from '../screens/faceDetection';
 
 const Stack = createNativeStackNavigator();
 
@@ -162,6 +163,11 @@ export default function CustomerNavigation() {
       <Stack.Screen
         name="Withdraw"
         component={Withdraw}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+            <Stack.Screen
+        name="FaceDetection"
+        component={FaceDetection}
         options={{headerShown: false, animationEnabled: false}}
       />
     </Stack.Navigator>
