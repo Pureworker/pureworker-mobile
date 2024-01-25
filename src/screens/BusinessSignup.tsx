@@ -91,6 +91,24 @@ export default function BusinessSignup() {
       });
       return;
     }
+    if (userType !== FREELANCER && !cacNo) {
+      Snackbar.show({
+        text: 'Please enter your cac No',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      return;
+    }
+    if (userType !== FREELANCER && !name) {
+      Snackbar.show({
+        text: 'Please enter your Business Name',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      return;
+    }
     if (userType === FREELANCER && !lastName) {
       Snackbar.show({
         text: 'Please enter your lastName',

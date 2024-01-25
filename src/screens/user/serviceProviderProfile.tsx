@@ -386,7 +386,7 @@ const ServiceProviderProfile = () => {
                   </View>
                   <View style={[tw` `, {marginTop: perHeight(5)}]}>
                     <Textcomp
-                      text={`₦${profileData?.portfolio.minPrice} - ₦${profileData?.portfolio.maxPrice}`}
+                      text={`₦${profileData?.portfolio?.minPrice} - ₦${profileData?.portfolio?.maxPrice}`}
                       size={12}
                       lineHeight={15}
                       color={'#FFFFFF'}

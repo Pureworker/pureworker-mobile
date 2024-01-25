@@ -751,7 +751,7 @@ export const getMessagesbyuser = async (param: any) => {
     if (response.status === 201) {
       console.log('response data:', response?.data, response?.data[0]);
     }
-    console.log('res', response);
+    console.log('res', response, response?.data);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);

@@ -61,8 +61,8 @@ export default function PortComp({
     const prepData = {
       service: service?._id,
       description: passedData?.serviceDescription,
-      maxPrice: passedData?.servicePriceMin,
-      minPrice: passedData?.servicePriceMax,
+      maxPrice: passedData?.servicePriceMax,
+      minPrice: passedData?.servicePriceMin,
       portfolio: passedData?.portfolios,
     };
     console.log('eff---', prepData, prepData?.portfolio);
@@ -395,7 +395,7 @@ export default function PortComp({
                 </View>
               </View>
             </>
-            <View style={[tw`border-b`, {borderWidth: 2}]}></View>
+            <View style={[tw`border-b`, {borderWidth: 2}]} />
 
             <View style={[tw`mt-4`, {}]}>
               <View style={[tw``, {}]}>

@@ -18,6 +18,7 @@ type TextInputsProps = {
   disable?: boolean;
   maxLength?: number;
   styleInput?: any;
+  placeHolderColor?: any;
 };
 
 const TextInputs = ({
@@ -34,6 +35,7 @@ const TextInputs = ({
   disable,
   maxLength,
   styleInput,
+  placeHolderColor,
 }: TextInputsProps) => {
   const [focuse, setFocuse] = useState(false);
   const [secureText, setSecureTextEntry] = useState(true);
@@ -87,7 +89,7 @@ const TextInputs = ({
           editable={disable}
           placeholder={labelText}
           maxLength={maxLength}
-          placeholderTextColor={'#000000'}
+          placeholderTextColor={ placeHolderColor ? placeHolderColor : '#000000'}
           style={[
             {
               flex: 1,

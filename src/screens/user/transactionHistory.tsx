@@ -1,28 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  Image,
+  View, Image,
   TouchableOpacity,
   Platform,
   StatusBar,
-  ScrollView,
-  FlatList,
+  ScrollView
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
-import {StackNavigation} from '../../constants/navigation';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { StackNavigation } from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
-import FastImage from 'react-native-fast-image';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { SIZES, perHeight, perWidth } from '../../utils/position/sizes';
 import {
   addTransactions,
   addcategorizedTransdata,
 } from '../../store/reducer/mainSlice';
-import {getTransactions} from '../../utils/api/func';
+import { getTransactions } from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import { formatDateHistory } from '../../utils/utils';
@@ -31,10 +27,6 @@ const TransactionHistory = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [isLoading, setisLoading] = useState(false);
-  // const [categorizedData, setcategorizedData] = useState({});
-
-  //filter  transaction datat to get months
-  const months = ['May', 'Apr', 'Feb'];
   const transactions = useSelector((state: any) => state.user.transactions);
   const categorizedData = useSelector(
     (state: any) => state.user.categorizedTransdata,
@@ -43,20 +35,20 @@ const TransactionHistory = () => {
 
   useEffect(() => {
     const initGetUsers = async () => {
-      setisLoading(true);
-      const res: any = await getTransactions('');
-      // console.log('dddddddd', res?.data);
-      if (res?.status === 201 || res?.status === 200) {
-        dispatch(addTransactions(res?.data?.data));
-        sort(transactions);
+      try {
+        const res: any = await getTransactions('');
+        if (res?.status === 201 || res?.status === 200) {
+          dispatch(addTransactions(res?.data?.data));
+          sort(res?.data?.data);
+        }
+      } catch (error) {
+        console.error('Error fetching transactions:', error);
+      } finally {
+        setisLoading(false);
       }
-      // setloading(false);
-      setisLoading(false);
     };
     initGetUsers();
   }, []);
-
-  // const categorizedData: any = {};
   const sort = (data: any[]) => {
     // Create an object to store categorized data
     // Iterate through the data and categorize it by month
@@ -83,7 +75,7 @@ const TransactionHistory = () => {
     //   categorizedData[monthYear].sort((a, b) => {
     //     const dateA = new Date(a.createdAt);
     //     const dateB = new Date(b.createdAt);
-    //     return dateA - dateB;
+    //     return dateA - dateB;65a589095bb26a47b7dc9fb3 659e66e97d7b5336ca150c8d
     //   });
     // });
   };

@@ -211,8 +211,13 @@ const Withdraw = () => {
                               borderRadius: 10,
                               paddingHorizontal: 10,
                               marginTop: 15,
+                              
                             },
                           ]}
+                          placeholderStyle={{
+                            color: '#00000080',
+                            fontWeight: 300,
+                          }}
                           data={bankList}
                           search
                           maxHeight={300}
@@ -277,6 +282,7 @@ const Withdraw = () => {
                           disable={true}
                           maxLength={11}
                           keyBoardType="numeric"
+                          placeHolderColor={'#00000080'}
                         />
                         {field.touched?.accountNumber &&
                           field.errors.accountNumber && (
@@ -328,6 +334,7 @@ const Withdraw = () => {
                           }`}
                           setState={form.setFieldValue}
                           disable={false}
+                          placeHolderColor={'#00000080'}
                         />
                       </>
                     )}
@@ -361,6 +368,7 @@ const Withdraw = () => {
                           }}
                           disable={true}
                           keyBoardType="numeric"
+                          placeHolderColor={'#00000080'}
                         />
                         {errors.amount && touched.amount && (
                           <Text style={{color: 'red', marginTop: 5}}>

@@ -48,7 +48,7 @@ export default function Inbox({navigation, route}: any) {
       // console.log(agentData?._id);
       const res: any = await getMessagesbyuser(`${userId}`);
       // const res: any = await getMessagesbyuser();
-      if (res?.status === 201) {
+      if (res?.status === 201 || res?.status === 200) {
         dispatch(addchatData(res?.data.messages));
         // console.log('here_', res?.data.messages);
       }

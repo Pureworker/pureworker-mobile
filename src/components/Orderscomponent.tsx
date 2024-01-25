@@ -1,4 +1,4 @@
-import {Image, View, TouchableOpacity, Platform} from 'react-native';
+import {Image, View, TouchableOpacity, Platform, Alert} from 'react-native';
 import {SIZES, perHeight, perWidth} from '../utils/position/sizes';
 import React, {useState} from 'react';
 import images from '../constants/images';
@@ -9,9 +9,14 @@ import {Rating, AirbnbRating} from 'react-native-ratings';
 import Modal from 'react-native-modal';
 import {WIDTH_WINDOW} from '../constants/generalStyles';
 import {useDispatch} from 'react-redux';
-import {getUserOrders} from '../utils/api/func';
+import {cancelOrder, getUserOrders} from '../utils/api/func';
 import {addcustomerOrders} from '../store/reducer/mainSlice';
 import socket from '../utils/socket';
+import Chat from '../assets/svg/Chat';
+import Location from '../assets/svg/Location';
+import DisputeIcon from '../assets/svg/Dispute';
+import Cross from '../assets/svg/Cross';
+import Snackbar from 'react-native-snackbar';
 
 const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
   const [saved, setsaved] = useState(false);
@@ -20,7 +25,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
 
   const [modalSection, setmodalSection] = useState('All');
 
-  console.log('OrderDetails',item);
+  console.log('OrderDetails', item);
 
   function formatDateToCustomFormat(dateString) {
     const options = {year: 'numeric', month: 'short', day: 'numeric'};
@@ -42,6 +47,45 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
     }
     // setloading(false);
     setisLoading(false);
+  };
+
+  const handleCancel = async () => {
+    setisLoading(true);
+    if (item?._id) {
+      const res = await cancelOrder(item?._id, {reason: 'Incorrect Request'});
+      if (res?.status === 200 || res?.status === 201) {
+        // navigation.navigate('PaymentConfirmed');
+        await initGetOrders();
+        Alert.alert('successful');
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+      setisLoading(false);
+      setInfoModal(false);
+      setmodalSection('All');
+    } else {
+      Snackbar.show({
+        text: 'Please fill all fields',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      setisLoading(false);
+      setInfoModal(false);
+      setmodalSection('All');
+    }
+    setisLoading(false);
+    setInfoModal(false);
+    setmodalSection('All');
   };
 
   return (
@@ -250,15 +294,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                   tw`flex mt-10 flex-row`,
                   {marginHorizontal: perWidth(30)},
                 ]}>
-                <Image
-                  resizeMode="contain"
-                  style={{
-                    width: perWidth(4),
-                    height: perWidth(12),
-                    tintColor: 'black',
-                  }}
-                  source={images.menu2}
-                />
+                <Cross />
                 <View style={[tw``, {marginLeft: perWidth(36)}]}>
                   <Textcomp
                     text={'Cancel Order'}
@@ -283,16 +319,8 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                   tw`flex mt-10 flex-row`,
                   {marginHorizontal: perWidth(30), marginTop: perHeight(25)},
                 ]}>
-                <Image
-                  resizeMode="contain"
-                  style={{
-                    width: perWidth(4),
-                    height: perWidth(12),
-                    tintColor: 'black',
-                  }}
-                  source={images.menu2}
-                />
-                <View style={[tw``, {marginLeft: perWidth(36)}]}>
+                <Chat />
+                <View style={[tw``, {marginLeft: perWidth(25)}]}>
                   <Textcomp
                     text={'Contact Service Provider'}
                     size={14}
@@ -311,16 +339,8 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                   tw`flex mt-10 flex-row`,
                   {marginHorizontal: perWidth(30), marginTop: perHeight(25)},
                 ]}>
-                <Image
-                  resizeMode="contain"
-                  style={{
-                    width: perWidth(4),
-                    height: perWidth(12),
-                    tintColor: 'black',
-                  }}
-                  source={images.menu2}
-                />
-                <View style={[tw``, {marginLeft: perWidth(36)}]}>
+                <Location />
+                <View style={[tw``, {marginLeft: perWidth(30)}]}>
                   <Textcomp
                     text={'View Location'}
                     size={14}
@@ -335,15 +355,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                   tw`flex mt-10 flex-row`,
                   {marginHorizontal: perWidth(30), marginTop: perHeight(25)},
                 ]}>
-                <Image
-                  resizeMode="contain"
-                  style={{
-                    width: perWidth(4),
-                    height: perWidth(12),
-                    tintColor: 'black',
-                  }}
-                  source={images.menu2}
-                />
+                <DisputeIcon />
                 <View style={[tw``, {marginLeft: perWidth(36)}]}>
                   <Textcomp
                     text={'Order Dispute'}
@@ -404,9 +416,8 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
               </View>
 
               <TouchableOpacity
-                onPress={() => {
-                  setInfoModal(false);
-                  setmodalSection('All');
+                onPress={async () => {
+                  await handleCancel();
                 }}
                 style={[
                   {

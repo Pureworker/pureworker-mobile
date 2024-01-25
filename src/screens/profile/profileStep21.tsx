@@ -407,7 +407,6 @@ const ProfileStep21 = () => {
                 lineHeight={16}
                 color={'#000413'}
                 fontFamily={'Inter-Regular'}
-                
               />
             </View>
             <View
