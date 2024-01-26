@@ -263,7 +263,7 @@ const TokenVerification = () => {
                 style={{
                   backgroundColor: colors.parpal,
                   marginHorizontal: 25,
-                  marginTop: 252,
+                  marginTop: 152,
                 }}
                 disable={code.length < 6}
               />

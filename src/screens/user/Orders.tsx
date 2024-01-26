@@ -42,10 +42,7 @@ const Orders = () => {
   const [searchInput, setsearchInput] = useState('');
   const [activeSection, setactiveSection] = useState('Active');
   const [isLoading, setisLoading] = useState(false);
-
-  const orders = [0, 1, 2, 3];
   const customerOrders = useSelector((state: any) => state.user.customerOrders);
-
   //modals
   const [serviceProviderModal, setserviceProviderModal] = useState(false);
   const [privateFeedback, setprivateFeedback] = useState(false);
@@ -60,7 +57,6 @@ const Orders = () => {
   useEffect(() => {
     // setorderDelivered(true);
   }, []);
-
   useEffect(() => {
     const initGetOrders = async () => {
       setisLoading(true);
@@ -74,9 +70,6 @@ const Orders = () => {
     };
     initGetOrders();
   }, []);
-
-  // console.log(customerOrders);
-
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View

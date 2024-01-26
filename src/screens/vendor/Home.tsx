@@ -162,6 +162,9 @@ const Home = ({navigation}: any) => {
     };
   }, []);
   const welcomeModal = useSelector((state: any) => state.user.welcomeModal);
+
+  console.log(userData?.businessName);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
@@ -242,14 +245,20 @@ const Home = ({navigation}: any) => {
             ]}>
             <Textcomp
               // text={`Welcome ${userData?.firstName || userData?.businessName},`}
+              // text={`Welcome ${
+              //   userData?.firstName
+              //     ? userData?.firstName !== undefined
+              //       ? userData?.firstName
+              //       : userData?.businessName === undefined
+              //       ? ''
+              //       : userData?.businessName
+              //     : ''
+              // },`}
               text={`Welcome ${
-                userData?.firstName
-                  ? userData?.firstName !== undefined
-                    ? userData?.firstName
-                    : userData?.businessName !== undefined
-                    ? userData?.businessName
-                    : ''
-                  : ''
+                userData?.firstName ||
+                (userData?.businessName !== undefined
+                  ? userData?.businessName
+                  : '')
               },`}
               size={17}
               lineHeight={17}
@@ -377,9 +386,7 @@ const Home = ({navigation}: any) => {
                   {borderTopRightRadius: 20, borderTopLeftRadius: 20},
                 ]}>
                 <Textcomp
-                  text={`₦${formatAmount(
-                    userData?.wallet?.availableBalance,
-                  )}`}
+                  text={`₦${formatAmount(userData?.wallet?.availableBalance)}`}
                   size={20}
                   lineHeight={20}
                   color={'#000413'}
@@ -417,7 +424,7 @@ const Home = ({navigation}: any) => {
                 ]}>
                 <Textcomp
                   // text={'NGN249,0000'}
-                  text={`NGN${formatAmount(
+                  text={`₦${formatAmount(
                     userData?.wallet?.availableBalance,
                   )}`}
                   size={20}

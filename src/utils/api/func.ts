@@ -561,7 +561,7 @@ export const addRatingOrder = async (param: any, data: any) => {
 
 export const getUserOrders = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
-  console.log('getUserOrders func started', param);
+  console.log('getUserOrders func started', param, AuthToken);
   try {
     const response = await axios({
       method: 'get',

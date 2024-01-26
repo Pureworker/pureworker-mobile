@@ -56,7 +56,7 @@ const OrderReview = ({route}: any) => {
 
     const Data = {
       serviceProvider: _data.serviceProvider,
-      totalPrice: Number(_data.totalPrice),
+      totalPrice: Number(_data?.totalPrice) + Number(_data?.totalPrice * 0.075),
       amount: Number(_data.totalPrice),
       description: _data.description,
       scheduledDeliveryDate: _data.date,

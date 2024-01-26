@@ -216,7 +216,7 @@ const FundingHistory = () => {
                             <View style={tw`flex flex-col ml-4`}>
                               <View style={[tw``, {marginTop: perHeight(0)}]}>
                                 <Textcomp
-                                  text={'Paystack'}
+                                  text={'Flutterwave'}
                                   size={15}
                                   lineHeight={17}
                                   color={'#000413'}

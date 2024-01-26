@@ -364,7 +364,7 @@ const OrderDetails = () => {
                 size={17}
                 lineHeight={17}
                 color={'#000413'}
-                fontFamily={'Inter-SemiBold'}
+                fontFamily={'Inter-Regular'}
               />
             </TouchableOpacity>
 

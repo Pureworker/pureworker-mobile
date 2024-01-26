@@ -107,15 +107,28 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
           ]}>
           <View style={tw`flex flex-row `}>
             <View style={[tw``, {width: perWidth(50), height: perWidth(50)}]}>
-              <Image
-                resizeMode="cover"
-                style={{
-                  width: perWidth(50),
-                  height: perWidth(50),
-                  borderRadius: perWidth(50) / 2,
-                }}
-                source={images.welcome}
-              />
+              {item?.serviceProvider?.profilePic ? (
+                <Image
+                  resizeMode="cover"
+                  style={{
+                    width: perWidth(50),
+                    height: perWidth(50),
+                    borderRadius: perWidth(50) / 2,
+                  }}
+                  source={{uri: item?.serviceProvider?.profilePic}}
+                />
+              ) : (
+                <Image
+                  resizeMode="cover"
+                  style={{
+                    width: perWidth(50),
+                    height: perWidth(50),
+                    borderRadius: perWidth(50) / 2,
+                  }}
+                  source={images.welcome}
+                />
+              )}
+
               <View
                 style={[
                   tw`absolute bottom-0 border-2 right-1 rounded-full`,
@@ -127,7 +140,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
               <View style={[tw`flex flex-row justify-between`, {}]}>
                 <View style={[tw``, {}]}>
                   <Textcomp
-                    text={`₦ ${item?.totalPrice}`}
+                    text={`₦ ${item?.amount || item?.totalPrice}`}
                     size={14}
                     lineHeight={16}
                     color={colors.white}

@@ -1,22 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  Platform,
-  StatusBar,
-  ScrollView,
-} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
-import {StackNavigation} from '../../../constants/navigation';
+import React, {useState} from 'react';
+import {View, Image, TouchableOpacity} from 'react-native';
+import {useSelector} from 'react-redux';
 import images from '../../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../../components/Textcomp';
 import socket from '../../../utils/socket';
 import Modal from 'react-native-modal/dist/modal';
-import {SIZES, perHeight, perWidth} from '../../../utils/position/sizes';
+import {SIZES, perWidth} from '../../../utils/position/sizes';
 import colors from '../../../constants/colors';
 import {WIDTH_WINDOW} from '../../../constants/generalStyles';
 
@@ -28,7 +18,7 @@ export default function ListComp({navigation, item}: any) {
   }
   const userData = useSelector((state: any) => state.user.userData);
   const [visible, setvisible] = useState(false);
-  return ( 
+  return (
     <>
       <TouchableOpacity
         onLongPress={() => setvisible(true)}
@@ -115,7 +105,10 @@ export default function ListComp({navigation, item}: any) {
             />
             <View>
               <View
-                style={[tw` py-4 flex flex-row items-center`, {marginLeft: perWidth(30)}]}>
+                style={[
+                  tw` py-4 flex flex-row items-center`,
+                  {marginLeft: perWidth(30)},
+                ]}>
                 <Image
                   source={images.profile}
                   style={{height: 50, width: 50}}

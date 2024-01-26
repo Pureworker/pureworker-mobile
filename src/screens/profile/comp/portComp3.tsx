@@ -58,6 +58,14 @@ export default function PortComp({
   const dispatch = useDispatch();
   const handleProfileSetup = async passedData => {
     console.log(passedData);
+
+    if (Number(passedData?.servicePriceMin) < 500) {
+      ToastShort('Min Price cannot be less than 500 naira.');
+    }
+    if (passedData?.servicePriceMax < passedData?.servicePriceMin) {
+      ToastShort('MaxPrice must be greater than MinPrice');
+      return;
+    }
     const prepData = {
       service: service?._id,
       description: passedData?.serviceDescription,
@@ -68,7 +76,6 @@ export default function PortComp({
     console.log('eff---', prepData, prepData?.portfolio);
     const res = await addPortfolio(prepData);
     console.error('RESULT', res?.data);
-
     if (res?.status === 200 || res?.status === 201) {
       // navigation.navigate('ProfileStep3');
       // setCurrentState('3');
@@ -76,6 +83,15 @@ export default function PortComp({
       ToastLong('Added successfully!.');
       close();
     } else {
+      ToastLong(
+        `${
+          res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured'
+        }`,
+      );
       Snackbar.show({
         text: res?.error?.message
           ? res?.error?.message
@@ -338,7 +354,7 @@ export default function PortComp({
                     justifyContent: 'center',
                     backgroundColor: colors.lightBlack,
                     height: 50,
-                    width: 120,
+                    width: 110,
                     borderRadius: 5,
                   }}>
                   <TextWrapper
@@ -373,7 +389,7 @@ export default function PortComp({
                     style={{
                       fontSize: 12,
                       color: colors.black,
-                      marginHorizontal: 10,
+                      marginHorizontal: 7.5,
                     }}>
                     to
                   </TextWrapper>

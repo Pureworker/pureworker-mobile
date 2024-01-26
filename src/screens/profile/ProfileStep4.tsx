@@ -34,6 +34,12 @@ import {addcompleteProfile, addformStage} from '../../store/reducer/mainSlice';
 import {_verifyID, completeProfile} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
+import {DateTime} from 'luxon';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import Textcomp from '../../components/Textcomp';
+import {perHeight} from '../../utils/position/sizes';
+import tw from 'twrnc';
+import { ToastShort } from '../../utils/utils';
 type Route = {
   key: string;
   name: string;
@@ -64,8 +70,7 @@ const ProfileStep4 = () => {
 
   const [login] = useLoginMutation();
   const [createService] = useCreateServiceMutation();
-
-  // console.log('--pppp', completeProfileData);
+  const userData = useSelector((state: any) => state.user.userData);
 
   const dispatch = useDispatch();
 
@@ -124,6 +129,63 @@ const ProfileStep4 = () => {
     }
     setisLoading(false);
   };
+  const verifyCAC = async () => {
+    if (schdeuleIsoDate) {
+      ToastShort('Please enter Registration Date');
+    }
+    if (idNumber) {
+      ToastShort('');
+    }
+    setisLoading(true);
+    const data = {
+      type: 'cac',
+      number: idNumber,
+      date: schdeuleIsoDate,
+      company_name: idName,
+    };
+    const res = await _verifyID(data);
+    console.log(res, 'CAC-data-here', res?.data);
+    if (
+      (res?.status === 200 || res?.status === 201) &&
+      res?.data?.status === 'success'
+    ) {
+      dispatch(
+        addcompleteProfile({
+          identity: {
+            means:
+              selectedVerification === 'Bank Verification Number'
+                ? 'bvn'
+                : 'nin',
+            number: idNumber,
+          },
+        }),
+      );
+      //then save to db
+      const resp: any = await completeProfile({
+        identity: {
+          means: 'cac',
+          number: idNumber,
+        },
+      });
+      console.log('result', res?.data);
+      if (resp?.status === 200 || resp?.status === 201) {
+        navigation.navigate('Congratulations');
+        dispatch(addformStage(6));
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+    }
+    setisLoading(false);
+  };
   const handleProfileSetup = () => {
     if (idNumber && selectedVerification) {
       const profileData = {
@@ -134,7 +196,7 @@ const ProfileStep4 = () => {
         appointmentTime: null,
       };
 
-      if (getUser?.user?.accountType?.toUpperCase() === 'FREELANCER') {
+      if (userData?.accountType?.toUpperCase() === 'FREELANCER') {
         dispatch(
           addcompleteProfile({
             identity: {
@@ -144,11 +206,12 @@ const ProfileStep4 = () => {
           }),
         );
       }
-      if (getUser?.user?.accountType?.toUpperCase() === 'BUSINESS') {
+      if (userData?.accountType?.toUpperCase() === 'BUSINESS') {
         dispatch(
           addcompleteProfile({
             identity: {
-              businessName: selectedVerification,
+              means: selectedVerification,
+              businessName: idName,
               cac: idNumber,
             },
           }),
@@ -184,17 +247,38 @@ const ProfileStep4 = () => {
       });
     }
   };
-
-  const handleProfileSetup2 = async () => {};
-
-  const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
-  const getUser = getUserData ?? [];
-  const userData = useSelector((state: any) => state.user.userData);
-
-  // console.log(getUserData,'asdf', getUser, getUser?.userType);
-  console.log('mmmm', getUser?.user?.accountType?.toUpperCase());
-
+  console.log('mmmm');
   const [collapseState2, setcollapseState2] = useState(false);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [schdeuleIsoDate, setschdeuleIsoDate] = useState('');
+  const [displayDate, setdisplayDate] = useState('');
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+  const handleConfirm = (date: any) => {
+    const f = `${date}`;
+    const jsDate = new Date(f);
+    const luxonDateTime = DateTime.fromJSDate(jsDate);
+    const isoString = luxonDateTime.toISO();
+    console.log(isoString);
+    setschdeuleIsoDate(isoString);
+    setdisplayDate(f);
+    hideDatePicker();
+  };
+  function formatToCustomString(date) {
+    const jsDate = new Date(date);
+    const luxonDateTime = DateTime.fromJSDate(jsDate);
+
+    return luxonDateTime.toLocaleString({
+      weekday: 'short',
+      month: 'short',
+      day: '2-digit',
+      year: 'numeric',
+      // hour: '2-digit',
+      // minute: '2-digit',
+    });
+  }
 
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
@@ -217,7 +301,7 @@ const ProfileStep4 = () => {
             style={{fontSize: 20, marginTop: 30, color: colors.black}}
           />
           {/* For freelancers  */}
-          {(getUser?.user?.accountType?.toUpperCase() === 'FREELANCER' ||
+          {(userData?.accountType?.toUpperCase() === 'FREELANCER' ||
             userData?.accountType?.toUpperCase() === 'FREELANCER') && (
             <>
               <Collapse
@@ -348,8 +432,8 @@ const ProfileStep4 = () => {
               />
             </>
           )}
-          {(getUser?.user?.accountType?.toUpperCase() === 'PROVIDER' ||
-            getUser?.user?.accountType?.toUpperCase() === 'BUSINESS') && (
+          {(userData?.accountType?.toUpperCase() === 'BUSINESS' ||
+            userData?.accountType?.toUpperCase() === 'PROVIDER') && (
             <>
               <>
                 <TextWrapper
@@ -387,6 +471,40 @@ const ProfileStep4 = () => {
                   setState={setIdNumber}
                 />
               </>
+              <>
+                <TextWrapper
+                  children="Date of Registration"
+                  isRequired={true}
+                  fontType={'semiBold'}
+                  style={{fontSize: 13, marginTop: 13, color: colors.black}}
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    setDatePickerVisibility(!isDatePickerVisible);
+                  }}
+                  style={[
+                    tw`w-full px-4 justify-center rounded-lg mt-3`,
+                    {backgroundColor: colors.greyLight1, height: perHeight(40)},
+                  ]}>
+                  <Textcomp
+                    text={`${
+                      displayDate
+                        ? formatToCustomString(displayDate)
+                        : 'Pick date'
+                    }`}
+                    size={15}
+                    lineHeight={17}
+                    color={displayDate ? '#000413' : 'grey'}
+                    fontFamily={'Inter-Regular'}
+                  />
+                </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={isDatePickerVisible}
+                  mode="date"
+                  onConfirm={handleConfirm}
+                  onCancel={hideDatePicker}
+                />
+              </>
             </>
           )}
 
@@ -394,10 +512,9 @@ const ProfileStep4 = () => {
             <Button
               onClick={() => {
                 // handleProfileSetup();
-                verifyID();
-                // navigation.navigate('ProfileStep5', {
-                //   serviceId: route?.params?.serviceId,
-                // });
+                userData?.accountType?.toUpperCase() === 'BUSINESS'
+                  ? verifyCAC()
+                  : verifyID();
               }}
               style={{
                 marginHorizontal: 40,
