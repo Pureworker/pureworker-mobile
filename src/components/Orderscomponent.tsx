@@ -293,7 +293,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
               onPress={() => setInfoModal(false)}
               style={tw`flex-1`}
             />
-            <View style={tw`h-[35%]  mt-auto bg-[#D9D9D9]`}>
+            <View style={tw`h-[${status !== 'PENDING' ?  '35%' : '22.5%'}]  mt-auto bg-[#D9D9D9]`}>
               <TouchableOpacity
                 onPress={() => {
                   setInfoModal(false);
@@ -343,42 +343,52 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                   />
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  setInfoModal(false);
-                  navigation.navigate('ViewLocation');
-                }}
-                style={[
-                  tw`flex mt-10 flex-row`,
-                  {marginHorizontal: perWidth(30), marginTop: perHeight(25)},
-                ]}>
-                <Location />
-                <View style={[tw``, {marginLeft: perWidth(30)}]}>
-                  <Textcomp
-                    text={'View Location'}
-                    size={14}
-                    lineHeight={17}
-                    color={'#000000'}
-                    fontFamily={'Inter-SemiBold'}
-                  />
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  tw`flex mt-10 flex-row`,
-                  {marginHorizontal: perWidth(30), marginTop: perHeight(25)},
-                ]}>
-                <DisputeIcon />
-                <View style={[tw``, {marginLeft: perWidth(36)}]}>
-                  <Textcomp
-                    text={'Order Dispute'}
-                    size={14}
-                    lineHeight={17}
-                    color={'#000000'}
-                    fontFamily={'Inter-SemiBold'}
-                  />
-                </View>
-              </TouchableOpacity>
+              {status !== 'PENDING' && (
+                <>
+                  {/* <TouchableOpacity
+                    onPress={() => {
+                      setInfoModal(false);
+                      navigation.navigate('ViewLocation');
+                    }}
+                    style={[
+                      tw`flex mt-10 flex-row`,
+                      {
+                        marginHorizontal: perWidth(30),
+                        marginTop: perHeight(25),
+                      },
+                    ]}>
+                    <Location />
+                    <View style={[tw``, {marginLeft: perWidth(30)}]}>
+                      <Textcomp
+                        text={'View Location'}
+                        size={14}
+                        lineHeight={17}
+                        color={'#000000'}
+                        fontFamily={'Inter-SemiBold'}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      tw`flex mt-10 flex-row`,
+                      {
+                        marginHorizontal: perWidth(30),
+                        marginTop: perHeight(25),
+                      },
+                    ]}>
+                    <DisputeIcon />
+                    <View style={[tw``, {marginLeft: perWidth(36)}]}>
+                      <Textcomp
+                        text={'Order Dispute'}
+                        size={14}
+                        lineHeight={17}
+                        color={'#000000'}
+                        fontFamily={'Inter-SemiBold'}
+                      />
+                    </View>
+                  </TouchableOpacity> */}
+                </>
+              )}
 
               <View
                 style={[

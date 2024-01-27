@@ -135,11 +135,19 @@ export default function CustomerSignup() {
           });
         } else {
           Snackbar.show({
-            text: res?.error?.message
-              ? res?.error?.message
-              : res?.error?.data?.message
-              ? res?.error?.data?.message
-              : 'Oops!, an error occured',
+            text:
+              res?.error?.message === 'Validation error'
+                ? res?.error?.error?.data?.[0]
+                : res?.error?.message
+                ? res?.error?.message
+                : res?.error?.data?.message
+                ? res?.error?.data?.message
+                : 'Oops!, an error occured',
+            // res?.error?.message
+            //   ? res?.error?.message
+            //   : res?.error?.data?.message
+            //   ? res?.error?.data?.message
+            //   : 'Oops!, an error occured',
             duration: Snackbar.LENGTH_SHORT,
             textColor: '#fff',
             backgroundColor: '#88087B',

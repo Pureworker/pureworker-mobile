@@ -30,6 +30,7 @@ import {isValidPhoneNumber} from '../utils/utils';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SIZES} from '../utils/position/sizes';
 import {Dropdown} from 'react-native-element-dropdown';
+import * as Yup from 'yup';
 export default function BusinessSignup() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -71,8 +72,75 @@ export default function BusinessSignup() {
   const [stateValue, setStateValue] = useState('');
 
   const navigation = useNavigation<StackNavigation>();
+  const validationSchema = Yup.object().shape({
+    firstName: Yup.string().when('accountType', {
+      is: 'business',
+      then: Yup.string(),
+      otherwise: Yup.string().required('First Name is required'),
+    }),
+    lastName: Yup.string().when('accountType', {
+      is: 'business',
+      then: Yup.string(),
+      otherwise: Yup.string().required('Last Name is required'),
+    }),
+    phoneNumber: Yup.string().length(11).required('Phone Number is required'),
+    dob: Yup.date().when('accountType', {
+      is: 'freelancer',
+      then: Yup.date().required('Date of Birth is required').nullable(),
+      otherwise: Yup.date(),
+    }),
+    email: Yup.string()
+      .email('Invalid email address')
+      .required('Email is required'),
+    gender: Yup.string().when('accountType', {
+      is: 'business',
+      then: Yup.string(),
+      otherwise: Yup.string()
+        .oneOf(['female', 'male', 'other'], 'Invalid gender')
+        .required('Gender is required'),
+    }),
+    nationality: Yup.string().required('Nationality is required'),
+    address: Yup.string().required('Address is required'),
+    state: Yup.string().required('State is required'),
+    accountType: Yup.string()
+      .required('Account Type is required')
+      .oneOf(['freelancer', 'business', 'support', 'customer']),
+    referralCode: Yup.string().optional(),
+    businessName: Yup.string().when('accountType', {
+      is: 'business',
+      then: Yup.string().required('Business Name is required'),
+      otherwise: Yup.string().notRequired(),
+    }),
+    cacNo: Yup.string().when('accountType', {
+      is: 'business',
+      then: Yup.string().required('CAC Number is required'),
+      otherwise: Yup.string().notRequired(),
+    }),
+    location: Yup.string().oneOf(['online', 'offline', 'both']).optional(),
+  });
 
   const handleSignup = async () => {
+    // Validate input data
+    await validationSchema.validate(
+      {
+        firstName,
+        lastName,
+        phoneNumber: phoneName,
+        dob: date,
+        email,
+        gender: genderValue,
+        nationality: nationalityValue,
+        address,
+        state: stateValue,
+        accountType: userType,
+        referralCode,
+        businessName: name,
+        cacNo,
+        location: locationValue,
+      },
+      {abortEarly: false}, // Collect all validation errors, not just the first one
+    );
+
     if (!email) {
       Snackbar.show({
         text: 'Please enter your email address',
@@ -203,18 +271,28 @@ export default function BusinessSignup() {
             type: 'signup',
           });
         } else {
+          console.log('ERR', res?.error?.error?.data);
+          setisLoading(false);
+          // throw new APIError(handleAPIError(res), res.status);
           Snackbar.show({
-            text: res?.error?.message
-              ? res?.error?.message
-              : res?.error?.data?.message
-              ? res?.error?.data?.message
-              : 'Oops!, an error occured',
-            duration: Snackbar.LENGTH_SHORT,
-            textColor: '#fff',
-            backgroundColor: '#88087B',
+            text:
+              res?.error?.message === 'Validation error' ||
+              res?.error?.message === 'Invalid Input Data. '
+                ? res?.error?.error?.data?.[0]
+                : res?.error?.message
+                ? res?.error?.message
+                : res?.error?.data?.message
+                ? res?.error?.data?.message
+                : 'Oops!, an error occured',
+            //   // ? res?.error?.message
+            //   // : res?.error?.data?.message
+            //   // ? res?.error?.data?.message
+            //   // : 'Oops!, an error occured',
+            //   duration: Snackbar.LENGTH_SHORT,
+            //   textColor: '#fff',
+            //   backgroundColor: '#88087B',
           });
         }
-        setisLoading(false);
       }
     } else {
       Snackbar.show({

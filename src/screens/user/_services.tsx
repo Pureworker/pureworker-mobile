@@ -36,7 +36,7 @@ const _Services = ({route}: any) => {
   const dispatch = useDispatch();
   const passedService = route.params?.service?.name;
   const id = route.params?.service?._id;
-  console.log('--kk-passed', route.params.service?.id);
+  console.log('--kk-passed', route.params.service?._id);
 
   const _providersByCateegory = useSelector(
     (state: any) => state.user.providersByCateegory,
@@ -57,6 +57,14 @@ const _Services = ({route}: any) => {
   }
 
   console.log('BOOKMARK', userData?.bookmarks);
+
+  useEffect(() => {
+    const query = userData?.bookmarks?.filter(
+      (item: {service: any}) => item?.service === id,
+    );
+    setsavedProviders(query);
+  }, [id, userData?.bookmarks]);
+
   useEffect(() => {
     const initGetUsers = async () => {
       setisLoading(true);
@@ -231,8 +239,10 @@ const _Services = ({route}: any) => {
                               scrollEnabled={false}
                               horizontal={false}
                               renderItem={(item: any, index: any) => {
-                                const ch = userData?.bookmarks?.filter(
-                                  s => s._id === item?.item?._id,
+                                console.log(':id', item?.item?._id);
+                                const ch = savedProviders?.filter(
+                                  (d: {service: any}) =>
+                                    d?.serviceProvider === item?.item?._id,
                                 );
                                 return (
                                   <ServiceCard2
@@ -242,6 +252,7 @@ const _Services = ({route}: any) => {
                                     index={item.index}
                                     id={id}
                                     serviceName={passedService}
+                                    save={ch?.length > 0 ? true : false}
                                   />
                                 );
                               }}
@@ -272,11 +283,12 @@ const _Services = ({route}: any) => {
                                     index={item.index}
                                     id={id}
                                     serviceName={passedService}
+                                    save={true}
                                   />
                                 </TouchableOpacity>
                               );
                             }}
-                            keyExtractor={item => item?.id}
+                            keyExtractor={item => item?._id}
                             ListFooterComponent={() => (
                               <View style={tw`h-20`} />
                             )}

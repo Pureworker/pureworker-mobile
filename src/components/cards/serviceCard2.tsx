@@ -10,9 +10,18 @@ import colors from '../../constants/colors';
 import {Rating, AirbnbRating} from 'react-native-ratings';
 import Review from '../Review';
 import FastImage from 'react-native-fast-image';
+import {bookMarkServiceProvide} from '../../utils/api/func';
+import {ToastShort} from '../../utils/utils';
 
-const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
-  const [saved, setsaved] = useState(false);
+const ServiceCard2 = ({
+  item,
+  index,
+  navigation,
+  id,
+  serviceName,
+  save,
+}: any) => {
+  const [saved, setsaved] = useState(save);
   // const portfolio = item?.portfolio?.filter(_item => _item?.service === id);
   const price = item?.priceRange?.filter(_item => _item?.service === id);
   console.log('pased', price, item?.description, item?.distance, 'item:', item);
@@ -21,6 +30,27 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
     const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
     return `${roundedKilometers}km`;
   }
+
+  const handleBookmark = async () => {
+    const res = await bookMarkServiceProvide({
+      service: id,
+      serviceProvider: item?._id,
+    });
+    if (res?.status === 200 || res?.status === 201) {
+      ToastShort('Service Provider bookmarked!.');
+      setsaved(!saved);
+    } else {
+      ToastShort(
+        `${
+          res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured'
+        }`,
+      );
+    }
+  };
   return (
     <TouchableOpacity
       onPress={() => {
@@ -93,7 +123,7 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
             </View>
             <TouchableOpacity
               onPress={() => {
-                setsaved(!saved);
+                handleBookmark();
               }}>
               <Image
                 resizeMode="contain"
@@ -129,7 +159,11 @@ const ServiceCard2 = ({item, index, navigation, id, serviceName}: any) => {
       <View>
         <View style={[tw``, {width: perWidth(105), marginTop: perWidth(4)}]}>
           <Textcomp
-            text={`${item?.firstName} ${item?.lastName}`}
+            text={
+              item?.businessName
+                ? `${item?.businessName}`
+                : `${item?.firstName} ${item?.lastName}`
+            }
             size={12}
             lineHeight={14}
             color={colors.white}

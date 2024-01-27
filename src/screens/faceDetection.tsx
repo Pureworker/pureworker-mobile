@@ -186,7 +186,7 @@ export default function FaceDetection({navigation}: any) {
           );
 
           if (result.liveness == Enum.LivenessStatus.PASSED) {
-            navigation.navigate('Kyc133');
+            navigation.navigate('Home');
           }
         }
       },
@@ -214,7 +214,10 @@ export default function FaceDetection({navigation}: any) {
             ]}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
               {/* <Backicon /> */}
-              <Image style={{width: 25, height: 25}} source={images.back} />
+              <Image
+                style={{width: 25, height: 25, tintColor: 'white'}}
+                source={images.back}
+              />
             </TouchableOpacity>
             <View style={tw`mx-auto`}>
               <Text

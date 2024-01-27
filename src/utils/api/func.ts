@@ -1281,3 +1281,28 @@ export const getProviderDataAll = async (param: any) => {
     };
   }
 };
+
+export const bookMarkServiceProvide = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('bookMarkServiceProvide func started', param);
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${API_BASE_URL}/user/bookmark`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+      data: param,
+    });
+    if (response.status === 201 || response.status === 200) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};

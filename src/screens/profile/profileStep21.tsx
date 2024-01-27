@@ -31,7 +31,7 @@ import {
   getProviderNew,
   uploadAssetsDOCorIMG,
 } from '../../utils/api/func';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {addProfileData, addformStage} from '../../store/reducer/mainSlice';
 import {ToastShort} from '../../utils/utils';
 import Modal from 'react-native-modal/dist/modal';
@@ -205,19 +205,15 @@ const ProfileStep21 = () => {
   };
   const [imageUrl, setImageUrl] = useState('');
   const openLibraryfordp = () => {
-    launchImageLibrary(options, async (resp: unknown) => {
+    launchCamera(options, async (resp: unknown) => {
       if (resp?.assets?.length > 0) {
         const fileSize = resp.assets[0].fileSize; // File size in bytes
         const fileSizeInMB = fileSize / (1024 * 1024); // Convert to megabytes
         if (fileSizeInMB > 1) {
-          // console.warn('Image size exceeds 1MB. Please choose a smaller image.');
           ToastShort('Image size exceeds 1MB. Please choose a smaller image.');
-          // You may want to display an error message or handle this case accordingly
           return;
         }
-
         console.log('resp', resp?.assets[0]);
-        // setPhotoUri(resp?.assets[0].uri);
         setImageUrl(resp?.assets[0].uri);
         const data = await uploadImgorDoc(resp?.assets[0]);
         console.warn('processed pic', data);
@@ -225,8 +221,30 @@ const ProfileStep21 = () => {
         const res: any = await completeProfile({profilePic: data});
       }
     });
-    // launchCamera
   };
+  // const openLibraryfordp = () => {
+  //   launchImageLibrary(options, async (resp: unknown) => {
+  //     if (resp?.assets?.length > 0) {
+  //       const fileSize = resp.assets[0].fileSize; // File size in bytes
+  //       const fileSizeInMB = fileSize / (1024 * 1024); // Convert to megabytes
+  //       if (fileSizeInMB > 1) {
+  //         // console.warn('Image size exceeds 1MB. Please choose a smaller image.');
+  //         ToastShort('Image size exceeds 1MB. Please choose a smaller image.');
+  //         // You may want to display an error message or handle this case accordingly
+  //         return;
+  //       }
+
+  //       console.log('resp', resp?.assets[0]);
+  //       // setPhotoUri(resp?.assets[0].uri);
+  //       setImageUrl(resp?.assets[0].uri);
+  //       const data = await uploadImgorDoc(resp?.assets[0]);
+  //       console.warn('processed pic', data);
+  //       dispatch(addcompleteProfile({profilePic: data}));
+  //       const res: any = await completeProfile({profilePic: data});
+  //     }
+  //   });
+  //   // launchCamera
+  // };
   const uploadImgorDoc = async (param: {
     uri: string;
     name: string | null;

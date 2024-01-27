@@ -324,24 +324,26 @@ const AddAddress = ({navigation}: any) => {
             enablePoweredByContainer={false}
           />
         </View>
-        <View style={tw` mt-3 mx-[5%] flex flex-row`}>
-          <Text1
-            text={'Address:'}
-            size={14}
-            color={colors.primary}
-            lineHeight={16}
-            style={[tw` `]}
-          />
-          <View style={tw`w-[80%] `}>
+        {description && (
+          <View style={tw` mt-3 mx-[5%] flex flex-row`}>
             <Text1
-              text={`${description}`}
+              text={'Selected Address:'}
               size={14}
               color={colors.primary}
               lineHeight={16}
-              style={[tw`ml-2 `]}
+              style={[tw` `]}
             />
+            <View style={tw`w-[80%] `}>
+              <Text1
+                text={`${description}`}
+                size={14}
+                color={colors.primary}
+                lineHeight={16}
+                style={[tw`ml-2 `]}
+              />
+            </View>
           </View>
-        </View>
+        )}
 
         <View style={[tw`mx-auto mt-4`, {width: perWidth(364)}]}>
           <TextInput
@@ -385,7 +387,6 @@ const AddAddress = ({navigation}: any) => {
           />
         )}
       </View>
-
       <SafeAreaView
         style={[
           tw`flex flex-row justify-between items-center `,

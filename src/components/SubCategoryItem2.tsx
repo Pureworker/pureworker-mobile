@@ -11,6 +11,7 @@ import {
 } from '../store/reducer/mainSlice';
 import {getProviderByService} from '../utils/api/func';
 import {useNavigation} from '@react-navigation/native';
+import tw from 'twrnc';
 
 const SubCategoryItem = ({style, itemDetail, index}: any) => {
   const category = useSelector((state: any) => state.user.category);
@@ -67,14 +68,23 @@ const SubCategoryItem = ({style, itemDetail, index}: any) => {
         //   dispatch(addCategory(title));
         // }
       }}
-      style={{marginTop: 8}}>
+      style={[
+        tw`rounded-full items-center justify-center `,
+        {
+          marginTop: 8,
+          borderWidth: 1,
+          marginBottom: 4,
+          borderColor: colors.primary,
+          marginRight: 8,
+        },
+      ]}>
       <TextWrapper
         fontType={'semiBold'}
         style={{
           color: colors.white,
-          marginLeft: 11,
-          marginRight: 8,
-          marginBottom: 8,
+          marginLeft:0,
+          paddingVertical: 4,
+          paddingHorizontal: 10,
         }}>
         {title}
       </TextWrapper>

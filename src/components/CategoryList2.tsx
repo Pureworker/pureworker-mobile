@@ -122,7 +122,8 @@ const CategoryList = ({
               color: '#D20713',
               position: 'absolute',
               right: -25,
-            }}>
+            }}
+            children={''}>
             {/* {'*'} */}
           </TextWrapper>
         </CollapseHeader>
@@ -144,6 +145,7 @@ const CategoryList = ({
                     flexDirection: 'row',
                     flexWrap: 'wrap',
                     width: '95%',
+                    paddingLeft: 4,
                   }}>
                   {_getSubCategory.map((item: any, index: number) => {
                     var offerStyle;

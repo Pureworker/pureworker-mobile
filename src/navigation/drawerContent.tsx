@@ -53,11 +53,11 @@ const DrawerContent = () => {
       route: 'PrivacyPolicy',
       icon: images.rate,
     },
-    {
-      label: 'FaceDetection',
-      route: 'FaceDetection',
-      icon: images.rate,
-    },
+    // {
+    //   label: 'FaceDetection',
+    //   route: 'FaceDetection',
+    //   icon: images.rate,
+    // },
   ];
   const dispatch = useDispatch();
   const [InfoModal, setInfoModal] = useState(false);

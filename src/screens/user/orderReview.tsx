@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
   Platform,
@@ -16,7 +15,6 @@ import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {perHeight, perWidth} from '../../utils/position/sizes';
-import {color} from 'react-native-reanimated';
 import colors from '../../constants/colors';
 import {createOrder} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
