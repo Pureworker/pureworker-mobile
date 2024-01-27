@@ -344,7 +344,6 @@ const AddAddress = ({navigation}: any) => {
             </View>
           </View>
         )}
-
         <View style={[tw`mx-auto mt-4`, {width: perWidth(364)}]}>
           <TextInput
             style={[
