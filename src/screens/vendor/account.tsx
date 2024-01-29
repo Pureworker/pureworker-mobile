@@ -22,7 +22,7 @@ import {SIZES} from '../../utils/position/sizes';
 import TextInputs from '../../components/TextInputs';
 import TextWrapper from '../../components/TextWrapper';
 import {generalStyles} from '../../constants/generalStyles';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import storage from 'redux-persist/es/storage';
 import {
   addProfileData,
@@ -32,6 +32,7 @@ import {
 import {
   completeProfile,
   getProfile,
+  getProviderNew,
   getUser,
   uploadAssetsDOCorIMG,
 } from '../../utils/api/func';
@@ -39,7 +40,12 @@ import FastImage from 'react-native-fast-image';
 import CustomLoading from '../../components/customLoading';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Snackbar from 'react-native-snackbar';
-import {ToastLong} from '../../utils/utils';
+import {ToastLong, ToastShort} from '../../utils/utils';
+import TickIcon from '../../assets/svg/Tick';
+import Modal from 'react-native-modal/dist/modal';
+import PortComp from '../profile/comp/portComp4';
+import AddCircle from '../../assets/svg/AddCircle';
+import EditComp from '../profile/comp/EditComp';
 
 const Account = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -58,6 +64,8 @@ const Account = () => {
   const category = useSelector((state: any) => state.user.pickedServices);
   const userData = useSelector((state: any) => state.user.userData);
 
+  console.log('protfolio:', profileData);
+
   useEffect(() => {
     const initGetProfile = async () => {
       const res: any = await getProfile(userData?._id);
@@ -71,7 +79,7 @@ const Account = () => {
 
   //image upload
   const options = {mediaType: 'photo', selectionLimit: 1};
-  const openLibraryfordp = () => {
+  const openLibraryfordp2 = () => {
     console.log('called logo');
     launchImageLibrary(options, async (resp: unknown) => {
       if (resp?.assets?.length > 0) {
@@ -85,6 +93,26 @@ const Account = () => {
       }
     });
     // launchCamera
+  };
+
+  const openLibraryfordp = () => {
+    launchCamera(options, async (resp: unknown) => {
+      if (resp?.assets?.length > 0) {
+        const fileSize = resp.assets[0].fileSize; // File size in bytes
+        // const fileSizeInMB = fileSize / (1024 * 1024); // Convert to megabytes
+        // if (fileSizeInMB > 1) {
+        //   ToastShort('Image size exceeds 1MB. Please choose a smaller image.');
+        //   return;
+        // }
+        console.log('resp', resp?.assets[0]);
+        setImageUrl(resp?.assets[0].uri);
+        const data = await uploadImgorDoc(resp?.assets[0]);
+        console.warn('processed pic', data);
+        // dispatch(addcompleteProfile({profilePic: data}));
+        // const res: any = await completeProfile({profilePic: data});
+        await upload(data);
+      }
+    });
   };
 
   const upload = async (param: string) => {
@@ -142,156 +170,139 @@ const Account = () => {
     }
     setisLoading(false);
   };
-  return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
-      <ScrollView>
-        <View
-          style={{
-            marginTop:
-              Platform.OS === 'ios'
-                ? getStatusBarHeight(true)
-                : StatusBar.currentHeight &&
-                  StatusBar.currentHeight + getStatusBarHeight(true),
-          }}
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginHorizontal: 20,
-          }}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              source={images.back}
-              style={{height: 25, width: 25}}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-          <View style={tw`mx-auto`}>
-            <Textcomp
-              text={'Account'}
-              size={17}
-              lineHeight={17}
-              color={'#000413'}
-              fontFamily={'Inter-SemiBold'}
-            />
-          </View>
-        </View>
-        <View style={tw`px-[5%]`}>
-          <TextWrapper
-            children=""
-            fontType={'semiBold'}
-            style={{fontSize: 20, marginTop: 30, color: colors.black}}
-          />
+  const [addModal, setaddModal] = useState(false);
+  const [editModal, seteditModal] = useState(false);
+  const [selectedService, setSelectedService] = useState(null);
 
-          <View>
-            <View
-              style={[
-                generalStyles.contentCenter,
-                {
-                  width: 145,
-                  height: 145,
-                  borderRadius: 145,
-                  alignSelf: 'center',
-                  backgroundColor: colors.greyLight1,
-                },
-              ]}>
-              {!profileImageLoading ? (
-                <>
-                  {!profileData?.profilePic && imageUrl?.length < 1 ? (
-                    <TextWrapper
-                      children="Upload Profile Photo"
-                      fontType={'semiBold'}
-                      style={{
-                        textAlign: 'center',
-                        fontSize: 14,
-                        color: colors.black,
-                      }}
-                    />
-                  ) : (
-                    <FastImage
-                      style={[
-                        tw``,
-                        {
-                          width: 145,
-                          height: 145,
-                          borderRadius: 145,
-                        },
-                      ]}
-                      source={{
-                        uri: profileData?.profilePic || imageUrl,
-                        headers: {Authorization: 'someAuthToken'},
-                        priority: FastImage.priority.normal,
-                      }}
-                      resizeMode={FastImage.resizeMode.cover}
-                    />
-                  )}
-                </>
-              ) : (
-                <ActivityIndicator
-                  style={{marginTop: 0}}
-                  size={'large'}
-                  color={colors.parpal}
-                />
-              )}
+  useEffect(() => {
+    const initGetProviderNew = async () => {
+      const res: any = await getProviderNew(userData?._id);
+      console.log('portfolio--', res?.data?.profile?.portfolios);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addProfileData(res?.data?.profile));
+      }
+    };
+    initGetProviderNew();
+  }, []);
+
+  return (
+    <>
+      <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+        <ScrollView>
+          <View
+            style={{
+              marginTop:
+                Platform.OS === 'ios'
+                  ? getStatusBarHeight(true)
+                  : StatusBar.currentHeight &&
+                    StatusBar.currentHeight + getStatusBarHeight(true),
+            }}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginHorizontal: 20,
+            }}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image
+                source={images.back}
+                style={{height: 25, width: 25}}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+            <View style={tw`mx-auto`}>
+              <Textcomp
+                text={'Account'}
+                size={17}
+                lineHeight={17}
+                color={'#000413'}
+                fontFamily={'Inter-SemiBold'}
+              />
             </View>
-            <View
-              style={{
-                position: 'absolute',
-                right: 40,
-                top: 10,
-                flexDirection: 'row',
-              }}>
-              <TouchableOpacity
-                onPress={async () => {
-                  // try {
-                  //   const response: any = await launchImageLibrary();
-                  //   setProfileImageLoading(true);
-                  //   if (response) {
-                  //     const filename = response?.uri.substring(
-                  //       response?.uri.lastIndexOf('/') + 1,
-                  //     );
-                  //     const uploadUri =
-                  //       Platform.OS === 'ios'
-                  //         ? response?.uri.replace('file://', '')
-                  //         : response.uri;
-                  //     const task = await storage()
-                  //       .ref(filename)
-                  //       .putFile(uploadUri);
-                  //     if (task.metadata) {
-                  //       profilePicture.current = task.metadata.fullPath;
-                  //     }
-                  //     let url = '';
-                  //     if (profilePicture.current) {
-                  //       url = await storage()
-                  //         .ref(profilePicture.current)
-                  //         .getDownloadURL();
-                  //     }
-                  //     setImageUrl(url);
-                  //     profilePicture.current = '';
-                  //     setProfileImageLoading(false);
-                  //   } else {
-                  //     setProfileImageLoading(false);
-                  //   }
-                  // } catch (error) {
-                  //   console.log('error', error);
-                  //   setProfileImageLoading(false);
-                  // }
-                  openLibraryfordp();
+          </View>
+          <View style={tw`px-[5%]`}>
+            <TextWrapper
+              children=""
+              fontType={'semiBold'}
+              style={{fontSize: 20, marginTop: 30, color: colors.black}}
+            />
+
+            <View>
+              <View
+                style={[
+                  generalStyles.contentCenter,
+                  {
+                    width: 145,
+                    height: 145,
+                    borderRadius: 145,
+                    alignSelf: 'center',
+                    backgroundColor: colors.greyLight1,
+                  },
+                ]}>
+                {!profileImageLoading ? (
+                  <>
+                    {!profileData?.profilePic && imageUrl?.length < 1 ? (
+                      <TextWrapper
+                        children="Upload Profile Photo"
+                        fontType={'semiBold'}
+                        style={{
+                          textAlign: 'center',
+                          fontSize: 14,
+                          color: colors.black,
+                        }}
+                      />
+                    ) : (
+                      <FastImage
+                        style={[
+                          tw``,
+                          {
+                            width: 145,
+                            height: 145,
+                            borderRadius: 145,
+                          },
+                        ]}
+                        source={{
+                          uri: profileData?.profilePic || imageUrl,
+                          headers: {Authorization: 'someAuthToken'},
+                          priority: FastImage.priority.normal,
+                        }}
+                        resizeMode={FastImage.resizeMode.cover}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <ActivityIndicator
+                    style={{marginTop: 0}}
+                    size={'large'}
+                    color={colors.parpal}
+                  />
+                )}
+              </View>
+              <View
+                style={{
+                  position: 'absolute',
+                  right: 50,
+                  top: 10,
+                  flexDirection: 'row',
                 }}>
-                <Image
-                  source={images.edit}
-                  resizeMode="contain"
-                  style={{
-                    width: 20,
-                    height: 20,
-                    marginLeft: 20,
-                    tintColor: '#000',
-                  }}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setImageUrl('')}>
+                <TouchableOpacity
+                  onPress={async () => {
+                    openLibraryfordp();
+                  }}>
+                  <Image
+                    source={images.edit}
+                    resizeMode="contain"
+                    style={{
+                      width: 20,
+                      height: 20,
+                      marginLeft: 20,
+                      tintColor: '#000',
+                    }}
+                  />
+                </TouchableOpacity>
+                {/* <TouchableOpacity onPress={() => setImageUrl('')}>
                 <Image
                   source={images.bin}
                   resizeMode="contain"
@@ -302,135 +313,440 @@ const Account = () => {
                     tintColor: '#000',
                   }}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+              </View>
             </View>
-          </View>
-          <TextWrapper
-            children="Description"
-            isRequired={true}
-            fontType={'semiBold'}
-            style={{fontSize: 16, marginTop: 20, color: colors.black}}
-          />
-          <View
-            style={{
-              height: 130,
-              borderRadius: 8,
-              backgroundColor: colors.greyLight1,
-              marginTop: 13,
-            }}>
-            <TextInputs
-              styleInput={{
-                color: colors.black,
-                paddingHorizontal: 18,
-                fontSize: 12,
-              }}
-              style={{backgroundColor: colors.greyLight1}}
-              labelText={
-                'Introduce yourself and enter your profile description.'
-              }
-              state={description}
-              setState={setDescription}
-              multiline={true}
-              nbLines={5}
+            <TextWrapper
+              children="Description"
+              isRequired={true}
+              fontType={'semiBold'}
+              style={{fontSize: 16, marginTop: 20, color: colors.black}}
             />
-          </View>
+            <View
+              style={{
+                height: 130,
+                borderRadius: 8,
+                backgroundColor: colors.greyLight1,
+                marginTop: 13,
+              }}>
+              <TextInputs
+                styleInput={{
+                  color: colors.black,
+                  paddingHorizontal: 18,
+                  fontSize: 12,
+                }}
+                style={{backgroundColor: colors.greyLight1}}
+                labelText={
+                  'Introduce yourself and enter your profile description.'
+                }
+                state={description}
+                setState={setDescription}
+                multiline={true}
+                nbLines={5}
+              />
+            </View>
 
-          <View style={tw`mt-[5%]`}>
+            <View style={tw`mt-[5%] hidden`}>
+              <TextWrapper
+                children="Services Intro"
+                fontType={'semiBold'}
+                style={{fontSize: 20, marginTop: 30, color: colors.black}}
+              />
+              {profileData?.services?.length
+                ? profileData?.services?.map((item: any, index: any) => {
+                    return (
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          marginTop: index === 0 ? 15 : 0,
+                          marginBottom: 15,
+                          marginHorizontal: 0,
+                          width: SIZES.width * 0.8,
+                        }}>
+                        <View
+                          key={index}
+                          style={{
+                            paddingHorizontal: 10,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: colors.lightBlack,
+                            height: 30,
+                            width: 'auto',
+                            borderRadius: 5,
+                          }}>
+                          <TextWrapper
+                            fontType={'semiBold'}
+                            style={{
+                              fontSize: 12,
+                              color: '#fff',
+                            }}>
+                            {/* {item} */}
+                            {item?.name}
+                          </TextWrapper>
+                        </View>
+                        <TouchableOpacity
+                          onPress={() => {
+                            // dispatch(removeCategory(item));
+                            navigation.navigate('EditService', {
+                              index: index,
+                              name: item?.name,
+                            });
+                          }}>
+                          <Image
+                            source={images.edit}
+                            resizeMode="contain"
+                            style={{
+                              width: 20,
+                              height: 20,
+                              marginLeft: 20,
+                              tintColor: '#000',
+                            }}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  })
+                : null}
+              <Button
+                onClick={() => {
+                  navigation.navigate('AddServices');
+                  // handleProfileSetup();
+                }}
+                style={{
+                  width: SIZES.width * 0.9,
+                  backgroundColor: colors.lightBlack,
+                  marginTop: 20,
+                }}
+                textStyle={{color: colors.primary}}
+                text={'Add Services'}
+              />
+            </View>
             <TextWrapper
               children="Services"
+              isRequired={true}
               fontType={'semiBold'}
-              style={{fontSize: 20, marginTop: 30, color: colors.black}}
+              style={{fontSize: 16, marginTop: 20, color: colors.black}}
             />
-            {category?.length
-              ? category?.map((item: any, index: any) => {
-                  return (
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        marginTop: index === 0 ? 15 : 0,
-                        marginBottom: 15,
-                        marginHorizontal: 0,
-                        width: SIZES.width * 0.8,
-                      }}>
+            <View style={tw`mt-2`}>
+              <Textcomp
+                text={'You can edit, delete or add a new service.'}
+                size={12}
+                lineHeight={16}
+                color={'#000413'}
+                fontFamily={'Inter-Regular'}
+              />
+            </View>
+            <View
+              style={{flexDirection: 'row', flexWrap: 'wrap', marginTop: 20}}>
+              {profileData?.services?.length > 0
+                ? profileData?.services?.map((item: any, index: any) => {
+                    const d = [];
+                    return (
                       <View
                         key={index}
                         style={{
-                          paddingHorizontal: 10,
-                          justifyContent: 'center',
+                          flexDirection: 'row',
                           alignItems: 'center',
-                          backgroundColor: colors.lightBlack,
-                          height: 30,
-                          width: 'auto',
-                          borderRadius: 5,
+                          marginBottom: 13,
+                          marginHorizontal: 0,
+                          marginTop: 10,
+                          width: '100%',
+                          justifyContent: 'space-between',
                         }}>
-                        <TextWrapper
-                          fontType={'semiBold'}
-                          style={{
-                            fontSize: 12,
-                            color: '#fff',
-                          }}>
-                          {/* {item} */}
-                          {item?.name}
-                        </TextWrapper>
+                        <View style={tw`flex flex-row items-center w-6/10`}>
+                          <View
+                            key={index}
+                            style={{
+                              paddingHorizontal: 10,
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              backgroundColor: colors.lightBlack,
+                              height: 'auto',
+                              width: 'auto',
+                              borderRadius: 5,
+                              paddingVertical: 5,
+                            }}>
+                            {/* <TextWrapper
+                              fontType={'semiBold'}
+                              style={{
+                                fontSize: 12,
+                                color: '#fff',
+                              }}>
+                              {item?.name}
+                            </TextWrapper> */}
+                            <Textcomp
+                              // numberOfLines={3}
+                              text={`${item?.name}`}
+                              size={12}
+                              lineHeight={18.75}
+                              color={colors.white}
+                              fontFamily={'Inter-SemiBold'}
+                            />
+                          </View>
+                          {d?.length > 0 && (
+                            <TickIcon style={{width: 20, marginLeft: 10}} />
+                          )}
+                        </View>
+                        <View style={tw`flex flex-row`}>
+                          <TouchableOpacity
+                            style={[tw`border bg-white  rounded px-2 py-0.5`]}
+                            onPress={() => {
+                              const newPortfolioItem = {
+                                service: '',
+                                description: '',
+                                images: [],
+                              };
+                              seteditModal(true);
+                              setSelectedService(item);
+                            }}>
+                            <Textcomp
+                              text={'Edit'}
+                              size={16}
+                              lineHeight={18.75}
+                              color={colors.parpal}
+                              fontFamily={'Inter-SemiBold'}
+                            />
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={tw`border bg-white ml-3 rounded px-2 py-0.5`}
+                            onPress={() => {
+                              setSelectedService(item);
+                              ToastShort('Coming soon!.');
+                            }}>
+                            <Textcomp
+                              text={'Delete'}
+                              size={16}
+                              lineHeight={18.75}
+                              color={'#D20713'}
+                              fontFamily={'Inter-SemiBold'}
+                            />
+                          </TouchableOpacity>
+                        </View>
                       </View>
-                      <TouchableOpacity
-                        onPress={() => {
-                          // dispatch(removeCategory(item));
-                          navigation.navigate('EditService', {
-                            index: index,
-                            name: item?.name,
-                          });
-                        }}>
-                        <Image
-                          source={images.edit}
-                          resizeMode="contain"
-                          style={{
-                            width: 20,
-                            height: 20,
-                            marginLeft: 20,
-                            tintColor: '#000',
-                          }}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  );
-                })
-              : null}
-            <Button
-              onClick={() => {
-                navigation.navigate('AddServices');
-                // handleProfileSetup();
+                    );
+                  })
+                : null}
+            </View>
+
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                  if (false) {
+                    ToastShort('Maximum portfolio');
+                  } else {
+                    // push({
+                    //   description: '',
+                    //   images: [],
+                    // });
+                  }
+                  setaddModal(true);
+                }}
+                style={[
+                  tw`flex flex-row ml-auto  items-center  py-4 rounded-lg  `,
+                ]}>
+                <AddCircle style={{marginRight: 4}} />
+                <Textcomp
+                  text={'Add new service'}
+                  size={16}
+                  lineHeight={16}
+                  color={colors.parpal}
+                  fontFamily={'Inter-Bold'}
+                />
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity
+              onPress={() => {
+                updateProfile({description: description});
               }}
-              style={{
-                width: SIZES.width * 0.9,
-                backgroundColor: colors.lightBlack,
-                marginTop: 20,
+              style={tw`mx-auto mt-8 py-4 bg-[${colors.darkPurple}] w-4/10 rounded-lg items-center justify-center`}>
+              <Textcomp
+                text={'Save'}
+                size={17}
+                lineHeight={17}
+                color={colors.primary}
+                fontFamily={'Inter-SemiBold'}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={tw`h-30`} />
+        </ScrollView>
+        <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
+      </View>
+      <Modal
+        isVisible={addModal}
+        onModalHide={() => {
+          setaddModal(false);
+        }}
+        style={{width: SIZES.width, height: SIZES.height, marginHorizontal: 0}}
+        deviceWidth={SIZES.width}
+        onBackdropPress={() => setaddModal(false)}
+        swipeThreshold={200}
+        onBackButtonPress={() => setaddModal(false)}>
+        <View
+          style={[
+            tw`bg-[#EBEBEB]  mx-auto mt-auto   p-4 pb-8`,
+            {borderRadius: 20, maxHeight: SIZES.height * 0.8},
+          ]}>
+          <View style={tw`mx-auto`} />
+          <View style={[tw``]}>
+            <View style={[tw` mt-4`]}>
+              <Textcomp
+                text={'Add Service Data'}
+                size={16}
+                lineHeight={16}
+                color={'#000413'}
+                fontFamily={'Inter-Bold'}
+              />
+            </View>
+            <View style={[tw` mt-1`]}>
+              <Textcomp
+                text={'Select Service.'}
+                size={10}
+                lineHeight={12}
+                color={'#000413'}
+                style={tw`underline`}
+                fontFamily={'Inter-Medium'}
+              />
+            </View>
+          </View>
+          <View>
+            <PortComp
+              lindex={0}
+              dlist={[]}
+              service={selectedService}
+              pdata={{
+                service: '',
+                description: '',
+                images: [],
               }}
-              textStyle={{color: colors.primary}}
-              text={'Add Services'}
+              portfolioData={[]}
+              handlePortfolioItemChange={(i: any, data: any) =>
+                // handlePortfolioItemChange(0, data)
+                {}
+              }
+              close={() => {
+                setaddModal(false);
+                //
+                const initGetProviderNew = async () => {
+                  const res: any = await getProviderNew(userData?._id);
+                  console.log('providerdatttttaaaaa', res?.data);
+                  console.log('portfolio--', res?.data?.profile?.portfolios);
+                  if (res?.status === 201 || res?.status === 200) {
+                    dispatch(addProfileData(res?.data?.profile));
+                  }
+                };
+                initGetProviderNew();
+              }}
             />
           </View>
-
           <TouchableOpacity
             onPress={() => {
-              updateProfile({description: description});
+              setaddModal(false);
             }}
-            style={tw`mx-auto mt-8 py-4 w-full items-center justify-center`}>
-            <Textcomp
-              text={'Save Profile'}
-              size={17}
-              lineHeight={17}
-              color={'#000413'}
-              fontFamily={'Inter-SemiBold'}
+            style={tw`absolute right-0 top-[-2]`}>
+            <Image
+              resizeMode="contain"
+              source={images.cancelCircle}
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: '#000413',
+                marginLeft: 5,
+              }}
             />
           </TouchableOpacity>
         </View>
-        <View style={tw`h-30`} />
-      </ScrollView>
-      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
-    </View>
+      </Modal>
+
+      {/* Edit Modal */}
+      <Modal
+        isVisible={editModal}
+        onModalHide={() => {
+          seteditModal(false);
+        }}
+        style={{width: SIZES.width, height: SIZES.height, marginHorizontal: 0}}
+        deviceWidth={SIZES.width}
+        onBackdropPress={() => seteditModal(false)}
+        swipeThreshold={200}
+        onBackButtonPress={() => seteditModal(false)}>
+        <View
+          style={[
+            tw`bg-[#EBEBEB]  mx-auto mt-auto   p-4 pb-8`,
+            {borderRadius: 20, maxHeight: SIZES.height * 0.8},
+          ]}>
+          <View style={tw`mx-auto`} />
+          <View style={[tw``]}>
+            <View style={[tw` mt-4`]}>
+              <Textcomp
+                text={'Edit Service Data'}
+                size={16}
+                lineHeight={16}
+                color={'#000413'}
+                fontFamily={'Inter-Bold'}
+              />
+            </View>
+            <View style={[tw` mt-1`]}>
+              <Textcomp
+                text={'Customers need assurance of your service proficiency.'}
+                size={10}
+                lineHeight={12}
+                color={'#000413'}
+                fontFamily={'Inter-Regular'}
+              />
+            </View>
+          </View>
+          <View>
+            <EditComp
+              lindex={0}
+              dlist={[]}
+              service={selectedService}
+              pdata={{
+                service: '',
+                description: '',
+                images: [],
+              }}
+              portfolioData={profileData?.portfolios}
+              handlePortfolioItemChange={(i: any, data: any) =>
+                // handlePortfolioItemChange(0, data)
+                {}
+              }
+              close={() => {
+                seteditModal(false);
+                //
+                const initGetProviderNew = async () => {
+                  const res: any = await getProviderNew(userData?._id);
+                  console.log('providerdatttttaaaaa', res?.data);
+                  console.log('portfolio--', res?.data?.profile?.portfolios);
+                  if (res?.status === 201 || res?.status === 200) {
+                    dispatch(addProfileData(res?.data?.profile));
+                  }
+                };
+                initGetProviderNew();
+              }}
+            />
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              seteditModal(false);
+            }}
+            style={tw`absolute right-0 top-[-2]`}>
+            <Image
+              resizeMode="contain"
+              source={images.cancelCircle}
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: '#000413',
+                marginLeft: 5,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    </>
   );
 };
 

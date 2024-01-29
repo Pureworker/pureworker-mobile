@@ -172,7 +172,7 @@ const ProfileStep21 = () => {
   const ProviderData = useSelector((state: any) => state.user.profileData);
 
   const [serviceList, setserviceList] = useState([]);
-  const options = {mediaType: 'photo', selectionLimit: 3};
+  const options = {mediaType: 'photo', selectionLimit: 1};
   const [addModal, setaddModal] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
   const [profileImageLoading, setProfileImageLoading] = useState(false);
@@ -208,11 +208,11 @@ const ProfileStep21 = () => {
     launchCamera(options, async (resp: unknown) => {
       if (resp?.assets?.length > 0) {
         const fileSize = resp.assets[0].fileSize; // File size in bytes
-        const fileSizeInMB = fileSize / (1024 * 1024); // Convert to megabytes
-        if (fileSizeInMB > 1) {
-          ToastShort('Image size exceeds 1MB. Please choose a smaller image.');
-          return;
-        }
+        // const fileSizeInMB = fileSize / (1024 * 1024); // Convert to megabytes
+        // if (fileSizeInMB > 1) {
+        //   ToastShort('Image size exceeds 1MB. Please choose a smaller image.');
+        //   return;
+        // }
         console.log('resp', resp?.assets[0]);
         setImageUrl(resp?.assets[0].uri);
         const data = await uploadImgorDoc(resp?.assets[0]);

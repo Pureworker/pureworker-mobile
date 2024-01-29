@@ -121,25 +121,25 @@ export default function BusinessSignup() {
 
   const handleSignup = async () => {
     // Validate input data
-    await validationSchema.validate(
-      {
-        firstName,
-        lastName,
-        phoneNumber: phoneName,
-        dob: date,
-        email,
-        gender: genderValue,
-        nationality: nationalityValue,
-        address,
-        state: stateValue,
-        accountType: userType,
-        referralCode,
-        businessName: name,
-        cacNo,
-        location: locationValue,
-      },
-      {abortEarly: false}, // Collect all validation errors, not just the first one
-    );
+    // await validationSchema.validate(
+    //   {
+    //     firstName,
+    //     lastName,
+    //     phoneNumber: phoneName,
+    //     dob: date,
+    //     email,
+    //     gender: genderValue,
+    //     nationality: nationalityValue,
+    //     address,
+    //     state: stateValue,
+    //     accountType: userType,
+    //     referralCode,
+    //     businessName: name,
+    //     cacNo,
+    //     location: locationValue,
+    //   },
+    //   {abortEarly: false}, // Collect all validation errors, not just the first one
+    // );
 
     if (!email) {
       Snackbar.show({

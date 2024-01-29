@@ -39,7 +39,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Textcomp from '../../components/Textcomp';
 import {perHeight} from '../../utils/position/sizes';
 import tw from 'twrnc';
-import { ToastShort } from '../../utils/utils';
+import {ToastShort} from '../../utils/utils';
 type Route = {
   key: string;
   name: string;
@@ -80,54 +80,79 @@ const ProfileStep4 = () => {
       type: selectedVerification === 'NIN' ? 'nin' : 'bvn',
       number: idNumber,
     };
-    const res = await _verifyID(data);
-    console.log(res, 'data-here', res?.data);
-    if (
-      (res?.status === 200 || res?.status === 201) &&
-      res?.data?.status === 'success'
-    ) {
-      dispatch(
-        addcompleteProfile({
-          identity: {
-            means:
-              selectedVerification === 'Bank Verification Number'
-                ? 'bvn'
-                : 'nin',
-            number: idNumber,
-          },
-        }),
-      );
-      //then save to db
-      const resp: any = await completeProfile({
-        identity: {
-          means:
-            selectedVerification === 'Bank Verification Number'
-              ? 'bvn'
-              : 'vNIN',
-          number: idNumber,
-        },
+    const res: any = await completeProfile({
+      identity: {
+        means:
+          selectedVerification === 'Bank Verification Number' ? 'bvn' : 'nin',
+        number: idNumber,
+      },
+    });
+    console.log('result', res?.data);
+    if (res?.status === 200 || res?.status === 201) {
+      navigation.navigate('Congratulations');
+      dispatch(addformStage(6));
+      setisLoading(false);
+    } else {
+      Snackbar.show({
+        text: res?.error?.message
+          ? res?.error?.message
+          : res?.error?.data?.message
+          ? res?.error?.data?.message
+          : 'Oops!, an error occured',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
       });
-      console.log('result', res?.data);
-      if (resp?.status === 200 || resp?.status === 201) {
-        // navigation.navigate('ProfileStep5', {
-        //   serviceId: route?.params?.serviceId,
-        // });
-        navigation.navigate('Congratulations');
-        dispatch(addformStage(6));
-      } else {
-        Snackbar.show({
-          text: res?.error?.message
-            ? res?.error?.message
-            : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured',
-          duration: Snackbar.LENGTH_SHORT,
-          textColor: '#fff',
-          backgroundColor: '#88087B',
-        });
-      }
+      setisLoading(false);
     }
-    setisLoading(false);
+    // const res = await _verifyID(data);
+    // console.log(res, 'data-here', res?.data);
+    // if (
+    //   (res?.status === 200 || res?.status === 201) &&
+    //   res?.data?.status === 'success'
+    // ) {
+    //   dispatch(
+    //     addcompleteProfile({
+    //       identity: {
+    // means:
+    //   selectedVerification === 'Bank Verification Number'
+    //     ? 'bvn'
+    //     : 'nin',
+    //         number: idNumber,
+    //       },
+    //     }),
+    //   );
+    //   //then save to db
+    //   const resp: any = await completeProfile({
+    //     identity: {
+    //       means:
+    //         selectedVerification === 'Bank Verification Number'
+    //           ? 'bvn'
+    //           : 'vNIN',
+    //       number: idNumber,
+    //     },
+    //   });
+    //   console.log('result', res?.data);
+    //   if (resp?.status === 200 || resp?.status === 201) {
+    //     // navigation.navigate('ProfileStep5', {
+    //     //   serviceId: route?.params?.serviceId,
+    //     // });
+    //     navigation.navigate('Congratulations');
+    //     dispatch(addformStage(6));
+    //   } else {
+    //     Snackbar.show({
+    //       text: res?.error?.message
+    //         ? res?.error?.message
+    //         : res?.error?.data?.message
+    //         ? res?.error?.data?.message
+    //         : 'Oops!, an error occured',
+    //       duration: Snackbar.LENGTH_SHORT,
+    //       textColor: '#fff',
+    //       backgroundColor: '#88087B',
+    //     });
+    //   }
+    // }
+    // setisLoading(false);
   };
   const verifyCAC = async () => {
     if (schdeuleIsoDate) {
@@ -136,55 +161,86 @@ const ProfileStep4 = () => {
     if (idNumber) {
       ToastShort('');
     }
-    setisLoading(true);
-    const data = {
-      type: 'cac',
-      number: idNumber,
-      date: schdeuleIsoDate,
-      company_name: idName,
+    const d = {
+      identity: {
+        means: 'cac',
+        number: idNumber,
+      },
     };
-    const res = await _verifyID(data);
-    console.log(res, 'CAC-data-here', res?.data);
-    if (
-      (res?.status === 200 || res?.status === 201) &&
-      res?.data?.status === 'success'
-    ) {
-      dispatch(
-        addcompleteProfile({
-          identity: {
-            means:
-              selectedVerification === 'Bank Verification Number'
-                ? 'bvn'
-                : 'nin',
-            number: idNumber,
-          },
-        }),
-      );
-      //then save to db
-      const resp: any = await completeProfile({
-        identity: {
-          means: 'cac',
-          number: idNumber,
-        },
+    setisLoading(true);
+    const res: any = await completeProfile({
+      identity: {
+        means: 'cac',
+        number: idNumber,
+      },
+    });
+    console.log('result', res?.data);
+    if (res?.status === 200 || res?.status === 201) {
+      navigation.navigate('Congratulations');
+      dispatch(addformStage(6));
+      setisLoading(false);
+    } else {
+      Snackbar.show({
+        text: res?.error?.message
+          ? res?.error?.message
+          : res?.error?.data?.message
+          ? res?.error?.data?.message
+          : 'Oops!, an error occured',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
       });
-      console.log('result', res?.data);
-      if (resp?.status === 200 || resp?.status === 201) {
-        navigation.navigate('Congratulations');
-        dispatch(addformStage(6));
-      } else {
-        Snackbar.show({
-          text: res?.error?.message
-            ? res?.error?.message
-            : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured',
-          duration: Snackbar.LENGTH_SHORT,
-          textColor: '#fff',
-          backgroundColor: '#88087B',
-        });
-      }
+      setisLoading(false);
     }
-    setisLoading(false);
+    // return;
+    // const data = {
+    //   type: 'cac',
+    //   number: idNumber,
+    //   date: schdeuleIsoDate,
+    //   company_name: idName,
+    // };
+    // const res = await _verifyID(data);
+    // console.log(res, 'CAC-data-here', res?.data);
+    // if (
+    //   (res?.status === 200 || res?.status === 201) &&
+    //   res?.data?.status === 'success'
+    // ) {
+    //   dispatch(
+    //     addcompleteProfile({
+    //       identity: {
+    //         means:
+    //           selectedVerification === 'Bank Verification Number'
+    //             ? 'bvn'
+    //             : 'nin',
+    //         number: idNumber,
+    //       },
+    //     }),
+    //   );
+    //   //then save to db
+    //   const resp: any = await completeProfile({
+    //     identity: {
+    //       means: 'cac',
+    //       number: idNumber,
+    //     },
+    //   });
+    //   console.log('result', res?.data);
+    //   if (resp?.status === 200 || resp?.status === 201) {
+    //     navigation.navigate('Congratulations');
+    //     dispatch(addformStage(6));
+    //   } else {
+    //     Snackbar.show({
+    //       text: res?.error?.message
+    //         ? res?.error?.message
+    //         : res?.error?.data?.message
+    //         ? res?.error?.data?.message
+    //         : 'Oops!, an error occured',
+    //       duration: Snackbar.LENGTH_SHORT,
+    //       textColor: '#fff',
+    //       backgroundColor: '#88087B',
+    //     });
+    //   }
+    // }
+    // setisLoading(false);
   };
   const handleProfileSetup = () => {
     if (idNumber && selectedVerification) {

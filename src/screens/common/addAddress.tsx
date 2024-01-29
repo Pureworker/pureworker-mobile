@@ -13,24 +13,24 @@ import {
 
 import colors from '../../constants/colors';
 
-import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
-import {perHeight, perWidth} from '../../utils/position/sizes';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { perHeight, perWidth } from '../../utils/position/sizes';
 import Text1 from '../../components/Textcomp';
-import React, {useContext, useEffect, useState} from 'react';
-import MapView, {Marker} from 'react-native-maps';
+import React, { useEffect, useState } from 'react';
+import MapView, { Marker } from 'react-native-maps';
 import requestPermissions from 'react-native-maps';
 import tw from 'twrnc';
 import Geolocation from '@react-native-community/geolocation';
-import {PERMISSIONS, request} from 'react-native-permissions';
+import { PERMISSIONS, request } from 'react-native-permissions';
 // import MapViewDirections from 'react-native-maps-directions';
 // import {CurrentstateContext} from '../../helpers/clocation_context';
 // import Buttonreactive from '../../components/common/Buttonreactive';
 import axios from 'axios';
 import images from '../../constants/images';
-import {updateUserData} from '../../utils/api/func';
+import { updateUserData } from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import Button from '../../components/Button';
-import {ToastLong} from '../../utils/utils';
+import { ToastLong } from '../../utils/utils';
 
 const AddAddress = ({navigation}: any) => {
   const [description, setdescription] = useState('');

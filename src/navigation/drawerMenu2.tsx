@@ -151,7 +151,7 @@ const DrawerMenu = () => {
           component={AddAddress}
           options={{headerShown: false}}
         />
-                <Drawer.Screen
+        <Drawer.Screen
           name="Referrals"
           component={Referrals}
           options={{headerShown: false}}

@@ -1,38 +1,35 @@
 import React, {useEffect, useState} from 'react';
 import {
   View,
-  Image,
   TextInput,
   ScrollView,
   TouchableOpacity,
   Platform,
+  Image,
+  ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigation} from '../../../constants/navigation';
 import TextWrapper from '../../../components/TextWrapper';
-import commonStyle from '../../../constants/commonStyle';
 import tw from 'twrnc';
 import colors from '../../../constants/colors';
 import {useDispatch, useSelector} from 'react-redux';
-import {WIDTH_WINDOW, generalStyles} from '../../../constants/generalStyles';
-import DropDownPicker from 'react-native-dropdown-picker';
+import {generalStyles} from '../../../constants/generalStyles';
 import Snackbar from 'react-native-snackbar';
-import {launchImageLibrary} from 'react-native-image-picker';
-import {
-  addcompleteProfile,
-  addformStage,
-  addportfolio,
-} from '../../../store/reducer/mainSlice';
 import {ToastLong, ToastShort} from '../../../utils/utils';
 import Textcomp from '../../../components/Textcomp';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import images from '../../../constants/images';
 import SubPortComp from './subComp';
-import {Formik, FieldArray, Field, useFormikContext} from 'formik';
+import {Formik, FieldArray} from 'formik';
 import * as yup from 'yup';
-import {addPortfolio} from '../../../utils/api/func';
-import PlusIcon from '../../../assets/svg/PlusIcon';
+import {addPortfolio, getSubCategory} from '../../../utils/api/func';
 import AddCircle from '../../../assets/svg/AddCircle';
+import {
+  Collapse,
+  CollapseHeader,
+  CollapseBody,
+} from 'accordion-collapse-react-native';
+import images from '../../../constants/images';
 
 const validationSchema = yup.object().shape({
   serviceDescription: yup.string().required('Service description is required'),
@@ -52,22 +49,19 @@ export default function PortComp({
   const [dropdownOpen, setdropdownOpen] = useState(false);
   const navigation = useNavigation<StackNavigation>();
   const [idNumber, setIdNumber] = useState('');
-  // const category = useSelector((state: any) => state.user.pickedServices);
   const [selectedVerification, setSelectedVerification] = useState('');
   const [description, setDescription] = useState('');
   const dispatch = useDispatch();
   const handleProfileSetup = async passedData => {
     console.log(passedData);
 
-    const minPrice = Number(passedData?.servicePriceMin);
-    const maxPrice = Number(passedData?.servicePriceMax);
-
-    if (minPrice < 500) {
+    if (Number(passedData?.servicePriceMin) < 500) {
       ToastShort('Min Price cannot be less than 500 naira.');
-      return;
     }
-    if (maxPrice < minPrice) {
-      ToastShort('Max Price must be greater than Min Price.');
+    if (
+      Number(passedData?.servicePriceMax) < Number(passedData?.servicePriceMin)
+    ) {
+      ToastShort('MaxPrice must be greater than MinPrice');
       return;
     }
     const prepData = {
@@ -117,26 +111,6 @@ export default function PortComp({
     servicePriceMax: '',
     portfolios: [],
   };
-  const sampleData = {
-    service: service?.id,
-    description: description,
-    maxPrice: 2000,
-    minPrice: 1000,
-    portfolio: [
-      {
-        description: 'I know my craft very well.',
-        images: [
-          'https://res.cloudinary.com/dr0pef3mn/image/upload/v1693319953/pure/1693319950720-pure%20worker%20logo.png.png',
-        ],
-      },
-      {
-        description: 'I know my craft very well. I am good at it.',
-        images: [
-          'https://res.cloudinary.com/dr0pef3mn/image/upload/v1693319953/pure/1693319950720-pure%20worker%20logo.png.png',
-        ],
-      },
-    ],
-  };
   const [serviceList, setserviceList] = useState(dlist);
 
   const [_portfolioData, setPortfolioData] = useState<
@@ -170,17 +144,6 @@ export default function PortComp({
     handlePortfolioItemChange(lindex, olddate);
     console.log('olddate-now', olddate);
   };
-  const handleServiceChange = (item: any) => {
-    // Update the selected service state
-    // setSelectedService(item.value);
-    console.log('settttt', item);
-  };
-  const handleRemovePortfolio = () => {
-    // Remove the selected portfolio item from the state
-    const updatedPortfolioData = [...portfolioData];
-    updatedPortfolioData.splice(lindex, 1);
-    handlePortfolioItemChange(lindex, updatedPortfolioData[lindex]);
-  };
   const [isValid, setIsValid] = useState<Array<boolean>>([true]);
   const [portfolioCount, setportfolioCount]: any[] = useState([]);
 
@@ -196,6 +159,29 @@ export default function PortComp({
       console.error('Some SubPortComp are incomplete');
     }
   };
+  const [collapseState, setCollapseState] = useState(false);
+  const [collapseState2, setCollapseState2] = useState(false);
+  const [selectCategory, setselectCategory] = useState('');
+  const [subCategory, setsubCategory] = useState([]);
+  const [subLoading, setsubLoading] = useState(false);
+
+  const _getCategory = useSelector((state: any) => state.user.category);
+  const getCategory = _getCategory;
+
+  const [_getSubCategory, set_getSubCategory] = useState([]);
+  const initSubGetCategory = async param => {
+    setsubLoading(true);
+    const res: any = await getSubCategory(param);
+    console.log('prssss', res?.data?.data);
+    if (res?.status === 201 || res?.status === 200) {
+      // dispatch(addSubcategory(res?.data?.data?.services));
+      set_getSubCategory(res?.data?.data?.[0]?.services);
+    }
+    setsubLoading(false);
+    // setisLoading(false);
+  };
+
+  const [serviceObj, setserviceObj] = useState({});
 
   return (
     <View style={[tw` `, {marginTop: 30}]}>
@@ -210,72 +196,234 @@ export default function PortComp({
             style={{}}
             extraScrollHeight={Platform.OS === 'ios' ? 30 : 0} // Adjust as needed
             enableOnAndroid={true}>
-            {/* <ScrollView horizontal style={{width: '100%'}}>
-              <>
-                <View
+            <>
+              <Collapse
+                isExpanded={collapseState}
+                onToggle={() => {
+                  setCollapseState(!collapseState);
+                }}
+                style={{
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                }}>
+                <CollapseHeader
                   style={{
-                    zIndex: 1,
-                    height: 60,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    backgroundColor: colors.lightBlack,
+                    marginVertical: 10,
+                    borderRadius: 5,
+                    height: 35,
+                    width: '95%',
+                    borderColor: colors.primary,
+                    borderWidth: 2,
+                    paddingHorizontal: 15,
                   }}>
-                  <View style={tw``}>
-                    <DropDownPicker
-                      open={false}
-                      value={service}
-                      items={serviceList}
-                      disabled={false}
-                      // items={tempdata}
-                      setOpen={setdropdownOpen}
-                      setValue={setservice_}
-                      setItems={setserviceList}
-                      showArrowIcon={false}
-                      zIndex={10}
-                      maxHeight={200}
-                      dropDownContainerStyle={{
-                        borderWidth: 0,
-                      }}
-                      labelStyle={{
-                        fontFamily: commonStyle.fontFamily.regular,
-                        fontSize: 14,
-                        color: colors.white,
-                      }}
-                      arrowIconStyle={
-                        {
-                          // backgroundColor: 'red'
-                        }
-                      }
-                      placeholder={service?.name}
-                      placeholderStyle={{
-                        fontFamily: commonStyle.fontFamily.regular,
-                        fontSize: 14,
-                        color: '#FFFFFF',
-                      }}
+                  <View style={{}}>
+                    <TextWrapper
+                      fontType={'semiBold'}
                       style={{
+                        fontSize: 14,
+                        color: '#fff',
+                      }}>
+                      {selectCategory ? selectCategory : 'Select Category'}
+                    </TextWrapper>
+                  </View>
+                  {collapseState ? (
+                    <Image
+                      source={images.polygonDown}
+                      resizeMode={'contain'}
+                      style={{width: 15, height: 15}}
+                    />
+                  ) : (
+                    <Image
+                      source={images.polygonForward}
+                      resizeMode={'contain'}
+                      style={{width: 15, height: 15}}
+                    />
+                  )}
+                  <TextWrapper
+                    fontType={'semiBold'}
+                    style={{
+                      fontSize: 35,
+                      color: '#D20713',
+                      position: 'absolute',
+                      right: -25,
+                    }}>
+                    {'*'}
+                  </TextWrapper>
+                </CollapseHeader>
+                <CollapseBody>
+                  {getCategory && getCategory.length > 0 && (
+                    <View
+                      style={{
+                        borderColor: colors.primary,
                         backgroundColor: colors.lightBlack,
+                        borderWidth: 2,
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        width: '95%',
+                      }}>
+                      {getCategory?.map((item: any, index: number) => {
+                        var offerStyle;
+                        if (index > 0) {
+                          offerStyle = {marginBottom: 25};
+                        }
+                        return (
+                          <TouchableOpacity
+                            key={index}
+                            onPress={async () => {
+                              setselectCategory(item?.name);
+                              setCollapseState(false);
+                              // HandleGetSubCategory(item?.id);
+                              await initSubGetCategory(item?._id || item?.id);
+                            }}
+                            style={{marginTop: 8}}>
+                            <TextWrapper
+                              fontType={'semiBold'}
+                              style={{
+                                color:
+                                  selectCategory === item?.name
+                                    ? colors.primary
+                                    : colors.white,
+                                marginLeft: 11,
+                                marginRight: 8,
+                                marginBottom: 8,
+                              }}>
+                              {item?.name}
+                            </TextWrapper>
+                          </TouchableOpacity>
+                        );
+                      })}
+                    </View>
+                  )}
+                </CollapseBody>
+              </Collapse>
+
+              <View style={{marginBottom: 40}}>
+                {selectCategory?.length > 0 && selectCategory !== '' && (
+                  <Collapse
+                    isExpanded={collapseState2}
+                    onToggle={() => {
+                      setCollapseState2(!collapseState2);
+                    }}
+                    style={{
+                      justifyContent: 'center',
+                      flexDirection: 'column',
+                    }}>
+                    <CollapseHeader
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        backgroundColor: colors.lightBlack,
+                        marginVertical: 10,
+                        borderRadius: 5,
+                        height: 35,
+                        width: '95%',
                         borderColor: colors.primary,
                         borderWidth: 2,
-                        width: WIDTH_WINDOW * 0.85,
-                      }}
-                      listMode="FLATLIST"
-                      showTickIcon={false}
-                      textStyle={{
-                        color: colors.white,
-                      }}
-                      listParentLabelStyle={{
-                        color: '#000',
-                        fontSize: 16,
-                        fontFamily: commonStyle.fontFamily.regular,
-                      }}
-                      listItemContainerStyle={{
-                        backgroundColor: '#F1F1F1',
-                        borderColor: 'red',
-                        opacity: 1,
-                        borderWidth: 0,
-                      }}
-                    />
-                  </View>
-                </View>
-              </>
-            </ScrollView> */}
+                        paddingHorizontal: 15,
+                        // marginHorizontal: 20
+                      }}>
+                      <View style={{}}>
+                        <TextWrapper
+                          fontType={'semiBold'}
+                          style={{
+                            fontSize: 14,
+                            color: '#fff',
+                          }}>
+                          {serviceObj ? serviceObj?.name : 'Select Services'}
+                        </TextWrapper>
+                      </View>
+                      {collapseState2 ? (
+                        <Image
+                          source={images.polygonDown}
+                          resizeMode={'contain'}
+                          style={{width: 15, height: 15}}
+                        />
+                      ) : (
+                        <Image
+                          source={images.polygonForward}
+                          resizeMode={'contain'}
+                          style={{width: 15, height: 15}}
+                        />
+                      )}
+                      <TextWrapper
+                        fontType={'semiBold'}
+                        style={{
+                          fontSize: 35,
+                          color: '#D20713',
+                          position: 'absolute',
+                          right: -25,
+                        }}>
+                        {'*'}
+                      </TextWrapper>
+                    </CollapseHeader>
+                    <CollapseBody>
+                      {subLoading ? (
+                        <ActivityIndicator
+                          size={'large'}
+                          color={colors.primary}
+                        />
+                      ) : (
+                        <>
+                          {_getSubCategory && _getSubCategory.length > 0 && (
+                            <View
+                              style={{
+                                borderColor: colors.primary,
+                                backgroundColor: colors.lightBlack,
+                                borderWidth: 2,
+                                flexDirection: 'row',
+                                flexWrap: 'wrap',
+                                width: '95%',
+                              }}>
+                              {_getSubCategory?.map(
+                                (item: any, index: number) => {
+                                  var offerStyle;
+                                  if (index > 0) {
+                                    offerStyle = {marginBottom: 25};
+                                  }
+                                  return (
+                                    <TouchableOpacity
+                                      key={index}
+                                      onPress={() => {
+                                        setserviceObj(item);
+                                        setCollapseState2(false);
+                                        console.log(serviceObj, item);
+                                      }}
+                                      style={{marginTop: 8}}>
+                                      <TextWrapper
+                                        fontType={'semiBold'}
+                                        style={{
+                                          // color: category.some(
+                                          //   (catItem: {name: any}) =>
+                                          //     catItem.name === item.name,
+                                          // )
+                                          //   ? colors.primary
+                                          //   : colors.white,
+                                          color: colors.white,
+                                          marginLeft: 11,
+                                          marginRight: 8,
+                                          marginBottom: 8,
+                                        }}>
+                                        {item?.name}
+                                      </TextWrapper>
+                                    </TouchableOpacity>
+                                  );
+                                },
+                              )}
+                            </View>
+                          )}
+                        </>
+                      )}
+                    </CollapseBody>
+                  </Collapse>
+                )}
+              </View>
+            </>
+
             <View
               style={{
                 paddingHorizontal: 10,
@@ -293,7 +441,7 @@ export default function PortComp({
                   fontSize: 12,
                   color: colors.grey,
                 }}>
-                {`Service: ${service?.name}`}
+                {`Service: ${serviceObj?.name}`}
               </TextWrapper>
             </View>
             <>
@@ -334,9 +482,10 @@ export default function PortComp({
                     borderRadius: 5,
                     color: '#fff',
                     height: Platform.OS === 'ios' ? 50 : 50,
+                    fontSize: 12,
                   }}
                   placeholderTextColor={colors.grey}
-                  placeholder="Enter service description"
+                  placeholder="Describe your proficiency in the service"
                   value={values.serviceDescription}
                   onChangeText={handleChange('serviceDescription')}
                   // setFieldValue('service', item.value)
@@ -439,25 +588,6 @@ export default function PortComp({
                 />
               </View>
             </View>
-
-            {/* {portfolioCount?.map((item, index) => {
-              return (
-                <SubPortComp
-                  // key={index}
-                  // lindex={index}
-                  // dlist={serviceList}
-                  // portfolioData={[]}
-                  // handlePortfolioItemChange={(i: any, data: any) =>
-                  //   handlePortfolioItemChange(index, data)
-                  // }
-                  key={index}
-                  lindex={index}
-                  portfolioData={portfolioData}
-                  handlePortfolioItemChange={handlePortfolioItemChange}
-                />
-              );
-            })} */}
-
             <FieldArray name="portfolios">
               {({push, remove}) => (
                 <ScrollView
@@ -521,232 +651,3 @@ export default function PortComp({
     </View>
   );
 }
-
-// import React, {useState, useEffect} from 'react';
-// import {
-//   View,
-//   Image,
-//   TextInput,
-//   ScrollView,
-//   TouchableOpacity,
-//   Platform,
-// } from 'react-native';
-// import {useNavigation} from '@react-navigation/native';
-// import {StackNavigation} from '../../../constants/navigation';
-// import TextWrapper from '../../../components/TextWrapper';
-// import commonStyle from '../../../constants/commonStyle';
-// import tw from 'twrnc';
-// import colors from '../../../constants/colors';
-// import {useDispatch, useSelector} from 'react-redux';
-// import {WIDTH_WINDOW, generalStyles} from '../../../constants/generalStyles';
-// import DropDownPicker from 'react-native-dropdown-picker';
-// import Snackbar from 'react-native-snackbar';
-// import {launchImageLibrary} from 'react-native-image-picker';
-// import {addcompleteProfile} from '../../../store/reducer/mainSlice';
-// import {ToastShort} from '../../../utils/utils';
-// import Textcomp from '../../../components/Textcomp';
-// import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-// import images from '../../../constants/images';
-// import SubPortComp from './subComp';
-// import {Formik, FieldArray, Field, useFormikContext} from 'formik';
-// import * as yup from 'yup';
-
-// const validationSchema = yup.object().shape({
-//   serviceDescription: yup.string().required('Service description is required'),
-//   servicePriceMin: yup.number().required('Service Price min is required '),
-//   servicePriceMax: yup.number().required('Service Price max is required '),
-//   portfolios: yup.array(),
-//   // Add other validation as needed
-//   // ...
-// });
-// const initialValues = {
-//   serviceDescription: '',
-//   servicePriceMin: '',
-//   servicePriceMax: '',
-//   portfolios: [
-//     {
-//       description: '',
-//       images: [],
-//     },
-//   ],
-// };
-
-// const PortComp = ({dlist, lindex, portfolioData, close, service}: any) => {
-//   const navigation = useNavigation<StackNavigation>();
-//   const dispatch = useDispatch();
-
-//   const handleProfileSetup = () => {
-//     // Handle profile setup logic using formik values
-//   };
-
-//   const handleAddButtonClick = arrayHelpers => {
-//     arrayHelpers.push({
-//       description: '',
-//       images: [],
-//     });
-//   };
-
-//   return (
-// <Formik
-//   initialValues={initialValues}
-//   validationSchema={validationSchema}
-//   onSubmit={handleProfileSetup}>
-//   {({values, handleChange, handleBlur, handleSubmit, setFieldValue}) => (
-//         <KeyboardAwareScrollView
-//           contentContainerStyle={{}}
-//           style={{}}
-//           extraScrollHeight={Platform.OS === 'ios' ? 30 : 0}
-//           enableOnAndroid={true}>
-//           {/* Your existing components here */}
-//           <View>
-//             <DropDownPicker
-//               open={false}
-//               value={service?.name}
-//               items={[]}
-//               disabled={true}
-//               // items={tempdata}
-//               showArrowIcon={false}
-//               zIndex={10}
-//               maxHeight={200}
-//               dropDownContainerStyle={{
-//                 borderWidth: 0,
-//               }}
-//               labelStyle={{
-//                 fontFamily: commonStyle.fontFamily.regular,
-//                 fontSize: 14,
-//                 color: colors.white,
-//               }}
-//               arrowIconStyle={
-//                 {
-//                   // backgroundColor: 'red'
-//                 }
-//               }
-//               placeholder="Select the service the portfolio is for?"
-//               placeholderStyle={{
-//                 fontFamily: commonStyle.fontFamily.regular,
-//                 fontSize: 14,
-//                 color: '#9E9E9E',
-//               }}
-//               style={{
-//                 backgroundColor: colors.lightBlack,
-//                 borderColor: colors.primary,
-//                 borderWidth: 2,
-//                 width: WIDTH_WINDOW * 0.85,
-//               }}
-//               listMode="FLATLIST"
-//               showTickIcon={false}
-//               textStyle={{
-//                 color: colors.white,
-//               }}
-//               listParentLabelStyle={{
-//                 color: '#000',
-//                 fontSize: 16,
-//                 fontFamily: commonStyle.fontFamily.regular,
-//               }}
-//               listItemContainerStyle={{
-//                 backgroundColor: '#F1F1F1',
-//                 borderColor: 'red',
-//                 opacity: 1,
-//                 borderWidth: 0,
-//               }}
-//               // onChangeItem={item => setFieldValue('service', item.value)}
-//             />
-//           </View>
-//           <View>
-//             <TextInput
-//               // ... other TextInput props
-//               value={values.serviceDescription}
-//               onChangeText={handleChange('serviceDescription')}
-//               onBlur={handleBlur('serviceDescription')}
-//             />
-//           </View>
-//           <View>
-//             <View style={[generalStyles.rowCenter]}>
-//               <TextInput
-//                 // ... other TextInput props
-//                 value={values.servicePriceMin}
-//                 onChangeText={handleChange('servicePriceMin')}
-//                 onBlur={handleBlur('servicePriceMin')}
-//               />
-//               <TextWrapper
-//                 fontType={'semiBold'}
-//                 style={{
-//                   fontSize: 12,
-//                   color: colors.black,
-//                   marginHorizontal: 10,
-//                 }}>
-//                 to
-//               </TextWrapper>
-//               <TextInput
-//                 // ... other TextInput props
-//                 value={values.servicePriceMax}
-//                 onChangeText={handleChange('servicePriceMax')}
-//                 onBlur={handleBlur('servicePriceMax')}
-//               />
-//             </View>
-//           </View>
-
-// <FieldArray name="portfolios">
-//   {({push, remove}) => (
-//     <ScrollView horizontal style={{width: '100%'}}>
-//       {values.portfolios.map((_, index) => (
-//         <SubPortComp
-//           key={index}
-//           lindex={index}
-//           portfolioData={portfolioData}
-//           handlePortfolioItemChange={(i, data) => {
-//             setFieldValue(`portfolios[${index}]`, data);
-//           }}
-//         />
-//       ))}
-//       <TouchableOpacity
-//         onPress={() => {
-//           push({
-//             description: '',
-//             images: [],
-//           });
-//         }}
-//         style={[
-//           tw`flex flex-row ml-auto px-4 items-center  py-4 rounded-lg  mt-4`,
-//         ]}>
-//         <Image
-//           source={images.cross}
-//           style={{
-//             width: 25,
-//             height: 25,
-//             marginRight: 10,
-//             tintColor: colors.darkPurple,
-//           }}
-//         />
-//         <Textcomp
-//           text={'Add Portfolio'}
-//           size={16}
-//           lineHeight={16}
-//           color={colors.darkPurple}
-//           fontFamily={'Inter-Bold'}
-//         />
-//       </TouchableOpacity>
-//     </ScrollView>
-//   )}
-// </FieldArray>
-
-//           <TouchableOpacity
-//             onPress={() => handleSubmit()}
-//             style={[
-//               tw` w-3/4 items-center mb-30 py-4 mx-auto rounded-lg bg-[${colors.darkPurple}] mt-4`,
-//             ]}>
-//             <Textcomp
-//               text={'Add'}
-//               size={16}
-//               lineHeight={16}
-//               color={'#FFFFFF'}
-//               fontFamily={'Inter-Bold'}
-//             />
-//           </TouchableOpacity>
-//         </KeyboardAwareScrollView>
-//   )}
-// </Formik>
-//   );
-// };
-
-// export default PortComp;

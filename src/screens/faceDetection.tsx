@@ -28,6 +28,11 @@ import tw from 'twrnc';
 import {perHeight, perWidth} from '../utils/position/sizes';
 import colors from '../constants/colors';
 import images from '../constants/images';
+import {getUser, updateUserData} from '../utils/api/func';
+import Snackbar from 'react-native-snackbar';
+import {ToastLong} from '../utils/utils';
+import {addUserData} from '../store/reducer/mainSlice';
+import {useDispatch} from 'react-redux';
 
 LogBox.ignoreLogs(['new NativeEventEmitter']);
 const eventManager = new NativeEventEmitter(RNFaceApi);
@@ -171,21 +176,32 @@ export default function FaceDetection({navigation}: any) {
     );
   };
 
+  const dispatch = useDispatch();
+  const initGetUsers = async () => {
+    const res: any = await getUser('');
+    console.log('dddddddd', res);
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addUserData(res?.data?.user));
+    }
+  };
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const startLiveness = () => {
     FaceSDK.startLiveness(
-      result => {
+      async result => {
         result = LivenessResponse.fromJson(JSON.parse(result));
 
         setImage(true, result.bitmap, Enum.ImageType.LIVE);
         if (result.bitmap != null) {
           setLiveness(
-            result.liveness == Enum.LivenessStatus.PASSED
+            result.liveness === Enum.LivenessStatus.PASSED
               ? 'passed'
               : 'unknown',
           );
 
-          if (result.liveness == Enum.LivenessStatus.PASSED) {
+          if (result.liveness === Enum.LivenessStatus.PASSED) {
+            await updateLive();
+            await initGetUsers();
             navigation.navigate('Home');
           }
         }
@@ -202,6 +218,28 @@ export default function FaceDetection({navigation}: any) {
       startLiveness();
     }, 10000);
   }, [startLiveness]);
+
+  const updateLive = async () => {
+    const res: any = await updateUserData({
+      liveTest: true,
+    });
+    console.log('result', res?.data);
+    if (res?.status === 200 || res?.status === 201) {
+      ToastLong('LIve Test Passed');
+      navigation.navigate('Home');
+    } else {
+      Snackbar.show({
+        text: res?.error?.message
+          ? res?.error?.message
+          : res?.error?.data?.message
+          ? res?.error?.data?.message
+          : 'Oops!, an error occured',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+    }
+  };
 
   return (
     <View style={[tw`flex-1 bg-[#121212]`, {}]}>

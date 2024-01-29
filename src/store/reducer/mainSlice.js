@@ -47,6 +47,7 @@ const initialState = {
   banks: [],
   welcomeModal: false,
   serviceProviderData: {},
+  liveTest: false,
 
   //provider-profileID
   provider_id: null,
@@ -240,6 +241,9 @@ export const mainSlice = createSlice({
     },
     setserviceProviderData: (state, action) => {
       state.serviceProviderData = action.payload;
+    },
+    setliveTest: (state, action) => {
+      state.liveTest = action.payload;
     },
   },
 });

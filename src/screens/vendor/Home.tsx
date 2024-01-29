@@ -87,6 +87,11 @@ const Home = ({navigation}: any) => {
         ToastLong('Address is required');
       } else {
         // Continue with your logic if geoLocation is valid
+
+        if (!userData?.liveTest) {
+          navigation.navigate('FaceDetection');
+          ToastLong('Virtual Interview is compulsory');
+        }
       }
       // setloading(false);
     };
@@ -424,9 +429,7 @@ const Home = ({navigation}: any) => {
                 ]}>
                 <Textcomp
                   // text={'NGN249,0000'}
-                  text={`₦${formatAmount(
-                    userData?.wallet?.availableBalance,
-                  )}`}
+                  text={`₦${formatAmount(userData?.wallet?.availableBalance)}`}
                   size={20}
                   lineHeight={20}
                   color={'#000413'}
@@ -549,7 +552,7 @@ const Home = ({navigation}: any) => {
             )}
           </View>
 
-          {formStage === 6 ? null : (
+          {userData?.isVerified === 'incomplete' || formStage === 6 ? null : (
             <TouchableOpacity
               onPress={() => {
                 // navigation.navigate('ProfileStep21');
@@ -579,6 +582,88 @@ const Home = ({navigation}: any) => {
               <Textcomp
                 text={'Complete your registration to accept orders'}
                 size={14}
+                lineHeight={16}
+                color={colors.primary}
+                fontFamily={'Inter-Medium'}
+              />
+            </TouchableOpacity>
+          )}
+
+          {userData?.isVerified === 'review' && (
+            <TouchableOpacity
+              onPress={() => {}}
+              style={[
+                tw`bg-[#2D303C] mx-auto items-center justify-center`,
+                {
+                  width: perWidth(309),
+                  height: perHeight(30),
+                  borderRadius: 7,
+                  marginTop: perHeight(43),
+                },
+              ]}>
+              <Textcomp
+                text={'Your profile is under review...'}
+                size={14}
+                lineHeight={16}
+                color={colors.primary}
+                fontFamily={'Inter-Medium'}
+              />
+            </TouchableOpacity>
+          )}
+          {userData?.isVerified === 'rejected' && (
+            <TouchableOpacity
+              onPress={() => {
+                // navigation.navigate('ProfileStep21');
+              }}
+              style={[
+                tw`bg-[#2D303C] mx-auto flex flex-row items-center justify-center`,
+                {
+                  width: perWidth(309),
+                  height: perHeight(30),
+                  borderRadius: 7,
+                  marginTop: perHeight(43),
+                },
+              ]}>
+              <Textcomp
+                text={'Profile verification failed '}
+                size={14}
+                lineHeight={16}
+                color={'#D20713'}
+                fontFamily={'Inter-Bold'}
+              />
+              <Textcomp
+                text={' (Check your email)'}
+                size={14}
+                lineHeight={16}
+                color={colors.primary}
+                fontFamily={'Inter-Medium'}
+              />
+            </TouchableOpacity>
+          )}
+          {userData?.isVerified === 'approved' && (
+            <TouchableOpacity
+              onPress={() => {
+                // navigation.navigate('ProfileStep21');
+              }}
+              style={[
+                tw`bg-[#2D303C] mx-auto flex flex-row items-center justify-center`,
+                {
+                  width: perWidth(309),
+                  height: perHeight(30),
+                  borderRadius: 7,
+                  marginTop: perHeight(43),
+                },
+              ]}>
+              <Textcomp
+                text={'Profile approved'}
+                size={14}
+                lineHeight={16}
+                color={'#45FF27'}
+                fontFamily={'Inter-Bold'}
+              />
+              <Textcomp
+                text={' (You will start receiving orders)'}
+                size={12}
                 lineHeight={16}
                 color={colors.primary}
                 fontFamily={'Inter-Medium'}
