@@ -60,6 +60,9 @@ const ProfileStep21 = () => {
   const [isLoading, setisLoading] = useState(false);
   const [createService] = useCreateServiceMutation();
   const dispatch = useDispatch();
+
+  const ProviderData = useSelector((state: any) => state.user.profileData);
+
   const handleProfileSetup = async () => {
     if (portfolioToServiceCount?.length > 0) {
       const payload_data = portfolioToServiceCount;
@@ -127,7 +130,9 @@ const ProfileStep21 = () => {
       return;
     }
     // const d = ProviderData?.portfolios?.filter(s => s.service === item?._id);
-    if (ProviderData?.portfolios?.length !== category?.length) {
+    const ProviderDataLength = ProviderData?.portfolios?.length;
+    const serviceLength = ProviderData?.service?.length;
+    if (ProviderDataLength !== serviceLength) {
       ToastShort('Please fill all service data!.');
       return;
     }
@@ -169,8 +174,6 @@ const ProfileStep21 = () => {
   const completeProfileData = useSelector(
     (state: any) => state.user.completeProfileData,
   );
-  const ProviderData = useSelector((state: any) => state.user.profileData);
-
   const [serviceList, setserviceList] = useState([]);
   const options = {mediaType: 'photo', selectionLimit: 1};
   const [addModal, setaddModal] = useState(false);

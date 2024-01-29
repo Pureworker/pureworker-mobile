@@ -22,6 +22,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import * as yup from 'yup';
 import {useFormik} from 'formik';
+import { ToastShort } from '../../utils/utils';
 type Route = {
   key: string;
   name: string;
@@ -180,6 +181,18 @@ const ProfileStep3 = () => {
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
+        return;
+      }
+      if ( values.email1 === values.email2) {
+        ToastShort('Cannot have Same Email for both contacts');
+        return;
+      }
+      if ( values.phoneNumber1 === values.phoneNumber2) {
+        ToastShort('Cannot have Same PhoneNumber for both contacts');
+        return;
+      }
+      if ( values.name1 === values.name2) {
+        ToastShort('Cannot have Same Name for both contacts');
         return;
       }
       // const contact = [
