@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   View,
@@ -25,6 +25,8 @@ import {
 import Snackbar from 'react-native-snackbar';
 import {useDispatch, useSelector} from 'react-redux';
 import tw from 'twrnc';
+import {addUserData, addproviderOrders} from '../../store/reducer/mainSlice';
+import {getProviderOrders, getUser} from '../../utils/api/func';
 
 type Route = {
   key: string;
@@ -45,6 +47,17 @@ const Congratulations = () => {
     (state: any) => state.user.completeProfileData,
   );
   console.log(completeProfileData);
+
+  useEffect(() => {
+    const initGetUsers = async () => {
+      const res: any = await getUser('');
+      console.log('dd', res?.data?.user);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addUserData(res?.data?.user));
+      }
+    };
+    initGetUsers();
+  }, []);
 
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>

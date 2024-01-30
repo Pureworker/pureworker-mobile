@@ -205,7 +205,6 @@ const TabServices = () => {
               state={searchInput}
               setState={text => {
                 setSearchInput(text);
-                // handleSearch(text);
                 debouncedHandleSearch(text);
               }}
             />

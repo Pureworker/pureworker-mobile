@@ -1149,6 +1149,30 @@ export const getSearchQuery = async (param: any) => {
   }
 };
 
+export const getSearchProvider = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getSearchQuery func started', param , `provider/get-providers?name=${param}`);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/provider/get-providers?name=${param}`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
 export const addPortfolio = async (param: any) => {
   console.log('addPortfolio func started', param);
   const AuthToken = await AsyncStorage.getItem('AuthToken');

@@ -19,17 +19,20 @@ import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {perHeight} from '../../utils/position/sizes';
+import {SIZES, perHeight} from '../../utils/position/sizes';
 import ServiceCard2 from '../../components/cards/serviceCard2';
 import TextInputs from '../../components/TextInput2';
 import {
   getProviderByCategory,
   getProviderByService,
+  getSearchProvider,
+  getSearchQuery,
   getUser,
 } from '../../utils/api/func';
 import {addprovidersByCateegory} from '../../store/reducer/mainSlice';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
+import colors from '../../constants/colors';
 
 const _Services = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -47,17 +50,13 @@ const _Services = ({route}: any) => {
   const [searchModal, setsearchModal] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const [searchInput, setsearchInput] = useState('');
-
   const [savedProviders, setsavedProviders] = useState([]);
-
   function metersToKilometers(meters) {
     const kilometers = meters / 1000; // Convert meters to kilometers
     const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
     return `${roundedKilometers} km`;
   }
-
-  console.log('BOOKMARK', userData?.bookmarks);
-
+  // console.log('BOOKMARK', userData?.bookmarks);
   useEffect(() => {
     const query = userData?.bookmarks?.filter(
       (item: {service: any}) => item?.service === id,
@@ -77,6 +76,44 @@ const _Services = ({route}: any) => {
     };
     initGetUsers();
   }, [dispatch, id]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return function (...args) {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
+  };
+  const handleSearch = async query => {
+    try {
+      // Optional: You can add loading state here if needed
+      setLoading(true);
+
+      // Use the useGetAllServicesQuery hook to fetch data based on the search input
+      const {data, error} = await getSearchProvider(query || searchInput);
+      console.log('resulk:', data);
+      if (error) {
+        console.error('Error fetching search results:', error);
+        // Handle error, show an error message, or take appropriate action
+      } else {
+        // Update the search results state with the fetched data
+
+        setSearchResults(data?.providers ?? []);
+      }
+    } catch (error) {
+      console.error('An unexpected error occurred during search:', error);
+      // Handle unexpected error, show an error message, or take appropriate action
+    } finally {
+      // Optional: You can update the loading state here if needed
+      setLoading(false);
+    }
+  };
+  const debouncedHandleSearch = debounce(handleSearch, 500);
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -152,7 +189,10 @@ const _Services = ({route}: any) => {
               style={{marginTop: 0, width: '70%'}}
               labelText={'Search for service provider'}
               state={searchInput}
-              setState={setsearchInput}
+              setState={text => {
+                setsearchInput(text);
+                debouncedHandleSearch(text);
+              }}
             />
             <TouchableOpacity
               style={{
@@ -171,92 +211,126 @@ const _Services = ({route}: any) => {
           </View>
         )}
         <View style={tw`mt-4 mb-3`}>
-          <View style={tw`flex flex-row`}>
-            <TouchableOpacity
-              onPress={() => {
-                setactiveSection('All');
-              }}
-              style={tw`w-1/2 border-b-2  items-center ${
-                activeSection === 'All'
-                  ? 'border-[#88087B]'
-                  : 'border-[#000000]'
-              }`}>
-              <Textcomp
-                text={'All'}
-                size={14}
-                lineHeight={16}
-                color={activeSection === 'All' ? '#88087B' : '#000413'}
-                fontFamily={'Inter-SemiBold'}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setactiveSection('Saved');
-              }}
-              style={tw`w-1/2 border-b-2 items-center ${
-                activeSection === 'Saved'
-                  ? 'border-[#88087B]'
-                  : 'border-[#000000]'
-              }`}>
-              <Textcomp
-                text={'Saved'}
-                size={14}
-                lineHeight={16}
-                color={activeSection === 'Saved' ? '#88087B' : '#000413'}
-                fontFamily={'Inter-SemiBold'}
-              />
-            </TouchableOpacity>
-          </View>
-
-          <>
-            {!isLoading && (
-              <>
-                {_providersByCateegory.length < 1 ? (
-                  <View
-                    style={[
-                      tw`bg-[#D9D9D9] flex flex-col rounded  mt-3 mx-2`,
-                      {height: perHeight(80), alignItems: 'center'},
-                    ]}>
-                    <View style={tw`my-auto pl-8`}>
-                      <Textcomp
-                        text={'Service Provider Not Found...'}
-                        size={17}
-                        lineHeight={17}
-                        color={'black'}
-                        fontFamily={'Inter-SemiBold'}
-                      />
+          {searchResults.length < 0 && (
+            <View style={tw`flex flex-row`}>
+              <TouchableOpacity
+                onPress={() => {
+                  setactiveSection('All');
+                }}
+                style={tw`w-1/2 border-b-2  items-center ${
+                  activeSection === 'All'
+                    ? 'border-[#88087B]'
+                    : 'border-[#000000]'
+                }`}>
+                <Textcomp
+                  text={'All'}
+                  size={14}
+                  lineHeight={16}
+                  color={activeSection === 'All' ? '#88087B' : '#000413'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setactiveSection('Saved');
+                }}
+                style={tw`w-1/2 border-b-2 items-center ${
+                  activeSection === 'Saved'
+                    ? 'border-[#88087B]'
+                    : 'border-[#000000]'
+                }`}>
+                <Textcomp
+                  text={'Saved'}
+                  size={14}
+                  lineHeight={16}
+                  color={activeSection === 'Saved' ? '#88087B' : '#000413'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </TouchableOpacity>
+            </View>
+          )}
+          {searchResults.length < 1 && (
+            <>
+              {!isLoading && (
+                <>
+                  {_providersByCateegory.length < 1 ? (
+                    <View
+                      style={[
+                        tw`bg-[#D9D9D9] flex flex-col rounded  mt-3 mx-2`,
+                        {height: perHeight(80), alignItems: 'center'},
+                      ]}>
+                      <View style={tw`my-auto pl-8`}>
+                        <Textcomp
+                          text={'Service Provider Not Found...'}
+                          size={17}
+                          lineHeight={17}
+                          color={'black'}
+                          fontFamily={'Inter-SemiBold'}
+                        />
+                      </View>
                     </View>
-                  </View>
-                ) : (
-                  <>
-                    {activeSection === 'All' && (
-                      <>
+                  ) : (
+                    <>
+                      {activeSection === 'All' && (
+                        <>
+                          <View style={[tw`items-center`, {flex: 1}]}>
+                            <ScrollView scrollEnabled={false} horizontal>
+                              <FlatList
+                                style={{flex: 1}}
+                                data={_providersByCateegory}
+                                scrollEnabled={false}
+                                horizontal={false}
+                                renderItem={(item: any, index: any) => {
+                                  console.log(':id', item?.item?._id);
+                                  const ch = savedProviders?.filter(
+                                    (d: {service: any}) =>
+                                      d?.serviceProvider === item?.item?._id,
+                                  );
+                                  return (
+                                    <ServiceCard2
+                                      key={index}
+                                      navigation={navigation}
+                                      item={item.item}
+                                      index={item.index}
+                                      id={id}
+                                      serviceName={passedService}
+                                      save={ch?.length > 0 ? true : false}
+                                    />
+                                  );
+                                }}
+                                keyExtractor={item => item?.id}
+                                ListFooterComponent={() => (
+                                  <View style={tw`h-20`} />
+                                )}
+                                contentContainerStyle={{paddingBottom: 20}}
+                              />
+                            </ScrollView>
+                          </View>
+                        </>
+                      )}
+                      {activeSection === 'Saved' && (
                         <View style={[tw`items-center`, {flex: 1}]}>
                           <ScrollView scrollEnabled={false} horizontal>
                             <FlatList
-                              style={{flex: 1}}
-                              data={_providersByCateegory}
-                              scrollEnabled={false}
+                              data={savedProviders}
                               horizontal={false}
+                              scrollEnabled={false}
                               renderItem={(item: any, index: any) => {
-                                console.log(':id', item?.item?._id);
-                                const ch = savedProviders?.filter(
-                                  (d: {service: any}) =>
-                                    d?.serviceProvider === item?.item?._id,
-                                );
                                 return (
-                                  <ServiceCard2
-                                    key={index}
-                                    navigation={navigation}
-                                    item={item.item}
-                                    index={item.index}
-                                    id={id}
-                                    serviceName={passedService}
-                                    save={ch?.length > 0 ? true : false}
-                                  />
+                                  <TouchableOpacity>
+                                    <ServiceCard2
+                                      key={index}
+                                      navigation={navigation}
+                                      item={item.item}
+                                      index={item.index}
+                                      id={id}
+                                      serviceName={passedService}
+                                      save={true}
+                                    />
+                                  </TouchableOpacity>
                                 );
                               }}
-                              keyExtractor={item => item?.id}
+                              keyExtractor={item => item?._id}
                               ListFooterComponent={() => (
                                 <View style={tw`h-20`} />
                               )}
@@ -264,44 +338,67 @@ const _Services = ({route}: any) => {
                             />
                           </ScrollView>
                         </View>
-                      </>
-                    )}
-                    {activeSection === 'Saved' && (
-                      <View style={[tw`items-center`, {flex: 1}]}>
-                        <ScrollView scrollEnabled={false} horizontal>
-                          <FlatList
-                            data={savedProviders}
-                            horizontal={false}
-                            scrollEnabled={false}
-                            renderItem={(item: any, index: any) => {
-                              return (
-                                <TouchableOpacity>
-                                  <ServiceCard2
-                                    key={index}
-                                    navigation={navigation}
-                                    item={item.item}
-                                    index={item.index}
-                                    id={id}
-                                    serviceName={passedService}
-                                    save={true}
-                                  />
-                                </TouchableOpacity>
-                              );
-                            }}
-                            keyExtractor={item => item?._id}
-                            ListFooterComponent={() => (
-                              <View style={tw`h-20`} />
-                            )}
-                            contentContainerStyle={{paddingBottom: 20}}
+                      )}
+                    </>
+                  )}
+                </>
+              )}
+            </>
+          )}
+          {searchResults.length > 0 && searchInput && (
+            <>
+              <>
+                <View style={tw`mt-4 mx-[5%]`}>
+                  <Textcomp
+                    text={'Search Results'}
+                    size={18}
+                    lineHeight={25}
+                    color={'#000413'}
+                    fontFamily={'Inter'}
+                  />
+                </View>
+                <ScrollView horizontal contentContainerStyle={{width: SIZES.width}}>
+                  <FlatList
+                    data={searchResults}
+                    keyExtractor={item => item.id?.toString()}
+                    renderItem={({item}) => (
+                      <TouchableOpacity
+                        style={tw`border-[${colors.darkPurple}] border-b justify-between items-center flex flex-row w-9/10 mx-auto mt-4 py-2 pb-4 px-3`}
+                        onPress={() => {
+                          // initFecthProviders(item?.id, item);
+                        }}>
+                        <View style={tw`flex flex-row`}>
+                          <Image
+                            source={
+                              item?.profilePic
+                                ? {uri: item?.profilePic}
+                                : images.profile
+                            }
+                            style={[tw`bg-red-400`, {width: 32}]}
                           />
-                        </ScrollView>
-                      </View>
+                          <Text
+                            style={tw`text-[${colors.darkPurple}] ml-3 font-600`}>
+                            {item?.fullName || item?.businessName}
+                          </Text>
+                        </View>
+                        <View style={tw`flex flex-row items-center`}>
+                          <Image
+                            resizeMode="contain"
+                            source={images.location}
+                            style={[tw``, {width: 20}]}
+                          />
+                          <Text
+                            style={tw`text-[${colors.darkPurple}] ml-3 font-600`}>
+                            {item?.distance}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
                     )}
-                  </>
-                )}
+                  />
+                </ScrollView>
               </>
-            )}
-          </>
+            </>
+          )}
         </View>
         <View style={tw`h-20`} />
       </ScrollView>
