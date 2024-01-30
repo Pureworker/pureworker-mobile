@@ -22,7 +22,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import * as yup from 'yup';
 import {useFormik} from 'formik';
-import { ToastShort } from '../../utils/utils';
+import {ToastShort} from '../../utils/utils';
 type Route = {
   key: string;
   name: string;
@@ -35,22 +35,26 @@ const validationSchema = yup.object().shape({
   name1: yup.string().required('Full Name is required'),
   relation1: yup.string().required('Relationship is required'),
   email1: yup
-  .string()
-  .email('Enter a valid email')
-  .required('Email is required')
-  .test('unique-emails', 'Emails must be different', function (value) {
-    const { email2 } = this.parent;
-    return value !== email2;
-  }),
-phoneNumber1: yup
-  .string()
-  .required('Phone Number is required')
-  .min(11, 'Invalid Phone number')
-  .max(11, 'Invalid Phone number')
-  .test('unique-phone-numbers', 'Phone Numbers must be different', function (value) {
-    const { phoneNumber2 } = this.parent;
-    return value !== phoneNumber2;
-  }),
+    .string()
+    .email('Enter a valid email')
+    .required('Email is required')
+    .test('unique-emails', 'Emails must be different', function (value) {
+      const {email2} = this.parent;
+      return value !== email2;
+    }),
+  phoneNumber1: yup
+    .string()
+    .required('Phone Number is required')
+    .min(11, 'Invalid Phone number')
+    .max(11, 'Invalid Phone number')
+    .test(
+      'unique-phone-numbers',
+      'Phone Numbers must be different',
+      function (value) {
+        const {phoneNumber2} = this.parent;
+        return value !== phoneNumber2;
+      },
+    ),
   // phoneNumber1: yup
   //   .string()
   //   .required('Phone Number is required')
@@ -183,15 +187,15 @@ const ProfileStep3 = () => {
         });
         return;
       }
-      if ( values.email1 === values.email2) {
+      if (values.email1 === values.email2) {
         ToastShort('Cannot have Same Email for both contacts');
         return;
       }
-      if ( values.phoneNumber1 === values.phoneNumber2) {
+      if (values.phoneNumber1 === values.phoneNumber2) {
         ToastShort('Cannot have Same PhoneNumber for both contacts');
         return;
       }
-      if ( values.name1 === values.name2) {
+      if (values.name1 === values.name2) {
         ToastShort('Cannot have Same Name for both contacts');
         return;
       }
@@ -230,6 +234,7 @@ const ProfileStep3 = () => {
       dispatch(
         addcompleteProfile({
           contact: contact,
+          action: 'add',
         }),
       );
       setisLoading(true);
@@ -274,6 +279,9 @@ const ProfileStep3 = () => {
         }}
         title={'Complete your Registration'}
         image={images.back}
+        func={() => {
+          navigation.navigate('ProfileStep21');
+        }}
       />
       <ProfileStepWrapper active={'three'} />
       <ScrollView>

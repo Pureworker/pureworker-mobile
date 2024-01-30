@@ -89,7 +89,7 @@ const Home = ({navigation}: any) => {
         // Continue with your logic if geoLocation is valid
 
         if (!userData?.liveTest) {
-          navigation.navigate('FaceDetection');
+          // navigation.navigate('FaceDetection');
           ToastLong('Virtual Interview is compulsory');
         }
       }
@@ -552,7 +552,7 @@ const Home = ({navigation}: any) => {
             )}
           </View>
 
-          {userData?.isVerified === 'incomplete' || formStage === 6 ? null : (
+          {userData?.isVerified === 'incomplete' || formStage !== 6 ?  (
             <TouchableOpacity
               onPress={() => {
                 // navigation.navigate('ProfileStep21');
@@ -587,7 +587,8 @@ const Home = ({navigation}: any) => {
                 fontFamily={'Inter-Medium'}
               />
             </TouchableOpacity>
-          )}
+          ) : null
+        }
 
           {userData?.isVerified === 'review' && (
             <TouchableOpacity

@@ -83,9 +83,7 @@ export const verifyUser = async (param: any) => {
       method: 'post',
       headers: {Authorization: `Bearer ${AuthToken}`},
       url: `${API_BASE_URL}/auth/verify-signup-otp`,
-      data: {
-        token: param,
-      },
+      data: param,
     });
     const storeTokenData = async (res: any) => {
       console.log('responsetoken here lets destructure:', res?.data);
@@ -127,7 +125,7 @@ export const resendOtp = async (param: any) => {
       console.log('otp response data:', response?.data);
     }
     return response;
-  } catch (error:any) {
+  } catch (error: any) {
     console.log(error, error?.response?.data);
     return {
       status: 400,

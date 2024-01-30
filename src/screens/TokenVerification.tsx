@@ -151,7 +151,10 @@ const TokenVerification = () => {
         });
       }
     } else {
-      const res = await verifyUser(code);
+      const res = await verifyUser({
+        email: route.params?.email?.toLowerCase(),
+        token: code,
+      });
       console.log('verify-here', res, 'data:', res?.data?.message);
       if (res?.status === 200 || res?.status === 201) {
         dispatch(

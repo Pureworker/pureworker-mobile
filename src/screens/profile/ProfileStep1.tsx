@@ -37,6 +37,8 @@ import {completeProfile, getSubCategory} from '../../utils/api/func';
 import {RouteContext} from '../../utils/context/route_context';
 import CustomLoading from '../../components/customLoading';
 import Spinner from 'react-native-loading-spinner-overlay';
+import {ToastShort} from '../../utils/utils';
+import {SIZES} from '../../utils/position/sizes';
 
 const PRofileStep1 = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -61,8 +63,7 @@ const PRofileStep1 = () => {
   const [selectCategory, setselectCategory] = useState('');
   const [subCategory, setsubCategory] = useState([]);
   const [subLoading, setsubLoading] = useState(false);
-  // const [getSubCategories] = useGetSubCategoriesQuery();
-
+  // const [getSubCategories] = useGetSubCategoriesQuery()
   const HandleGetSubCategory = async param => {
     console.log('started');
     try {
@@ -106,9 +107,8 @@ const PRofileStep1 = () => {
   const handleProfileSetup = async () => {
     setisLoading(true);
     if (categoryId) {
-      const res = await completeProfile({services: categoryId});
+      const res = await completeProfile({services: categoryId, action: 'add'});
       console.error('RESULT', res?.data);
-
       if (res?.status === 200 || res?.status === 201) {
         dispatch(addprovider_id(res?.data?.profile?.id));
         // navigation.navigate('ProfileStep2');
@@ -141,6 +141,10 @@ const PRofileStep1 = () => {
   };
 
   const handleNext = async () => {
+    if (category?.length < 1) {
+      ToastShort('Atleast 1 service is required!.');
+      return;
+    }
     console.log(categoryId);
     await handleProfileSetup();
     // const data = completeProfileData;
@@ -454,25 +458,7 @@ const PRofileStep1 = () => {
           ) : null}
         </View>
 
-        <View
-          style={[
-            generalStyles.rowBetween,
-            {marginHorizontal: 20, marginBottom: 35},
-          ]}>
-          <Button
-            onClick={() => {
-              handleNext();
-            }}
-            style={[
-              tw`ml-auto`,
-              {width: 90, backgroundColor: colors.lightBlack},
-            ]}
-            textStyle={{color: colors.primary}}
-            text={'Next'}
-          />
-        </View>
-
-        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+        <View style={{flexDirection: 'row', flexWrap: 'wrap', marginTop: 10}}>
           {category?.length > 0
             ? category?.map((item: any, index: any) => {
                 return (
@@ -522,6 +508,24 @@ const PRofileStep1 = () => {
                 );
               })
             : null}
+        </View>
+
+        <View
+          style={[
+            generalStyles.rowBetween,
+            {marginHorizontal: 'auto', marginTop: 25},
+          ]}>
+          <Button
+            onClick={() => {
+              handleNext();
+            }}
+            style={[
+              tw`mx-auto`,
+              {width: SIZES.width * 0.65, backgroundColor: colors.lightBlack},
+            ]}
+            textStyle={{color: colors.primary}}
+            text={'Next'}
+          />
         </View>
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />

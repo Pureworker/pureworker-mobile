@@ -18,7 +18,7 @@ type HeaderProps = {
   statusBarStyle?: any;
   textStyle?: any;
   imageStyle?: any;
-  func?: any
+  func?: any;
 };
 
 const Header = ({
@@ -61,9 +61,9 @@ const Header = ({
         style={{position: 'absolute', left: 20}}
         onPress={() => {
           if (func) {
-            func()
-          }else{
-            navigation.goBack()
+            func();
+          } else {
+            navigation.goBack();
           }
         }}>
         <Image

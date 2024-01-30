@@ -76,6 +76,10 @@ const ProfileStep4 = () => {
 
   const verifyID = async () => {
     setisLoading(true);
+    if (!idNumber) {
+      ToastShort('Please enter IdNumber');
+      return;
+    }
     const data = {
       type: selectedVerification === 'NIN' ? 'nin' : 'bvn',
       number: idNumber,
@@ -93,6 +97,15 @@ const ProfileStep4 = () => {
       dispatch(addformStage(6));
       setisLoading(false);
     } else {
+      ToastShort(
+        `${
+          res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured'
+        }`,
+      );
       Snackbar.show({
         text: res?.error?.message
           ? res?.error?.message
@@ -155,11 +168,9 @@ const ProfileStep4 = () => {
     // setisLoading(false);
   };
   const verifyCAC = async () => {
-    if (schdeuleIsoDate) {
-      ToastShort('Please enter Registration Date');
-    }
-    if (idNumber) {
-      ToastShort('');
+    if (!idNumber) {
+      ToastShort('Please enter IdNumber');
+      return;
     }
     const d = {
       identity: {
@@ -180,6 +191,15 @@ const ProfileStep4 = () => {
       dispatch(addformStage(6));
       setisLoading(false);
     } else {
+      ToastShort(
+        `${
+          res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured'
+        }`,
+      );
       Snackbar.show({
         text: res?.error?.message
           ? res?.error?.message
@@ -190,6 +210,7 @@ const ProfileStep4 = () => {
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
+
       setisLoading(false);
     }
     // return;
@@ -347,6 +368,9 @@ const ProfileStep4 = () => {
         }}
         title={'Complete your Registration'}
         image={images.back}
+        func={() => {
+          navigation.navigate('ProfileStep3');
+        }}
       />
       <ProfileStepWrapper active={'four'} />
       <ScrollView>

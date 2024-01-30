@@ -129,9 +129,10 @@ const ProfileStep21 = () => {
       ToastShort('Description is required!. ');
       return;
     }
+
     // const d = ProviderData?.portfolios?.filter(s => s.service === item?._id);
     const ProviderDataLength = ProviderData?.portfolios?.length;
-    const serviceLength = ProviderData?.service?.length;
+    const serviceLength = ProviderData?.services?.length;
     if (ProviderDataLength !== serviceLength) {
       ToastShort('Please fill all service data!.');
       return;
@@ -193,7 +194,7 @@ const ProfileStep21 = () => {
       console.log('portfolio--', res?.data?.profile?.portfolios);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addProfileData(res?.data?.profile));
-      }
+      } 
     };
     // initGetProfile();
     initGetProviderNew();
@@ -277,6 +278,9 @@ const ProfileStep21 = () => {
         }}
         title={'Complete your Registration'}
         image={images.back}
+        func={() => {
+          navigation.navigate('ProfileStep1');
+        }}
       />
       <ProfileStepWrapper active={'two'} />
       <ScrollView>
