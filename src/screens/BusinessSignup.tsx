@@ -631,7 +631,7 @@ export default function BusinessSignup() {
                   maxHeight={300}
                   labelField="label"
                   valueField="value"
-                  placeholder={'Select state'}
+                  placeholder={'Select service location'}
                   searchPlaceholder="Search..."
                   value={locationValue}
                   itemTextStyle={{
