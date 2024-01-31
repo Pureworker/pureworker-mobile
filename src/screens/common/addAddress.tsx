@@ -363,7 +363,7 @@ const AddAddress = ({navigation}: any) => {
         </View>
 
         {!isLoading ? (
-          <View style={{marginHorizontal: 25, marginTop: 75}}>
+          <View style={{marginHorizontal: 25, marginTop: 45}}>
             <Button
               onClick={() => {
                 upload('');

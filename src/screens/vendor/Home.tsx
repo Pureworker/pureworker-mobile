@@ -527,11 +527,10 @@ const Home = ({navigation}: any) => {
                 />
               </TouchableOpacity>
             </View>
-
             {OinPending?.length < 1 ? (
               <View style={[tw`mt-4`, {marginLeft: perWidth(27)}]}>
                 <Textcomp
-                  text={'You have no orders in pending'}
+                  text={'You have no orders pending'}
                   size={18}
                   lineHeight={18}
                   color={'#88087B'}
@@ -551,8 +550,7 @@ const Home = ({navigation}: any) => {
               </View>
             )}
           </View>
-
-          {userData?.isVerified === 'incomplete' || formStage !== 6 ?  (
+          {userData?.isVerified === 'incomplete' && formStage !== 6 ? (
             <TouchableOpacity
               onPress={() => {
                 // navigation.navigate('ProfileStep21');
@@ -587,9 +585,7 @@ const Home = ({navigation}: any) => {
                 fontFamily={'Inter-Medium'}
               />
             </TouchableOpacity>
-          ) : null
-        }
-
+          ) : null}
           {userData?.isVerified === 'review' && (
             <TouchableOpacity
               onPress={() => {}}

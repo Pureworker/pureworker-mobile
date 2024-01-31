@@ -259,7 +259,7 @@ const PaymentMethod2 = ({route}: any) => {
               />
             </View>
           )}
-          {amount >= 100 && (
+          {/* {amount >= 100 && (
             <View>
               <TouchableOpacity
                 style={[
@@ -279,7 +279,7 @@ const PaymentMethod2 = ({route}: any) => {
                 </Text>
               </TouchableOpacity>
             </View>
-          )}
+          )} */}
         </View>
       </ScrollView>
       <Paystack
