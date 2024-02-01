@@ -6,6 +6,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  TextInput,
+  StyleSheet,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
@@ -37,6 +39,7 @@ import {ToastShort} from '../../utils/utils';
 import Modal from 'react-native-modal/dist/modal';
 import Textcomp from '../../components/Textcomp';
 import PortComp from './comp/portComp3';
+import Textarea from 'react-native-textarea';
 type Route = {
   key: string;
   name: string;
@@ -194,7 +197,7 @@ const ProfileStep21 = () => {
       console.log('portfolio--', res?.data?.profile?.portfolios);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addProfileData(res?.data?.profile));
-      } 
+      }
     };
     // initGetProfile();
     initGetProviderNew();
@@ -393,7 +396,24 @@ const ProfileStep21 = () => {
               fontType={'semiBold'}
               style={{fontSize: 16, marginTop: 20, color: colors.black}}
             />
-            <View
+            <View style={styles.container1}>
+              <Textarea
+                containerStyle={styles.textareaContainer}
+                style={styles.textarea}
+                onChangeText={(text: string) => {
+                  setDescription(text);
+                  dispatch(addcompleteProfile({description: description}));
+                }}
+                defaultValue={description}
+                maxLength={300}
+                placeholder={
+                  'Introduce yourself and enter your profile description.'
+                }
+                placeholderTextColor={'black'}
+                underlineColorAndroid={'transparent'}
+              />
+            </View>
+            {/* <View
               style={{
                 height: 130,
                 borderRadius: 8,
@@ -406,7 +426,7 @@ const ProfileStep21 = () => {
                   paddingHorizontal: 18,
                   fontSize: 12,
                 }}
-                style={{backgroundColor: colors.greyLight1}}
+                style={{backgroundColor: colors.green, flex: 1}}
                 labelText={
                   'Introduce yourself and enter your profile description.'
                 }
@@ -416,9 +436,25 @@ const ProfileStep21 = () => {
                   dispatch(addcompleteProfile({description: description}));
                 }}
                 multiline={true}
-                nbLines={5}
+                nbLines={20}
               />
-            </View>
+              <TextInput
+                multiline={true}
+                style={{
+                  height: 130,
+                  borderRadius: 8,
+                  backgroundColor: colors.greyLight1,
+                  marginTop: 0,
+                  padding: 10,
+                }}
+                placeholder="Introduce yourself and enter your profile description."
+                value={description}
+                onChangeText={(text: string) => {
+                  setDescription(text);
+                  dispatch(addcompleteProfile({description: description}));
+                }}
+              />
+            </View> */}
             <TextWrapper
               children="Services"
               isRequired={true}
@@ -684,5 +720,26 @@ const ProfileStep21 = () => {
     </View>
   );
 };
+const styles = StyleSheet.create({
+  container2: {
+    flex: 1,
+    padding: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textareaContainer: {
+    height: 180,
+    padding: 10,
+    backgroundColor: colors.greyLight1,
+    borderRadius: 15,
+    marginTop: 10,
+  },
+  textarea: {
+    textAlignVertical: 'top', // hack android
+    height: 170,
+    fontSize: 14,
+    color: 'black',
+  },
+});
 
 export default ProfileStep21;
