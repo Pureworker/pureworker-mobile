@@ -199,6 +199,14 @@ const ProfileStep3 = () => {
         ToastShort('Cannot have Same Name for both contacts');
         return;
       }
+      if (values.phoneNumber1?.length !== 11) {
+        ToastShort('Phone Number1 must be 11 numbers');
+        return;
+      }
+      if (values.phoneNumber2?.length !== 11) {
+        ToastShort('Phone Number2 must be 11 numbers');
+        return;
+      }
       // const contact = [
       //   {
       //     fullName: name1,

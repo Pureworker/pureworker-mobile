@@ -1,15 +1,13 @@
-import {View, TouchableOpacity, Image, TextInput} from 'react-native';
-import React, {useState} from 'react';
+import { View, TouchableOpacity, TextInput } from 'react-native';
+import React, { useState } from 'react';
 import tw from 'twrnc';
-import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
+import { SIZES, perHeight, perWidth } from '../../utils/position/sizes';
 import Textcomp from '../Textcomp';
-import images from '../../constants/images';
 import colors from '../../constants/colors';
-import {WIDTH_WINDOW} from '../../constants/generalStyles';
+import { WIDTH_WINDOW } from '../../constants/generalStyles';
 import Modal from 'react-native-modal/dist/modal';
-import Review from '../Review';
 import Review2 from '../Review2';
-import {sendRatings} from '../../utils/api/func';
+import { sendRatings } from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 
 export default function RateyourExperience({
