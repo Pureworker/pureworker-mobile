@@ -242,11 +242,10 @@ const ProfileStep3 = () => {
       dispatch(
         addcompleteProfile({
           contact: contact,
-          action: 'add',
         }),
       );
       setisLoading(true);
-      const res: any = await completeProfile({contact: contact});
+      const res: any = await completeProfile({contact: contact, action: 'add'});
       console.log('result', res?.data);
       if (res?.status === 200 || res?.status === 201) {
         navigation.navigate('ProfileStep4', {

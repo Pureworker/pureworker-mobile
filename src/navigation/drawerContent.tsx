@@ -89,7 +89,7 @@ const DrawerContent = () => {
         setPhotoUri(resp?.assets[0].uri);
         //
         const data = await uploadImgorDoc(resp?.assets[0]);
-        console.log('processed pic', data);
+        // console.log('processed pic', data);
         // const res = await updateUserData({profilePic: data});
         // await initUpdate({profilePic: data});
       }
@@ -108,7 +108,7 @@ const DrawerContent = () => {
   const initUpdate = async (param: any) => {
     setloading(true);
     const res = await updateUserData(param);
-    console.log(res);
+    // console.log('expected-res',res?.data);
     if ([200, 201].includes(res?.status)) {
       // await initGetData();
       await initGetUsers();

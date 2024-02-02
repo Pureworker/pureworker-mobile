@@ -543,7 +543,13 @@ const Home = ({navigation}: any) => {
                   data={OinPending}
                   horizontal={true}
                   renderItem={(item: any) => {
-                    return <ClosetoYou3 item={item?.item} navigation={navigation} index={item.index} />;
+                    return (
+                      <ClosetoYou3
+                        item={item?.item}
+                        navigation={navigation}
+                        index={item.index}
+                      />
+                    );
                   }}
                   keyExtractor={item => item.id}
                 />
@@ -552,6 +558,7 @@ const Home = ({navigation}: any) => {
           </View>
           {userData?.isVerified === 'incomplete' && formStage !== 6 ? (
             <TouchableOpacity
+              disabled={true}
               onPress={() => {
                 // navigation.navigate('ProfileStep21');
                 if (formStage === 1) {
@@ -588,7 +595,10 @@ const Home = ({navigation}: any) => {
           ) : null}
           {userData?.isVerified === 'review' && (
             <TouchableOpacity
-              onPress={() => {}}
+              disabled={true}
+              onPress={() => {
+                // navigation.navigate('ProfileStep3');
+              }}
               style={[
                 tw`bg-[#2D303C] mx-auto items-center justify-center`,
                 {
@@ -609,6 +619,7 @@ const Home = ({navigation}: any) => {
           )}
           {userData?.isVerified === 'rejected' && (
             <TouchableOpacity
+              disabled={true}
               onPress={() => {
                 // navigation.navigate('ProfileStep21');
               }}
@@ -639,6 +650,7 @@ const Home = ({navigation}: any) => {
           )}
           {userData?.isVerified === 'approved' && (
             <TouchableOpacity
+              disabled={true}
               onPress={() => {
                 // navigation.navigate('ProfileStep21');
               }}
