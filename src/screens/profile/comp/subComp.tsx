@@ -11,6 +11,8 @@ import {FlatList} from 'react-native-gesture-handler';
 import {ToastShort} from '../../../utils/utils';
 import images from '../../../constants/images';
 import CancelCircle2 from '../../../assets/svg/CancelCircle2';
+import {uploadAssetsDOCorIMG} from '../../../utils/api/func';
+import {ActivityIndicator} from 'react-native-paper';
 export default function SubPortComp({
   lindex,
   portfolioData,
@@ -57,24 +59,91 @@ export default function SubPortComp({
   const [pictures, setPictures] = useState<Array<string>>([]);
   const options = {mediaType: 'photo', selectionLimit: 3};
 
-  const openLibraryfordp = () => {
-    launchImageLibrary(options, async (resp: any) => {
-      if (resp?.assets?.length > 0) {
-        console.log('============res list========================');
-        console.log(resp?.assets);
-        console.log('====================================');
-        const arr = resp?.assets?.map((item: any) => item?.uri);
-        setPictures(arr);
-        UpdateValue('images', arr);
-      }
-    });
-  };
 
+  //
   const UpdateValue = (field: string | number, data: any) => {
     const oldDate = {description: shortDescription, images: [...pictures]};
     oldDate[field] = data;
     handlePortfolioItemChange(lindex, oldDate);
   };
+
+  // const openLibraryfordp = () => {
+  //   launchImageLibrary(options, async (resp: any) => {
+  //     if (resp?.assets?.length > 0) {
+  //       console.log('============res list========================');
+  //       console.log(resp?.assets);
+  //       console.log('====================================');
+  //       const arr = resp?.assets?.map((item: any) => item?.uri);
+  //       setPictures(arr);
+  //       UpdateValue('images', arr);
+  //     }
+  //   });
+  // };
+  const [isLoading, setisLoading] = useState(false);
+  const openLibraryfordp = async () => {
+    launchImageLibrary(options, async (resp: any) => {
+      if (resp?.assets?.length > 0) {
+        console.log('============res list========================');
+        console.log(resp?.assets);
+        console.log('====================================');
+        // Iterate through selected images
+        for (const item of resp.assets) {
+          const localUri = item.uri;
+          // Make post-call to upload image
+          try {
+            // const processedLink = await uploadImage(localUri);
+            const processedLink = await uploadImgorDoc(item);
+            console.log('returned:', processedLink);
+            
+            // Update the state or save the processed link instead of local URI
+            setPictures(prevPictures => [...prevPictures, processedLink]);
+            UpdateValue('images', [...pictures, processedLink]);
+          } catch (error) {
+            console.error('Error uploading image:', error);
+            setisLoading(false);
+            // Handle error as needed
+          }
+        }
+      }
+    });
+  };
+  const uploadImgorDoc = async (param: {
+    uri: string;
+    name: string | null;
+    copyError: string | undefined;
+    fileCopyUri: string | null;
+    type: string | null;
+    size: number | null;
+  }) => {
+    setisLoading(true);
+    const res: any = await uploadAssetsDOCorIMG(param);
+    if (res?.status === 201 || res?.status === 200) {
+      console.log('ApartmentType', res?.data);
+      setisLoading(false);
+      return res?.data?.url;
+    }
+    setisLoading(false);
+  };
+
+  // Assuming you have an uploadImage function that makes a post-call
+  // const uploadImage = async (localUri: string) => {
+  //   // Logic for making post-call and getting processed link
+  //   // Replace this with your actual implementation
+  //   // For example, using fetch or axios to upload the image
+  //   const response = await fetch('your_upload_endpoint', {
+  //     method: 'POST',
+  //     body: // Create a FormData with the image file
+  //     // Handle headers and other necessary configurations
+  //   });
+
+  //   if (!response.ok) {
+  //     throw new Error('Error uploading image');
+  //   }
+
+  //   const responseData = await response.json();
+  //   return responseData.processedLink; // Replace with the actual property in your response
+  // };
+
 
   return (
     <View
@@ -118,6 +187,9 @@ export default function SubPortComp({
         }}
       />
 
+      {isLoading && (
+        <ActivityIndicator size={'small'} color={colors.darkPurple} />
+      )}
       {pictures?.length < 1 ? (
         <View style={tw`flex flex-row`}>
           <TouchableOpacity

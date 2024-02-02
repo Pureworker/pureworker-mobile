@@ -265,7 +265,8 @@ const ProfileStep21 = () => {
     if (res?.status === 201 || res?.status === 200) {
       console.log('ApartmentType', res?.data);
       setisLoading(false);
-      return res?.data?.doc?.url;
+      // return res?.data?.doc?.url;
+      return res?.data?.url;
     }
     setisLoading(false);
   };

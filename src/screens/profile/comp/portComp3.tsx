@@ -70,6 +70,10 @@ export default function PortComp({
       ToastShort('Max Price must be greater than Min Price.');
       return;
     }
+    if (!passedData?.serviceDescription || passedData?.serviceDescription?.length < 1) {
+      ToastShort('Service Description cannot be empty.');
+      return;
+    }
     const prepData = {
       service: service?._id,
       description: passedData?.serviceDescription,

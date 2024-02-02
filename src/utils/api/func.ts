@@ -1209,7 +1209,7 @@ export const getProviderNew = async (param: any) => {
   try {
     const response = await axios({
       method: 'get',
-      url: `${API_BASE_URL}/provider/get-profile-new/${param}`,
+      url: `${API_BASE_URL}/provider/get-profile/${param}`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
     if (response.status === 201) {
