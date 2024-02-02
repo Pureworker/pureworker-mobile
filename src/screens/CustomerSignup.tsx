@@ -26,11 +26,15 @@ import DateTimesPicker from '../components/DatePicker';
 import {StackNavigation} from '../constants/navigation';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import {generalStyles} from '../constants/generalStyles';
-import {SIZES} from '../utils/position/sizes';
+import {SIZES, perHeight} from '../utils/position/sizes';
 import {Signup} from '../utils/api/auth';
 import {isValidPhoneNumber} from '../utils/utils';
 import {Dropdown} from 'react-native-element-dropdown';
 import tw from 'twrnc';
+import Textcomp from '../components/Textcomp';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {DateTime} from 'luxon';
+import {number} from 'yup';
 export default function CustomerSignup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -62,6 +66,41 @@ export default function CustomerSignup() {
 
   const [isLoading, setisLoading] = useState(false);
   const navigation = useNavigation<StackNavigation>();
+  const [schdeuleIsoDate, setschdeuleIsoDate] = useState('');
+  const [displayDate, setdisplayDate] = useState('');
+
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+  const handleConfirm = (date: any) => {
+    const f = `${date}`;
+    const jsDate = new Date(f);
+    console.log('pppickked:', jsDate);
+    setDateTime(jsDate);
+    const luxonDateTime = DateTime.fromJSDate(jsDate);
+    const isoString = luxonDateTime.toISO();
+    console.log(isoString);
+    setschdeuleIsoDate(isoString);
+    setdisplayDate(f);
+    hideDatePicker();
+  };
+  function formatToCustomString(date: string | number | Date) {
+    const jsDate = new Date(date);
+    const luxonDateTime = DateTime.fromJSDate(jsDate);
+
+    console.log('picked:', jsDate);
+
+    return luxonDateTime.toLocaleString({
+      weekday: 'short',
+      month: 'short',
+      day: '2-digit',
+      year: 'numeric',
+      // hour: '2-digit',
+      // minute: '2-digit',
+    });
+  }
+
   useEffect(() => {
     setNationalityItems([...allCountry]);
   }, []);
@@ -426,7 +465,7 @@ export default function CustomerSignup() {
               }}>
               Date of Birth
             </Text>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{
                 marginTop: 15,
                 marginBottom: 10,
@@ -436,6 +475,31 @@ export default function CustomerSignup() {
                 width: '100%',
               }}>
               <DateTimesPicker updateDate={setDateTime} />
+            </TouchableOpacity> */}
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+            />
+
+            <TouchableOpacity
+              onPress={() => {
+                setDatePickerVisibility(!isDatePickerVisible);
+              }}
+              style={[
+                tw`w-full px-4 justify-center rounded-lg mt-3`,
+                {backgroundColor: colors.greyLight1, height: perHeight(40)},
+              ]}>
+              <Textcomp
+                text={`${
+                  displayDate ? formatToCustomString(displayDate) : ''
+                }`}
+                size={17}
+                lineHeight={17}
+                color={'#000413'}
+                fontFamily={'Inter-Regular'}
+              />
             </TouchableOpacity>
             {/* <ScrollView horizontal style={{width: SIZES.width * 0.9, backgroundColor: 'red'}}> */}
             {/* <View

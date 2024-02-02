@@ -565,12 +565,11 @@ const ProfileStep3 = () => {
               />
             )}
           </View>
-          <View style={{height: 50}} />
+          <View style={{height: 85}} />
         </View>
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
   );
 };
-
 export default ProfileStep3;

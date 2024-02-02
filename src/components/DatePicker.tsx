@@ -94,6 +94,9 @@ const DateTimesPicker = ({ updateDate, type = 'date', isImage = false, image }: 
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
+
+    console.log(currentDate);
+    
     updateDate(currentDate);
   };
 

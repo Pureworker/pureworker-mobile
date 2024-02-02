@@ -28,9 +28,11 @@ import Tooltip from 'react-native-walkthrough-tooltip';
 import {Signup} from '../utils/api/auth';
 import {isValidPhoneNumber} from '../utils/utils';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {SIZES} from '../utils/position/sizes';
+import {SIZES, perHeight} from '../utils/position/sizes';
 import {Dropdown} from 'react-native-element-dropdown';
 import * as Yup from 'yup';
+import Textcomp from '../components/Textcomp';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 export default function BusinessSignup() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -301,6 +303,42 @@ export default function BusinessSignup() {
     setNationalityItems([...allCountry]);
   }, []);
   const [referralCode, setReferralCode] = useState('');
+
+  //
+  const [schdeuleIsoDate, setschdeuleIsoDate] = useState('');
+  const [displayDate, setdisplayDate] = useState('');
+
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+  const handleConfirm = (date: any) => {
+    const f = `${date}`;
+    const jsDate = new Date(f);
+    console.log('pppickked:', jsDate);
+    setDateTime(jsDate);
+    const luxonDateTime = DateTime.fromJSDate(jsDate);
+    const isoString = luxonDateTime.toISO();
+    console.log(isoString);
+    setschdeuleIsoDate(isoString);
+    setdisplayDate(f);
+    hideDatePicker();
+  };
+  function formatToCustomString(date: string | number | Date) {
+    const jsDate = new Date(date);
+    const luxonDateTime = DateTime.fromJSDate(jsDate);
+
+    console.log('picked:', jsDate);
+
+    return luxonDateTime.toLocaleString({
+      weekday: 'short',
+      month: 'short',
+      day: '2-digit',
+      year: 'numeric',
+      // hour: '2-digit',
+      // minute: '2-digit',
+    });
+  }
 
   return (
     <View
@@ -681,69 +719,8 @@ export default function BusinessSignup() {
                   }}
                 />
               </View>
-              {/* <View
-                style={{
-                  zIndex: genderOpen ? 0 : 2,
-                  minHeight: 500,
-                  marginBottom: -400,
-                }}>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontFamily: commonStyle.fontFamily.medium,
-                    color: '#fff',
-                    marginTop: 15,
-                    marginBottom: 15,
-                  }}>
-                  Nationality
-                </Text>
-                <Dropdown
-                  style={[
-                    tw``,
-                    {
-                      zIndex: 10,
-                      width: SIZES.width * 0.875,
-                      backgroundColor: '#F7F5F5',
-                      borderColor: '#9E9E9E14',
-                      height: 50,
-                      borderRadius: 10,
-                      paddingHorizontal: 10,
-                    },
-                  ]}
-                  data={allCountry}
-                  search
-                  maxHeight={300}
-                  labelField="label"
-                  valueField="value"
-                  placeholder={'Select Nationality'}
-                  searchPlaceholder="Search..."
-                  value={nationalityValue}
-                  itemTextStyle={{
-                    color: 'black',
-                  }}
-                  onChange={item => {
-                    console.log(item.value);
-                    setNationalityValue(item.value);
-                  }}
-                />
-              </View> */}
 
               <View style={{zIndex: locationOpen ? 0 : 2}}>
-                {/* <Text
-                  style={{
-                    fontSize: 16,
-                    fontFamily: commonStyle.fontFamily.medium,
-                    color: '#fff',
-                    marginTop: 15,
-                  }}>
-                  Address
-                </Text>
-                <TextInputs
-                  style={{marginTop: 17}}
-                  labelText={'Enter Address'}
-                  state={address}
-                  setState={setAddress}
-                /> */}
                 <Text
                   style={{
                     fontSize: 16,
@@ -835,6 +812,7 @@ export default function BusinessSignup() {
                 }}>
                 Phone Number
               </Text>
+
               <TextInputs
                 style={{marginTop: 17}}
                 labelText={'Enter Phone'}
@@ -852,7 +830,7 @@ export default function BusinessSignup() {
                 }}>
                 Date of Birth
               </Text>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{
                   marginTop: 15,
                   marginBottom: 10,
@@ -862,7 +840,7 @@ export default function BusinessSignup() {
                   width: '100%',
                 }}>
                 <DateTimesPicker updateDate={setDateTime} />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               {/* <View
                 style={{
                   zIndex: 1,
@@ -940,6 +918,34 @@ export default function BusinessSignup() {
                   }}
                 />
               </View> */}
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+              />
+
+              <TouchableOpacity
+                onPress={() => {
+                  setDatePickerVisibility(!isDatePickerVisible);
+                }}
+                style={[
+                  tw`w-full px-4 justify-center rounded-lg mt-3`,
+                  {backgroundColor: colors.greyLight1, height: perHeight(40)},
+                ]}>
+                <Textcomp
+                  text={`${
+                    displayDate
+                      ? formatToCustomString(displayDate)
+                      : ''
+                  }`}
+                  size={17}
+                  lineHeight={17}
+                  color={'#000413'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </TouchableOpacity>
+
               <View
                 style={{
                   zIndex: genderOpen ? 0 : 2,

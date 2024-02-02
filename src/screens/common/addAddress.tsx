@@ -392,13 +392,13 @@ const AddAddress = ({navigation}: any) => {
           {position: 'absolute', top: 0, right: 0, left: 15},
           styles.and,
         ]}>
-        <TouchableOpacity
+                    {/* <Mapbackicon /> */}
+        {/* <TouchableOpacity
           onPress={() => {
-            // navigation.goBack();
+            navigation.goBack();
           }}>
-          {/* <Mapbackicon /> */}
           <Image source={images.back} style={{width: 20, height: 20}} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <View
           style={[
             tw`w-1/2 ${

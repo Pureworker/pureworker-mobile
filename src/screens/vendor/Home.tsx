@@ -90,7 +90,7 @@ const Home = ({navigation}: any) => {
 
         if (!userData?.liveTest) {
           // navigation.navigate('FaceDetection');
-          ToastLong('Virtual Interview is compulsory');
+          // ToastLong('Virtual Interview is compulsory');
         }
       }
       // setloading(false);
@@ -558,7 +558,7 @@ const Home = ({navigation}: any) => {
           </View>
           {userData?.isVerified === 'incomplete' && formStage !== 6 ? (
             <TouchableOpacity
-              disabled={true}
+
               onPress={() => {
                 // navigation.navigate('ProfileStep21');
                 if (formStage === 1) {
@@ -771,8 +771,7 @@ const Home = ({navigation}: any) => {
               </View>
             </View>
           )}
-
-          {welcomeModal && (
+          {welcomeModal && welcomeModal === true && (
             <WelcomeModal
               close={() => {
                 dispatch(setwelcomeModal(false));
