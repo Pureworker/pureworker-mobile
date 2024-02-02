@@ -22,7 +22,7 @@ const ClosetoYou3 = ({item, index, navigation}: any) => {
   // JSON.parse(item?.price || '');
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('ServiceProviderProfile', item)}
+      onPress={() => navigation.navigate('Orders', item)}
       style={[
         tw` mt-4 border-[#FFC727] justify-between bg-[${colors.darkPurple}]`,
         {

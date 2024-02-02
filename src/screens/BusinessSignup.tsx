@@ -92,15 +92,15 @@ export default function BusinessSignup() {
     email: Yup.string()
       .email('Invalid email address')
       .required('Email is required'),
-    gender: Yup.string().when('accountType', {
-      is: 'business',
-      then: Yup.string(),
-      otherwise: Yup.string()
-        .oneOf(['female', 'male', 'other'], 'Invalid gender')
-        .required('Gender is required'),
-    }),
-    nationality: Yup.string().required('Nationality is required'),
-    address: Yup.string().required('Address is required'),
+    // gender: Yup.string().when('accountType', {
+    //   is: 'business',
+    //   then: Yup.string(),
+    //   otherwise: Yup.string()
+    //     .oneOf(['female', 'male', 'other'], 'Invalid gender')
+    //     .required('Gender is required'),
+    // }),
+    // nationality: Yup.string().required('Nationality is required'),
+    // address: Yup.string().required('Address is required'),
     state: Yup.string().required('State is required'),
     accountType: Yup.string()
       .required('Account Type is required')
@@ -211,14 +211,14 @@ export default function BusinessSignup() {
           firstName: firstName,
           lastName: lastName,
           phoneNumber: phoneName,
-          address: address,
+          // address: address,
           businessName: name,
           cacNo: cacNo,
           location: locationValue?.toLowerCase(),
           dob: date,
           // userType: userType.toLowerCase(),
-          nationality: nationalityValue,
-          gender: genderValue?.toLowerCase().trim(),
+          // nationality: nationalityValue,
+          // gender: genderValue?.toLowerCase().trim(),
           accountType: userType?.toLowerCase(),
           state: stateValue,
         };
@@ -228,9 +228,9 @@ export default function BusinessSignup() {
           lastName: lastName,
           phoneNumber: phoneName,
           dob: date,
-          gender: genderValue?.toLowerCase().trim(),
-          nationality: nationalityValue,
-          address: address,
+          // gender: genderValue?.toLowerCase().trim(),
+          // nationality: nationalityValue,
+          // address: address,
           // userType: userType.toLowerCase(),
           accountType: userType?.toLowerCase(),
           state: stateValue,
@@ -239,13 +239,13 @@ export default function BusinessSignup() {
           businessName: name,
           cacNo: cacNo,
           location: locationValue?.toLowerCase(),
-          address: address,
+          // address: address,
           phoneNumber: phoneName,
           email: email.toLowerCase().trim(),
           accountType: userType?.toLowerCase(),
-          gender: genderValue?.toLowerCase().trim(),
+          // gender: genderValue?.toLowerCase().trim(),
           state: stateValue,
-          nationality: nationalityValue,
+          // nationality: nationalityValue,
         };
 
         if (referralCode && referralCode?.length > 2) {
@@ -273,7 +273,6 @@ export default function BusinessSignup() {
         } else {
           console.log('ERR', res?.error?.error?.data);
           setisLoading(false);
-          // throw new APIError(handleAPIError(res), res.status);
           Snackbar.show({
             text:
               res?.error?.message === 'Validation error' ||
@@ -284,13 +283,6 @@ export default function BusinessSignup() {
                 : res?.error?.data?.message
                 ? res?.error?.data?.message
                 : 'Oops!, an error occured',
-            //   // ? res?.error?.message
-            //   // : res?.error?.data?.message
-            //   // ? res?.error?.data?.message
-            //   // : 'Oops!, an error occured',
-            //   duration: Snackbar.LENGTH_SHORT,
-            //   textColor: '#fff',
-            //   backgroundColor: '#88087B',
           });
         }
       }
@@ -689,7 +681,7 @@ export default function BusinessSignup() {
                   }}
                 />
               </View>
-              <View
+              {/* <View
                 style={{
                   zIndex: genderOpen ? 0 : 2,
                   minHeight: 500,
@@ -734,10 +726,10 @@ export default function BusinessSignup() {
                     setNationalityValue(item.value);
                   }}
                 />
-              </View>
+              </View> */}
 
               <View style={{zIndex: locationOpen ? 0 : 2}}>
-                <Text
+                {/* <Text
                   style={{
                     fontSize: 16,
                     fontFamily: commonStyle.fontFamily.medium,
@@ -751,7 +743,7 @@ export default function BusinessSignup() {
                   labelText={'Enter Address'}
                   state={address}
                   setState={setAddress}
-                />
+                /> */}
                 <Text
                   style={{
                     fontSize: 16,
@@ -871,7 +863,7 @@ export default function BusinessSignup() {
                 }}>
                 <DateTimesPicker updateDate={setDateTime} />
               </TouchableOpacity>
-              <View
+              {/* <View
                 style={{
                   zIndex: 1,
                   minHeight: 500,
@@ -947,8 +939,7 @@ export default function BusinessSignup() {
                     borderWidth: 0,
                   }}
                 />
-              </View>
-
+              </View> */}
               <View
                 style={{
                   zIndex: genderOpen ? 0 : 2,
@@ -1121,7 +1112,7 @@ export default function BusinessSignup() {
                   setState={setEmail}
                   keyBoardType={'email-address'}
                 />
-                <Text
+                {/* <Text
                   style={{
                     fontSize: 16,
                     fontFamily: commonStyle.fontFamily.medium,
@@ -1135,7 +1126,7 @@ export default function BusinessSignup() {
                   labelText={'Enter Address'}
                   state={address}
                   setState={setAddress}
-                />
+                /> */}
                 <Text
                   style={{
                     fontSize: 16,

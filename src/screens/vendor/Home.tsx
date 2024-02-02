@@ -543,7 +543,7 @@ const Home = ({navigation}: any) => {
                   data={OinPending}
                   horizontal={true}
                   renderItem={(item: any) => {
-                    return <ClosetoYou3 item={item?.item} index={item.index} />;
+                    return <ClosetoYou3 item={item?.item} navigation={navigation} index={item.index} />;
                   }}
                   keyExtractor={item => item.id}
                 />

@@ -86,7 +86,7 @@ const ProfileStep4 = () => {
     };
     const res: any = await completeProfile({
       identity: {
-        means:
+        type:
           selectedVerification === 'Bank Verification Number' ? 'bvn' : 'nin',
         number: idNumber,
       },
@@ -174,14 +174,14 @@ const ProfileStep4 = () => {
     }
     const d = {
       identity: {
-        means: 'cac',
+        type: 'cac',
         number: idNumber,
       },
     };
     setisLoading(true);
     const res: any = await completeProfile({
       identity: {
-        means: 'cac',
+        type: 'cac',
         number: idNumber,
       },
     });
@@ -277,7 +277,7 @@ const ProfileStep4 = () => {
         dispatch(
           addcompleteProfile({
             identity: {
-              means: selectedVerification,
+              type: selectedVerification,
               number: idNumber,
             },
           }),
@@ -287,7 +287,7 @@ const ProfileStep4 = () => {
         dispatch(
           addcompleteProfile({
             identity: {
-              means: selectedVerification,
+              type: selectedVerification,
               businessName: idName,
               cac: idNumber,
             },

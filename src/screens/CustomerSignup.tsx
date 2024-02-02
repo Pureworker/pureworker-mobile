@@ -81,9 +81,9 @@ export default function CustomerSignup() {
       firstName &&
       lastName &&
       phoneName &&
-      address &&
-      genderValue &&
-      nationalityValue &&
+      // address &&
+      // genderValue &&
+      // nationalityValue &&
       stateValue
     ) {
       if (!validateEmail(email)) {
@@ -110,11 +110,11 @@ export default function CustomerSignup() {
           firstName: firstName,
           lastName: lastName,
           phoneNumber: phoneName,
-          address: address,
+          // address: address,
           dob: date,
           // userType: userType,
-          gender: genderValue?.toLowerCase().trim(),
-          nationality: nationalityValue,
+          // gender: genderValue?.toLowerCase().trim(),
+          // nationality: nationalityValue,
           accountType: 'customer',
           state: stateValue,
         };
@@ -438,7 +438,7 @@ export default function CustomerSignup() {
               <DateTimesPicker updateDate={setDateTime} />
             </TouchableOpacity>
             {/* <ScrollView horizontal style={{width: SIZES.width * 0.9, backgroundColor: 'red'}}> */}
-            <View
+            {/* <View
               style={{
                 zIndex: 1,
                 // marginTop: 15,
@@ -502,7 +502,7 @@ export default function CustomerSignup() {
                   borderWidth: 0,
                 }}
               />
-            </View>
+            </View> */}
             <View
               style={{
                 zIndex: genderOpen ? 0 : 2,
@@ -553,11 +553,9 @@ export default function CustomerSignup() {
               />
             </View>
             {/* </ScrollView> */}
-            <View
+            {/* <View
               style={{
-                // zIndex: 1,
                 zIndex: genderOpen ? 0 : 2,
-                // marginTop: 15,
                 minHeight: 500,
                 marginBottom: -400,
               }}>
@@ -571,49 +569,6 @@ export default function CustomerSignup() {
                 }}>
                 Nationality
               </Text>
-              {/* <DropDownPicker
-                open={nationalityOpen}
-                value={nationalityValue}
-                items={nationalityItems}
-                setOpen={setNationalityOpen}
-                setValue={setNationalityValue}
-                setItems={setNationalityItems}
-                showArrowIcon={false}
-                zIndex={10}
-                dropDownContainerStyle={{
-                  borderWidth: 0,
-                }}
-                labelStyle={{
-                  fontFamily: commonStyle.fontFamily.regular,
-                  fontSize: 14,
-                  color: '#000',
-                }}
-                placeholderStyle={{
-                  fontFamily: commonStyle.fontFamily.regular,
-                  fontSize: 14,
-                  color: '#9E9E9E',
-                }}
-                style={{
-                  backgroundColor: '#F7F5F5',
-                  borderColor: '#9E9E9E14',
-                }}
-                listMode="MODAL"
-                showTickIcon={false}
-                textStyle={{
-                  color: '#9E9E9E',
-                }}
-                listParentLabelStyle={{
-                  color: '#000',
-                  fontSize: 16,
-                  fontFamily: commonStyle.fontFamily.regular,
-                }}
-                listItemContainerStyle={{
-                  backgroundColor: '#F1F1F1',
-                  borderColor: 'red',
-                  opacity: 1,
-                  borderWidth: 0,
-                }}
-              /> */}
               <Dropdown
                 style={[
                   tw``,
@@ -646,9 +601,9 @@ export default function CustomerSignup() {
                   setIsFocus(false);
                 }}
               />
-            </View>
+            </View> */}
             <View style={{zIndex: nationalityOpen ? 0 : 2}}>
-              <Text
+              {/* <Text
                 style={{
                   fontSize: 16,
                   fontFamily: commonStyle.fontFamily.medium,
@@ -662,7 +617,7 @@ export default function CustomerSignup() {
                 labelText={'Enter address'}
                 state={address}
                 setState={setAddress}
-              />
+              /> */}
               <Text
                 style={{
                   fontSize: 16,

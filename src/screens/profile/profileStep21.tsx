@@ -456,14 +456,14 @@ const ProfileStep21 = () => {
               />
             </View> */}
             <TextWrapper
-              children="Services"
+              children="Service Intro"
               isRequired={true}
               fontType={'semiBold'}
               style={{fontSize: 16, marginTop: 20, color: colors.black}}
             />
             <View style={tw`mt-2`}>
               <Textcomp
-                text={'You can edit, delete or add a new service.'}
+                text={'Click on edit to add service description'}
                 size={12}
                 lineHeight={16}
                 color={'#000413'}

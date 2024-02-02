@@ -394,7 +394,7 @@ const AddAddress = ({navigation}: any) => {
         ]}>
         <TouchableOpacity
           onPress={() => {
-            navigation.goBack();
+            // navigation.goBack();
           }}>
           {/* <Mapbackicon /> */}
           <Image source={images.back} style={{width: 20, height: 20}} />
