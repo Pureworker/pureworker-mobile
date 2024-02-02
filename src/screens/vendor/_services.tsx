@@ -1,18 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
   Platform,
   StatusBar,
   FlatList,
-  Modal,
-  SafeAreaView,
   ScrollView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import Header from '../../components/Header';
 import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
@@ -22,15 +18,11 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {perHeight} from '../../utils/position/sizes';
 import ServiceCard2 from '../../components/cards/serviceCard2';
 import TextInputs from '../../components/TextInput2';
-import {
-  getProviderByCategory,
-  getProviderByService,
-  getUser,
-} from '../../utils/api/func';
+import {getProviderByService} from '../../utils/api/func';
 import {addprovidersByCateegory} from '../../store/reducer/mainSlice';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
-import { ToastShort } from '../../utils/utils';
+import {ToastShort} from '../../utils/utils';
 
 const _Services = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -42,13 +34,10 @@ const _Services = ({route}: any) => {
   const _providersByCateegory = useSelector(
     (state: any) => state.user.providersByCateegory,
   );
-  const dummyData = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   const [activeSection, setactiveSection] = useState('All');
   const [searchModal, setsearchModal] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const [searchInput, setsearchInput] = useState('');
-
-
 
   const [savedProviders, setsavedProviders] = useState([]);
 
@@ -110,7 +99,7 @@ const _Services = ({route}: any) => {
             <TouchableOpacity
               onPress={() => {
                 if (_providersByCateegory.length < 1) {
-                  ToastShort('No Service Provider.')
+                  ToastShort('No Service Provider.');
                 } else {
                   setsearchModal(true);
                 }

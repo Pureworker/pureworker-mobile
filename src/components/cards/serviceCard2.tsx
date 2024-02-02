@@ -7,7 +7,6 @@ import tw from 'twrnc';
 import Textcomp from '../Textcomp';
 import colors from '../../constants/colors';
 
-import {Rating, AirbnbRating} from 'react-native-ratings';
 import Review from '../Review';
 import FastImage from 'react-native-fast-image';
 import {bookMarkServiceProvide} from '../../utils/api/func';
@@ -15,7 +14,7 @@ import {ToastShort} from '../../utils/utils';
 
 const ServiceCard2 = ({
   item,
-  index,
+  // index,
   navigation,
   id,
   serviceName,
@@ -23,8 +22,12 @@ const ServiceCard2 = ({
 }: any) => {
   const [saved, setsaved] = useState(save);
   // const portfolio = item?.portfolio?.filter(_item => _item?.service === id);
-  const price = item?.priceRange?.filter(_item => _item?.service === id);
+  const price = item?.priceRange?.filter(
+    (_item: {service: any}) => _item?.service === id,
+  );
   console.log('pased', price, item?.description, item?.distance, 'item:', item);
+  console.log('lllll---');
+
   function metersToKilometers(meters: any) {
     const kilometers = Number(meters) / 1000; // Convert meters to kilometers
     const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
@@ -32,7 +35,7 @@ const ServiceCard2 = ({
   }
 
   const handleBookmark = async () => {
-    const res = await bookMarkServiceProvide({
+    const res: any = await bookMarkServiceProvide({
       service: id,
       serviceProvider: item?._id,
     });
@@ -137,7 +140,7 @@ const ServiceCard2 = ({
           </View>
           <View style={[tw``, {width: perWidth(252), marginTop: perHeight(4)}]}>
             <Textcomp
-              text={`${item?.description}`}
+              text={`${item?.portfolio?.description}`}
               size={12}
               lineHeight={14}
               color={colors.white}

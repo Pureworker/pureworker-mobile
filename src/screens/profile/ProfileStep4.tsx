@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   ActivityIndicator,
@@ -6,21 +6,18 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {StackNavigation} from '../../constants/navigation';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { StackNavigation } from '../../constants/navigation';
 import Header from '../../components/Header';
 import images from '../../constants/images';
 import Button from '../../components/Button';
 import TextWrapper from '../../components/TextWrapper';
 import commonStyle from '../../constants/commonStyle';
 import {
-  useCreateServiceMutation,
-  useGetCategoryQuery,
-  useGetUserDetailQuery,
-  useLoginMutation,
+  useCreateServiceMutation, useLoginMutation
 } from '../../store/slice/api';
 import colors from '../../constants/colors';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ProfileStepWrapper from '../../components/ProfileStepWrapper';
 import TextInputs from '../../components/TextInputs';
 
@@ -30,16 +27,16 @@ import {
   CollapseBody,
 } from 'accordion-collapse-react-native';
 import Snackbar from 'react-native-snackbar';
-import {addcompleteProfile, addformStage} from '../../store/reducer/mainSlice';
-import {_verifyID, completeProfile} from '../../utils/api/func';
+import { addcompleteProfile, addformStage } from '../../store/reducer/mainSlice';
+import { completeProfile } from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
-import {DateTime} from 'luxon';
+import { DateTime } from 'luxon';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Textcomp from '../../components/Textcomp';
-import {perHeight} from '../../utils/position/sizes';
+import { perHeight } from '../../utils/position/sizes';
 import tw from 'twrnc';
-import {ToastShort} from '../../utils/utils';
+import { ToastShort } from '../../utils/utils';
 type Route = {
   key: string;
   name: string;
@@ -55,9 +52,8 @@ const ProfileStep4 = () => {
   const route: Route = useRoute();
   const [isLoading, setisLoading] = useState(false);
 
-  const category = useSelector((state: any) => state.user.pickedServices);
+  // const category = useSelector((state: any) => state.user.pickedServices);
   const [collapseState, setCollapseState] = useState(false);
-  const [dataLoaded, setDataLoaded] = useState(false);
   const [selectedVerification, setSelectedVerification] = useState('');
   const [nationalityItems, setNationalityItems] = useState([
     'NIN',
@@ -67,9 +63,6 @@ const ProfileStep4 = () => {
     // 'Voters Card',
     // 'Others',
   ]);
-
-  const [login] = useLoginMutation();
-  const [createService] = useCreateServiceMutation();
   const userData = useSelector((state: any) => state.user.userData);
 
   const dispatch = useDispatch();
@@ -80,10 +73,10 @@ const ProfileStep4 = () => {
       ToastShort('Please enter IdNumber');
       return;
     }
-    const data = {
-      type: selectedVerification === 'NIN' ? 'nin' : 'bvn',
-      number: idNumber,
-    };
+    // const data = {
+    //   type: selectedVerification === 'NIN' ? 'nin' : 'bvn',
+    //   number: idNumber,
+    // };
     const res: any = await completeProfile({
       identity: {
         type:
@@ -263,68 +256,67 @@ const ProfileStep4 = () => {
     // }
     // setisLoading(false);
   };
-  const handleProfileSetup = () => {
-    if (idNumber && selectedVerification) {
-      const profileData = {
-        serviceId: route?.params?.serviceId,
-        idNumber: idNumber,
-        potfolios: [],
-        scheduleDate: null,
-        appointmentTime: null,
-      };
+  // const handleProfileSetup = () => {
+  //   if (idNumber && selectedVerification) {
+  //     const profileData = {
+  //       serviceId: route?.params?.serviceId,
+  //       idNumber: idNumber,
+  //       potfolios: [],
+  //       scheduleDate: null,
+  //       appointmentTime: null,
+  //     };
 
-      if (userData?.accountType?.toUpperCase() === 'FREELANCER') {
-        dispatch(
-          addcompleteProfile({
-            identity: {
-              type: selectedVerification,
-              number: idNumber,
-            },
-          }),
-        );
-      }
-      if (userData?.accountType?.toUpperCase() === 'BUSINESS') {
-        dispatch(
-          addcompleteProfile({
-            identity: {
-              type: selectedVerification,
-              businessName: idName,
-              cac: idNumber,
-            },
-          }),
-        );
-      }
-      navigation.navigate('ProfileStep5', {
-        serviceId: route?.params?.serviceId,
-      });
-      // createService(profileData)
-      //   .unwrap()
-      //   .then((data: any) => {
-      //     if (data) {
-      //       navigation.navigate('ProfileStep5', {
-      //         serviceId: route?.params?.serviceId,
-      //       });
-      //     }
-      //   })
-      //   .catch((error: any) => {
-      //     console.log('err', error);
-      //     Snackbar.show({
-      //       text: error.data.message,
-      //       duration: Snackbar.LENGTH_SHORT,
-      //       textColor: '#fff',
-      //       backgroundColor: '#88087B',
-      //     });
-      //   });
-    } else {
-      Snackbar.show({
-        text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_SHORT,
-        textColor: '#fff',
-        backgroundColor: '#88087B',
-      });
-    }
-  };
-  console.log('mmmm');
+  //     if (userData?.accountType?.toUpperCase() === 'FREELANCER') {
+  //       dispatch(
+  //         addcompleteProfile({
+  //           identity: {
+  //             type: selectedVerification,
+  //             number: idNumber,
+  //           },
+  //         }),
+  //       );
+  //     }
+  //     if (userData?.accountType?.toUpperCase() === 'BUSINESS') {
+  //       dispatch(
+  //         addcompleteProfile({
+  //           identity: {
+  //             type: selectedVerification,
+  //             businessName: idName,
+  //             cac: idNumber,
+  //           },
+  //         }),
+  //       );
+  //     }
+  //     navigation.navigate('ProfileStep5', {
+  //       serviceId: route?.params?.serviceId,
+  //     });
+  //     // createService(profileData)
+  //     //   .unwrap()
+  //     //   .then((data: any) => {
+  //     //     if (data) {
+  //     //       navigation.navigate('ProfileStep5', {
+  //     //         serviceId: route?.params?.serviceId,
+  //     //       });
+  //     //     }
+  //     //   })
+  //     //   .catch((error: any) => {
+  //     //     console.log('err', error);
+  //     //     Snackbar.show({
+  //     //       text: error.data.message,
+  //     //       duration: Snackbar.LENGTH_SHORT,
+  //     //       textColor: '#fff',
+  //     //       backgroundColor: '#88087B',
+  //     //     });
+  //     //   });
+  //   } else {
+  //     Snackbar.show({
+  //       text: 'Please fill all fields',
+  //       duration: Snackbar.LENGTH_SHORT,
+  //       textColor: '#fff',
+  //       backgroundColor: '#88087B',
+  //     });
+  //   }
+  // };
   const [collapseState2, setcollapseState2] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [schdeuleIsoDate, setschdeuleIsoDate] = useState('');
@@ -343,7 +335,7 @@ const ProfileStep4 = () => {
     setdisplayDate(f);
     hideDatePicker();
   };
-  function formatToCustomString(date) {
+  function formatToCustomString(date: string | number | Date) {
     const jsDate = new Date(date);
     const luxonDateTime = DateTime.fromJSDate(jsDate);
 

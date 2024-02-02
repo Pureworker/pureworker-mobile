@@ -1,10 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import Toast from 'react-native-toast-message';
-import {Alert, PermissionsAndroid, Platform} from 'react-native';
-import {ToastLong} from './validations';
-import {addPushToken} from './api/func';
-import { useSelector } from 'react-redux';
+import { PermissionsAndroid, Platform } from 'react-native';
+
+import { addPushToken } from './api/func';
+import { ToastLong } from './utils';
 
 //
 // import inAppMessaging from '@react-native-firebase/in-app-messaging';
@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 async function requestUserPermission() {
   const _enabled = await messaging().hasPermission();
   if (_enabled) {
-    await GetFCMToken();
+    await GetFCMToken({});
   } else {
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -24,7 +24,7 @@ async function requestUserPermission() {
     );
 
     if (enabled) {
-      GetFCMToken();
+      GetFCMToken({});
       console.error('Authorization status:', authStatus);
     }
   }
@@ -79,13 +79,7 @@ const GetFCMToken = async (userData:any) => {
   } catch (error) {
     console.log(error, 'error in fcmtoken');
   }
-  //   }
-  async function onSetup(user) {
-    // await setupUser(user);
-    // inAppMessaging()
-    // Allow user to receive messages now setup is complete
-    // inAppMessaging().setMessagesDisplaySuppressed(false);
-  }
+  
 };
 
 const NotificationListner = () => {

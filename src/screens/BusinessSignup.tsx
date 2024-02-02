@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,7 +9,7 @@ import {
   StatusBar,
   Platform,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import images from '../constants/images';
 import tw from 'twrnc';
 import commonStyle from '../constants/commonStyle';
@@ -17,22 +17,21 @@ import Button from '../components/Button';
 import MyStatusBar from '../components/MyStatusBar';
 import colors from '../constants/colors';
 import TextInputs from '../components/TextInputs';
-import DropDownPicker from 'react-native-dropdown-picker';
 import Snackbar from 'react-native-snackbar';
-import {allCountry, allState, validateEmail} from '../constants/utils';
-import {BUSINESS, CUSTOMER, FREELANCER} from '../constants/userType';
-import DateTimesPicker from '../components/DatePicker';
-import {StackNavigation} from '../constants/navigation';
-import {generalStyles} from '../constants/generalStyles';
+import { allCountry, allState, validateEmail } from '../constants/utils';
+import { BUSINESS, CUSTOMER, FREELANCER } from '../constants/userType';
+import { StackNavigation } from '../constants/navigation';
+import { generalStyles } from '../constants/generalStyles';
 import Tooltip from 'react-native-walkthrough-tooltip';
-import {Signup} from '../utils/api/auth';
-import {isValidPhoneNumber} from '../utils/utils';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {SIZES, perHeight} from '../utils/position/sizes';
-import {Dropdown} from 'react-native-element-dropdown';
+import { Signup } from '../utils/api/auth';
+import { isValidPhoneNumber } from '../utils/utils';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { SIZES, perHeight } from '../utils/position/sizes';
+import { Dropdown } from 'react-native-element-dropdown';
 import * as Yup from 'yup';
 import Textcomp from '../components/Textcomp';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {DateTime} from 'luxon';
 export default function BusinessSignup() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -40,7 +39,7 @@ export default function BusinessSignup() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [cacNo, setCacNo] = useState('');
-  const [address, setAddress] = useState('');
+  // const [address, setAddress] = useState('');
   const [userType, setUserType] = useState('FREELANCER');
   const [locationOpen, setLocationOpen] = useState(false);
   const [locationValue, setLocationValue] = useState('');
@@ -58,15 +57,15 @@ export default function BusinessSignup() {
     {label: 'Both', value: 'Both'},
   ]);
   const [genderOpen, setGenderOpen] = useState(false);
-  const [genderValue, setGenderValue] = useState(null);
+
   const [genderItems, setGenderItems] = useState([
     {label: 'Male', value: 'Male'},
     {label: 'Female', value: 'Female'},
     {label: 'Choose not to answer', value: 'Choose not to answer'},
   ]);
   const [nationalityOpen, setNationalityOpen] = useState(false);
-  const [nationalityValue, setNationalityValue] = useState(null);
-  const [nationalityItems, setNationalityItems] = useState<any>([]);
+  // const [nationalityValue, setNationalityValue] = useState(null);
+  // const [nationalityItems, setNationalityItems] = useState<any>([]);
   // const [signup, { isLoading }] = useSignupMutation();
   const [toolTipLeftVisible, setToolTipLeftVisible] = useState(false);
   const [toolTipRightVisible, setToolTipRightVisible] = useState(false);
@@ -255,7 +254,7 @@ export default function BusinessSignup() {
           fl_data.referralCode = referralCode;
         }
 
-        const res = await Signup(
+        const res:any = await Signup(
           userType === CUSTOMER
             ? fl_data
             : userType === FREELANCER
@@ -300,7 +299,7 @@ export default function BusinessSignup() {
   };
 
   useEffect(() => {
-    setNationalityItems([...allCountry]);
+    // setNationalityItems([...allCountry]);
   }, []);
   const [referralCode, setReferralCode] = useState('');
 
@@ -1135,4 +1134,3 @@ export default function BusinessSignup() {
     </View>
   );
 }
-const styles = StyleSheet.create({});

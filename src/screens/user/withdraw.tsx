@@ -14,7 +14,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
-import {Formik, Field, ErrorMessage} from 'formik';
+import {Formik, Field} from 'formik';
 import * as Yup from 'yup';
 import {
   fetchAccountDetails,
@@ -47,7 +47,7 @@ const validationSchema = Yup.object().shape({
 });
 const Withdraw = () => {
   const navigation = useNavigation<StackNavigation>();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const banks = useSelector((state: any) => state.user.banks);
   const [bankList, setBankList] = useState([]);
   const [isLoading, setisLoading] = useState(false);
@@ -59,7 +59,7 @@ const Withdraw = () => {
       try {
         const res: any = await getBanks('');
         if (res?.data?.data) {
-          const list = res?.data?.data.map(item => ({
+          const list = res?.data?.data.map((item: { name: any; code: any; }) => ({
             label: item?.name,
             value: item?.code,
           }));
@@ -79,8 +79,8 @@ const Withdraw = () => {
     const res: any = await getUser('');
     setisLoading(false);
   };
-  const [accountNumber, setaccountNumber] = useState('');
-  const [accountName, setaccountName] = useState('');
+  const [ setaccountNumber] = useState('');
+  const [accountName, setaccountName]:any = useState('');
 
   const handleWithdraw = async values => {
     setisLoading(true);
@@ -91,7 +91,7 @@ const Withdraw = () => {
       narration: 'Withdrawal',
     };
     try {
-      const res = await withdraw(param);
+      const res:any = await withdraw(param);
       console.log('WITHDRAW:', res);
       if ([200, 201].includes(res?.status)) {
         ToastShort(
@@ -186,7 +186,7 @@ const Withdraw = () => {
               {({handleSubmit, errors, touched}) => (
                 <View style={{marginHorizontal: 20, marginTop: 50}}>
                   <Field name="bank">
-                    {({field, form}) => (
+                    {({form}) => (
                       <View style={[tw`mb-4`, {}]}>
                         <TextWrapper
                           children="Bank"
@@ -211,7 +211,6 @@ const Withdraw = () => {
                               borderRadius: 10,
                               paddingHorizontal: 10,
                               marginTop: 15,
-                              
                             },
                           ]}
                           placeholderStyle={{
@@ -228,6 +227,7 @@ const Withdraw = () => {
                           itemTextStyle={{
                             color: 'black',
                           }}
+                          value={selectedBank?.value}
                           onChange={item => {
                             const d = `${item.value}`;
                             const fil = banks?.filter(item => item.code === d);
@@ -246,7 +246,7 @@ const Withdraw = () => {
                     )}
                   </Field>
                   <Field name="accountNumber">
-                    {({field, form}) => (
+                    {({field, form}:any) => (
                       <>
                         <TextWrapper
                           children="Account Number"
@@ -268,6 +268,7 @@ const Withdraw = () => {
                           }}
                           labelText={'Enter account number'}
                           state={field.value}
+                          // setState={(value) => debouncedQueryName(value)}
                           setState={async value => {
                             if (!selectedBank) {
                               ToastShort('Select a bank');
@@ -275,8 +276,10 @@ const Withdraw = () => {
                             }
                             form.setFieldValue('accountNumber', value);
                             setaccountNumber(value);
-                            if (value?.length > 7) {
+                            if (value?.length > 9) {
                               await queryName(value);
+                            } else {
+                              setaccountName('');
                             }
                           }}
                           disable={true}
@@ -305,7 +308,7 @@ const Withdraw = () => {
                     )}
                   </Field>
                   <Field name="accountName">
-                    {({field, form}) => (
+                    {({field, form}:any) => (
                       <>
                         <TextWrapper
                           children="Account Name"
@@ -340,7 +343,7 @@ const Withdraw = () => {
                     )}
                   </Field>
                   <Field name="amount">
-                    {({field, form}) => (
+                    {({field, form}:any) => (
                       <>
                         <TextWrapper
                           children="Amount"

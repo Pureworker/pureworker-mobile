@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Image,
@@ -16,16 +16,8 @@ import Textcomp from '../../components/Textcomp';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
 import Modal from 'react-native-modal/dist/modal';
+import {getProviderOrders, getSupportUser, getUser} from '../../utils/api/func';
 import {
-  getCategory,
-  getPopularService,
-  getProviderOrders,
-  getSupportUser,
-  getUser,
-} from '../../utils/api/func';
-import {
-  addPopularServices,
-  addSCategory,
   addUserData,
   addproviderOrders,
   setwelcomeModal,
@@ -33,7 +25,6 @@ import {
 import ClosetoYou3 from '../../components/cards/CloseToYou3';
 import {formatAmount} from '../../utils/validations';
 import FastImage from 'react-native-fast-image';
-import {RouteContext} from '../../utils/context/route_context';
 import socket from '../../utils/socket';
 import Geolocation from 'react-native-geolocation-service';
 import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
@@ -95,24 +86,24 @@ const Home = ({navigation}: any) => {
       }
       // setloading(false);
     };
-    const initGetCategory = async () => {
-      setisLoading(true);
-      const res: any = await getCategory('');
-      // console.log('aaaaaaaaa', res?.data?.data);
-      if (res?.status === 201 || res?.status === 200) {
-        dispatch(addSCategory(res?.data?.data));
-      }
-      setisLoading(false);
-    };
-    const initGetPopularServices = async () => {
-      setisLoading(true);
-      const res: any = await getPopularService('');
-      // console.log('ppppppppp', res?.data?.data);
-      if (res?.status === 201 || res?.status === 200) {
-        dispatch(addPopularServices(res?.data?.data));
-      }
-      setisLoading(false);
-    };
+    // const initGetCategory = async () => {
+    //   setisLoading(true);
+    //   const res: any = await getCategory('');
+    //   // console.log('aaaaaaaaa', res?.data?.data);
+    //   if (res?.status === 201 || res?.status === 200) {
+    //     dispatch(addSCategory(res?.data?.data));
+    //   }
+    //   setisLoading(false);
+    // };
+    // const initGetPopularServices = async () => {
+    //   setisLoading(true);
+    //   const res: any = await getPopularService('');
+    //   // console.log('ppppppppp', res?.data?.data);
+    //   if (res?.status === 201 || res?.status === 200) {
+    //     dispatch(addPopularServices(res?.data?.data));
+    //   }
+    //   setisLoading(false);
+    // };
     initGetUsers();
     getSupportUser('');
     // initGetCategory();
@@ -128,10 +119,10 @@ const Home = ({navigation}: any) => {
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addproviderOrders(res?.data?.data));
         let inProgress = providerOrders?.filter(
-          item => item?.status === 'INPROGRESS',
+          (item: {status: string}) => item?.status === 'INPROGRESS',
         );
         let pending = providerOrders?.filter(
-          item => item?.status === 'PENDING',
+          (item: {status: string}) => item?.status === 'PENDING',
         );
         setOinProgress(inProgress);
         setOinPending(pending);
@@ -142,11 +133,11 @@ const Home = ({navigation}: any) => {
   }, []);
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
-  const _getCategory = useSelector((state: any) => state.user.category);
-  const _popularServices = useSelector(
-    (state: any) => state.user.popularServices,
-  );
-  const {currentState, setCurrentState} = useContext(RouteContext);
+  // const _getCategory = useSelector((state: any) => state.user.category);
+  // const _popularServices = useSelector(
+  //   (state: any) => state.user.popularServices,
+  // );
+  // const {currentState, setCurrentState} = useContext(RouteContext);
   const formStage = useSelector((state: any) => state.user.formStage);
   const supportUser = useSelector((store: any) => store.user.supportUser);
   console.log('stage', formStage);
@@ -494,9 +485,15 @@ const Home = ({navigation}: any) => {
                   data={OinProgress}
                   horizontal={true}
                   renderItem={(item: any) => {
-                    return <ClosetoYou3 item={item?.item} index={item.index} />;
+                    return (
+                      <ClosetoYou3
+                        navigation={navigation}
+                        item={item?.item}
+                        index={item.index}
+                      />
+                    );
                   }}
-                  keyExtractor={item => item.id}
+                  keyExtractor={item => item?.id}
                 />
               </View>
             )}
@@ -558,7 +555,6 @@ const Home = ({navigation}: any) => {
           </View>
           {userData?.isVerified === 'incomplete' && formStage !== 6 ? (
             <TouchableOpacity
-
               onPress={() => {
                 // navigation.navigate('ProfileStep21');
                 if (formStage === 1) {

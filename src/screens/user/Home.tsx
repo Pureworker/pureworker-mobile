@@ -1,12 +1,10 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
   SafeAreaView,
   FlatList,
-  ActivityIndicator,
   StatusBar,
   ScrollView,
   Platform,
@@ -14,7 +12,6 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import _ from 'lodash';
 import images from '../../constants/images';
-import TextInputs from '../../components/TextInput2';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
@@ -22,19 +19,15 @@ import colors from '../../constants/colors';
 import ServiceCard from '../../components/cards/serviceCard';
 import ClosetoYou from '../../components/cards/closeToYou';
 import CategoryList2 from '../../components/CategoryList2';
-import commonStyle from '../../constants/commonStyle';
 import {
   useGetAllServiceProviderPotfolioQuery,
   useGetAllServiceProviderProfileQuery,
-  useGetCategoryQuery,
   useGetUserDetailQuery,
 } from '../../store/slice/api';
 import Modal from 'react-native-modal';
 import {StackNavigation} from '../../constants/navigation';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {useGetUserDataQuery} from '../../store/slice/api2';
+import {useNavigation} from '@react-navigation/native';
 import {
-  addCategory,
   addPopularServices,
   addSCategory,
   addUserData,
@@ -50,10 +43,8 @@ import {
 } from '../../utils/api/func';
 import FastImage from 'react-native-fast-image';
 import socket from '../../utils/socket';
-import Spinner from 'react-native-loading-spinner-overlay';
 import Geolocation from 'react-native-geolocation-service';
 import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
-import * as Sentry from '@sentry/react-native';
 import {ToastLong} from '../../utils/utils';
 import WelcomeModal from '../../components/SignupModal';
 const Home = () => {
@@ -239,19 +230,31 @@ const Home = () => {
               },
             ]}>
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <FastImage
-                style={{width: 50, height: 50, borderRadius: 25}}
-                source={
-                  userData?.profilePic
-                    ? {
-                        uri: userData?.profilePic,
-                        headers: {Authorization: 'someAuthToken'},
-                        priority: FastImage.priority.normal,
-                      }
-                    : images.profile
-                }
-                resizeMode={FastImage.resizeMode.cover}
-              />
+              {userData?.profilePic ? (
+                <FastImage
+                  style={{width: 50, height: 50, borderRadius: 25}}
+                  // source={
+                  //   userData?.profilePic
+                  //     ? {
+                  //         uri: userData?.profilePic,
+                  //         headers: {Authorization: 'someAuthToken'},
+                  //         priority: FastImage.priority.normal,
+                  //       }
+                  //     : images.profile
+                  // }
+                  source={{
+                    uri: userData?.profilePic,
+                    headers: {Authorization: 'someAuthToken'},
+                    priority: FastImage.priority.normal,
+                  }}
+                  resizeMode={FastImage.resizeMode.cover}
+                />
+              ) : (
+                <Image
+                  source={images.profile}
+                  style={{width: 50, height: 50, borderRadius: 25}}
+                />
+              )}
             </TouchableOpacity>
             {/* <TextInputs
               style={{marginTop: 0, width: '70%'}}

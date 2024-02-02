@@ -1,25 +1,19 @@
-import {Image, TouchableOpacity, View} from 'react-native';
-import {perHeight, perWidth} from '../../utils/position/sizes';
+import { Image, TouchableOpacity, View } from 'react-native';
+import { perHeight, perWidth } from '../../utils/position/sizes';
 import React from 'react';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../Textcomp';
-import StarRating from 'react-native-star-rating-widget';
 import colors from '../../constants/colors';
-import Review from '../Review';
 import FastImage from 'react-native-fast-image';
 
 const ClosetoYou3 = ({item, index, navigation}: any) => {
-  const price = 0;
-
-  console.log('on-order', item);
-  function formatDate(dateString) {
+  // console.log('on-order', item);
+  function formatDate(dateString: string | number | Date) {
     const options = {year: 'numeric', month: 'short', day: 'numeric'};
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', options);
   }
-
-  // JSON.parse(item?.price || '');
   return (
     <TouchableOpacity
       onPress={() => navigation.navigate('Orders', item)}
