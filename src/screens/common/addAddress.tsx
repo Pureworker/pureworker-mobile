@@ -325,21 +325,21 @@ const AddAddress = ({navigation}: any) => {
           />
         </View>
         {description && (
-          <View style={tw` mt-3 mx-[5%] flex flex-row`}>
+          <View style={tw` mt-3 mx-[5%] flex flex-col`}>
             <Text1
               text={'Selected Address:'}
               size={14}
-              color={colors.primary}
+              color={colors.black}
               lineHeight={16}
-              style={[tw` `]}
+              style={[tw`font-700 `]}
             />
-            <View style={tw`w-[80%] `}>
+            <View style={tw`w-[95%] `}>
               <Text1
                 text={`${description}`}
                 size={14}
                 color={colors.primary}
                 lineHeight={16}
-                style={[tw`ml-2 `]}
+                style={[tw`font-600 `]}
               />
             </View>
           </View>
