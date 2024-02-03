@@ -72,7 +72,7 @@ const TipServiceProvider = () => {
     console.log('tippppp', res?.data);
     if (res?.status === 201 || res?.status === 200) {
       Snackbar.show({
-        text: 'Successful ',
+        text: 'This provider has been tipped!.',
         duration: Snackbar.LENGTH_SHORT,
         textColor: '#fff',
         backgroundColor: '#88087B',
@@ -151,7 +151,11 @@ const TipServiceProvider = () => {
             </View>
             <View style={[tw` py-4 mx-auto`, {}]}>
               <Textcomp
-                text={'Jennifer  A.'}
+                text={`${
+                  item?.serviceProvider?.businessName
+                    ? item?.serviceProvider?.businessName
+                    : `${item?.serviceProvider?.firstName} ${item?.serviceProvider?.lastName}`
+                }`}
                 size={17}
                 lineHeight={17}
                 color={'#000000'}
@@ -227,6 +231,9 @@ const TipServiceProvider = () => {
                 placeholderTextColor={'#00000080'}
                 keyboardType="numeric"
                 style={[tw`border-b pb-2 `, {width: perWidth(311)}]}
+                onChangeText={text => {
+                  setamount(text);
+                }}
                 value={`${amount}`}
               />
             </View>
@@ -274,7 +281,7 @@ const TipServiceProvider = () => {
           ]}
         />
       </ScrollView>
-      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
   );
 };

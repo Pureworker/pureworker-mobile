@@ -822,8 +822,8 @@ export const sendPrivateFeedback = async (param: any, data: any) => {
   console.log('sendPrivateFeedback func started', param, data);
   try {
     const response = await axios({
-      method: 'patch',
-      url: `${API_BASE_URL}/order/add-feedback/${param}`,
+      method: 'post',
+      url: `${API_BASE_URL}/ordern/add-feedback/${param}`,
       headers: {Authorization: `Bearer ${AuthToken}`},
       data: data,
     });
@@ -919,7 +919,7 @@ export const tipProvider = async (data: any) => {
   try {
     const response = await axios({
       method: 'post',
-      url: `${API_BASE_URL}/transaction/tip-provider`,
+      url: `${API_BASE_URL}/ordern/tip-provider`,
       headers: {Authorization: `Bearer ${AuthToken}`},
       data: data,
     });

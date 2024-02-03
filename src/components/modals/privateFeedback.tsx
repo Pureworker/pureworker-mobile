@@ -10,6 +10,10 @@ import Modal from 'react-native-modal/dist/modal';
 import {sendPrivateFeedback} from '../../utils/api/func';
 import {ActivityIndicator} from 'react-native-paper';
 import Snackbar from 'react-native-snackbar';
+import SmileIcon from '../../assets/svg/Smile';
+import Smile2 from '../../assets/svg/Smile2';
+import PoorIcon from '../../assets/svg/Poor';
+import CryingEmoji from '../../assets/svg/crying';
 
 export default function PrivateFeedback({
   navigation,
@@ -21,21 +25,22 @@ export default function PrivateFeedback({
   const [isLoading, setisLoading] = useState(false);
 
   const [feedback, setfeedback] = useState('');
+  const [emoji, setemoji] = useState('');
 
-  console.log(item?._id);
+  // console.log(item?._id);
   const id = item?._id;
 
   const initSendFeedback = async () => {
     setisLoading(true);
     const data = {
-      emoji: 'sad',
-      comment: 'You offered a very bad service!!!',
+      emoji: emoji,
+      comment: feedback,
     };
     const res = await sendPrivateFeedback(id, data);
     console.log(res);
     if (res?.status === 201 || res?.status === 200) {
       Snackbar.show({
-        text: 'Feedback sent!.',
+        text: 'Your feedback has been received.',
         duration: Snackbar.LENGTH_SHORT,
         textColor: '#fff',
         backgroundColor: '#88087B',
@@ -100,21 +105,33 @@ export default function PrivateFeedback({
             </View>
             <View
               style={[
-                tw`px-[7.5%] mt-4 flex flex-row w-[60%] justify-between mx-auto`,
+                tw`px-[.5%] mt-4 flex flex-row w-[60%] justify-between mx-auto`,
                 {},
               ]}>
-              <Image
-                source={images.profile}
-                style={[tw``, {width: 40, height: 40}]}
-              />
-              <Image
-                source={images.profile}
-                style={[tw``, {width: 40, height: 40}]}
-              />
-              <Image
-                source={images.profile}
-                style={[tw``, {width: 40, height: 40}]}
-              />
+              <TouchableOpacity
+                onPress={() => {
+                  setemoji('verygood');
+                }}>
+                <SmileIcon />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setemoji('good');
+                }}>
+                <Smile2 />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setemoji('poor');
+                }}>
+                <PoorIcon />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setemoji('verypoor');
+                }}>
+                <CryingEmoji />
+              </TouchableOpacity>
             </View>
             <View style={[tw`px-[7.5%] mt-4`, {}]}>
               <TextInput

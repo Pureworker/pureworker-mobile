@@ -201,25 +201,28 @@ export default function RateyourExperience({
   const [rateService, setrateService] = useState(0);
 
   const id = item?._id;
-
   // Validation function to check if the comment is provided
   const isValid = () => {
     return comment.trim().length > 0;
   };
-
   const handleFinish = () => {
     // Validate if the comment is provided
-    if (!isValid()) {
+    // if (!isValid()) {
+    //   Snackbar.show({
+    //     text: 'Please provide a comment.',
+    //     duration: Snackbar.LENGTH_SHORT,
+    //     backgroundColor: 'red',
+    //   });
+    //   return;
+    // }
+    if (rateExperience === 0 || recommend === 0 || rateService === 0) {
       Snackbar.show({
-        text: 'Please provide a comment.',
+        text: 'Please provide ratings for all categories.',
         duration: Snackbar.LENGTH_SHORT,
         backgroundColor: 'red',
       });
       return;
     }
-
-    // Optionally, you can add additional validation for rating values.
-
     // Call the onFinish function if all validations pass
     OnFinish({
       communication: rateExperience,
@@ -264,7 +267,7 @@ export default function RateyourExperience({
             <View style={[tw`px-[7.5%] mt-1`, {}]}>
               <Textcomp
                 text={
-                  'Please rate your and describe your experience. Your answer will help other buyers to communicate with the service provider.  '
+                  'Please rate your service provider and describe your experience. This is Important for the service provider to get paid.'
                 }
                 size={14}
                 lineHeight={17}
@@ -276,7 +279,7 @@ export default function RateyourExperience({
               style={[tw`px-[7.5%] mt-4 flex flex-col justify-between `, {}]}>
               <View style={tw`mb-2`}>
                 <Textcomp
-                  text={'Rate your Experience'}
+                  text={'Communication Level'}
                   size={12}
                   lineHeight={14}
                   color={'#000000'}

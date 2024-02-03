@@ -32,8 +32,9 @@ import OrderInProgress from '../../components/modals/OrderinProgress';
 import OrderPlaced from '../../components/modals/orderPlaced';
 import ScheduledDeliveryDate from '../../components/modals/scheduledDeliveryDate';
 import colors from '../../constants/colors';
-import {completedOrder} from '../../utils/api/func';
+import {completedOrder, getUserOrders} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
+import { addcustomerOrders, addproviderOrders } from '../../store/reducer/mainSlice';
 
 const OrderActive = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -62,12 +63,22 @@ const OrderActive = ({route}: any) => {
   // console.log('data:', userData);
 
   const [isLoading, setisLoading] = useState(false);
-  const initGetOrders = async () => {
+  // const initGetOrders = async () => {
+  //   setisLoading(true);
+  //   const res: any = await getProviderOrders(userData?._id);
+  //   if (res?.status === 201 || res?.status === 200) {
+  //     dispatch(addproviderOrders(res?.data?.data));
+  //   }
+  //   setisLoading(false);
+  // };
+  const initGetOrders2 = async () => {
     setisLoading(true);
-    const res: any = await getProviderOrders(userData?._id);
+    const res: any = await getUserOrders('');
+    console.log('oooooooo', res?.data);
     if (res?.status === 201 || res?.status === 200) {
-      dispatch(addproviderOrders(res?.data?.data));
+      dispatch(addcustomerOrders(res?.data?.data));
     }
+    // setloading(false);
     setisLoading(false);
   };
   const handleComplete = async (val: any) => {
@@ -76,7 +87,8 @@ const OrderActive = ({route}: any) => {
       const res = await completedOrder(item?._id, {...val});
       if (res?.status === 200 || res?.status === 201) {
         // navigation.navigate('PaymentConfirmed');
-        await initGetOrders();
+        // await initGetOrders();
+        await initGetOrders2();
         setrateYourExperience(false);
         Alert.alert('successful');
       } else {

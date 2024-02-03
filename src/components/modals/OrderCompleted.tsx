@@ -10,6 +10,8 @@ import Modal from 'react-native-modal/dist/modal';
 
 export default function OrderCompleted({navigation, visible, func, item}: any) {
   const [InfoModal, setInfoModal] = useState(visible);
+
+  console.log('---CoMPLETED:', item);
   return (
     <Modal
       isVisible={visible}
@@ -24,10 +26,7 @@ export default function OrderCompleted({navigation, visible, func, item}: any) {
       onSwipeComplete={() => func(false)}
       onBackButtonPress={() => func(false)}>
       <View style={tw` h-full w-full bg-black bg-opacity-5`}>
-        <TouchableOpacity
-          onPress={() => func(false)}
-          style={tw`flex-1`}
-        />
+        <TouchableOpacity onPress={() => func(false)} style={tw`flex-1`} />
         <View style={tw`h-[35.5%] mt-auto bg-[#D9D9D9]`}>
           <TouchableOpacity
             onPress={() => {
@@ -47,9 +46,11 @@ export default function OrderCompleted({navigation, visible, func, item}: any) {
             </View>
             <View style={[tw`px-[7.5%] mt-1`, {}]}>
               <Textcomp
-                text={
-                  'We hope you enjoyed the work with lambuja? Awesome seller deserves a tip. '
-                }
+                text={`We hope you enjoyed the work with ${
+                  item?.serviceProvider?.businessName
+                    ? item?.serviceProvider?.businessName
+                    : `${item?.serviceProvider?.firstName} ${item?.serviceProvider?.lastName}`
+                } ?     Awesome seller deserves a tip. `}
                 size={14}
                 lineHeight={17}
                 color={'#000000'}
@@ -75,7 +76,7 @@ export default function OrderCompleted({navigation, visible, func, item}: any) {
               <TouchableOpacity
                 onPress={() => {
                   func(false);
-                  navigation.navigate('TipServiceProvider', {item: item });
+                  navigation.navigate('TipServiceProvider', {item: item});
                   func(false);
                 }}
                 style={[

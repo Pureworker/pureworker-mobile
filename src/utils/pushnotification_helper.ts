@@ -79,9 +79,7 @@ const GetFCMToken = async (userData:any) => {
   } catch (error) {
     console.log(error, 'error in fcmtoken');
   }
-  
 };
-
 const NotificationListner = () => {
   messaging().onNotificationOpenedApp(remoteMessage => {
     console.log(
