@@ -92,7 +92,6 @@ const Home = ({navigation}: any) => {
         });
       };
       emitProviderOnlineStatus();
-      // setloading(false);
     };
     // const initGetCategory = async () => {
     //   setisLoading(true);
