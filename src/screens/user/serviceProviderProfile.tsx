@@ -69,7 +69,6 @@ const ServiceProviderProfile = () => {
   const serviceProviderData = useSelector(
     (state: any) => state.user.serviceProviderData,
   );
-
   console.log('passedDATA-------', profileData);
 
   const {data: getSingleProviderServiceData, isLoading: isLoadingUser} =
@@ -93,18 +92,25 @@ const ServiceProviderProfile = () => {
   useEffect(() => {
     const initProvider = async () => {
       setisLoading(true);
-      if (
-        !profileData?.portfolio?.provider ||
-        !profileData?.portfolio?.service
-      ) {
+      const providerId = profileData?.portfolio?.provider ?? profileData?._id;
+      const serviceId =
+        profileData?.portfolio?.service || profileData?.services?.[0]?._id;
+
+      if (!providerId || !serviceId) {
         ToastShort('Invalid Provider Id');
+        setisLoading(false);
         return;
       }
       const res: any = await getProviderDataAll({
-        providerID: profileData?.portfolio?.provider,
-        serviceID: profileData?.portfolio?.service,
+        providerID: providerId,
+        serviceID: serviceId,
       });
-      console.log('PROOOOOVVVIIIDERRR', res, res?.data?.['0']);
+      // const res: any = await getProviderDataAll({
+      //   providerID: profileData?.portfolio?.provider || profileData?._id,
+      //   serviceID:
+      //     profileData?.portfolio?.service || profileData?.services?.[0]?._id,
+      // });
+      console.log('PROOOOOVVVIIIDERRR', res?.data?.['0']);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(setserviceProviderData(res?.data?.['0']));
       }
@@ -166,7 +172,6 @@ const ServiceProviderProfile = () => {
   const ch = savedProviders?.filter(
     (d: {service: any}) => d?.serviceProvider === profileData?._id,
   );
-
   // console.log('userData:', userData);
 
   return (
@@ -400,7 +405,10 @@ const ServiceProviderProfile = () => {
               <View style={tw`border-b border-[#FFF] pb-4 mx-2`}>
                 <View style={tw` pt-3`}>
                   <Textcomp
-                    text={profileData?.portfolio?.description}
+                    text={
+                      profileData?.portfolio?.description ||
+                      serviceProviderData?.description
+                    }
                     size={13}
                     lineHeight={14}
                     color={'#FFFFFF'}
@@ -468,7 +476,13 @@ const ServiceProviderProfile = () => {
                   </View>
                   <View style={[tw` `, {marginTop: perHeight(5)}]}>
                     <Textcomp
-                      text={`₦${profileData?.portfolio?.minPrice} - ₦${profileData?.portfolio?.maxPrice}`}
+                      text={`₦${
+                        profileData?.portfolio?.minPrice ||
+                        serviceProviderData?.portfolio?.minPrice
+                      } - ₦${
+                        profileData?.portfolio?.maxPrice ||
+                        serviceProviderData?.portfolio?.maxPrice
+                      }`}
                       size={12}
                       lineHeight={15}
                       color={'#FFFFFF'}
@@ -594,7 +608,8 @@ const ServiceProviderProfile = () => {
                 </View>
               </View>
 
-              {profileData?.portfolio?.portfolio?.length < 1 ? (
+              {profileData?.portfolio?.portfolio?.length < 1 ||
+              serviceProviderData?.portfolio?.portfolio?.length < 1 ? (
                 <View style={tw`mt-[25%] mx-auto`}>
                   <Textcomp
                     text={'No portfolio Available!.'}
@@ -621,7 +636,10 @@ const ServiceProviderProfile = () => {
                       />
                     </View>
 
-                    {profileData?.portfolio?.portfolio?.map((item, index) => {
+                    {(
+                      profileData?.portfolio?.portfolio ||
+                      serviceProviderData?.portfolio?.portfolio
+                    )?.map((item, index) => {
                       console.log('PORRRRRRRRRTTTTT:', item, item?.images);
                       return (
                         <View style={tw`w-full mt-3`} key={index}>

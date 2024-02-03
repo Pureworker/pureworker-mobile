@@ -8,17 +8,23 @@ import StarRating from 'react-native-star-rating-widget';
 import colors from '../../constants/colors';
 import Review from '../Review';
 import FastImage from 'react-native-fast-image';
-import { metersToKilometers } from '../../utils/utils';
+import {metersToKilometers} from '../../utils/utils';
 
 const ClosetoYou = ({item, index, navigation}: any) => {
   const price = 0;
 
-  // console.log('on-order', item);
+  console.log('on-order', item);
 
   // JSON.parse(item?.price || '');
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('ServiceProviderProfile', item)}
+      onPress={() =>
+        navigation.navigate('ServiceProviderProfile', {
+          item: item,
+          serviceName: item?.services?.[0]?.name,
+          id: item?._id,
+        })
+      }
       style={[
         tw` mt-4 border-[#FFC727] justify-between bg-[${colors.darkPurple}]`,
         {
@@ -71,9 +77,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
         <View style={[tw``, {marginLeft: perWidth(12)}]}>
           <View style={[tw``, {}]}>
             <Textcomp
-              text={`${item?.firstName} ${item?.lastName?.charAt(
-                0,
-              )}.`}
+              text={`${item?.firstName} ${item?.lastName?.charAt(0)}.`}
               size={12}
               lineHeight={14}
               color={colors.primary}

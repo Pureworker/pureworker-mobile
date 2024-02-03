@@ -72,51 +72,51 @@
 //                 fontFamily={'Inter-Regular'}
 //               />
 //             </View>
-//             <View
-//               style={[tw`px-[7.5%] mt-4 flex flex-col justify-between `, {}]}>
-//               <View style={tw`mb-2`}>
-//                 <Textcomp
-//                   text={'Rate your Experience'}
-//                   size={12}
-//                   lineHeight={14}
-//                   color={'#000000'}
-//                   fontFamily={'Inter-Regular'}
-//                 />
-//               </View>
-//               <Review2
-//                 value={rateExperience}
-//                 func={text => setrateExperience(text)}
-//               />
-//             </View>
-//             <View
-//               style={[tw`px-[7.5%] mt-4 flex flex-col justify-between `, {}]}>
-//               <View style={tw`mb-2`}>
-//                 <Textcomp
-//                   text={'Recommend to a Friend'}
-//                   size={12}
-//                   lineHeight={14}
-//                   color={'#000000'}
-//                   fontFamily={'Inter-Regular'}
-//                 />
-//               </View>
-//               <Review2 value={recommend} func={text => setrecommend(text)} />
-//             </View>
-//             <View
-//               style={[tw`px-[7.5%] mt-4 flex flex-col justify-between `, {}]}>
-//               <View style={tw`mb-2`}>
-//                 <Textcomp
-//                   text={'Service as Described'}
-//                   size={12}
-//                   lineHeight={14}
-//                   color={'#000000'}
-//                   fontFamily={'Inter-Regular'}
-//                 />
-//               </View>
-//               <Review2
-//                 value={rateService}
-//                 func={text => setrateService(text)}
-//               />
-//             </View>
+// <View
+//   style={[tw`px-[7.5%] mt-4 flex flex-col justify-between `, {}]}>
+//   <View style={tw`mb-2`}>
+//     <Textcomp
+//       text={'Rate your Experience'}
+//       size={12}
+//       lineHeight={14}
+//       color={'#000000'}
+//       fontFamily={'Inter-Regular'}
+//     />
+//   </View>
+//   <Review2
+//     value={rateExperience}
+//     func={text => setrateExperience(text)}
+//   />
+// </View>
+// <View
+//   style={[tw`px-[7.5%] mt-4 flex flex-col justify-between `, {}]}>
+//   <View style={tw`mb-2`}>
+//     <Textcomp
+//       text={'Recommend to a Friend'}
+//       size={12}
+//       lineHeight={14}
+//       color={'#000000'}
+//       fontFamily={'Inter-Regular'}
+//     />
+//   </View>
+//   <Review2 value={recommend} func={text => setrecommend(text)} />
+// </View>
+// <View
+//   style={[tw`px-[7.5%] mt-4 flex flex-col justify-between `, {}]}>
+//   <View style={tw`mb-2`}>
+//     <Textcomp
+//       text={'Service as Described'}
+//       size={12}
+//       lineHeight={14}
+//       color={'#000000'}
+//       fontFamily={'Inter-Regular'}
+//     />
+//   </View>
+//   <Review2
+//     value={rateService}
+//     func={text => setrateService(text)}
+//   />
+// </View>
 //             <View style={[tw`px-[7.5%] mt-4`, {}]}>
 //               <TextInput
 //                 multiline
@@ -254,7 +254,7 @@ export default function RateyourExperience({
           <View>
             <View style={[tw` py-4`, {marginLeft: perWidth(30)}]}>
               <Textcomp
-                text={'Rate your Experience'}
+                text={'Complete Order: Rate your Experience'}
                 size={17}
                 lineHeight={17}
                 color={'#000000'}
@@ -272,7 +272,51 @@ export default function RateyourExperience({
                 fontFamily={'Inter-Regular'}
               />
             </View>
-            {/* ... (remaining code remains unchanged) */}
+            <View
+              style={[tw`px-[7.5%] mt-4 flex flex-col justify-between `, {}]}>
+              <View style={tw`mb-2`}>
+                <Textcomp
+                  text={'Rate your Experience'}
+                  size={12}
+                  lineHeight={14}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+              <Review2
+                value={rateExperience}
+                func={text => setrateExperience(text)}
+              />
+            </View>
+            <View
+              style={[tw`px-[7.5%] mt-4 flex flex-col justify-between `, {}]}>
+              <View style={tw`mb-2`}>
+                <Textcomp
+                  text={'Recommend to a Friend'}
+                  size={12}
+                  lineHeight={14}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+              <Review2 value={recommend} func={text => setrecommend(text)} />
+            </View>
+            <View
+              style={[tw`px-[7.5%] mt-4 flex flex-col justify-between `, {}]}>
+              <View style={tw`mb-2`}>
+                <Textcomp
+                  text={'Service as Described'}
+                  size={12}
+                  lineHeight={14}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+              <Review2
+                value={rateService}
+                func={text => setrateService(text)}
+              />
+            </View>
             <View
               style={[tw`px-[7.5%] mt-4 flex flex-col justify-between `, {}]}>
               <TextInput

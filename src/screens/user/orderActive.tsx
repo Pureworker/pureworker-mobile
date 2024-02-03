@@ -8,6 +8,7 @@ import {
   StatusBar,
   ScrollView,
   FlatList,
+  Alert,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Header from '../../components/Header';
@@ -31,6 +32,8 @@ import OrderInProgress from '../../components/modals/OrderinProgress';
 import OrderPlaced from '../../components/modals/orderPlaced';
 import ScheduledDeliveryDate from '../../components/modals/scheduledDeliveryDate';
 import colors from '../../constants/colors';
+import {completedOrder} from '../../utils/api/func';
+import Snackbar from 'react-native-snackbar';
 
 const OrderActive = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -56,7 +59,50 @@ const OrderActive = ({route}: any) => {
 
   const userData = useSelector((state: any) => state.user.userData);
 
-  console.log('data:', userData);
+  // console.log('data:', userData);
+
+  const [isLoading, setisLoading] = useState(false);
+  const initGetOrders = async () => {
+    setisLoading(true);
+    const res: any = await getProviderOrders(userData?._id);
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addproviderOrders(res?.data?.data));
+    }
+    setisLoading(false);
+  };
+  const handleComplete = async (val: any) => {
+    setisLoading(true);
+    if (item?._id) {
+      const res = await completedOrder(item?._id, {...val});
+      if (res?.status === 200 || res?.status === 201) {
+        // navigation.navigate('PaymentConfirmed');
+        await initGetOrders();
+        setrateYourExperience(false);
+        Alert.alert('successful');
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+      setisLoading(false);
+    } else {
+      Snackbar.show({
+        text: 'Please fill all fields',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      setisLoading(false);
+    }
+    setisLoading(false);
+  };
 
   useEffect(() => {
     // setorderDelivered(true);
@@ -432,8 +478,7 @@ const OrderActive = ({route}: any) => {
                           </>
                         );
                       }
-                    }
-                    else if (item.title === 'Order In Progress') {
+                    } else if (item.title === 'Order In Progress') {
                       if (passedData?.status === 'INPROGRESS') {
                         return (
                           <>
@@ -469,8 +514,7 @@ const OrderActive = ({route}: any) => {
                           </>
                         );
                       }
-                    }
-                    else if (item.title === 'Order Delivered') {
+                    } else if (item.title === 'Order Delivered') {
                       if (passedData?.status === 'COMPLETED') {
                         return (
                           <>
@@ -506,9 +550,11 @@ const OrderActive = ({route}: any) => {
                           </>
                         );
                       }
-                    }
-                    else if (item.title === 'Order Dispute') {
-                      if (passedData?.status === 'DISPUTE' || passedData?.status === 'CANCELLED') {
+                    } else if (item.title === 'Order Dispute') {
+                      if (
+                        passedData?.status === 'DISPUTE' ||
+                        passedData?.status === 'CANCELLED'
+                      ) {
                         return (
                           <>
                             <TouchableOpacity
@@ -543,8 +589,7 @@ const OrderActive = ({route}: any) => {
                           </>
                         );
                       }
-                    }
-                    else if (item.title === 'Rate your experince') {
+                    } else if (item.title === 'Rate your experince') {
                       if (passedData?.status === 'COMPLETED') {
                         return (
                           <>
@@ -580,8 +625,7 @@ const OrderActive = ({route}: any) => {
                           </>
                         );
                       }
-                    }
-                    else if (item.title === 'Private Feedback') {
+                    } else if (item.title === 'Private Feedback') {
                       if (passedData?.status === 'COMPLETED') {
                         return (
                           <>
@@ -617,9 +661,11 @@ const OrderActive = ({route}: any) => {
                           </>
                         );
                       }
-                    }
-                    else if (item.title === 'Scheduled Delivery Date') {
-                      if (passedData?.status === 'PENDING' || passedData?.status === 'ACCEPTED') {
+                    } else if (item.title === 'Scheduled Delivery Date') {
+                      if (
+                        passedData?.status === 'PENDING' ||
+                        passedData?.status === 'ACCEPTED'
+                      ) {
                         return (
                           <>
                             <TouchableOpacity
@@ -654,8 +700,7 @@ const OrderActive = ({route}: any) => {
                           </>
                         );
                       }
-                    }
-                     else {
+                    } else {
                       return (
                         <>
                           <TouchableOpacity
@@ -692,6 +737,32 @@ const OrderActive = ({route}: any) => {
                     }
                   })}
                 </View>
+                {passedData?.status === 'INPROGRESS' && (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setrateYourExperience(true);
+                    }} // Use the handleFinish function for the "Done" button
+                    style={[
+                      {
+                        width: perWidth(316),
+                        height: perHeight(40),
+                        borderRadius: 13,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: colors.darkPurple,
+                        marginTop: 20,
+                      },
+                      tw`mx-auto mt-[25%]`,
+                    ]}>
+                    <Textcomp
+                      text={'Complete'}
+                      size={14}
+                      lineHeight={17}
+                      color={'#FFC727'}
+                      fontFamily={'Inter-SemiBold'}
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
             )}
           </>
@@ -721,6 +792,9 @@ const OrderActive = ({route}: any) => {
         }}
         visible={rateYourExperience}
         item={item}
+        OnFinish={(values: any) => {
+          handleComplete(values);
+        }}
       />
       <OrderCompleted
         navigation={navigation}

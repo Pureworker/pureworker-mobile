@@ -424,7 +424,7 @@ export const cancelOrder = async (param: any, data: any) => {
   }
 };
 
-export const completedOrder = async (param: any, data:any) => {
+export const completedOrder = async (param: any, data: any) => {
   console.log('completedOrder func started', param, data);
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   try {
@@ -434,7 +434,35 @@ export const completedOrder = async (param: any, data:any) => {
       headers: {
         Authorization: `Bearer ${AuthToken}`,
       },
-      data: data
+      data: data,
+    });
+
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const completedOrderProvider = async (param: any, data: any) => {
+  console.log('completedOrderProvider func started', param, data);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${API_BASE_URL}/ordern/complete-order/${param}`,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+      data: data,
     });
 
     if (response.status === 201) {
@@ -1152,7 +1180,11 @@ export const getSearchQuery = async (param: any) => {
 
 export const getSearchProvider = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
-  console.log('getSearchQuery func started', param , `provider/get-providers?name=${param}`);
+  console.log(
+    'getSearchQuery func started',
+    param,
+    `provider/get-providers?name=${param}`,
+  );
   try {
     const response = await axios({
       method: 'get',
