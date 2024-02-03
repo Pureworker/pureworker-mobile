@@ -103,10 +103,10 @@ const Index = () => {
           <View
             style={[
               tw`bg-[${colors.darkPurple}] flex flex-row justify-between mx-auto mt-4 p-2 px-4 rounded`,
-              {height: perHeight(95), width: perWidth(348)},
+              {height: perHeight(65), width: perWidth(348)},
             ]}>
             <View>
-              <View style={tw`mr-auto `}>
+              <View style={tw`mr-auto`}>
                 <Textcomp
                   text={'Stay up to date!'}
                   size={14}
@@ -124,7 +124,7 @@ const Index = () => {
                   fontFamily={'Inter-SemiBold'}
                 />
               </View>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {}}
                 style={tw`mr-auto border  border-[${colors.primary}] px-4 py-2 rounded-lg  mt-auto`}>
                 <Textcomp
@@ -134,7 +134,7 @@ const Index = () => {
                   color={'#FFFFFF'}
                   fontFamily={'Inter-SemiBold'}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Image

@@ -152,6 +152,9 @@ const Home = () => {
         if (res?.data === undefined) {
           dispatch(addcloseProvider([]));
         }
+        if (res?.data?.data && res?.data?.data?.length === 0) {
+          dispatch(addcloseProvider([]));
+        }
       }
       setisLoading(false);
     };

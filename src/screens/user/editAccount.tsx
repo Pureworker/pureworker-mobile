@@ -181,7 +181,7 @@ const EditAccount = () => {
           </TouchableOpacity>
           <View style={tw`mx-auto`}>
             <Textcomp
-              text={'Account'}
+              text={'Edit Account'}
               size={17}
               lineHeight={17}
               color={'#000413'}
@@ -190,7 +190,7 @@ const EditAccount = () => {
           </View>
         </View>
         <View style={tw`flex-1`}>
-          <View style={[tw`mt-4`, {marginHorizontal: perWidth(20)}]}>
+          <View style={[tw`mt-8`, {marginHorizontal: perWidth(20)}]}>
             <View style={tw`flex flex-row justify-between`}>
               <View style={tw``}>
                 <Textcomp
@@ -345,7 +345,7 @@ const EditAccount = () => {
               />
             </View>
           </View>
-          <View
+          {/* <View
             style={[
               tw`bg-[${colors.darkPurple}] mt-4 pl-5 justify-center`,
               {height: perHeight(60)},
@@ -368,7 +368,7 @@ const EditAccount = () => {
                 value={nationality}
               />
             </View>
-          </View>
+          </View> */}
           <TouchableOpacity
             onPress={() => {
               setDatePickerVisible(true);
@@ -398,7 +398,7 @@ const EditAccount = () => {
               </View>
             </View>
           </TouchableOpacity>
-          <ScrollView horizontal>
+          {/* <ScrollView horizontal>
             <View
               style={[
                 tw`bg-[${colors.darkPurple}]  mt-4 pl-5 justify-start`,
@@ -422,65 +422,6 @@ const EditAccount = () => {
                   }}>
                   Gender
                 </Text>
-                {/* <DropDownPicker
-                  open={locationOpen}
-                  value={locationValue}
-                  items={locationItems}
-                  setOpen={setLocationOpen}
-                  setValue={setLocationValue}
-                  setItems={setLocationItems}
-                  showArrowIcon={true}
-                  ArrowDownIconComponent={({style}) => (
-                    <Image
-                      resizeMode="contain"
-                      style={{width: 15, height: 15, tintColor: '#010B2D'}}
-                      source={!locationOpen && images.polygonForward}
-                    />
-                  )}
-                  ArrowUpIconComponent={({style}) => (
-                    <Image
-                      resizeMode="contain"
-                      style={{width: 15, height: 15, tintColor: '#010B2D'}}
-                      source={locationOpen && images.polygonDown}
-                    />
-                  )}
-                  zIndex={10}
-                  placeholder="Select Gender"
-                  dropDownContainerStyle={{
-                    borderWidth: 0,
-                  }}
-                  labelStyle={{
-                    fontFamily: commonStyle.fontFamily.regular,
-                    fontSize: 14,
-                    color: '#000',
-                  }}
-                  placeholderStyle={{
-                    fontFamily: commonStyle.fontFamily.regular,
-                    fontSize: 14,
-                    color: '#9E9E9E',
-                  }}
-                  style={{
-                    backgroundColor: '#D9D9D9',
-                    borderColor: '#9E9E9E14',
-                    width: 250,
-                  }}
-                  listMode="FLATLIST"
-                  showTickIcon={false}
-                  textStyle={{
-                    color: '#9E9E9E',
-                  }}
-                  listParentLabelStyle={{
-                    color: '#000',
-                    fontSize: 16,
-                    fontFamily: commonStyle.fontFamily.regular,
-                  }}
-                  listItemContainerStyle={{
-                    backgroundColor: 'D9D9D9',
-                    borderColor: 'red',
-                    opacity: 1,
-                    borderWidth: 0,
-                  }}
-                /> */}
                 <Dropdown
                   style={[
                     styles.dropdown,
@@ -511,7 +452,7 @@ const EditAccount = () => {
                 />
               </View>
             </View>
-          </ScrollView>
+          </ScrollView> */}
         </View>
         <View style={tw`h-80`} />
       </ScrollView>

@@ -304,7 +304,7 @@ const OrderReview = ({route}: any) => {
                     />
                   </View>
                 </View>
-                <View style={tw`mt-2`}>
+                {/* <View style={tw`mt-2`}>
                   <View style={tw``}>
                     <Textcomp
                       text={'Promo code'}
@@ -314,7 +314,7 @@ const OrderReview = ({route}: any) => {
                       fontFamily={'Inter-Medium'}
                     />
                   </View>
-                </View>
+                </View> */}
               </View>
               <View style={tw`items-end pr-3`}>
                 <Image
@@ -341,7 +341,7 @@ const OrderReview = ({route}: any) => {
                     fontFamily={'Inter-SemiBold'}
                   />
                 </View>
-                <TouchableOpacity onPress={() => {}} style={tw`mt-2`}>
+                {/* <TouchableOpacity onPress={() => {}} style={tw`mt-2`}>
                   <Textcomp
                     text={'Enter a Code'}
                     size={13}
@@ -349,7 +349,7 @@ const OrderReview = ({route}: any) => {
                     color={'#88087B'}
                     fontFamily={'Inter-Regular'}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </View>
           </View>

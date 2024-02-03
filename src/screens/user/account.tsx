@@ -235,7 +235,9 @@ const Account = () => {
             <View>
               <View style={tw``}>
                 <Textcomp
-                  text={`${userData?.address}`}
+                  text={`${
+                    userData?.address === undefined ? '' : userData?.address
+                  }`}
                   size={14}
                   lineHeight={15}
                   color={'#FFFFFF'}
@@ -253,7 +255,7 @@ const Account = () => {
               </View>
             </View>
           </View>
-          <View
+          {/* <View
             style={[
               tw`bg-[${colors.darkPurple}] mt-4 pl-5 justify-center`,
               {height: perHeight(60)},
@@ -278,7 +280,7 @@ const Account = () => {
                 />
               </View>
             </View>
-          </View>
+          </View> */}
           <View
             style={[
               tw`bg-[${colors.darkPurple}] mt-4 pl-5 justify-center`,
@@ -305,7 +307,7 @@ const Account = () => {
               </View>
             </View>
           </View>
-          <View
+          {/* <View
             style={[
               tw`bg-[${colors.darkPurple}] mt-4 pl-5 justify-center`,
               {height: perHeight(60)},
@@ -330,7 +332,7 @@ const Account = () => {
                 />
               </View>
             </View>
-          </View>
+          </View> */}
         </View>
         <View style={tw`h-20`} />
       </ScrollView>

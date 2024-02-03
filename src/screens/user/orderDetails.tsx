@@ -45,6 +45,9 @@ const OrderDetails = () => {
   const providerData = route.params?.data;
   const service = route.params?.service;
   const dispatch = useDispatch();
+
+  console.log('PPPPP---', providerData);
+
   const [locationItems, setLocationItems] = useState([
     {label: 'Online (your business renders services online)', value: 'Online'},
     {
@@ -249,7 +252,11 @@ const OrderDetails = () => {
             </View>
             <View style={tw``}>
               <Textcomp
-                text={'Confirm with John pedro before hiring'}
+                text={`Confirm with ${
+                  providerData?.businessName
+                    ? providerData?.businessName
+                    : `${providerData?.firstName} ${providerData?.lastName}`
+                }  before hiring`}
                 size={11}
                 lineHeight={14}
                 color={'#000413'}
@@ -275,6 +282,46 @@ const OrderDetails = () => {
                 backgroundColor: colors.greyLight1,
                 marginTop: 13,
               }}>
+              {/* <TextInputs
+                styleInput={{
+                  color: colors.black,
+                  paddingHorizontal: 18,
+                  fontSize: 12,
+                }}
+                style={{
+                  backgroundColor: colors.green,
+                  height: 130,
+                  borderRadius: 0,
+                }}
+                labelText={
+                  'Enter brief description about the service to be rendered'
+                }
+                state={description}
+                setState={text => {
+                  setDescription(text);
+                }}
+                multiline={true}
+                nbLines={5}
+              /> */}
+              <TextInput
+                multiline
+                placeholder="Enter brief description about the service to be rendered"
+                style={[
+                  tw` px-4 rounded-lg`,
+                  {height: perHeight(80), backgroundColor: colors.greyLight1},
+                ]}
+                onChangeText={text => {
+                  setDescription(text);
+                }}
+              />
+            </View>
+            {/* <View
+              style={{
+                height: 130,
+                borderRadius: 8,
+                backgroundColor: colors.greyLight1,
+                marginTop: 13,
+              }}>
               <TextInputs
                 styleInput={{
                   color: colors.black,
@@ -290,7 +337,7 @@ const OrderDetails = () => {
                 multiline={true}
                 nbLines={5}
               />
-            </View>
+            </View> */}
           </View>
           <View
             style={[
