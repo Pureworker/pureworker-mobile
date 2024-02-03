@@ -181,7 +181,7 @@ import colors from '../../constants/colors';
 import {WIDTH_WINDOW} from '../../constants/generalStyles';
 import Modal from 'react-native-modal/dist/modal';
 import Review2 from '../Review2';
-import {sendRatings} from '../../utils/api/func';
+// import {sendRatings} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 
 export default function RateyourExperience({

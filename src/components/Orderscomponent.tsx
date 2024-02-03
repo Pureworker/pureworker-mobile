@@ -233,11 +233,15 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
             <View
               style={[tw``, {width: perWidth(105), marginTop: perWidth(4)}]}>
               <Textcomp
-                text={`${
-                  item?.serviceProvider?.firstName +
-                  ' ' +
-                  item?.serviceProvider?.lastName?.charAt(0)
-                }.`}
+                text={
+                  item?.serviceProvider?.businessName
+                    ? item?.serviceProvider?.businessName
+                    : `${
+                        item?.serviceProvider?.firstName +
+                        ' ' +
+                        item?.serviceProvider?.lastName?.charAt(0)
+                      }.`
+                }
                 size={12}
                 lineHeight={14}
                 color={colors.white}
@@ -293,7 +297,10 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
               onPress={() => setInfoModal(false)}
               style={tw`flex-1`}
             />
-            <View style={tw`h-[${status !== 'PENDING' ?  '35%' : '22.5%'}]  mt-auto bg-[#D9D9D9]`}>
+            <View
+              style={tw`h-[${
+                status !== 'PENDING' ? '35%' : '22.5%'
+              }]  mt-auto bg-[#D9D9D9]`}>
               <TouchableOpacity
                 onPress={() => {
                   setInfoModal(false);

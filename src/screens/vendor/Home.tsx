@@ -138,7 +138,19 @@ const Home = ({navigation}: any) => {
       setisLoading(false);
     };
     initGetOrders();
-  }, []);
+  }, [dispatch, providerOrders, userData?._id]);
+
+  useEffect(() => {
+    let inProgress = providerOrders?.filter(
+      (item: {status: string}) => item?.status === 'INPROGRESS',
+    );
+    let pending = providerOrders?.filter(
+      (item: {status: string}) => item?.status === 'PENDING',
+    );
+    setOinProgress(inProgress);
+    setOinPending(pending);
+  }, [providerOrders]);
+
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
   // const _getCategory = useSelector((state: any) => state.user.category);

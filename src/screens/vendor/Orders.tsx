@@ -35,9 +35,6 @@ const Orders = () => {
   const [isLoading, setisLoading] = useState(false);
   const providerOrders = useSelector((state: any) => state.user.providerOrders);
   const userData = useSelector((state: any) => state.user.userData);
-
-  const orders = [0, 1, 2, 3];
-
   useEffect(() => {
     const initGetOrders = async () => {
       setisLoading(true);
@@ -50,6 +47,8 @@ const Orders = () => {
     };
     initGetOrders();
   }, [dispatch]);
+
+  
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>

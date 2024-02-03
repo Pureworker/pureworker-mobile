@@ -1,5 +1,5 @@
-import { Image, TouchableOpacity, View } from 'react-native';
-import { perHeight, perWidth } from '../../utils/position/sizes';
+import {Image, TouchableOpacity, View} from 'react-native';
+import {perHeight, perWidth} from '../../utils/position/sizes';
 import React from 'react';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -69,9 +69,13 @@ const ClosetoYou3 = ({item, index, navigation}: any) => {
         <View style={[tw``, {marginLeft: perWidth(12)}]}>
           <View style={[tw``, {}]}>
             <Textcomp
-              text={`${item?.user?.firstName} ${item?.user?.lastName?.charAt(
-                0,
-              )}.`}
+              text={
+                item?.user?.businessName
+                  ? item?.user?.businessName
+                  : `${item?.user?.firstName} ${item?.user?.lastName?.charAt(
+                      0,
+                    )}.`
+              }
               size={12}
               lineHeight={14}
               color={colors.primary}
