@@ -1,22 +1,19 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, Image, Platform } from 'react-native';
-import { DrawerContentScrollView } from '@react-navigation/drawer';
+import React, {useState} from 'react';
+import {View, TouchableOpacity, Image, Platform} from 'react-native';
+import {DrawerContentScrollView} from '@react-navigation/drawer';
 import tw from 'twrnc';
 // import {useStoreActions, useStoreState} from 'easy-peasy';
-import { SIZES, perHeight, perWidth } from '../utils/position/sizes';
+import {SIZES, perHeight, perWidth} from '../utils/position/sizes';
 import images from '../constants/images';
 import Textcomp from '../components/Textcomp';
-import { useDispatch, useSelector } from 'react-redux';
-import { addUserData, logout } from '../store/reducer/mainSlice';
-import { launchImageLibrary } from 'react-native-image-picker';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigation } from '../constants/navigation';
+import {useDispatch, useSelector} from 'react-redux';
+import {addUserData, logout} from '../store/reducer/mainSlice';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigation} from '../constants/navigation';
 import Modal from 'react-native-modal/dist/modal';
 import colors from '../constants/colors';
-import {
-  getUser, updateUserData,
-  uploadAssetsDOCorIMG
-} from '../utils/api/func';
+import {getUser, updateUserData, uploadAssetsDOCorIMG} from '../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
@@ -88,6 +85,16 @@ const DrawerContent = () => {
       }
     });
   };
+  const openLibraryfordp2 = () => {
+    launchCamera(options, async (resp: any) => {
+      if (resp?.assets?.length > 0) {
+        console.log('resp', resp?.assets[0]);
+        setPhotoUri(resp?.assets[0].uri);
+
+       await uploadImgorDoc(resp?.assets[0]);
+      }
+    });
+  };
   const initGetUsers = async () => {
     const res: any = await getUser('');
     console.log('drawerdata', res?.data?.user);
@@ -99,7 +106,7 @@ const DrawerContent = () => {
   console.log(userData?.profilePic);
   const initUpdate = async (param: any) => {
     setloading(true);
-    const res:any = await updateUserData(param);
+    const res: any = await updateUserData(param);
     // console.log('expected-res',res?.data);
     if ([200, 201].includes(res?.status)) {
       // await initGetData();
@@ -168,7 +175,7 @@ const DrawerContent = () => {
             <TouchableOpacity
               style={[tw`rounded-full`, {width: 50, height: 50}]}
               onPress={() => {
-                openLibraryfordp();
+                openLibraryfordp2();
                 // if (
                 //   userType.userType === BUSINESS ||
                 //   userType.userType === FREELANCER

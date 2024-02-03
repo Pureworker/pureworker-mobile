@@ -11,6 +11,7 @@ import {
   cancelOrder,
   completedOrder,
   getProviderOrders,
+  onMYOrder,
   startOrder,
   updateStatusOrder,
 } from '../utils/api/func';
@@ -183,6 +184,37 @@ const Orderscomponent2 = ({item, index, status}: any) => {
     setisLoading(false);
   };
 
+  const handleOnMyWay = async () => {
+    setisLoading(true);
+    if (item?._id) {
+      const res = await onMYOrder(item?._id);
+      if (res?.status === 200 || res?.status === 201) {
+        await initGetOrders();
+        Alert.alert('Order Now in transist.');
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+      setisLoading(false);
+    } else {
+      Snackbar.show({
+        text: 'Please fill all fields',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      setisLoading(false);
+    }
+    setisLoading(false);
+  };
   const handleStart = async () => {
     setisLoading(true);
     if (item?._id) {
@@ -275,6 +307,17 @@ const Orderscomponent2 = ({item, index, status}: any) => {
                 <View style={[tw``, {}]}>
                   <Textcomp
                     text={'ACCEPTED'}
+                    size={14}
+                    lineHeight={16}
+                    color={'#29D31A'}
+                    fontFamily={'Inter-Bold'}
+                  />
+                </View>
+              )}
+              {status === 'TRACK' && (
+                <View style={[tw``, {}]}>
+                  <Textcomp
+                    text={'IN TRANSIT'}
                     size={14}
                     lineHeight={16}
                     color={'#29D31A'}
@@ -449,6 +492,53 @@ const Orderscomponent2 = ({item, index, status}: any) => {
           </View>
         )}
         {status === 'ACCEPTED' && (
+          <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
+            <TouchableOpacity
+              onPress={() => {
+                handleOnMyWay();
+              }}
+              style={[
+                tw`bg-[${colors.primary}] items-center justify-center`,
+                {
+                  width: perWidth(90),
+                  height:
+                    Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
+                  borderRadius: 7,
+                },
+              ]}>
+              <Textcomp
+                text={'On My way'}
+                size={12}
+                lineHeight={14}
+                color={colors.black}
+                fontFamily={'Inter-SemiBold'}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setscheduledDeliveryDate(true);
+              }}
+              style={[
+                tw`bg-[${colors.primary}] items-center justify-center`,
+                {
+                  width: perWidth(90),
+                  height:
+                    Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
+                  borderRadius: 7,
+                  marginLeft: perWidth(46),
+                },
+              ]}>
+              <Textcomp
+                text={'Reschedule'}
+                size={12}
+                lineHeight={14}
+                color={colors.black}
+                fontFamily={'Inter-SemiBold'}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
+        {status === 'TRACK' && (
           <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
             <TouchableOpacity
               onPress={() => {

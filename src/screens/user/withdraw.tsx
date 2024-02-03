@@ -40,14 +40,13 @@ const validationSchema = Yup.object().shape({
     .required('Please enter account number.')
     .min(10)
     .max(10),
-  accountName: Yup.string().required('Account name is required.'),
+  // accountName: Yup.string().required('Account name is required.'),
   amount: Yup.number()
     .required('Please enter the amount.')
     .min(1, 'Amount must be greater than 0.'),
 });
 const Withdraw = () => {
   const navigation = useNavigation<StackNavigation>();
-  // const dispatch = useDispatch();
   const banks = useSelector((state: any) => state.user.banks);
   const [bankList, setBankList] = useState([]);
   const [isLoading, setisLoading] = useState(false);
@@ -59,7 +58,7 @@ const Withdraw = () => {
       try {
         const res: any = await getBanks('');
         if (res?.data?.data) {
-          const list = res?.data?.data.map((item: { name: any; code: any; }) => ({
+          const list = res?.data?.data.map((item: {name: any; code: any}) => ({
             label: item?.name,
             value: item?.code,
           }));
@@ -79,8 +78,8 @@ const Withdraw = () => {
     const res: any = await getUser('');
     setisLoading(false);
   };
-  const [ setaccountNumber] = useState('');
-  const [accountName, setaccountName]:any = useState('');
+  const [accountNumber, setaccountNumber] = useState('');
+  const [accountName, setaccountName]: any = useState('');
 
   const handleWithdraw = async values => {
     setisLoading(true);
@@ -91,7 +90,7 @@ const Withdraw = () => {
       narration: 'Withdrawal',
     };
     try {
-      const res:any = await withdraw(param);
+      const res: any = await withdraw(param);
       console.log('WITHDRAW:', res);
       if ([200, 201].includes(res?.status)) {
         ToastShort(
@@ -182,7 +181,10 @@ const Withdraw = () => {
                 amount: 0,
               }}
               validationSchema={validationSchema}
-              onSubmit={values => handleWithdraw(values)}>
+              onSubmit={values => {
+                console.log('values');
+                handleWithdraw(values);
+              }}>
               {({handleSubmit, errors, touched}) => (
                 <View style={{marginHorizontal: 20, marginTop: 50}}>
                   <Field name="bank">
@@ -246,7 +248,7 @@ const Withdraw = () => {
                     )}
                   </Field>
                   <Field name="accountNumber">
-                    {({field, form}:any) => (
+                    {({field, form}: any) => (
                       <>
                         <TextWrapper
                           children="Account Number"
@@ -308,7 +310,7 @@ const Withdraw = () => {
                     )}
                   </Field>
                   <Field name="accountName">
-                    {({field, form}:any) => (
+                    {({field, form}: any) => (
                       <>
                         <TextWrapper
                           children="Account Name"
@@ -343,7 +345,7 @@ const Withdraw = () => {
                     )}
                   </Field>
                   <Field name="amount">
-                    {({field, form}:any) => (
+                    {({field, form}: any) => (
                       <>
                         <TextWrapper
                           children="Amount"
@@ -384,10 +386,13 @@ const Withdraw = () => {
 
                   {!isLoading ? (
                     <Button
-                      onClick={handleSubmit}
+                      onClick={() => {
+                        // console.log(errors);
+                        handleSubmit();
+                      }}
                       style={{
                         marginHorizontal: 40,
-                        marginTop: 140,
+                        marginTop: 120,
                         backgroundColor: colors.lightBlack,
                       }}
                       textStyle={{color: colors.primary}}

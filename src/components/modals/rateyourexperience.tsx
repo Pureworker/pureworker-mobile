@@ -331,6 +331,7 @@ export default function RateyourExperience({
                 onChangeText={text => {
                   setcomment(text);
                 }}
+                placeholder="Satisfied with the job? Share your review"
               />
             </View>
             <TouchableOpacity
