@@ -39,3 +39,32 @@ export function metersToKilometers(meters) {
   const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
   return `${roundedKilometers} km`;
 }
+
+export function timeAgo(lastOnline) {
+  const currentTime = new Date();
+  const lastOnlineTime = new Date(lastOnline);
+  const timeDifference = currentTime - lastOnlineTime;
+
+  // Convert the time difference to minutes
+  const minutes = Math.floor(timeDifference / (1000 * 60));
+
+  if (minutes < 60) {
+    return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
+  } else {
+    // Convert the time difference to hours
+    const hours = Math.floor(minutes / 60);
+
+    if (hours < 24) {
+      return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+    } else {
+      // Convert the time difference to days
+      const days = Math.floor(hours / 24);
+      return `${days} day${days !== 1 ? 's' : ''} ago`;
+    }
+  }
+}
+
+// Example usage:
+const lastOnlineTimestamp = '2024-02-03T01:31:07.957Z';
+const result = timeAgo(lastOnlineTimestamp);
+console.log(result);

@@ -424,8 +424,8 @@ export const cancelOrder = async (param: any, data: any) => {
   }
 };
 
-export const completedOrder = async (param: any) => {
-  console.log('completedOrder func started', param);
+export const completedOrder = async (param: any, data:any) => {
+  console.log('completedOrder func started', param, data);
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   try {
     const response = await axios({
@@ -434,6 +434,7 @@ export const completedOrder = async (param: any) => {
       headers: {
         Authorization: `Bearer ${AuthToken}`,
       },
+      data: data
     });
 
     if (response.status === 201) {

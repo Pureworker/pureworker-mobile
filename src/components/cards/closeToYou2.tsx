@@ -11,9 +11,13 @@ import {Rating} from 'react-native-ratings';
 import {useMakeFavoriteProductMutation} from '../../store/slice/api';
 import Snackbar from 'react-native-snackbar';
 import Review from '../Review';
+import FastImage from 'react-native-fast-image';
+import { metersToKilometers } from '../../utils/utils';
 
-const CloseToYouCard2 = ({item, index}: any) => {
+const CloseToYouCard2 = ({item, index, navigation}: any) => {
   const [makeFavoriteProduct] = useMakeFavoriteProductMutation();
+
+  console.log('close----', item);
 
   const handleFavoriteProduct = async (
     serviceId: number,
@@ -58,7 +62,7 @@ const CloseToYouCard2 = ({item, index}: any) => {
       ]}>
       <View style={tw`flex flex-row `}>
         <View style={[tw``, {width: perWidth(50), height: perWidth(50)}]}>
-          <Image
+          {/* <Image
             resizeMode="cover"
             style={{
               width: perWidth(50),
@@ -66,6 +70,24 @@ const CloseToYouCard2 = ({item, index}: any) => {
               borderRadius: perWidth(50) / 2,
             }}
             source={{uri: item?.profilePicture}}
+          /> */}
+          <FastImage
+            style={[
+              tw``,
+              {
+                width: perWidth(50),
+                height: perWidth(50),
+                borderRadius: perWidth(50) / 2,
+              },
+            ]}
+            source={{
+              uri:
+                item?.profilePicture ||
+                'https://res.cloudinary.com/dr0pef3mn/image/upload/v1694275934/Assets/1694275933654-Ellipse%2014.png.png',
+              headers: {Authorization: 'someAuthToken'},
+              priority: FastImage.priority.normal,
+            }}
+            resizeMode={FastImage.resizeMode.cover}
           />
           <View
             style={[
@@ -78,7 +100,7 @@ const CloseToYouCard2 = ({item, index}: any) => {
           <View style={[tw`flex flex-row justify-between`, {}]}>
             <View style={[tw``, {}]}>
               <Textcomp
-                text={item?.fullNameFirst + ' ' + item?.fullNameSecond}
+                text={`${item?.services?.[0]?.name}`}
                 size={14}
                 lineHeight={16}
                 color={colors.white}
@@ -114,7 +136,11 @@ const CloseToYouCard2 = ({item, index}: any) => {
       <View>
         <View style={[tw``, {width: perWidth(105), marginTop: perWidth(4)}]}>
           <Textcomp
-            text={'Steven W.s'}
+            text={
+              item?.businessName
+                ? `${item?.businessName}`
+                : `${item?.firstName} ${item?.lastName?.charAt(0)}.`
+            }
             size={12}
             lineHeight={14}
             color={colors.white}
@@ -144,7 +170,7 @@ const CloseToYouCard2 = ({item, index}: any) => {
           <View
             style={[tw`ml-1`, {width: perWidth(80), marginTop: perWidth(1)}]}>
             <Textcomp
-              text={'2Km away'}
+            text={`${metersToKilometers(item?.distance)}`}
               size={12}
               lineHeight={14}
               color={colors.primary}
@@ -171,7 +197,7 @@ const CloseToYouCard2 = ({item, index}: any) => {
             readonly={true}
             startingValue={2}
           /> */}
-          <Review value={2} editable={false} />
+           <Review value={1} editable={false} />
         </View>
       </View>
     </View>

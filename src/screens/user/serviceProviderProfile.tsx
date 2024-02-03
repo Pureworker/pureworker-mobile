@@ -25,21 +25,32 @@ import {
   useGetSingleProviderAllServiceQuery,
   useGetSingleProviderServiceQuery,
 } from '../../store/slice/api';
-import {getProviderAllReview, getProviderDataAll} from '../../utils/api/func';
 import {
+  bookMarkServiceProvide,
+  getProviderAllReview,
+  getProviderDataAll,
+  getUser,
+} from '../../utils/api/func';
+import {
+  addUserData,
   addprovidersReviews,
   setserviceProviderData,
 } from '../../store/reducer/mainSlice';
+import {ToastShort, timeAgo} from '../../utils/utils';
+import socket from '../../utils/socket';
 
 const ServiceProviderProfile = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [activeSection, setActiveSection] = useState('About');
   const [imageModal, setimageModal] = useState(false);
+  const [selectedImage, setselectedImage] = useState('');
   const [isLoading, setisLoading] = useState(false);
+  const userData = useSelector((state: any) => state.user.userData);
 
   const [saved, setsaved] = useState(false);
   const route: any = useRoute();
+  console.log('ps-data:', route.params);
   const profileData = route.params?.item;
   const serviceName = route.params?.serviceName;
   const id = route.params?.id;
@@ -79,30 +90,21 @@ const ServiceProviderProfile = () => {
     getSingleProviderService?.ServicePotfolio?.length > 1
       ? JSON.parse(getSingleProviderService?.ServicePotfolio[1]?.potfolioImages)
       : [];
-  // const thirdPotfolio = getSingleProviderService?.ServicePotfolio?.length > 2 ? JSON.parse(getSingleProviderService?.ServicePotfolio[2]?.potfolioImages) : []
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   const initProviderRevie = async () => {
-  //     setisLoading(true);
-  //     const res: any = await getProviderAllReview(profileData?._id);
-  //     console.log('pppppppp', res?.data);
-  //     if (res?.status === 201 || res?.status === 200) {
-  //       dispatch(addprovidersReviews(res?.data?.data));
-  //     }
-  //     setisLoading(false);
-  //     // setloading(false);
-  //   };
-  //   initProviderRevie();
-  // }, [dispatch, navigation, profileData?._id]);
-
   useEffect(() => {
     const initProvider = async () => {
       setisLoading(true);
+      if (
+        !profileData?.portfolio?.provider ||
+        !profileData?.portfolio?.service
+      ) {
+        ToastShort('Invalid Provider Id');
+        return;
+      }
       const res: any = await getProviderDataAll({
         providerID: profileData?.portfolio?.provider,
         serviceID: profileData?.portfolio?.service,
       });
-      console.log('PROOOOOVVVIIIDERRR', res?.data?.['0']);
+      console.log('PROOOOOVVVIIIDERRR', res, res?.data?.['0']);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(setserviceProviderData(res?.data?.['0']));
       }
@@ -118,6 +120,54 @@ const ServiceProviderProfile = () => {
     const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
     return daysAgo;
   }
+
+  const handleBookmark = async () => {
+    try {
+      const data = {
+        service: id,
+        serviceProvider: profileData?._id || serviceProviderData?._id,
+      };
+      const res: any = await bookMarkServiceProvide(data);
+      if (res?.status === 200 || res?.status === 201) {
+        ToastShort('Service Provider bookmarked!.');
+        setsaved(!saved);
+      } else {
+        ToastShort(
+          `${
+            res?.error?.message
+              ? res?.error?.message
+              : res?.error?.data?.message
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured'
+          }`,
+        );
+      }
+    } catch (error) {
+    } finally {
+      const initGetUsers = async () => {
+        const res: any = await getUser('');
+        // console.log('dd', res?.data?.user);
+        if (res?.status === 201 || res?.status === 200) {
+          dispatch(addUserData(res?.data?.user));
+        }
+      };
+      initGetUsers();
+    }
+  };
+
+  const [savedProviders, setsavedProviders] = useState([]);
+  useEffect(() => {
+    const query = userData?.bookmarks?.filter(
+      (item: {service: any}) => item?.service === id,
+    );
+    setsavedProviders(query);
+  }, [id, userData?.bookmarks]);
+
+  const ch = savedProviders?.filter(
+    (d: {service: any}) => d?.serviceProvider === profileData?._id,
+  );
+
+  // console.log('userData:', userData);
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -191,7 +241,16 @@ const ServiceProviderProfile = () => {
             <TouchableOpacity
               style={tw`bg-white p-1.5 rounded-full items-center justify-center`}
               onPress={() => {
-                setsaved(!saved);
+                if (
+                  // userData?._id === serviceProviderData?._id ||
+                  userData?._id === profileData?._id
+                ) {
+                  ToastShort(
+                    'Service providers cannot Boommark with themselves!.',
+                  );
+                } else {
+                  handleBookmark();
+                }
               }}>
               <Image
                 resizeMode="contain"
@@ -200,13 +259,29 @@ const ServiceProviderProfile = () => {
                   height: 20,
                   tintColor: saved ? '#C0392B' : 'black',
                 }}
-                source={saved ? images.saved : images.save}
+                source={ch?.length > 0 ? images.saved : images.save}
               />
             </TouchableOpacity>
           </View>
           <View style={tw`mt-auto pb-4 ml-auto mr-4`}>
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={() => {
+                socket.connect();
+
+                if (
+                  // userData?._id === serviceProviderData?._id ||
+                  userData?._id === profileData?._id
+                ) {
+                  ToastShort('Service providers cannot chat with themselves!.');
+                } else {
+                  navigation.navigate('Inbox', {
+                    id: profileData?._id || profileData?._id,
+                    name: profileData?.businessName
+                      ? profileData?.businessName
+                      : `${profileData.firstName} ${profileData?.lastName}`,
+                  });
+                }
+              }}
               style={tw`bg-white p-1.5 rounded-lg items-center justify-center`}>
               <Image
                 source={images.chat}
@@ -227,7 +302,11 @@ const ServiceProviderProfile = () => {
         <View style={tw``}>
           <View style={tw`mx-auto pt-2`}>
             <Textcomp
-              text={`${profileData?.firstName} ${profileData?.lastName}`}
+              text={
+                profileData?.businessName
+                  ? `${profileData?.businessName}`
+                  : `${profileData?.firstName} ${profileData?.lastName}`
+              }
               size={20}
               lineHeight={24}
               color={'#000413'}
@@ -353,7 +432,10 @@ const ServiceProviderProfile = () => {
                   </View>
                   <View style={[tw` `, {marginTop: perHeight(5)}]}>
                     <Textcomp
-                      text={`${serviceProviderData?.address}`}
+                      text={`${
+                        serviceProviderData?.address ||
+                        serviceProviderData?.state
+                      }`}
                       size={12}
                       lineHeight={15}
                       color={'#FFFFFF'}
@@ -395,7 +477,7 @@ const ServiceProviderProfile = () => {
                   </View>
                 </View>
               </View>
-              <View
+              {/* <View
                 style={[
                   tw`border-b border-[#FFF] flex flex-row items-center pt-4 mx-2`,
                   {paddingVertical: perHeight(11)},
@@ -427,7 +509,7 @@ const ServiceProviderProfile = () => {
                     />
                   </View>
                 </View>
-              </View>
+              </View> */}
               <View
                 style={[
                   tw`border-b border-[#FFF] flex flex-row items-center pt-4 mx-2`,
@@ -453,7 +535,11 @@ const ServiceProviderProfile = () => {
                   <View style={[tw` `, {marginTop: perHeight(5)}]}>
                     <Textcomp
                       // text={'Abuja, Nigeria'}
-                      text={profileData?.user?.lastOnline}
+                      text={
+                        serviceProviderData?.lastOnline
+                          ? timeAgo(serviceProviderData?.lastOnline)
+                          : profileData?.user?.lastOnline
+                      }
                       size={12}
                       lineHeight={15}
                       color={'#FFFFFF'}
@@ -522,22 +608,21 @@ const ServiceProviderProfile = () => {
                 <>
                   <View
                     style={[
-                      tw`border-b border-[#FFF] flex flex-row items-center pt-4 mx-2`,
+                      tw`border-b border-[#FFF] items-center pt-4 mx-2`,
                       {paddingVertical: perHeight(11)},
                     ]}>
-                    <View style={[tw` `, {marginLeft: perWidth(25)}]}>
-                      <View style={tw` `}>
-                        <Textcomp
-                          text={'PortFolio'}
-                          size={14}
-                          lineHeight={15}
-                          color={'#FFFFFF80'}
-                          fontFamily={'Inter-Bold'}
-                        />
-                      </View>
+                    <View style={tw`w-full `}>
+                      <Textcomp
+                        text={'PortFolio'}
+                        size={14}
+                        lineHeight={15}
+                        color={'#FFFFFF80'}
+                        fontFamily={'Inter-Bold'}
+                      />
                     </View>
 
                     {profileData?.portfolio?.portfolio?.map((item, index) => {
+                      console.log('PORRRRRRRRRTTTTT:', item, item?.images);
                       return (
                         <View style={tw`w-full mt-3`} key={index}>
                           <View style={tw` `}>
@@ -552,10 +637,14 @@ const ServiceProviderProfile = () => {
                           <FlatList
                             scrollEnabled={false}
                             data={item?.images}
-                            renderItem={({image, index}) => {
+                            renderItem={item => {
                               return (
                                 <FastImage
-                                  onTouchStart={() => setimageModal(true)}
+                                  key={index}
+                                  onTouchStart={() => {
+                                    setimageModal(true);
+                                    setselectedImage(item.item);
+                                  }}
                                   style={[
                                     tw`mr-2`,
                                     {
@@ -565,7 +654,7 @@ const ServiceProviderProfile = () => {
                                     },
                                   ]}
                                   source={{
-                                    uri: image,
+                                    uri: item.item,
                                     headers: {Authorization: 'someAuthToken'},
                                     priority: FastImage.priority.normal,
                                   }}
@@ -1066,7 +1155,23 @@ const ServiceProviderProfile = () => {
       </View>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('OrderDetails', {data: profileData, service: id});
+          if (
+            // userData?._id === serviceProviderData?._id ||
+            userData?._id === profileData?._id
+          ) {
+            console.log(
+              userData?._id,
+              profileData?._id,
+              serviceProviderData?._id,
+            );
+
+            ToastShort('Service Providers cannot hire thermselves!.');
+          } else {
+            navigation.navigate('OrderDetails', {
+              data: profileData,
+              service: id,
+            });
+          }
         }}
         style={[
           tw`bg-[#FFF] absolute bottom-[11%] right-[5%] rounded-full items-center justify-center`,
@@ -1096,24 +1201,24 @@ const ServiceProviderProfile = () => {
         onSwipeComplete={() => setimageModal(false)}>
         <View
           style={[
-            tw`bg-white mt-auto mb-[25%] items-center  rounded-lg `,
+            tw` mt-auto mb-[25%] items-center  rounded-lg `,
             {width: perWidth(310), height: perHeight(315), borderRadius: 15},
           ]}>
           <FastImage
             style={[
               tw``,
               {
-                width: perWidth(310),
+                width: perWidth(300),
                 height: perHeight(315),
                 borderRadius: 15,
               },
             ]}
             source={{
-              uri: 'https://res.cloudinary.com/dr0pef3mn/image/upload/v1691626246/Assets/1691626245707-Frame%2071.png.png',
+              uri: selectedImage,
               headers: {Authorization: 'someAuthToken'},
               priority: FastImage.priority.normal,
             }}
-            resizeMode={FastImage.resizeMode.cover}
+            resizeMode={FastImage.resizeMode.contain}
           />
         </View>
       </Modal>

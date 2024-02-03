@@ -84,6 +84,14 @@ const Home = ({navigation}: any) => {
           // ToastLong('Virtual Interview is compulsory');
         }
       }
+      const emitProviderOnlineStatus = () => {
+        // Emit an event to the backend indicating that the customer is still connected
+        socket.connect();
+        socket.emit('provideronlinestatus', {
+          customerId: userData?.id || userData?._id,
+        });
+      };
+      emitProviderOnlineStatus();
       // setloading(false);
     };
     // const initGetCategory = async () => {
@@ -141,22 +149,48 @@ const Home = ({navigation}: any) => {
   const formStage = useSelector((state: any) => state.user.formStage);
   const supportUser = useSelector((store: any) => store.user.supportUser);
   console.log('stage', formStage);
+  // useEffect(() => {
+  //   const emitProviderOnlineStatus = () => {
+  //     // Emit an event to the backend indicating that the customer is still connected
+  //     socket.emit('provideronlinestatus', {
+  //       customerId: userData?.id || userData?._id,
+  //     });
+  //   };
+  //   // Initial emit and set up the interval to emit every 30 seconds
+  //   emitProviderOnlineStatus();
+  //   console.log('Emiited oline');
+  //   const intervalId = setInterval(emitProviderOnlineStatus, 30000);
+  //   return () => {
+  //     // Clean up the interval when the component is unmounted
+  //     clearInterval(intervalId);
+  //     socket.disconnect();
+  //   };
+  // }, []);
   useEffect(() => {
     const emitProviderOnlineStatus = () => {
       // Emit an event to the backend indicating that the customer is still connected
+      socket.connect();
       socket.emit('provideronlinestatus', {
         customerId: userData?.id || userData?._id,
       });
     };
-    // Initial emit and set up the interval to emit every 30 seconds
+
+    // Initial emit
     emitProviderOnlineStatus();
-    const intervalId = setInterval(emitProviderOnlineStatus, 30000);
+    console.error('Emitted online');
+
+    // Set up the interval to emit every 30 seconds
+    const intervalId = setInterval(emitProviderOnlineStatus, 120000);
+
     return () => {
       // Clean up the interval when the component is unmounted
       clearInterval(intervalId);
+
+      // Disconnect the socket when the component is unmounted
       socket.disconnect();
     };
-  }, []);
+  }, []); // Include relevant dependencies in the array
+
   const welcomeModal = useSelector((state: any) => state.user.welcomeModal);
 
   console.log(userData?.businessName);

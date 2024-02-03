@@ -117,10 +117,10 @@ const Orderscomponent2 = ({item, index, status}: any) => {
     setisLoading(false);
   };
 
-  const handleComplete = async () => {
+  const handleComplete = async (val: any) => {
     setisLoading(true);
     if (item?._id) {
-      const res = await completedOrder(item?._id);
+      const res = await completedOrder(item?._id, {...val});
       if (res?.status === 200 || res?.status === 201) {
         // navigation.navigate('PaymentConfirmed');
         await initGetOrders();
@@ -493,7 +493,9 @@ const Orderscomponent2 = ({item, index, status}: any) => {
           <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
             <TouchableOpacity
               onPress={() => {
-                handleComplete();
+                // handleComplete();
+                //bring up ratings Modal
+                setrateYourExperience(true);
               }}
               style={[
                 tw`bg-[${colors.primary}] items-center justify-center`,
@@ -605,6 +607,9 @@ const Orderscomponent2 = ({item, index, status}: any) => {
           setrateYourExperience(text);
         }}
         visible={rateYourExperience}
+        OnFinish={(values: any) => {
+          handleComplete(values);
+        }}
       />
     </>
   );
