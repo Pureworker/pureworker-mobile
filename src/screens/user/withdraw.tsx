@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Text,
   StatusBar,
+  Alert,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -93,6 +94,7 @@ const Withdraw = () => {
       const res: any = await withdraw(param);
       console.log('WITHDRAW:', res);
       if ([200, 201].includes(res?.status)) {
+        Alert.alert('Your withdrawal request is being processed!!! 🚀.');
         ToastShort(
           res?.data?.data ||
             'Your withdrawal request is being processed!!! 🚀.',
