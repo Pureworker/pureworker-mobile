@@ -128,7 +128,7 @@ export default function Inbox({navigation, route}: any) {
                     resizeMode="cover"
                     source={images.back}
                     style={[
-                      tw`w-full ml-4`,
+                      tw`w-full ml-0`,
                       {
                         height: 25,
                         width: 25,
