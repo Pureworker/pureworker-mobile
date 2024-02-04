@@ -1,4 +1,5 @@
 import Toast from 'react-native-simple-toast';
+import {DateTime} from 'luxon';
 
 export const ToastShort = (msg: string) => {
   Toast.show(msg, Toast.SHORT);
@@ -17,19 +18,31 @@ export const isValidPhoneNumber = (phoneNumber: any) => {
   return phoneRegex.test(phoneNumber);
 };
 
-export function formatDateHistory(inputDateStr) {
-  const inputDate = new Date(inputDateStr);
+// export function formatDateHistory(inputDateStr) {
+//   const inputDate = new Date(inputDateStr);
 
-  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const dayOfWeek = daysOfWeek[inputDate.getUTCDay()];
+//   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+//   const dayOfWeek = daysOfWeek[inputDate.getUTCDay()];
 
-  const dayOfMonth = inputDate.getUTCDate();
+//   const dayOfMonth = inputDate.getUTCDate();
 
-  // Adjust the hours and minutes to your desired format
-  const hours = inputDate.getUTCHours();
-  const minutes = inputDate.getUTCMinutes();
+//   // Adjust the hours and minutes to your desired format
+//   const hours = inputDate.getUTCHours();
+//   const minutes = inputDate.getUTCMinutes();
 
-  // Format the output string
+//   // Format the output string
+//   const formattedDate = `${dayOfWeek} ${dayOfMonth}, ${hours}:${minutes}`;
+
+//   return formattedDate;
+// }
+export function formatDateHistory(inputDateStr: any) {
+  const inputDate = DateTime.fromISO(inputDateStr, {zone: 'Africa/Lagos'});
+
+  const dayOfWeek = inputDate.toFormat('ccc');
+  const dayOfMonth = inputDate.toFormat('d');
+  const hours = inputDate.toFormat('H');
+  const minutes = inputDate.toFormat('mm');
+
   const formattedDate = `${dayOfWeek} ${dayOfMonth}, ${hours}:${minutes}`;
 
   return formattedDate;

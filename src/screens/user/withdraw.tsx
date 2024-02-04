@@ -44,7 +44,7 @@ const validationSchema = Yup.object().shape({
   // accountName: Yup.string().required('Account name is required.'),
   amount: Yup.number()
     .required('Please enter the amount.')
-    .min(1, 'Amount must be greater than 0.'),
+    .min(500, 'min Amount is NGN 500.'),
 });
 const Withdraw = () => {
   const navigation = useNavigation<StackNavigation>();

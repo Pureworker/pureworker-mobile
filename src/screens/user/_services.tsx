@@ -76,7 +76,7 @@ const _Services = ({route}: any) => {
     };
     initGetUsers();
   }, [dispatch, id]);
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState(_providersByCateegory);
   const [loading, setLoading] = useState(false);
   const debounce = (func, delay) => {
     let timeoutId;
@@ -89,22 +89,41 @@ const _Services = ({route}: any) => {
       }, delay);
     };
   };
-  const handleSearch = async query => {
+  // const handleSearch = async query => {
+  //   try {
+  //     // Optional: You can add loading state here if needed
+  //     setLoading(true);
+
+  //     // Use the useGetAllServicesQuery hook to fetch data based on the search input
+  //     const {data, error} = await getSearchProvider(query || searchInput);
+  //     console.log('resulk:', data);
+  //     if (error) {
+  //       console.error('Error fetching search results:', error);
+  //       // Handle error, show an error message, or take appropriate action
+  //     } else {
+  //       // Update the search results state with the fetched data
+
+  //       setSearchResults(data?.providers ?? []);
+  //     }
+  //   } catch (error) {
+  //     console.error('An unexpected error occurred during search:', error);
+  //     // Handle unexpected error, show an error message, or take appropriate action
+  //   } finally {
+  //     // Optional: You can update the loading state here if needed
+  //     setLoading(false);
+  //   }
+  // };
+  const handleSearch = query => {
     try {
-      // Optional: You can add loading state here if needed
       setLoading(true);
+      // Filter the data based on the search input
+      const filteredData =
+        _providersByCateegory?.filter((provider: {fullName: string}) =>
+          provider.fullName.toLowerCase().includes(query.toLowerCase()),
+        ) || [];
 
-      // Use the useGetAllServicesQuery hook to fetch data based on the search input
-      const {data, error} = await getSearchProvider(query || searchInput);
-      console.log('resulk:', data);
-      if (error) {
-        console.error('Error fetching search results:', error);
-        // Handle error, show an error message, or take appropriate action
-      } else {
-        // Update the search results state with the fetched data
-
-        setSearchResults(data?.providers ?? []);
-      }
+      console.log('RESSSSS:', filteredData);
+      setSearchResults(filteredData);
     } catch (error) {
       console.error('An unexpected error occurred during search:', error);
       // Handle unexpected error, show an error message, or take appropriate action
@@ -113,6 +132,7 @@ const _Services = ({route}: any) => {
       setLoading(false);
     }
   };
+
   const debouncedHandleSearch = debounce(handleSearch, 500);
 
   return (
@@ -211,7 +231,7 @@ const _Services = ({route}: any) => {
           </View>
         )}
         <View style={tw`mt-4 mb-3`}>
-          {searchResults.length < 0 && (
+          {_providersByCateegory.length > 0 && (
             <View style={tw`flex flex-row`}>
               <TouchableOpacity
                 onPress={() => {
@@ -249,35 +269,53 @@ const _Services = ({route}: any) => {
               </TouchableOpacity>
             </View>
           )}
-          {searchResults.length < 1 && (
-            <>
-              {!isLoading && (
-                <>
-                  {_providersByCateegory.length < 1 ? (
-                    <View
-                      style={[
-                        tw`bg-[#D9D9D9] flex flex-col rounded  mt-3 mx-2`,
-                        {height: perHeight(80), alignItems: 'center'},
-                      ]}>
-                      <View style={tw`my-auto pl-8`}>
-                        <Textcomp
-                          text={'Service Provider Not Found...'}
-                          size={17}
-                          lineHeight={17}
-                          color={'black'}
-                          fontFamily={'Inter-SemiBold'}
-                        />
-                      </View>
+          {searchResults?.length < 1 && (
+            <View
+              style={[
+                tw`bg-[#D9D9D9] flex flex-col rounded  mt-3 mx-2`,
+                {height: perHeight(80), alignItems: 'center'},
+              ]}>
+              <View style={tw`my-auto pl-8`}>
+                <Textcomp
+                  text={'Service Provider Not Found...'}
+                  size={17}
+                  lineHeight={17}
+                  color={'black'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </View>
+            </View>
+          )}
+          <>
+            {!isLoading && (
+              <>
+                {_providersByCateegory.length < 1 ? (
+                  <View
+                    style={[
+                      tw`bg-[#D9D9D9] flex flex-col rounded  mt-3 mx-2`,
+                      {height: perHeight(80), alignItems: 'center'},
+                    ]}>
+                    <View style={tw`my-auto pl-8`}>
+                      <Textcomp
+                        text={'Service Provider Not Found...'}
+                        size={17}
+                        lineHeight={17}
+                        color={'black'}
+                        fontFamily={'Inter-SemiBold'}
+                      />
                     </View>
-                  ) : (
-                    <>
-                      {activeSection === 'All' && (
-                        <>
-                          <View style={[tw`items-center`, {flex: 1}]}>
+                  </View>
+                ) : (
+                  <>
+                    {activeSection === 'All' && (
+                      <>
+                        <View style={[tw`items-center`, {flex: 1}]}>
+                          {searchResults.length < 1 && (
                             <ScrollView scrollEnabled={false} horizontal>
                               <FlatList
                                 style={{flex: 1}}
-                                data={_providersByCateegory}
+                                // data={_providersByCateegory}
+                                data={searchResults}
                                 scrollEnabled={false}
                                 horizontal={false}
                                 renderItem={(item: any, index: any) => {
@@ -305,19 +343,26 @@ const _Services = ({route}: any) => {
                                 contentContainerStyle={{paddingBottom: 20}}
                               />
                             </ScrollView>
-                          </View>
-                        </>
-                      )}
-                      {activeSection === 'Saved' && (
-                        <View style={[tw`items-center`, {flex: 1}]}>
-                          <ScrollView scrollEnabled={false} horizontal>
-                            <FlatList
-                              data={savedProviders}
-                              horizontal={false}
-                              scrollEnabled={false}
-                              renderItem={(item: any, index: any) => {
-                                return (
-                                  <TouchableOpacity>
+                          )}
+                          {searchResults.length > 0 && (
+                            <ScrollView scrollEnabled={false} horizontal>
+                              <FlatList
+                                style={{flex: 1}}
+                                // data={_providersByCateegory}
+                                data={
+                                  searchResults.length > 0
+                                    ? searchResults
+                                    : _providersByCateegory
+                                }
+                                scrollEnabled={false}
+                                horizontal={false}
+                                renderItem={(item: any, index: any) => {
+                                  console.log(':id', item?.item?._id);
+                                  const ch = savedProviders?.filter(
+                                    (d: {service: any}) =>
+                                      d?.serviceProvider === item?.item?._id,
+                                  );
+                                  return (
                                     <ServiceCard2
                                       key={index}
                                       navigation={navigation}
@@ -325,27 +370,61 @@ const _Services = ({route}: any) => {
                                       index={item.index}
                                       id={id}
                                       serviceName={passedService}
-                                      save={true}
+                                      save={ch?.length > 0 ? true : false}
+                                      savedProviders={savedProviders}
                                     />
-                                  </TouchableOpacity>
-                                );
-                              }}
-                              keyExtractor={item => item?._id}
-                              ListFooterComponent={() => (
-                                <View style={tw`h-20`} />
-                              )}
-                              contentContainerStyle={{paddingBottom: 20}}
-                            />
-                          </ScrollView>
+                                  );
+                                }}
+                                keyExtractor={item => item?.id}
+                                ListFooterComponent={() => (
+                                  <View style={tw`h-20`} />
+                                )}
+                                contentContainerStyle={{paddingBottom: 20}}
+                              />
+                            </ScrollView>
+                          )}
                         </View>
-                      )}
-                    </>
-                  )}
-                </>
-              )}
-            </>
-          )}
-          {searchResults.length > 0 && searchInput && (
+                      </>
+                    )}
+                    {activeSection === 'Saved' && (
+                      <View style={[tw`items-center`, {flex: 1}]}>
+                        <ScrollView scrollEnabled={false} horizontal>
+                          <FlatList
+                            data={savedProviders}
+                            horizontal={false}
+                            scrollEnabled={false}
+                            renderItem={(item: any, index: any) => {
+                              return (
+                                <TouchableOpacity>
+                                  <ServiceCard2
+                                    key={index}
+                                    navigation={navigation}
+                                    item={item.item}
+                                    index={item.index}
+                                    id={id}
+                                    serviceName={passedService}
+                                    save={true}
+                                  />
+                                </TouchableOpacity>
+                              );
+                            }}
+                            keyExtractor={item => item?._id}
+                            ListFooterComponent={() => (
+                              <View style={tw`h-20`} />
+                            )}
+                            contentContainerStyle={{paddingBottom: 20}}
+                          />
+                        </ScrollView>
+                      </View>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+          </>
+          {/* )} */}
+          {/* {searchResults.length > 0 && searchInput && ( */}
+          {false && (
             <>
               <>
                 <View style={tw`mt-4 mx-[5%]`}>
@@ -357,7 +436,9 @@ const _Services = ({route}: any) => {
                     fontFamily={'Inter'}
                   />
                 </View>
-                <ScrollView horizontal contentContainerStyle={{width: SIZES.width}}>
+                <ScrollView
+                  horizontal
+                  contentContainerStyle={{width: SIZES.width}}>
                   <FlatList
                     data={searchResults}
                     keyExtractor={item => item.id?.toString()}

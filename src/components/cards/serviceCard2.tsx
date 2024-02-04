@@ -9,8 +9,14 @@ import colors from '../../constants/colors';
 
 import Review from '../Review';
 import FastImage from 'react-native-fast-image';
-import {bookMarkServiceProvide} from '../../utils/api/func';
+import {
+  bookMarkServiceProvide,
+  deletebookMarkServiceProvide,
+  getUser,
+} from '../../utils/api/func';
 import {ToastShort} from '../../utils/utils';
+import {useDispatch} from 'react-redux';
+import {addUserData} from '../../store/reducer/mainSlice';
 
 const ServiceCard2 = ({
   item,
@@ -19,6 +25,7 @@ const ServiceCard2 = ({
   id,
   serviceName,
   save,
+  savedProviders,
 }: any) => {
   const [saved, setsaved] = useState(save);
   // const portfolio = item?.portfolio?.filter(_item => _item?.service === id);
@@ -34,24 +41,104 @@ const ServiceCard2 = ({
     return `${roundedKilometers}km`;
   }
 
+  // const handleBookmark = async () => {
+  //   const res: any = await bookMarkServiceProvide({
+  //     service: id,
+  //     serviceProvider: item?._id,
+  //   });
+  //   if (res?.status === 200 || res?.status === 201) {
+  //     ToastShort('Service Provider bookmarked!.');
+  //     setsaved(!saved);
+  //   } else {
+  //     ToastShort(
+  //       `${
+  //         res?.error?.message
+  //           ? res?.error?.message
+  //           : res?.error?.data?.message
+  //           ? res?.error?.data?.message
+  //           : 'Oops!, an error occured'
+  //       }`,
+  //     );
+  //   }
+  // };
+
   const handleBookmark = async () => {
-    const res: any = await bookMarkServiceProvide({
-      service: id,
-      serviceProvider: item?._id,
-    });
-    if (res?.status === 200 || res?.status === 201) {
-      ToastShort('Service Provider bookmarked!.');
-      setsaved(!saved);
-    } else {
-      ToastShort(
-        `${
-          res?.error?.message
-            ? res?.error?.message
-            : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured'
-        }`,
+    try {
+      const res: any = await bookMarkServiceProvide({
+        service: id,
+        serviceProvider: item?._id,
+      });
+      // const res: any = await bookMarkServiceProvide(data);
+      if (res?.status === 200 || res?.status === 201) {
+        ToastShort('Service Provider bookmarked!.');
+        setsaved(!saved);
+      } else {
+        ToastShort(
+          `${
+            res?.error?.message
+              ? res?.error?.message
+              : res?.error?.data?.message
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured'
+          }`,
+        );
+      }
+    } catch (error) {
+    } finally {
+      const initGetUsers = async () => {
+        const res: any = await getUser('');
+        if (res?.status === 201 || res?.status === 200) {
+          dispatch(addUserData(res?.data?.user));
+
+          const query = res?.data?.user?.bookmarks?.filter(
+            (item: {service: any}) => item?.service === id,
+          );
+          // setsavedProviders(query);
+        }
+      };
+      initGetUsers();
+    }
+  };
+  const dispatch = useDispatch();
+  const ch = savedProviders?.filter(
+    (d: {service: any}) => d?.serviceProvider === item?._id,
+  );
+  const handleRemoveBookmark = async () => {
+    try {
+      const ch = savedProviders?.filter(
+        (d: {service: any}) => d?.serviceProvider === item?._id,
       );
+      const __id = ch?.[0]?._id;
+      const res: any = await deletebookMarkServiceProvide(__id);
+      if (res?.status === 200 || res?.status === 201 || res?.status === 204) {
+        ToastShort('Unboomarked!.');
+        setsaved(!saved);
+      } else {
+        console.log(res?.status);
+
+        ToastShort(
+          `${
+            res?.error?.message
+              ? res?.error?.message
+              : res?.error?.data?.message
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured'
+          }`,
+        );
+      }
+    } catch (error) {
+    } finally {
+      const initGetUsers = async () => {
+        const res: any = await getUser('');
+        if (res?.status === 201 || res?.status === 200) {
+          dispatch(addUserData(res?.data?.user));
+          const query = res?.data?.user?.bookmarks?.filter(
+            (item: {service: any}) => item?.service === id,
+          );
+          // setsavedProviders(query);
+        }
+      };
+      initGetUsers();
     }
   };
   return (
@@ -126,7 +213,11 @@ const ServiceCard2 = ({
             </View>
             <TouchableOpacity
               onPress={() => {
-                handleBookmark();
+                if (ch?.length > 0) {
+                  handleRemoveBookmark();
+                } else {
+                  handleBookmark();
+                }
               }}>
               <Image
                 resizeMode="contain"

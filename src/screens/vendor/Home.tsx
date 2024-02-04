@@ -137,7 +137,30 @@ const Home = ({navigation}: any) => {
       setisLoading(false);
     };
     initGetOrders();
-  }, [providerOrders, userData?._id]);
+    // }, [providerOrders, userData?._id]);
+  }, []);
+
+  useEffect(() => {
+    const initGetOrders = async () => {
+      setisLoading(true);
+      const res: any = await getProviderOrders(userData?._id);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addproviderOrders(res?.data?.data));
+        let inProgress = providerOrders?.filter(
+          (item: {status: string}) => item?.status === 'INPROGRESS',
+        );
+        let pending = providerOrders?.filter(
+          (item: {status: string}) => item?.status === 'PENDING',
+        );
+        setOinProgress(inProgress);
+        setOinPending(pending);
+      }
+      setisLoading(false);
+    };
+    initGetOrders();
+    const intervalId = setInterval(initGetOrders, 2.5 * 60 * 1000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     let inProgress = providerOrders?.filter(

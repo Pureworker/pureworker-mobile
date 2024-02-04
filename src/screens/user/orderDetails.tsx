@@ -358,7 +358,7 @@ const OrderDetails = () => {
               ]}>
               <View style={tw``}>
                 <Textcomp
-                  text={'N'}
+                  text={'₦'}
                   size={17}
                   lineHeight={17}
                   color={'#000413'}

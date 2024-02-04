@@ -22,7 +22,7 @@ export const getUser = async (param: any) => {
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
     if (response.status === 201) {
-      console.log('response data:', response?.data);
+      console.log('response data:');
     }
     console.log(response?.data);
     return response;
@@ -434,6 +434,33 @@ export const cancelOrder = async (param: any, data: any) => {
       },
     });
 
+    if (response.status === 201) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const declineOrder = async (param: any) => {
+  console.log('declineOrder func started', param);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${API_BASE_URL}/ordern/decline-order/${param}`,
+      // data: data,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
     if (response.status === 201) {
       console.log('response data:', response?.data);
     }
@@ -1373,6 +1400,31 @@ export const bookMarkServiceProvide = async (param: any) => {
       url: `${API_BASE_URL}/user/bookmark`,
       headers: {Authorization: `Bearer ${AuthToken}`},
       data: param,
+    });
+    if (response.status === 201 || response.status === 200) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const deletebookMarkServiceProvide = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('deletebookMarkServiceProvide func started', param);
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${API_BASE_URL}/user/delete-bookmark/${param}`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+      // data: param,
     });
     if (response.status === 201 || response.status === 200) {
       console.log('response data:', response?.data);

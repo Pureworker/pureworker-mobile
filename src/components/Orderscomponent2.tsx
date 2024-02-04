@@ -10,6 +10,7 @@ import {
   acceptOrder,
   cancelOrder,
   completedOrder,
+  declineOrder,
   getProviderOrders,
   onMYOrder,
   startOrder,
@@ -93,6 +94,37 @@ const Orderscomponent2 = ({item, index, status}: any) => {
         // navigation.navigate('PaymentConfirmed');
         await initGetOrders();
         Alert.alert('successful');
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+      setisLoading(false);
+    } else {
+      Snackbar.show({
+        text: 'Please fill all fields',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      setisLoading(false);
+    }
+    setisLoading(false);
+  };
+  const handleDecline = async () => {
+    setisLoading(true);
+    if (item?._id) {
+      const res = await declineOrder(item?._id);
+      if (res?.status === 200 || res?.status === 201) {
+        await initGetOrders();
+        Alert.alert('Order Declined');
       } else {
         Snackbar.show({
           text: res?.error?.message
@@ -469,7 +501,7 @@ const Orderscomponent2 = ({item, index, status}: any) => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                handleCancel();
+                handleDecline();
               }}
               style={[
                 tw`bg-[${colors.primary}] items-center justify-center`,

@@ -213,7 +213,7 @@ const DrawerContent = () => {
                   style={tw`mt-3 flex flex-row`}>
                   <View style={tw``}>
                     <Textcomp
-                      text={'0.0 '}
+                      text={'0.0'}
                       size={14}
                       color={'#FFCD1E'}
                       style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '500'}]}
@@ -326,7 +326,7 @@ const DrawerContent = () => {
           )}
           <View style={[tw`mt-4 ml-3`, {}]}>
             <Textcomp
-              text={`Version: ${Platform.OS === 'ios' ? '1.1.1.8' : '1.1.1.8'}`}
+              text={`Version: ${Platform.OS === 'ios' ? '1.0.0.1' : '1.0.0.1'}`}
               size={14}
               color={'#000000'}
               style={[

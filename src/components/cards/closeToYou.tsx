@@ -4,18 +4,13 @@ import React from 'react';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../Textcomp';
-import StarRating from 'react-native-star-rating-widget';
 import colors from '../../constants/colors';
 import Review from '../Review';
 import FastImage from 'react-native-fast-image';
 import {metersToKilometers} from '../../utils/utils';
 
 const ClosetoYou = ({item, index, navigation}: any) => {
-  const price = 0;
-
   console.log('on-order', item);
-
-  // JSON.parse(item?.price || '');
   return (
     <TouchableOpacity
       onPress={() =>
@@ -77,7 +72,13 @@ const ClosetoYou = ({item, index, navigation}: any) => {
         <View style={[tw``, {marginLeft: perWidth(12)}]}>
           <View style={[tw``, {}]}>
             <Textcomp
-              text={`${item?.firstName} ${item?.lastName?.charAt(0)}.`}
+              text={
+                item?.businessName
+                  ? `${item?.businessName}`
+                  : item?.firstName
+                  ? `${item?.firstName} ${item?.lastName?.charAt(0)}.`
+                  : `${item?.fullName}`
+              }
               size={12}
               lineHeight={14}
               color={colors.primary}
@@ -97,7 +98,8 @@ const ClosetoYou = ({item, index, navigation}: any) => {
           <View style={[tw``, {width: perWidth(105), marginTop: perWidth(4)}]}>
             <Textcomp
               // text={`$${price[0]?.priceMax ? price[0]?.priceMax : 0}/hr`}
-              text={'₦ 000'}
+              // text={'₦000'}
+              text={''}
               size={12}
               lineHeight={14}
               color={colors.white}
@@ -137,7 +139,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
         </View>
 
         <View style={[tw``, {width: perWidth(80), marginTop: perWidth(1)}]}>
-          <Review value={1} editable={false} />
+          <Review value={Number(item?.averageRating) || 0} editable={false} />
         </View>
         {/*  <StarRating
           style={{width: perWidth(40)}}

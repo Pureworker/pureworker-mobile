@@ -302,8 +302,13 @@ const Home = () => {
               {marginLeft: perWidth(18), marginTop: perHeight(28)},
             ]}>
             <Textcomp
+              // text={`Welcome ${
+              //   userData?.firstName !== undefined ? userData?.firstName : ''
+              // },`}
               text={`Welcome ${
-                userData?.firstName !== undefined ? userData?.firstName : ''
+                userData?.firstName !== undefined
+                  ? userData?.firstName?.trimEnd()
+                  : ''
               },`}
               size={17}
               lineHeight={17}

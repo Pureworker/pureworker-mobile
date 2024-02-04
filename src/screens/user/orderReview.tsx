@@ -56,6 +56,7 @@ const OrderReview = ({route}: any) => {
       serviceProvider: _data.serviceProvider,
       totalPrice: Number(_data?.totalPrice) + Number(_data?.totalPrice * 0.075),
       amount: Number(_data.totalPrice),
+      vatAmount: Number(_data?.totalPrice * 0.075),
       description: _data.description,
       scheduledDeliveryDate: _data.date,
       location: `${_data.location}`.toLowerCase(),
@@ -82,15 +83,15 @@ const OrderReview = ({route}: any) => {
             textColor: '#fff',
             backgroundColor: '#88087B',
           });
-          ToastShort(
-            `${
-              res?.error?.message
-                ? res?.error?.message
-                : res?.error?.data?.message
-                ? res?.error?.data?.message
-                : 'Oops!, an error occured'
-            }`,
-          );
+          // ToastShort(
+          //   `${
+          //     res?.error?.message
+          //       ? res?.error?.message
+          //       : res?.error?.data?.message
+          //       ? res?.error?.data?.message
+          //       : 'Oops!, an error occured'
+          //   }`,
+          // );
         }
         setisLoading(false);
       } else {

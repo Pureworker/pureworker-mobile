@@ -27,6 +27,7 @@ import {
 } from '../../store/slice/api';
 import {
   bookMarkServiceProvide,
+  deletebookMarkServiceProvide,
   getProviderAllReview,
   getProviderDataAll,
   getUser,
@@ -152,9 +153,52 @@ const ServiceProviderProfile = () => {
     } finally {
       const initGetUsers = async () => {
         const res: any = await getUser('');
-        // console.log('dd', res?.data?.user);
         if (res?.status === 201 || res?.status === 200) {
           dispatch(addUserData(res?.data?.user));
+
+          const query = res?.data?.user?.bookmarks?.filter(
+            (item: {service: any}) => item?.service === id,
+          );
+          setsavedProviders(query);
+        }
+      };
+      initGetUsers();
+    }
+  };
+
+  const handleRemoveBookmark = async () => {
+    try {
+      const ch = savedProviders?.filter(
+        (d: {service: any}) => d?.serviceProvider === profileData?._id,
+      );
+      const __id = ch?.[0]?._id;
+      const res: any = await deletebookMarkServiceProvide(__id);
+      if (res?.status === 200 || res?.status === 201 || res?.status === 204 ) {
+        ToastShort('Unboomarked!.');
+        setsaved(!saved);
+      } else {
+        console.log(res?.status);
+
+        ToastShort(
+          `${
+            res?.error?.message
+              ? res?.error?.message
+              : res?.error?.data?.message
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured'
+          }`,
+        );
+      }
+    } catch (error) {
+    } finally {
+      const initGetUsers = async () => {
+        const res: any = await getUser('');
+        if (res?.status === 201 || res?.status === 200) {
+          dispatch(addUserData(res?.data?.user));
+          const query = res?.data?.user?.bookmarks?.filter(
+            (item: {service: any}) => item?.service === id,
+          );
+          setsavedProviders(query);
         }
       };
       initGetUsers();
@@ -172,6 +216,13 @@ const ServiceProviderProfile = () => {
   const ch = savedProviders?.filter(
     (d: {service: any}) => d?.serviceProvider === profileData?._id,
   );
+
+  useEffect(() => {
+    const ch = savedProviders?.filter(
+      (d: {service: any}) => d?.serviceProvider === profileData?._id,
+    );
+  }, [profileData?._id, savedProviders]);
+
   // console.log('userData:', userData);
 
   return (
@@ -254,7 +305,11 @@ const ServiceProviderProfile = () => {
                     'Service providers cannot Boommark with themselves!.',
                   );
                 } else {
-                  handleBookmark();
+                  if (ch?.length > 0) {
+                    handleRemoveBookmark();
+                  } else {
+                    handleBookmark();
+                  }
                 }
               }}>
               <Image
@@ -262,7 +317,7 @@ const ServiceProviderProfile = () => {
                 style={{
                   width: 20,
                   height: 20,
-                  tintColor: saved ? '#C0392B' : 'black',
+                  tintColor: ch?.length > 0 ? '#C0392B' : 'black',
                 }}
                 source={ch?.length > 0 ? images.saved : images.save}
               />
