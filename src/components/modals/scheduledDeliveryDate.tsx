@@ -51,6 +51,10 @@ export default function ScheduledDeliveryDate({
   console.log(days);
   function formatDate(inputDateStr: string | number | Date) {
     const inputDate = new Date(inputDateStr);
+
+    // Adjust the date and time to GMT+1
+    inputDate.setUTCHours(inputDate.getUTCHours() + 1);
+
     const day = inputDate.getUTCDate();
     const month = inputDate.getUTCMonth() + 1; // Months are zero-based
     const year = inputDate.getUTCFullYear();
@@ -59,6 +63,7 @@ export default function ScheduledDeliveryDate({
 
     return formattedDate;
   }
+
   const [change, setchange] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [schdeuleIsoDate, setschdeuleIsoDate] = useState('');
