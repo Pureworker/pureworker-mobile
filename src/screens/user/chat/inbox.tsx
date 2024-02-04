@@ -10,7 +10,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {Fragment, useCallback, useEffect, useState} from 'react';
 import tw from 'twrnc';
 // import {, FONTS, icons, images, } from '../../constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -34,7 +34,7 @@ export default function Inbox({navigation, route}: any) {
   const agentData = useSelector((state: any) => state.user.userData);
   const chatData = useSelector((store: any) => store.user.chatData);
   // console.log('datahere', agentData?._id);
-  console.log('passed:',route.params);
+  console.log('passed:', route.params);
   useEffect(() => {
     socket.connect();
     console.log('-idid', socket.id);
@@ -103,6 +103,30 @@ export default function Inbox({navigation, route}: any) {
   }
   const groupedMessages = groupMessagesByDate(chatData);
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    const handleFetch = async () => {
+      // setloading(true);
+      // console.log(agentData?._id);
+      const res: any = await getMessagesbyuser(`${userId}`);
+      // const res: any = await getMessagesbyuser();
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addchatData(res?.data.messages));
+        // console.log('here_', res?.data.messages);
+      }
+      // setloading(false);
+    };
+
+    try {
+      handleFetch();
+    } catch (error) {
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
+
   return (
     <SafeAreaView style={[tw`h-full bg-[#EBEBEB]  w-full`, styles.container]}>
       <KeyboardAvoidingView
@@ -147,7 +171,9 @@ export default function Inbox({navigation, route}: any) {
                     lineHeight: 14,
                   },
                 ]}>
-                {(userName === 'Support Support' || userName === 'Support')  ? 'Support' : userName}
+                {userName === 'Support Support' || userName === 'Support'
+                  ? 'Support'
+                  : userName}
               </Text>
               <View style={tw`flex flex-row`}>
                 <Text
@@ -160,7 +186,9 @@ export default function Inbox({navigation, route}: any) {
                       lineHeight: 14,
                     },
                   ]}>
-                  {(userName === 'Support Support' || userName === 'Support') ? '' : 'Xd ago'}
+                  {userName === 'Support Support' || userName === 'Support'
+                    ? ''
+                    : 'Xd ago'}
                 </Text>
               </View>
             </View>
@@ -189,7 +217,8 @@ export default function Inbox({navigation, route}: any) {
               })}
               <View style={tw`h-20`} />
             </ScrollView> */}
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView
+             showsVerticalScrollIndicator={false}>
               {Object.keys(groupedMessages).map((date, i) => (
                 <View key={date} style={tw`${i === 0 ? 'pt-5' : 'pt-2.5'}`}>
                   <View style={tw`flex flex-row items-center`}>
@@ -237,12 +266,12 @@ export default function Inbox({navigation, route}: any) {
                       );
                     }
                   })}
-                </View> 
+                </View>
               ))}
             </ScrollView>
           </View>
 
-          {(userName === 'Support Support' || userName === 'Support') ? null : (
+          {userName === 'Support Support' || userName === 'Support' ? null : (
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('OrderDetails', {data: agentData});

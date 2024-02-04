@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Platform,
   StatusBar,
   ScrollView,
+  RefreshControl,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -51,6 +52,29 @@ const Index = () => {
     const date = new Date(dateString);
     return new Intl.DateTimeFormat('en-US', options).format(date);
   }
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    const handleFetch = async () => {
+      // setloading(true);
+      setisLoading(true);
+      const res: any = await getChatsbyuser('');
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addchatList(res?.data.chats));
+        console.log(chatList);
+      }
+      setisLoading(false);
+      // setloading(false);
+    };
+
+    try {
+      handleFetch();
+    } catch (error) {
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
+
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
@@ -98,7 +122,10 @@ const Index = () => {
           </View>
         </TouchableOpacity>
       </View>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View style={[tw` w-full pt-5`, {}]}>
           {chatList?.length < 1 ? (
             <View style={[tw`flex-1 items-center`, {}]}>

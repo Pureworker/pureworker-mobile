@@ -34,7 +34,10 @@ import ScheduledDeliveryDate from '../../components/modals/scheduledDeliveryDate
 import colors from '../../constants/colors';
 import {completedOrder, getUserOrders} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
-import { addcustomerOrders, addproviderOrders } from '../../store/reducer/mainSlice';
+import {
+  addcustomerOrders,
+  addproviderOrders,
+} from '../../store/reducer/mainSlice';
 
 const OrderActive = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -81,7 +84,6 @@ const OrderActive = ({route}: any) => {
     // setloading(false);
     setisLoading(false);
   };
-
 
   const handleComplete = async (val: any) => {
     setisLoading(true);
@@ -756,7 +758,7 @@ const OrderActive = ({route}: any) => {
                   <TouchableOpacity
                     onPress={() => {
                       setrateYourExperience(true);
-                    }} // Use the handleFinish function for the "Done" button
+                    }}
                     style={[
                       {
                         width: perWidth(316),
@@ -770,7 +772,7 @@ const OrderActive = ({route}: any) => {
                       tw`mx-auto mt-[25%]`,
                     ]}>
                     <Textcomp
-                      text={'Complete'}
+                      text={'Mark job as completed'}
                       size={14}
                       lineHeight={17}
                       color={'#FFC727'}

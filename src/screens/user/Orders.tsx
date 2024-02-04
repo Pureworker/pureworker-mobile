@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   StatusBar,
   ScrollView,
   FlatList,
+  RefreshControl,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Header from '../../components/Header';
@@ -132,7 +133,30 @@ const Orders = () => {
   //   };
   //   initGetOrders();
   // }, []);
+  const [refreshing, setRefreshing] = useState(false);
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    const initGetOrders = async () => {
+      setisLoading(true);
+      const res: any = await getUserOrders(searchInput);
+      console.log('oooooooo', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addcustomerOrders(res?.data?.data));
+        // Filter orders based on search input
+        // const filtered = res?.data?.data.filter(order =>
+        //   order?.service?.toLowerCase().includes(searchInput.toLowerCase()),
+        // );
+      }
+      setisLoading(false);
+    };
+    try {
+       initGetOrders();
+    } catch (error) {
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
@@ -229,7 +253,11 @@ const Orders = () => {
           </TouchableOpacity>
         </View>
       )}
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        >
         <View style={tw`flex flex-row mt-4`}>
           <TouchableOpacity
             onPress={() => {
