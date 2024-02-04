@@ -21,10 +21,8 @@ import colors from '../../constants/colors';
 const PrivacyPolicy = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
-
   const [deactivateAccount, setdeactivateAccount] = useState(false);
   const [deleteAccount, setdeleteAccount] = useState(false);
-
   const data = [
     {
       header: 'Overview of the Pureworker App',
@@ -87,7 +85,6 @@ const PrivacyPolicy = () => {
       text: 'These Terms of Service constitute the entire agreement between you and Pureworker with respect to the use of the Pureworker app and its content, materials, and services and supersede all prior or contemporaneous communications and proposals,',
     },
   ];
-
   const data_customer = [
     {
       title: 'Information We Collect:',

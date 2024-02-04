@@ -316,7 +316,7 @@ const Orderscomponent2 = ({item, index, status}: any) => {
               {status === 'INPROGRESS' && (
                 <View style={[tw``, {}]}>
                   <Textcomp
-                    text={'INPROGRESS'}
+                    text={'IN PROGRESS'}
                     size={14}
                     lineHeight={16}
                     color={colors.primary}

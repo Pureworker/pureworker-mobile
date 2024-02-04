@@ -58,7 +58,7 @@ const PaymentConfirmed = () => {
             justifyContent: 'space-between',
             marginHorizontal: 20,
           }}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
             <Image
               source={images.cross}
               style={{height: 25, width: 25, tintColor: 'black'}}

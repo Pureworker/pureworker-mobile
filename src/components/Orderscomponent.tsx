@@ -17,6 +17,7 @@ import Location from '../assets/svg/Location';
 import DisputeIcon from '../assets/svg/Dispute';
 import Cross from '../assets/svg/Cross';
 import Snackbar from 'react-native-snackbar';
+import {ToastShort} from '../utils/utils';
 
 const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
   const [saved, setsaved] = useState(false);
@@ -227,6 +228,17 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                     />
                   </View>
                 )}
+                {status === 'TRACK' && (
+                  <View style={[tw``, {}]}>
+                    <Textcomp
+                      text={'IN TRANSIT'}
+                      size={14}
+                      lineHeight={16}
+                      color={'#EB001B'}
+                      fontFamily={'Inter-Bold'}
+                    />
+                  </View>
+                )}
               </View>
             </View>
           </View>
@@ -253,7 +265,9 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
           <View style={tw`flex flex-row mt-auto justify-between`}>
             <View>
               <Textcomp
-                text={`${formatDateToCustomFormat(item?.createdAt)}`}
+                text={`${formatDateToCustomFormat(
+                  item?.scheduledDeliveryDate,
+                )}`}
                 size={14}
                 lineHeight={16}
                 color={colors.white}
@@ -310,7 +324,15 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
               />
 
               <TouchableOpacity
-                onPress={() => setmodalSection('Cancel')}
+                onPress={() => {
+                  // setmodalSection('Cancel')
+                  setmodalSection('Cancel2');
+                  // if (status === 'CANCELLED') {
+                  //   ToastShort('This Order has already')
+                  // }else{
+
+                  // }
+                }}
                 style={[
                   tw`flex mt-10 flex-row`,
                   {marginHorizontal: perWidth(30)},
@@ -471,6 +493,101 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                 />
               </TouchableOpacity>
 
+              <View
+                style={[
+                  tw`bg-black mt-auto mb-4`,
+                  {height: 2, width: WIDTH_WINDOW * 0.95},
+                ]}
+              />
+            </View>
+          </View>
+        )}
+        {modalSection === 'Cancel2' && (
+          <View style={tw` h-full w-full bg-black bg-opacity-5`}>
+            <TouchableOpacity
+              onPress={() => setInfoModal(false)}
+              style={tw`flex-1`}
+            />
+            <View style={tw`h-[30%]  mt-auto bg-[#D9D9D9]`}>
+              <TouchableOpacity
+                onPress={() => {
+                  setInfoModal(false);
+                }}
+                style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
+              />
+              {/* <View style={[tw`mt-6`, {marginLeft: perWidth(36)}]}>
+                <Textcomp
+                  text={'Cancel Order'}
+                  size={16}
+                  lineHeight={18.75}
+                  color={'#000000'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </View> */}
+
+              <View
+                style={[
+                  tw``,
+                  {marginLeft: perWidth(36), marginTop: perHeight(20)},
+                ]}>
+                <Textcomp
+                  text={'Are you sure you want to cancel this order ?'}
+                  size={16}
+                  lineHeight={18.75}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+
+              <TouchableOpacity
+                onPress={async () => {
+                  await handleCancel();
+                }}
+                style={[
+                  {
+                    width: perWidth(316),
+                    height: perHeight(40),
+                    borderRadius: 13,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: colors.darkPurple,
+                    marginTop: 40,
+                  },
+                  tw`mx-auto`,
+                ]}>
+                <Textcomp
+                  text={'Proceed'}
+                  size={14}
+                  lineHeight={17}
+                  color={'#FFC727'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={async () => {
+                  // await handleCancel();
+                  setmodalSection('All');
+                }}
+                style={[
+                  {
+                    width: perWidth(316),
+                    height: perHeight(40),
+                    borderRadius: 13,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: '#FF0000',
+                    marginTop: 20,
+                  },
+                  tw`mx-auto`,
+                ]}>
+                <Textcomp
+                  text={'Cancel'}
+                  size={14}
+                  lineHeight={17}
+                  color={'white'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </TouchableOpacity>
               <View
                 style={[
                   tw`bg-black mt-auto mb-4`,

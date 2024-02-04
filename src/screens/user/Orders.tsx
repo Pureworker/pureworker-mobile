@@ -234,7 +234,9 @@ const Orders = () => {
               />
             </View>
             <TouchableOpacity
-              onPress={() => {navigation.navigate('Services');}}
+              onPress={() => {
+                navigation.navigate('Services');
+              }}
               style={[tw`mx-auto `, {marginTop: perHeight(29)}]}>
               <Textcomp
                 text={'Explore services'}
@@ -256,16 +258,24 @@ const Orders = () => {
                     horizontal={false}
                     scrollEnabled={false}
                     renderItem={(item: any, index: any) => {
-                      return (
-                        <Orderscomponent
-                          key={index}
-                          navigation={navigation}
-                          item={item.item}
-                          index={item.index}
-                          status={item.item?.status}
-                          // index % 3 === 0 ? 'Pending' : 'Inprogress'
-                        />
-                      );
+                      if (
+                        item?.item?.status === 'CANCELLED' ||
+                        item?.item?.status === 'COMPLETED' ||
+                        item?.item?.status === 'DECLINED'
+                      ) {
+                        return null;
+                      } else {
+                        return (
+                          <Orderscomponent
+                            key={index}
+                            navigation={navigation}
+                            item={item.item}
+                            index={item.index}
+                            status={item.item?.status}
+                            // index % 3 === 0 ? 'Pending' : 'Inprogress'
+                          />
+                        );
+                      }
                     }}
                     keyExtractor={item => item?.id}
                     ListFooterComponent={<View style={tw`h-20`} />}
@@ -278,21 +288,28 @@ const Orders = () => {
                 <ScrollView horizontal>
                   <FlatList
                     scrollEnabled={false}
-                    data={customerOrders?.filter(
-                      item => item?.status === 'COMPLETED',
-                    )}
+                    data={customerOrders}
                     horizontal={false}
                     renderItem={(item: any, index: any) => {
-                      return (
-                        <Orderscomponent
-                          key={index}
-                          navigation={navigation}
-                          item={item.item}
-                          index={item.index}
-                          status={item.item?.status}
-                          // status={index % 3 === 0 ? 'Pending' : 'Completed'}
-                        />
-                      );
+                      console.log('texter---', item?.item);
+                      if (
+                        item?.item?.status === 'CANCELLED' ||
+                        item?.item?.status === 'COMPLETED' ||
+                        item?.item?.status === 'DECLINED'
+                      ) {
+                        return (
+                          <Orderscomponent
+                            key={index}
+                            navigation={navigation}
+                            item={item.item}
+                            index={item.index}
+                            status={item.item?.status}
+                            // status={index % 3 === 0 ? 'Pending' : 'Completed'}
+                          />
+                        );
+                      } else {
+                        return null;
+                      }
                     }}
                     keyExtractor={item => item?.id}
                     ListFooterComponent={<View style={tw`h-20`} />}
@@ -367,7 +384,7 @@ const Orders = () => {
         }}
         visible={scheduledDeliveryDate}
       />
-      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
   );
 };

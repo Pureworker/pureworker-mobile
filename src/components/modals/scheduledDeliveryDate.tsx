@@ -1,4 +1,11 @@
-import {View, TouchableOpacity, Image, TextInput, Platform} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  Platform,
+  Alert,
+} from 'react-native';
 import React, {useState} from 'react';
 import tw from 'twrnc';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
@@ -7,6 +14,12 @@ import images from '../../constants/images';
 import colors from '../../constants/colors';
 import {WIDTH_WINDOW} from '../../constants/generalStyles';
 import Modal from 'react-native-modal/dist/modal';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {DateTime} from 'luxon';
+import {getUserOrders, rescheduleOrder} from '../../utils/api/func';
+import Snackbar from 'react-native-snackbar';
+import {useDispatch} from 'react-redux';
+import {addcustomerOrders} from '../../store/reducer/mainSlice';
 
 export default function ScheduledDeliveryDate({
   navigation,
@@ -34,11 +47,84 @@ export default function ScheduledDeliveryDate({
 
     return {days, hours, minutes};
   }
-
   const {days, hours, minutes} = getTimeDifference(item?.scheduledDeliveryDate);
-
   console.log(days);
+  function formatDate(inputDateStr: string | number | Date) {
+    const inputDate = new Date(inputDateStr);
+    const day = inputDate.getUTCDate();
+    const month = inputDate.getUTCMonth() + 1; // Months are zero-based
+    const year = inputDate.getUTCFullYear();
 
+    const formattedDate = `${day}/${month < 10 ? '0' : ''}${month}/${year}`;
+
+    return formattedDate;
+  }
+  const [change, setchange] = useState(false);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [schdeuleIsoDate, setschdeuleIsoDate] = useState('');
+  const [displayDate, setdisplayDate] = useState('');
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+  const handleConfirm = (date: any) => {
+    const f = `${date}`;
+    const jsDate = new Date(f);
+    const luxonDateTime = DateTime.fromJSDate(jsDate);
+    const isoString = luxonDateTime.toISO();
+    console.log('ios--', isoString);
+    setschdeuleIsoDate(isoString);
+    setdisplayDate(f);
+    hideDatePicker();
+  };
+  const dispatch = useDispatch();
+  const initGetOrders = async () => {
+    setisLoading(true);
+    const res: any = await getUserOrders('');
+    console.log('oooooooo', res?.data);
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addcustomerOrders(res?.data?.data));
+    }
+    // setloading(false);
+    setisLoading(false);
+  };
+  const [isLoading, setisLoading] = useState(false);
+  const handleUpdate = async () => {
+    setisLoading(true);
+    if (item?._id) {
+      const res = await rescheduleOrder(item?._id, {
+        scheduledDate: schdeuleIsoDate,
+      });
+      if (res?.status === 200 || res?.status === 201) {
+        // navigation.navigate('PaymentConfirmed');
+        await initGetOrders();
+        Alert.alert('Order Date Rescheduled');
+        setDatePickerVisibility(false);
+        func(false);
+        navigation.goBack();
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+      setisLoading(false);
+    } else {
+      Snackbar.show({
+        text: 'Please fill all fields',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      setisLoading(false);
+    }
+    setisLoading(false);
+  };
   return (
     <Modal
       isVisible={visible}
@@ -76,13 +162,19 @@ export default function ScheduledDeliveryDate({
             </View>
             <View style={[tw`px-[7.5%] mt-1`, {}]}>
               <Textcomp
-                text={'Expected delivery 02/08/23'}
+                text={`Expected delivery ${formatDate(
+                  schdeuleIsoDate === ''
+                    ? item?.scheduledDeliveryDate
+                    : schdeuleIsoDate,
+                )}`}
                 size={14}
                 lineHeight={17}
                 color={'#000000'}
                 fontFamily={'Inter-Regular'}
               />
             </View>
+
+            {/* {!change && ( */}
             <View
               style={[
                 tw`mx-[7.5%] bg-[#EBEBEB] flex flex-row justify-between px-6 rounded-full mt-6 py-2.5 items-center`,
@@ -91,7 +183,7 @@ export default function ScheduledDeliveryDate({
               <View style={tw`items-center`}>
                 <View>
                   <Textcomp
-                    text={`${days}`}
+                    text={`${getTimeDifference(schdeuleIsoDate)?.days || days}`}
                     size={14}
                     lineHeight={17}
                     color={'#000000'}
@@ -111,7 +203,9 @@ export default function ScheduledDeliveryDate({
               <View style={tw`items-center`}>
                 <View>
                   <Textcomp
-                    text={`${hours}`}
+                    text={`${
+                      getTimeDifference(schdeuleIsoDate)?.hours || hours
+                    }`}
                     size={14}
                     lineHeight={17}
                     color={'#000000'}
@@ -131,7 +225,9 @@ export default function ScheduledDeliveryDate({
               <View style={tw`items-center`}>
                 <View>
                   <Textcomp
-                    text={`${minutes}`}
+                    text={`${
+                      getTimeDifference(schdeuleIsoDate)?.minutes || minutes
+                    }`}
                     size={14}
                     lineHeight={17}
                     color={'#000000'}
@@ -149,30 +245,69 @@ export default function ScheduledDeliveryDate({
                 </View>
               </View>
             </View>
-            <TouchableOpacity
-              onPress={() => {
-                func(false);
-              }}
-              style={[
-                {
-                  width: perWidth(315),
-                  height: perHeight(40),
-                  borderRadius: 6,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: colors.darkPurple,
-                  marginTop: 50,
-                },
-                tw`mx-auto`,
-              ]}>
-              <Textcomp
-                text={'Change Delivery Date'}
-                size={14}
-                lineHeight={17}
-                color={'#FFC727'}
-                fontFamily={'Inter-Bold'}
-              />
-            </TouchableOpacity>
+            {/* )} */}
+
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="datetime"
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+            />
+
+            {schdeuleIsoDate ? (
+              <TouchableOpacity
+                onPress={() => {
+                  // func(false);
+                  handleUpdate();
+                }}
+                style={[
+                  {
+                    width: perWidth(315),
+                    height: perHeight(40),
+                    borderRadius: 6,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: colors.darkPurple,
+                    marginTop: 50,
+                  },
+                  tw`mx-auto`,
+                ]}>
+                <Textcomp
+                  text={'Save Delivery Date'}
+                  size={14}
+                  lineHeight={17}
+                  color={'#FFC727'}
+                  fontFamily={'Inter-Bold'}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  // func(false);
+                  setchange(true);
+                  setDatePickerVisibility(true);
+                }}
+                style={[
+                  {
+                    width: perWidth(315),
+                    height: perHeight(40),
+                    borderRadius: 6,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: colors.darkPurple,
+                    marginTop: 50,
+                  },
+                  tw`mx-auto`,
+                ]}>
+                <Textcomp
+                  text={'Change Delivery Date'}
+                  size={14}
+                  lineHeight={17}
+                  color={'#FFC727'}
+                  fontFamily={'Inter-Bold'}
+                />
+              </TouchableOpacity>
+            )}
           </View>
           <View
             style={[
