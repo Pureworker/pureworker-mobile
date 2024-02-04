@@ -21,8 +21,8 @@ import {perHeight} from '../../utils/position/sizes';
 import TextInputs from '../../components/TextInput2';
 import CloseToYouCard2 from '../../components/cards/closeToYou2';
 import Orderscomponent2 from '../../components/Orderscomponent2';
-import { addproviderOrders } from '../../store/reducer/mainSlice';
-import { getProviderOrders, getUserOrders } from '../../utils/api/func';
+import {addproviderOrders} from '../../store/reducer/mainSlice';
+import {getProviderOrders, getUserOrders} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 
@@ -46,9 +46,7 @@ const Orders = () => {
       setisLoading(false);
     };
     initGetOrders();
-  }, [dispatch]);
-
-  
+  }, []);
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -214,7 +212,9 @@ const Orders = () => {
               />
             </View>
             <TouchableOpacity
-              onPress={() => {navigation.navigate('Services');}}
+              onPress={() => {
+                navigation.navigate('Services');
+              }}
               style={[tw`mx-auto `, {marginTop: perHeight(29)}]}>
               <Textcomp
                 text={'Explore services'}
@@ -242,7 +242,7 @@ const Orders = () => {
                           navigation={navigation}
                           item={item.item}
                           index={item.index}
-                          status ={item?.item?.status}
+                          status={item?.item?.status}
                           // status={index % 3 === 0 ? 'Pending' : 'Inprogress'}
                         />
                       );
@@ -258,7 +258,9 @@ const Orders = () => {
                 <ScrollView horizontal>
                   <FlatList
                     scrollEnabled={false}
-                    data={providerOrders?.filter((item)=> item?.status === 'COMPLETED')}
+                    data={providerOrders?.filter(
+                      item => item?.status === 'COMPLETED',
+                    )}
                     horizontal={false}
                     renderItem={(item: any, index: any) => {
                       return (
@@ -280,7 +282,7 @@ const Orders = () => {
           </>
         )}
       </ScrollView>
-      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
   );
 };

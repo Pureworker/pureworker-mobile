@@ -104,7 +104,21 @@ const Wallet = () => {
                     fontFamily={'Inter-Bold'}
                   />
                 </View>
-                <TouchableOpacity style={tw``} onPress={() => initGetUsers()}>
+                <TouchableOpacity
+                  style={tw``}
+                  onPress={() => {
+                    const initGetUsers = async () => {
+                      setisLoading(true);
+                      const res: any = await getUser('');
+                      console.log('dddddddd', res);
+                      if (res?.status === 201 || res?.status === 200) {
+                        dispatch(addUserData(res?.data?.user));
+                      }
+                      setisLoading(false);
+                      // setloading(false);
+                    };
+                    initGetUsers();
+                  }}>
                   <Image
                     source={images.refresh}
                     style={{height: 17, width: 17, tintColor: 'black'}}

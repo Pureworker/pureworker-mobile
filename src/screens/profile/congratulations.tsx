@@ -1,32 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {
-  Image,
-  View,
-  ActivityIndicator,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useEffect} from 'react';
+import {View} from 'react-native';
 
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
-import Header from '../../components/Header';
-import images from '../../constants/images';
 import Button from '../../components/Button';
 import TextWrapper from '../../components/TextWrapper';
-import commonStyle from '../../constants/commonStyle';
 import colors from '../../constants/colors';
-import ProfileStepWrapper from '../../components/ProfileStepWrapper';
-import DateTimesPicker from '../../components/DatePicker';
-import {generalStyles} from '../../constants/generalStyles';
-import {
-  useCreateServiceMutation,
-  useLoginMutation,
-} from '../../store/slice/api';
-import Snackbar from 'react-native-snackbar';
+import {useCreateServiceMutation} from '../../store/slice/api';
 import {useDispatch, useSelector} from 'react-redux';
 import tw from 'twrnc';
-import {addUserData, addproviderOrders} from '../../store/reducer/mainSlice';
-import {getProviderOrders, getUser} from '../../utils/api/func';
+import {addUserData} from '../../store/reducer/mainSlice';
+import {getUser} from '../../utils/api/func';
 
 type Route = {
   key: string;

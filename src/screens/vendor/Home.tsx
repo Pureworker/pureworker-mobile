@@ -137,7 +137,7 @@ const Home = ({navigation}: any) => {
       setisLoading(false);
     };
     initGetOrders();
-  }, [dispatch, providerOrders, userData?._id]);
+  }, [providerOrders, userData?._id]);
 
   useEffect(() => {
     let inProgress = providerOrders?.filter(
