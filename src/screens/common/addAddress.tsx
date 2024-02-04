@@ -327,7 +327,7 @@ const AddAddress = ({navigation}: any) => {
         {description && (
           <View style={tw` mt-3 mx-[5%] flex flex-col`}>
             <Text1
-              text={'Selected Address:'}
+              text={'Location:'}
               size={14}
               color={colors.black}
               lineHeight={16}
