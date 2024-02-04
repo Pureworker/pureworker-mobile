@@ -4,8 +4,8 @@ import Svg, {G, Path, Defs, ClipPath} from 'react-native-svg';
 function FundingIcon(props) {
   return (
     <Svg
-      width={52}
-      height={54}
+      width={32}
+      height={34}
       viewBox="0 0 52 54"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

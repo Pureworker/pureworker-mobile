@@ -1,27 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  View, Image,
+  View,
+  Image,
   TouchableOpacity,
   Platform,
   StatusBar,
-  ScrollView
+  ScrollView,
+  Text,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { StackNavigation } from '../../constants/navigation';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
-import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { SIZES, perHeight, perWidth } from '../../utils/position/sizes';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import {
   addTransactions,
   addcategorizedTransdata,
 } from '../../store/reducer/mainSlice';
-import { getTransactions } from '../../utils/api/func';
+import {getTransactions} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
-import { formatDateHistory } from '../../utils/utils';
+import {formatDateHistory} from '../../utils/utils';
+import FundingIcon from '../../assets/svg/FundingIcon';
+import PaymentIcon from '../../assets/svg/PayentIcon';
+import WithdrawalIcon from '../../assets/svg/WithdrawalIcon';
 
 const TransactionHistory = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -286,11 +291,31 @@ const TransactionHistory = () => {
                             }`}>
                             <View
                               style={[tw`flex flex-row items-center  `, {}]}>
-                              <Image
+                              {/* <Image
                                 resizeMode="contain"
                                 source={images.pureWorkerLogo}
                                 style={{width: perWidth(25), aspectRatio: 1}}
-                              />
+                              /> */}
+                              <View style={{}}>
+                                {item?.type === 'funding' ? (
+                                  <FundingIcon />
+                                ) : item?.type === 'payment' ? (
+                                  <PaymentIcon />
+                                ) : item?.type === 'withdrawal' ? (
+                                  <WithdrawalIcon />
+                                ) : item?.type === 'reversal' ? (
+                                  <PaymentIcon />
+                                ) : (
+                                  <Image
+                                    resizeMode="contain"
+                                    source={images.pureWorkerLogo}
+                                    style={{
+                                      width: perWidth(25),
+                                      aspectRatio: 1,
+                                    }}
+                                  />
+                                )}
+                              </View>
                               <View style={tw`flex flex-col ml-4`}>
                                 <View style={[tw``, {marginTop: perHeight(0)}]}>
                                   <Textcomp
@@ -303,7 +328,9 @@ const TransactionHistory = () => {
                                 </View>
                                 <View style={[tw``, {marginTop: perHeight(4)}]}>
                                   <Textcomp
-                                         text={`${formatDateHistory(item.createdAt)}`}
+                                    text={`${formatDateHistory(
+                                      item.createdAt,
+                                    )}`}
                                     size={13}
                                     lineHeight={15}
                                     color={'#00041380'}
@@ -324,10 +351,14 @@ const TransactionHistory = () => {
                               </View>
                               <View style={[tw``, {marginTop: perHeight(4)}]}>
                                 <Textcomp
-                                  text={`${item?.type}`}
+                                  text={`${
+                                    item?.status === undefined
+                                      ? ''
+                                      : item?.status
+                                  }`}
                                   size={13}
                                   lineHeight={15}
-                                  color={'#00041380'}
+                                  color={item?.status ? 'green' : '#00041380'}
                                   fontFamily={'Inter-SemiBold'}
                                 />
                               </View>
@@ -344,7 +375,7 @@ const TransactionHistory = () => {
         </View>
         <View style={tw`h-30`} />
       </ScrollView>
-      <Spinner visible={isLoading} customIndicator={<CustomLoading/>}/>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>
   );
 };

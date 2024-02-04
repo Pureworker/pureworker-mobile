@@ -221,7 +221,18 @@ const FundingHistory = () => {
                                 <PaymentIcon />
                               ) : item?.type === 'withdrawal' ? (
                                 <WithdrawalIcon />
-                              ) : null}
+                              ) : item?.type === 'reversal' ? (
+                                <PaymentIcon />
+                              ) : (
+                                <Image
+                                  resizeMode="contain"
+                                  source={images.pureWorkerLogo}
+                                  style={{
+                                    width: perWidth(25),
+                                    aspectRatio: 1,
+                                  }}
+                                />
+                              )}
                             </View>
 
                             <View style={tw`flex flex-col ml-4`}>
