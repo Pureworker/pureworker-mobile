@@ -26,7 +26,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
 
   const [modalSection, setmodalSection] = useState('All');
 
-  console.log('OrderDetails', item);
+  // console.log('OrderDetails', item);
 
   function formatDateToCustomFormat(dateString) {
     const options = {year: 'numeric', month: 'short', day: 'numeric'};
@@ -36,9 +36,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
     );
     return formattedDate;
   }
-
   const dispatch = useDispatch();
-
   const initGetOrders = async () => {
     setisLoading(true);
     const res: any = await getUserOrders('');
@@ -49,7 +47,6 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
     // setloading(false);
     setisLoading(false);
   };
-
   const handleCancel = async () => {
     setisLoading(true);
     if (item?._id) {

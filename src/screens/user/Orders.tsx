@@ -57,19 +57,82 @@ const Orders = () => {
   useEffect(() => {
     // setorderDelivered(true);
   }, []);
+
+  const [filteredOrders, setFilteredOrders] = useState(customerOrders);
+
   useEffect(() => {
     const initGetOrders = async () => {
       setisLoading(true);
-      const res: any = await getUserOrders('');
+      const res: any = await getUserOrders(searchInput);
       console.log('oooooooo', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addcustomerOrders(res?.data?.data));
+        // Filter orders based on search input
+        // const filtered = res?.data?.data.filter(order =>
+        //   order?.service?.toLowerCase().includes(searchInput.toLowerCase()),
+        // );
       }
-      // setloading(false);
       setisLoading(false);
     };
     initGetOrders();
   }, []);
+  const handleSearch = (query: string) => {
+    try {
+      // Filter the data based on the search input
+      // const filteredData =
+      //   _providersByCateegory?.filter((provider: {fullName: string}) =>
+      //     provider.fullName.toLowerCase().includes(query.toLowerCase()),
+      //   ) || [];
+
+      const filtered =
+        customerOrders.filter(
+          order =>
+            order?.serviceProvider?.firstName
+              .toLowerCase()
+              .includes(query.toLowerCase()) ||
+            order?.serviceProvider?.lastName
+              .toLowerCase()
+              .includes(query.toLowerCase()),
+        ) || [];
+
+      console.log('RESSSSS:', filtered);
+      setFilteredOrders(filtered);
+      // setSearchResults(filtered);
+    } catch (error) {
+      console.error('An unexpected error occurred during search:', error);
+      // Handle unexpected error, show an error message, or take appropriate action
+    } finally {
+      // Optional: You can update the loading state here if needed
+      // setLoading(false);
+    }
+  };
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return function (...args) {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
+  };
+  const debouncedHandleSearch = debounce(handleSearch, 500);
+
+  // useEffect(() => {
+  //   const initGetOrders = async () => {
+  //     setisLoading(true);
+  //     const res: any = await getUserOrders('');
+  //     console.log('oooooooo', res?.data);
+  //     if (res?.status === 201 || res?.status === 200) {
+  //       dispatch(addcustomerOrders(res?.data?.data));
+  //     }
+  //     // setloading(false);
+  //     setisLoading(false);
+  //   };
+  //   initGetOrders();
+  // }, []);
+
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
@@ -129,7 +192,11 @@ const Orders = () => {
               paddingBottom: 5,
             },
           ]}>
-          <TouchableOpacity onPress={() => setsearchModal(false)}>
+          <TouchableOpacity
+            onPress={() => {
+              setFilteredOrders(customerOrders);
+              setsearchModal(false);
+            }}>
             <Image
               source={images.cross}
               style={{height: 20, width: 20, tintColor: 'black'}}
@@ -140,7 +207,11 @@ const Orders = () => {
             style={{marginTop: 10, width: '70%'}}
             labelText={'Search for orders'}
             state={searchInput}
-            setState={setsearchInput}
+            // setState={setsearchInput}
+            setState={text => {
+              setsearchInput(text);
+              debouncedHandleSearch(text);
+            }}
           />
           <TouchableOpacity
             style={{
@@ -252,35 +323,85 @@ const Orders = () => {
           <>
             {activeSection === 'Active' && (
               <View style={[tw`items-center`, {flex: 1}]}>
-                <ScrollView horizontal>
-                  <FlatList
-                    data={customerOrders}
-                    horizontal={false}
-                    scrollEnabled={false}
-                    renderItem={(item: any, index: any) => {
-                      if (
-                        item?.item?.status === 'CANCELLED' ||
-                        item?.item?.status === 'COMPLETED' ||
-                        item?.item?.status === 'DECLINED'
-                      ) {
-                        return null;
-                      } else {
-                        return (
-                          <Orderscomponent
-                            key={index}
-                            navigation={navigation}
-                            item={item.item}
-                            index={item.index}
-                            status={item.item?.status}
-                            // index % 3 === 0 ? 'Pending' : 'Inprogress'
-                          />
-                        );
-                      }
-                    }}
-                    keyExtractor={item => item?.id}
-                    ListFooterComponent={<View style={tw`h-20`} />}
-                  />
-                </ScrollView>
+                {filteredOrders?.length < 1 && (
+                  <View
+                    style={[
+                      tw`bg-[#D9D9D9] w-full flex flex-col rounded  mt-3 mx-2`,
+                      {height: perHeight(80), alignItems: 'center'},
+                    ]}>
+                    <View style={tw`my-auto pl-8`}>
+                      <Textcomp
+                        text={'Orders Not Found...'}
+                        size={17}
+                        lineHeight={17}
+                        color={'black'}
+                        fontFamily={'Inter-SemiBold'}
+                      />
+                    </View>
+                  </View>
+                )}
+                {filteredOrders?.length > 1 && (
+                  <ScrollView horizontal>
+                    <FlatList
+                      data={filteredOrders}
+                      horizontal={false}
+                      scrollEnabled={false}
+                      renderItem={(item: any, index: any) => {
+                        if (
+                          item?.item?.status === 'CANCELLED' ||
+                          item?.item?.status === 'COMPLETED' ||
+                          item?.item?.status === 'DECLINED'
+                        ) {
+                          return null;
+                        } else {
+                          return (
+                            <Orderscomponent
+                              key={index}
+                              navigation={navigation}
+                              item={item.item}
+                              index={item.index}
+                              status={item.item?.status}
+                              // index % 3 === 0 ? 'Pending' : 'Inprogress'
+                            />
+                          );
+                        }
+                      }}
+                      keyExtractor={item => item?.id}
+                      ListFooterComponent={<View style={tw`h-20`} />}
+                    />
+                  </ScrollView>
+                )}
+                {false && (
+                  <ScrollView horizontal>
+                    <FlatList
+                      data={customerOrders}
+                      horizontal={false}
+                      scrollEnabled={false}
+                      renderItem={(item: any, index: any) => {
+                        if (
+                          item?.item?.status === 'CANCELLED' ||
+                          item?.item?.status === 'COMPLETED' ||
+                          item?.item?.status === 'DECLINED'
+                        ) {
+                          return null;
+                        } else {
+                          return (
+                            <Orderscomponent
+                              key={index}
+                              navigation={navigation}
+                              item={item.item}
+                              index={item.index}
+                              status={item.item?.status}
+                              // index % 3 === 0 ? 'Pending' : 'Inprogress'
+                            />
+                          );
+                        }
+                      }}
+                      keyExtractor={item => item?.id}
+                      ListFooterComponent={<View style={tw`h-20`} />}
+                    />
+                  </ScrollView>
+                )}
               </View>
             )}
             {activeSection === 'Closed' && (
