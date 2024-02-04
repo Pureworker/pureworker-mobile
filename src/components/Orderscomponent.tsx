@@ -159,7 +159,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                 />
               </View>
               <View style={tw`ml-auto`}>
-                {status === 'INPROGRESS' && (
+                {status === 'INPROGRESS' && item?.isCompletedByProvider === false && (
                   <View style={[tw``, {}]}>
                     <Textcomp
                       text={'IN PROGRESS'}
@@ -192,7 +192,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                     />
                   </View>
                 )}
-                {status === 'COMPLETED' && (
+                {(status === 'COMPLETED' || item?.isCompletedByProvider === true) && (
                   <View style={[tw``, {}]}>
                     <Textcomp
                       text={'COMPLETED'}

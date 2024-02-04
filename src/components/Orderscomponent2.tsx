@@ -158,6 +158,8 @@ const Orderscomponent2 = ({item, index, status}: any) => {
         // navigation.navigate('PaymentConfirmed');
         await initGetOrders();
         Alert.alert('successful');
+        setrateYourExperience(false);
+        setrateYourExperience(false);
       } else {
         Snackbar.show({
           text: res?.error?.message
@@ -169,6 +171,7 @@ const Orderscomponent2 = ({item, index, status}: any) => {
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
+        setrateYourExperience(false);
       }
       setisLoading(false);
     } else {

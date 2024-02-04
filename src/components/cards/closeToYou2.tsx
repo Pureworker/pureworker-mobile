@@ -1,6 +1,6 @@
 import {Image, View, TouchableOpacity} from 'react-native';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -12,38 +12,133 @@ import {useMakeFavoriteProductMutation} from '../../store/slice/api';
 import Snackbar from 'react-native-snackbar';
 import Review from '../Review';
 import FastImage from 'react-native-fast-image';
-import { metersToKilometers } from '../../utils/utils';
+import {ToastShort, metersToKilometers} from '../../utils/utils';
+import {
+  bookMarkServiceProvide,
+  deletebookMarkServiceProvide,
+  getUser,
+} from '../../utils/api/func';
+import {useDispatch, useSelector} from 'react-redux';
+import {addUserData} from '../../store/reducer/mainSlice';
 
 const CloseToYouCard2 = ({item, index, navigation}: any) => {
   const [makeFavoriteProduct] = useMakeFavoriteProductMutation();
+  const dispatch = useDispatch();
+  // const userData = useSelector((state: any) => state.user.userData);
+  // console.log('close----k', item);
+  // const [savedProviders, setsavedProviders] = useState([]);
+  // useEffect(() => {
+  //   const query = userData?.bookmarks?.filter(
+  //     (item: {service: any}) => item?.service === id,
+  //   );
+  //   setsavedProviders(query);
+  // }, [id, userData?.bookmarks]);
 
-  console.log('close----', item);
+  // const handleFavoriteProduct = async (
+  //   serviceId: number,
+  //   isFavorite: boolean,
+  // ) => {
+  //   if (serviceId) {
+  //     const addFavoriteData = {
+  //       favorite: !isFavorite,
+  //       serviceId: serviceId,
+  //     };
+  //     makeFavoriteProduct(addFavoriteData)
+  //       .unwrap()
+  //       .then(data => {
+  //         // Snackbar.show({
+  //         //   text: data. ? "Service provider has been favorite" : "Product has been remove favorite", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#88087B',
+  //         // });
+  //       })
+  //       .catch(error => {
+  //         console.log('err', error);
+  //         Snackbar.show({
+  //           text: error.data.message,
+  //           duration: Snackbar.LENGTH_SHORT,
+  //           textColor: '#fff',
+  //           backgroundColor: '#88087B',
+  //         });
+  //       });
+  //   }
+  // };
 
-  const handleFavoriteProduct = async (
-    serviceId: number,
-    isFavorite: boolean,
-  ) => {
-    if (serviceId) {
-      const addFavoriteData = {
-        favorite: !isFavorite,
-        serviceId: serviceId,
+  const handleBookmark = async () => {
+    try {
+      const res: any = await bookMarkServiceProvide({
+        service: id,
+        serviceProvider: item?._id,
+      });
+      // const res: any = await bookMarkServiceProvide(data);
+      if (res?.status === 200 || res?.status === 201) {
+        ToastShort('Service Provider bookmarked!.');
+        // setsaved(!saved);
+      } else {
+        ToastShort(
+          `${
+            res?.error?.message
+              ? res?.error?.message
+              : res?.error?.data?.message
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured'
+          }`,
+        );
+      }
+    } catch (error) {
+    } finally {
+      const initGetUsers = async () => {
+        const res: any = await getUser('');
+        if (res?.status === 201 || res?.status === 200) {
+          dispatch(addUserData(res?.data?.user));
+
+          const query = res?.data?.user?.bookmarks?.filter(
+            (item: {service: any}) => item?.service === id,
+          );
+          // setsavedProviders(query);
+        }
       };
-      makeFavoriteProduct(addFavoriteData)
-        .unwrap()
-        .then(data => {
-          // Snackbar.show({
-          //   text: data. ? "Service provider has been favorite" : "Product has been remove favorite", duration: Snackbar.LENGTH_SHORT, textColor: '#fff', backgroundColor: '#88087B',
-          // });
-        })
-        .catch(error => {
-          console.log('err', error);
-          Snackbar.show({
-            text: error.data.message,
-            duration: Snackbar.LENGTH_SHORT,
-            textColor: '#fff',
-            backgroundColor: '#88087B',
-          });
-        });
+      initGetUsers();
+    }
+  };
+
+  // const ch = savedProviders?.filter(
+  //   (d: {service: any}) => d?.serviceProvider === item?._id,
+  // );
+  const handleRemoveBookmark = async () => {
+    try {
+      const ch = savedProviders?.filter(
+        (d: {service: any}) => d?.serviceProvider === item?._id,
+      );
+      const __id = ch?.[0]?._id;
+      const res: any = await deletebookMarkServiceProvide(__id);
+      if (res?.status === 200 || res?.status === 201 || res?.status === 204) {
+        ToastShort('Unboomarked!.');
+        // setsaved(!saved);
+      } else {
+        console.log(res?.status);
+
+        ToastShort(
+          `${
+            res?.error?.message
+              ? res?.error?.message
+              : res?.error?.data?.message
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured'
+          }`,
+        );
+      }
+    } catch (error) {
+    } finally {
+      const initGetUsers = async () => {
+        const res: any = await getUser('');
+        if (res?.status === 201 || res?.status === 200) {
+          dispatch(addUserData(res?.data?.user));
+          const query = res?.data?.user?.bookmarks?.filter(
+            (item: {service: any}) => item?.service === id,
+          );
+          // setsavedProviders(query);
+        }
+      };
+      initGetUsers();
     }
   };
   return (
@@ -107,9 +202,13 @@ const CloseToYouCard2 = ({item, index, navigation}: any) => {
                 fontFamily={'Inter-Bold'}
               />
             </View>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
-                handleFavoriteProduct(item?.id, item?.isFavorite);
+                // if (ch?.length > 0) {
+                //   handleRemoveBookmark();
+                // } else {
+                //   handleBookmark();
+                // }
               }}>
               <Image
                 resizeMode="contain"
@@ -117,9 +216,9 @@ const CloseToYouCard2 = ({item, index, navigation}: any) => {
                   width: perWidth(20),
                   height: perWidth(20),
                 }}
-                source={item?.isFavorite ? images.saved : images.save}
+                source={true ? images.saved : images.save}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
           <View style={[tw``, {width: perWidth(252), marginTop: perHeight(4)}]}>
             <Textcomp
@@ -170,7 +269,7 @@ const CloseToYouCard2 = ({item, index, navigation}: any) => {
           <View
             style={[tw`ml-1`, {width: perWidth(80), marginTop: perWidth(1)}]}>
             <Textcomp
-            text={`${metersToKilometers(item?.distance)}`}
+              text={`${metersToKilometers(item?.distance)}`}
               size={12}
               lineHeight={14}
               color={colors.primary}
@@ -197,7 +296,7 @@ const CloseToYouCard2 = ({item, index, navigation}: any) => {
             readonly={true}
             startingValue={2}
           /> */}
-           <Review value={1} editable={false} />
+          <Review value={1} editable={false} />
         </View>
       </View>
     </View>

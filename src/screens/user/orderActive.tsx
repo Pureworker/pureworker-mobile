@@ -81,6 +81,8 @@ const OrderActive = ({route}: any) => {
     // setloading(false);
     setisLoading(false);
   };
+
+
   const handleComplete = async (val: any) => {
     setisLoading(true);
     if (item?._id) {
@@ -102,6 +104,7 @@ const OrderActive = ({route}: any) => {
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
+        setrateYourExperience(false);
       }
       setisLoading(false);
     } else {
