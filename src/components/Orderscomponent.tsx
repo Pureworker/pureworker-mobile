@@ -140,7 +140,8 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
               <View style={[tw`flex flex-row justify-between`, {}]}>
                 <View style={[tw``, {}]}>
                   <Textcomp
-                    text={`₦ ${item?.amount || item?.totalPrice}`}
+                    // text={`₦ ${item?.amount || item?.totalPrice}`}
+                    text={`₦ ${item?.totalPrice || item?.amount}`}
                     size={14}
                     lineHeight={16}
                     color={colors.white}
@@ -436,7 +437,7 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                 ]}>
                 <Textcomp
                   text={
-                    'Orders can only be canceled 5 hours before scheduled delivery time'
+                    'Orders can only be canceled 2 hours before scheduled delivery time'
                   }
                   size={12}
                   lineHeight={16.75}

@@ -36,7 +36,7 @@ const PrivacyPolicy = () => {
     },
     {
       header: 'Cancellation of Orders',
-      text: 'Orders can only be canceled 5 hours before the scheduled delivery time. If a customer cancels an order within 5 hours of the scheduled delivery time, the Freelancer or Business may dispute the cancellation.',
+      text: 'Orders can only be canceled 2 hours before the scheduled delivery time. If a customer cancels an order within 5 hours of the scheduled delivery time, the Freelancer or Business may dispute the cancellation.',
     },
     {
       header: 'Order Status',

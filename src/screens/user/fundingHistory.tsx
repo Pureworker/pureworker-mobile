@@ -22,7 +22,10 @@ import {
 import {getTransactions} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
-import { formatDateHistory } from '../../utils/utils';
+import {formatDateHistory} from '../../utils/utils';
+import FundingIcon from '../../assets/svg/FundingIcon';
+import PaymentIcon from '../../assets/svg/PayentIcon';
+import WithdrawalIcon from '../../assets/svg/WithdrawalIcon';
 
 const FundingHistory = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -31,7 +34,15 @@ const FundingHistory = () => {
   // const [categorizedData, setcategorizedData] = useState({});
   //filter  transaction datat to get months
   const months = ['May', 'Apr', 'Feb'];
-  const transactions = useSelector((state: any) => state.user.transactions);
+  // const transactions = useSelector((state: any) => state.user.transactions);
+  const transaction = useSelector((state: any) => state.user.transactions);
+
+  const transactions = transaction.filter(
+    (transaction: {type: string}) => transaction.type === 'funding',
+  );
+
+  // Now you can use fundingTransactions array wherever you need it
+
   const categorizedData = useSelector(
     (state: any) => state.user.categorizedTransdata,
   );
@@ -109,8 +120,6 @@ const FundingHistory = () => {
 
     return formattedDate;
   }
-
-
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -197,10 +206,7 @@ const FundingHistory = () => {
                     />
                   </View>
                   {categorizedData[monthYear].map(
-                    (
-                      item: {id: React.Key | null | undefined},
-                      index: number,
-                    ) => {
+                    (item: any, index: number) => {
                       console.log('Item', item);
                       return (
                         <View
@@ -208,11 +214,16 @@ const FundingHistory = () => {
                             index === 0 ? 'pb-4' : 'py-4'
                           }`}>
                           <View style={[tw`flex flex-row items-center  `, {}]}>
-                            <Image
-                              resizeMode="contain"
-                              source={images.pureWorkerLogo}
-                              style={{width: perWidth(25), aspectRatio: 1}}
-                            />
+                            <View style={{}}>
+                              {item?.type === 'funding' ? (
+                                <FundingIcon />
+                              ) : item?.type === 'payment' ? (
+                                <PaymentIcon />
+                              ) : item?.type === 'withdrawal' ? (
+                                <WithdrawalIcon />
+                              ) : null}
+                            </View>
+
                             <View style={tw`flex flex-col ml-4`}>
                               <View style={[tw``, {marginTop: perHeight(0)}]}>
                                 <Textcomp
@@ -246,13 +257,18 @@ const FundingHistory = () => {
                             </View>
                             <View style={[tw``, {marginTop: perHeight(4)}]}>
                               <Textcomp
-                                text={`${
-                                  item?.type?.slice(0, 1)?.toUpperCase() +
-                                  item?.type?.slice(1)
-                                }`}
+                                // text={`${
+                                //   item?.type?.slice(0, 1)?.toUpperCase() +
+                                //   item?.type?.slice(1)
+                                // }`}
+                                text={`${item?.status}`}
                                 size={13}
                                 lineHeight={15}
-                                color={'#00041380'}
+                                color={
+                                  item.status === 'successful'
+                                    ? 'green'
+                                    : '#00041380'
+                                }
                                 fontFamily={'Inter-SemiBold'}
                               />
                             </View>
