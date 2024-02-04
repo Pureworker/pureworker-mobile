@@ -62,6 +62,10 @@ const Orders = () => {
   const [filteredOrders, setFilteredOrders] = useState(customerOrders);
 
   useEffect(() => {
+    setFilteredOrders(customerOrders);
+  }, [customerOrders, dispatch]);
+
+  useEffect(() => {
     const initGetOrders = async () => {
       setisLoading(true);
       const res: any = await getUserOrders(searchInput);
@@ -151,7 +155,7 @@ const Orders = () => {
       setisLoading(false);
     };
     try {
-       initGetOrders();
+      initGetOrders();
     } catch (error) {
     } finally {
       setRefreshing(false);
@@ -256,8 +260,7 @@ const Orders = () => {
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        >
+        }>
         <View style={tw`flex flex-row mt-4`}>
           <TouchableOpacity
             onPress={() => {

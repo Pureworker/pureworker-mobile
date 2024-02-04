@@ -90,39 +90,44 @@ export default function ScheduledDeliveryDate({
   const [isLoading, setisLoading] = useState(false);
   const handleUpdate = async () => {
     setisLoading(true);
-    if (item?._id) {
-      const res = await rescheduleOrder(item?._id, {
-        scheduledDate: schdeuleIsoDate,
-      });
-      if (res?.status === 200 || res?.status === 201) {
-        // navigation.navigate('PaymentConfirmed');
-        await initGetOrders();
-        Alert.alert('Order Date Rescheduled');
-        setDatePickerVisibility(false);
-        func(false);
-        navigation.goBack();
+    try {
+      if (item?._id) {
+        const res = await rescheduleOrder(item?._id, {
+          scheduledDate: schdeuleIsoDate,
+        });
+        if (res?.status === 200 || res?.status === 201) {
+          // navigation.navigate('PaymentConfirmed');
+          await initGetOrders();
+          Alert.alert('Order Date Rescheduled');
+          setDatePickerVisibility(false);
+          func(false);
+          navigation.goBack();
+        } else {
+          Snackbar.show({
+            text: res?.error?.message
+              ? res?.error?.message
+              : res?.error?.data?.message
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured',
+            duration: Snackbar.LENGTH_SHORT,
+            textColor: '#fff',
+            backgroundColor: '#88087B',
+          });
+        }
+        setisLoading(false);
       } else {
         Snackbar.show({
-          text: res?.error?.message
-            ? res?.error?.message
-            : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured',
+          text: 'Please fill all fields',
           duration: Snackbar.LENGTH_SHORT,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
+        setisLoading(false);
       }
-      setisLoading(false);
-    } else {
-      Snackbar.show({
-        text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_SHORT,
-        textColor: '#fff',
-        backgroundColor: '#88087B',
-      });
-      setisLoading(false);
+    } catch (error) {
+    } finally {
     }
+
     setisLoading(false);
   };
   return (
