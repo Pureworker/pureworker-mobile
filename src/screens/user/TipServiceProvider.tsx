@@ -61,7 +61,6 @@ const TipServiceProvider = () => {
       title: '₦5000',
     },
   ];
-
   const item = route.params?.item;
   const handleTip = async () => {
     try {
@@ -99,23 +98,6 @@ const TipServiceProvider = () => {
       setisLoading(false);
     }
   };
-  //   <FastImage
-  //   onTouchStart={() => setimageModal(true)}
-  //   style={[
-  //     tw`mr-2`,
-  //     {
-  //       width: perWidth(95),
-  //       aspectRatio: 1,
-  //       borderRadius: 10,
-  //     },
-  //   ]}
-  //   source={{
-  //     uri: item,
-  //     headers: {Authorization: 'someAuthToken'},
-  //     priority: FastImage.priority.normal,
-  //   }}
-  //   resizeMode={FastImage.resizeMode.cover}
-  // />
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView style={{height: '100%'}}>

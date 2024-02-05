@@ -146,10 +146,13 @@ const Home = ({navigation}: any) => {
       const res: any = await getProviderOrders(userData?._id);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addproviderOrders(res?.data?.data));
-        let inProgress = providerOrders?.filter(
-          (item: {status: string}) => item?.status === 'INPROGRESS',
+        // let inProgress = res?.data?.data?.filter(
+        //   (item: {status: string}) => item?.status === 'INPROGRESS',
+        // );
+        let inProgress = res?.data?.data?.filter(
+          (item: { status: string }) => item?.status === 'INPROGRESS' || item?.status === 'TRACK',
         );
-        let pending = providerOrders?.filter(
+        let pending = res?.data?.data?.filter(
           (item: {status: string}) => item?.status === 'PENDING',
         );
         setOinProgress(inProgress);
@@ -163,14 +166,19 @@ const Home = ({navigation}: any) => {
   }, []);
 
   useEffect(() => {
+    // let inProgress = providerOrders?.filter(
+    //   (item: {status: string}) => item?.status === 'INPROGRESS',
+    // );
     let inProgress = providerOrders?.filter(
-      (item: {status: string}) => item?.status === 'INPROGRESS',
+      (item: { status: string }) => item?.status === 'INPROGRESS' || item?.status === 'TRACK',
     );
     let pending = providerOrders?.filter(
       (item: {status: string}) => item?.status === 'PENDING',
     );
     setOinProgress(inProgress);
     setOinPending(pending);
+
+
   }, [providerOrders]);
 
   //selectors
@@ -182,7 +190,7 @@ const Home = ({navigation}: any) => {
   // const {currentState, setCurrentState} = useContext(RouteContext);
   const formStage = useSelector((state: any) => state.user.formStage);
   const supportUser = useSelector((store: any) => store.user.supportUser);
-  console.log('stage', formStage);
+  console.log('stage', formStage, OinPending, 'progress:', OinProgress);
   // useEffect(() => {
   //   const emitProviderOnlineStatus = () => {
   //     // Emit an event to the backend indicating that the customer is still connected

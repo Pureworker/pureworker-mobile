@@ -22,6 +22,7 @@ import RateyourExperience from './modals/rateyourexperience';
 import ScheduledDeliveryDate from './modals/scheduledDeliveryDate';
 import {useDispatch, useSelector} from 'react-redux';
 import {addproviderOrders} from '../store/reducer/mainSlice';
+import RateyourCustommer from './modals/rateYourCustomer';
 
 const Orderscomponent2 = ({item, index, status}: any) => {
   const [saved, setsaved] = useState(false);
@@ -155,7 +156,6 @@ const Orderscomponent2 = ({item, index, status}: any) => {
     if (item?._id) {
       const res = await completedOrder(item?._id, {...val});
       if (res?.status === 200 || res?.status === 201) {
-        // navigation.navigate('PaymentConfirmed');
         await initGetOrders();
         Alert.alert('successful');
         setrateYourExperience(false);
@@ -717,6 +717,31 @@ const Orderscomponent2 = ({item, index, status}: any) => {
             </TouchableOpacity>
           </View>
         )}
+        {status === 'CANCELLED' && (
+          <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
+            <TouchableOpacity
+              onPress={() => {
+                setorderDispute(true);
+              }}
+              style={[
+                tw`bg-[${colors.primary}] items-center justify-center`,
+                {
+                  width: perWidth(190),
+                  height:
+                    Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
+                  borderRadius: 7,
+                },
+              ]}>
+              <Textcomp
+                text={'Dispute'}
+                size={12}
+                lineHeight={14}
+                color={colors.black}
+                fontFamily={'Inter-SemiBold'}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
       <OrderDispute
         navigation={null}
@@ -732,7 +757,17 @@ const Orderscomponent2 = ({item, index, status}: any) => {
         }}
         visible={scheduledDeliveryDate}
       />
-      <RateyourExperience
+      {/* <RateyourExperience
+        navigation={null}
+        func={(text: boolean | ((prevState: boolean) => boolean)) => {
+          setrateYourExperience(text);
+        }}
+        visible={rateYourExperience}
+        OnFinish={(values: any) => {
+          handleComplete(values);
+        }}
+      /> */}
+      <RateyourCustommer
         navigation={null}
         func={(text: boolean | ((prevState: boolean) => boolean)) => {
           setrateYourExperience(text);
