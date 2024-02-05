@@ -159,17 +159,18 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                 />
               </View>
               <View style={tw`ml-auto`}>
-                {status === 'INPROGRESS' && item?.isCompletedByProvider === false && (
-                  <View style={[tw``, {}]}>
-                    <Textcomp
-                      text={'IN PROGRESS'}
-                      size={14}
-                      lineHeight={16}
-                      color={colors.primary}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </View>
-                )}
+                {status === 'INPROGRESS' &&
+                  item?.isCompletedByProvider === false && (
+                    <View style={[tw``, {}]}>
+                      <Textcomp
+                        text={'IN PROGRESS'}
+                        size={14}
+                        lineHeight={16}
+                        color={colors.primary}
+                        fontFamily={'Inter-Bold'}
+                      />
+                    </View>
+                  )}
                 {status === 'PENDING' && (
                   <View style={[tw``, {}]}>
                     <Textcomp
@@ -192,7 +193,8 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                     />
                   </View>
                 )}
-                {(status === 'COMPLETED' || item?.isCompletedByProvider === true) && (
+                {(status === 'COMPLETED' ||
+                  item?.isCompletedByProvider === true) && (
                   <View style={[tw``, {}]}>
                     <Textcomp
                       text={'COMPLETED'}
@@ -370,9 +372,9 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                   />
                 </View>
               </TouchableOpacity>
-              {status !== 'PENDING' && (
-                <>
-                  {/* <TouchableOpacity
+              {(status === 'ACCEPTED' || status === 'TRACK') &&
+                item?.location !== 'online' && (
+                  <TouchableOpacity
                     onPress={() => {
                       setInfoModal(false);
                       navigation.navigate('ViewLocation');
@@ -395,26 +397,31 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                       />
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[
-                      tw`flex mt-10 flex-row`,
-                      {
-                        marginHorizontal: perWidth(30),
-                        marginTop: perHeight(25),
-                      },
-                    ]}>
-                    <DisputeIcon />
-                    <View style={[tw``, {marginLeft: perWidth(36)}]}>
-                      <Textcomp
-                        text={'Order Dispute'}
-                        size={14}
-                        lineHeight={17}
-                        color={'#000000'}
-                        fontFamily={'Inter-SemiBold'}
-                      />
-                    </View>
-                  </TouchableOpacity> */}
-                </>
+                )}
+              {status !== 'PENDING' && (
+                <TouchableOpacity
+                  onPress={() => {
+                    setInfoModal(false);
+                    navigation.navigate('ViewLocation');
+                  }}
+                  style={[
+                    tw`flex mt-10 flex-row`,
+                    {
+                      marginHorizontal: perWidth(30),
+                      marginTop: perHeight(25),
+                    },
+                  ]}>
+                  <DisputeIcon />
+                  <View style={[tw``, {marginLeft: perWidth(36)}]}>
+                    <Textcomp
+                      text={'Order Dispute'}
+                      size={14}
+                      lineHeight={17}
+                      color={'#000000'}
+                      fontFamily={'Inter-SemiBold'}
+                    />
+                  </View>
+                </TouchableOpacity>
               )}
 
               <View
@@ -502,7 +509,10 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
         {modalSection === 'Cancel2' && (
           <View style={tw` h-full w-full bg-black bg-opacity-5`}>
             <TouchableOpacity
-              onPress={() => setInfoModal(false)}
+              onPress={() => {
+                setInfoModal(false);
+                setmodalSection('All');
+              }}
               style={tw`flex-1`}
             />
             <View style={tw`h-[30%]  mt-auto bg-[#D9D9D9]`}>
@@ -538,7 +548,13 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
 
               <TouchableOpacity
                 onPress={async () => {
-                  await handleCancel();
+                  if (status === 'ACCEPTED' || status === 'PENDING') {
+                    await handleCancel();
+                  } else {
+                    ToastShort(
+                      'Only pending and accepted Orders can be cancelled!>',
+                    );
+                  }
                 }}
                 style={[
                   {

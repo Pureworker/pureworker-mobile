@@ -225,7 +225,7 @@ const Orderscomponent2 = ({item, index, status}: any) => {
       const res = await onMYOrder(item?._id);
       if (res?.status === 200 || res?.status === 201) {
         await initGetOrders();
-        Alert.alert('Order Now in transist.');
+        Alert.alert('Order Now in Transit.');
       } else {
         Snackbar.show({
           text: res?.error?.message

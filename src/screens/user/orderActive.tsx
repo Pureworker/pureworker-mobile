@@ -149,7 +149,7 @@ const OrderActive = ({route}: any) => {
       func: () => setorderDispute(true),
     },
     {
-      title: 'Rate your experince',
+      title: 'Rate Your Experience',
       func: () => setrateYourExperience(true),
     },
     {

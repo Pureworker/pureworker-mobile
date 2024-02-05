@@ -1,12 +1,12 @@
-import {View, TouchableOpacity, Image, TextInput, Platform} from 'react-native';
-import React, {useState} from 'react';
+import { View, TouchableOpacity, Platform } from 'react-native';
+import React, { useState } from 'react';
 import tw from 'twrnc';
-import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
+import { SIZES, perWidth } from '../../utils/position/sizes';
 import Textcomp from '../Textcomp';
-import images from '../../constants/images';
 import colors from '../../constants/colors';
-import {WIDTH_WINDOW} from '../../constants/generalStyles';
+import { WIDTH_WINDOW } from '../../constants/generalStyles';
 import Modal from 'react-native-modal/dist/modal';
+import { formatDateHistory2 } from '../../utils/utils';
 
 export default function OrderPlaced({navigation, visible, func, item}: any) {
   const [InfoModal, setInfoModal] = useState(visible);
@@ -56,7 +56,7 @@ export default function OrderPlaced({navigation, visible, func, item}: any) {
             </View>
             <View style={[tw`px-[7.5%] mt-2.5`, {}]}>
               <Textcomp
-                text={`Scheduled Delivery: ${item?.scheduledDeliveryDate}`}
+                text={`Scheduled Delivery: ${formatDateHistory2(item?.scheduledDeliveryDate)}`}
                 size={14}
                 lineHeight={17}
                 color={'#000000'}

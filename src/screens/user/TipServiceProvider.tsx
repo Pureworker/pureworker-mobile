@@ -21,11 +21,13 @@ import colors from '../../constants/colors';
 import {perHeight, perWidth} from '../../utils/position/sizes';
 import {HEIGHT_WINDOW, WIDTH_WINDOW} from '../../constants/generalStyles';
 import {PLATFORMS} from 'twrnc/dist/esm/types';
-import {tipProvider} from '../../utils/api/func';
+import {getTransactions, tipProvider} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import {ActivityIndicator} from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
+import {ToastShort} from '../../utils/utils';
+import {addTransactions} from '../../store/reducer/mainSlice';
 
 const TipServiceProvider = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -36,50 +38,66 @@ const TipServiceProvider = () => {
   const amountList = [
     {
       amount: 100,
-      title: 'N100',
+      title: '₦100',
     },
     {
       amount: 200,
-      title: 'N200',
+      title: '₦200',
     },
     {
       amount: 500,
-      title: 'N500',
+      title: '₦500',
     },
     {
       amount: 1000,
-      title: 'N1000',
+      title: '₦1000',
     },
     {
       amount: 2000,
-      title: 'N2000',
+      title: '₦2000',
     },
     {
       amount: 5000,
-      title: 'N5000',
+      title: '₦5000',
     },
   ];
 
   const item = route.params?.item;
   const handleTip = async () => {
-    setisLoading(true);
-    const _data = {
-      amount: Number(amount),
-      providerID: item?.serviceProvider?._id,
-      orderID: item?._id,
-    };
-    const res: any = await tipProvider(_data);
-    console.log('tippppp', res?.data);
-    if (res?.status === 201 || res?.status === 200) {
-      Snackbar.show({
-        text: 'This provider has been tipped!.',
-        duration: Snackbar.LENGTH_SHORT,
-        textColor: '#fff',
-        backgroundColor: '#88087B',
-      });
-      navigation.navigate('Orders');
+    try {
+      setisLoading(true);
+      const _data = {
+        amount: Number(amount),
+        providerID: item?.serviceProvider?._id,
+        orderID: item?._id,
+      };
+      const res: any = await tipProvider(_data);
+      console.log('tippppp', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        Snackbar.show({
+          text: 'This provider has been tipped!.',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+        navigation.navigate('Orders');
+      }
+    } catch (error) {
+      ToastShort(error?.data?.message);
+    } finally {
+      const initTransaction = async () => {
+        try {
+          const res: any = await getTransactions('');
+          if (res?.status === 201 || res?.status === 200) {
+            dispatch(addTransactions(res?.data?.data));
+          }
+        } catch (error) {
+          console.error('Error fetching transactions:', error);
+        }
+      };
+      initTransaction();
+      setisLoading(false);
     }
-    setisLoading(false);
   };
   //   <FastImage
   //   onTouchStart={() => setimageModal(true)}
