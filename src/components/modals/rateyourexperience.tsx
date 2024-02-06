@@ -172,8 +172,8 @@
 //   );
 // }
 
-import React, {useState} from 'react';
-import {View, TouchableOpacity, TextInput} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, TouchableOpacity, TextInput, Keyboard} from 'react-native';
 import tw from 'twrnc';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import Textcomp from '../Textcomp';
@@ -232,6 +232,29 @@ export default function RateyourExperience({
     });
   };
 
+  const [modalHeight, setModalHeight] = useState('70%'); // Initial modal height
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setModalHeight('90%'); // Update modal height when keyboard is shown
+      },
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setModalHeight('70%'); // Reset modal height when keyboard is hidden
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   return (
     <Modal
       isVisible={visible}
@@ -247,7 +270,7 @@ export default function RateyourExperience({
       onBackButtonPress={() => func(false)}>
       <View style={tw` h-full w-full bg-black bg-opacity-5`}>
         <TouchableOpacity onPress={() => func(false)} style={tw`flex-1`} />
-        <View style={tw`h-[70%] mt-auto bg-[#D9D9D9]`}>
+        <View style={[tw` mt-auto bg-[#D9D9D9]`, {height: modalHeight}]}>
           <TouchableOpacity
             onPress={() => {
               func(false);

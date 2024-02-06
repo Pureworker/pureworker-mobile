@@ -26,6 +26,8 @@ import {formatDateHistory} from '../../utils/utils';
 import FundingIcon from '../../assets/svg/FundingIcon';
 import PaymentIcon from '../../assets/svg/PayentIcon';
 import WithdrawalIcon from '../../assets/svg/WithdrawalIcon';
+import TipIcon from '../../assets/svg/TipIcon';
+import ReversalIcon from '../../assets/svg/ReversalIcon';
 
 const FundingHistory = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -123,57 +125,56 @@ const FundingHistory = () => {
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
-      <ScrollView>
-        <View
-          style={{
-            marginTop:
-              Platform.OS === 'ios'
-                ? getStatusBarHeight(true)
-                : StatusBar.currentHeight &&
-                  StatusBar.currentHeight + getStatusBarHeight(true),
-          }}
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginHorizontal: 20,
-          }}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              source={images.back}
-              style={{height: 25, width: 25}}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-          <View style={tw`mx-auto`}>
-            <Textcomp
-              text={'Funding  History'}
-              size={17}
-              lineHeight={17}
-              color={'#000413'}
-              fontFamily={'Inter-SemiBold'}
-            />
-          </View>
+      <View
+        style={{
+          marginTop:
+            Platform.OS === 'ios'
+              ? getStatusBarHeight(true)
+              : StatusBar.currentHeight &&
+                StatusBar.currentHeight + getStatusBarHeight(true),
+        }}
+      />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginHorizontal: 20,
+        }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            source={images.back}
+            style={{height: 25, width: 25}}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
+        <View style={tw`mx-auto`}>
+          <Textcomp
+            text={'Funding  History'}
+            size={17}
+            lineHeight={17}
+            color={'#000413'}
+            fontFamily={'Inter-SemiBold'}
+          />
         </View>
+      </View>
+      <View
+        style={[
+          tw`mx-auto mb-5`,
+          {width: perWidth(335), paddingLeft: perWidth(10)},
+        ]}>
+        <View style={[tw``, {marginTop: perHeight(19)}]}>
+          <Textcomp
+            text={'Wallet History'}
+            size={17}
+            lineHeight={17}
+            color={'#000413'}
+            fontFamily={'Inter-SemiBold'}
+          />
+        </View>
+      </View>
+      <ScrollView>
         <View style={tw`flex-1`}>
-          <View
-            style={[
-              tw`mx-auto`,
-              {width: perWidth(335), paddingLeft: perWidth(10)},
-            ]}>
-            <View style={[tw``, {marginTop: perHeight(19)}]}>
-              <Textcomp
-                text={'Wallet History'}
-                size={17}
-                lineHeight={17}
-                color={'#000413'}
-                fontFamily={'Inter-SemiBold'}
-              />
-            </View>
-          </View>
-
           {!transactions || transactions?.length < 1 ? (
             <View
               style={[
@@ -222,16 +223,20 @@ const FundingHistory = () => {
                               ) : item?.type === 'withdrawal' ? (
                                 <WithdrawalIcon />
                               ) : item?.type === 'reversal' ? (
-                                <PaymentIcon />
+                                <ReversalIcon />
+                              ) : item?.type === 'tip' ? (
+                                <TipIcon />
                               ) : (
-                                <Image
-                                  resizeMode="contain"
-                                  source={images.pureWorkerLogo}
-                                  style={{
-                                    width: perWidth(25),
-                                    aspectRatio: 1,
-                                  }}
-                                />
+                                <View>
+                                  <Image
+                                    resizeMode="contain"
+                                    source={images.pureWorkerLogo}
+                                    style={{
+                                      width: perWidth(20),
+                                      aspectRatio: 1,
+                                    }}
+                                  />
+                                </View>
                               )}
                             </View>
 

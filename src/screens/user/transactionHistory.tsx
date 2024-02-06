@@ -27,6 +27,8 @@ import {formatDateHistory} from '../../utils/utils';
 import FundingIcon from '../../assets/svg/FundingIcon';
 import PaymentIcon from '../../assets/svg/PayentIcon';
 import WithdrawalIcon from '../../assets/svg/WithdrawalIcon';
+import TipIcon from '../../assets/svg/TipIcon';
+import ReversalIcon from '../../assets/svg/ReversalIcon';
 
 const TransactionHistory = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -114,7 +116,7 @@ const TransactionHistory = () => {
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
-      <ScrollView>
+      <>
         <View
           style={{
             marginTop:
@@ -148,23 +150,24 @@ const TransactionHistory = () => {
             />
           </View>
         </View>
-        <View style={tw`flex-1`}>
-          <View
-            style={[
-              tw`mx-auto`,
-              {width: perWidth(335), paddingLeft: perWidth(10)},
-            ]}>
-            <View style={[tw``, {marginTop: perHeight(19)}]}>
-              <Textcomp
-                text={'Transactions'}
-                size={17}
-                lineHeight={17}
-                color={'#000413'}
-                fontFamily={'Inter-SemiBold'}
-              />
-            </View>
+        <View
+          style={[
+            tw`mx-auto`,
+            {width: perWidth(335), paddingLeft: perWidth(10)},
+          ]}>
+          <View style={[tw``, {marginTop: perHeight(19)}]}>
+            <Textcomp
+              text={'Transactions'}
+              size={17}
+              lineHeight={17}
+              color={'#000413'}
+              fontFamily={'Inter-SemiBold'}
+            />
           </View>
-
+        </View>
+      </>
+      <ScrollView>
+        <View style={tw`flex-1`}>
           {!transactions || transactions?.length < 1 ? (
             <View
               style={[
@@ -302,16 +305,20 @@ const TransactionHistory = () => {
                                 ) : item?.type === 'withdrawal' ? (
                                   <WithdrawalIcon />
                                 ) : item?.type === 'reversal' ? (
-                                  <PaymentIcon />
+                                  <ReversalIcon />
+                                ) : item?.type === 'tip' ? (
+                                  <TipIcon />
                                 ) : (
-                                  <Image
-                                    resizeMode="contain"
-                                    source={images.pureWorkerLogo}
-                                    style={{
-                                      width: perWidth(25),
-                                      aspectRatio: 1,
-                                    }}
-                                  />
+                                  <View>
+                                    <Image
+                                      resizeMode="contain"
+                                      source={images.pureWorkerLogo}
+                                      style={{
+                                        width: perWidth(20),
+                                        aspectRatio: 1,
+                                      }}
+                                    />
+                                  </View>
                                 )}
                               </View>
                               <View style={tw`flex flex-col ml-4`}>
@@ -352,6 +359,8 @@ const TransactionHistory = () => {
                                   text={`${
                                     item?.status === undefined
                                       ? ''
+                                      : item?.status === 'successfull'
+                                      ? 'successful'
                                       : item?.status
                                   }`}
                                   size={13}

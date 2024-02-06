@@ -873,100 +873,112 @@ const ServiceProviderProfile = () => {
               ) : (
                 <ScrollView
                   horizontal
+                  scrollEnabled={false}
                   contentContainerStyle={[
-                    tw`mx-2 h-auto `,
-                    {flex: 0, borderRadius: 5, marginTop: perHeight(1)},
+                    tw`mx-2 h-auto`,
+                    {flexGrow: 1, borderRadius: 5, marginTop: perHeight(1)},
                   ]}>
                   <FlatList
-                    scrollEnabled={false}
+                    scrollEnabled={true}
                     data={serviceProviderData?.jobs || []}
                     renderItem={(item, index) => {
-                      console.log('JOOBSS', item);
+                      console.log('JOOBSS', serviceProviderData?.jobs.length);
                       return (
-                        <View
-                          style={[
-                            tw` ${index === 0 ? 'mt-0' : 'mt-4'}  mx-auto bg-[${
-                              colors.darkPurple
-                            }]`,
-                            {
-                              height: perWidth(130),
-                              width: SIZES.width * 0.95,
-                              borderWidth: 0,
-                              borderRadius: 5,
-                              // marginLeft: index === 0 ? 10 : 3,
-                              paddingHorizontal: perWidth(16),
-                              paddingVertical: perWidth(14),
-                            },
-                          ]}>
-                          <View style={tw`flex flex-row `}>
-                            <View
-                              style={[
-                                tw``,
-                                {width: perWidth(50), height: perWidth(50)},
-                              ]}>
-                              <FastImage
-                                style={[
-                                  tw`mr-2`,
-                                  {
-                                    width: perWidth(50),
-                                    height: perWidth(50),
-                                    borderRadius: perWidth(50) / 2,
-                                  },
-                                ]}
-                                source={{
-                                  uri:
-                                    item?.item?.user?.profilePic ??
-                                    'https://res.cloudinary.com/dr0pef3mn/image/upload/v1691626246/Assets/1691626245707-Frame%2071.png.png',
-                                  headers: {Authorization: 'someAuthToken'},
-                                  priority: FastImage.priority.normal,
-                                }}
-                                resizeMode={FastImage.resizeMode.cover}
-                              />
-                              <View
-                                style={[
-                                  tw`absolute bottom-0 border-2 right-1 rounded-full`,
-                                  {
-                                    width: 8,
-                                    height: 8,
-                                    backgroundColor: colors.green,
-                                  },
-                                ]}
-                              />
-                            </View>
-                            <View
-                              style={[tw`flex-1`, {marginLeft: perWidth(12)}]}>
-                              <View
-                                style={[tw`flex flex-row justify-between`, {}]}>
-                                <View style={[tw``, {}]}>
-                                  <Textcomp
-                                    text={`₦ ${item?.item?.amount}`}
-                                    size={14}
-                                    lineHeight={16}
-                                    color={colors.white}
-                                    fontFamily={'Inter-Bold'}
-                                  />
-                                </View>
-                              </View>
+                        <>
+                          <View
+                            style={[
+                              tw` ${
+                                index === 0 ? 'mt-0' : 'mt-4'
+                              }  mx-auto bg-[${colors.darkPurple}]`,
+                              {
+                                height: perWidth(130),
+                                width: SIZES.width * 0.95,
+                                borderWidth: 0,
+                                borderRadius: 5,
+                                // marginLeft: index === 0 ? 10 : 3,
+                                paddingHorizontal: perWidth(16),
+                                paddingVertical: perWidth(14),
+                              },
+                            ]}>
+                            <View style={tw`flex flex-row `}>
                               <View
                                 style={[
                                   tw``,
-                                  {
-                                    width: perWidth(252),
-                                    marginTop: perHeight(4),
-                                  },
+                                  {width: perWidth(50), height: perWidth(50)},
                                 ]}>
-                                <Textcomp
-                                  text={`${item?.item?.description}`}
-                                  size={12}
-                                  lineHeight={14}
-                                  color={colors.white}
-                                  fontFamily={'Inter-SemiBold'}
-                                  numberOfLines={2}
+                                <FastImage
+                                  style={[
+                                    tw`mr-2`,
+                                    {
+                                      width: perWidth(50),
+                                      height: perWidth(50),
+                                      borderRadius: perWidth(50) / 2,
+                                    },
+                                  ]}
+                                  source={{
+                                    uri:
+                                      item?.item?.user?.profilePic ??
+                                      'https://res.cloudinary.com/dr0pef3mn/image/upload/v1691626246/Assets/1691626245707-Frame%2071.png.png',
+                                    headers: {Authorization: 'someAuthToken'},
+                                    priority: FastImage.priority.normal,
+                                  }}
+                                  resizeMode={FastImage.resizeMode.cover}
+                                />
+                                <View
+                                  style={[
+                                    tw`absolute bottom-0 border-2 right-1 rounded-full`,
+                                    {
+                                      width: 8,
+                                      height: 8,
+                                      backgroundColor: colors.green,
+                                    },
+                                  ]}
                                 />
                               </View>
+                              <View
+                                style={[
+                                  tw`flex-1`,
+                                  {marginLeft: perWidth(12)},
+                                ]}>
+                                <View
+                                  style={[
+                                    tw`flex flex-row justify-between`,
+                                    {},
+                                  ]}>
+                                  <View style={[tw``, {}]}>
+                                    <Textcomp
+                                      text={`₦ ${item?.item?.amount}`}
+                                      size={14}
+                                      lineHeight={16}
+                                      color={colors.white}
+                                      fontFamily={'Inter-Bold'}
+                                    />
+                                  </View>
+                                </View>
+                                <View
+                                  style={[
+                                    tw``,
+                                    {
+                                      width: perWidth(252),
+                                      marginTop: perHeight(4),
+                                    },
+                                  ]}>
+                                  <Textcomp
+                                    text={`${
+                                      item?.item?.description !== undefined
+                                        ? item?.item?.description
+                                        : ''
+                                    }`}
+                                    size={12}
+                                    lineHeight={14}
+                                    color={colors.white}
+                                    fontFamily={'Inter-SemiBold'}
+                                    numberOfLines={2}
+                                  />
+                                </View>
+                              </View>
                             </View>
-                          </View>
-                          {/* <View>
+                            {/* <View>
                         <View
                           style={[
                             tw``,
@@ -981,42 +993,50 @@ const ServiceProviderProfile = () => {
                           />
                         </View>
                       </View> */}
-                          <View
-                            style={tw`mt-auto flex flex-row items-center justify-between`}>
                             <View
-                              style={[
-                                tw``,
-                                {width: perWidth(105), marginTop: perWidth(4)},
-                              ]}>
-                              <Textcomp
-                                text={`${formatDateHistory3(
-                                  item?.item?.createdAt,
-                                )}`}
-                                size={12}
-                                lineHeight={14}
-                                color={colors.white}
-                                fontFamily={'Inter-SemiBold'}
-                              />
-                            </View>
+                              style={tw`mt-auto flex flex-row items-center justify-between`}>
+                              <View
+                                style={[
+                                  tw``,
+                                  {
+                                    width: perWidth(105),
+                                    marginTop: perWidth(4),
+                                  },
+                                ]}>
+                                <Textcomp
+                                  text={`${formatDateHistory3(
+                                    item?.item?.createdAt,
+                                  )}`}
+                                  size={12}
+                                  lineHeight={14}
+                                  color={colors.white}
+                                  fontFamily={'Inter-SemiBold'}
+                                />
+                              </View>
 
-                            <View style={[tw``, {}]}>
-                              <Textcomp
-                                text={'COMPLETED'}
-                                size={12}
-                                lineHeight={14}
-                                color={colors.primary}
-                                fontFamily={'Inter-Bold'}
-                              />
+                              <View style={[tw``, {}]}>
+                                <Textcomp
+                                  text={'COMPLETED'}
+                                  size={12}
+                                  lineHeight={14}
+                                  color={colors.primary}
+                                  fontFamily={'Inter-Bold'}
+                                />
+                              </View>
                             </View>
                           </View>
-                        </View>
+                          {item?.index ===
+                            serviceProviderData?.jobs.length - 1 && (
+                            <View style={tw`h-60 w-full`} />
+                          )}
+                        </>
                       );
                     }}
                     //   keyExtractor={item => item.id}
                     numColumns={1}
                     contentContainerStyle={{marginTop: 10}}
+                    ListFooterComponent={<View style={tw`h-150`} />}
                   />
-
                   <View style={tw`h-150`} />
                 </ScrollView>
               )}
@@ -1025,7 +1045,7 @@ const ServiceProviderProfile = () => {
           {activeSection === 'Reviews' && (
             <ScrollView
               contentContainerStyle={[
-                tw`mx-2 h-auto `,
+                tw`mx-2 `,
                 {flex: 0, borderRadius: 5, marginTop: perHeight(1)},
               ]}>
               <View
@@ -1051,7 +1071,11 @@ const ServiceProviderProfile = () => {
                   </View>
                   <View style={tw` pt-2`}>
                     <Review
-                      value={serviceProviderData?.rating || 0}
+                      value={
+                        serviceProviderData?.rating ||
+                        serviceProviderData?.averageRating ||
+                        0
+                      }
                       editable={false}
                     />
                   </View>
@@ -1076,7 +1100,7 @@ const ServiceProviderProfile = () => {
                 <View style={tw`flex mt-auto flex-row justify-between`}>
                   <View style={tw` pt-2`}>
                     <Textcomp
-                      text={'Woul recommend'}
+                      text={'Would recommend'}
                       size={12}
                       lineHeight={14}
                       color={'#FFFFFF'}
@@ -1108,129 +1132,133 @@ const ServiceProviderProfile = () => {
                   </View>
                 </View>
               </View>
-
               <FlatList
-                scrollEnabled={true}
+                scrollEnabled={false}
                 data={serviceProviderData?.reviews || []}
                 renderItem={(item, index) => {
                   return (
-                    <View
-                      style={[
-                        tw` ${index === 0 ? 'mt-0' : 'mt-4'}  mx-auto bg-[${
-                          colors.darkPurple
-                        }]`,
-                        {
-                          height: perWidth(157),
-                          width: SIZES.width * 0.95,
-                          borderWidth: 0,
-                          borderRadius: 5,
-                          // marginLeft: index === 0 ? 10 : 3,
-                          paddingHorizontal: perWidth(16),
-                          paddingVertical: perWidth(14),
-                        },
-                      ]}>
-                      <View style={tw`flex flex-row `}>
-                        <View
-                          style={[
-                            tw``,
-                            {width: perWidth(50), height: perWidth(50)},
-                          ]}>
-                          <FastImage
-                            style={[
-                              tw`mr-2`,
-                              {
-                                width: perWidth(50),
-                                height: perWidth(50),
-                                borderRadius: perWidth(50) / 2,
-                              },
-                            ]}
-                            source={{
-                              uri: 'https://res.cloudinary.com/dr0pef3mn/image/upload/v1691626246/Assets/1691626245707-Frame%2071.png.png',
-                              headers: {Authorization: 'someAuthToken'},
-                              priority: FastImage.priority.normal,
-                            }}
-                            resizeMode={FastImage.resizeMode.cover}
-                          />
-                          <View
-                            style={[
-                              tw`absolute bottom-0 border-2 right-1 rounded-full`,
-                              {
-                                width: 8,
-                                height: 8,
-                                backgroundColor: colors.green,
-                              },
-                            ]}
-                          />
-                        </View>
-                        <View style={[tw`flex-1`, {marginLeft: perWidth(12)}]}>
-                          <View style={[tw`flex flex-row justify-between`, {}]}>
-                            <View style={[tw``, {}]}>
-                              <Textcomp
-                                text={`${item?.item?.user?.firstName} ${item?.item?.user?.lastName}`}
-                                size={14}
-                                lineHeight={16}
-                                color={colors.white}
-                                fontFamily={'Inter-Bold'}
-                              />
-                            </View>
-                            <View style={tw` pt-2`}>
-                              <Review
-                                value={item.item?.averageRating}
-                                editable={false}
-                              />
-                            </View>
-                          </View>
+                    <>
+                      <View
+                        style={[
+                          tw` ${index === 0 ? 'mt-0' : 'mt-4'}  mx-auto bg-[${
+                            colors.darkPurple
+                          }]`,
+                          {
+                            height: perWidth(157),
+                            width: SIZES.width * 0.95,
+                            borderWidth: 0,
+                            borderRadius: 5,
+                            // marginLeft: index === 0 ? 10 : 3,
+                            paddingHorizontal: perWidth(16),
+                            paddingVertical: perWidth(14),
+                          },
+                        ]}>
+                        <View style={tw`flex flex-row `}>
                           <View
                             style={[
                               tw``,
-                              {width: perWidth(252), marginTop: perHeight(4)},
+                              {width: perWidth(50), height: perWidth(50)},
                             ]}>
-                            <Textcomp
-                              text={`${item?.item?.user?.state} `}
-                              size={12}
-                              lineHeight={14}
-                              color={'#FFFFFF80'}
-                              fontFamily={'Inter-SemiBold'}
-                              numberOfLines={2}
+                            <FastImage
+                              style={[
+                                tw`mr-2`,
+                                {
+                                  width: perWidth(50),
+                                  height: perWidth(50),
+                                  borderRadius: perWidth(50) / 2,
+                                },
+                              ]}
+                              source={{
+                                // 'https://res.cloudinary.com/dr0pef3mn/image/upload/v1691626246/Assets/1691626245707-Frame%2071.png.png'
+                                uri:
+                                  item?.item?.user?.profilePic ??
+                                  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                                headers: {Authorization: 'someAuthToken'},
+                                priority: FastImage.priority.normal,
+                              }}
+                              resizeMode={FastImage.resizeMode.cover}
                             />
-                            <View style={[tw`ml-auto`, {}]}>
+                            <View
+                              style={[
+                                tw`absolute bottom-0 border-2 right-1 rounded-full`,
+                                {
+                                  width: 8,
+                                  height: 8,
+                                  backgroundColor: colors.green,
+                                },
+                              ]}
+                            />
+                          </View>
+                          <View
+                            style={[tw`flex-1`, {marginLeft: perWidth(12)}]}>
+                            <View
+                              style={[tw`flex flex-row justify-between`, {}]}>
+                              <View style={[tw``, {}]}>
+                                <Textcomp
+                                  text={`${item?.item?.user?.firstName} ${item?.item?.user?.lastName}`}
+                                  size={14}
+                                  lineHeight={16}
+                                  color={colors.white}
+                                  fontFamily={'Inter-Bold'}
+                                />
+                              </View>
+                              <View style={tw` pt-2`}>
+                                <Review
+                                  value={item.item?.averageRating}
+                                  editable={false}
+                                />
+                              </View>
+                            </View>
+                            <View
+                              style={[
+                                tw``,
+                                {width: perWidth(252), marginTop: perHeight(4)},
+                              ]}>
                               <Textcomp
-                                text={`${getDaysAgo(
-                                  item?.item?.createdAt,
-                                )} days ago`}
+                                text={`${item?.item?.user?.state} `}
                                 size={12}
-                                lineHeight={16}
+                                lineHeight={14}
                                 color={'#FFFFFF80'}
-                                fontFamily={'Inter-Bold'}
+                                fontFamily={'Inter-SemiBold'}
+                                numberOfLines={2}
                               />
+                              <View style={[tw`ml-auto`, {}]}>
+                                <Textcomp
+                                  text={`${getDaysAgo(
+                                    item?.item?.createdAt,
+                                  )} days ago`}
+                                  size={12}
+                                  lineHeight={16}
+                                  color={'#FFFFFF80'}
+                                  fontFamily={'Inter-Bold'}
+                                />
+                              </View>
                             </View>
                           </View>
                         </View>
-                      </View>
-                      <View>
-                        <View
-                          style={[
-                            tw` ml-auto mr-2`,
-                            {width: perWidth(252), marginTop: perWidth(5)},
-                          ]}>
-                          <Textcomp
-                            text={item?.item?.comment}
-                            size={12}
-                            lineHeight={14}
-                            color={colors.white}
-                            fontFamily={'Inter-SemiBold'}
-                          />
+                        <View>
+                          <View
+                            style={[
+                              tw` ml-auto mr-2`,
+                              {width: perWidth(252), marginTop: perWidth(5)},
+                            ]}>
+                            <Textcomp
+                              text={item?.item?.comment}
+                              size={12}
+                              lineHeight={14}
+                              color={colors.white}
+                              fontFamily={'Inter-SemiBold'}
+                            />
+                          </View>
                         </View>
                       </View>
-                    </View>
+                    </>
                   );
                 }}
-                //   keyExtractor={item => item.id}
                 numColumns={1}
                 contentContainerStyle={{marginTop: 10}}
-                ListFooterComponent={<View style={tw`h-40`} />}
+                ListFooterComponent={<View style={tw`h-60`} />}
               />
-
               <View style={tw`h-150`} />
             </ScrollView>
           )}
