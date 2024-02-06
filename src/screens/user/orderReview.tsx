@@ -43,8 +43,7 @@ const OrderReview = ({route}: any) => {
   );
 
   const handleCreate = async () => {
-    // setisLoading(true);
-
+    setisLoading(true);
     const scheduledDeliveryDate = new Date(_data.scheduledDeliveryDate);
     const formattedScheduledDate = new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
@@ -108,8 +107,9 @@ const OrderReview = ({route}: any) => {
       ToastShort(`Error: ${error}`);
       setisLoading(false);
       setisLoading(false);
+    } finally {
+      setisLoading(false);
     }
-    setisLoading(false);
   };
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -174,8 +174,7 @@ const OrderReview = ({route}: any) => {
                       fontFamily={'Inter-Medium'}
                     />
                   </View>
-                  <View
-                    style={[tw` mt-2`, {maxHeight: 200, minHeight: 50}]}>
+                  <View style={[tw` mt-2`, {maxHeight: 200, minHeight: 50}]}>
                     <Textcomp
                       text={`${_data?.description}`}
                       size={12}

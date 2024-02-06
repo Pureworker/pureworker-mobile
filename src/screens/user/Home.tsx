@@ -8,9 +8,9 @@ import {
   StatusBar,
   ScrollView,
   Platform,
+  RefreshControl,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import _ from 'lodash';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
@@ -19,11 +19,6 @@ import colors from '../../constants/colors';
 import ServiceCard from '../../components/cards/serviceCard';
 import ClosetoYou from '../../components/cards/closeToYou';
 import CategoryList2 from '../../components/CategoryList2';
-import {
-  useGetAllServiceProviderPotfolioQuery,
-  useGetAllServiceProviderProfileQuery,
-  useGetUserDetailQuery,
-} from '../../store/slice/api';
 import Modal from 'react-native-modal';
 import {StackNavigation} from '../../constants/navigation';
 import {useNavigation} from '@react-navigation/native';
@@ -47,6 +42,7 @@ import Geolocation from 'react-native-geolocation-service';
 import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {ToastLong} from '../../utils/utils';
 import WelcomeModal from '../../components/SignupModal';
+import axios from 'axios';
 const Home = () => {
   useEffect(() => {
     //Request location permission
@@ -73,42 +69,15 @@ const Home = () => {
   const dispatch = useDispatch();
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
-  const {
-    data: getServiceProviderProfileData,
-    isLoading: isLoadingServiceProviderProfile,
-  } = useGetAllServiceProviderProfileQuery();
-  const getServiceProviderProfile = getServiceProviderProfileData ?? [];
-  const {
-    data: getServiceProviderPotfolioData,
-    isLoading: isLoadingServiceProviderPotfolio,
-  } = useGetAllServiceProviderPotfolioQuery();
-  const getServiceProviderPotfolio = getServiceProviderPotfolioData ?? [];
-  // console.log("🚀 ~ file: Home.tsx:52 ~ Home ~ getServiceProviderPotfolio:", getServiceProviderPotfolio)
-  const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
-  // const { data: getUserData, isLoading: isLoadingUser } = useGetUserDataQuery();
-  // const getUser = getUserData ?? [];
-  // const {data: getCategoryData, isLoading, isError} = useGetCategoryQuery();
-  // const getCategory = getCategoryData ?? [];
   const [InfoModal, setInfoModal] = useState(false);
-  const filteredData = !_.isEmpty(getServiceProviderPotfolioData)
-    ? getServiceProviderPotfolioData.filter((item: {description: string}) =>
-        item.description.toLowerCase().includes(search.toLowerCase()),
-      )
-    : [];
   const [isLoading, setisLoading] = useState(false);
   useEffect(() => {
     const initGetUsers = async () => {
       const res: any = await getUser('');
-      console.log('dddddddd', res?.data);
+      // console.log('dddddddd', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addUserData(res?.data?.user));
       }
-      // if (!userData?.geoLocation || userData?.geoLocation === undefined || userData?.geoLocation === null) {
-      //   navigation.navigate('AddAddress');
-      //   ToastLong('Address is required');
-      // } else {
-      // }
-      // Check if userData exists and has valid geoLocation coordinates
       console.error('GEOLOCATION::', res?.data?.user?.geoLocation);
       const userData = res?.data?.user;
       if (
@@ -135,7 +104,6 @@ const Home = () => {
     const initGetPopularServices = async () => {
       setisLoading(true);
       const res: any = await getPopularService('');
-      // console.log('ppppppppp', res?.data?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addPopularServices(res?.data?.data));
       }
@@ -163,6 +131,14 @@ const Home = () => {
     initGetPopularServices();
     initGetProviderByProximity();
     getSupportUser('');
+    // axios
+    // .post('https://api.pureworker.com/api/location', {long: 0, lat: 1})
+    // .then(response => {
+    //   console.log('Location sent successfully:', response.data);
+    // })
+    // .catch(error => {
+    //   console.error('Error sending location:', error);
+    // });
   }, [dispatch]);
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
@@ -198,7 +174,6 @@ const Home = () => {
   //     return [];
   //   }
   // }, [search, getServiceProviderProfile]);
-  console.log(getServiceProviderProfile[0]);
   const [ContactAgent, setContactAgent] = useState(false);
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const handleDropdownClick = (catId: React.SetStateAction<null>) => {
@@ -210,6 +185,17 @@ const Home = () => {
   };
   // Sentry.nativeCrash();
   const [welcomeshow, setwelcomeshow] = useState(true);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    // Call your refresh function here
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000); // Simulating a delay, replace with your actual refresh logic
+  };
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
@@ -221,7 +207,10 @@ const Home = () => {
             paddingTop: Platform.OS === 'ios' ? 10 : 20,
           },
         ]}>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           <View
             style={[
               tw`items-center justify-center`,
@@ -474,7 +463,6 @@ const Home = () => {
                 horizontal>
                 <ScrollView scrollEnabled={false}>
                   {_getCategory?.map((item, index) => {
-                    // console.log(item);
                     return (
                       <CategoryList2
                         key={index}

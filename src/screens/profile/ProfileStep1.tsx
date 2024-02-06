@@ -106,6 +106,8 @@ const PRofileStep1 = () => {
 
   const [isLoading, setisLoading] = useState(false);
   const handleProfileSetup = async () => {
+    console.log(categoryId);
+    return
     setisLoading(true);
     if (categoryId) {
       const res = await completeProfile({services: categoryId, action: 'add'});
@@ -185,6 +187,15 @@ const PRofileStep1 = () => {
               color: colors.black,
             }}
           />
+          <View style={tw``}>
+            <Textcomp
+              text={'You can add multiple services'}
+              size={12}
+              lineHeight={17}
+              color={'#000000'}
+              fontFamily={'Inter-Regular'}
+            />
+          </View>
 
           <Collapse
             isExpanded={collapseState}
@@ -512,15 +523,6 @@ const PRofileStep1 = () => {
         </View>
 
         <View style={[{marginLeft: 'auto', marginTop: 25, paddingRight: 20}]}>
-          <View style={tw`mx-auto`}>
-            <Textcomp
-              text={'You can add multiple services'}
-              size={12}
-              lineHeight={17}
-              color={'#000000'}
-              fontFamily={'Inter-Regular'}
-            />
-          </View>
           <Button
             onClick={() => {
               handleNext();
@@ -533,7 +535,7 @@ const PRofileStep1 = () => {
             text={'Next'}
           />
         </View>
-        <View style={tw`h-40`}/>
+        <View style={tw`h-40`} />
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>

@@ -4,6 +4,9 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: "com.google.gms.google-services"
 apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
 
+Project background_geolocation = project(':react-native-background-geolocation')
+apply from: "${background_geolocation.projectDir}/app.gradle"
+
 import com.android.build.OutputFile
 
 /**
@@ -137,8 +140,8 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            // signingConfig signingConfigs.debug
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
+            // signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -167,6 +170,7 @@ dependencies {
     //
     implementation project(':react-native-splash-screen')
     implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation project(':react-native-background-fetch')
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
     implementation platform('com.google.firebase:firebase-bom:32.0.0')

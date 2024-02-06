@@ -150,7 +150,8 @@ const Home = ({navigation}: any) => {
         //   (item: {status: string}) => item?.status === 'INPROGRESS',
         // );
         let inProgress = res?.data?.data?.filter(
-          (item: { status: string }) => item?.status === 'INPROGRESS' || item?.status === 'TRACK',
+          (item: {status: string}) =>
+            item?.status === 'INPROGRESS' || item?.status === 'TRACK',
         );
         let pending = res?.data?.data?.filter(
           (item: {status: string}) => item?.status === 'PENDING',
@@ -170,15 +171,14 @@ const Home = ({navigation}: any) => {
     //   (item: {status: string}) => item?.status === 'INPROGRESS',
     // );
     let inProgress = providerOrders?.filter(
-      (item: { status: string }) => item?.status === 'INPROGRESS' || item?.status === 'TRACK',
+      (item: {status: string}) =>
+        item?.status === 'INPROGRESS' || item?.status === 'TRACK',
     );
     let pending = providerOrders?.filter(
       (item: {status: string}) => item?.status === 'PENDING',
     );
     setOinProgress(inProgress);
     setOinPending(pending);
-
-
   }, [providerOrders]);
 
   //selectors
@@ -190,7 +190,7 @@ const Home = ({navigation}: any) => {
   // const {currentState, setCurrentState} = useContext(RouteContext);
   const formStage = useSelector((state: any) => state.user.formStage);
   const supportUser = useSelector((store: any) => store.user.supportUser);
-  console.log('stage', formStage, OinPending, 'progress:', OinProgress);
+  // console.log('stage', formStage, OinPending, 'progress:', OinProgress);
   // useEffect(() => {
   //   const emitProviderOnlineStatus = () => {
   //     // Emit an event to the backend indicating that the customer is still connected
@@ -843,15 +843,16 @@ const Home = ({navigation}: any) => {
               </View>
             </View>
           )}
-          {welcomeModal && welcomeModal === true && (
-            <WelcomeModal
-              close={() => {
-                dispatch(setwelcomeModal(false));
-              }}
-            />
-          )}
         </View>
       </Modal>
+
+      {welcomeModal && welcomeModal === true && (
+        <WelcomeModal
+          close={() => {
+            dispatch(setwelcomeModal(false));
+          }}
+        />
+      )}
     </SafeAreaView>
   );
 };

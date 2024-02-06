@@ -942,6 +942,7 @@ export default function BusinessSignup() {
                   lineHeight={17}
                   color={'#000413'}
                   fontFamily={'Inter-Regular'}
+                  style={{fontWeight: 400}}
                 />
               </TouchableOpacity>
 

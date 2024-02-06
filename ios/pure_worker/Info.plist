@@ -22,10 +22,10 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
 	<key>CodePushDeploymentKey</key>
 	<string>z_7c9nYCWlbz6qIUdzsL_5-KrwpAXi2zFWS-2</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
@@ -44,18 +44,18 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Pureworker requires access to your calendar for order scheduling.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Pureworker requires access to the camera to capture images for user verification.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Pureworker requires access your location for provider mapping.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Pureworker requires access your location for provider mapping.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Pureworker requires access your location for provider mapping.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Pureworker requires access to the photo library to upload pictures.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Pureworker requires access to the photo library to upload pictures.</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>Pureworker requires access to your calendar for order scheduling.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Inter-Bold.ttf</string>
@@ -66,6 +66,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
+		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

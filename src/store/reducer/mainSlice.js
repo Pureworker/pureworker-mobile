@@ -130,7 +130,7 @@ export const mainSlice = createSlice({
       // console.log(action.payload, arr);
 
       const nameToRemove = action.payload.name;
-      const idToRemove = action.payload.id;
+      const idToRemove = action.payload._id;
 
       const updatedPickedServices = state.pickedServices.filter(
         text => text.name !== nameToRemove,

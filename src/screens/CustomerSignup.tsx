@@ -499,6 +499,7 @@ export default function CustomerSignup() {
                 lineHeight={17}
                 color={'#000413'}
                 fontFamily={'Inter-Regular'}
+                style={{fontWeight: 400}}
               />
             </TouchableOpacity>
             {/* <ScrollView horizontal style={{width: SIZES.width * 0.9, backgroundColor: 'red'}}> */}

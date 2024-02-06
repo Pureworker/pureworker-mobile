@@ -22,9 +22,10 @@ export const getUser = async (param: any) => {
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
     if (response.status === 201) {
-      console.log('response data:');
+      // console.log('response data:');
     }
-    console.log(response?.data);
+    console.log('GET_USER:',response?.status);
+    // console.log(response?.data);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -739,7 +740,7 @@ export const getProviderOrders = async (param: any) => {
 // };
 
 export const addPushToken = async (param: any) => {
-  console.log('addPushToken func started', param);
+  // console.log('addPushToken func started', param);
   const AuthToken = await AsyncStorage.getItem('AuthToken');
 
   try {

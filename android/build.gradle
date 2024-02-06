@@ -23,6 +23,11 @@ buildscript {
 }
 
 allprojects {
+    repositories {
+        maven { url("${project(':react-native-background-geolocation').projectDir}/libs")
+        maven { url 'https://developer.huawei.com/repo/' } }
+        maven { url("${project(':react-native-background-fetch').projectDir}/libs") }
+    }
     configurations.all {
         resolutionStrategy {
             force 'com.facebook.react:react-native:0.71.7'

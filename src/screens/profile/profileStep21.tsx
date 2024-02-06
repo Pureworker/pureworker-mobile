@@ -377,7 +377,7 @@ const ProfileStep21 = () => {
                     }}
                   />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setImageUrl('')}>
+                {/* <TouchableOpacity onPress={() => setImageUrl('')}>
                   <Image
                     source={images.bin}
                     resizeMode="contain"
@@ -388,7 +388,7 @@ const ProfileStep21 = () => {
                       tintColor: '#000',
                     }}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </View>
             <TextWrapper
