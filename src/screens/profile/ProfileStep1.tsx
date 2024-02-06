@@ -39,6 +39,7 @@ import CustomLoading from '../../components/customLoading';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {ToastShort} from '../../utils/utils';
 import {SIZES} from '../../utils/position/sizes';
+import Textcomp from '../../components/Textcomp';
 
 const PRofileStep1 = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -510,23 +511,29 @@ const PRofileStep1 = () => {
             : null}
         </View>
 
-        <View
-          style={[
-            generalStyles.rowBetween,
-            {marginHorizontal: 'auto', marginTop: 25},
-          ]}>
+        <View style={[{marginLeft: 'auto', marginTop: 25, paddingRight: 20}]}>
+          <View style={tw`mx-auto`}>
+            <Textcomp
+              text={'You can add multiple services'}
+              size={12}
+              lineHeight={17}
+              color={'#000000'}
+              fontFamily={'Inter-Regular'}
+            />
+          </View>
           <Button
             onClick={() => {
               handleNext();
             }}
             style={[
-              tw`mx-auto`,
-              {width: SIZES.width * 0.65, backgroundColor: colors.lightBlack},
+              tw`mx-auto mt-3`,
+              {width: SIZES.width * 0.3, backgroundColor: colors.lightBlack},
             ]}
             textStyle={{color: colors.primary}}
             text={'Next'}
           />
         </View>
+        <View style={tw`h-40`}/>
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </View>

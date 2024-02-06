@@ -72,5 +72,6 @@ const images = {
   sidetri: require('../assets/images/sidetri.png'),
   cancelCircle: require('../assets/images/cancelCircle.png'),
   rate: require('../assets/images/rate.png'),
+  Naira2: require('../assets/images/Naira2.png'),
 };
 export default images;

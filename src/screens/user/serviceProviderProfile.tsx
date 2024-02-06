@@ -592,9 +592,9 @@ const ServiceProviderProfile = () => {
                 ]}>
                 <View style={tw`ml-1`}>
                   <Image
-                    source={images.eye}
+                    source={images.Naira2}
                     resizeMode="contain"
-                    style={{width: 25, height: 25}}
+                    style={{width: 25, height: 25, tintColor: 'white'}}
                   />
                 </View>
                 <View style={tw`ml-3 `}>
