@@ -18,6 +18,10 @@ export const isValidPhoneNumber = (phoneNumber: any) => {
   return phoneRegex.test(phoneNumber);
 };
 
+export function roundToSingleDigit(number: number) {
+  return Math.round(number);
+}
+
 // export function formatDateHistory(inputDateStr) {
 //   const inputDate = new Date(inputDateStr);
 

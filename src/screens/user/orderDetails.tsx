@@ -256,7 +256,7 @@ const OrderDetails = () => {
                   providerData?.businessName
                     ? providerData?.businessName
                     : `${providerData?.firstName} ${providerData?.lastName}`
-                }  before hiring`}
+                } before hiring`}
                 size={11}
                 lineHeight={14}
                 color={'#000413'}
@@ -693,35 +693,38 @@ const OrderDetails = () => {
               }}
             />
           </View>
-          <View
-            style={[
-              tw`border-b border-[#00000033] pb-4 mx-4 px-4`,
-              {marginTop: perHeight(5)},
-            ]}>
-            <TextWrapper
-              children="Enter Address(if offline)"
-              isRequired={false}
-              fontType={'semiBold'}
-              style={{fontSize: 16, marginTop: 20, color: colors.black}}
-            />
 
+          {locationValue && locationValue !== 'Online' && (
             <View
               style={[
-                tw`flex flex-row px-3 items-center  rounded-lg mt-4`,
-                {backgroundColor: colors.greyLight1, height: perHeight(40)},
+                tw`border-b border-[#00000033] pb-4 mx-4 px-4`,
+                {marginTop: perHeight(5)},
               ]}>
-              <TextInput
-                style={[
-                  tw`flex-1 py-2 ml-3 text-black`,
-                  {fontFamily: 'Inter-Medium'},
-                ]}
-                keyboardType="default"
-                onChangeText={text => {
-                  setaddress(text);
-                }}
+              <TextWrapper
+                children="Enter Address(if offline)"
+                isRequired={false}
+                fontType={'semiBold'}
+                style={{fontSize: 16, marginTop: 20, color: colors.black}}
               />
+
+              <View
+                style={[
+                  tw`flex flex-row px-3 items-center  rounded-lg mt-4`,
+                  {backgroundColor: colors.greyLight1, height: perHeight(40)},
+                ]}>
+                <TextInput
+                  style={[
+                    tw`flex-1 py-2 ml-3 text-black`,
+                    {fontFamily: 'Inter-Medium'},
+                  ]}
+                  keyboardType="default"
+                  onChangeText={text => {
+                    setaddress(text);
+                  }}
+                />
+              </View>
             </View>
-          </View>
+          )}
 
           <View style={tw`mx-auto flex flex-row justify-between mt-8`}>
             <TouchableOpacity

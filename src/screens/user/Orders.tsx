@@ -392,6 +392,7 @@ const Orders = () => {
                               item={item.item}
                               index={item.index}
                               status={item.item?.status}
+                              showall={false}
                               // index % 3 === 0 ? 'Pending' : 'Inprogress'
                             />
                           );
@@ -423,6 +424,7 @@ const Orders = () => {
                               item={item.item}
                               index={item.index}
                               status={item.item?.status}
+                              showall={false}
                               // index % 3 === 0 ? 'Pending' : 'Inprogress'
                             />
                           );

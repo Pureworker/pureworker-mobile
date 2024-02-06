@@ -24,7 +24,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {addproviderOrders} from '../store/reducer/mainSlice';
 import RateyourCustommer from './modals/rateYourCustomer';
 
-const Orderscomponent2 = ({item, index, status}: any) => {
+const Orderscomponent2 = ({item, index, status, showall}: any) => {
   const [saved, setsaved] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const [orderDispute, setorderDispute] = useState(false);

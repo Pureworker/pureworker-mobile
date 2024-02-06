@@ -38,6 +38,7 @@ import {
   addcustomerOrders,
   addproviderOrders,
 } from '../../store/reducer/mainSlice';
+import Orderscomponent3 from '../../components/Orderscomponent3';
 
 const OrderActive = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -407,7 +408,7 @@ const OrderActive = ({route}: any) => {
                     ListFooterComponent={<View style={tw`h-20`} />}
                   />
                 </ScrollView> */}
-                <Orderscomponent
+                <Orderscomponent3
                   navigation={navigation}
                   // item={item.item}
                   // index={item.index}
@@ -415,6 +416,7 @@ const OrderActive = ({route}: any) => {
                   item={passedData}
                   index={item?.index}
                   status={passedData?.status}
+                  showall={true}
                 />
                 <View
                   style={[

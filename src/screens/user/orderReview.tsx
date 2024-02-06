@@ -174,7 +174,8 @@ const OrderReview = ({route}: any) => {
                       fontFamily={'Inter-Medium'}
                     />
                   </View>
-                  <View style={tw``}>
+                  <View
+                    style={[tw` mt-2`, {maxHeight: 200, minHeight: 50}]}>
                     <Textcomp
                       text={`${_data?.description}`}
                       size={12}

@@ -1,25 +1,23 @@
-import {Image, View, TouchableOpacity, Platform, Alert} from 'react-native';
-import {SIZES, perHeight, perWidth} from '../utils/position/sizes';
-import React, {useState} from 'react';
+import { Image, View, TouchableOpacity, Alert } from 'react-native';
+import { SIZES, perHeight, perWidth } from '../utils/position/sizes';
+import React, { useState } from 'react';
 import images from '../constants/images';
 import tw from 'twrnc';
 import Textcomp from './Textcomp';
 import colors from '../constants/colors';
-import {Rating, AirbnbRating} from 'react-native-ratings';
 import Modal from 'react-native-modal';
-import {WIDTH_WINDOW} from '../constants/generalStyles';
-import {useDispatch} from 'react-redux';
-import {cancelOrder, getUserOrders} from '../utils/api/func';
-import {addcustomerOrders} from '../store/reducer/mainSlice';
+import { WIDTH_WINDOW } from '../constants/generalStyles';
+import { useDispatch } from 'react-redux';
+import { cancelOrder, getUserOrders } from '../utils/api/func';
+import { addcustomerOrders } from '../store/reducer/mainSlice';
 import socket from '../utils/socket';
 import Chat from '../assets/svg/Chat';
 import Location from '../assets/svg/Location';
 import DisputeIcon from '../assets/svg/Dispute';
 import Cross from '../assets/svg/Cross';
 import Snackbar from 'react-native-snackbar';
-import {ToastShort} from '../utils/utils';
 
-const Orderscomponent = ({
+const Orderscomponent3 = ({
   item,
   index,
   status,
@@ -92,7 +90,6 @@ const Orderscomponent = ({
     setInfoModal(false);
     setmodalSection('All');
   };
-
   return (
     <>
       <>
@@ -102,7 +99,7 @@ const Orderscomponent = ({
           style={[
             tw` mt-4 mx-auto bg-[${colors.darkPurple}]`,
             {
-              height: perWidth(135),
+              //   height: perWidth(135),
               width: SIZES.width * 0.95,
               borderWidth: 0,
               borderRadius: 5,
@@ -153,98 +150,97 @@ const Orderscomponent = ({
                     fontFamily={'Inter-Bold'}
                   />
                 </View>
+                <View style={tw`ml-auto`}>
+                  {status === 'INPROGRESS' &&
+                    item?.isCompletedByProvider === false && (
+                      <View style={[tw``, {}]}>
+                        <Textcomp
+                          text={'IN PROGRESS'}
+                          size={14}
+                          lineHeight={16}
+                          color={colors.primary}
+                          fontFamily={'Inter-Bold'}
+                        />
+                      </View>
+                    )}
+                  {status === 'PENDING' && (
+                    <View style={[tw``, {}]}>
+                      <Textcomp
+                        text={'PENDING'}
+                        size={14}
+                        lineHeight={16}
+                        color={'#C705B3'}
+                        fontFamily={'Inter-Bold'}
+                      />
+                    </View>
+                  )}
+                  {status === 'ACCEPTED' && (
+                    <View style={[tw``, {}]}>
+                      <Textcomp
+                        text={'ACCEPTED'}
+                        size={14}
+                        lineHeight={16}
+                        color={'#29D31A'}
+                        fontFamily={'Inter-Bold'}
+                      />
+                    </View>
+                  )}
+                  {(status === 'COMPLETED' ||
+                    item?.isCompletedByProvider === true) && (
+                    <View style={[tw``, {}]}>
+                      <Textcomp
+                        text={'COMPLETED'}
+                        size={14}
+                        lineHeight={16}
+                        color={'#FFC727'}
+                        fontFamily={'Inter-Bold'}
+                      />
+                    </View>
+                  )}
+                  {status === 'DECLINED' && (
+                    <View style={[tw``, {}]}>
+                      <Textcomp
+                        text={'DECLINED'}
+                        size={14}
+                        lineHeight={16}
+                        color={'#EB001B'}
+                        fontFamily={'Inter-Bold'}
+                      />
+                    </View>
+                  )}
+                  {status === 'CANCELLED' && (
+                    <View style={[tw``, {}]}>
+                      <Textcomp
+                        text={'CANCELLED'}
+                        size={14}
+                        lineHeight={16}
+                        color={'#EB001B'}
+                        fontFamily={'Inter-Bold'}
+                      />
+                    </View>
+                  )}
+                  {status === 'TRACK' && (
+                    <View style={[tw``, {}]}>
+                      <Textcomp
+                        text={'IN TRANSIT'}
+                        size={14}
+                        lineHeight={16}
+                        color={'#EB001B'}
+                        fontFamily={'Inter-Bold'}
+                      />
+                    </View>
+                  )}
+                </View>
               </View>
               <View
                 style={[tw``, {width: perWidth(252), marginTop: perHeight(4)}]}>
                 <Textcomp
                   text={`${item?.description}`}
-                  size={12}
+                  size={11}
                   lineHeight={14}
                   color={colors.white}
                   fontFamily={'Inter-SemiBold'}
-                  numberOfLines={2}
                 />
-              </View>
-              <View style={tw`ml-auto`}>
-                {status === 'INPROGRESS' &&
-                  item?.isCompletedByProvider === false && (
-                    <View style={[tw``, {}]}>
-                      <Textcomp
-                        text={'IN PROGRESS'}
-                        size={14}
-                        lineHeight={16}
-                        color={colors.primary}
-                        fontFamily={'Inter-Bold'}
-                      />
-                    </View>
-                  )}
-                {status === 'PENDING' && (
-                  <View style={[tw``, {}]}>
-                    <Textcomp
-                      text={'PENDING'}
-                      size={14}
-                      lineHeight={16}
-                      color={'#C705B3'}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </View>
-                )}
-                {status === 'ACCEPTED' && (
-                  <View style={[tw``, {}]}>
-                    <Textcomp
-                      text={'ACCEPTED'}
-                      size={14}
-                      lineHeight={16}
-                      color={'#29D31A'}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </View>
-                )}
-                {(status === 'COMPLETED' ||
-                  item?.isCompletedByProvider === true) && (
-                  <View style={[tw``, {}]}>
-                    <Textcomp
-                      text={'COMPLETED'}
-                      size={14}
-                      lineHeight={16}
-                      color={'#FFC727'}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </View>
-                )}
-                {status === 'DECLINED' && (
-                  <View style={[tw``, {}]}>
-                    <Textcomp
-                      text={'DECLINED'}
-                      size={14}
-                      lineHeight={16}
-                      color={'#EB001B'}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </View>
-                )}
-                {status === 'CANCELLED' && (
-                  <View style={[tw``, {}]}>
-                    <Textcomp
-                      text={'CANCELLED'}
-                      size={14}
-                      lineHeight={16}
-                      color={'#EB001B'}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </View>
-                )}
-                {status === 'TRACK' && (
-                  <View style={[tw``, {}]}>
-                    <Textcomp
-                      text={'IN TRANSIT'}
-                      size={14}
-                      lineHeight={16}
-                      color={'#EB001B'}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </View>
-                )}
               </View>
             </View>
           </View>
@@ -268,7 +264,7 @@ const Orderscomponent = ({
               />
             </View>
           </View>
-          <View style={tw`flex flex-row mt-auto justify-between`}>
+          <View style={tw`flex flex-row mt-3 justify-between`}>
             <View>
               <Textcomp
                 text={`${formatDateToCustomFormat(
@@ -624,4 +620,4 @@ const Orderscomponent = ({
     </>
   );
 };
-export default Orderscomponent;
+export default Orderscomponent3;
