@@ -27,7 +27,7 @@ export default function OrderPlaced({navigation, visible, func, item}: any) {
         <TouchableOpacity onPress={() => func(false)} style={tw`flex-1`} />
         <View
           style={tw`h-[${
-            Platform.OS === 'ios' ? '30.5%' : '35%'
+            Platform.OS === 'ios' ? '37.5%' : '35%'
           }] mt-auto bg-[#D9D9D9]`}>
           <TouchableOpacity
             onPress={() => {

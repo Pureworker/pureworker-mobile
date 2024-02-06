@@ -256,7 +256,7 @@ const PRofileStep2 = () => {
       });
     }
   };
-  const {currentState, setCurrentState} = useContext(RouteContext);
+  // const {currentState, setCurrentState} = useContext(RouteContext);
   console.log('here', categoryId);
   const _handleFuncUpload = async () => {
     setisLoading(true);

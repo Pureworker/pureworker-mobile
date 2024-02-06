@@ -56,7 +56,7 @@ const _Services = ({route}: any) => {
     const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
     return `${roundedKilometers} km`;
   }
-  // console.log('BOOKMARK', userData?.bookmarks);
+  console.log('BOOKMARK', userData?.bookmarks);
   useEffect(() => {
     const query = userData?.bookmarks?.filter(
       (item: {service: any}) => item?.service === id,
@@ -289,7 +289,8 @@ const _Services = ({route}: any) => {
           <>
             {!isLoading && (
               <>
-                {(_providersByCateegory.length < 1 || searchResults?.length < 1) ? (
+                {_providersByCateegory.length < 1 ||
+                searchResults?.length < 1 ? (
                   <View
                     style={[
                       tw`bg-[#D9D9D9] flex flex-col rounded  mt-3 mx-2`,
@@ -394,6 +395,8 @@ const _Services = ({route}: any) => {
                             horizontal={false}
                             scrollEnabled={false}
                             renderItem={(item: any, index: any) => {
+                              console.log('SSS--', item);
+
                               return (
                                 <TouchableOpacity>
                                   <ServiceCard2

@@ -114,7 +114,7 @@ const PRofileStep1 = () => {
         // navigation.navigate('ProfileStep2');
         // setCurrentState('2');
         navigation.navigate('ProfileStep21');
-        setCurrentState('21');
+        // setCurrentState('21');
         dispatch(addformStage(21));
       } else {
         Snackbar.show({
