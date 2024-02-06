@@ -43,6 +43,8 @@ export default function NotificationComp({item, seen, seen_}: any) {
     }
   }
 
+  console.log(item);
+  
   return (
     <>
       <TouchableOpacity
@@ -58,7 +60,7 @@ export default function NotificationComp({item, seen, seen_}: any) {
               {width: 8, height: 8, borderRadius: 5},
             ]}
           />
-          <View style={[tw`flex  `, {width: perWidth(270)}]}>
+          <View style={[tw`flex ml-2 `, {width: perWidth(270)}]}>
             <Textcomp
               text={item?.title}
               size={14}

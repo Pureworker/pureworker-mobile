@@ -770,7 +770,7 @@ const OrderDetails = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={tw`h-30`} />
+        <View style={tw`h-80`} />
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
       <View style={tw`h-1 w-full mb-5 bg-black`} />

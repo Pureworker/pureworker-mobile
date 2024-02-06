@@ -193,8 +193,8 @@ const CloseToYou = () => {
         )}
       </>
       <ScrollView>
-        <View style={tw`mt-3 mb-3`}>
-          <View style={tw`flex flex-row`}>
+        <View style={tw`mt-4 mb-3`}>
+          {/* <View style={tw`flex flex-row`}>
             <TouchableOpacity
               onPress={() => {
                 setActiveSection('All');
@@ -229,7 +229,7 @@ const CloseToYou = () => {
                 fontFamily={'Inter-SemiBold'}
               />
             </TouchableOpacity>
-          </View>
+          </View> */}
 
           {closeProvider.length < 1 ? (
             <View

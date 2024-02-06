@@ -402,7 +402,6 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                 <TouchableOpacity
                   onPress={() => {
                     setInfoModal(false);
-                    navigation.navigate('ViewLocation');
                   }}
                   style={[
                     tw`flex mt-10 flex-row`,
@@ -551,9 +550,13 @@ const Orderscomponent2 = ({item, index, status, navigation, editable}: any) => {
                   if (status === 'ACCEPTED' || status === 'PENDING') {
                     await handleCancel();
                   } else {
-                    ToastShort(
-                      'Only pending and accepted Orders can be cancelled!>',
-                    );
+                    setmodalSection('All');
+                    Snackbar.show({
+                      text: 'You can’t cancel this order. Only Pending and Accepted Orders can be canceled.',
+                      duration: Snackbar.LENGTH_SHORT,
+                      textColor: '#fff',
+                      backgroundColor: '#88087B',
+                    });
                   }
                 }}
                 style={[

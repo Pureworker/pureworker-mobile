@@ -37,7 +37,13 @@ import {
   addprovidersReviews,
   setserviceProviderData,
 } from '../../store/reducer/mainSlice';
-import {ToastShort, timeAgo} from '../../utils/utils';
+import {
+  ToastShort,
+  formatDateHistory,
+  formatDateHistory2,
+  formatDateHistory3,
+  timeAgo,
+} from '../../utils/utils';
 import socket from '../../utils/socket';
 
 const ServiceProviderProfile = () => {
@@ -173,7 +179,7 @@ const ServiceProviderProfile = () => {
       );
       const __id = ch?.[0]?._id;
       const res: any = await deletebookMarkServiceProvide(__id);
-      if (res?.status === 200 || res?.status === 201 || res?.status === 204 ) {
+      if (res?.status === 200 || res?.status === 201 || res?.status === 204) {
         ToastShort('Unboomarked!.');
         setsaved(!saved);
       } else {
@@ -875,6 +881,7 @@ const ServiceProviderProfile = () => {
                     scrollEnabled={false}
                     data={serviceProviderData?.jobs || []}
                     renderItem={(item, index) => {
+                      console.log('JOOBSS', item);
                       return (
                         <View
                           style={[
@@ -907,7 +914,9 @@ const ServiceProviderProfile = () => {
                                   },
                                 ]}
                                 source={{
-                                  uri: 'https://res.cloudinary.com/dr0pef3mn/image/upload/v1691626246/Assets/1691626245707-Frame%2071.png.png',
+                                  uri:
+                                    item?.item?.user?.profilePic ??
+                                    'https://res.cloudinary.com/dr0pef3mn/image/upload/v1691626246/Assets/1691626245707-Frame%2071.png.png',
                                   headers: {Authorization: 'someAuthToken'},
                                   priority: FastImage.priority.normal,
                                 }}
@@ -930,7 +939,7 @@ const ServiceProviderProfile = () => {
                                 style={[tw`flex flex-row justify-between`, {}]}>
                                 <View style={[tw``, {}]}>
                                   <Textcomp
-                                    text={'$15'}
+                                    text={`₦ ${item?.item?.amount}`}
                                     size={14}
                                     lineHeight={16}
                                     color={colors.white}
@@ -947,7 +956,7 @@ const ServiceProviderProfile = () => {
                                   },
                                 ]}>
                                 <Textcomp
-                                  text={'description'}
+                                  text={`${item?.item?.description}`}
                                   size={12}
                                   lineHeight={14}
                                   color={colors.white}
@@ -980,7 +989,9 @@ const ServiceProviderProfile = () => {
                                 {width: perWidth(105), marginTop: perWidth(4)},
                               ]}>
                               <Textcomp
-                                text={'Jan3, 2020'}
+                                text={`${formatDateHistory3(
+                                  item?.item?.createdAt,
+                                )}`}
                                 size={12}
                                 lineHeight={14}
                                 color={colors.white}
@@ -990,7 +1001,7 @@ const ServiceProviderProfile = () => {
 
                             <View style={[tw``, {}]}>
                               <Textcomp
-                                text={'IN PROGRESS'}
+                                text={'COMPLETED'}
                                 size={12}
                                 lineHeight={14}
                                 color={colors.primary}
@@ -1102,7 +1113,6 @@ const ServiceProviderProfile = () => {
                 scrollEnabled={true}
                 data={serviceProviderData?.reviews || []}
                 renderItem={(item, index) => {
-                  console.log(item);
                   return (
                     <View
                       style={[
@@ -1156,7 +1166,7 @@ const ServiceProviderProfile = () => {
                           <View style={[tw`flex flex-row justify-between`, {}]}>
                             <View style={[tw``, {}]}>
                               <Textcomp
-                                text={'Stacy  W.'}
+                                text={`${item?.item?.user?.firstName} ${item?.item?.user?.lastName}`}
                                 size={14}
                                 lineHeight={16}
                                 color={colors.white}
@@ -1165,7 +1175,7 @@ const ServiceProviderProfile = () => {
                             </View>
                             <View style={tw` pt-2`}>
                               <Review
-                                value={item.item?.recommend}
+                                value={item.item?.averageRating}
                                 editable={false}
                               />
                             </View>
@@ -1176,7 +1186,7 @@ const ServiceProviderProfile = () => {
                               {width: perWidth(252), marginTop: perHeight(4)},
                             ]}>
                             <Textcomp
-                              text={'Lagos'}
+                              text={`${item?.item?.user?.state} `}
                               size={12}
                               lineHeight={14}
                               color={'#FFFFFF80'}

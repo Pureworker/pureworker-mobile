@@ -9,6 +9,7 @@ import {
   Image,
   ScrollView,
   KeyboardAvoidingView,
+  Keyboard,
 } from 'react-native';
 import React, {Fragment, useCallback, useEffect, useState} from 'react';
 import tw from 'twrnc';
@@ -30,12 +31,14 @@ import {ToastShort} from '../../../utils/utils';
 export default function Inbox({navigation, route}: any) {
   const userId = route.params?.id;
   const userName = route.params?.name;
-  console.log('userID', userId);
+
   const agentData = useSelector((state: any) => state.user.userData);
   const chatData = useSelector((store: any) => store.user.chatData);
   // console.log('datahere', agentData?._id);
-  console.log('passed:', route.params);
+
   useEffect(() => {
+    console.log('userID', userId);
+    console.log('passed:', route.params);
     socket.connect();
     console.log('-idid', socket.id);
     socket.emit('authentication', agentData);
@@ -125,6 +128,28 @@ export default function Inbox({navigation, route}: any) {
     } finally {
       setRefreshing(false);
     }
+  }, []);
+
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setIsKeyboardOpen(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setIsKeyboardOpen(false);
+      },
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
   }, []);
 
   return (
@@ -217,8 +242,7 @@ export default function Inbox({navigation, route}: any) {
               })}
               <View style={tw`h-20`} />
             </ScrollView> */}
-            <ScrollView
-             showsVerticalScrollIndicator={false}>
+            <ScrollView showsVerticalScrollIndicator={false}>
               {Object.keys(groupedMessages).map((date, i) => (
                 <View key={date} style={tw`${i === 0 ? 'pt-5' : 'pt-2.5'}`}>
                   <View style={tw`flex flex-row items-center`}>
@@ -289,12 +313,23 @@ export default function Inbox({navigation, route}: any) {
               />
             </TouchableOpacity>
           )}
-          <View
+          {/* <View
             style={[
               tw` w-full mx-auto mt-auto  px-[4%] border-t-4 border-black `,
               {
                 height: HEIGHT_SCREEN * 0.085,
                 marginBottom: Platform.OS === 'ios' ? 0 : 5,
+              },
+            ]}> */}
+          <View
+            style={[
+              tw`w-full mx-auto mt-auto px-[4%]`,
+              {
+                height: HEIGHT_SCREEN * 0.085,
+                marginBottom: isKeyboardOpen || Platform.OS === 'ios' ? 0 : 5,
+                borderStyle: isKeyboardOpen ? null : 'solid',
+                borderTopWidth: isKeyboardOpen ? 0 : 4,
+                borderTopColor: 'black',
               },
             ]}>
             <View style={tw`flex flex-row mt-3 py-2 px-2 bg-[#D9D9D9]`}>

@@ -61,6 +61,20 @@ export function formatDateHistory2(inputDateStr: any) {
 
   return formattedDate;
 }
+export function formatDateHistory3(inputDateStr: any) {
+  const inputDate = DateTime.fromISO(inputDateStr, { zone: 'Africa/Lagos' });
+
+  const dayOfWeek = inputDate.toFormat('ccc');
+  const dayOfMonth = inputDate.toFormat('d');
+  const month = inputDate.toFormat('LLL'); // Month abbreviation
+  const year = inputDate.toFormat('yyyy');
+  const hours = inputDate.toFormat('H');
+  const minutes = inputDate.toFormat('mm');
+
+  const formattedDate = `${dayOfWeek} ${dayOfMonth} ${month}, ${year}`;
+
+  return formattedDate;
+}
 
 export function metersToKilometers(meters) {
   const kilometers = meters / 1000; // Convert meters to kilometers

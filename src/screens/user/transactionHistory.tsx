@@ -37,7 +37,6 @@ const TransactionHistory = () => {
     (state: any) => state.user.categorizedTransdata,
   );
   console.log(transactions);
-
   useEffect(() => {
     const initGetUsers = async () => {
       try {
@@ -84,7 +83,6 @@ const TransactionHistory = () => {
     //   });
     // });
   };
-
   function formatDate(inputDate) {
     // Split the input date by '-'
     const dateParts = inputDate.split('-');

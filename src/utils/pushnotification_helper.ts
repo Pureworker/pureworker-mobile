@@ -121,7 +121,7 @@ const NotificationListner = () => {
   messaging().onMessage(async remoteMessage => {
     console.log('Notification on foreground state.....', remoteMessage);
     // Alert.alert('Push gotten here', remoteMessage?.data?.service);
-    ToastLong('Notification Received!, Please check.');
+    ToastLong('Notification Received!, Please check!.');
     console.log('app opened');
   });
   /*
