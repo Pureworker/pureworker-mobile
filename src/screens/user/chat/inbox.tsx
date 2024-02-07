@@ -296,22 +296,35 @@ export default function Inbox({navigation, route}: any) {
           </View>
 
           {userName === 'Support Support' || userName === 'Support' ? null : (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('OrderDetails', {data: agentData});
-              }}
-              style={[
-                tw`bg-[#2D303C] absolute bottom-[11%] rounded-lg right-[5%]  items-center justify-center`,
-                {width: perWidth(90), aspectRatio: 1, height: perHeight(35)},
-              ]}>
-              <Textcomp
-                text={'Tap to Hire'}
-                size={14}
-                lineHeight={16.5}
-                color={'#FFC727'}
-                fontFamily={'Inter-SemiBold'}
-              />
-            </TouchableOpacity>
+            <>
+              {agentData?.accountType !== 'customer' ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('OrderDetails', {
+                      data: {
+                        _id: userId,
+                        businessName: userName,
+                      },
+                    });
+                  }}
+                  style={[
+                    tw`bg-[#2D303C] absolute bottom-[11%] rounded-lg right-[5%]  items-center justify-center`,
+                    {
+                      width: perWidth(90),
+                      aspectRatio: 1,
+                      height: perHeight(35),
+                    },
+                  ]}>
+                  <Textcomp
+                    text={'Tap to Hire'}
+                    size={14}
+                    lineHeight={16.5}
+                    color={'#FFC727'}
+                    fontFamily={'Inter-SemiBold'}
+                  />
+                </TouchableOpacity>
+              ) : null}
+            </>
           )}
           {/* <View
             style={[

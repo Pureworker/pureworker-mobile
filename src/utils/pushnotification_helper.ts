@@ -2,13 +2,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import Toast from 'react-native-toast-message';
 import { PermissionsAndroid, Platform } from 'react-native';
-
 import { addPushToken } from './api/func';
 import { ToastLong } from './utils';
-
-//
 // import inAppMessaging from '@react-native-firebase/in-app-messaging';
-
 async function requestUserPermission() {
   const _enabled = await messaging().hasPermission();
   if (_enabled) {
@@ -28,8 +24,7 @@ async function requestUserPermission() {
       console.error('Authorization status:', authStatus);
     }
   }
-}
-
+};
 const GetFCMToken = async (userData:any) => {
   let _fcmtoken = await AsyncStorage.getItem('fcmtoken');
   // await messaging().setAPNSToken('74657374696E67746F6B656E', 'unknown');
@@ -158,7 +153,6 @@ export {requestUserPermission, NotificationListner, GetFCMToken};
 //     console.warn('error', e);
 //   }
 // };
-
 // ecmvRZYcTEm9nyGuHC-Nur:APA91bHlHx4Qi4zQrOO0g0885p7COsP-kLFCemPL5Ep4QRIHFnPvdJRZyKoKZHPNTs_cSq3Z3z7ynaTyJ58YF2fxOK_fHUeyp05JMvazByEA50ac0AogU4wmbBAjiY4ZN5kHrdjLGwKb
 // assets/favicon.png"}, "body": "hey peeps", "title": "Hello Emma43"}
 //  LOG  Notification on foreground state..... {"collapseKey": "com.kobosquare",

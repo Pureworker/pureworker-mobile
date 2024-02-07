@@ -70,7 +70,7 @@ const Referrals = () => {
   const handleShare = async (contentToShare: any) => {
     try {
       await Share.share({
-        message: `I use Pureworker to hire any and all Artisans.  Use to the referral code ${contentToShare} `,
+        message: `I use Pureworker to hire any and all Artisans.  Use to the referral code: ${contentToShare} `,
       });
     } catch (error) {
       console.error('Error sharing content:', error.message);

@@ -78,7 +78,6 @@ const OrderDetails = () => {
     setandroidshowDate(false);
   };
   console.log(providerData);
-
   const showMode = (currentMode: any) => {
     setShow(true);
     setMode(currentMode);

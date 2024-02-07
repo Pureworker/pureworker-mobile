@@ -127,7 +127,6 @@ const OrderActive = ({route}: any) => {
   }, []);
 
   const item = route.params.data;
-
   const links = [
     {
       title: 'Order Placed',
@@ -169,7 +168,6 @@ const OrderActive = ({route}: any) => {
       func: () => setscheduledDeliveryDate(true),
     },
   ];
-
   const providerLinks = [
     {
       title: 'Private Feedback',
@@ -179,7 +177,7 @@ const OrderActive = ({route}: any) => {
       },
     },
     {
-      title: 'Rate your experince',
+      title: 'Rate your Customer',
       func: () => setrateYourExperience(true),
     },
     {
@@ -211,7 +209,6 @@ const OrderActive = ({route}: any) => {
       func: () => setorderPlacing(true),
     },
   ];
-
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
@@ -608,7 +605,7 @@ const OrderActive = ({route}: any) => {
                           </>
                         );
                       }
-                    } else if (item.title === 'Rate your experince') {
+                    } else if (item.title === 'Rate Your Experience') {
                       if (passedData?.status === 'COMPLETED') {
                         return (
                           <>

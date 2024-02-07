@@ -154,7 +154,7 @@ const OrderReview = ({route}: any) => {
                 tw`flex flex-row justify-between `,
                 {paddingLeft: perWidth(32), marginTop: perHeight(25)},
               ]}>
-              <View>
+              <View style={tw`w-8/10`}>
                 <View style={tw``}>
                   <Textcomp
                     text={'Order Details'}
@@ -246,7 +246,7 @@ const OrderReview = ({route}: any) => {
                 </View>
               </View>
 
-              <View style={tw`items-center pr-3`}>
+              <View style={tw`items-center pr-3  w-2/10`}>
                 <Image
                   resizeMode="contain"
                   style={[tw``, {width: 15, height: 15}]}

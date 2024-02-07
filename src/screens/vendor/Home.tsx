@@ -16,8 +16,9 @@ import Textcomp from '../../components/Textcomp';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
 import Modal from 'react-native-modal/dist/modal';
-import {getProviderOrders, getSupportUser, getUser} from '../../utils/api/func';
+import {getCategory, getProviderOrders, getSupportUser, getUser} from '../../utils/api/func';
 import {
+  addSCategory,
   addUserData,
   addproviderOrders,
   setwelcomeModal,
@@ -93,15 +94,14 @@ const Home = ({navigation}: any) => {
       };
       emitProviderOnlineStatus();
     };
-    // const initGetCategory = async () => {
-    //   setisLoading(true);
-    //   const res: any = await getCategory('');
-    //   // console.log('aaaaaaaaa', res?.data?.data);
-    //   if (res?.status === 201 || res?.status === 200) {
-    //     dispatch(addSCategory(res?.data?.data));
-    //   }
-    //   setisLoading(false);
-    // };
+    const initGetCategory = async () => {
+      setisLoading(true);
+      const res: any = await getCategory('');
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addSCategory(res?.data?.data));
+      }
+      setisLoading(false);
+    };
     // const initGetPopularServices = async () => {
     //   setisLoading(true);
     //   const res: any = await getPopularService('');
@@ -113,7 +113,7 @@ const Home = ({navigation}: any) => {
     // };
     initGetUsers();
     getSupportUser('');
-    // initGetCategory();
+    initGetCategory();
     // initGetPopularServices();
   }, [dispatch]);
   const providerOrders = useSelector((state: any) => state.user.providerOrders);
@@ -724,7 +724,7 @@ const Home = ({navigation}: any) => {
             <TouchableOpacity
               disabled={true}
               onPress={() => {
-                // navigation.navigate('ProfileStep21');
+                // navigation.navigate('ProfileStep1');
               }}
               style={[
                 tw`bg-[#2D303C] mx-auto flex flex-row items-center justify-center`,

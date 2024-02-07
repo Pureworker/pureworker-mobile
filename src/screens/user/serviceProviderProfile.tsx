@@ -1264,38 +1264,43 @@ const ServiceProviderProfile = () => {
           )}
         </View>
       </View>
-      <TouchableOpacity
-        onPress={() => {
-          if (
-            // userData?._id === serviceProviderData?._id ||
-            userData?._id === profileData?._id
-          ) {
-            console.log(
-              userData?._id,
-              profileData?._id,
-              serviceProviderData?._id,
-            );
+      <>
+        {userData?.accountType === 'freelancer' ||
+        userData?.accountType === 'business' ? null : (
+          <TouchableOpacity
+            onPress={() => {
+              if (
+                // userData?._id === serviceProviderData?._id ||
+                userData?._id === profileData?._id
+              ) {
+                console.log(
+                  userData?._id,
+                  profileData?._id,
+                  serviceProviderData?._id,
+                );
 
-            ToastShort('Service Providers cannot hire thermselves!.');
-          } else {
-            navigation.navigate('OrderDetails', {
-              data: profileData,
-              service: id,
-            });
-          }
-        }}
-        style={[
-          tw`bg-[#FFF] absolute bottom-[11%] right-[5%] rounded-full items-center justify-center`,
-          {width: perWidth(52), aspectRatio: 1},
-        ]}>
-        <Textcomp
-          text={'HIRE'}
-          size={14}
-          lineHeight={16.5}
-          color={'#000413'}
-          fontFamily={'Inter-SemiBold'}
-        />
-      </TouchableOpacity>
+                ToastShort('Service Providers cannot hire thermselves!.');
+              } else {
+                navigation.navigate('OrderDetails', {
+                  data: profileData,
+                  service: id,
+                });
+              }
+            }}
+            style={[
+              tw`bg-[#FFF] absolute bottom-[11%] right-[5%] rounded-full items-center justify-center`,
+              {width: perWidth(52), aspectRatio: 1},
+            ]}>
+            <Textcomp
+              text={'HIRE'}
+              size={14}
+              lineHeight={16.5}
+              color={'#000413'}
+              fontFamily={'Inter-SemiBold'}
+            />
+          </TouchableOpacity>
+        )}
+      </>
       <Modal
         isVisible={imageModal}
         onBackButtonPress={() => setimageModal(false)}

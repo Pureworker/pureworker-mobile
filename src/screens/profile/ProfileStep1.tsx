@@ -107,7 +107,6 @@ const PRofileStep1 = () => {
   const [isLoading, setisLoading] = useState(false);
   const handleProfileSetup = async () => {
     console.log(categoryId);
-    return
     setisLoading(true);
     if (categoryId) {
       const res = await completeProfile({services: categoryId, action: 'add'});

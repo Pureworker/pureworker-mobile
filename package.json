@@ -13,7 +13,7 @@
     "release-bundle": "npm run bundle && cd android && ./gradlew bundleRelease",
     "release": "cd android && ./gradlew assembleRelease",
     "iosPush": "appcenter codepush release-react -a pureworkerapp-gmail.com/Pureworker-Ios -d Staging",
-    "/": "appcenter codepush release-react -a pureworkerapp-gmail.com/Pureworker-Ios -d Production",
+    "iosPush2": "appcenter codepush release-react -a pureworkerapp-gmail.com/Pureworker-Ios -d Production",
     "androidPush": "appcenter codepush release-react -a pureworkerapp-gmail.com/Pureworker-android -d Staging",
     "androidPush2": "appcenter codepush release-react -a pureworkerapp-gmail.com/Pureworker-android -d Production",
     "codepushall": "yarn iosPush && yarn androidPush",

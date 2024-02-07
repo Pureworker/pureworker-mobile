@@ -379,7 +379,7 @@ const Orderscomponent = ({
                   />
                 </View>
               </TouchableOpacity>
-              {(status === 'ACCEPTED' || status === 'TRACK') &&
+              {(status === 'TRACK') &&
                 item?.location !== 'online' && (
                   <TouchableOpacity
                     onPress={() => {
