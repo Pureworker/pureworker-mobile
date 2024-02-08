@@ -289,7 +289,7 @@ const App = () => {
           </PersistGate>
         </Provider>
       </RouteContext.Provider>
-      <Toast config={toastConfig} visibilityTime={1000} autoHide={true} />
+      <Toast config={toastConfig} visibilityTime={5000} autoHide={true} />
     </>
   );
 };

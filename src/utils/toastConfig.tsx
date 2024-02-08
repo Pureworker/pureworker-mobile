@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, View} from 'react-native';
+import {Image, Pressable, Text, TouchableOpacity, View} from 'react-native';
 import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
 import GlobalImages from '../assets/globalImage';
 
@@ -10,7 +10,7 @@ const toastConfig = {
         width: '100%',
         height: 'auto',
         justifyContent: 'center',
-        paddingHorizontal: 50,
+        paddingHorizontal: 15,
       }}>
       <View
         style={{
@@ -35,7 +35,7 @@ const toastConfig = {
             borderWidth: 0,
             borderLeftWidth: 0,
             elevation: 0,
-            width: '100%',
+            width: '80%',
             // backgroundColor: 'transparent',
             // flexWrap: 'wrap',
           }}
@@ -48,6 +48,18 @@ const toastConfig = {
           text1NumberOfLines={2}
           text2NumberOfLines={2}
         />
+
+        <TouchableOpacity
+          style={{
+            paddingHorizontal: 15,
+            paddingVertical: 5,
+            borderRadius: 50,
+            // marginLeft: 5,
+            backgroundColor: 'grey',
+          }}
+          onPress={() => Toast.hide()}>
+          <Text style={{color: 'white'}}>x</Text>
+        </TouchableOpacity>
       </View>
     </View>
   ),
