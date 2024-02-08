@@ -58,10 +58,10 @@ const GetFCMToken = async (userData: any) => {
           const res = await addPushToken(param);
           console.log('res', res, res?.data);
           if (res.status && (res.status === 200 || res.status === 201)) {
-            Toast.show({
-              type: 'success',
-              text1: 'Token Added successfully',
-            });
+            // Toast.show({
+            //   type: 'success',
+            //   text1: 'Token Added successfully',
+            // });
           } else {
             Toast.show({
               type: 'error',
@@ -104,60 +104,20 @@ const NotificationListner = () => {
   // Register background handler
   messaging().setBackgroundMessageHandler(async remoteMessage => {
     console.log('Message handled in the background!', remoteMessage);
-    // Toast.show({
-    //   type: 'success',
-    //   position: 'top',
-    //   text1: 'Notification',
-    //   // text2: `${notification?._body}`,
-    //   visibilityTime: 4000,
-    //   topOffset: 30,
-    //   bottomOffset: 60,
-    // });
-
-    Notifications.postLocalNotification(
-      {
-        body: 'Local notification!',
-        title: 'Local Notification Title',
-        sound: 'chime.aiff',
-        badge: 3,
-        identifier: 'pureworker',
-        thread: 'none',
-        payload: 2,
-        type: 'sample',
-        // silent: false,
-        // category: 'SOME_CATEGORY',
-        // userInfo: {},
-        // fireDate: new Date(),
-      },
-      1,
-    );
   });
 
   // Foreground Notification
   messaging().onMessage(async remoteMessage => {
-    try {
-      // Alert.alert('starting location notification display');
-      Notifications.postLocalNotification(
-        {
-          body: 'Local notification!',
-          title: 'Local Notification Title',
-          sound: 'chime.aiff',
-          badge: 3,
-          identifier: 'pureworker',
-          thread: 'none',
-          payload: 2,
-          type: 'sample',
-          // silent: false,
-          // category: 'SOME_CATEGORY',
-          // userInfo: {},
-          // fireDate: new Date(),
-        },
-        1,
-      );
-    } catch (error) {
-      Alert.alert('local notification display error');
-      console.log('local notification display error');
-    }
+    console.error(remoteMessage);
+    Toast.show({
+      type: 'success',
+      position: 'top',
+      text1: `${remoteMessage?.notification?.title}`,
+      text2: `${remoteMessage?.notification?.body}`,
+      topOffset: 30,
+      bottomOffset: 60,
+    });
+
     console.log('Notification on foreground state.....', remoteMessage);
     // Alert.alert('Push gotten here', remoteMessage?.data?.service);
     ToastLong('Notification Received!, Please check!.');

@@ -27,7 +27,6 @@ import BackgroundGeolocation, {
 } from 'react-native-background-geolocation';
 import BackgroundFetch from 'react-native-background-fetch';
 import axios from 'axios';
-import useNotifee from './src/hooks/useNotifee';
 import Toast from 'react-native-toast-message';
 import toastConfig from './src/utils/toastConfig';
 
@@ -40,7 +39,7 @@ const {width} = Dimensions.get('screen');
 
 const App = () => {
   const [user, setUser] = useState(null);
-  useNotifee();
+  
 
   // useEffect(() => {
   //   codePush.sync({
@@ -290,7 +289,7 @@ const App = () => {
           </PersistGate>
         </Provider>
       </RouteContext.Provider>
-      <Toast config={toastConfig} />
+      <Toast config={toastConfig} visibilityTime={1000} autoHide={true} />
     </>
   );
 };
