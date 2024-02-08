@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {useState, useRef, useEffect, useContext} from 'react';
-import {Dimensions} from 'react-native';
+import {Dimensions, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {PersistGate} from 'redux-persist/integration/react';
@@ -27,6 +27,9 @@ import BackgroundGeolocation, {
 } from 'react-native-background-geolocation';
 import BackgroundFetch from 'react-native-background-fetch';
 import axios from 'axios';
+import useNotifee from './src/hooks/useNotifee';
+import Toast from 'react-native-toast-message';
+import toastConfig from './src/utils/toastConfig';
 
 Sentry.init({
   dsn: 'https://aaf6ecb52ce579d3e2a85f314f1773ad@o4506399508725760.ingest.sentry.io/4506410437509120',
@@ -37,6 +40,7 @@ const {width} = Dimensions.get('screen');
 
 const App = () => {
   const [user, setUser] = useState(null);
+  useNotifee();
 
   // useEffect(() => {
   //   codePush.sync({
@@ -117,13 +121,19 @@ const App = () => {
       location => {
         console.warn('[onLocation2]', location);
         axios
-        .post('https://api.pureworker.com/api/location', {long: location?.coords?.longitude, lat: location?.coords?.latitude})
-        .then(response => {
-          console.log('BACKGROUND:Location sent successfully:', response.data);
-        })
-        .catch(error => {
-          console.error('Error sending location:', error);
-        });
+          .post('https://api.pureworker.com/api/location', {
+            long: location?.coords?.longitude,
+            lat: location?.coords?.latitude,
+          })
+          .then(response => {
+            console.log(
+              'BACKGROUND:Location sent successfully:',
+              response.data,
+            );
+          })
+          .catch(error => {
+            console.error('Error sending location:', error);
+          });
         setLocation(JSON.stringify(location, null, 2));
       },
     );
@@ -172,7 +182,9 @@ const App = () => {
       setEnabled(state.enabled);
       console.log(
         '- BackgroundGeolocation is configured and ready: ',
-        state.enabled, 'data-here:', state
+        state.enabled,
+        'data-here:',
+        state,
       );
     });
 
@@ -265,16 +277,21 @@ const App = () => {
     };
     loadState();
   }, []); // Empty dependency array to run this effect once on component mount
+
   return (
-    <RouteContext.Provider value={{currentState, setCurrentState: updateState}}>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <NavigationContainer ref={navigationRef}>
-            <MainStack />
-          </NavigationContainer>
-        </PersistGate>
-      </Provider>
-    </RouteContext.Provider>
+    <>
+      <RouteContext.Provider
+        value={{currentState, setCurrentState: updateState}}>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <NavigationContainer ref={navigationRef}>
+              <MainStack />
+            </NavigationContainer>
+          </PersistGate>
+        </Provider>
+      </RouteContext.Provider>
+      <Toast config={toastConfig} />
+    </>
   );
 };
 const codePushOptions = {
@@ -285,3 +302,10 @@ const codePushOptions = {
 };
 // export default App;
 export default codePush(codePushOptions)(App);
+
+// Installed Packages
+/*****
+ *
+ * - react-native-notifications
+ * - react-native-push-notification
+ * */

@@ -43,6 +43,7 @@ import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {ToastLong} from '../../utils/utils';
 import WelcomeModal from '../../components/SignupModal';
 import axios from 'axios';
+import useNotifee from '../../hooks/useNotifee';
 const Home = () => {
   useEffect(() => {
     //Request location permission
@@ -188,6 +189,8 @@ const Home = () => {
 
   const [refreshing, setRefreshing] = useState(false);
 
+  const {initiateNotification} = useNotifee();
+
   const onRefresh = () => {
     setRefreshing(true);
     // Call your refresh function here
@@ -323,7 +326,11 @@ const Home = () => {
 
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('ListServices');
+                console.log(
+                  'working here......................................',
+                );
+                initiateNotification();
+                // navigation.navigate('ListServices');
               }}
               style={[tw`mr-4`]}>
               <Textcomp

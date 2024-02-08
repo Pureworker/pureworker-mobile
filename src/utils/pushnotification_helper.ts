@@ -1,9 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import Toast from 'react-native-toast-message';
-import { PermissionsAndroid, Platform } from 'react-native';
-import { addPushToken } from './api/func';
-import { ToastLong } from './utils';
+import {Alert, PermissionsAndroid, Platform} from 'react-native';
+import {addPushToken} from './api/func';
+import {ToastLong} from './utils';
+
 // import inAppMessaging from '@react-native-firebase/in-app-messaging';
 async function requestUserPermission() {
   const _enabled = await messaging().hasPermission();
@@ -24,8 +25,8 @@ async function requestUserPermission() {
       console.error('Authorization status:', authStatus);
     }
   }
-};
-const GetFCMToken = async (userData:any) => {
+}
+const GetFCMToken = async (userData: any) => {
   let _fcmtoken = await AsyncStorage.getItem('fcmtoken');
   // await messaging().setAPNSToken('74657374696E67746F6B656E', 'unknown');
   //   await messaging().registerDeviceForRemoteMessages();
@@ -99,21 +100,64 @@ const NotificationListner = () => {
         );
       }
     });
+
   // Register background handler
   messaging().setBackgroundMessageHandler(async remoteMessage => {
     console.log('Message handled in the background!', remoteMessage);
-    Toast.show({
-      type: 'success',
-      position: 'top',
-      text1: 'Notification',
-      // text2: `${notification?._body}`,
-      visibilityTime: 4000,
-      topOffset: 30,
-      bottomOffset: 60,
-    });
+    // Toast.show({
+    //   type: 'success',
+    //   position: 'top',
+    //   text1: 'Notification',
+    //   // text2: `${notification?._body}`,
+    //   visibilityTime: 4000,
+    //   topOffset: 30,
+    //   bottomOffset: 60,
+    // });
+
+    Notifications.postLocalNotification(
+      {
+        body: 'Local notification!',
+        title: 'Local Notification Title',
+        sound: 'chime.aiff',
+        badge: 3,
+        identifier: 'pureworker',
+        thread: 'none',
+        payload: 2,
+        type: 'sample',
+        // silent: false,
+        // category: 'SOME_CATEGORY',
+        // userInfo: {},
+        // fireDate: new Date(),
+      },
+      1,
+    );
   });
 
+  // Foreground Notification
   messaging().onMessage(async remoteMessage => {
+    try {
+      // Alert.alert('starting location notification display');
+      Notifications.postLocalNotification(
+        {
+          body: 'Local notification!',
+          title: 'Local Notification Title',
+          sound: 'chime.aiff',
+          badge: 3,
+          identifier: 'pureworker',
+          thread: 'none',
+          payload: 2,
+          type: 'sample',
+          // silent: false,
+          // category: 'SOME_CATEGORY',
+          // userInfo: {},
+          // fireDate: new Date(),
+        },
+        1,
+      );
+    } catch (error) {
+      Alert.alert('local notification display error');
+      console.log('local notification display error');
+    }
     console.log('Notification on foreground state.....', remoteMessage);
     // Alert.alert('Push gotten here', remoteMessage?.data?.service);
     ToastLong('Notification Received!, Please check!.');
