@@ -10,6 +10,7 @@ import {messageTimeStamp} from '../../../utils/utils';
 interface params {
   text: string;
   type: string;
+  time: any
 }
 
 export default function Index({type, text, time}: params) {

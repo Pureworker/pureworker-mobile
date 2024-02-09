@@ -264,9 +264,6 @@ export default function Inbox({navigation, route}: any) {
 
                   {groupedMessages[date].map((message, index) => {
                     let item = message;
-                    console.log('====================================');
-                    console.log(item);
-                    console.log('====================================');
                     if (item?.from?._id === agentData?._id) {
                       return (
                         <Chatcomp
