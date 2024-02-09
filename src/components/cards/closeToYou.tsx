@@ -182,7 +182,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
                 </View>
 
                 <View style={tw`px-[7.5%]`}>
-                  {item?.services?.map(service => {
+                  {item?.services?.map((service: { name: any; _id: any; }) => {
                     return (
                       <TouchableOpacity
                         onPress={() => {
