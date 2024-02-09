@@ -1,5 +1,5 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Provider as PaperProvider} from 'react-native-paper';
@@ -22,11 +22,22 @@ import VendorHomeStack from './vendorHome';
 import AddAddress from '../screens/common/addAddress';
 import TabServices from '../screens/user/tab_servicess2';
 import Referrals from '../screens/common/referrals';
+import { registerTransistorAuthorizationListener } from '../tracking/authorization';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+  const navigation = useNavigation();
+  React.useEffect(() => {
+    registerTransistorAuthorizationListener(navigation);
+    return () => {
+      // Remove BackgroundGeolocation event-subscribers when the View is removed or refreshed
+      // during development live-reload.  Without this, event-listeners will accumulate with
+      // each refresh during live-reload.
+      // unsubscribe();
+    };
+  }, []);
   return (
     <Tab.Navigator
       screenOptions={{

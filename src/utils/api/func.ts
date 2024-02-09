@@ -14,18 +14,17 @@ const API_BASE_URL = 'https://api.pureworker.com/api';
 //
 export const getUser = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
-  console.log('verifyUser func started', param, AuthToken);
+  console.log('verifyUser func started', param);
   try {
     const response = await axios({
       method: 'get',
       url: `${API_BASE_URL}/user/me`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
-      // console.log('response data:');
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('GET_USER', response?.status);
     }
-    console.log('GET_USER:',response?.status);
-    // console.log(response?.data);
+    console.log('GET_USER:', response?.status);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -45,8 +44,8 @@ export const getProfile = async (param: any) => {
       url: `${API_BASE_URL}/provider/get-profile/${param}`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
-      console.log('response data:', response?.data);
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('getProfile', response?.status);
       if (response?.data?.user) {
         store.dispatch(addUserData(response?.data?.user));
       }
@@ -64,17 +63,17 @@ export const getProfile = async (param: any) => {
 };
 export const getCategory = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
-  console.log('getCategory func started', param, AuthToken);
+  console.log('getCategory func started', param);
   try {
     const response = await axios({
       method: 'get',
       url: `${API_BASE_URL}/service/get-all-categories`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
-      console.log('response data:', response?.data);
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('getCategory:', response?.status);
     }
-    console.log(response?.data);
+    console.log('getCategory:', response?.status);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -87,17 +86,18 @@ export const getCategory = async (param: any) => {
 };
 export const getSubCategory = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
-  console.log('getSubCategory func started', param, AuthToken);
+  console.log('getSubCategory func started', param);
   try {
     const response = await axios({
       method: 'get',
       url: `${API_BASE_URL}/service/get-category/${param}`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
-      console.log('response data:', response?.data);
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('getSubCategory', response?.status);
     }
-    console.log(response?.data);
+
+    console.log('getSubCategory:', response?.status);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -110,15 +110,14 @@ export const getSubCategory = async (param: any) => {
 };
 export const getPopularService = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
-  console.log('getPopularService func started', param, AuthToken);
+  console.log('getPopularService func started', param);
   try {
     const response = await axios({
       method: 'get',
       url: `${API_BASE_URL}/service/get-popular-services`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
-      // console.log('response data:', response?.data);
+    if (response?.status === 201 || response?.status === 200) {
     }
     console.log(response?.data);
     return response;
@@ -142,7 +141,7 @@ export const uploadAssetsDOCorIMG = async (param: any) => {
     // name: param.name || param?.fileName, // Adjust the filename as needed
   });
   formData.append('folder', 'profile');
-  console.log('uploadAssetsDOCorIMG started', param, formData, AuthToken);
+  console.log('uploadAssetsDOCorIMG started', param, formData);
   try {
     const response = await axios.post(`${API_BASE_URL}/upload`, formData, {
       headers: {
@@ -150,7 +149,7 @@ export const uploadAssetsDOCorIMG = async (param: any) => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('uploadAssetsDOCorIMG', response?.data);
     }
     return response;
@@ -179,10 +178,11 @@ export const completeProfile = async (param: any) => {
       },
     });
 
-    if (response.status === 201) {
-      console.log('response data:', response?.data);
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('completeProfile', response?.status);
     }
-    console.log(response?.data);
+
+    console.log('completeProfile:', response?.status);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data, param);
@@ -203,7 +203,7 @@ export const getTransactions = async (param: any) => {
       url: `${API_BASE_URL}/transaction/get-transactions/${param}`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -220,18 +220,19 @@ export const getTransactions = async (param: any) => {
 
 export const getProviderByService = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
-  console.log('getProviderByService func started', param, AuthToken);
+  console.log('getProviderByService func started', param);
   try {
     const response = await axios({
       method: 'get',
       url: `${API_BASE_URL}/provider/get-provider-by-service/${param}`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
-      console.log('response data:', response?.data);
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('getProviderByService', response?.status);
       store.dispatch(addprovidersByCateegory(response?.data?.data));
     }
-    console.log(response?.data);
+
+    console.log('getProviderByService:', response?.status);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -252,10 +253,11 @@ export const getProviderByCategory = async (param: any) => {
       url: `${API_BASE_URL}/provider/get-provider-by-category/${param}`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
-      console.log('response data:', response?.data);
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('getProviderByCategory', response?.status);
     }
-    console.log(response?.data);
+
+    console.log('getProviderByCategory:', response?.status);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -275,10 +277,11 @@ export const getProviderAllReview = async (param: any) => {
       url: `${API_BASE_URL}/provider/get-all-reviews/${param}`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
-      console.log('response data:', response?.data);
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('getProviderAllReview', response?.status);
     }
-    console.log(response?.data);
+
+    console.log('getProviderAllReview:', response?.status);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -303,10 +306,11 @@ export const createOrder = async (param: any) => {
       },
     });
 
-    if (response.status === 201) {
-      console.log('response data:', response?.data);
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('createOrder', response?.status);
     }
-    console.log(response?.data);
+
+    console.log('createOrder:', response?.status);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -329,10 +333,11 @@ export const acceptOrder = async (param: any) => {
         Authorization: `Bearer ${AuthToken}`,
       },
     });
-    if (response.status === 201) {
-      console.log('response data:', response?.data);
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('acceptOrder:', response?.status);
     }
-    console.log(response?.data);
+
+    console.log('acceptOrder:', response?.status);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -354,7 +359,7 @@ export const onMYOrder = async (param: any) => {
         Authorization: `Bearer ${AuthToken}`,
       },
     });
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -380,7 +385,7 @@ export const startOrder = async (param: any) => {
         Authorization: `Bearer ${AuthToken}`,
       },
     });
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -407,7 +412,7 @@ export const startOrder = async (param: any) => {
 //         Authorization: `Bearer ${AuthToken}`,
 //       },
 //     });
-//     if (response.status === 201) {
+//     if (response?.status === 201 || response?.status === 200) {
 //       console.log('response data:', response?.data);
 //     }
 //     console.log(response?.data);
@@ -435,7 +440,7 @@ export const cancelOrder = async (param: any, data: any) => {
       },
     });
 
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -462,7 +467,7 @@ export const rescheduleOrder = async (param: any, data: any) => {
         Authorization: `Bearer ${AuthToken}`,
       },
     });
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -489,7 +494,7 @@ export const declineOrder = async (param: any) => {
         Authorization: `Bearer ${AuthToken}`,
       },
     });
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -517,7 +522,7 @@ export const completedOrder = async (param: any, data: any) => {
       data: data,
     });
 
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -545,7 +550,7 @@ export const completedOrderProvider = async (param: any, data: any) => {
       data: data,
     });
 
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -573,7 +578,7 @@ export const completedOrderProvider = async (param: any, data: any) => {
 //       },
 //     });
 
-//     if (response.status === 201) {
+//     if (response?.status === 201 || response?.status === 200) {
 //       console.log('response data:', response?.data);
 //     }
 //     console.log(response?.data);
@@ -599,7 +604,7 @@ export const completedOrderProvider = async (param: any, data: any) => {
 //       },
 //     });
 
-//     if (response.status === 201) {
+//     if (response?.status === 201 || response?.status === 200) {
 //       console.log('response data:', response?.data);
 //     }
 //     console.log(response?.data);
@@ -626,7 +631,7 @@ export const addFeedbackOrder = async (param: any, data: any) => {
       },
     });
 
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -653,7 +658,7 @@ export const addRatingOrder = async (param: any, data: any) => {
       },
     });
 
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -670,17 +675,18 @@ export const addRatingOrder = async (param: any, data: any) => {
 
 export const getUserOrders = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
-  console.log('getUserOrders func started', param, AuthToken);
+  console.log('getUserOrders func started', param);
   try {
     const response = await axios({
       method: 'get',
       url: `${API_BASE_URL}/ordern/customer-orders`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
-      console.log('response data:', response?.data);
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('getUserOrders:', response?.status, response?.data?.length);
     }
-    console.log(response?.data);
+
+    console.log('getUserOrders:', response?.status);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -700,10 +706,15 @@ export const getProviderOrders = async (param: any) => {
       url: `${API_BASE_URL}/ordern/provider-orders`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
-      console.log('response data:', response?.data);
+    if (response?.status === 201 || response?.status === 200) {
+      console.log(
+        'getProviderOrders',
+        response?.status,
+        response?.data?.order?.length,
+      );
     }
-    console.log(response?.data);
+
+    console.log('getProviderOrders:', response?.status);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -724,7 +735,7 @@ export const getProviderOrders = async (param: any) => {
 //       url: `${API_BASE_URL}/order/provider-orders/${param}/?status=COMPLETED`,
 //       headers: {Authorization: `Bearer ${AuthToken}`},
 //     });
-//     if (response.status === 201) {
+//     if (response?.status === 201 || response?.status === 200) {
 //       console.log('response data:', response?.data);
 //     }
 //     console.log(response?.data);
@@ -757,7 +768,7 @@ export const addPushToken = async (param: any) => {
     console.log('response', response);
     return response;
   } catch (error) {
-    console.log('addPushToken', error, error?.response?.data);
+    // console.log('addPushToken', error, error?.response?.data);
     return {
       status: 400,
       err: error,
@@ -778,7 +789,7 @@ export const updateProfilePic2 = async (param: any) => {
       data: {uri: `${param}`},
     });
 
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('updateAssets res data:', response?.data);
     }
     return response;
@@ -805,7 +816,7 @@ export const updateUserData = async (param: any) => {
       // {uri: `${param}`},
     });
 
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('updateUserData res data:', response?.data);
     }
     return response;
@@ -831,9 +842,14 @@ export const getChatsbyuser = async (param: any) => {
       },
     });
     if (response?.status === 201) {
-      console.log('response data:', response?.data);
+      console.log(
+        'getChatsbyuser',
+        response?.status,
+        response?.data?.chats?.length,
+      );
     }
-    console.log('res', response);
+    // console.log('res', response);
+    console.log('getChatsbyuser:', response?.status);
     return response;
   } catch (error) {
     console.log(error);
@@ -857,7 +873,7 @@ export const getMessagesbyuser = async (param: any) => {
       },
     });
 
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data, response?.data[0]);
     }
     console.log('res', response, response?.data);
@@ -881,7 +897,7 @@ export const getUserNotification = async (param: any) => {
       url: `${API_BASE_URL}/get-all-notifications`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -907,7 +923,7 @@ export const sendPrivateFeedback = async (param: any, data: any) => {
       headers: {Authorization: `Bearer ${AuthToken}`},
       data: data,
     });
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -931,7 +947,7 @@ export const sendPrivateFeedback = async (param: any, data: any) => {
 //       headers: {Authorization: `Bearer ${AuthToken}`},
 //       data: data,
 //     });
-//     if (response.status === 201) {
+//     if (response?.status === 201 || response?.status === 200) {
 //       console.log('response data:', response?.data);
 //     }
 //     console.log(response?.data);
@@ -955,10 +971,11 @@ export const getFAQ = async (param: any) => {
       url: `${API_BASE_URL}/get-faq`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
-      console.log('response data:', response?.data);
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('getFAQ', response?.status);
     }
-    console.log(response?.data);
+
+    console.log('getFAQ', response?.status);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -979,10 +996,14 @@ export const getProviderByProximity = async (param: any) => {
       url: `${API_BASE_URL}/provider/get-provider-by-proximity`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
-      console.log('response data:', response?.data);
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('getProviderByProximity', response?.status);
     }
-    console.log('GETPROVIDERBYPROXIMITY', response?.data);
+    console.log(
+      'GETPROVIDERBYPROXIMITY:',
+      response?.status,
+      response?.data?.length,
+    );
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -1003,7 +1024,7 @@ export const tipProvider = async (data: any) => {
       headers: {Authorization: `Bearer ${AuthToken}`},
       data: data,
     });
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -1029,7 +1050,7 @@ export const f_deactivateAccount = async (data: any) => {
       headers: {Authorization: `Bearer ${AuthToken}`},
       data: data,
     });
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -1054,7 +1075,7 @@ export const _verifyID = async (data: any) => {
       headers: {Authorization: `Bearer ${AuthToken}`},
       data: data,
     });
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -1078,7 +1099,7 @@ export const getReferralDetails = async (param: any) => {
       url: `${API_BASE_URL}/user/referral`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -1135,7 +1156,7 @@ export const _deactivateAccount = async (data: any) => {
       headers: {Authorization: `Bearer ${AuthToken}`},
       // data: data,
     });
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -1151,7 +1172,7 @@ export const _deactivateAccount = async (data: any) => {
 };
 export const getSupportUser = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
-  console.log('getSupportUser func started', AuthToken);
+  console.log('getSupportUser func started');
 
   try {
     const response = await axios({
@@ -1161,8 +1182,8 @@ export const getSupportUser = async (param: any) => {
         Authorization: `Bearer ${AuthToken}`,
       },
     });
-    if (response.status === 201 || response.status === 200) {
-      console.log('response data:', response?.data);
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('getSupportUser:', response?.data);
       store.dispatch(addsupportUser(response?.data?.data));
     }
     //   console.log("res", response);
@@ -1179,7 +1200,7 @@ export const getSupportUser = async (param: any) => {
 
 export const getBanks = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
-  console.log('getBanks func started', AuthToken);
+  console.log('getBanks func started');
   try {
     const response = await axios({
       method: 'get',
@@ -1188,8 +1209,9 @@ export const getBanks = async (param: any) => {
         Authorization: `Bearer ${AuthToken}`,
       },
     });
-    if (response.status === 201 || response.status === 200) {
+    if (response?.status === 201 || response?.status === 200) {
       // console.log('Banks data:', response?.data);
+      console.log('getBanks', response?.status);
 
       store.dispatch(addbanks(response?.data?.data));
     }
@@ -1219,7 +1241,7 @@ export const withdraw = async (param: any) => {
       data: param,
     });
 
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -1243,7 +1265,7 @@ export const getSearchQuery = async (param: any) => {
       url: `${API_BASE_URL}/service/get-all-services?name=${param}`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -1271,7 +1293,7 @@ export const getSearchProvider = async (param: any) => {
       url: `${API_BASE_URL}/provider/get-providers?name=${param}`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -1301,7 +1323,7 @@ export const addPortfolio = async (param: any) => {
       },
     });
 
-    if (response.status === 201) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -1325,8 +1347,8 @@ export const getProviderNew = async (param: any) => {
       url: `${API_BASE_URL}/provider/get-profile/${param}`,
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
-    if (response.status === 201) {
-      console.log('response data:', response?.data);
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('getProviderNew', response?.status);
     }
     console.log(response?.data);
     return response;
@@ -1350,7 +1372,7 @@ export const fetchAccountDetails = async (param: any) => {
       headers: {Authorization: `Bearer ${AuthToken}`},
       data: param,
     });
-    if (response.status === 201 || response.status === 200) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -1377,7 +1399,7 @@ export const fetchAccountDetails = async (param: any) => {
 //       headers: {Authorization: `Bearer ${AuthToken}`},
 //     });
 
-//     if (response.status === 201) {
+//     if (response?.status === 201 || response?.status === 200) {
 //       console.log('response data:', response?.data);
 //     }
 //     console.log(response?.data);
@@ -1404,10 +1426,9 @@ export const getProviderDataAll = async (param: any) => {
       },
     });
 
-    if (response.status === 201) {
-      console.log('response data:', response?.data);
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('getProviderDataAll:', response?.status);
     }
-    console.log(response?.data);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -1429,7 +1450,7 @@ export const bookMarkServiceProvide = async (param: any) => {
       headers: {Authorization: `Bearer ${AuthToken}`},
       data: param,
     });
-    if (response.status === 201 || response.status === 200) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -1454,7 +1475,7 @@ export const deletebookMarkServiceProvide = async (param: any) => {
       headers: {Authorization: `Bearer ${AuthToken}`},
       // data: param,
     });
-    if (response.status === 201 || response.status === 200) {
+    if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);

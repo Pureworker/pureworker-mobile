@@ -21,6 +21,7 @@ export const verifyLogin = async (param: any) => {
       try {
         await AsyncStorage.setItem('AuthToken', res?.data?.token);
         await AsyncStorage.setItem('Role', res?.data?.user.accountType);
+        await AsyncStorage.setItem('ID', res?.data?.user._id);
       } catch (e) {
         // saving error
         console.log('Error Saving Token data.');
@@ -90,6 +91,7 @@ export const verifyUser = async (param: any) => {
       try {
         await AsyncStorage.setItem('AuthToken', res?.data?.token);
         await AsyncStorage.setItem('Role', res?.data?.user.accountType);
+        await AsyncStorage.setItem('ID', res?.data?.user._id);
       } catch (e) {
         // saving error
         console.log('Error Saving Token data.');

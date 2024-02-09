@@ -30,7 +30,7 @@ const GetFCMToken = async (userData:any) => {
   // await messaging().setAPNSToken('74657374696E67746F6B656E', 'unknown');
   //   await messaging().registerDeviceForRemoteMessages();
   const token = await messaging().getToken();
-  console.log(`${Platform.OS} fcmTOKEN2`, token);
+  // console.log(`${Platform.OS} fcmTOKEN2`, token);
   //   if (Platform.OS === 'ios') {
   //     messaging()
   //       .registerDeviceForRemoteMessages() // no-op on Android and if already registered
@@ -43,10 +43,10 @@ const GetFCMToken = async (userData:any) => {
   //   } else {
   try {
     let fcmtoken = await messaging().getToken();
-    console.error(
-      `${Platform.OS === 'ios' ? 'ios' : 'android'} fcmTOKEN`,
-      fcmtoken,
-    );
+    // console.error(
+    //   `${Platform.OS === 'ios' ? 'ios' : 'android'} fcmTOKEN`,
+    //   fcmtoken,
+    // );
     if (!fcmtoken) {
     } else {
       const _token = await AsyncStorage.getItem('fcmtoken');
@@ -55,7 +55,7 @@ const GetFCMToken = async (userData:any) => {
         await AsyncStorage.setItem('fcmtoken', fcmtoken);
         const initToken = async (param: any) => {
           const res = await addPushToken(param);
-          console.log('res', res, res?.data);
+          // console.log('res', res, res?.data);
           if (res.status && (res.status === 200 || res.status === 201)) {
             Toast.show({
               type: 'success',

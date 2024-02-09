@@ -40,9 +40,9 @@ const EditAccount = () => {
   const userData = useSelector((state: any) => state.user.userData);
 
   const [locationItems, setLocationItems] = useState([
-    { label: 'Male', value: 'male' },
-    { label: 'Female', value: 'female' },
-    { label: 'Other', value: 'other' },
+    {label: 'Male', value: 'male'},
+    {label: 'Female', value: 'female'},
+    {label: 'Other', value: 'other'},
   ]);
   const [loading, setloading] = useState(false);
   const [locationOpen, setLocationOpen] = useState(false);
@@ -64,7 +64,12 @@ const EditAccount = () => {
         dispatch(addUserData(res?.data?.user));
       }
     } catch (error) {
-      console.error('Error getting user data:', error, error?.response, error?.response?.data);
+      console.error(
+        'Error getting user data:',
+        error,
+        error?.response,
+        error?.response?.data,
+      );
       Alert.alert('Error');
       // Handle error appropriately
     }
@@ -75,6 +80,7 @@ const EditAccount = () => {
     try {
       const res = await updateUserData(param);
       console.log(res);
+
       if ([200, 201].includes(res?.status)) {
         Toast.show({
           type: 'success',
@@ -209,9 +215,7 @@ const EditAccount = () => {
                     email,
                     phoneNumber,
                     address,
-                    nationality,
                     dob,
-                    gender,
                   });
                 }}
                 style={tw``}>

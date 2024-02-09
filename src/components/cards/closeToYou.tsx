@@ -10,7 +10,7 @@ import FastImage from 'react-native-fast-image';
 import {metersToKilometers} from '../../utils/utils';
 
 const ClosetoYou = ({item, index, navigation}: any) => {
-  console.log('on-order', item);
+  // console.log('on-order', item);
   return (
     <TouchableOpacity
       onPress={() =>

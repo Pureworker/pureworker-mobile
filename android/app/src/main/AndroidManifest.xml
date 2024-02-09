@@ -3,9 +3,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:minSdkVersion="34" android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
       android:name=".MainApplication"
@@ -34,6 +36,10 @@
             <data android:scheme="pureworker"/>
         </intent-filter>
       </activity>
+
+      <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="7e0b1d065499a4f1578f25400ed9f8e0c320b93a8a08491950ecbcfae19cbfd7" />
+
       <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDp32iWaShk9E_wTNtJbAkNXqdishmZnE8"/>
+      <service android:name=".LocationService" android:foregroundServiceType="location"/>
     </application>
 </manifest>
