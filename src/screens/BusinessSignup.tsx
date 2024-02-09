@@ -945,7 +945,6 @@ export default function BusinessSignup() {
                   style={{fontWeight: 400}}
                 />
               </TouchableOpacity>
-
               <View
                 style={{
                   zIndex: genderOpen ? 0 : 2,

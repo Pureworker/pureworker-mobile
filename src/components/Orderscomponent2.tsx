@@ -23,6 +23,7 @@ import ScheduledDeliveryDate from './modals/scheduledDeliveryDate';
 import {useDispatch, useSelector} from 'react-redux';
 import {addproviderOrders} from '../store/reducer/mainSlice';
 import RateyourCustommer from './modals/rateYourCustomer';
+import { formatDateHistory, formatDateHistory2 } from '../utils/utils';
 
 const Orderscomponent2 = ({item, index, status, showall}: any) => {
   const [saved, setsaved] = useState(false);
@@ -31,7 +32,7 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
   const [scheduledDeliveryDate, setscheduledDeliveryDate] = useState(false);
   const [rateYourExperience, setrateYourExperience] = useState(false);
 
-  console.log(item);
+  console.log('ORDER:',item);
 
   useEffect(() => {
     const initGetOrders2 = async () => {
@@ -456,7 +457,7 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
               {width: perWidth(300), marginTop: perWidth(5)},
             ]}>
             <Textcomp
-              text={`Date & Time: ${item?.scheduledDeliveryDate}`}
+              text={`Date & Time: ${formatDateHistory2(item?.scheduledDeliveryDate)}`}
               size={12}
               lineHeight={14}
               color={colors.white}
@@ -752,6 +753,8 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
       />
       <ScheduledDeliveryDate
         navigation={null}
+        // value={scheduledDeliveryDate}
+        item={item}
         func={(text: boolean | ((prevState: boolean) => boolean)) => {
           setscheduledDeliveryDate(text);
         }}

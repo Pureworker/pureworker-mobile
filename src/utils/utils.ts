@@ -52,7 +52,7 @@ export function formatDateHistory(inputDateStr: any) {
   return formattedDate;
 }
 export function formatDateHistory2(inputDateStr: any) {
-  const inputDate = DateTime.fromISO(inputDateStr, { zone: 'Africa/Lagos' });
+  const inputDate = DateTime.fromISO(inputDateStr, {zone: 'Africa/Lagos'});
 
   const dayOfWeek = inputDate.toFormat('ccc');
   const dayOfMonth = inputDate.toFormat('d');
@@ -66,7 +66,7 @@ export function formatDateHistory2(inputDateStr: any) {
   return formattedDate;
 }
 export function formatDateHistory3(inputDateStr: any) {
-  const inputDate = DateTime.fromISO(inputDateStr, { zone: 'Africa/Lagos' });
+  const inputDate = DateTime.fromISO(inputDateStr, {zone: 'Africa/Lagos'});
 
   const dayOfWeek = inputDate.toFormat('ccc');
   const dayOfMonth = inputDate.toFormat('d');
@@ -110,8 +110,18 @@ export function timeAgo(lastOnline) {
   }
 }
 
+// export function messageTimeStamp(timestamp: string | number | Date) {
+//   const date = new Date(timestamp);
+//   const hours = String(date.getUTCHours()).padStart(2, '0');
+//   const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+//   return `${hours}:${minutes}`;
+// }
 export function messageTimeStamp(timestamp: string | number | Date) {
   const date = new Date(timestamp);
+
+  // Adjusting for UTC+1
+  date.setUTCHours(date.getUTCHours() + 1);
+
   const hours = String(date.getUTCHours()).padStart(2, '0');
   const minutes = String(date.getUTCMinutes()).padStart(2, '0');
   return `${hours}:${minutes}`;

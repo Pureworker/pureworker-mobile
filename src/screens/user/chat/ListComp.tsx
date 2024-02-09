@@ -20,6 +20,10 @@ export default function ListComp({navigation, item}: any) {
   const userData = useSelector((state: any) => state.user.userData);
   const [visible, setvisible] = useState(false);
 
+  console.log('====================================');
+  console.log(item);
+  console.log('====================================');
+
   return (
     <>
       <TouchableOpacity
@@ -35,6 +39,10 @@ export default function ListComp({navigation, item}: any) {
               item?.userA?._id === userData?._id
                 ? item?.userB?.fullName
                 : item?.userA?.fullName,
+            lastOnline:
+              item?.userA?._id === userData?._id
+                ? item?.userB?.lastOnline
+                : item?.userA?.lastOnline,
           });
         }}
         style={tw`flex flex-row mt-2 py-2 mx-1 rounded justify-between bg-[#2D303C]`}>

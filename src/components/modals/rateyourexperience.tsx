@@ -218,7 +218,7 @@ export default function RateyourExperience({
     if (rateExperience === 0 || recommend === 0 || rateService === 0) {
       Snackbar.show({
         text: 'Please provide ratings for all categories.',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         backgroundColor: 'red',
       });
       return;

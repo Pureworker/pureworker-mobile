@@ -26,11 +26,12 @@ import colors from '../../../constants/colors';
 import images from '../../../constants/images';
 import {HEIGHT_SCREEN, HEIGHT_WINDOW} from '../../../constants/generalStyles';
 import Textcomp from '../../../components/Textcomp';
-import {ToastShort} from '../../../utils/utils';
+import {ToastShort, timeAgo} from '../../../utils/utils';
 
 export default function Inbox({navigation, route}: any) {
   const userId = route.params?.id;
   const userName = route.params?.name;
+  const lastOnline = route.params?.lastOnline;
 
   const agentData = useSelector((state: any) => state.user.userData);
   const chatData = useSelector((store: any) => store.user.chatData);
@@ -214,7 +215,9 @@ export default function Inbox({navigation, route}: any) {
                   ]}>
                   {userName === 'Support Support' || userName === 'Support'
                     ? ''
-                    : 'Xd ago'}
+                    : lastOnline
+                    ? `${timeAgo(lastOnline)} ago`
+                    : ''}
                 </Text>
               </View>
             </View>
