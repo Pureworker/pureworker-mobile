@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {View, TouchableOpacity, Image, Platform, PermissionsAndroid} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Image,
+  Platform,
+  PermissionsAndroid,
+} from 'react-native';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import tw from 'twrnc';
 // import {useStoreActions, useStoreState} from 'easy-peasy';
@@ -252,7 +258,7 @@ const DrawerContent = () => {
               style={[tw`rounded-full`, {width: 50, height: 50}]}
               onPress={() => {
                 // openLibraryfordp2();
-                opencamerafordp4()
+                opencamerafordp4();
                 // if (
                 //   userType.userType === BUSINESS ||
                 //   userType.userType === FREELANCER
@@ -403,7 +409,7 @@ const DrawerContent = () => {
           )}
           <View style={[tw`mt-4 ml-3`, {}]}>
             <Textcomp
-              text={`Version: ${Platform.OS === 'ios' ? '1.0.0.4' : '1.0.0.4'}`}
+              text={`Version: ${Platform.OS === 'ios' ? '1.0.0.5' : '1.0.0.5'}`}
               size={14}
               color={'#000000'}
               style={[
