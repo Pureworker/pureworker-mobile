@@ -43,6 +43,7 @@ import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {ToastLong} from '../../utils/utils';
 import WelcomeModal from '../../components/SignupModal';
 import axios from 'axios';
+
 const Home = () => {
   useEffect(() => {
     //Request location permission
