@@ -27,6 +27,8 @@ import BackgroundGeolocation, {
 } from 'react-native-background-geolocation';
 import BackgroundFetch from 'react-native-background-fetch';
 import axios from 'axios';
+import Toast from 'react-native-toast-message';
+import toastConfig from './src/utils/toastConfig';
 import SettingsService from './src/tracking/SettingsService';
 import {registerTransistorAuthorizationListener} from './src/tracking/authorization';
 import ENV from './src/tracking/ENV';
@@ -39,6 +41,7 @@ Sentry.init({
 const Stack = createStackNavigator();
 const App = () => {
   const [user, setUser] = useState(null);
+
   const [accessToken, setToken]: any = useState(null);
   useEffect(() => {
     const getToken = async () => {
@@ -209,6 +212,7 @@ const App = () => {
           .catch(error => {
             console.error('Error sending location:', error);
           });
+
         axios
           .post(
             'https://api.pureworker.com/api/location2',
@@ -327,7 +331,13 @@ const App = () => {
           });
       }),
     );
-
+//     }).then(state => {
+//       setEnabled(state.enabled);
+//       console.log(
+//         '- BackgroundGeolocation is configured and ready: ',
+//         state.enabled,
+//         'data-here:',
+//         state,
     subscribe(
       BackgroundGeolocation.onPowerSaveChange(enabled => {
         console.log('[onPowerSaveChange]', enabled);
@@ -507,16 +517,21 @@ const App = () => {
     };
     loadState();
   }, []); // Empty dependency array to run this effect once on component mount
+
   return (
-    <RouteContext.Provider value={{currentState, setCurrentState: updateState}}>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <NavigationContainer ref={navigationRef}>
-            <MainStack />
-          </NavigationContainer>
-        </PersistGate>
-      </Provider>
-    </RouteContext.Provider>
+    <>
+      <RouteContext.Provider
+        value={{currentState, setCurrentState: updateState}}>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <NavigationContainer ref={navigationRef}>
+              <MainStack />
+            </NavigationContainer>
+          </PersistGate>
+        </Provider>
+      </RouteContext.Provider>
+      <Toast config={toastConfig} visibilityTime={5000} autoHide={true} />
+    </>
   );
 };
 const codePushOptions = {
@@ -525,5 +540,13 @@ const codePushOptions = {
     codePush.CheckFrequency.ON_APP_START,
   installMode: codePush.InstallMode.IMMEDIATE,
 };
-export default App;
-// export default codePush(codePushOptions)(App);
+// export default App;
+export default codePush(codePushOptions)(App);
+
+// Installed Packages
+/*****
+ *
+ * - react-native-notifications
+ * - react-native-push-notification
+ * */
+
