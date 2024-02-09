@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, TouchableOpacity, Image, Platform} from 'react-native';
+import {View, TouchableOpacity, Image, Platform, PermissionsAndroid} from 'react-native';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import tw from 'twrnc';
 // import {useStoreActions, useStoreState} from 'easy-peasy';
@@ -19,6 +19,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-toast-message';
 import FastImage from 'react-native-fast-image';
 import socket from '../utils/socket';
+import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 
 const DrawerContent = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -51,6 +52,11 @@ const DrawerContent = () => {
     //   route: 'FaceDetection',
     //   icon: images.rate,
     // },
+    {
+      label: 'Tracking',
+      route: 'Tracking',
+      icon: images.rate,
+    },
   ];
   const dispatch = useDispatch();
   const [InfoModal, setInfoModal] = useState(false);
@@ -86,14 +92,84 @@ const DrawerContent = () => {
     });
   };
   const openLibraryfordp2 = () => {
+    console.warn('processed called');
     launchCamera(options, async (resp: any) => {
       if (resp?.assets?.length > 0) {
         console.log('resp', resp?.assets[0]);
         setPhotoUri(resp?.assets[0].uri);
 
-       await uploadImgorDoc(resp?.assets[0]);
+        await uploadImgorDoc(resp?.assets[0]);
       }
     });
+  };
+
+  const opencamerafordp4 = async () => {
+    const options = {
+      mediaType: 'photo',
+      selectionLimit: 1,
+      cameraType: 'front',
+    };
+    try {
+      if (Platform.OS === 'ios') {
+        const openCamera = async () => {
+          const cameraStatus = await check(PERMISSIONS.IOS.CAMERA);
+
+          if (cameraStatus === RESULTS.GRANTED) {
+            // Camera permission is granted, open camera here
+            await launchCamera(options, async (resp: unknown) => {
+              if (resp?.assets?.length > 0) {
+                console.log('resp', resp?.assets[0]);
+                setPhotoUri(resp?.assets[0].uri);
+
+                await uploadImgorDoc(resp?.assets[0]);
+              }
+            });
+          } else {
+            // Camera permission is not granted, request it
+            const newCameraStatus = await request(PERMISSIONS.IOS.CAMERA);
+            if (newCameraStatus === RESULTS.GRANTED) {
+              // Camera permission granted after request, open camera
+              await launchCamera(options, async (resp: unknown) => {
+                if (resp?.assets?.length > 0) {
+                  console.log('resp', resp?.assets[0]);
+                  setPhotoUri(resp?.assets[0].uri);
+
+                  await uploadImgorDoc(resp?.assets[0]);
+                }
+              });
+            } else {
+              // Camera permission denied
+              console.log('Camera permission denied');
+            }
+          }
+        };
+        openCamera();
+      } else {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'App Camera Permission',
+            message: 'Pureworker needs access to your camera to takee picture',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Camera permission given');
+          await launchCamera(options, async (resp: unknown) => {
+            if (resp?.assets?.length > 0) {
+              console.log('resp', resp?.assets[0]);
+              setPhotoUri(resp?.assets[0].uri);
+              await uploadImgorDoc(resp?.assets[0]);
+            }
+          });
+        } else {
+          console.log('Camera permission denied2');
+        }
+      }
+    } catch (error) {}
+    // launchCamera
   };
   const initGetUsers = async () => {
     const res: any = await getUser('');
@@ -175,7 +251,8 @@ const DrawerContent = () => {
             <TouchableOpacity
               style={[tw`rounded-full`, {width: 50, height: 50}]}
               onPress={() => {
-                openLibraryfordp2();
+                // openLibraryfordp2();
+                opencamerafordp4()
                 // if (
                 //   userType.userType === BUSINESS ||
                 //   userType.userType === FREELANCER
@@ -326,7 +403,7 @@ const DrawerContent = () => {
           )}
           <View style={[tw`mt-4 ml-3`, {}]}>
             <Textcomp
-              text={`Version: ${Platform.OS === 'ios' ? '1.0.0.3' : '1.0.0.3'}`}
+              text={`Version: ${Platform.OS === 'ios' ? '1.0.0.4' : '1.0.0.4'}`}
               size={14}
               color={'#000000'}
               style={[

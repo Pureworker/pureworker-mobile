@@ -113,7 +113,7 @@ const Home = () => {
     const initGetProviderByProximity = async () => {
       setisLoading(true);
       const res: any = await getProviderByProximity(userData?._id);
-      console.warn('proximity', res?.data);
+      // console.warn('proximity', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         if (res?.data?.data) {
           dispatch(addcloseProvider(res?.data?.data));
@@ -149,7 +149,7 @@ const Home = () => {
   );
   const supportUser = useSelector((store: any) => store.user.supportUser);
   const closeProvider = useSelector((state: any) => state.user.closeProvider);
-  console.log('daaaaattttttaaaa', 'here:', closeProvider);
+  // console.log('daaaaattttttaaaa', 'here:', closeProvider);
   const welcomeModal = useSelector((state: any) => state.user.welcomeModal);
   // const filterBySearchProduct = useMemo(() => {
   //   var searchArray = [];

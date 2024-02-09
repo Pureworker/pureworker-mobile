@@ -215,11 +215,12 @@ const Withdraw = () => {
                               borderRadius: 10,
                               paddingHorizontal: 10,
                               marginTop: 15,
+                              color: '#00000080',
                             },
                           ]}
                           placeholderStyle={{
                             color: '#00000080',
-                            fontWeight: 300,
+                            fontWeight: 400,
                           }}
                           data={bankList}
                           search

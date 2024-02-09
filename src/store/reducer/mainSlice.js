@@ -229,7 +229,7 @@ export const mainSlice = createSlice({
       state.referralDetails = action.payload;
     },
     addsupportUser: (state, action) => {
-      console.log('addsupportUser', action.payload);
+      // console.log('addsupportUser', action.payload);
       state.supportUser = action.payload;
     },
     addbanks: (state, action) => {

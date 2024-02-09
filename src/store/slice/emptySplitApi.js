@@ -5,7 +5,7 @@ import { BASE_URL } from './baseurl'
 import { isJwtExpired } from 'jwt-check-expiration';
 import Snackbar from 'react-native-snackbar';
 
-console.log('url', BASE_URL);
+// console.log('url', BASE_URL);
 
 export const emptySplitApi = createApi({
   baseQuery: fetchBaseQuery({ 

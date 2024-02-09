@@ -4,6 +4,7 @@
 #import "RNSplashScreen.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import <CodePush/CodePush.h>
+#import <TSBackgroundFetch/TSBackgroundFetch.h>
 
 @implementation AppDelegate
 
@@ -17,6 +18,9 @@
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
+
+  // [REQUIRED] Register BackgroundFetch
+  [[TSBackgroundFetch sharedInstance] didFinishLaunching];
   
   bool didFinish=[super application:application didFinishLaunchingWithOptions:launchOptions];
   [RNSplashScreen show];  // here
