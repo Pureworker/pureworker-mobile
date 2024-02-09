@@ -9,6 +9,7 @@ import Modal from 'react-native-modal/dist/modal';
 import {SIZES, perWidth} from '../../../utils/position/sizes';
 import colors from '../../../constants/colors';
 import {WIDTH_WINDOW} from '../../../constants/generalStyles';
+import {timeAgo} from '../../../utils/utils';
 
 export default function ListComp({navigation, item}: any) {
   function formatDate(dateString) {
@@ -18,6 +19,7 @@ export default function ListComp({navigation, item}: any) {
   }
   const userData = useSelector((state: any) => state.user.userData);
   const [visible, setvisible] = useState(false);
+
   return (
     <>
       <TouchableOpacity
@@ -60,7 +62,11 @@ export default function ListComp({navigation, item}: any) {
             </View>
             <View style={[tw`mt-1`, {}]}>
               <Textcomp
-                text={'...'}
+                text={
+                  item?.userB?.lastOnline
+                    ? timeAgo(item?.userB?.lastOnline)
+                    : ''
+                }
                 size={13}
                 lineHeight={13}
                 color={'#FFFFFF'}
