@@ -110,10 +110,10 @@ const Index = () => {
             fontFamily={'Inter-SemiBold'}
           />
         </View>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={()=>{}}>
           <View style={tw``}>
             <Textcomp
-              text={'. . .'}
+              text={''}
               size={17}
               lineHeight={17}
               color={'#000413'}

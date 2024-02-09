@@ -110,6 +110,13 @@ export function timeAgo(lastOnline) {
   }
 }
 
+export function messageTimeStamp(timestamp: string | number | Date) {
+  const date = new Date(timestamp);
+  const hours = String(date.getUTCHours()).padStart(2, '0');
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
+
 // Example usage:
 const lastOnlineTimestamp = '2024-02-03T01:31:07.957Z';
 const result = timeAgo(lastOnlineTimestamp);

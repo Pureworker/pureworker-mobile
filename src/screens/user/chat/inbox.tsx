@@ -264,17 +264,21 @@ export default function Inbox({navigation, route}: any) {
 
                   {groupedMessages[date].map((message, index) => {
                     let item = message;
+                    console.log('====================================');
+                    console.log(item);
+                    console.log('====================================');
                     if (item?.from?._id === agentData?._id) {
                       return (
                         <Chatcomp
                           key={index}
                           text={item?.body}
                           type={'other'}
+                          time={item?.updatedAt}
                         />
                       );
                     } else if (item?.to?._id === agentData?._id) {
                       return (
-                        <Chatcomp key={index} text={item?.body} type={'me'} />
+                        <Chatcomp key={index} text={item?.body} type={'me'} time={item?.updatedAt} />
                       );
                     } else if (item?.from === agentData?._id) {
                       return (
@@ -282,11 +286,12 @@ export default function Inbox({navigation, route}: any) {
                           key={index}
                           text={item?.body}
                           type={'other'}
+                          time={item?.updatedAt}
                         />
                       );
                     } else if (item?.to === agentData?._id) {
                       return (
-                        <Chatcomp key={index} text={item?.body} type={'me'} />
+                        <Chatcomp key={index} text={item?.body} type={'me'} time={item?.updatedAt} />
                       );
                     }
                   })}
