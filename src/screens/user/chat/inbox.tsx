@@ -68,6 +68,7 @@ export default function Inbox({navigation, route}: any) {
       from: agentData?._id,
       to: `${userId}`,
       body: message,
+      updatedAt: new Date().toISOString(),
       // isNewChat: chatData?.length === 0 ? true : false,
     };
     setmessage('');
@@ -275,7 +276,12 @@ export default function Inbox({navigation, route}: any) {
                       );
                     } else if (item?.to?._id === agentData?._id) {
                       return (
-                        <Chatcomp key={index} text={item?.body} type={'me'} time={item?.updatedAt} />
+                        <Chatcomp
+                          key={index}
+                          text={item?.body}
+                          type={'me'}
+                          time={item?.updatedAt}
+                        />
                       );
                     } else if (item?.from === agentData?._id) {
                       return (
@@ -288,7 +294,12 @@ export default function Inbox({navigation, route}: any) {
                       );
                     } else if (item?.to === agentData?._id) {
                       return (
-                        <Chatcomp key={index} text={item?.body} type={'me'} time={item?.updatedAt} />
+                        <Chatcomp
+                          key={index}
+                          text={item?.body}
+                          type={'me'}
+                          time={item?.updatedAt}
+                        />
                       );
                     }
                   })}

@@ -822,7 +822,7 @@ export default function BusinessSignup() {
               />
               <Text
                 style={{
-                  fontSize: 16,
+                  fontSize: 14,
                   fontFamily: commonStyle.fontFamily.medium,
                   color: '#fff',
                   marginTop: 15,

@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {View, Image, TextInput, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigation} from '../../../constants/navigation';
 import TextWrapper from '../../../components/TextWrapper';
@@ -13,6 +19,7 @@ import images from '../../../constants/images';
 import CancelCircle2 from '../../../assets/svg/CancelCircle2';
 import {uploadAssetsDOCorIMG} from '../../../utils/api/func';
 import {ActivityIndicator} from 'react-native-paper';
+import Textarea from 'react-native-textarea';
 export default function SubPortComp({
   lindex,
   portfolioData,
@@ -59,7 +66,6 @@ export default function SubPortComp({
   const [pictures, setPictures] = useState<Array<string>>([]);
   const options = {mediaType: 'photo', selectionLimit: 3};
 
-
   //
   const UpdateValue = (field: string | number, data: any) => {
     const oldDate = {description: shortDescription, images: [...pictures]};
@@ -94,7 +100,7 @@ export default function SubPortComp({
             // const processedLink = await uploadImage(localUri);
             const processedLink = await uploadImgorDoc(item);
             console.log('returned:', processedLink);
-            
+
             // Update the state or save the processed link instead of local URI
             setPictures(prevPictures => [...prevPictures, processedLink]);
             UpdateValue('images', [...pictures, processedLink]);
@@ -144,7 +150,6 @@ export default function SubPortComp({
   //   return responseData.processedLink; // Replace with the actual property in your response
   // };
 
-
   return (
     <View
       style={[
@@ -182,8 +187,18 @@ export default function SubPortComp({
         placeholder={'Briefly talk about the portfolio .....Max: 20 words'}
         value={shortDescription}
         onChangeText={text => {
-          setShortDescription(text);
-          UpdateValue('description', text);
+          // setShortDescription(text);
+          // UpdateValue('description', text);
+          // Split the text into words
+          const words = text.split(' ');
+          // Limit the words to 20
+          const limitedWords = words.slice(0, 20);
+          // Join the limited words back into a string
+          const limitedText = limitedWords.join(' ');
+          // Set the state with the limited text
+          setShortDescription(limitedText);
+          // Update the value (if needed)
+          UpdateValue('description', limitedText);
         }}
       />
 
@@ -254,3 +269,25 @@ export default function SubPortComp({
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container2: {
+    flex: 1,
+    padding: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textareaContainer: {
+    height: 80,
+    padding: 10,
+    backgroundColor: colors.greyLight1,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  textarea: {
+    textAlignVertical: 'top', // hack android
+    height: 170,
+    fontSize: 14,
+    color: 'black',
+  },
+});
