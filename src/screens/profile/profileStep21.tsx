@@ -59,15 +59,17 @@ const ProfileStep21 = () => {
   const navigation = useNavigation<StackNavigation>();
   const route: Route = useRoute();
   const category = useSelector((state: any) => state.user.pickedServices);
+  const ProviderData = useSelector((state: any) => state.user.profileData);
+
+
   const [allPotfolio, setAllPotfolio] = useState<any>([]);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState(ProviderData?.description ?? '');
   const [shortDescription, setShortDescription] = useState('');
   const [potfolioImageUrl, setPotfolioImageUrl] = useState<any>([]);
   const [isLoading, setisLoading] = useState(false);
   const [createService] = useCreateServiceMutation();
   const dispatch = useDispatch();
 
-  const ProviderData = useSelector((state: any) => state.user.profileData);
 
   const handleProfileSetup = async () => {
     if (portfolioToServiceCount?.length > 0) {

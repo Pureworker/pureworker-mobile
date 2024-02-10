@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Text,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigation} from '../../../constants/navigation';
@@ -249,6 +250,12 @@ export default function SubPortComp({
                       borderRadius: 5,
                     }}
                   />
+                  <TouchableOpacity
+                    style={tw` w-1/4 items-center mt-1 bg-red-800 rounded-full `}
+                    onPress={() => {
+                    }}>
+                    <Text style={[tw`text-white bold`, {fontWeight: '700', fontSize: 14, lineHeight: 14}]}>X</Text>
+                  </TouchableOpacity>
                 </View>
               );
             }}

@@ -30,13 +30,14 @@ import {ToastShort, timeAgo} from '../../../utils/utils';
 
 export default function Inbox({navigation, route}: any) {
   const userId = route.params?.id;
-  const userName = route.params?.name;
+  const userName = route.params?.name?.trim();
   const lastOnline = route.params?.lastOnline;
 
   const agentData = useSelector((state: any) => state.user.userData);
   const chatData = useSelector((store: any) => store.user.chatData);
-  // console.log('datahere', agentData?._id);
-
+  console.log('====================================');
+  console.log(agentData);
+  console.log('====================================');
   useEffect(() => {
     console.log('userID', userId);
     console.log('passed:', route.params);
@@ -313,7 +314,7 @@ export default function Inbox({navigation, route}: any) {
 
           {userName === 'Support Support' || userName === 'Support' ? null : (
             <>
-              {agentData?.accountType !== 'customer' ? (
+              {agentData?.accountType?.toLowerCase() === 'customer' ? (
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('OrderDetails', {
