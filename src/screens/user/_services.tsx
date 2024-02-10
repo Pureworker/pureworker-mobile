@@ -410,7 +410,7 @@ const _Services = ({route}: any) => {
                             horizontal={false}
                             scrollEnabled={false}
                             renderItem={(item: any, index: any) => {
-                              console.log('SAVEDSSS--', item.item);
+                              // console.log('SAVEDSSS--', item.item);
                               return (
                                 <TouchableOpacity>
                                   <ServiceCard2
