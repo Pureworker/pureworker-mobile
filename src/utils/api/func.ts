@@ -159,6 +159,7 @@ export const uploadAssetsDOCorIMG = async (
     return response;
   } catch (error) {
     console.log(error, error?.response, error?.response?.data);
+    console.log(error?.message);
     return {
       status: 400,
       err: error,

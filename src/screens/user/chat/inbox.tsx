@@ -135,15 +135,32 @@ export default function Inbox({navigation, route}: any) {
     const result = await launchImageLibrary({mediaType: 'photo'});
 
     if (result.assets!?.length > 0) {
-      const imageUrl = await uploadAssetsDOCorIMG(
-        {
-          uri: result.assets?.[0]?.uri,
-          name: result.assets?.[0]?.fileName,
-        },
-        'inbox-image',
+      const uploadResponse = await uploadAssetsDOCorIMG({
+        uri: result.assets?.[0]?.uri,
+        name: result.assets?.[0]?.fileName,
+        type: result.assets?.[0]?.type,
+      });
+
+      // console.log(uploadResponse?.data?.url, '   >>>>>>>>');
+      console.log(
+        uploadResponse?.data?.url,
+        ' sending image ...............................',
       );
 
-      console.log(imageUrl);
+      const data = {
+        from: agentData?._id,
+        to: `${userId}`,
+        body: uploadResponse?.data?.url ?? '',
+      };
+      console.log(data);
+      const currentDate = new Date();
+      const createdAt = currentDate.toISOString();
+      const _data = [...chatData, {...data, createdAt: createdAt}];
+      dispatch(addchatData(_data));
+      socket.emit('message', data, async () => {
+        console.log('message sent', data);
+        ToastShort('Message sent');
+      });
     }
   };
 
@@ -230,7 +247,7 @@ export default function Inbox({navigation, route}: any) {
                   ]}>
                   {userName === 'Support Support' || userName === 'Support'
                     ? ''
-                    : 'Xd ago'}
+                    : ''}
                 </Text>
               </View>
             </View>
