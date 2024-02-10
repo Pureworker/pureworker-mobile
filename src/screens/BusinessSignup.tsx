@@ -654,8 +654,12 @@ export default function BusinessSignup() {
                       height: 50,
                       borderRadius: 10,
                       paddingHorizontal: 10,
+                      color: '#757575',
                     },
                   ]}
+                  placeholderStyle={{
+                    color: '#757575',
+                  }}
                   data={locationItems}
                   search
                   maxHeight={300}
@@ -700,8 +704,12 @@ export default function BusinessSignup() {
                       height: 50,
                       borderRadius: 10,
                       paddingHorizontal: 10,
+                      color: '#757575',
                     },
                   ]}
+                  placeholderStyle={{
+                    color: '#757575',
+                  }}
                   data={allState}
                   search
                   maxHeight={300}

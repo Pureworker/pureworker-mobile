@@ -357,7 +357,6 @@ const DrawerContent = () => {
               </TouchableOpacity>
             ))}
           </View>
-
           <View
             style={[
               tw` px-2 w-[90%] border-t pb-6 pt-10 mx-auto rounded-lg`,
@@ -409,7 +408,7 @@ const DrawerContent = () => {
           )}
           <View style={[tw`mt-4 ml-3`, {}]}>
             <Textcomp
-              text={`Version: ${Platform.OS === 'ios' ? '1.0.0.9' : '1.0.0.9'}`}
+              text={`Version: ${Platform.OS === 'ios' ? '1.0.1.0' : '1.0.1.0'}`}
               size={14}
               color={'#000000'}
               style={[

@@ -17,7 +17,12 @@ import Textcomp from '../../components/Textcomp';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
 import Modal from 'react-native-modal/dist/modal';
-import {getCategory, getProviderOrders, getSupportUser, getUser} from '../../utils/api/func';
+import {
+  getCategory,
+  getProviderOrders,
+  getSupportUser,
+  getUser,
+} from '../../utils/api/func';
 import {
   addSCategory,
   addUserData,
@@ -329,9 +334,9 @@ const Home = ({navigation}: any) => {
               //     : ''
               // },`}
               text={`Welcome ${
-                userData?.firstName ||
+                userData?.firstName?.trimEnd() ||
                 (userData?.businessName !== undefined
-                  ? userData?.businessName
+                  ? userData?.businessName?.trimEnd()
                   : '')
               },`}
               size={17}

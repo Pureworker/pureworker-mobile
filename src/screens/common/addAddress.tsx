@@ -325,7 +325,7 @@ const AddAddress = ({navigation}: any) => {
             enablePoweredByContainer={false}
           />
         </View>
-        {description && (
+        {false && (
           <View style={tw` mt-3 mx-[5%] flex flex-col`}>
             <Text1
               text={'Location:'}
@@ -345,7 +345,30 @@ const AddAddress = ({navigation}: any) => {
             </View>
           </View>
         )}
-        <View style={[tw`mx-auto mt-4`, {width: perWidth(364)}]}>
+        <TouchableOpacity
+          onPress={() => {
+            upload('');
+          }}
+          style={tw`w-[90%] bg-[#A1A1A11A] p-2 px-3 rounded-lg mt-4 mx-auto `}>
+          <View style={tw`flex flex-row items-center `}>
+            <Image source={images.location} style={{width: 25, height: 25}} />
+            <Text1
+              text={'Current Location'}
+              size={14}
+              color={colors.parpal}
+              lineHeight={16}
+              style={[tw`font-600 ml-2`]}
+            />
+          </View>
+          <Text1
+            text={'Tap to select current Location'}
+            size={12}
+            color={'#'}
+            lineHeight={16}
+            style={[tw`font-600 `]}
+          />
+        </TouchableOpacity>
+        {/* <View style={[tw`mx-auto mt-4`, {width: perWidth(364)}]}>
           <TextInput
             style={[
               tw`bg-[#F2F2F2] text-black px-4  mx-4 rounded-lg`,
@@ -353,7 +376,7 @@ const AddAddress = ({navigation}: any) => {
             ]}
             placeholder="Enter Extra Info"
           />
-        </View>
+        </View> */}
         <View style={tw`bg-white mt-4`}>
           {/* <Buttonreactive
             condition={true}

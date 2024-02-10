@@ -362,18 +362,19 @@ export default function PortComp({
                     justifyContent: 'center',
                     backgroundColor: colors.lightBlack,
                     height: 50,
-                    width: 110,
+                    width: 120,
                     borderRadius: 5,
                   }}>
                   <TextWrapper
                     // numberOfLines={1}
                     fontType={'semiBold'}
                     style={{
-                      fontSize: 12,
+                      fontSize: 10,
                       color: '#fff',
                     }}>
                     {/* {service?.name} */}
-                    Price Range 
+                    {/* Price Range  */}
+                    Price Range / Hour
                   </TextWrapper>
                 </View>
                 <View style={[generalStyles.rowCenter]}>

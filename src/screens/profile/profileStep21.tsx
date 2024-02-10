@@ -61,15 +61,15 @@ const ProfileStep21 = () => {
   const category = useSelector((state: any) => state.user.pickedServices);
   const ProviderData = useSelector((state: any) => state.user.profileData);
 
-
   const [allPotfolio, setAllPotfolio] = useState<any>([]);
-  const [description, setDescription] = useState(ProviderData?.description ?? '');
+  const [description, setDescription] = useState(
+    ProviderData?.description || '',
+  );
   const [shortDescription, setShortDescription] = useState('');
   const [potfolioImageUrl, setPotfolioImageUrl] = useState<any>([]);
   const [isLoading, setisLoading] = useState(false);
   const [createService] = useCreateServiceMutation();
   const dispatch = useDispatch();
-
 
   const handleProfileSetup = async () => {
     if (portfolioToServiceCount?.length > 0) {
@@ -169,7 +169,6 @@ const ProfileStep21 = () => {
     }
     setisLoading(false);
   };
-
   const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
   const getUser = getUserData ?? [];
   const [nationalityOpen, setNationalityOpen] = useState(false);

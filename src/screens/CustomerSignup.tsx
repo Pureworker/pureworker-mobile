@@ -595,6 +595,9 @@ export default function CustomerSignup() {
                     paddingHorizontal: 10,
                   },
                 ]}
+                placeholderStyle={{
+                  color: '#757575',
+                }}
                 data={allState}
                 search
                 maxHeight={300}

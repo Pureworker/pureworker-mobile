@@ -518,7 +518,7 @@ export default function PortComp({
                       color: '#fff',
                     }}>
                     {/* {service?.name} */}
-                    Price Range
+                    Price Range / Hour
                   </TextWrapper>
                 </View>
                 <View style={[generalStyles.rowCenter]}>
