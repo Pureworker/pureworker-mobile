@@ -23,7 +23,7 @@ import ScheduledDeliveryDate from './modals/scheduledDeliveryDate';
 import {useDispatch, useSelector} from 'react-redux';
 import {addproviderOrders} from '../store/reducer/mainSlice';
 import RateyourCustommer from './modals/rateYourCustomer';
-import { formatDateHistory, formatDateHistory2 } from '../utils/utils';
+import {formatDateHistory, formatDateHistory2} from '../utils/utils';
 
 const Orderscomponent2 = ({item, index, status, showall}: any) => {
   const [saved, setsaved] = useState(false);
@@ -32,7 +32,7 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
   const [scheduledDeliveryDate, setscheduledDeliveryDate] = useState(false);
   const [rateYourExperience, setrateYourExperience] = useState(false);
 
-  console.log('ORDER:',item);
+  console.log('ORDER:', item);
 
   useEffect(() => {
     const initGetOrders2 = async () => {
@@ -444,20 +444,25 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
               {width: perWidth(300), marginTop: perWidth(5)},
             ]}>
             <Textcomp
-              text={`Address: ${item?.address}`}
+              text={`Address: ${
+                item?.location === 'online' ? 'NIL' : item?.address
+              }`}
               size={12}
               lineHeight={14}
               color={colors.white}
               fontFamily={'Inter-Regular'}
             />
           </View>
+
           <View
             style={[
               tw` mx-auto`,
               {width: perWidth(300), marginTop: perWidth(5)},
             ]}>
             <Textcomp
-              text={`Date & Time: ${formatDateHistory2(item?.scheduledDeliveryDate)}`}
+              text={`Date & Time: ${formatDateHistory2(
+                item?.scheduledDeliveryDate,
+              )}`}
               size={12}
               lineHeight={14}
               color={colors.white}
