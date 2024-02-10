@@ -27,7 +27,7 @@ import colors from '../../../constants/colors';
 import images from '../../../constants/images';
 import {HEIGHT_SCREEN, HEIGHT_WINDOW} from '../../../constants/generalStyles';
 import Textcomp from '../../../components/Textcomp';
-import {ToastShort} from '../../../utils/utils';
+import {ToastLong, ToastShort} from '../../../utils/utils';
 
 export default function Inbox({navigation, route}: any) {
   const userId = route.params?.id;
@@ -141,26 +141,24 @@ export default function Inbox({navigation, route}: any) {
         type: result.assets?.[0]?.type,
       });
 
-      // console.log(uploadResponse?.data?.url, '   >>>>>>>>');
-      console.log(
-        uploadResponse?.data?.url,
-        ' sending image ...............................',
-      );
-
-      const data = {
-        from: agentData?._id,
-        to: `${userId}`,
-        body: uploadResponse?.data?.url ?? '',
-      };
-      console.log(data);
-      const currentDate = new Date();
-      const createdAt = currentDate.toISOString();
-      const _data = [...chatData, {...data, createdAt: createdAt}];
-      dispatch(addchatData(_data));
-      socket.emit('message', data, async () => {
-        console.log('message sent', data);
-        ToastShort('Message sent');
-      });
+      try {
+        const data = {
+          from: agentData?._id,
+          to: `${userId}`,
+          body: uploadResponse?.data?.url ?? '',
+        };
+        console.log(data);
+        const currentDate = new Date();
+        const createdAt = currentDate.toISOString();
+        const _data = [...chatData, {...data, createdAt: createdAt}];
+        dispatch(addchatData(_data));
+        socket.emit('message', data, async () => {
+          console.log('message sent', data);
+          ToastShort('Message sent');
+        });
+      } catch (err) {
+        ToastLong('Unable to send image');
+      }
     }
   };
 
