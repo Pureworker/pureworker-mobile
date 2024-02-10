@@ -1,12 +1,10 @@
 import {Image, View, TouchableOpacity} from 'react-native';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import React, {useState} from 'react';
-
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../Textcomp';
 import colors from '../../constants/colors';
-
 import Review from '../Review';
 import FastImage from 'react-native-fast-image';
 import {
@@ -18,9 +16,8 @@ import {ToastShort} from '../../utils/utils';
 import {useDispatch} from 'react-redux';
 import {addUserData} from '../../store/reducer/mainSlice';
 
-const ServiceCard2 = ({
+const ServiceCard3 = ({
   item,
-  // index,
   navigation,
   id,
   serviceName,
@@ -28,38 +25,15 @@ const ServiceCard2 = ({
   savedProviders,
 }: any) => {
   const [saved, setsaved] = useState(save);
-  // const portfolio = item?.portfolio?.filter(_item => _item?.service === id);
   const price = item?.priceRange?.filter(
     (_item: {service: any}) => _item?.service === id,
   );
   console.log('pased', price, item?.description, item?.distance, 'item:', item);
-  // console.log('lllll---');
   function metersToKilometers(meters: any) {
     const kilometers = Number(meters) / 1000; // Convert meters to kilometers
     const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
     return `${roundedKilometers}km`;
   }
-  // const handleBookmark = async () => {
-  //   const res: any = await bookMarkServiceProvide({
-  //     service: id,
-  //     serviceProvider: item?._id,
-  //   });
-  //   if (res?.status === 200 || res?.status === 201) {
-  //     ToastShort('Service Provider bookmarked!.');
-  //     setsaved(!saved);
-  //   } else {
-  //     ToastShort(
-  //       `${
-  //         res?.error?.message
-  //           ? res?.error?.message
-  //           : res?.error?.data?.message
-  //           ? res?.error?.data?.message
-  //           : 'Oops!, an error occured'
-  //       }`,
-  //     );
-  //   }
-  // };
-
   const handleBookmark = async () => {
     try {
       const res: any = await bookMarkServiceProvide({
@@ -314,10 +288,10 @@ const ServiceCard2 = ({
             readonly={true}
             startingValue={2}
           /> */}
-          <Review value={item?.averageRating} editable={false} />
+          <Review value={item?.rating} editable={false} />
         </View>
       </View>
     </TouchableOpacity>
   );
 };
-export default ServiceCard2;
+export default ServiceCard3;

@@ -205,7 +205,6 @@ const Home = () => {
           {
             flex: 1,
             backgroundColor: '#EBEBEB',
-            paddingTop: Platform.OS === 'ios' ? 10 : 20,
           },
         ]}>
         <ScrollView
@@ -220,6 +219,7 @@ const Home = () => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 marginHorizontal: 20,
+                paddingTop: Platform.OS === 'ios' ? 10 : 27.5,
               },
             ]}>
             <TouchableOpacity onPress={() => navigation.openDrawer()}>

@@ -938,11 +938,11 @@ export default function BusinessSignup() {
                       ? formatToCustomString(displayDate)
                       : ''
                   }`}
-                  size={17}
-                  lineHeight={17}
+                  size={14}
+                  lineHeight={14}
                   color={'#000413'}
                   fontFamily={'Inter-Regular'}
-                  style={{fontWeight: 400}}
+                  style={{fontWeight: 300}}
                 />
               </TouchableOpacity>
               <View

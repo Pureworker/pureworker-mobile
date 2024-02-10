@@ -395,7 +395,7 @@ export default function CustomerSignup() {
                 navigation.navigate('BusinessSignup');
               }}
               textStyle={{
-                color: userType === 'PROVIDER' ? colors.white : '#000',
+                color: userType !== 'CUSTOMER' ? colors.white : '#000',
                 fontSize: 17,
                 fontFamily: commonStyle.fontFamily.semibold,
               }}
@@ -403,8 +403,8 @@ export default function CustomerSignup() {
                 flex: 1,
                 borderRadius: 8,
                 height: 45,
-                backgroundColor:
-                  userType === 'PROVIDER' ? colors.parpal : colors.white,
+                backgroundColor: 
+                  userType === 'CUSTOMER' ? colors.primary : colors.white,
               }}
             />
           </View>
@@ -492,14 +492,12 @@ export default function CustomerSignup() {
                 {backgroundColor: colors.greyLight1, height: perHeight(40)},
               ]}>
               <Textcomp
-                text={`${
-                  displayDate ? formatToCustomString(displayDate) : ''
-                }`}
-                size={17}
-                lineHeight={17}
+                text={`${displayDate ? formatToCustomString(displayDate) : ''}`}
+                size={14}
+                lineHeight={14}
                 color={'#000413'}
                 fontFamily={'Inter-Regular'}
-                style={{fontWeight: 400}}
+                style={{fontWeight: 300}}
               />
             </TouchableOpacity>
             {/* <ScrollView horizontal style={{width: SIZES.width * 0.9, backgroundColor: 'red'}}> */}

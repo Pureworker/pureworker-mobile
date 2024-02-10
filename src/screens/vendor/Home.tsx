@@ -7,6 +7,7 @@ import {
   FlatList,
   StatusBar,
   ScrollView,
+  Platform,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import images from '../../constants/images';
@@ -250,6 +251,7 @@ const Home = ({navigation}: any) => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 marginHorizontal: 20,
+                paddingTop: Platform.OS === 'ios' ? 10 : 27.5,
               },
             ]}>
             <TouchableOpacity onPress={() => navigation.openDrawer()}>

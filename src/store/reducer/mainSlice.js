@@ -103,6 +103,7 @@ export const mainSlice = createSlice({
       state.formStage = 1;
       state.serviceView = null;
       state.banks = [];
+      state.bookMarkedProviders = [];
     },
 
     addCategory: (state, action) => {
@@ -245,6 +246,10 @@ export const mainSlice = createSlice({
     setliveTest: (state, action) => {
       state.liveTest = action.payload;
     },
+    setbookMarkedProviders: (state, action) => {
+      state.bookMarkedProviders = action.payload;
+    },
+    
   },
 });
 
@@ -282,6 +287,7 @@ export const {
   addbanks,
   setwelcomeModal,
   setserviceProviderData,
+  setbookMarkedProviders,
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);
