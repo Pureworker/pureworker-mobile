@@ -73,5 +73,6 @@ const images = {
   cancelCircle: require('../assets/images/cancelCircle.png'),
   rate: require('../assets/images/rate.png'),
   Naira2: require('../assets/images/Naira2.png'),
+  chatImageIcon: require('../assets/images/chatImage.png'),
 };
 export default images;

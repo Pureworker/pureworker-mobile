@@ -130,14 +130,18 @@ export const getPopularService = async (param: any) => {
     };
   }
 };
-export const uploadAssetsDOCorIMG = async (param: any) => {
+
+export const uploadAssetsDOCorIMG = async (
+  param: any,
+  formDataKey = 'profile-picture',
+) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   const formData = new FormData();
-  formData.append('profile-picture', {
+  formData.append(formDataKey, {
     uri: param.uri,
     type: param.type, // Adjust the MIME type based on your image type
-    name: 'profile-picture',
-    fieldname: 'profile-picture',
+    name: param?.name ? param?.name : 'profile-picture',
+    fieldname: formDataKey,
     // name: param.name || param?.fileName, // Adjust the filename as needed
   });
   formData.append('folder', 'profile');

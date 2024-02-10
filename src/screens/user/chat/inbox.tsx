@@ -18,10 +18,11 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {perHeight, perWidth} from '../../../utils/position/sizes';
 import Chatcomp from './chatcomp';
 import socket from '../../../utils/socket';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 import {addchatData} from '../../../store/reducer/mainSlice';
 import {useDispatch, useSelector} from 'react-redux';
-import {getMessagesbyuser} from '../../../utils/api/func';
+import {getMessagesbyuser, uploadAssetsDOCorIMG} from '../../../utils/api/func';
 import colors from '../../../constants/colors';
 import images from '../../../constants/images';
 import {HEIGHT_SCREEN, HEIGHT_WINDOW} from '../../../constants/generalStyles';
@@ -129,6 +130,22 @@ export default function Inbox({navigation, route}: any) {
       setRefreshing(false);
     }
   }, []);
+
+  const selectImage = async () => {
+    const result = await launchImageLibrary({mediaType: 'photo'});
+
+    if (result.assets!?.length > 0) {
+      const imageUrl = await uploadAssetsDOCorIMG(
+        {
+          uri: result.assets?.[0]?.uri,
+          name: result.assets?.[0]?.fileName,
+        },
+        'inbox-image',
+      );
+
+      console.log(imageUrl);
+    }
+  };
 
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
@@ -275,7 +292,12 @@ export default function Inbox({navigation, route}: any) {
                       );
                     } else if (item?.to?._id === agentData?._id) {
                       return (
-                        <Chatcomp key={index} text={item?.body} type={'me'} time={item?.updatedAt} />
+                        <Chatcomp
+                          key={index}
+                          text={item?.body}
+                          type={'me'}
+                          time={item?.updatedAt}
+                        />
                       );
                     } else if (item?.from === agentData?._id) {
                       return (
@@ -288,7 +310,12 @@ export default function Inbox({navigation, route}: any) {
                       );
                     } else if (item?.to === agentData?._id) {
                       return (
-                        <Chatcomp key={index} text={item?.body} type={'me'} time={item?.updatedAt} />
+                        <Chatcomp
+                          key={index}
+                          text={item?.body}
+                          type={'me'}
+                          time={item?.updatedAt}
+                        />
                       );
                     }
                   })}
@@ -370,19 +397,33 @@ export default function Inbox({navigation, route}: any) {
               />
               <TouchableOpacity
                 onPress={() => {
-                  onSubmit();
+                  message.length > 0 ? onSubmit() : selectImage();
                 }}>
-                <Image
-                  resizeMode="contain"
-                  source={images.send2}
-                  style={[
-                    tw`w-full `,
-                    {
-                      height: 30,
-                      width: 30,
-                    },
-                  ]}
-                />
+                {message.length > 0 ? (
+                  <Image
+                    resizeMode="contain"
+                    source={images.send2}
+                    style={[
+                      tw`w-full `,
+                      {
+                        height: 30,
+                        width: 30,
+                      },
+                    ]}
+                  />
+                ) : (
+                  <Image
+                    resizeMode="contain"
+                    source={images.chatImageIcon}
+                    style={[
+                      tw`w-full `,
+                      {
+                        height: 30,
+                        width: 30,
+                      },
+                    ]}
+                  />
+                )}
               </TouchableOpacity>
               {/* {boxFocuss || message?.length > 0 ? (
                 <TouchableOpacity
