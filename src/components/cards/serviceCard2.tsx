@@ -1,6 +1,6 @@
 import {Image, View, TouchableOpacity} from 'react-native';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -12,11 +12,15 @@ import FastImage from 'react-native-fast-image';
 import {
   bookMarkServiceProvide,
   deletebookMarkServiceProvide,
+  getBookMarkedProviders,
   getUser,
 } from '../../utils/api/func';
 import {ToastShort} from '../../utils/utils';
-import {useDispatch} from 'react-redux';
-import {addUserData} from '../../store/reducer/mainSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  addUserData,
+  setbookMarkedProviders,
+} from '../../store/reducer/mainSlice';
 
 const ServiceCard2 = ({
   item,
@@ -39,6 +43,9 @@ const ServiceCard2 = ({
     const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
     return `${roundedKilometers}km`;
   }
+  const bookMarkedProviders = useSelector(
+    (state: any) => state.user.bookMarkedProviders,
+  );
   // const handleBookmark = async () => {
   //   const res: any = await bookMarkServiceProvide({
   //     service: id,
@@ -94,6 +101,7 @@ const ServiceCard2 = ({
           // setsavedProviders(query);
         }
       };
+      initBookmarked();
       initGetUsers();
     }
   };
@@ -101,6 +109,30 @@ const ServiceCard2 = ({
   const ch = savedProviders?.filter(
     (d: {service: any}) => d?.serviceProvider === item?._id,
   );
+  const initBookmarked = async () => {
+    const res: any = await getBookMarkedProviders(id);
+    console.log('bbbbbmmm', res?.data?.data);
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(setbookMarkedProviders(res?.data?.data));
+      // dispatch(addprovidersByCateegory(res?.data?.data));
+    }
+  };
+
+  useEffect(() => {
+    const _initBookmarked = async () => {
+      const res: any = await getBookMarkedProviders(id);
+      console.log('bbbbbmmm', res?.data?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(setbookMarkedProviders(res?.data?.data));
+        // dispatch(addprovidersByCateegory(res?.data?.data));
+      }
+    };
+    _initBookmarked();
+  }, []);
+
+  console.log('====================================');
+  console.log(bookMarkedProviders);
+  console.log('====================================');
   const handleRemoveBookmark = async () => {
     try {
       const ch = savedProviders?.filter(
@@ -130,15 +162,14 @@ const ServiceCard2 = ({
         const res: any = await getUser('');
         if (res?.status === 201 || res?.status === 200) {
           dispatch(addUserData(res?.data?.user));
-          const query = res?.data?.user?.bookmarks?.filter(
-            (item: {service: any}) => item?.service === id,
-          );
           // setsavedProviders(query);
         }
       };
       initGetUsers();
+      initBookmarked();
     }
   };
+
   return (
     <TouchableOpacity
       onPress={() => {
