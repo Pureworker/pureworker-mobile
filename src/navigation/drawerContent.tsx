@@ -58,11 +58,11 @@ const DrawerContent = () => {
     //   route: 'FaceDetection',
     //   icon: images.rate,
     // },
-    {
-      label: 'Tracking',
-      route: 'Tracking',
-      icon: images.rate,
-    },
+    // {
+    //   label: 'Tracking',
+    //   route: 'Tracking',
+    //   icon: images.rate,
+    // },
   ];
   const dispatch = useDispatch();
   const [InfoModal, setInfoModal] = useState(false);
@@ -324,7 +324,7 @@ const DrawerContent = () => {
 
           <View
             style={[
-              tw` px-2 w-[90%] pb-6 pt-3 mx-auto rounded-lg`,
+              tw` px-2 w-[90%] pb-3 pt-3 mx-auto rounded-lg`,
               {marginTop: perHeight(40)},
             ]}>
             {navLinks.map((link, index) => (
@@ -359,8 +359,11 @@ const DrawerContent = () => {
           </View>
           <View
             style={[
-              tw` px-2 w-[90%] border-t pb-6 pt-10 mx-auto rounded-lg`,
-              {marginTop: perHeight(20)},
+              tw` px-2 w-[90%] border-t pb-6  mx-auto rounded-lg`,
+              {
+                marginTop: perHeight(20),
+                paddingTop: Platform.OS === 'ios' ? 30 : 20,
+              },
             ]}>
             {navLinks2.map((link, index) => (
               <TouchableOpacity
@@ -408,7 +411,7 @@ const DrawerContent = () => {
           )}
           <View style={[tw`mt-4 ml-3`, {}]}>
             <Textcomp
-              text={`Version: ${Platform.OS === 'ios' ? '1.0.1.0' : '1.0.1.0'}`}
+              text={`Version: ${Platform.OS === 'ios' ? '1.0.1.2' : '1.0.1.2'}`}
               size={14}
               color={'#000000'}
               style={[

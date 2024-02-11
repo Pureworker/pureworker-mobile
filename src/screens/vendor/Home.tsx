@@ -465,7 +465,11 @@ const Home = ({navigation}: any) => {
                   {borderTopRightRadius: 20, borderTopLeftRadius: 20},
                 ]}>
                 <Textcomp
-                  text={`₦${formatAmount(userData?.wallet?.availableBalance)}`}
+                  text={`₦${
+                    userData?.wallet?.availableBalance
+                      ? formatAmount(userData?.wallet?.availableBalance)
+                      : 0
+                  }`}
                   size={20}
                   lineHeight={20}
                   color={'#000413'}
@@ -503,7 +507,11 @@ const Home = ({navigation}: any) => {
                 ]}>
                 <Textcomp
                   // text={'NGN249,0000'}
-                  text={`₦${formatAmount(userData?.wallet?.availableBalance)}`}
+                  text={`₦${
+                    userData?.wallet?.availableBalance
+                      ? formatAmount(userData?.wallet?.availableBalance)
+                      : 0
+                  }`}
                   size={20}
                   lineHeight={20}
                   color={'#000413'}

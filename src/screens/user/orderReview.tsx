@@ -154,7 +154,7 @@ const OrderReview = ({route}: any) => {
                 tw`flex flex-row justify-between `,
                 {paddingLeft: perWidth(32), marginTop: perHeight(25)},
               ]}>
-              <View style={tw`w-8/10`}>
+              <View style={tw`w-10/10`}>
                 <View style={tw``}>
                   <Textcomp
                     text={'Order Details'}
@@ -184,6 +184,45 @@ const OrderReview = ({route}: any) => {
                     />
                   </View>
                 </View>
+
+                {/* <View style={tw``}>
+                  <Image
+                    resizeMode="contain"
+                    style={[tw``, {width: 15, height: 15}]}
+                    source={images.arrow_up}
+                  />
+                  <View style={tw`mt-1.5 bg-red-400`}>
+                    <Textcomp
+                      text={`₦${_data?.totalPrice}`}
+                      size={14}
+                      lineHeight={15}
+                      color={'#000413'}
+                      fontFamily={'Inter-SemiBold'}
+                    />
+                  </View>
+                </View> */}
+                <View style={tw`mt-1.5`}>
+                  <View style={tw``}>
+                    <Textcomp
+                      text={'Amount:'}
+                      size={14}
+                      lineHeight={15}
+                      color={'#000413'}
+                      fontFamily={'Inter-Medium'}
+                    />
+                  </View>
+                  <View style={tw`mt-1`}>
+                    <Textcomp
+                      // text={'$2000'}
+                      text={`₦${_data?.totalPrice}`}
+                      size={15}
+                      lineHeight={15}
+                      color={'#000413'}
+                      fontFamily={'Inter'}
+                    />
+                  </View>
+                </View>
+
                 <View style={tw`mt-1.5`}>
                   <View style={tw``}>
                     <Textcomp
@@ -243,25 +282,6 @@ const OrderReview = ({route}: any) => {
                       fontFamily={'Inter'}
                     />
                   </View>
-                </View>
-              </View>
-
-              <View style={tw`items-center pr-3  w-2/10`}>
-                <Image
-                  resizeMode="contain"
-                  style={[tw``, {width: 15, height: 15}]}
-                  source={images.arrow_up}
-                />
-
-                <View style={tw`mt-1.5`}>
-                  <Textcomp
-                    // text={'$2000'}
-                    text={`₦${_data?.totalPrice}`}
-                    size={14}
-                    lineHeight={15}
-                    color={'#000413'}
-                    fontFamily={'Inter-SemiBold'}
-                  />
                 </View>
               </View>
             </View>

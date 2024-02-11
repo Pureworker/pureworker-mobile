@@ -168,7 +168,7 @@ const PRofileStep1 = () => {
         title={'Complete your Registration'}
         image={images.back}
         func={() => {
-          navigation.navigate('Home');
+          navigation.navigate('Index');
         }}
       />
       <ProfileStepWrapper active={'one'} />

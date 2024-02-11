@@ -91,15 +91,15 @@ export default function PortComp({
       ToastLong('Added successfully!.');
       close();
     } else {
-      ToastLong(
-        `${
-          res?.error?.message
-            ? res?.error?.message
-            : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured'
-        }`,
-      );
+      // ToastLong(
+      //   `${
+      //     res?.error?.message
+      //       ? res?.error?.message
+      //       : res?.error?.data?.message
+      //       ? res?.error?.data?.message
+      //       : 'Oops!, an error occured'
+      //   }`,
+      // );
       Snackbar.show({
         text: res?.error?.message
           ? res?.error?.message

@@ -54,7 +54,7 @@ export default function BusinessSignup() {
         'Offline (your business renders services at the customer’s location)',
       value: 'Offline',
     },
-    {label: 'Both', value: 'Both'},
+    {label: 'Hybrid', value: 'Hybrid'},
   ]);
   const [genderOpen, setGenderOpen] = useState(false);
 
@@ -117,7 +117,7 @@ export default function BusinessSignup() {
       then: Yup.string().required('CAC Number is required'),
       otherwise: Yup.string().notRequired(),
     }),
-    location: Yup.string().oneOf(['online', 'offline', 'both']).optional(),
+    location: Yup.string().oneOf(['online', 'offline', 'hybrid']).optional(),
   });
 
   const handleSignup = async () => {

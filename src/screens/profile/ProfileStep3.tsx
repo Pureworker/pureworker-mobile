@@ -399,7 +399,7 @@ const ProfileStep3 = () => {
               marginTop: 13,
             }}>
             <TextInputs
-              styleInput={{color: colors.black, paddingHorizontal: 18}}
+              styleInput={{color: colors.black, paddingHorizontal: 18, height: 120}}
               style={{marginTop: 0, backgroundColor: colors.greyLight1}}
               labelText={'Enter address'}
               state={formik.values.address1}
@@ -520,7 +520,7 @@ const ProfileStep3 = () => {
               marginTop: 13,
             }}>
             <TextInputs
-              styleInput={{color: colors.black, paddingHorizontal: 18}}
+              styleInput={{color: colors.black, paddingHorizontal: 18, height: 120}}
               style={{marginTop: 0, backgroundColor: colors.greyLight1}}
               labelText={'Enter address'}
               // state={address2}
