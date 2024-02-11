@@ -201,6 +201,7 @@ const ProfileStep21 = () => {
       console.log('portfolio--', res?.data?.profile?.portfolios);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addProfileData(res?.data?.profile));
+        setDescription(res?.data?.profile?.description);
       }
     };
     // initGetProfile();
