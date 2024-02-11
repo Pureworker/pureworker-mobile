@@ -363,7 +363,7 @@ const AddAddress = ({navigation}: any) => {
           <Text1
             text={'Tap to select current Location'}
             size={12}
-            color={'#'}
+            color={'#000000'}
             lineHeight={16}
             style={[tw`font-600 `]}
           />
