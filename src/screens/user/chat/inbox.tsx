@@ -28,12 +28,14 @@ import images from '../../../constants/images';
 import {HEIGHT_SCREEN, HEIGHT_WINDOW} from '../../../constants/generalStyles';
 import Textcomp from '../../../components/Textcomp';
 import {ToastShort, timeAgo} from '../../../utils/utils';
+import useChat from '../../../hooks/useChat';
 
 export default function Inbox({navigation, route}: any) {
   const userId = route.params?.id;
   const userName = route.params?.name?.trim();
   const lastOnline = route.params?.lastOnline;
 
+  const {getUnreadMessages} = useChat();
   const agentData = useSelector((state: any) => state.user.userData);
   const chatData = useSelector((store: any) => store.user.chatData);
   console.log('====================================');
@@ -189,6 +191,12 @@ export default function Inbox({navigation, route}: any) {
     };
   }, []);
 
+  useEffect(() => {
+    return () => {
+      getUnreadMessages();
+    };
+  });
+
   return (
     <SafeAreaView style={[tw`h-full bg-[#EBEBEB]  w-full`, styles.container]}>
       <KeyboardAvoidingView
@@ -302,7 +310,6 @@ export default function Inbox({navigation, route}: any) {
                   </View>
 
                   {groupedMessages[date].map((message, index) => {
-                    console.log(message?.id);
                     let item = message;
                     if (item?.from?._id === agentData?._id) {
                       return (

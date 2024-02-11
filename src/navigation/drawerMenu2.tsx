@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -22,13 +22,22 @@ import VendorHomeStack from './vendorHome';
 import AddAddress from '../screens/common/addAddress';
 import TabServices from '../screens/user/tab_servicess2';
 import Referrals from '../screens/common/referrals';
-import { registerTransistorAuthorizationListener } from '../tracking/authorization';
+import {registerTransistorAuthorizationListener} from '../tracking/authorization';
+import useChat from '../hooks/useChat';
+import {useSelector} from 'react-redux';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+  const {getUnreadMessages} = useChat();
+  const unreadChats = useSelector((state: any) => state.user.unreadChats);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    getUnreadMessages();
+  }, []);
+
   React.useEffect(() => {
     registerTransistorAuthorizationListener(navigation);
     return () => {
@@ -96,6 +105,10 @@ const TabNavigator = () => {
           tabBarIcon: ({focused}) => (
             <TabIcon focused={focused} icon={images.chat} name={'Chats'} />
           ),
+          tabBarBadge: unreadChats ? unreadChats : undefined,
+          tabBarBadgeStyle: {
+            backgroundColor: 'orange',
+          },
         }}
       />
       <Tab.Screen
