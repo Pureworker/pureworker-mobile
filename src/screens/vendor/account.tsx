@@ -544,6 +544,8 @@ const Account = () => {
                               };
                               seteditModal(true);
                               setSelectedService(item);
+
+                              
                             }}>
                             <Textcomp
                               text={'Edit'}

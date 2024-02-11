@@ -22,7 +22,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import SubPortComp from './subComp';
 import {Formik, FieldArray} from 'formik';
 import * as yup from 'yup';
-import {addPortfolio, getSubCategory} from '../../../utils/api/func';
+import {addPortfolio, addPortfolio2, getSubCategory} from '../../../utils/api/func';
 import AddCircle from '../../../assets/svg/AddCircle';
 import {
   Collapse,
@@ -52,6 +52,7 @@ export default function PortComp({
   const [selectedVerification, setSelectedVerification] = useState('');
   const [description, setDescription] = useState('');
   const dispatch = useDispatch();
+
   const handleProfileSetup = async passedData => {
     try {
       console.log(passedData);
@@ -73,7 +74,7 @@ export default function PortComp({
         portfolio: passedData?.portfolios,
       };
       console.log('eff---', prepData, prepData?.portfolio);
-      const res = await addPortfolio(prepData);
+      const res = await addPortfolio2(prepData);
       console.error('RESULT', res?.data);
       if (res?.status === 200 || res?.status === 201) {
         // navigation.navigate('ProfileStep3');
@@ -125,11 +126,9 @@ export default function PortComp({
     portfolios: [],
   };
   const [serviceList, setserviceList] = useState(dlist);
-
   const [_portfolioData, setPortfolioData] = useState<
     Array<{description: string; pictures: Array<string>}>
   >([]);
-
   const handlePortfolioItemChange = (
     index: number,
     data: {description: string; pictures: Array<string>},
