@@ -11,6 +11,8 @@ import colors from '../../../constants/colors';
 import {WIDTH_WINDOW} from '../../../constants/generalStyles';
 import {timeAgo} from '../../../utils/utils';
 import {getUnreadMessages} from '../../../utils/api/chat';
+import FastImage from 'react-native-fast-image';
+import {getUnreadMessages} from '../../../utils/api/chat';
 
 export default function ListComp({navigation, item}: any) {
   function formatDate(dateString) {
@@ -21,9 +23,9 @@ export default function ListComp({navigation, item}: any) {
   const userData = useSelector((state: any) => state.user.userData);
   const [visible, setvisible] = useState(false);
 
-  // console.log('====================================');
-  // console.log(item);
-  // console.log('====================================');
+  console.log('====================================');
+  console.log(item);
+  console.log('====================================');
 
   return (
     <>
@@ -57,10 +59,36 @@ export default function ListComp({navigation, item}: any) {
         }}
         style={tw`flex flex-row mt-2 py-2 mx-1 rounded justify-between bg-[#2D303C]`}>
         <View style={[tw`flex flex-row items-center px-2`, {}]}>
-          <Image
+          {/* <Image
             source={images.profile}
             style={{height: 50, width: 50}}
             resizeMode="contain"
+          /> */}
+          <FastImage
+            style={[
+              tw``,
+              {
+                width: perWidth(50),
+                height: perWidth(50),
+                borderRadius: perWidth(50) / 2,
+              },
+            ]}
+            source={{
+              uri:
+                item?.userA?._id === userData?._id
+                  ? item?.userB?.profilePic
+                    ? item?.userB?.profilePic
+                    : 'https://res.cloudinary.com/dpdytuqlf/image/upload/v1707651780/category/k17kfdlowt9qnflorody.jpg'
+                  : item?.userA?.profilePic
+                  ? item?.userA?.profilePic
+                  : 'https://res.cloudinary.com/dpdytuqlf/image/upload/v1707651780/category/k17kfdlowt9qnflorody.jpg',
+
+              // item?.profilePicture ||
+              // 'https://res.cloudinary.com/dpdytuqlf/image/upload/v1707651780/category/k17kfdlowt9qnflorody.jpg',
+              headers: {Authorization: 'someAuthToken'},
+              priority: FastImage.priority.normal,
+            }}
+            resizeMode={FastImage.resizeMode.cover}
           />
           <View style={[tw`flex flex-col  ml-2`, {}]}>
             <View style={[tw``, {}]}>

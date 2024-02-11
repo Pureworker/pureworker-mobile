@@ -58,6 +58,7 @@ export default function EditComp({
       return;
     }
     const prepData = {
+      id: foundPortfolio?.[0]?._id,
       service: service?._id,
       description: passedData?.serviceDescription,
       maxPrice: passedData?.servicePriceMax,
@@ -71,7 +72,7 @@ export default function EditComp({
       // navigation.navigate('ProfileStep3');
       // setCurrentState('3');
       // dispatch(addformStage(3));
-      ToastLong('Added successfully!.');
+      ToastLong('Edited successfully!.');
       close();
     } else {
       ToastLong(
@@ -247,7 +248,7 @@ export default function EditComp({
                     justifyContent: 'center',
                     backgroundColor: colors.lightBlack,
                     height: 50,
-                    width: 110,
+                    width: 125,
                     borderRadius: 5,
                   }}>
                   <TextWrapper
@@ -258,7 +259,7 @@ export default function EditComp({
                       color: '#fff',
                     }}>
                     {/* {service?.name} */}
-                    Price Range
+                    Price Range/hour
                   </TextWrapper>
                 </View>
                 <View style={[generalStyles.rowCenter]}>

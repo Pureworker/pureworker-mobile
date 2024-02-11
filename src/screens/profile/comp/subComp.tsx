@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Text,
+  Platform,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigation} from '../../../constants/navigation';
@@ -65,7 +66,10 @@ export default function SubPortComp({
 
   const [shortDescription, setShortDescription] = useState('');
   const [pictures, setPictures] = useState<Array<string>>([]);
-  const options = {mediaType: 'photo', selectionLimit: 3};
+  const options = {
+    mediaType: 'photo',
+    selectionLimit: Platform.OS === 'android' ? 2 : 3,
+  };
 
   //
   const UpdateValue = (field: string | number, data: any) => {
@@ -252,9 +256,14 @@ export default function SubPortComp({
                   />
                   <TouchableOpacity
                     style={tw` w-1/4 items-center mt-1 bg-red-800 rounded-full `}
-                    onPress={() => {
-                    }}>
-                    <Text style={[tw`text-white bold`, {fontWeight: '700', fontSize: 14, lineHeight: 14}]}>X</Text>
+                    onPress={() => {}}>
+                    <Text
+                      style={[
+                        tw`text-white bold`,
+                        {fontWeight: '700', fontSize: 14, lineHeight: 14},
+                      ]}>
+                      X
+                    </Text>
                   </TouchableOpacity>
                 </View>
               );

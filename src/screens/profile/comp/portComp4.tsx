@@ -22,7 +22,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import SubPortComp from './subComp';
 import {Formik, FieldArray} from 'formik';
 import * as yup from 'yup';
-import {addPortfolio, getSubCategory} from '../../../utils/api/func';
+import {addPortfolio, addPortfolio2, getSubCategory} from '../../../utils/api/func';
 import AddCircle from '../../../assets/svg/AddCircle';
 import {
   Collapse,
@@ -52,44 +52,58 @@ export default function PortComp({
   const [selectedVerification, setSelectedVerification] = useState('');
   const [description, setDescription] = useState('');
   const dispatch = useDispatch();
-  const handleProfileSetup = async passedData => {
-    console.log(passedData);
 
-    if (Number(passedData?.servicePriceMin) < 500) {
-      ToastShort('Min Price cannot be less than 500 naira.');
-    }
-    if (
-      Number(passedData?.servicePriceMax) < Number(passedData?.servicePriceMin)
-    ) {
-      ToastShort('MaxPrice must be greater than MinPrice');
-      return;
-    }
-    const prepData = {
-      service: service?._id,
-      description: passedData?.serviceDescription,
-      maxPrice: passedData?.servicePriceMax,
-      minPrice: passedData?.servicePriceMin,
-      portfolio: passedData?.portfolios,
-    };
-    console.log('eff---', prepData, prepData?.portfolio);
-    const res = await addPortfolio(prepData);
-    console.error('RESULT', res?.data);
-    if (res?.status === 200 || res?.status === 201) {
-      // navigation.navigate('ProfileStep3');
-      // setCurrentState('3');
-      // dispatch(addformStage(3));
-      ToastLong('Added successfully!.');
-      close();
-    } else {
-      ToastLong(
-        `${
-          res?.error?.message
+  const handleProfileSetup = async passedData => {
+    try {
+      console.log(passedData);
+      if (Number(passedData?.servicePriceMin) < 500) {
+        ToastShort('Min Price cannot be less than 500 naira.');
+      }
+      if (
+        Number(passedData?.servicePriceMax) <
+        Number(passedData?.servicePriceMin)
+      ) {
+        ToastShort('MaxPrice must be greater than MinPrice');
+        return;
+      }
+      const prepData = {
+        service: serviceObj?._id,
+        description: passedData?.serviceDescription,
+        maxPrice: passedData?.servicePriceMax,
+        minPrice: passedData?.servicePriceMin,
+        portfolio: passedData?.portfolios,
+      };
+      console.log('eff---', prepData, prepData?.portfolio);
+      const res = await addPortfolio2(prepData);
+      console.error('RESULT', res?.data);
+      if (res?.status === 200 || res?.status === 201) {
+        // navigation.navigate('ProfileStep3');
+        // setCurrentState('3');
+        // dispatch(addformStage(3));
+        ToastLong('Added successfully!.');
+        close();
+      } else {
+        // ToastLong(
+        //   `${
+        //     res?.error?.message
+        //       ? res?.error?.message
+        //       : res?.error?.data?.message
+        //       ? res?.error?.data?.message
+        //       : 'Oops!, an error occured'
+        //   }`,
+        // );
+        Snackbar.show({
+          text: res?.error?.message
             ? res?.error?.message
             : res?.error?.data?.message
             ? res?.error?.data?.message
-            : 'Oops!, an error occured'
-        }`,
-      );
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+    } catch (error) {
       Snackbar.show({
         text: res?.error?.message
           ? res?.error?.message
@@ -112,11 +126,9 @@ export default function PortComp({
     portfolios: [],
   };
   const [serviceList, setserviceList] = useState(dlist);
-
   const [_portfolioData, setPortfolioData] = useState<
     Array<{description: string; pictures: Array<string>}>
   >([]);
-
   const handlePortfolioItemChange = (
     index: number,
     data: {description: string; pictures: Array<string>},
@@ -391,7 +403,11 @@ export default function PortComp({
                                       onPress={() => {
                                         setserviceObj(item);
                                         setCollapseState2(false);
-                                        console.log(serviceObj, item);
+                                        console.log(
+                                          'service:',
+                                          serviceObj,
+                                          item,
+                                        );
                                       }}
                                       style={{marginTop: 8}}>
                                       <TextWrapper

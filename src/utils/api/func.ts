@@ -1343,6 +1343,36 @@ export const addPortfolio = async (param: any) => {
   }
 };
 
+export const addPortfolio2 = async (param: any) => {
+  console.log('addPortfolio2 func started', param);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log(AuthToken);
+
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${API_BASE_URL}/provider/portfolio`,
+      data: param,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
+
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data, param);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
 export const getProviderNew = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   console.log('getProviderNew func started', param);
@@ -1511,6 +1541,35 @@ export const getBookMarkedProviders = async (param: any) => {
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const deletePortfolio = async (param: any) => {
+  console.log('delete Portfolio func started', param);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log(AuthToken);
+
+  try {
+    const response = await axios({
+      method: 'delete',
+      url: `${API_BASE_URL}/provider/delete-portfolio/${param.portfolioID}/${param.serviceID}`,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
+
+    if (response?.status === 201 || response?.status === 200 || response?.status === 204) {
+      console.log('deletePortfolio', response?.status);
+    }
+    console.log('deletePortfolio:', response?.status);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data, param);
     return {
       status: 400,
       err: error,
