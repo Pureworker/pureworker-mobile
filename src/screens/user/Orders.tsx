@@ -89,17 +89,20 @@ const Orders = () => {
       //     provider.fullName.toLowerCase().includes(query.toLowerCase()),
       //   ) || [];
 
+      
+      console.log('qqqq::::::::', query);
       const filtered =
         customerOrders.filter(
           order =>
             order?.serviceProvider?.firstName
-              .toLowerCase()
-              .includes(query.toLowerCase()) ||
+              ?.toLowerCase()
+              ?.includes(query.toLowerCase()) ||
             order?.serviceProvider?.lastName
-              .toLowerCase()
-              .includes(query.toLowerCase()),
+              ?.toLowerCase()
+              ?.includes(query.toLowerCase()),
         ) || [];
 
+        console.log(filtered, '         ..............................');
       console.log('RESSSSS:', filtered);
       setFilteredOrders(filtered);
       // setSearchResults(filtered);

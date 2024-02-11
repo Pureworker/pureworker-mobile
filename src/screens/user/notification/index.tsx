@@ -7,6 +7,7 @@ import {
   Platform,
   StatusBar,
   ScrollView,
+  RefreshControl,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -34,24 +35,26 @@ const Index = () => {
   const dispatch = useDispatch();
 
   const [isLoading, setisLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const userData = useSelector((state: any) => state.user.userData);
   const notifications = useSelector((state: any) => state.user.notifications);
   const viewedNotification = useSelector(
     (state: any) => state.user.viewedNotifications,
   );
 
+  const initNotifications = async () => {
+    setisLoading(true);
+    const id = '';
+    const res: any = await getUserNotification(userData?._id);
+    console.log('dddddddd', res?.data);
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addnotifications(res?.data?.data));
+    }
+    // setloading(false);
+    setisLoading(false);
+  };
+
   useEffect(() => {
-    const initNotifications = async () => {
-      setisLoading(true);
-      const id = '';
-      const res: any = await getUserNotification(userData?._id);
-      console.log('dddddddd', res?.data);
-      if (res?.status === 201 || res?.status === 200) {
-        dispatch(addnotifications(res?.data?.data));
-      }
-      // setloading(false);
-      setisLoading(false);
-    };
     initNotifications();
   }, []);
 
@@ -63,9 +66,25 @@ const Index = () => {
     console.log('---DATA', data);
     // getNotifications();
   };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    initNotifications();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
+
+
+
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
-      <ScrollView>
+      <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      >
         <View
           style={{
             marginTop:

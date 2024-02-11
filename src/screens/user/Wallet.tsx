@@ -7,6 +7,7 @@ import {
   Platform,
   StatusBar,
   ScrollView,
+  RefreshControl,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -24,8 +25,8 @@ import {getUser} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import socket from '../../utils/socket';
-import { roundToSingleDigit } from '../../utils/utils';
-import { formatAmount } from '../../utils/validations';
+import {roundToSingleDigit} from '../../utils/utils';
+import {formatAmount} from '../../utils/validations';
 
 const Wallet = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -34,7 +35,19 @@ const Wallet = () => {
   const [ContactAgent, setContactAgent] = useState(false);
   const userData = useSelector((state: any) => state.user.userData);
   const [isLoading, setisLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
+  const initGetUsers = async () => {
+    setisLoading(true);
+    const res: any = await getUser('');
+    console.log('dddddddd', res);
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addUserData(res?.data?.user));
+    }
+    setisLoading(false);
+    // setloading(false);
+  };
+  
   useEffect(() => {
     const initGetUsers = async () => {
       setisLoading(true);
@@ -50,10 +63,21 @@ const Wallet = () => {
   }, [dispatch, navigation]);
   const supportUser = useSelector((store: any) => store.user.supportUser);
 
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    initGetUsers();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   return (
     <>
       <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
         <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           style={tw`flex-1 h-full `}
           contentContainerStyle={{flex: 1}}>
           <View
@@ -205,7 +229,9 @@ const Wallet = () => {
                   </View>
                   <View style={[tw``, {marginTop: perHeight(5)}]}>
                     <Textcomp
-                      text={`₦ ${formatAmount(userData?.wallet?.availableBalance)}`}
+                      text={`₦ ${formatAmount(
+                        userData?.wallet?.availableBalance,
+                      )}`}
                       size={14}
                       lineHeight={16}
                       color={'#FFFFFF'}

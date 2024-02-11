@@ -6,6 +6,7 @@ import {
   Platform,
   StatusBar,
   ScrollView,
+  RefreshControl,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -33,6 +34,7 @@ const FundingHistory = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [isLoading, setisLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   // const [categorizedData, setcategorizedData] = useState({});
   //filter  transaction datat to get months
   const months = ['May', 'Apr', 'Feb'];
@@ -48,20 +50,19 @@ const FundingHistory = () => {
   const categorizedData = useSelector(
     (state: any) => state.user.categorizedTransdata,
   );
-  console.log(transactions);
 
+  const initGetUsers = async () => {
+    setisLoading(true);
+    const res: any = await getTransactions('');
+    // console.log('dddddddd', res?.data);
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addTransactions(res?.data?.data));
+      sort(transactions);
+    }
+    // setloading(false);
+    setisLoading(false);
+  };
   useEffect(() => {
-    const initGetUsers = async () => {
-      setisLoading(true);
-      const res: any = await getTransactions('');
-      // console.log('dddddddd', res?.data);
-      if (res?.status === 201 || res?.status === 200) {
-        dispatch(addTransactions(res?.data?.data));
-        sort(transactions);
-      }
-      // setloading(false);
-      setisLoading(false);
-    };
     initGetUsers();
   }, []);
 
@@ -123,6 +124,14 @@ const FundingHistory = () => {
     return formattedDate;
   }
 
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    initGetUsers();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
@@ -173,7 +182,10 @@ const FundingHistory = () => {
           />
         </View>
       </View>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View style={tw`flex-1`}>
           {!transactions || transactions?.length < 1 ? (
             <View

@@ -18,10 +18,11 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {perHeight, perWidth} from '../../../utils/position/sizes';
 import Chatcomp from './chatcomp';
 import socket from '../../../utils/socket';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 import {addchatData} from '../../../store/reducer/mainSlice';
 import {useDispatch, useSelector} from 'react-redux';
-import {getMessagesbyuser} from '../../../utils/api/func';
+import {getMessagesbyuser, uploadAssetsDOCorIMG} from '../../../utils/api/func';
 import colors from '../../../constants/colors';
 import images from '../../../constants/images';
 import {HEIGHT_SCREEN, HEIGHT_WINDOW} from '../../../constants/generalStyles';
@@ -132,6 +133,39 @@ export default function Inbox({navigation, route}: any) {
       setRefreshing(false);
     }
   }, []);
+
+  const selectImage = async () => {
+    const result = await launchImageLibrary({mediaType: 'photo'});
+
+    if (result.assets!?.length > 0) {
+      const uploadResponse = await uploadAssetsDOCorIMG({
+        uri: result.assets?.[0]?.uri,
+        name: result.assets?.[0]?.fileName,
+        type: result.assets?.[0]?.type,
+      });
+
+      try {
+        const data = {
+          from: agentData?._id,
+          to: `${userId}`,
+          body: uploadResponse?.data?.url ?? '',
+        };
+        console.log(data);
+        const currentDate = new Date();
+        const createdAt = currentDate.toISOString();
+        const _data = [...chatData, {...data, createdAt: createdAt}];
+        dispatch(addchatData(_data));
+        socket.emit('message', data, async () => {
+          console.log('message sent', data);
+          ToastShort('Message sent');
+        });
+      } catch (err) {
+        ToastLong('Unable to send image');
+      }
+    }
+  };
+
+  // pureworkerapp@gmail.com
 
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
@@ -276,6 +310,7 @@ export default function Inbox({navigation, route}: any) {
                           text={item?.body}
                           type={'other'}
                           time={item?.updatedAt}
+                          isRead={item?.isRead}
                         />
                       );
                     } else if (item?.to?._id === agentData?._id) {
@@ -285,6 +320,7 @@ export default function Inbox({navigation, route}: any) {
                           text={item?.body}
                           type={'me'}
                           time={item?.updatedAt}
+                          isRead={item?.isRead}
                         />
                       );
                     } else if (item?.from === agentData?._id) {
@@ -294,6 +330,7 @@ export default function Inbox({navigation, route}: any) {
                           text={item?.body}
                           type={'other'}
                           time={item?.updatedAt}
+                          isRead={item?.isRead}
                         />
                       );
                     } else if (item?.to === agentData?._id) {
@@ -303,6 +340,7 @@ export default function Inbox({navigation, route}: any) {
                           text={item?.body}
                           type={'me'}
                           time={item?.updatedAt}
+                          isRead={item?.isRead}
                         />
                       );
                     }
@@ -385,19 +423,33 @@ export default function Inbox({navigation, route}: any) {
               />
               <TouchableOpacity
                 onPress={() => {
-                  onSubmit();
+                  message.length > 0 ? onSubmit() : selectImage();
                 }}>
-                <Image
-                  resizeMode="contain"
-                  source={images.send2}
-                  style={[
-                    tw`w-full `,
-                    {
-                      height: 30,
-                      width: 30,
-                    },
-                  ]}
-                />
+                {message.length > 0 ? (
+                  <Image
+                    resizeMode="contain"
+                    source={images.send2}
+                    style={[
+                      tw`w-full `,
+                      {
+                        height: 30,
+                        width: 30,
+                      },
+                    ]}
+                  />
+                ) : (
+                  <Image
+                    resizeMode="contain"
+                    source={images.chatImageIcon}
+                    style={[
+                      tw`w-full `,
+                      {
+                        height: 30,
+                        width: 30,
+                      },
+                    ]}
+                  />
+                )}
               </TouchableOpacity>
               {/* {boxFocuss || message?.length > 0 ? (
                 <TouchableOpacity
