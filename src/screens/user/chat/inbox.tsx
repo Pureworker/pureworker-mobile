@@ -12,7 +12,13 @@ import {
   Keyboard,
   Pressable,
 } from 'react-native';
-import React, {Fragment, useCallback, useEffect, useState} from 'react';
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import tw from 'twrnc';
 // import {, FONTS, icons, images, } from '../../constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -210,12 +216,17 @@ export default function Inbox({navigation, route}: any) {
     };
   }, []);
 
+  useLayoutEffect(() => {
+    dispatch(addchatData([]));
+  }, []);
+
   useEffect(() => {
     return () => {
       getUnreadMessages();
-      dispatch(addchatData([]));
+      console.log('exiting screen');
+      // dispatch(addchatData([]));
     };
-  });
+  }, []);
 
   return (
     <SafeAreaView style={[tw`h-full bg-[#EBEBEB]  w-full`, styles.container]}>
@@ -541,7 +552,7 @@ export default function Inbox({navigation, route}: any) {
         <Pressable onPress={() => toggleImageModal('')}>
           <Text style={styles.closeText}>Close</Text>
         </Pressable>
-        {/* <GestureHandlerRootView style={{width: '90%', height: '70%'}}>
+        <GestureHandlerRootView style={{width: '90%', height: '70%'}}>
           <ImageZoom
             uri={imageModal.imageLink}
             minScale={0.5}
@@ -552,15 +563,15 @@ export default function Inbox({navigation, route}: any) {
             }}
             resizeMode="contain"
           />
-        </GestureHandlerRootView> */}
-        <Image
+        </GestureHandlerRootView>
+        {/* <Image
           source={{uri: imageModal.imageLink}}
           style={{
             width: '80%',
             height: '70%',
           }}
           resizeMode="contain"
-        />
+        /> */}
       </Modal>
 
       {/* <View
