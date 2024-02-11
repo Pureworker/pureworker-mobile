@@ -329,31 +329,33 @@ const Orderscomponent = ({
                 style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
               />
 
-              <TouchableOpacity
-                onPress={() => {
-                  // setmodalSection('Cancel')
-                  setmodalSection('Cancel2');
-                  // if (status === 'CANCELLED') {
-                  //   ToastShort('This Order has already')
-                  // }else{
+              {status !== 'DECLINED' && (
+                <TouchableOpacity
+                  onPress={() => {
+                    // setmodalSection('Cancel')
+                    setmodalSection('Cancel2');
+                    // if (status === 'CANCELLED') {
+                    //   ToastShort('This Order has already')
+                    // }else{
 
-                  // }
-                }}
-                style={[
-                  tw`flex mt-10 flex-row`,
-                  {marginHorizontal: perWidth(30)},
-                ]}>
-                <Cross />
-                <View style={[tw``, {marginLeft: perWidth(36)}]}>
-                  <Textcomp
-                    text={'Cancel Order'}
-                    size={14}
-                    lineHeight={17}
-                    color={'#000000'}
-                    fontFamily={'Inter-SemiBold'}
-                  />
-                </View>
-              </TouchableOpacity>
+                    // }
+                  }}
+                  style={[
+                    tw`flex mt-10 flex-row`,
+                    {marginHorizontal: perWidth(30)},
+                  ]}>
+                  <Cross />
+                  <View style={[tw``, {marginLeft: perWidth(36)}]}>
+                    <Textcomp
+                      text={'Cancel Order'}
+                      size={14}
+                      lineHeight={17}
+                      color={'#000000'}
+                      fontFamily={'Inter-SemiBold'}
+                    />
+                  </View>
+                </TouchableOpacity>
+              )}
 
               <TouchableOpacity
                 onPress={() => {
@@ -379,32 +381,31 @@ const Orderscomponent = ({
                   />
                 </View>
               </TouchableOpacity>
-              {(status === 'TRACK') &&
-                item?.location !== 'online' && (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setInfoModal(false);
-                      navigation.navigate('ViewLocation');
-                    }}
-                    style={[
-                      tw`flex mt-10 flex-row`,
-                      {
-                        marginHorizontal: perWidth(30),
-                        marginTop: perHeight(25),
-                      },
-                    ]}>
-                    <Location />
-                    <View style={[tw``, {marginLeft: perWidth(30)}]}>
-                      <Textcomp
-                        text={'View Location'}
-                        size={14}
-                        lineHeight={17}
-                        color={'#000000'}
-                        fontFamily={'Inter-SemiBold'}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                )}
+              {status === 'TRACK' && item?.location !== 'online' && (
+                <TouchableOpacity
+                  onPress={() => {
+                    setInfoModal(false);
+                    navigation.navigate('ViewLocation');
+                  }}
+                  style={[
+                    tw`flex mt-10 flex-row`,
+                    {
+                      marginHorizontal: perWidth(30),
+                      marginTop: perHeight(25),
+                    },
+                  ]}>
+                  <Location />
+                  <View style={[tw``, {marginLeft: perWidth(30)}]}>
+                    <Textcomp
+                      text={'View Location'}
+                      size={14}
+                      lineHeight={17}
+                      color={'#000000'}
+                      fontFamily={'Inter-SemiBold'}
+                    />
+                  </View>
+                </TouchableOpacity>
+              )}
               {status !== 'PENDING' && (
                 <TouchableOpacity
                   onPress={() => {
