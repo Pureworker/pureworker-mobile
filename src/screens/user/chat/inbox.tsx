@@ -19,6 +19,7 @@ import {perHeight, perWidth} from '../../../utils/position/sizes';
 import Chatcomp from './chatcomp';
 import socket from '../../../utils/socket';
 import {launchImageLibrary} from 'react-native-image-picker';
+import Modal from 'react-native-modal';
 
 import {addchatData} from '../../../store/reducer/mainSlice';
 import {useDispatch, useSelector} from 'react-redux';
@@ -31,6 +32,11 @@ import {ToastShort, timeAgo} from '../../../utils/utils';
 import useChat from '../../../hooks/useChat';
 
 export default function Inbox({navigation, route}: any) {
+  const [imageModal, setImageModal] = useState({
+    isOpen: false,
+    imageLink: '',
+  });
+
   const userId = route.params?.id;
   const userName = route.params?.name?.trim();
   const lastOnline = route.params?.lastOnline;
@@ -38,9 +44,17 @@ export default function Inbox({navigation, route}: any) {
   const {getUnreadMessages} = useChat();
   const agentData = useSelector((state: any) => state.user.userData);
   const chatData = useSelector((store: any) => store.user.chatData);
-  console.log('====================================');
-  console.log(agentData);
-  console.log('====================================');
+
+  const toggleImageModal = (link: string = '') => {
+    const newObj = {
+      ...imageModal,
+      isOpen: !imageModal.isOpen,
+      imageLink: link,
+    };
+
+    setImageModal(newObj);
+  };
+
   useEffect(() => {
     console.log('userID', userId);
     console.log('passed:', route.params);
@@ -197,6 +211,8 @@ export default function Inbox({navigation, route}: any) {
     };
   });
 
+  console.log(imageModal.isOpen, imageModal.imageLink, '          djdddddddd');
+
   return (
     <SafeAreaView style={[tw`h-full bg-[#EBEBEB]  w-full`, styles.container]}>
       <KeyboardAvoidingView
@@ -259,7 +275,7 @@ export default function Inbox({navigation, route}: any) {
                   {userName === 'Support Support' || userName === 'Support'
                     ? ''
                     : lastOnline
-                    ? `${timeAgo(lastOnline)} ago`
+                    ? `${timeAgo(lastOnline)}`
                     : ''}
                 </Text>
               </View>
@@ -320,6 +336,7 @@ export default function Inbox({navigation, route}: any) {
                           time={item?.updatedAt}
                           isRead={item?.isRead}
                           id={item?.id}
+                          toggleImageModal={toggleImageModal}
                         />
                       );
                     } else if (item?.to?._id === agentData?._id) {
@@ -331,6 +348,7 @@ export default function Inbox({navigation, route}: any) {
                           time={item?.updatedAt}
                           isRead={item?.isRead}
                           id={item?.id}
+                          toggleImageModal={toggleImageModal}
                         />
                       );
                     } else if (item?.from === agentData?._id) {
@@ -342,6 +360,7 @@ export default function Inbox({navigation, route}: any) {
                           time={item?.updatedAt}
                           isRead={item?.isRead}
                           id={item?.id}
+                          toggleImageModal={toggleImageModal}
                         />
                       );
                     } else if (item?.to === agentData?._id) {
@@ -353,6 +372,7 @@ export default function Inbox({navigation, route}: any) {
                           time={item?.updatedAt}
                           isRead={item?.isRead}
                           id={item?.id}
+                          toggleImageModal={toggleImageModal}
                         />
                       );
                     }
@@ -502,6 +522,26 @@ export default function Inbox({navigation, route}: any) {
           </View>
         </View>
       </KeyboardAvoidingView>
+
+      <Modal
+        isVisible={imageModal.isOpen}
+        style={{
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        onBackdropPress={() => toggleImageModal('')}>
+        <Image
+          source={{uri: imageModal.imageLink}}
+          style={{
+            width: '80%',
+            height: '70%',
+          }}
+          // resizeMode="contain"
+        />
+      </Modal>
+
       {/* <View
           style={[
             tw` w-full mx-auto absolute  `,

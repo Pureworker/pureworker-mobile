@@ -1,4 +1,4 @@
-import {Image, Linking, View} from 'react-native';
+import {Image, Linking, Pressable, View} from 'react-native';
 import React, {useEffect} from 'react';
 import tw from 'twrnc';
 
@@ -7,7 +7,7 @@ import {perHeight, perWidth} from '../../../utils/position/sizes';
 import colors from '../../../constants/colors';
 import {messageTimeStamp} from '../../../utils/utils';
 import {urlValidator} from '../../../utils/chat';
-import { markAsRead } from '../../../utils/api/chat';
+import {markAsRead} from '../../../utils/api/chat';
 
 interface params {
   text: string;
@@ -15,14 +15,21 @@ interface params {
   time: any;
   isRead: boolean;
   id: string;
+  toggleImageModal: (link: string) => {isOpen: boolean; link: string};
 }
 
-export default function Index({type, text, time, isRead, id}: params) {
+export default function Index({
+  type,
+  text,
+  time,
+  isRead,
+  id,
+  toggleImageModal,
+}: params) {
   const isUrl = urlValidator(text);
 
-  console.log(isRead);
   useEffect(() => {
-    if (!isRead){
+    if (!isRead) {
       markAsRead(id);
     }
   }, []);
@@ -30,7 +37,8 @@ export default function Index({type, text, time, isRead, id}: params) {
   return (
     <>
       {isUrl ? (
-        <View
+        <Pressable
+          onPress={() => toggleImageModal(text)}
           style={[
             tw`bg-[${type === 'me' ? colors.parpal : '#011B33'}] ${
               type === 'me' ? 'mr-auto' : 'ml-auto'
@@ -50,7 +58,7 @@ export default function Index({type, text, time, isRead, id}: params) {
             style={{width: 100, height: 100}}
             resizeMode="contain"
           />
-        </View>
+        </Pressable>
       ) : (
         <View
           style={[
