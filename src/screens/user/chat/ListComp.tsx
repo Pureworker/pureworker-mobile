@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {View, Image, TouchableOpacity} from 'react-native';
+
+import React, {useState} from 'react';
+import {View, Image, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import images from '../../../constants/images';
 import tw from 'twrnc';
@@ -39,7 +40,16 @@ export default function ListComp({navigation, item}: any) {
             name:
               item?.userA?._id === userData?._id
                 ? item?.userB?.fullName
-                : item?.userA?.fullName,
+                  ? item?.userB?.fullName
+                  : item?.userB?.firstName
+                  ? `${item?.userB?.firstName} ${item?.userB?.lastName}`
+                  : `${item?.userB?.businessName}`
+                : item?.userA?.fullName
+                ? item?.userA?.fullName
+                : item?.userA?.firstName
+                ? `${item?.userA?.firstName} ${item?.userB?.lastName}`
+                : `${item?.userA?.businessName}`,
+            // item?.userA?.fullName,
             lastOnline:
               item?.userA?._id === userData?._id
                 ? item?.userB?.lastOnline
@@ -57,11 +67,22 @@ export default function ListComp({navigation, item}: any) {
             <View style={[tw``, {}]}>
               <Textcomp
                 text={
+                  // item?.userA?._id === userData?._id ?
                   item?.userA?._id === userData?._id
                     ? item?.userB?.fullName
-                    : item?.userB?._id === userData?._id
+                      ? item?.userB?.fullName
+                      : item?.userB?.firstName
+                      ? `${item?.userB?.firstName} ${item?.userB?.lastName}`
+                      : `${item?.userB?.businessName}`
+                    : item?.userA?.fullName
                     ? item?.userA?.fullName
-                    : null
+                    : item?.userA?.firstName
+                    ? `${item?.userA?.firstName} ${item?.userB?.lastName}`
+                    : `${item?.userA?.businessName}`
+                  // ? item?.userB?.fullName
+                  // : item?.userB?._id === userData?._id
+                  // ? item?.userA?.fullName
+                  // : null
                 }
                 size={17}
                 lineHeight={17}
@@ -84,14 +105,33 @@ export default function ListComp({navigation, item}: any) {
             </View>
           </View>
         </View>
-        <View style={[tw`mr-3 `, {}]}>
-          <Textcomp
-            text={formatDate(item?.updatedAt)}
-            size={13}
-            lineHeight={15}
-            color={'#FFFFFF80'}
-            fontFamily={'Inter-SemiBold'}
-          />
+        <View style={[tw`flex flex-col `, {}]}>
+          <View style={[tw`mr-3 `, {}]}>
+            <Textcomp
+              text={formatDate(item?.updatedAt)}
+              size={13}
+              lineHeight={15}
+              color={'#FFFFFF80'}
+              fontFamily={'Inter-SemiBold'}
+            />
+          </View>
+          {/* <View
+            style={[
+              tw`mt-auto bg-[${colors.parpal}] ml-auto mr-4 rounded-full`,
+              {},
+            ]}>
+            <Textcomp
+              text={`${item?.unreadMessagesCount}`}
+              size={15}
+              lineHeight={15}
+              color={'#FFFFFF'}
+              fontFamily={'Inter-SemiBold'}
+              style={tw``}
+            />
+          </View> */}
+          <View style={styles.circle}>
+            <Text style={styles.countText}>{item?.unreadMessagesCount}</Text>
+          </View>
         </View>
       </TouchableOpacity>
       <Modal
@@ -234,3 +274,22 @@ export default function ListComp({navigation, item}: any) {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  circle: {
+    width: 20, // Adjust as needed for your layout
+    height: 20, // Adjust as needed for your layout
+    borderRadius: 15, // Half of width and height to make it a perfect circle
+    backgroundColor: colors.parpal,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 'auto',
+    marginTop: 'auto',
+    marginRight: 10,
+  },
+  countText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontFamily: 'Inter-SemiBold',
+  },
+});
