@@ -21,9 +21,9 @@ export default function ListComp({navigation, item}: any) {
   const userData = useSelector((state: any) => state.user.userData);
   const [visible, setvisible] = useState(false);
 
-  console.log('====================================');
-  console.log(item);
-  console.log('====================================');
+  // console.log('====================================');
+  // console.log(item);
+  // console.log('====================================');
 
   return (
     <>

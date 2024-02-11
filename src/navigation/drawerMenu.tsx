@@ -39,6 +39,7 @@ const TabNavigator = () => {
   };
 
   useEffect(() => {
+    console.log('fetching unread messages');
     fetchUnreadMessages();
   }, []);
 

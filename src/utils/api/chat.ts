@@ -18,7 +18,7 @@ export const getUnreadMessages = async (): Promise<number> => {
   //   {"chats": [{"chatsWithUnreadMessages": 3}], "status": "success"}
 };
 
-export const markAsRead = async (messageId: string): Promise<number> => {
+export const markAsRead = async (messageId: string) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   // unread-chats
   const response = await axios.patch(
@@ -31,7 +31,7 @@ export const markAsRead = async (messageId: string): Promise<number> => {
     },
   );
 
-  console.log(response.data);
+  console.log(response.data, ' ..............................., unread');
   //   return response?.data?.chats?.[0]?.chatsWithUnreadMessages;
   //   {"chats": [{"chatsWithUnreadMessages": 3}], "status": "success"}
 };

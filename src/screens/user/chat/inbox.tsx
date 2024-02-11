@@ -302,6 +302,7 @@ export default function Inbox({navigation, route}: any) {
                   </View>
 
                   {groupedMessages[date].map((message, index) => {
+                    console.log(message?.id);
                     let item = message;
                     if (item?.from?._id === agentData?._id) {
                       return (
@@ -311,6 +312,7 @@ export default function Inbox({navigation, route}: any) {
                           type={'other'}
                           time={item?.updatedAt}
                           isRead={item?.isRead}
+                          id={item?.id}
                         />
                       );
                     } else if (item?.to?._id === agentData?._id) {
@@ -321,6 +323,7 @@ export default function Inbox({navigation, route}: any) {
                           type={'me'}
                           time={item?.updatedAt}
                           isRead={item?.isRead}
+                          id={item?.id}
                         />
                       );
                     } else if (item?.from === agentData?._id) {
@@ -331,6 +334,7 @@ export default function Inbox({navigation, route}: any) {
                           type={'other'}
                           time={item?.updatedAt}
                           isRead={item?.isRead}
+                          id={item?.id}
                         />
                       );
                     } else if (item?.to === agentData?._id) {
@@ -341,6 +345,7 @@ export default function Inbox({navigation, route}: any) {
                           type={'me'}
                           time={item?.updatedAt}
                           isRead={item?.isRead}
+                          id={item?.id}
                         />
                       );
                     }
