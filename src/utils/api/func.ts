@@ -1518,3 +1518,32 @@ export const getBookMarkedProviders = async (param: any) => {
     };
   }
 };
+
+export const deletePortfolio = async (param: any) => {
+  console.log('delete Portfolio func started', param);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log(AuthToken);
+
+  try {
+    const response = await axios({
+      method: 'delete',
+      url: `${API_BASE_URL}/provider/delete-portfolio/${param.portfolioID}/${param.serviceID}`,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
+
+    if (response?.status === 201 || response?.status === 200 || response?.status === 204) {
+      console.log('deletePortfolio', response?.status);
+    }
+    console.log('deletePortfolio:', response?.status);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data, param);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};

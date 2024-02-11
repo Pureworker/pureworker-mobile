@@ -701,27 +701,28 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
           </View>
         )}
         {status === 'DECLINED' && (
-          <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
-            <TouchableOpacity
-              onPress={() => {}}
-              style={[
-                tw`bg-[${colors.primary}] items-center justify-center`,
-                {
-                  width: perWidth(190),
-                  height:
-                    Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
-                  borderRadius: 7,
-                },
-              ]}>
-              <Textcomp
-                text={'Dispute '}
-                size={12}
-                lineHeight={14}
-                color={colors.black}
-                fontFamily={'Inter-SemiBold'}
-              />
-            </TouchableOpacity>
-          </View>
+          <></>
+          // <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
+          //   <TouchableOpacity
+          //     onPress={() => {}}
+          //     style={[
+          //       tw`bg-[${colors.primary}] items-center justify-center`,
+          //       {
+          //         width: perWidth(190),
+          //         height:
+          //           Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
+          //         borderRadius: 7,
+          //       },
+          //     ]}>
+          //     <Textcomp
+          //       text={'Dispute '}
+          //       size={12}
+          //       lineHeight={14}
+          //       color={colors.black}
+          //       fontFamily={'Inter-SemiBold'}
+          //     />
+          //   </TouchableOpacity>
+          // </View>
         )}
         {status === 'CANCELLED' && (
           <View style={tw`mx-auto flex flex-row justify-between mt-4`}>

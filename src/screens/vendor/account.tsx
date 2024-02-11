@@ -31,6 +31,7 @@ import {
 } from '../../store/reducer/mainSlice';
 import {
   completeProfile,
+  deletePortfolio,
   getProfile,
   getProviderNew,
   getUser,
@@ -170,6 +171,47 @@ const Account = () => {
     }
     setisLoading(false);
   };
+  const _deletePortfolio = async (param: any) => {
+    console.log(param);
+    try {
+      const res: any = await deletePortfolio(param);
+      console.log('delete result:', res?.data);
+      if (res?.status === 200 || res?.status === 201) {
+        ToastLong('Portfolio deleted successfully');
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+    } catch (error) {
+      Snackbar.show({
+        text: res?.error?.message
+          ? res?.error?.message
+          : res?.error?.data?.message
+          ? res?.error?.data?.message
+          : 'Oops!, an error occured',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+    } finally {
+      const initGetProfile = async () => {
+        const res: any = await getProfile(userData?._id);
+        if (res?.status === 201 || res?.status === 200) {
+          dispatch(addProfileData(res?.data?.profile));
+        }
+      };
+      initGetProfile();
+      setisLoading(false);
+    }
+  };
   const [addModal, setaddModal] = useState(false);
   const [editModal, seteditModal] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
@@ -184,6 +226,8 @@ const Account = () => {
     };
     initGetProviderNew();
   }, []);
+
+  const [deleteModal, setdeleteModal] = useState(false);
 
   return (
     <>
@@ -513,7 +557,8 @@ const Account = () => {
                             style={tw`border bg-white ml-3 rounded px-2 py-0.5`}
                             onPress={() => {
                               setSelectedService(item);
-                              ToastShort('Coming soon!.');
+                              // ToastShort('Coming soon!.');
+                              setdeleteModal(true);
                             }}>
                             <Textcomp
                               text={'Delete'}
@@ -744,6 +789,83 @@ const Account = () => {
               }}
             />
           </TouchableOpacity>
+        </View>
+      </Modal>
+
+      <Modal
+        isVisible={deleteModal}
+        onModalHide={() => {
+          setdeleteModal(false);
+        }}
+        style={{width: SIZES.width, height: SIZES.height, marginHorizontal: 0}}
+        deviceWidth={SIZES.width}
+        onBackdropPress={() => setdeleteModal(false)}
+        swipeThreshold={200}
+        onBackButtonPress={() => setdeleteModal(false)}>
+        <View
+          style={[
+            tw`bg-[#EBEBEB] w-9/10 mx-auto my-auto   p-4 pb-8`,
+            {borderRadius: 20, maxHeight: SIZES.height * 0.8},
+          ]}>
+          <View style={[tw``]}>
+            <View style={[tw` mt-4`]}>
+              <Textcomp
+                text={'Delete Service Data'}
+                size={16}
+                lineHeight={16}
+                color={'#000413'}
+                fontFamily={'Inter-Bold'}
+              />
+            </View>
+
+            <View style={[tw` mt-4 items-center`]}>
+              <Textcomp
+                text={'Are you sure you want to delete This Service'}
+                size={16}
+                lineHeight={16}
+                color={'#000413'}
+                style={{textAlign: 'center'}}
+                fontFamily={'Inter'}
+              />
+            </View>
+
+            <View style={[tw`flex flex-row`]}>
+              <TouchableOpacity
+                onPress={() => {
+                  setdeleteModal(false);
+                }}
+                style={tw`mx-auto mt-8 py-4 bg-[${colors.darkPurple}] w-4/10 rounded-lg items-center justify-center`}>
+                <Textcomp
+                  text={'Cancel'}
+                  size={17}
+                  lineHeight={17}
+                  color={colors.primary}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  const portfolio = profileData?.portfolios?.filter(
+                    (portfolio: {service: any}) =>
+                      portfolio.service === selectedService?._id,
+                  );
+                  const payload = {
+                    portfolioID: portfolio?.[0]._id,
+                    serviceID: selectedService?._id,
+                  };
+                  _deletePortfolio(payload);
+                }}
+                style={tw`mx-auto mt-8 py-4 bg-[#ff0000] w-4/10 rounded-lg items-center justify-center`}>
+                <Textcomp
+                  text={'Delete'}
+                  size={17}
+                  lineHeight={17}
+                  color={colors.white}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       </Modal>
     </>

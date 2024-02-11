@@ -197,8 +197,8 @@ const ProfileStep21 = () => {
     };
     const initGetProviderNew = async () => {
       const res: any = await getProviderNew(userData?._id);
-      console.log('providerdatttttaaaaa', res?.data);
-      console.log('portfolio--', res?.data?.profile?.portfolios);
+      // console.log('providerdatttttaaaaa', res?.data);
+      // console.log('portfolio--', res?.data?.profile?.portfolios);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addProfileData(res?.data?.profile));
         setDescription(res?.data?.profile?.description);
@@ -234,7 +234,6 @@ const ProfileStep21 = () => {
       }
     });
   };
-
   const opencamerafordp4 = async () => {
     const options = {
       mediaType: 'photo',

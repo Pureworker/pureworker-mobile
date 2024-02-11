@@ -53,43 +53,56 @@ export default function PortComp({
   const [description, setDescription] = useState('');
   const dispatch = useDispatch();
   const handleProfileSetup = async passedData => {
-    console.log(passedData);
-
-    if (Number(passedData?.servicePriceMin) < 500) {
-      ToastShort('Min Price cannot be less than 500 naira.');
-    }
-    if (
-      Number(passedData?.servicePriceMax) < Number(passedData?.servicePriceMin)
-    ) {
-      ToastShort('MaxPrice must be greater than MinPrice');
-      return;
-    }
-    const prepData = {
-      service: service?._id,
-      description: passedData?.serviceDescription,
-      maxPrice: passedData?.servicePriceMax,
-      minPrice: passedData?.servicePriceMin,
-      portfolio: passedData?.portfolios,
-    };
-    console.log('eff---', prepData, prepData?.portfolio);
-    const res = await addPortfolio(prepData);
-    console.error('RESULT', res?.data);
-    if (res?.status === 200 || res?.status === 201) {
-      // navigation.navigate('ProfileStep3');
-      // setCurrentState('3');
-      // dispatch(addformStage(3));
-      ToastLong('Added successfully!.');
-      close();
-    } else {
-      ToastLong(
-        `${
-          res?.error?.message
+    try {
+      console.log(passedData);
+      if (Number(passedData?.servicePriceMin) < 500) {
+        ToastShort('Min Price cannot be less than 500 naira.');
+      }
+      if (
+        Number(passedData?.servicePriceMax) <
+        Number(passedData?.servicePriceMin)
+      ) {
+        ToastShort('MaxPrice must be greater than MinPrice');
+        return;
+      }
+      const prepData = {
+        service: serviceObj?._id,
+        description: passedData?.serviceDescription,
+        maxPrice: passedData?.servicePriceMax,
+        minPrice: passedData?.servicePriceMin,
+        portfolio: passedData?.portfolios,
+      };
+      console.log('eff---', prepData, prepData?.portfolio);
+      const res = await addPortfolio(prepData);
+      console.error('RESULT', res?.data);
+      if (res?.status === 200 || res?.status === 201) {
+        // navigation.navigate('ProfileStep3');
+        // setCurrentState('3');
+        // dispatch(addformStage(3));
+        ToastLong('Added successfully!.');
+        close();
+      } else {
+        // ToastLong(
+        //   `${
+        //     res?.error?.message
+        //       ? res?.error?.message
+        //       : res?.error?.data?.message
+        //       ? res?.error?.data?.message
+        //       : 'Oops!, an error occured'
+        //   }`,
+        // );
+        Snackbar.show({
+          text: res?.error?.message
             ? res?.error?.message
             : res?.error?.data?.message
             ? res?.error?.data?.message
-            : 'Oops!, an error occured'
-        }`,
-      );
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+    } catch (error) {
       Snackbar.show({
         text: res?.error?.message
           ? res?.error?.message
@@ -391,7 +404,11 @@ export default function PortComp({
                                       onPress={() => {
                                         setserviceObj(item);
                                         setCollapseState2(false);
-                                        console.log(serviceObj, item);
+                                        console.log(
+                                          'service:',
+                                          serviceObj,
+                                          item,
+                                        );
                                       }}
                                       style={{marginTop: 8}}>
                                       <TextWrapper
