@@ -1,5 +1,5 @@
 import {Image, Linking, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import tw from 'twrnc';
 
 import Textcomp from '../../../components/Textcomp';
@@ -12,10 +12,18 @@ interface params {
   text: string;
   type: string;
   time: any;
+  isRead: boolean;
 }
 
-export default function Index({type, text, time}: params) {
+export default function Index({type, text, time, isRead}: params) {
   const isUrl = urlValidator(text);
+
+  console.log(isRead);
+  useEffect(() => {
+    if(!isRead){
+      
+    }
+  }, []);
 
   return (
     <>

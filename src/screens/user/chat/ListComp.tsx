@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Image, TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 import images from '../../../constants/images';
@@ -10,6 +10,7 @@ import {SIZES, perWidth} from '../../../utils/position/sizes';
 import colors from '../../../constants/colors';
 import {WIDTH_WINDOW} from '../../../constants/generalStyles';
 import {timeAgo} from '../../../utils/utils';
+import { getUnreadMessages } from '../../../utils/api/chat';
 
 export default function ListComp({navigation, item}: any) {
   function formatDate(dateString) {

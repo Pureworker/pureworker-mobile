@@ -165,7 +165,6 @@ export default function Inbox({navigation, route}: any) {
     }
   };
 
-
   // pureworkerapp@gmail.com
 
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
@@ -311,6 +310,7 @@ export default function Inbox({navigation, route}: any) {
                           text={item?.body}
                           type={'other'}
                           time={item?.updatedAt}
+                          isRead={item?.isRead}
                         />
                       );
                     } else if (item?.to?._id === agentData?._id) {
@@ -320,6 +320,7 @@ export default function Inbox({navigation, route}: any) {
                           text={item?.body}
                           type={'me'}
                           time={item?.updatedAt}
+                          isRead={item?.isRead}
                         />
                       );
                     } else if (item?.from === agentData?._id) {
@@ -329,6 +330,7 @@ export default function Inbox({navigation, route}: any) {
                           text={item?.body}
                           type={'other'}
                           time={item?.updatedAt}
+                          isRead={item?.isRead}
                         />
                       );
                     } else if (item?.to === agentData?._id) {
@@ -338,6 +340,7 @@ export default function Inbox({navigation, route}: any) {
                           text={item?.body}
                           type={'me'}
                           time={item?.updatedAt}
+                          isRead={item?.isRead}
                         />
                       );
                     }

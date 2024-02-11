@@ -38,6 +38,20 @@ Sentry.init({
   dsn: 'https://aaf6ecb52ce579d3e2a85f314f1773ad@o4506399508725760.ingest.sentry.io/4506410437509120',
 });
 
+
+
+
+
+
+
+// mark-messages-as-read
+// unread-chats
+
+
+
+
+
+
 const Stack = createStackNavigator();
 const App = () => {
   const [user, setUser] = useState(null);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -7,7 +7,7 @@ import HomeScreen from '../screens/user/Home';
 import TabIcon from '../components/TabIcon';
 import images from '../constants/images';
 import {SIZES, perHeight} from '../utils/position/sizes';
-import {Platform} from 'react-native';
+import {Platform, Text} from 'react-native';
 import DrawerContent from './drawerContent';
 import Wallet from '../screens/user/Wallet';
 import Orders from '../screens/user/Orders';
@@ -25,11 +25,23 @@ import Chat from '../screens/user/chat/index';
 import TabServices from '../screens/user/tab_services';
 import AddAddress from '../screens/common/addAddress';
 import Referrals from '../screens/common/referrals';
+import {getUnreadMessages} from '../utils/api/chat';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+  const [unreadMessage, setUnreadMessage] = useState<number>(0);
+
+  const fetchUnreadMessages = async () => {
+    const res: number = await getUnreadMessages();
+    setUnreadMessage(res);
+  };
+
+  useEffect(() => {
+    fetchUnreadMessages();
+  }, []);
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -87,6 +99,10 @@ const TabNavigator = () => {
           tabBarIcon: ({focused}) => (
             <TabIcon focused={focused} icon={images.chat} name={'Chats'} />
           ),
+          tabBarBadge: unreadMessage ? unreadMessage : undefined,
+          tabBarBadgeStyle: {
+            backgroundColor: 'orange',
+          },
         }}
       />
       <Tab.Screen
