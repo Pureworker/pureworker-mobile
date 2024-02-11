@@ -358,7 +358,7 @@ const TransactionHistory = () => {
                                 </View>
                               </View>
                             </View>
-                            <View style={tw`flex flex-col`}>
+                            <View style={tw`flex flex-col items-end`}>
                               <View style={[tw``, {marginTop: perHeight(0)}]}>
                                 <Textcomp
                                   text={`₦${item?.amount}`}
@@ -368,16 +368,16 @@ const TransactionHistory = () => {
                                   fontFamily={'Inter-SemiBold'}
                                 />
                               </View>
-                              <View style={[tw``, {marginTop: perHeight(4)}]}>
+                              <View style={[tw` `, {marginTop: perHeight(4)}]}>
                                 <Textcomp
                                   text={`${
                                     item?.status === undefined
                                       ? ''
                                       : item?.status === 'successfull'
-                                      ? 'successful'
+                                      ? 'SUCCESSFUL'
                                       : item?.status
                                   }`}
-                                  size={13}
+                                  size={11}
                                   lineHeight={15}
                                   color={item?.status ? 'green' : '#00041380'}
                                   fontFamily={'Inter-SemiBold'}

@@ -89,18 +89,24 @@ export function metersToKilometers(meters) {
 export function timeAgo(lastOnline) {
   const currentTime = new Date();
   const lastOnlineTime = new Date(lastOnline);
-  const timeDifference = currentTime - lastOnlineTime;
+  const timeDifference = (currentTime - lastOnlineTime) / 1000; // Convert milliseconds to seconds
 
   // Convert the time difference to minutes
-  const minutes = Math.floor(timeDifference / (1000 * 60));
+  const minutes = Math.floor(timeDifference / 60);
 
-  if (minutes < 60) {
+  if (minutes < 1) {
+    // If difference is less than a minute, show seconds
+    const seconds = Math.floor(timeDifference);
+    return `${seconds} second${seconds !== 1 ? 's' : ''} ago`;
+  } else if (minutes < 60) {
+    // If difference is less than an hour, show minutes
     return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
   } else {
     // Convert the time difference to hours
     const hours = Math.floor(minutes / 60);
 
     if (hours < 24) {
+      // If difference is less than a day, show hours
       return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
     } else {
       // Convert the time difference to days
@@ -109,6 +115,31 @@ export function timeAgo(lastOnline) {
     }
   }
 }
+
+
+// export function timeAgo(lastOnline) {
+//   const currentTime = new Date();
+//   const lastOnlineTime = new Date(lastOnline);
+//   const timeDifference = currentTime - lastOnlineTime;
+
+//   // Convert the time difference to minutes
+//   const minutes = Math.floor(timeDifference / (1000 * 60));
+
+//   if (minutes < 60) {
+//     return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
+//   } else {
+//     // Convert the time difference to hours
+//     const hours = Math.floor(minutes / 60);
+
+//     if (hours < 24) {
+//       return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+//     } else {
+//       // Convert the time difference to days
+//       const days = Math.floor(hours / 24);
+//       return `${days} day${days !== 1 ? 's' : ''} ago`;
+//     }
+//   }
+// }
 
 // export function messageTimeStamp(timestamp: string | number | Date) {
 //   const date = new Date(timestamp);

@@ -279,7 +279,7 @@ const Home = ({navigation}: any) => {
                 resizeMode={FastImage.resizeMode.cover}
               />
             </TouchableOpacity>
-            <TextInputs
+            {/* <TextInputs
               style={{marginTop: 10, width: '70%'}}
               labelText={'Search'}
               state={search}
@@ -296,7 +296,7 @@ const Home = ({navigation}: any) => {
                   }}
                 />
               }
-            />
+            /> */}
             <TouchableOpacity
               onPress={() => {
                 setInfoModal(true);
@@ -549,7 +549,11 @@ const Home = ({navigation}: any) => {
                   fontFamily={'Inter-Medium'}
                 />
               </View>
-              <TouchableOpacity style={[tw`mr-4`]}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Orders');
+                }}
+                style={[tw`mr-4`]}>
                 <Textcomp
                   text={'See All'}
                   size={14}
@@ -605,7 +609,11 @@ const Home = ({navigation}: any) => {
                   fontFamily={'Inter-Medium'}
                 />
               </View>
-              <TouchableOpacity style={[tw`mr-4`]}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Orders');
+                }}
+                style={[tw`mr-4`]}>
                 <Textcomp
                   text={'See All'}
                   size={14}
