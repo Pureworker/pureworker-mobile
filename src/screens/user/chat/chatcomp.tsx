@@ -15,7 +15,7 @@ interface params {
   time: any;
   isRead: boolean;
   id: string;
-  toggleImageModal: (link: string) => {isOpen: boolean; link: string};
+  toggleImageModal: (link?: string) => void;
 }
 
 export default function Index({

@@ -10,6 +10,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Keyboard,
+  Pressable,
 } from 'react-native';
 import React, {Fragment, useCallback, useEffect, useState} from 'react';
 import tw from 'twrnc';
@@ -537,19 +538,10 @@ export default function Inbox({navigation, route}: any) {
           alignItems: 'center',
         }}
         onBackdropPress={() => toggleImageModal('')}>
-        <Text
-          style={{
-            padding: 10,
-            borderRadius: 20,
-            borderWidth: 1,
-            borderColor: 'white',
-            textAlign: 'center',
-            color: 'white',
-          }}
-          onPress={() => toggleImageModal('')}>
-          Close
-        </Text>
-        <GestureHandlerRootView style={{width: '90%', height: '70%'}}>
+        <Pressable onPress={() => toggleImageModal('')}>
+          <Text style={styles.closeText}>Close</Text>
+        </Pressable>
+        {/* <GestureHandlerRootView style={{width: '90%', height: '70%'}}>
           <ImageZoom
             uri={imageModal.imageLink}
             minScale={0.5}
@@ -560,15 +552,15 @@ export default function Inbox({navigation, route}: any) {
             }}
             resizeMode="contain"
           />
-        </GestureHandlerRootView>
-        {/* <Image
+        </GestureHandlerRootView> */}
+        <Image
           source={{uri: imageModal.imageLink}}
           style={{
             width: '80%',
             height: '70%',
           }}
           resizeMode="contain"
-        /> */}
+        />
       </Modal>
 
       {/* <View
@@ -631,5 +623,13 @@ const styles = StyleSheet.create({
     shadowOpacity: Platform.OS === 'ios' ? 0.15 : 0.5,
     shadowRadius: 3,
     elevation: Platform.OS === 'ios' ? 8 : 2,
+  },
+  closeText: {
+    padding: 10,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'white',
+    textAlign: 'center',
+    color: 'white',
   },
 });
