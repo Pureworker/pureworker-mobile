@@ -25,21 +25,23 @@ import Chat from '../screens/user/chat/index';
 import TabServices from '../screens/user/tab_services';
 import AddAddress from '../screens/common/addAddress';
 import Referrals from '../screens/common/referrals';
-import {getUnreadMessages} from '../utils/api/chat';
+import {useSelector} from 'react-redux';
+import useChat from '../hooks/useChat';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-  const [unreadMessage, setUnreadMessage] = useState<number>(0);
+  const {getUnreadMessages} = useChat();
+  const unreadChats = useSelector((state: any) => state.user.unreadChats);
+  const unreadNotification = useSelector(
+    (state: any) => state.user.unreadNotification,
+  );
 
-  const fetchUnreadMessages = async () => {
-    const res: number = await getUnreadMessages();
-    setUnreadMessage(res);
-  };
+  console.log(unreadChats, ' ................... uuuuuuuuuuuuuuuuuuuuuuuuuuu');
 
   useEffect(() => {
-    fetchUnreadMessages();
+    getUnreadMessages();
   }, []);
 
   return (
@@ -99,7 +101,7 @@ const TabNavigator = () => {
           tabBarIcon: ({focused}) => (
             <TabIcon focused={focused} icon={images.chat} name={'Chats'} />
           ),
-          tabBarBadge: unreadMessage ? unreadMessage : undefined,
+          tabBarBadge: unreadChats ? unreadChats : undefined,
           tabBarBadgeStyle: {
             backgroundColor: 'orange',
           },
@@ -117,6 +119,10 @@ const TabNavigator = () => {
               name={'Notifications'}
             />
           ),
+          tabBarBadge: unreadNotification ? unreadNotification : undefined,
+          tabBarBadgeStyle: {
+            backgroundColor: 'orange',
+          },
         }}
       />
     </Tab.Navigator>

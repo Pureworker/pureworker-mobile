@@ -7,21 +7,23 @@ import {perHeight, perWidth} from '../../../utils/position/sizes';
 import colors from '../../../constants/colors';
 import {messageTimeStamp} from '../../../utils/utils';
 import {urlValidator} from '../../../utils/chat';
+import { markAsRead } from '../../../utils/api/chat';
 
 interface params {
   text: string;
   type: string;
   time: any;
   isRead: boolean;
+  id: string;
 }
 
-export default function Index({type, text, time, isRead}: params) {
+export default function Index({type, text, time, isRead, id}: params) {
   const isUrl = urlValidator(text);
 
   console.log(isRead);
   useEffect(() => {
-    if(!isRead){
-      
+    if (!isRead){
+      markAsRead(id);
     }
   }, []);
 

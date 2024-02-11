@@ -35,6 +35,8 @@ const initialState = {
   customerOrders: [],
   providerOrders: [],
   chatList: [],
+  unreadChats: 0,
+  unreadNotification: 0,
   chatData: [],
   notifications: [],
   viewedNotifications: [],
@@ -72,6 +74,8 @@ export const mainSlice = createSlice({
       };
       state.pickedServices = [];
       state.chatData = [];
+      state.unreadChats = 0;
+      state.unreadNotification = 0;
       state.chatList = [];
       state.notifications = [];
       state.pickedServicesId = [];
@@ -163,6 +167,12 @@ export const mainSlice = createSlice({
     addProfileData: (state, action) => {
       state.profileData = action.payload;
     },
+    updateUnreadChat: (state, action) => {
+      state.unreadChats = action.payload;
+    },
+    updateUnreadNotification: (state, action) => {
+      state.unreadNotification = action.payload;
+    },
     // addcompleteProfile: (state, action) => {
     //   var list = {...state.completeProfileData, ...action.payload};
     //   state.completeProfileData = list;
@@ -249,7 +259,6 @@ export const mainSlice = createSlice({
     setbookMarkedProviders: (state, action) => {
       state.bookMarkedProviders = action.payload;
     },
-    
   },
 });
 
@@ -288,6 +297,8 @@ export const {
   setwelcomeModal,
   setserviceProviderData,
   setbookMarkedProviders,
+  updateUnreadChat,
+  updateUnreadNotification,
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);
