@@ -1,4 +1,3 @@
-
 import React, {useState} from 'react';
 import {View, Image, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
@@ -11,7 +10,7 @@ import {SIZES, perWidth} from '../../../utils/position/sizes';
 import colors from '../../../constants/colors';
 import {WIDTH_WINDOW} from '../../../constants/generalStyles';
 import {timeAgo} from '../../../utils/utils';
-import { getUnreadMessages } from '../../../utils/api/chat';
+import {getUnreadMessages} from '../../../utils/api/chat';
 
 export default function ListComp({navigation, item}: any) {
   function formatDate(dateString) {
@@ -280,7 +279,7 @@ const styles = StyleSheet.create({
     width: 20, // Adjust as needed for your layout
     height: 20, // Adjust as needed for your layout
     borderRadius: 15, // Half of width and height to make it a perfect circle
-    backgroundColor: colors.parpal,
+    backgroundColor: 'orange',
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 'auto',

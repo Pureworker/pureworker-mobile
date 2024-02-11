@@ -28,6 +28,8 @@ export default function Index({
 }: params) {
   const isUrl = urlValidator(text);
 
+  console.log(isUrl, time);
+
   useEffect(() => {
     if (!isRead) {
       markAsRead(id);

@@ -20,6 +20,7 @@ import Chatcomp from './chatcomp';
 import socket from '../../../utils/socket';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Modal from 'react-native-modal';
+import {ImageZoom} from '@likashefqet/react-native-image-zoom';
 
 import {addchatData} from '../../../store/reducer/mainSlice';
 import {useDispatch, useSelector} from 'react-redux';
@@ -30,6 +31,7 @@ import {HEIGHT_SCREEN, HEIGHT_WINDOW} from '../../../constants/generalStyles';
 import Textcomp from '../../../components/Textcomp';
 import {ToastShort, timeAgo} from '../../../utils/utils';
 import useChat from '../../../hooks/useChat';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 export default function Inbox({navigation, route}: any) {
   const [imageModal, setImageModal] = useState({
@@ -56,12 +58,12 @@ export default function Inbox({navigation, route}: any) {
   };
 
   useEffect(() => {
-    console.log('userID', userId);
-    console.log('passed:', route.params);
+    // console.log('userID', userId);
+    // console.log('passed:', route.params);
     socket.connect();
-    console.log('-idid', socket.id);
-    socket.emit('authentication', agentData);
-    console.log('got here');
+    // console.log('-idid', socket.id);
+    // socket.emit('authentication', agentData);
+    // console.log('got here');
   }, []);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -106,6 +108,7 @@ export default function Inbox({navigation, route}: any) {
   socket.on('message', data => {
     console.log('message received', data);
     const _data = [...chatData, data];
+
     dispatch(addchatData(_data));
   });
 
@@ -165,6 +168,7 @@ export default function Inbox({navigation, route}: any) {
           from: agentData?._id,
           to: `${userId}`,
           body: uploadResponse?.data?.url ?? '',
+          updatedAt: new Date().toISOString(),
         };
         console.log(data);
         const currentDate = new Date();
@@ -208,10 +212,9 @@ export default function Inbox({navigation, route}: any) {
   useEffect(() => {
     return () => {
       getUnreadMessages();
+      dispatch(addchatData([]));
     };
   });
-
-  console.log(imageModal.isOpen, imageModal.imageLink, '          djdddddddd');
 
   return (
     <SafeAreaView style={[tw`h-full bg-[#EBEBEB]  w-full`, styles.container]}>
@@ -528,18 +531,44 @@ export default function Inbox({navigation, route}: any) {
         style={{
           width: '100%',
           height: '100%',
+          padding: 0,
+          margin: 0,
           justifyContent: 'center',
           alignItems: 'center',
         }}
         onBackdropPress={() => toggleImageModal('')}>
-        <Image
+        <Text
+          style={{
+            padding: 10,
+            borderRadius: 20,
+            borderWidth: 1,
+            borderColor: 'white',
+            textAlign: 'center',
+            color: 'white',
+          }}
+          onPress={() => toggleImageModal('')}>
+          Close
+        </Text>
+        <GestureHandlerRootView style={{width: '90%', height: '70%'}}>
+          <ImageZoom
+            uri={imageModal.imageLink}
+            minScale={0.5}
+            maxScale={3}
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+            resizeMode="contain"
+          />
+        </GestureHandlerRootView>
+        {/* <Image
           source={{uri: imageModal.imageLink}}
           style={{
             width: '80%',
             height: '70%',
           }}
-          // resizeMode="contain"
-        />
+          resizeMode="contain"
+        /> */}
       </Modal>
 
       {/* <View
