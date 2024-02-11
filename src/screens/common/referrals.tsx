@@ -70,12 +70,13 @@ const Referrals = () => {
   const handleShare = async (contentToShare: any) => {
     try {
       await Share.share({
-        message: `I use Pureworker to hire any and all Artisans.  Use to the referral code: ${contentToShare} `,
+        message: `I use Pureworker to hire any and all Artisans. Use to the referral code: "${contentToShare}" to sign up or Download the app using my link ${'https://www.pureworker.com/'} `,
       });
     } catch (error) {
       console.error('Error sharing content:', error.message);
     }
   };
+
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       {/* <View

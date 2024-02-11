@@ -28,6 +28,7 @@ import {
 import {
   bookMarkServiceProvide,
   deletebookMarkServiceProvide,
+  getBookMarkedProviders,
   getProviderAllReview,
   getProviderDataAll,
   getUser,
@@ -35,6 +36,7 @@ import {
 import {
   addUserData,
   addprovidersReviews,
+  setbookMarkedProviders,
   setserviceProviderData,
 } from '../../store/reducer/mainSlice';
 import {
@@ -134,6 +136,27 @@ const ServiceProviderProfile = () => {
     return daysAgo;
   }
 
+  const initBookmarked = async () => {
+    const res: any = await getBookMarkedProviders(id);
+    console.log('bbbbbmmm', res?.data?.data);
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(setbookMarkedProviders(res?.data?.data));
+      // dispatch(addprovidersByCateegory(res?.data?.data));
+    }
+  };
+
+  useEffect(() => {
+    const _initBookmarked = async () => {
+      const res: any = await getBookMarkedProviders(id);
+      console.log('bbbbbmmm', res?.data?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(setbookMarkedProviders(res?.data?.data));
+        // dispatch(addprovidersByCateegory(res?.data?.data));
+      }
+    };
+    _initBookmarked();
+  }, []);
+
   const handleBookmark = async () => {
     try {
       const data = {
@@ -161,13 +184,13 @@ const ServiceProviderProfile = () => {
         const res: any = await getUser('');
         if (res?.status === 201 || res?.status === 200) {
           dispatch(addUserData(res?.data?.user));
-
           const query = res?.data?.user?.bookmarks?.filter(
             (item: {service: any}) => item?.service === id,
           );
           setsavedProviders(query);
         }
       };
+      initBookmarked();
       initGetUsers();
     }
   };
@@ -207,9 +230,12 @@ const ServiceProviderProfile = () => {
           setsavedProviders(query);
         }
       };
+      initBookmarked();
       initGetUsers();
     }
   };
+
+
 
   const [savedProviders, setsavedProviders] = useState([]);
   useEffect(() => {
@@ -520,15 +546,16 @@ const ServiceProviderProfile = () => {
                 ]}>
                 <View style={tw`ml-1`}>
                   <Image
-                    source={images.dollar}
+                    // source={images.dollar}
+                    source={images.Naira2}
                     resizeMode="contain"
-                    style={{width: 25, height: 25}}
+                    style={{width: 25, height: 25, tintColor: 'white'}}
                   />
                 </View>
                 <View style={tw`ml-3 `}>
                   <View style={tw` `}>
                     <Textcomp
-                      text={'Price range'}
+                      text={'Price range / Hour'}
                       size={12}
                       lineHeight={15}
                       color={'#FFFFFF80'}
@@ -592,7 +619,7 @@ const ServiceProviderProfile = () => {
                 ]}>
                 <View style={tw`ml-1`}>
                   <Image
-                    source={images.Naira2}
+                    source={images.eye}
                     resizeMode="contain"
                     style={{width: 25, height: 25, tintColor: 'white'}}
                   />

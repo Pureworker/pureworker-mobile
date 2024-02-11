@@ -55,7 +55,7 @@ const OrderDetails = () => {
         'Offline (your business renders services at the customer’s location)',
       value: 'Offline',
     },
-    {label: 'Both', value: 'Both'},
+    {label: 'Hybrid', value: 'Hybrid'},
   ]);
   const [locationOpen, setLocationOpen] = useState(false);
   const [locationValue, setLocationValue] = useState(null);
@@ -84,6 +84,17 @@ const OrderDetails = () => {
   };
 
   const handleCreate = async () => {
+    if (locationValue !== 'Online') {
+      if (!address) {
+        Snackbar.show({
+          text: 'Address is required for Offline or Hybrid Jobs',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+        return;
+      }
+    }
     // setisLoading(true);
     const Data = {
       serviceProvider:

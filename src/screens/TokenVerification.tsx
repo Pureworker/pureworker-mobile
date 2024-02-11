@@ -278,8 +278,8 @@ const TokenVerification = () => {
           //   color={colors.parpal}
           // />
         }
+        {isLoading && <ActivityIndicator color={'white'} size={'small'} />}
       </ScrollView>
-      {isLoading && <Loading />}
     </KeyboardAvoidingView>
   );
 };

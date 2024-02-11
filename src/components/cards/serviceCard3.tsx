@@ -1,30 +1,23 @@
 import {Image, View, TouchableOpacity} from 'react-native';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
-import React, {useEffect, useState} from 'react';
-
+import React, {useState} from 'react';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../Textcomp';
 import colors from '../../constants/colors';
-
 import Review from '../Review';
 import FastImage from 'react-native-fast-image';
 import {
   bookMarkServiceProvide,
   deletebookMarkServiceProvide,
-  getBookMarkedProviders,
   getUser,
 } from '../../utils/api/func';
 import {ToastShort} from '../../utils/utils';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  addUserData,
-  setbookMarkedProviders,
-} from '../../store/reducer/mainSlice';
+import {useDispatch} from 'react-redux';
+import {addUserData} from '../../store/reducer/mainSlice';
 
-const ServiceCard2 = ({
+const ServiceCard3 = ({
   item,
-  // index,
   navigation,
   id,
   serviceName,
@@ -32,41 +25,15 @@ const ServiceCard2 = ({
   savedProviders,
 }: any) => {
   const [saved, setsaved] = useState(save);
-  // const portfolio = item?.portfolio?.filter(_item => _item?.service === id);
   const price = item?.priceRange?.filter(
     (_item: {service: any}) => _item?.service === id,
   );
   console.log('pased', price, item?.description, item?.distance, 'item:', item);
-  // console.log('lllll---');
   function metersToKilometers(meters: any) {
     const kilometers = Number(meters) / 1000; // Convert meters to kilometers
     const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
     return `${roundedKilometers}km`;
   }
-  const bookMarkedProviders = useSelector(
-    (state: any) => state.user.bookMarkedProviders,
-  );
-  // const handleBookmark = async () => {
-  //   const res: any = await bookMarkServiceProvide({
-  //     service: id,
-  //     serviceProvider: item?._id,
-  //   });
-  //   if (res?.status === 200 || res?.status === 201) {
-  //     ToastShort('Service Provider bookmarked!.');
-  //     setsaved(!saved);
-  //   } else {
-  //     ToastShort(
-  //       `${
-  //         res?.error?.message
-  //           ? res?.error?.message
-  //           : res?.error?.data?.message
-  //           ? res?.error?.data?.message
-  //           : 'Oops!, an error occured'
-  //       }`,
-  //     );
-  //   }
-  // };
-
   const handleBookmark = async () => {
     try {
       const res: any = await bookMarkServiceProvide({
@@ -101,7 +68,6 @@ const ServiceCard2 = ({
           // setsavedProviders(query);
         }
       };
-      initBookmarked();
       initGetUsers();
     }
   };
@@ -109,30 +75,6 @@ const ServiceCard2 = ({
   const ch = savedProviders?.filter(
     (d: {service: any}) => d?.serviceProvider === item?._id,
   );
-  const initBookmarked = async () => {
-    const res: any = await getBookMarkedProviders(id);
-    console.log('bbbbbmmm', res?.data?.data);
-    if (res?.status === 201 || res?.status === 200) {
-      dispatch(setbookMarkedProviders(res?.data?.data));
-      // dispatch(addprovidersByCateegory(res?.data?.data));
-    }
-  };
-
-  useEffect(() => {
-    const _initBookmarked = async () => {
-      const res: any = await getBookMarkedProviders(id);
-      console.log('bbbbbmmm', res?.data?.data);
-      if (res?.status === 201 || res?.status === 200) {
-        dispatch(setbookMarkedProviders(res?.data?.data));
-        // dispatch(addprovidersByCateegory(res?.data?.data));
-      }
-    };
-    _initBookmarked();
-  }, []);
-
-  console.log('====================================');
-  console.log(bookMarkedProviders);
-  console.log('====================================');
   const handleRemoveBookmark = async () => {
     try {
       const ch = savedProviders?.filter(
@@ -162,14 +104,15 @@ const ServiceCard2 = ({
         const res: any = await getUser('');
         if (res?.status === 201 || res?.status === 200) {
           dispatch(addUserData(res?.data?.user));
+          const query = res?.data?.user?.bookmarks?.filter(
+            (item: {service: any}) => item?.service === id,
+          );
           // setsavedProviders(query);
         }
       };
       initGetUsers();
-      initBookmarked();
     }
   };
-
   return (
     <TouchableOpacity
       onPress={() => {
@@ -345,10 +288,10 @@ const ServiceCard2 = ({
             readonly={true}
             startingValue={2}
           /> */}
-          <Review value={item?.averageRating} editable={false} />
+          <Review value={item?.rating} editable={false} />
         </View>
       </View>
     </TouchableOpacity>
   );
 };
-export default ServiceCard2;
+export default ServiceCard3;

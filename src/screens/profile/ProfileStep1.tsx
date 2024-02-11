@@ -167,6 +167,9 @@ const PRofileStep1 = () => {
         }}
         title={'Complete your Registration'}
         image={images.back}
+        func={() => {
+          navigation.navigate('Index');
+        }}
       />
       <ProfileStepWrapper active={'one'} />
       <ScrollView>
@@ -182,11 +185,11 @@ const PRofileStep1 = () => {
             style={{
               fontSize: 16,
               marginTop: 13,
-              marginBottom: 45,
+              marginBottom: 5,
               color: colors.black,
             }}
           />
-          <View style={tw``}>
+          <View style={[tw``, {    marginBottom:30}]}>
             <Textcomp
               text={'You can add multiple services'}
               size={12}

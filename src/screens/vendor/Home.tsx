@@ -7,6 +7,7 @@ import {
   FlatList,
   StatusBar,
   ScrollView,
+  Platform,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import images from '../../constants/images';
@@ -16,7 +17,12 @@ import Textcomp from '../../components/Textcomp';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
 import Modal from 'react-native-modal/dist/modal';
-import {getCategory, getProviderOrders, getSupportUser, getUser} from '../../utils/api/func';
+import {
+  getCategory,
+  getProviderOrders,
+  getSupportUser,
+  getUser,
+} from '../../utils/api/func';
 import {
   addSCategory,
   addUserData,
@@ -250,6 +256,7 @@ const Home = ({navigation}: any) => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 marginHorizontal: 20,
+                paddingTop: Platform.OS === 'ios' ? 10 : 27.5,
               },
             ]}>
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
@@ -327,9 +334,9 @@ const Home = ({navigation}: any) => {
               //     : ''
               // },`}
               text={`Welcome ${
-                userData?.firstName ||
+                userData?.firstName?.trimEnd() ||
                 (userData?.businessName !== undefined
-                  ? userData?.businessName
+                  ? userData?.businessName?.trimEnd()
                   : '')
               },`}
               size={17}
@@ -458,7 +465,11 @@ const Home = ({navigation}: any) => {
                   {borderTopRightRadius: 20, borderTopLeftRadius: 20},
                 ]}>
                 <Textcomp
-                  text={`₦${formatAmount(userData?.wallet?.availableBalance)}`}
+                  text={`₦${
+                    userData?.wallet?.availableBalance
+                      ? formatAmount(userData?.wallet?.availableBalance)
+                      : 0
+                  }`}
                   size={20}
                   lineHeight={20}
                   color={'#000413'}
@@ -496,7 +507,11 @@ const Home = ({navigation}: any) => {
                 ]}>
                 <Textcomp
                   // text={'NGN249,0000'}
-                  text={`₦${formatAmount(userData?.wallet?.availableBalance)}`}
+                  text={`₦${
+                    userData?.wallet?.availableBalance
+                      ? formatAmount(userData?.wallet?.availableBalance)
+                      : 0
+                  }`}
                   size={20}
                   lineHeight={20}
                   color={'#000413'}

@@ -49,6 +49,16 @@ const Wallet = () => {
   };
   
   useEffect(() => {
+    const initGetUsers = async () => {
+      setisLoading(true);
+      const res: any = await getUser('');
+      // console.log('dddddddd', res);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addUserData(res?.data?.user));
+      }
+      setisLoading(false);
+      // setloading(false);
+    };
     initGetUsers();
   }, [dispatch, navigation]);
   const supportUser = useSelector((store: any) => store.user.supportUser);
@@ -126,7 +136,7 @@ const Wallet = () => {
                     const initGetUsers = async () => {
                       setisLoading(true);
                       const res: any = await getUser('');
-                      console.log('dddddddd', res);
+                      // console.log('dddddddd', res);
                       if (res?.status === 201 || res?.status === 200) {
                         dispatch(addUserData(res?.data?.user));
                       }

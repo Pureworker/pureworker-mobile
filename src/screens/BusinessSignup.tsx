@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,7 +9,7 @@ import {
   StatusBar,
   Platform,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import images from '../constants/images';
 import tw from 'twrnc';
 import commonStyle from '../constants/commonStyle';
@@ -18,16 +18,16 @@ import MyStatusBar from '../components/MyStatusBar';
 import colors from '../constants/colors';
 import TextInputs from '../components/TextInputs';
 import Snackbar from 'react-native-snackbar';
-import { allCountry, allState, validateEmail } from '../constants/utils';
-import { BUSINESS, CUSTOMER, FREELANCER } from '../constants/userType';
-import { StackNavigation } from '../constants/navigation';
-import { generalStyles } from '../constants/generalStyles';
+import {allCountry, allState, validateEmail} from '../constants/utils';
+import {BUSINESS, CUSTOMER, FREELANCER} from '../constants/userType';
+import {StackNavigation} from '../constants/navigation';
+import {generalStyles} from '../constants/generalStyles';
 import Tooltip from 'react-native-walkthrough-tooltip';
-import { Signup } from '../utils/api/auth';
-import { isValidPhoneNumber } from '../utils/utils';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { SIZES, perHeight } from '../utils/position/sizes';
-import { Dropdown } from 'react-native-element-dropdown';
+import {Signup} from '../utils/api/auth';
+import {isValidPhoneNumber} from '../utils/utils';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {SIZES, perHeight} from '../utils/position/sizes';
+import {Dropdown} from 'react-native-element-dropdown';
 import * as Yup from 'yup';
 import Textcomp from '../components/Textcomp';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -54,7 +54,7 @@ export default function BusinessSignup() {
         'Offline (your business renders services at the customer’s location)',
       value: 'Offline',
     },
-    {label: 'Both', value: 'Both'},
+    {label: 'Hybrid', value: 'Hybrid'},
   ]);
   const [genderOpen, setGenderOpen] = useState(false);
 
@@ -117,7 +117,7 @@ export default function BusinessSignup() {
       then: Yup.string().required('CAC Number is required'),
       otherwise: Yup.string().notRequired(),
     }),
-    location: Yup.string().oneOf(['online', 'offline', 'both']).optional(),
+    location: Yup.string().oneOf(['online', 'offline', 'hybrid']).optional(),
   });
 
   const handleSignup = async () => {
@@ -254,7 +254,7 @@ export default function BusinessSignup() {
           fl_data.referralCode = referralCode;
         }
 
-        const res:any = await Signup(
+        const res: any = await Signup(
           userType === CUSTOMER
             ? fl_data
             : userType === FREELANCER
@@ -547,6 +547,7 @@ export default function BusinessSignup() {
                 labelText={'Enter cac no'}
                 state={cacNo}
                 setState={setCacNo}
+                keyBoardType={'numeric'}
               />
               {/* <View
                 style={{
@@ -653,8 +654,12 @@ export default function BusinessSignup() {
                       height: 50,
                       borderRadius: 10,
                       paddingHorizontal: 10,
+                      color: '#757575',
                     },
                   ]}
+                  placeholderStyle={{
+                    color: '#757575',
+                  }}
                   data={locationItems}
                   search
                   maxHeight={300}
@@ -699,8 +704,12 @@ export default function BusinessSignup() {
                       height: 50,
                       borderRadius: 10,
                       paddingHorizontal: 10,
+                      color: '#757575',
                     },
                   ]}
+                  placeholderStyle={{
+                    color: '#757575',
+                  }}
                   data={allState}
                   search
                   maxHeight={300}
@@ -822,7 +831,7 @@ export default function BusinessSignup() {
               />
               <Text
                 style={{
-                  fontSize: 16,
+                  fontSize: 14,
                   fontFamily: commonStyle.fontFamily.medium,
                   color: '#fff',
                   marginTop: 15,
@@ -934,18 +943,15 @@ export default function BusinessSignup() {
                 ]}>
                 <Textcomp
                   text={`${
-                    displayDate
-                      ? formatToCustomString(displayDate)
-                      : ''
+                    displayDate ? formatToCustomString(displayDate) : ''
                   }`}
-                  size={17}
-                  lineHeight={17}
+                  size={14}
+                  lineHeight={14}
                   color={'#000413'}
                   fontFamily={'Inter-Regular'}
-                  style={{fontWeight: 400}}
+                  style={{fontWeight: 300}}
                 />
               </TouchableOpacity>
-
               <View
                 style={{
                   zIndex: genderOpen ? 0 : 2,

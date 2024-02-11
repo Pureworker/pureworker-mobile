@@ -155,13 +155,13 @@ const Index = () => {
                 />
               </TouchableOpacity> */}
             </View>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            {/* <TouchableOpacity onPress={() => navigation.goBack()}>
               <Image
                 source={images.cross}
                 style={{height: 15, width: 20}}
                 resizeMode="contain"
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
           {/* <View

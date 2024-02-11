@@ -48,7 +48,7 @@ export default function ScheduledDeliveryDate({
     return {days, hours, minutes};
   }
   const {days, hours, minutes} = getTimeDifference(item?.scheduledDeliveryDate);
-  console.log(days);
+  console.log(days, item?.scheduledDeliveryDate);
   function formatDate(inputDateStr: string | number | Date) {
     const inputDate = new Date(inputDateStr);
 
@@ -193,7 +193,12 @@ export default function ScheduledDeliveryDate({
               <View style={tw`items-center`}>
                 <View>
                   <Textcomp
-                    text={`${getTimeDifference(schdeuleIsoDate)?.days || days}`}
+                    // text={`${getTimeDifference(schdeuleIsoDate)?.days || days}`}
+                    text={`${
+                      isNaN(getTimeDifference(schdeuleIsoDate)?.days)
+                        ? days
+                        : getTimeDifference(schdeuleIsoDate)?.days
+                    }`}
                     size={14}
                     lineHeight={17}
                     color={'#000000'}
@@ -213,8 +218,13 @@ export default function ScheduledDeliveryDate({
               <View style={tw`items-center`}>
                 <View>
                   <Textcomp
+                    // text={`${
+                    //   getTimeDifference(schdeuleIsoDate)?.hours || hours
+                    // }`}
                     text={`${
-                      getTimeDifference(schdeuleIsoDate)?.hours || hours
+                      isNaN(getTimeDifference(schdeuleIsoDate)?.hours)
+                        ? hours
+                        : getTimeDifference(schdeuleIsoDate)?.hours
                     }`}
                     size={14}
                     lineHeight={17}
@@ -235,8 +245,13 @@ export default function ScheduledDeliveryDate({
               <View style={tw`items-center`}>
                 <View>
                   <Textcomp
+                    // text={`${
+                    //   getTimeDifference(schdeuleIsoDate)?.minutes || minutes
+                    // }`}
                     text={`${
-                      getTimeDifference(schdeuleIsoDate)?.minutes || minutes
+                      isNaN(getTimeDifference(schdeuleIsoDate)?.minutes)
+                        ? minutes
+                        : getTimeDifference(schdeuleIsoDate)?.minutes
                     }`}
                     size={14}
                     lineHeight={17}

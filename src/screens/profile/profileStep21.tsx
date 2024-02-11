@@ -8,6 +8,8 @@ import {
   Alert,
   TextInput,
   StyleSheet,
+  Platform,
+  PermissionsAndroid,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
@@ -52,19 +54,22 @@ import TextInputs from '../../components/TextInputs';
 import {addcompleteProfile} from '../../store/reducer/mainSlice';
 import FastImage from 'react-native-fast-image';
 import TickIcon from '../../assets/svg/Tick';
+import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 const ProfileStep21 = () => {
   const navigation = useNavigation<StackNavigation>();
   const route: Route = useRoute();
   const category = useSelector((state: any) => state.user.pickedServices);
+  const ProviderData = useSelector((state: any) => state.user.profileData);
+
   const [allPotfolio, setAllPotfolio] = useState<any>([]);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState(
+    ProviderData?.description || '',
+  );
   const [shortDescription, setShortDescription] = useState('');
   const [potfolioImageUrl, setPotfolioImageUrl] = useState<any>([]);
   const [isLoading, setisLoading] = useState(false);
   const [createService] = useCreateServiceMutation();
   const dispatch = useDispatch();
-
-  const ProviderData = useSelector((state: any) => state.user.profileData);
 
   const handleProfileSetup = async () => {
     if (portfolioToServiceCount?.length > 0) {
@@ -164,7 +169,6 @@ const ProfileStep21 = () => {
     }
     setisLoading(false);
   };
-
   const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
   const getUser = getUserData ?? [];
   const [nationalityOpen, setNationalityOpen] = useState(false);
@@ -228,6 +232,84 @@ const ProfileStep21 = () => {
         const res: any = await completeProfile({profilePic: data});
       }
     });
+  };
+
+  const opencamerafordp4 = async () => {
+    const options = {
+      mediaType: 'photo',
+      selectionLimit: 1,
+      cameraType: 'front',
+    };
+    try {
+      if (Platform.OS === 'ios') {
+        const openCamera = async () => {
+          const cameraStatus = await check(PERMISSIONS.IOS.CAMERA);
+
+          if (cameraStatus === RESULTS.GRANTED) {
+            // Camera permission is granted, open camera here
+            await launchCamera(options, async (resp: unknown) => {
+              if (resp?.assets?.length > 0) {
+                console.log('resp', resp?.assets[0]);
+                setImageUrl(resp?.assets[0].uri);
+                const data = await uploadImgorDoc(resp?.assets[0]);
+                console.warn('processed pic', data);
+                dispatch(addcompleteProfile({profilePic: data}));
+                const res: any = await completeProfile({profilePic: data});
+
+                // await uploadImgorDoc(resp?.assets[0]);
+              }
+            });
+          } else {
+            // Camera permission is not granted, request it
+            const newCameraStatus = await request(PERMISSIONS.IOS.CAMERA);
+            if (newCameraStatus === RESULTS.GRANTED) {
+              // Camera permission granted after request, open camera
+              await launchCamera(options, async (resp: unknown) => {
+                if (resp?.assets?.length > 0) {
+                  console.log('resp', resp?.assets[0]);
+                  setImageUrl(resp?.assets[0].uri);
+                  const data = await uploadImgorDoc(resp?.assets[0]);
+                  console.warn('processed pic', data);
+                  dispatch(addcompleteProfile({profilePic: data}));
+                  const res: any = await completeProfile({profilePic: data});
+                }
+              });
+            } else {
+              // Camera permission denied
+              console.log('Camera permission denied');
+            }
+          }
+        };
+        openCamera();
+      } else {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'App Camera Permission',
+            message: 'Pureworker needs access to your camera to takee picture',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Camera permission given');
+          await launchCamera(options, async (resp: unknown) => {
+            if (resp?.assets?.length > 0) {
+              console.log('resp', resp?.assets[0]);
+              setImageUrl(resp?.assets[0].uri);
+              const data = await uploadImgorDoc(resp?.assets[0]);
+              console.warn('processed pic', data);
+              dispatch(addcompleteProfile({profilePic: data}));
+              const res: any = await completeProfile({profilePic: data});
+            }
+          });
+        } else {
+          console.log('Camera permission denied2');
+        }
+      }
+    } catch (error) {}
+    // launchCamera
   };
   // const openLibraryfordp = () => {
   //   launchImageLibrary(options, async (resp: unknown) => {
@@ -303,7 +385,8 @@ const ProfileStep21 = () => {
             <View>
               <TouchableOpacity
                 onPress={() => {
-                  openLibraryfordp();
+                  // openLibraryfordp();
+                  opencamerafordp4();
                 }}
                 style={[
                   generalStyles.contentCenter,

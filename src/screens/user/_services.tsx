@@ -23,13 +23,17 @@ import {SIZES, perHeight} from '../../utils/position/sizes';
 import ServiceCard2 from '../../components/cards/serviceCard2';
 import TextInputs from '../../components/TextInput2';
 import {
+  getBookMarkedProviders,
   getProviderByCategory,
   getProviderByService,
   getSearchProvider,
   getSearchQuery,
   getUser,
 } from '../../utils/api/func';
-import {addprovidersByCateegory} from '../../store/reducer/mainSlice';
+import {
+  addprovidersByCateegory,
+  setbookMarkedProviders,
+} from '../../store/reducer/mainSlice';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import colors from '../../constants/colors';
@@ -43,6 +47,9 @@ const _Services = ({route}: any) => {
 
   const _providersByCateegory = useSelector(
     (state: any) => state.user.providersByCateegory,
+  );
+  const bookMarkedProviders = useSelector(
+    (state: any) => state.user.bookMarkedProviders,
   );
   const userData = useSelector((state: any) => state.user.userData);
   const dummyData = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -74,7 +81,18 @@ const _Services = ({route}: any) => {
       }
       setisLoading(false);
     };
+    const initBookmarked = async () => {
+      setisLoading(true);
+      const res: any = await getBookMarkedProviders(id);
+      console.log('bbbbbmmm', res?.data?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(setbookMarkedProviders(res?.data?.data));
+        // dispatch(addprovidersByCateegory(res?.data?.data));
+      }
+      setisLoading(false);
+    };
     initGetUsers();
+    initBookmarked();
   }, [dispatch, id]);
   const [searchResults, setSearchResults] = useState(_providersByCateegory);
   const [loading, setLoading] = useState(false);
@@ -388,37 +406,56 @@ const _Services = ({route}: any) => {
                       </>
                     )}
                     {activeSection === 'Saved' && (
-                      <View style={[tw`items-center`, {flex: 1}]}>
-                        <ScrollView scrollEnabled={false} horizontal>
-                          <FlatList
-                            data={savedProviders}
-                            horizontal={false}
-                            scrollEnabled={false}
-                            renderItem={(item: any, index: any) => {
-                              console.log('SSS--', item);
-
-                              return (
-                                <TouchableOpacity>
-                                  <ServiceCard2
-                                    key={index}
-                                    navigation={navigation}
-                                    item={item.item}
-                                    index={item.index}
-                                    id={id}
-                                    serviceName={passedService}
-                                    save={true}
-                                  />
-                                </TouchableOpacity>
-                              );
-                            }}
-                            keyExtractor={item => item?._id}
-                            ListFooterComponent={() => (
-                              <View style={tw`h-20`} />
-                            )}
-                            contentContainerStyle={{paddingBottom: 20}}
-                          />
-                        </ScrollView>
-                      </View>
+                      <>
+                        {bookMarkedProviders?.length < 1 && (
+                          <View
+                            style={[
+                              tw`bg-[#D9D9D9] flex-1 w-full flex-col rounded  mt-4 mx-2`,
+                              {height: perHeight(80), alignItems: 'center'},
+                            ]}>
+                            <View style={tw`my-auto pl-8`}>
+                              <Textcomp
+                                text={'No Bookmarked Provider Found...'}
+                                size={17}
+                                lineHeight={17}
+                                color={'black'}
+                                fontFamily={'Inter-SemiBold'}
+                              />
+                            </View>
+                          </View>
+                        )}
+                        <View style={[tw`items-center`, {flex: 1}]}>
+                          <ScrollView scrollEnabled={false} horizontal>
+                            <FlatList
+                              data={bookMarkedProviders}
+                              horizontal={false}
+                              scrollEnabled={false}
+                              renderItem={(item: any, index: any) => {
+                                // console.log('SAVEDSSS--', item.item);
+                                return (
+                                  <TouchableOpacity>
+                                    <ServiceCard2
+                                      key={index}
+                                      navigation={navigation}
+                                      item={item.item?.serviceProvider}
+                                      index={item.index}
+                                      id={id}
+                                      serviceName={passedService}
+                                      save={true}
+                                      savedProviders={savedProviders}
+                                    />
+                                  </TouchableOpacity>
+                                );
+                              }}
+                              keyExtractor={item => item?._id}
+                              ListFooterComponent={() => (
+                                <View style={tw`h-20`} />
+                              )}
+                              contentContainerStyle={{paddingBottom: 20}}
+                            />
+                          </ScrollView>
+                        </View>
+                      </>
                     )}
                   </>
                 )}

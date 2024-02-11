@@ -69,7 +69,7 @@ const Orders = () => {
     const initGetOrders = async () => {
       setisLoading(true);
       const res: any = await getUserOrders(searchInput);
-      console.log('oooooooo', res?.data);
+      console.log('oooooooopage', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addcustomerOrders(res?.data?.data));
         // Filter orders based on search input
@@ -374,7 +374,7 @@ const Orders = () => {
                     </View>
                   </View>
                 )}
-                {filteredOrders?.length > 1 && (
+                {filteredOrders?.length > 0 && (
                   <ScrollView horizontal>
                     <FlatList
                       data={filteredOrders}

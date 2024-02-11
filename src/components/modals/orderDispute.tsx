@@ -64,7 +64,7 @@ export default function OrderDispute({navigation, visible, func}: any) {
                   multiline
                   style={[
                     tw`bg-[#EBEBEB] p-4 rounded-lg`,
-                    {height: perHeight(110)},
+                    {height: perHeight(110), color: 'black'},
                   ]}
                 />
               </View>

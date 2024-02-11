@@ -11,7 +11,7 @@ import {metersToKilometers} from '../../utils/utils';
 import Modal from 'react-native-modal/dist/modal';
 
 const ClosetoYou = ({item, index, navigation}: any) => {
-  console.log('close-order', item);
+  // console.log('close-order', item);
   const [showModal, setshowModal] = useState(false);
   return (
     <>
