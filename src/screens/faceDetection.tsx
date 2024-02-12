@@ -220,24 +220,34 @@ export default function FaceDetection({navigation}: any) {
   }, [startLiveness]);
 
   const updateLive = async () => {
-    const res: any = await updateUserData({
-      liveTest: true,
-    });
-    console.log('result', res?.data);
-    if (res?.status === 200 || res?.status === 201) {
-      ToastLong('LIve Test Passed');
-      navigation.navigate('Home');
-    } else {
+    try {
+      const res: any = await updateUserData({
+        liveTest: true,
+      });
+      console.log('result', res?.data);
+      if (res?.status === 200 || res?.status === 201) {
+        ToastLong('LIve Test Passed');
+        navigation.navigate('Home');
+      }
+    } catch (error) {
       Snackbar.show({
-        text: res?.error?.message
-          ? res?.error?.message
-          : res?.error?.data?.message
-          ? res?.error?.data?.message
-          : 'Oops!, an error occured',
+        text: error?.message || 'Oops!, an error occured',
         duration: Snackbar.LENGTH_SHORT,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
+      // Snackbar.show({
+      //   text: res?.error?.message
+      //     ? res?.error?.message
+      //     : res?.error?.data?.message
+      //     ? res?.error?.data?.message
+      //     : 'Oops!, an error occured',
+      //   duration: Snackbar.LENGTH_SHORT,
+      //   textColor: '#fff',
+      //   backgroundColor: '#88087B',
+      // });
+    } finally {
+      initGetUsers();
     }
   };
 
