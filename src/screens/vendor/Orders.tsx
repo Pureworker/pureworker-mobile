@@ -48,6 +48,20 @@ const Orders = () => {
     initGetOrders();
   }, []);
 
+  useEffect(() => {
+    setactiveSection('Active');
+
+    // Cleanup function to be called when the component unmounts
+    return () => {
+      // Set activeSection to 'Active' when the component unmounts
+      setactiveSection('Active');
+    };
+  }, []);
+  useEffect(() => {
+    setactiveSection('Active');
+  }, [navigation]);
+
+
   const [filteredOrders, setFilteredOrders] = useState(providerOrders);
 
   useEffect(() => {

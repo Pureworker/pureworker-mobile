@@ -325,6 +325,7 @@ const OrderDetails = () => {
                 onChangeText={text => {
                   setDescription(text);
                 }}
+                placeholderTextColor={'black'}
               />
             </View>
             {/* <View
