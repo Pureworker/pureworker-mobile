@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   ScrollView,
   Platform,
+  TextInput,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import images from '../constants/images';
@@ -28,13 +29,14 @@ import Tooltip from 'react-native-walkthrough-tooltip';
 import {generalStyles} from '../constants/generalStyles';
 import {SIZES, perHeight} from '../utils/position/sizes';
 import {Signup} from '../utils/api/auth';
-import {isValidPhoneNumber} from '../utils/utils';
+import {ToastLong, isValidPhoneNumber} from '../utils/utils';
 import {Dropdown} from 'react-native-element-dropdown';
 import tw from 'twrnc';
 import Textcomp from '../components/Textcomp';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {DateTime} from 'luxon';
 import {number} from 'yup';
+import { validateDate } from '../utils/auth';
 export default function CustomerSignup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -69,6 +71,12 @@ export default function CustomerSignup() {
   const [schdeuleIsoDate, setschdeuleIsoDate] = useState('');
   const [displayDate, setdisplayDate] = useState('');
 
+  const [birthDate, setBirthDate] = useState({
+    day: undefined,
+    month: undefined,
+    year: undefined,
+  });
+
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
@@ -101,10 +109,95 @@ export default function CustomerSignup() {
     });
   }
 
+  const handleBirthDate = (key: string, value: number) => {
+    const newDate = new Date();
+
+    if (typeof value !== 'number' || (!(value === 0) && !(value > 0))) {
+      return ToastLong(
+        'Invalid value, kindly input a valid number for day, month and year',
+      );
+    }
+
+    if (key === 'day' && value.toString().length === 2) {
+      if (
+        value > 31 ||
+        (birthDate.month === 1 && value > 29 && !isLeapYear(birthDate.year)) ||
+        ((birthDate.month === 3 ||
+          birthDate.month === 5 ||
+          birthDate.month === 8 ||
+          birthDate.month === 10) &&
+          value > 30)
+      ) {
+        return ToastLong('Invalid day given');
+      }
+
+      if (birthDate.month === undefined || birthDate.year === undefined) {
+        return ToastLong('Fill in the year and month first');
+      }
+    }
+
+    if (key === 'month' && value.toString().length === 2) {
+      if (value > 12) {
+        return ToastLong('Invalid month given');
+      }
+
+      if (birthDate.year === undefined) {
+        return ToastLong('Fill in the year first');
+      }
+    }
+
+    // const concatYearValue = `${birthDate.year}`.concat(value.toString());
+
+    // console.log(concatYearValue, '   concat', value);
+
+    if (key === 'year' && value.toString().length === 4) {
+      if (value > newDate.getFullYear() || value < 1600) {
+        return ToastLong('Invalid year given');
+      }
+    }
+
+    const newBirthDateObj = {
+      ...birthDate,
+      [key]: value,
+    };
+
+    setBirthDate(newBirthDateObj);
+  };
+
   useEffect(() => {
     setNationalityItems([...allCountry]);
   }, []);
   const handleSignup = async () => {
+    let dateErrorMessage = '';
+
+    Object.keys(birthDate).map(key => {
+      const res = validateDate(
+        key,
+        birthDate[key as keyof typeof birthDate],
+        birthDate,
+      );
+
+      if (!res.isSuccess) {
+        dateErrorMessage = res.message;
+      }
+    });
+
+    if (dateErrorMessage.length > 0) {
+      Snackbar.show({
+        text: dateErrorMessage,
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      return;
+    }
+
+    birthDate.month = birthDate.month - 1;
+    const combined = Object.values(birthDate).reverse().join('-');
+    const finalBirthDate = new Date(combined);
+
+    setDateTime(finalBirthDate);
+
     if (!email) {
       Snackbar.show({
         text: 'Please enter your email address',
@@ -403,7 +496,7 @@ export default function CustomerSignup() {
                 flex: 1,
                 borderRadius: 8,
                 height: 45,
-                backgroundColor: 
+                backgroundColor:
                   userType === 'CUSTOMER' ? colors.primary : colors.white,
               }}
             />
@@ -476,7 +569,60 @@ export default function CustomerSignup() {
               }}>
               <DateTimesPicker updateDate={setDateTime} />
             </TouchableOpacity> */}
-            <DateTimePickerModal
+
+            <View
+              style={{
+                flexDirection: 'row',
+                width: '100%',
+                gap: 20,
+                marginTop: 10,
+              }}>
+              <TextInput
+                value={birthDate.year !== undefined ? `${birthDate.year}` : ''}
+                placeholder="yyyy"
+                maxLength={4}
+                style={{
+                  paddingHorizontal: 10,
+                  borderRadius: 5,
+                  height: 45,
+                  width: 60,
+                  textAlign: 'center',
+                  backgroundColor: 'white',
+                }}
+                inputMode="decimal"
+                onChangeText={e => handleBirthDate('year', Number(e))}
+              />
+              <TextInput
+                value={
+                  birthDate.month !== undefined ? `${birthDate.month}` : ''
+                }
+                placeholder="mm"
+                style={{
+                  paddingHorizontal: 10,
+                  borderRadius: 5,
+                  height: 45,
+                  width: 50,
+                  textAlign: 'center',
+                  backgroundColor: 'white',
+                }}
+                inputMode="decimal"
+                onChangeText={e => handleBirthDate('month', Number(e))}
+              />
+              <TextInput
+                value={birthDate.day !== undefined ? `${birthDate.day}` : ''}
+                placeholder="dd"
+                style={{
+                  paddingHorizontal: 10,
+                  borderRadius: 5,
+                  height: 45,
+                  backgroundColor: 'white',
+                }}
+                inputMode="decimal"
+                onChangeText={e => handleBirthDate('day', Number(e))}
+              />
+            </View>
+
+            {/* <DateTimePickerModal
               isVisible={isDatePickerVisible}
               mode="date"
               onConfirm={handleConfirm}
@@ -499,7 +645,7 @@ export default function CustomerSignup() {
                 fontFamily={'Inter-Regular'}
                 style={{fontWeight: 300}}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             {/* <ScrollView horizontal style={{width: SIZES.width * 0.9, backgroundColor: 'red'}}> */}
             {/* <View
               style={{

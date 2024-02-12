@@ -1039,6 +1039,7 @@ export default function BusinessSignup() {
                     birthDate.year !== undefined ? `${birthDate.year}` : ''
                   }
                   placeholder="yyyy"
+                  maxLength={4}
                   style={{
                     paddingHorizontal: 10,
                     borderRadius: 5,
