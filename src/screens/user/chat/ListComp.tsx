@@ -12,7 +12,6 @@ import {WIDTH_WINDOW} from '../../../constants/generalStyles';
 import {timeAgo} from '../../../utils/utils';
 import {getUnreadMessages} from '../../../utils/api/chat';
 import FastImage from 'react-native-fast-image';
-import {getUnreadMessages} from '../../../utils/api/chat';
 
 export default function ListComp({navigation, item}: any) {
   function formatDate(dateString) {

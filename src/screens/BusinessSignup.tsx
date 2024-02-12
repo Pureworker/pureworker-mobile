@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   StatusBar,
   Platform,
+  TextInput,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import images from '../constants/images';
@@ -24,7 +25,7 @@ import {StackNavigation} from '../constants/navigation';
 import {generalStyles} from '../constants/generalStyles';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import {Signup} from '../utils/api/auth';
-import {isValidPhoneNumber} from '../utils/utils';
+import {ToastLong, isValidPhoneNumber} from '../utils/utils';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SIZES, perHeight} from '../utils/position/sizes';
 import {Dropdown} from 'react-native-element-dropdown';
@@ -32,6 +33,7 @@ import * as Yup from 'yup';
 import Textcomp from '../components/Textcomp';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {DateTime} from 'luxon';
+import {isLeapYear, validateDate} from '../utils/auth';
 export default function BusinessSignup() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -44,6 +46,74 @@ export default function BusinessSignup() {
   const [locationOpen, setLocationOpen] = useState(false);
   const [locationValue, setLocationValue] = useState('');
   const [date, setDate] = useState(new Date());
+
+  const [birthDate, setBirthDate] = useState({
+    day: undefined,
+    month: undefined,
+    year: undefined,
+  });
+
+  const [birthDateError, setBirthDateError] = useState({
+    day: null,
+    month: null,
+    year: null,
+  });
+
+  const handleBirthDate = (key: string, value: number) => {
+    const newDate = new Date();
+
+    if (typeof value !== 'number' || (!(value === 0) && !(value > 0))) {
+      return ToastLong(
+        'Invalid value, kindly input a valid number for day, month and year',
+      );
+    }
+
+    if (key === 'day' && value.toString().length === 2) {
+      if (
+        value > 31 ||
+        (birthDate.month === 1 && value > 29 && !isLeapYear(birthDate.year)) ||
+        ((birthDate.month === 3 ||
+          birthDate.month === 5 ||
+          birthDate.month === 8 ||
+          birthDate.month === 10) &&
+          value > 30)
+      ) {
+        return ToastLong('Invalid day given');
+      }
+
+      if (birthDate.month === undefined || birthDate.year === undefined) {
+        return ToastLong('Fill in the year and month first');
+      }
+    }
+
+    if (key === 'month' && value.toString().length === 2) {
+      if (value > 12) {
+        return ToastLong('Invalid month given');
+      }
+
+      if (birthDate.year === undefined) {
+        return ToastLong('Fill in the year first');
+      }
+    }
+
+    // const concatYearValue = `${birthDate.year}`.concat(value.toString());
+
+    // console.log(concatYearValue, '   concat', value);
+
+    if (key === 'year' && value.toString().length === 4) {
+      if (value > newDate.getFullYear() || value < 1600) {
+        return ToastLong('Invalid year given');
+      }
+    }
+
+    const newBirthDateObj = {
+      ...birthDate,
+      [key]: value,
+    };
+
+    setBirthDate(newBirthDateObj);
+  };
+
   const setDateTime = (dateTime: any) => {
     setDate(dateTime);
   };
@@ -121,6 +191,7 @@ export default function BusinessSignup() {
   });
 
   const handleSignup = async () => {
+    let errorMessage = '';
     // Validate input data
     // await validationSchema.validate(
     //   {
@@ -141,6 +212,34 @@ export default function BusinessSignup() {
     //   },
     //   {abortEarly: false}, // Collect all validation errors, not just the first one
     // );
+
+    Object.keys(birthDate).map(key => {
+      const res = validateDate(
+        key,
+        birthDate[key as keyof typeof birthDate],
+        birthDate,
+      );
+
+      if (!res.isSuccess) {
+        errorMessage = res.message;
+      }
+    });
+
+    if (errorMessage.length > 0) {
+      Snackbar.show({
+        text: errorMessage,
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      return;
+    }
+
+    birthDate.month = birthDate.month - 1;
+    const combined = Object.values(birthDate).reverse().join('-');
+    const finalBirthDate = new Date(combined);
+
+    setDateTime(finalBirthDate);
 
     if (!email) {
       Snackbar.show({
@@ -312,6 +411,7 @@ export default function BusinessSignup() {
     setDatePickerVisibility(false);
   };
   const handleConfirm = (date: any) => {
+    // console.log(date);
     const f = `${date}`;
     const jsDate = new Date(f);
     console.log('pppickked:', jsDate);
@@ -926,12 +1026,65 @@ export default function BusinessSignup() {
                   }}
                 />
               </View> */}
-              <DateTimePickerModal
+
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: '100%',
+                  gap: 20,
+                  marginTop: 10,
+                }}>
+                <TextInput
+                  value={
+                    birthDate.year !== undefined ? `${birthDate.year}` : ''
+                  }
+                  placeholder="yyyy"
+                  style={{
+                    paddingHorizontal: 10,
+                    borderRadius: 5,
+                    height: 45,
+                    width: 60,
+                    textAlign: 'center',
+                    backgroundColor: 'white',
+                  }}
+                  inputMode="decimal"
+                  onChangeText={e => handleBirthDate('year', Number(e))}
+                />
+                <TextInput
+                  value={
+                    birthDate.month !== undefined ? `${birthDate.month}` : ''
+                  }
+                  placeholder="mm"
+                  style={{
+                    paddingHorizontal: 10,
+                    borderRadius: 5,
+                    height: 45,
+                    width: 50,
+                    textAlign: 'center',
+                    backgroundColor: 'white',
+                  }}
+                  inputMode="decimal"
+                  onChangeText={e => handleBirthDate('month', Number(e))}
+                />
+                <TextInput
+                  value={birthDate.day !== undefined ? `${birthDate.day}` : ''}
+                  placeholder="dd"
+                  style={{
+                    paddingHorizontal: 10,
+                    borderRadius: 5,
+                    height: 45,
+                    backgroundColor: 'white',
+                  }}
+                  inputMode="decimal"
+                  onChangeText={e => handleBirthDate('day', Number(e))}
+                />
+              </View>
+              {/* <DateTimePickerModal
                 isVisible={isDatePickerVisible}
                 mode="date"
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
-              />
+              /> */}
 
               <TouchableOpacity
                 onPress={() => {
