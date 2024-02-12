@@ -17,6 +17,7 @@ import React, {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useRef,
   useState,
 } from 'react';
 import tw from 'twrnc';
@@ -41,6 +42,7 @@ import useChat from '../../../hooks/useChat';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 export default function Inbox({navigation, route}: any) {
+  const scrollRef = useRef<ScrollView | null>(null);
   const [imageModal, setImageModal] = useState({
     isOpen: false,
     imageLink: '',
@@ -320,7 +322,10 @@ export default function Inbox({navigation, route}: any) {
               })}
               <View style={tw`h-20`} />
             </ScrollView> */}
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView
+              ref={scrollRef}
+              showsVerticalScrollIndicator={false}
+              onContentSizeChange={() => scrollRef!?.current!?.scrollToEnd()}>
               {Object.keys(groupedMessages).map((date, i) => (
                 <View key={date} style={tw`${i === 0 ? 'pt-5' : 'pt-2.5'}`}>
                   <View style={tw`flex flex-row items-center`}>

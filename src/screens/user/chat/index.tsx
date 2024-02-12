@@ -127,7 +127,8 @@ const Index = () => {
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
+        }
+        >
         <View style={[tw` w-full pt-5`, {}]}>
           {chatList?.length < 1 ? (
             <View style={[tw`flex-1 items-center`, {}]}>
