@@ -275,7 +275,9 @@ const OrderReview = ({route}: any) => {
                   </View>
                   <View style={tw``}>
                     <Textcomp
-                      text={`${_data?.address}`}
+                      text={`${
+                        _data?.address === undefined ? '' : _data?.address
+                      }`}
                       size={12}
                       lineHeight={14}
                       color={'#000413'}

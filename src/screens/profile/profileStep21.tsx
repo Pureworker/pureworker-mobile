@@ -60,10 +60,17 @@ const ProfileStep21 = () => {
   const route: Route = useRoute();
   const category = useSelector((state: any) => state.user.pickedServices);
   const ProviderData = useSelector((state: any) => state.user.profileData);
+  const completeProfileData = useSelector(
+    (state: any) => state.user.completeProfileData,
+  );
 
   const [allPotfolio, setAllPotfolio] = useState<any>([]);
   const [description, setDescription] = useState(
-    ProviderData?.description || '',
+    ProviderData?.description
+      ? ProviderData?.description
+      : completeProfileData?.description
+      ? completeProfileData?.description
+      : '',
   );
   const [shortDescription, setShortDescription] = useState('');
   const [potfolioImageUrl, setPotfolioImageUrl] = useState<any>([]);
@@ -179,9 +186,7 @@ const ProfileStep21 = () => {
     //   images: [],
     // },
   ]);
-  const completeProfileData = useSelector(
-    (state: any) => state.user.completeProfileData,
-  );
+
   const [serviceList, setserviceList] = useState([]);
   const options = {mediaType: 'photo', selectionLimit: 1};
   const [addModal, setaddModal] = useState(false);

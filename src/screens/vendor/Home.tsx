@@ -85,10 +85,9 @@ const Home = ({navigation}: any) => {
         ToastLong('Address is required');
       } else {
         // Continue with your logic if geoLocation is valid
-
         if (!userData?.liveTest) {
-          // navigation.navigate('FaceDetection');
-          // ToastLong('Virtual Interview is compulsory');
+          navigation.navigate('FaceDetection');
+          ToastLong('Virtual Interview is compulsory');
         }
       }
       const emitProviderOnlineStatus = () => {

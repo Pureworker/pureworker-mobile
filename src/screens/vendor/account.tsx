@@ -8,6 +8,7 @@ import {
   StatusBar,
   ScrollView,
   ActivityIndicator,
+  PermissionsAndroid,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -47,6 +48,7 @@ import Modal from 'react-native-modal/dist/modal';
 import PortComp from '../profile/comp/portComp4';
 import AddCircle from '../../assets/svg/AddCircle';
 import EditComp from '../profile/comp/EditComp';
+import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 
 const Account = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -73,6 +75,7 @@ const Account = () => {
       console.log('dddddddd-----', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addProfileData(res?.data?.profile));
+        setDescription(res?.data?.profile?.description)
       }
     };
     initGetProfile();
@@ -116,6 +119,73 @@ const Account = () => {
     });
   };
 
+  const opencamerafordp4 = async () => {
+    const options = {
+      mediaType: 'photo',
+      selectionLimit: 1,
+      cameraType: 'front',
+    };
+    try {
+      if (Platform.OS === 'ios') {
+        const openCamera = async () => {
+          const cameraStatus = await check(PERMISSIONS.IOS.CAMERA);
+
+          if (cameraStatus === RESULTS.GRANTED) {
+            // Camera permission is granted, open camera here
+            await launchCamera(options, async (resp: unknown) => {
+              if (resp?.assets?.length > 0) {
+                console.log('resp', resp?.assets[0]);
+                setImageUrl(resp?.assets[0].uri);
+                await uploadImgorDoc(resp?.assets[0]);
+              }
+            });
+          } else {
+            // Camera permission is not granted, request it
+            const newCameraStatus = await request(PERMISSIONS.IOS.CAMERA);
+            if (newCameraStatus === RESULTS.GRANTED) {
+              // Camera permission granted after request, open camera
+              await launchCamera(options, async (resp: unknown) => {
+                if (resp?.assets?.length > 0) {
+                  console.log('resp', resp?.assets[0]);
+                  setImageUrl(resp?.assets[0].uri);
+                  await uploadImgorDoc(resp?.assets[0]);
+                }
+              });
+            } else {
+              // Camera permission denied
+              console.log('Camera permission denied');
+            }
+          }
+        };
+        openCamera();
+      } else {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'App Camera Permission',
+            message: 'Pureworker needs access to your camera to takee picture',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Camera permission given');
+          await launchCamera(options, async (resp: unknown) => {
+            if (resp?.assets?.length > 0) {
+              console.log('resp', resp?.assets[0]);
+              setImageUrl(resp?.assets[0].uri);
+              await uploadImgorDoc(resp?.assets[0]);
+            }
+          });
+        } else {
+          console.log('Camera permission denied2');
+        }
+      }
+    } catch (error) {}
+    // launchCamera
+  };
+
   const upload = async (param: string) => {
     const res: any = await completeProfile({profilePic: param});
     console.log('result', res?.data);
@@ -157,6 +227,7 @@ const Account = () => {
     console.log('Update result:', res?.data);
     if (res?.status === 200 || res?.status === 201) {
       ToastLong('Profile Updated');
+      navigation.navigate('Home');
     } else {
       Snackbar.show({
         text: res?.error?.message
@@ -273,7 +344,11 @@ const Account = () => {
               style={{fontSize: 20, marginTop: 30, color: colors.black}}
             />
 
-            <View>
+            <TouchableOpacity
+              onPress={async () => {
+                // openLibraryfordp();
+                opencamerafordp4();
+              }}>
               <View
                 style={[
                   generalStyles.contentCenter,
@@ -333,7 +408,7 @@ const Account = () => {
                 }}>
                 <TouchableOpacity
                   onPress={async () => {
-                    openLibraryfordp();
+                    // openLibraryfordp();
                   }}>
                   <Image
                     source={images.edit}
@@ -359,7 +434,7 @@ const Account = () => {
                 />
               </TouchableOpacity> */}
               </View>
-            </View>
+            </TouchableOpacity>
             <TextWrapper
               children="Description"
               isRequired={true}
@@ -544,8 +619,6 @@ const Account = () => {
                               };
                               seteditModal(true);
                               setSelectedService(item);
-
-                              
                             }}>
                             <Textcomp
                               text={'Edit'}
@@ -822,7 +895,7 @@ const Account = () => {
 
             <View style={[tw` mt-4 items-center`]}>
               <Textcomp
-                text={'Are you sure you want to delete This Service'}
+                text={'Are you sure you want to delete This Service ?'}
                 size={16}
                 lineHeight={16}
                 color={'#000413'}

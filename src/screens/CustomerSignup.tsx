@@ -588,6 +588,7 @@ export default function CustomerSignup() {
                   width: 60,
                   textAlign: 'center',
                   backgroundColor: 'white',
+                  color: '#000000',
                 }}
                 inputMode="decimal"
                 onChangeText={e => handleBirthDate('year', Number(e))}
@@ -604,6 +605,7 @@ export default function CustomerSignup() {
                   width: 50,
                   textAlign: 'center',
                   backgroundColor: 'white',
+                  color: '#000000',
                 }}
                 inputMode="decimal"
                 onChangeText={e => handleBirthDate('month', Number(e))}
@@ -616,12 +618,12 @@ export default function CustomerSignup() {
                   borderRadius: 5,
                   height: 45,
                   backgroundColor: 'white',
+                  color: '#000000',
                 }}
                 inputMode="decimal"
                 onChangeText={e => handleBirthDate('day', Number(e))}
               />
             </View>
-
             {/* <DateTimePickerModal
               isVisible={isDatePickerVisible}
               mode="date"
@@ -739,6 +741,7 @@ export default function CustomerSignup() {
                     height: 50,
                     borderRadius: 10,
                     paddingHorizontal: 10,
+                    color: '#757575',
                   },
                 ]}
                 placeholderStyle={{
@@ -754,6 +757,9 @@ export default function CustomerSignup() {
                 valueField="value"
                 placeholder={!isFocus ? 'Select state' : '...'}
                 searchPlaceholder="Search..."
+                inputSearchStyle={{
+                  color: '#757575',
+                }}
                 value={nationalityValue}
                 onFocus={() => setIsFocus(true)}
                 onBlur={() => setIsFocus(false)}

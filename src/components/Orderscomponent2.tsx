@@ -32,7 +32,7 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
   const [scheduledDeliveryDate, setscheduledDeliveryDate] = useState(false);
   const [rateYourExperience, setrateYourExperience] = useState(false);
 
-  console.log('ORDER:', item);
+  // console.log('ORDER:', item);
 
   useEffect(() => {
     const initGetOrders2 = async () => {

@@ -227,8 +227,9 @@ const Orders = () => {
             onPress={() => {
               setFilteredOrders(customerOrders);
               setsearchModal(false);
+              setsearchInput('');
             }}>
-            <Image
+            <Image 
               source={images.cross}
               style={{height: 20, width: 20, tintColor: 'black'}}
               resizeMode="contain"

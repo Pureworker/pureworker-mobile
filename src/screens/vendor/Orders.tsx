@@ -48,6 +48,52 @@ const Orders = () => {
     initGetOrders();
   }, []);
 
+  const [filteredOrders, setFilteredOrders] = useState(providerOrders);
+
+  useEffect(() => {
+    setFilteredOrders(providerOrders);
+  }, [providerOrders, dispatch]);
+
+  const handleSearch = (query: string) => {
+    try {
+      console.log('qqqq::::::::', query);
+      const filtered =
+        providerOrders.filter(
+          order =>
+            order?.user?.firstName
+              ?.toLowerCase()
+              ?.includes(query.toLowerCase()) ||
+            order?.user?.lastName
+              ?.toLowerCase()
+              ?.includes(query.toLowerCase()),
+        ) || [];
+
+      console.log(filtered, '         ..............................');
+      console.log('RESSSSS:', filtered);
+      setFilteredOrders(filtered);
+      // setSearchResults(filtered);
+    } catch (error) {
+      console.error('An unexpected error occurred during search:', error);
+      // Handle unexpected error, show an error message, or take appropriate action
+    } finally {
+      // Optional: You can update the loading state here if needed
+      // setLoading(false);
+    }
+  };
+
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return function (...args) {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
+  };
+  const debouncedHandleSearch = debounce(handleSearch, 500);
+
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
@@ -118,7 +164,10 @@ const Orders = () => {
             style={{marginTop: 10, width: '70%'}}
             labelText={'Search for customer'}
             state={searchInput}
-            setState={setsearchInput}
+            setState={text => {
+              setsearchInput(text);
+              debouncedHandleSearch(text);
+            }}
           />
           <TouchableOpacity
             style={{
@@ -230,45 +279,64 @@ const Orders = () => {
           <>
             {activeSection === 'Active' && (
               <View style={[tw`items-center`, {flex: 1}]}>
-                <ScrollView horizontal>
-                  <FlatList
-                    data={providerOrders}
-                    horizontal={false}
-                    scrollEnabled={false}
-                    renderItem={(item: any, index: any) => {
-                      // return (
-                      //   <Orderscomponent2
-                      //     key={index}
-                      //     navigation={navigation}
-                      //     item={item.item}
-                      //     index={item.index}
-                      //     status={item?.item?.status}
-                      //     // status={index % 3 === 0 ? 'Pending' : 'Inprogress'}
-                      //   />
-                      // );
-                      if (
-                        item?.item?.status === 'CANCELLED' ||
-                        item?.item?.status === 'COMPLETED' ||
-                        item?.item?.status === 'DECLINED'
-                      ) {
-                        return null;
-                      } else {
-                        return (
-                          <Orderscomponent2
-                            key={index}
-                            navigation={navigation}
-                            item={item.item}
-                            index={item.index}
-                            status={item.item?.status}
-                            // index % 3 === 0 ? 'Pending' : 'Inprogress'
-                          />
-                        );
-                      }
-                    }}
-                    keyExtractor={item => item?.id}
-                    ListFooterComponent={<View style={tw`h-20`} />}
-                  />
-                </ScrollView>
+                {filteredOrders?.length < 1 && (
+                  <View
+                    style={[
+                      tw`bg-[#D9D9D9] w-full flex flex-col rounded  mt-3 mx-2`,
+                      {height: perHeight(80), alignItems: 'center'},
+                    ]}>
+                    <View style={tw`my-auto pl-8`}>
+                      <Textcomp
+                        text={'Orders Not Found...'}
+                        size={17}
+                        lineHeight={17}
+                        color={'black'}
+                        fontFamily={'Inter-SemiBold'}
+                      />
+                    </View>
+                  </View>
+                )}
+                {filteredOrders?.length > 0 && (
+                  <ScrollView horizontal>
+                    <FlatList
+                      data={filteredOrders}
+                      horizontal={false}
+                      scrollEnabled={false}
+                      renderItem={(item: any, index: any) => {
+                        // return (
+                        //   <Orderscomponent2
+                        //     key={index}
+                        //     navigation={navigation}
+                        //     item={item.item}
+                        //     index={item.index}
+                        //     status={item?.item?.status}
+                        //     // status={index % 3 === 0 ? 'Pending' : 'Inprogress'}
+                        //   />
+                        // );
+                        if (
+                          item?.item?.status === 'CANCELLED' ||
+                          item?.item?.status === 'COMPLETED' ||
+                          item?.item?.status === 'DECLINED'
+                        ) {
+                          return null;
+                        } else {
+                          return (
+                            <Orderscomponent2
+                              key={index}
+                              navigation={navigation}
+                              item={item.item}
+                              index={item.index}
+                              status={item.item?.status}
+                              // index % 3 === 0 ? 'Pending' : 'Inprogress'
+                            />
+                          );
+                        }
+                      }}
+                      keyExtractor={item => item?.id}
+                      ListFooterComponent={<View style={tw`h-20`} />}
+                    />
+                  </ScrollView>
+                )}
               </View>
             )}
             {activeSection === 'Closed' && (

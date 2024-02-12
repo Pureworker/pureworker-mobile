@@ -48,7 +48,7 @@ const Index = () => {
       // setloading(false);
     };
     handleFetch();
-  }, []);
+  }, []); 
   function formatDate(dateString) {
     const options = {year: 'numeric', month: 'short', day: '2-digit'};
     const date = new Date(dateString);

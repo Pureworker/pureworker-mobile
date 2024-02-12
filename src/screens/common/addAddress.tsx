@@ -198,6 +198,36 @@ const AddAddress = ({navigation}: any) => {
     longitudeDelta: 0.035,
   });
 
+  const chooseCurrent = async () => {
+    const permissionStatus = await request(
+      Platform.OS === 'android'
+        ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
+        : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+    );
+    console.log('loc_status', permissionStatus);
+
+    if (permissionStatus === 'granted') {
+      Geolocation.getCurrentPosition(
+        async position => {
+          setSelectedLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+          console.log(position);
+          await fetchAddress(
+            position.coords.latitude,
+            position.coords.longitude,
+          );
+          await upload('');
+        },
+        error => console.log('Error getting location:', error),
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      );
+    } else {
+      console.warn('Location permission denied');
+    }
+  };
+
   return (
     <View style={{flex: 1}}>
       <View style={[tw`h-[40%]`]}>
@@ -347,7 +377,8 @@ const AddAddress = ({navigation}: any) => {
         )}
         <TouchableOpacity
           onPress={() => {
-            upload('');
+            // upload('');
+            chooseCurrent();
           }}
           style={tw`w-[90%] bg-[#A1A1A11A] p-2 px-3 rounded-lg mt-4 mx-auto `}>
           <View style={tw`flex flex-row items-center `}>

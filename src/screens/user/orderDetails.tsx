@@ -46,7 +46,7 @@ const OrderDetails = () => {
   const service = route.params?.service;
   const dispatch = useDispatch();
 
-  console.log('PPPPP---', providerData);
+  console.log('PPPPP---', route.params);
 
   const [locationItems, setLocationItems] = useState([
     {label: 'Online (your business renders services online)', value: 'Online'},
@@ -96,7 +96,7 @@ const OrderDetails = () => {
       }
     }
     // setisLoading(true);
-    const Data = {
+    const Data: any = {
       serviceProvider:
         providerData?._id || providerData?.id || providerData?.user?._id,
       totalPrice: price,
@@ -120,6 +120,9 @@ const OrderDetails = () => {
       // scheduleTime &&
       locationValue
     ) {
+      if (locationValue === 'Online') {
+        delete Data.address;
+      }
       navigation.navigate('OrderReview', Data);
     } else {
       Snackbar.show({
@@ -132,11 +135,6 @@ const OrderDetails = () => {
     }
     // setisLoading(false);
   };
-
-  // const showDatePicker = () => {
-  //   setMode('date');
-  //   setShow(true);
-  // };
 
   const showTimePicker = () => {
     setMode('time');
@@ -317,8 +315,12 @@ const OrderDetails = () => {
                 multiline
                 placeholder="Enter brief description about the service to be rendered"
                 style={[
-                  tw` px-4 rounded-lg`,
-                  {height: perHeight(80), backgroundColor: colors.greyLight1},
+                  tw` px-4 rounded-lg `,
+                  {
+                    height: perHeight(80),
+                    backgroundColor: colors.greyLight1,
+                    color: 'black',
+                  },
                 ]}
                 onChangeText={text => {
                   setDescription(text);

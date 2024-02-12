@@ -193,7 +193,7 @@ export default function PortComp({
     // setisLoading(false);
   };
 
-  const [serviceObj, setserviceObj] = useState({});
+  const [serviceObj, setserviceObj] = useState(null);
 
   return (
     <View style={[tw` `, {marginTop: 30}]}>

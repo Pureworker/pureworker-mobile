@@ -220,24 +220,34 @@ export default function FaceDetection({navigation}: any) {
   }, [startLiveness]);
 
   const updateLive = async () => {
-    const res: any = await updateUserData({
-      liveTest: true,
-    });
-    console.log('result', res?.data);
-    if (res?.status === 200 || res?.status === 201) {
-      ToastLong('LIve Test Passed');
-      navigation.navigate('Home');
-    } else {
+    try {
+      const res: any = await updateUserData({
+        liveTest: true,
+      });
+      console.log('result', res?.data);
+      if (res?.status === 200 || res?.status === 201) {
+        ToastLong('LIve Test Passed');
+        navigation.navigate('Home');
+      }
+    } catch (error) {
       Snackbar.show({
-        text: res?.error?.message
-          ? res?.error?.message
-          : res?.error?.data?.message
-          ? res?.error?.data?.message
-          : 'Oops!, an error occured',
+        text: error?.message || 'Oops!, an error occured',
         duration: Snackbar.LENGTH_SHORT,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
+      // Snackbar.show({
+      //   text: res?.error?.message
+      //     ? res?.error?.message
+      //     : res?.error?.data?.message
+      //     ? res?.error?.data?.message
+      //     : 'Oops!, an error occured',
+      //   duration: Snackbar.LENGTH_SHORT,
+      //   textColor: '#fff',
+      //   backgroundColor: '#88087B',
+      // });
+    } finally {
+      initGetUsers();
     }
   };
 
@@ -250,13 +260,17 @@ export default function FaceDetection({navigation}: any) {
               tw`px-2 py-1 flex flex-row items-center justify-between w-full `,
               {paddingTop: perHeight(15)},
             ]}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              {/* <Backicon /> */}
+            {/* <Backicon /> */}
+            {/* <TouchableOpacity
+              onPress={() => {
+                // navigation.goBack()
+              }}>
+ 
               <Image
                 style={{width: 25, height: 25, tintColor: 'white'}}
                 source={images.back}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <View style={tw`mx-auto`}>
               <Text
                 style={[

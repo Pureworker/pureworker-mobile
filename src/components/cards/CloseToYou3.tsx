@@ -8,7 +8,7 @@ import colors from '../../constants/colors';
 import FastImage from 'react-native-fast-image';
 
 const ClosetoYou3 = ({item, index, navigation}: any) => {
-  // console.log('on-order', item);
+  console.log('pendingOItem--', item);
   function formatDate(dateString: string | number | Date) {
     const options = {year: 'numeric', month: 'short', day: 'numeric'};
     const date = new Date(dateString);
@@ -51,8 +51,9 @@ const ClosetoYou3 = ({item, index, navigation}: any) => {
             ]}
             source={{
               uri:
-                item?.profilePicture ||
-                'https://res.cloudinary.com/dr0pef3mn/image/upload/v1694275934/Assets/1694275933654-Ellipse%2014.png.png',
+                item?.user?.profilePicture ||
+                'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+              // 'https://res.cloudinary.com/dr0pef3mn/image/upload/v1694275934/Assets/1694275933654-Ellipse%2014.png.png',
               headers: {Authorization: 'someAuthToken'},
               priority: FastImage.priority.normal,
             }}
@@ -126,7 +127,7 @@ const ClosetoYou3 = ({item, index, navigation}: any) => {
           <View
             style={[tw`ml-1`, {width: perWidth(70), marginTop: perWidth(1)}]}>
             <Textcomp
-              text={item?.address}
+              text={item?.location === 'online' ? 'ONLINE' : item?.address}
               size={12}
               lineHeight={14}
               color={colors.white}

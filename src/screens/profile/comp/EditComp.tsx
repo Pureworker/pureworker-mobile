@@ -22,6 +22,7 @@ import {Formik, FieldArray} from 'formik';
 import * as yup from 'yup';
 import {addPortfolio} from '../../../utils/api/func';
 import AddCircle from '../../../assets/svg/AddCircle';
+import SubPortComp2 from './subComp2';
 
 const validationSchema = yup.object().shape({
   serviceDescription: yup.string().required('Service description is required'),
@@ -376,7 +377,7 @@ export default function EditComp({
                   style={{width: '100%', paddingHorizontal: 4}}
                   showsVerticalScrollIndicator={false}>
                   {values.portfolios.map((portfolio, index) => (
-                    <SubPortComp
+                    <SubPortComp2
                       key={index}
                       remove={() => {
                         remove(index);
@@ -386,7 +387,7 @@ export default function EditComp({
                         });
                       }}
                       lindex={index}
-                      portfolioData={portfolioData}
+                      portfolioData={portfolio}
                       handlePortfolioItemChange={(i, data) => {
                         setFieldValue(`portfolios[${index}]`, data);
                       }}
@@ -423,7 +424,7 @@ export default function EditComp({
                 tw` w-6/10 items-center mb-30 py-4 mx-auto rounded-lg bg-[${colors.darkPurple}] mt-4`,
               ]}>
               <Textcomp
-                text={'Add'}
+                text={'Save'}
                 size={16}
                 lineHeight={16}
                 color={'#FFFFFF'}

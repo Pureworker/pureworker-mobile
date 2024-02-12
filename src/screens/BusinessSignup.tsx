@@ -774,6 +774,9 @@ export default function BusinessSignup() {
                   selectedTextStyle={{
                     color: '#000',
                   }}
+                  inputSearchStyle={{
+                    color: '#757575',
+                  }}
                   placeholderStyle={{
                     color: '#757575',
                   }}
@@ -823,6 +826,9 @@ export default function BusinessSignup() {
                   value={stateValue}
                   itemTextStyle={{
                     color: 'black',
+                  }}
+                  inputSearchStyle={{
+                    color: '#757575',
                   }}
                   selectedTextStyle={{
                     color: '#000',
@@ -1154,6 +1160,9 @@ export default function BusinessSignup() {
                   value={stateValue}
                   itemTextStyle={{
                     color: 'black',
+                  }}
+                  inputSearchStyle={{
+                    color: '#757575',
                   }}
                   selectedTextStyle={{
                     color: '#000',
