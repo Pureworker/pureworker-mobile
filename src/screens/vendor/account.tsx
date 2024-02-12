@@ -157,6 +157,7 @@ const Account = () => {
     console.log('Update result:', res?.data);
     if (res?.status === 200 || res?.status === 201) {
       ToastLong('Profile Updated');
+      navigation.navigate('Home')
     } else {
       Snackbar.show({
         text: res?.error?.message
