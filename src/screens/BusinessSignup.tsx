@@ -191,7 +191,7 @@ export default function BusinessSignup() {
   });
 
   const handleSignup = async () => {
-    let errorMessage = '';
+    let dateErrorMessage = '';
     // Validate input data
     // await validationSchema.validate(
     //   {
@@ -221,13 +221,13 @@ export default function BusinessSignup() {
       );
 
       if (!res.isSuccess) {
-        errorMessage = res.message;
+        dateErrorMessage = res.message;
       }
     });
 
-    if (errorMessage.length > 0) {
+    if (userType === FREELANCER && dateErrorMessage.length > 0) {
       Snackbar.show({
-        text: errorMessage,
+        text: dateErrorMessage,
         duration: Snackbar.LENGTH_SHORT,
         textColor: '#fff',
         backgroundColor: '#88087B',
@@ -1086,7 +1086,7 @@ export default function BusinessSignup() {
                 onCancel={hideDatePicker}
               /> */}
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   setDatePickerVisibility(!isDatePickerVisible);
                 }}
@@ -1104,7 +1104,7 @@ export default function BusinessSignup() {
                   fontFamily={'Inter-Regular'}
                   style={{fontWeight: 300}}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <View
                 style={{
                   zIndex: genderOpen ? 0 : 2,
