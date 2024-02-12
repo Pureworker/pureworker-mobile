@@ -10,8 +10,15 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Keyboard,
+  Pressable,
 } from 'react-native';
-import React, {Fragment, useCallback, useEffect, useState} from 'react';
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import tw from 'twrnc';
 // import {, FONTS, icons, images, } from '../../constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -19,6 +26,8 @@ import {perHeight, perWidth} from '../../../utils/position/sizes';
 import Chatcomp from './chatcomp';
 import socket from '../../../utils/socket';
 import {launchImageLibrary} from 'react-native-image-picker';
+import Modal from 'react-native-modal';
+import {ImageZoom} from '@likashefqet/react-native-image-zoom';
 
 import {addchatData} from '../../../store/reducer/mainSlice';
 import {useDispatch, useSelector} from 'react-redux';
@@ -29,8 +38,14 @@ import {HEIGHT_SCREEN, HEIGHT_WINDOW} from '../../../constants/generalStyles';
 import Textcomp from '../../../components/Textcomp';
 import {ToastShort, timeAgo} from '../../../utils/utils';
 import useChat from '../../../hooks/useChat';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 export default function Inbox({navigation, route}: any) {
+  const [imageModal, setImageModal] = useState({
+    isOpen: false,
+    imageLink: '',
+  });
+
   const userId = route.params?.id;
   const userName = route.params?.name?.trim();
   const lastOnline = route.params?.lastOnline;
@@ -38,16 +53,24 @@ export default function Inbox({navigation, route}: any) {
   const {getUnreadMessages} = useChat();
   const agentData = useSelector((state: any) => state.user.userData);
   const chatData = useSelector((store: any) => store.user.chatData);
-  console.log('====================================');
-  console.log(agentData);
-  console.log('====================================');
+
+  const toggleImageModal = (link: string = '') => {
+    const newObj = {
+      ...imageModal,
+      isOpen: !imageModal.isOpen,
+      imageLink: link,
+    };
+
+    setImageModal(newObj);
+  };
+
   useEffect(() => {
-    console.log('userID', userId);
-    console.log('passed:', route.params);
+    // console.log('userID', userId);
+    // console.log('passed:', route.params);
     socket.connect();
-    console.log('-idid', socket.id);
-    socket.emit('authentication', agentData);
-    console.log('got here');
+    // console.log('-idid', socket.id);
+    // socket.emit('authentication', agentData);
+    // console.log('got here');
   }, []);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -92,6 +115,7 @@ export default function Inbox({navigation, route}: any) {
   socket.on('message', data => {
     console.log('message received', data);
     const _data = [...chatData, data];
+
     dispatch(addchatData(_data));
   });
 
@@ -151,6 +175,7 @@ export default function Inbox({navigation, route}: any) {
           from: agentData?._id,
           to: `${userId}`,
           body: uploadResponse?.data?.url ?? '',
+          updatedAt: new Date().toISOString(),
         };
         console.log(data);
         const currentDate = new Date();
@@ -191,11 +216,17 @@ export default function Inbox({navigation, route}: any) {
     };
   }, []);
 
+  useLayoutEffect(() => {
+    dispatch(addchatData([]));
+  }, []);
+
   useEffect(() => {
     return () => {
       getUnreadMessages();
+      console.log('exiting screen');
+      // dispatch(addchatData([]));
     };
-  });
+  }, []);
 
   return (
     <SafeAreaView style={[tw`h-full bg-[#EBEBEB]  w-full`, styles.container]}>
@@ -259,7 +290,7 @@ export default function Inbox({navigation, route}: any) {
                   {userName === 'Support Support' || userName === 'Support'
                     ? ''
                     : lastOnline
-                    ? `${timeAgo(lastOnline)} ago`
+                    ? `${timeAgo(lastOnline)}`
                     : ''}
                 </Text>
               </View>
@@ -320,6 +351,7 @@ export default function Inbox({navigation, route}: any) {
                           time={item?.updatedAt}
                           isRead={item?.isRead}
                           id={item?.id}
+                          toggleImageModal={toggleImageModal}
                         />
                       );
                     } else if (item?.to?._id === agentData?._id) {
@@ -331,6 +363,7 @@ export default function Inbox({navigation, route}: any) {
                           time={item?.updatedAt}
                           isRead={item?.isRead}
                           id={item?.id}
+                          toggleImageModal={toggleImageModal}
                         />
                       );
                     } else if (item?.from === agentData?._id) {
@@ -342,6 +375,7 @@ export default function Inbox({navigation, route}: any) {
                           time={item?.updatedAt}
                           isRead={item?.isRead}
                           id={item?.id}
+                          toggleImageModal={toggleImageModal}
                         />
                       );
                     } else if (item?.to === agentData?._id) {
@@ -353,6 +387,7 @@ export default function Inbox({navigation, route}: any) {
                           time={item?.updatedAt}
                           isRead={item?.isRead}
                           id={item?.id}
+                          toggleImageModal={toggleImageModal}
                         />
                       );
                     }
@@ -502,6 +537,43 @@ export default function Inbox({navigation, route}: any) {
           </View>
         </View>
       </KeyboardAvoidingView>
+
+      <Modal
+        isVisible={imageModal.isOpen}
+        style={{
+          width: '100%',
+          height: '100%',
+          padding: 0,
+          margin: 0,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        onBackdropPress={() => toggleImageModal('')}>
+        <Pressable onPress={() => toggleImageModal('')}>
+          <Text style={styles.closeText}>Close</Text>
+        </Pressable>
+        <GestureHandlerRootView style={{width: '90%', height: '70%'}}>
+          <ImageZoom
+            uri={imageModal.imageLink}
+            minScale={0.5}
+            maxScale={3}
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+            resizeMode="contain"
+          />
+        </GestureHandlerRootView>
+        {/* <Image
+          source={{uri: imageModal.imageLink}}
+          style={{
+            width: '80%',
+            height: '70%',
+          }}
+          resizeMode="contain"
+        /> */}
+      </Modal>
+
       {/* <View
           style={[
             tw` w-full mx-auto absolute  `,
@@ -562,5 +634,13 @@ const styles = StyleSheet.create({
     shadowOpacity: Platform.OS === 'ios' ? 0.15 : 0.5,
     shadowRadius: 3,
     elevation: Platform.OS === 'ios' ? 8 : 2,
+  },
+  closeText: {
+    padding: 10,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'white',
+    textAlign: 'center',
+    color: 'white',
   },
 });

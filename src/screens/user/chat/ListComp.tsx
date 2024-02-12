@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
     width: 20, // Adjust as needed for your layout
     height: 20, // Adjust as needed for your layout
     borderRadius: 15, // Half of width and height to make it a perfect circle
-    backgroundColor: colors.parpal,
+    backgroundColor: 'orange',
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 'auto',
