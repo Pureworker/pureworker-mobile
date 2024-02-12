@@ -38,8 +38,6 @@ const TabNavigator = () => {
     (state: any) => state.user.unreadNotification,
   );
 
-  console.log(unreadChats, ' ................... uuuuuuuuuuuuuuuuuuuuuuuuuuu');
-
   useEffect(() => {
     getUnreadMessages();
   }, []);
