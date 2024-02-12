@@ -41,7 +41,7 @@ export default function EditComp({
   const foundPortfolio = portfolioData?.filter(
     item => item?.service === service?._id,
   );
-  console.log('hhhh:', foundPortfolio);
+  console.log('hhhh:', foundPortfolio, service);
   const [service_, setservice_] = useState(null);
   const navigation = useNavigation<StackNavigation>();
   // const category = useSelector((state: any) => state.user.pickedServices);
