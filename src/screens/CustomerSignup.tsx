@@ -36,7 +36,7 @@ import Textcomp from '../components/Textcomp';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {DateTime} from 'luxon';
 import {number} from 'yup';
-import { validateDate } from '../utils/auth';
+import {validateDate} from '../utils/auth';
 export default function CustomerSignup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -743,6 +743,9 @@ export default function CustomerSignup() {
                 ]}
                 placeholderStyle={{
                   color: '#757575',
+                }}
+                selectedTextStyle={{
+                  color: '#000',
                 }}
                 data={allState}
                 search
