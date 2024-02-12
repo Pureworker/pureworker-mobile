@@ -77,6 +77,7 @@ const Index = () => {
     }
   }, []);
 
+
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View

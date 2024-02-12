@@ -30,7 +30,7 @@ import {
   setwelcomeModal,
 } from '../../store/reducer/mainSlice';
 import ClosetoYou3 from '../../components/cards/CloseToYou3';
-import {formatAmount} from '../../utils/validations';
+import {formatAmount, formatAmount2} from '../../utils/validations';
 import FastImage from 'react-native-fast-image';
 import socket from '../../utils/socket';
 import Geolocation from 'react-native-geolocation-service';
@@ -66,6 +66,7 @@ const Home = ({navigation}: any) => {
   const [OinProgress, setOinProgress] = useState([]);
   const [OinPending, setOinPending] = useState([]);
   const [isLoading, setisLoading] = useState(false);
+  const userData = useSelector((state: any) => state.user.userData);
   useEffect(() => {
     const initGetUsers = async () => {
       const res: any = await getUser('');
@@ -73,22 +74,25 @@ const Home = ({navigation}: any) => {
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addUserData(res?.data?.user));
       }
-      const userData = res?.data?.user;
+      const _userData = res?.data?.user;
       if (
-        !userData?.geoLocation ||
-        !userData.geoLocation.coordinates ||
-        (userData.geoLocation.coordinates[0] === 0 &&
-          userData.geoLocation.coordinates[1] === 0) ||
-        !userData.geoLocation.coordinates.length
+        !_userData?.geoLocation ||
+        !_userData.geoLocation.coordinates ||
+        (_userData.geoLocation.coordinates[0] === 0 &&
+          _userData.geoLocation.coordinates[1] === 0) ||
+        !_userData.geoLocation.coordinates.length
       ) {
         navigation.navigate('AddAddress');
         ToastLong('Address is required');
       } else {
         // Continue with your logic if geoLocation is valid
-        if (!userData?.liveTest) {
-          navigation.navigate('FaceDetection');
-          ToastLong('Virtual Interview is compulsory');
-        }
+        if (!_userData?.liveTest) {
+          if (userData?.liveTest) {
+          } else {
+            navigation.navigate('FaceDetection');
+            ToastLong('Virtual Interview is compulsory');
+          }
+        } 
       }
       const emitProviderOnlineStatus = () => {
         // Emit an event to the backend indicating that the customer is still connected
@@ -187,7 +191,6 @@ const Home = ({navigation}: any) => {
   }, [providerOrders]);
 
   //selectors
-  const userData = useSelector((state: any) => state.user.userData);
   // const _getCategory = useSelector((state: any) => state.user.category);
   // const _popularServices = useSelector(
   //   (state: any) => state.user.popularServices,
@@ -466,7 +469,7 @@ const Home = ({navigation}: any) => {
                 <Textcomp
                   text={`₦${
                     userData?.wallet?.availableBalance
-                      ? formatAmount(userData?.wallet?.availableBalance)
+                      ? formatAmount2(userData?.wallet?.availableBalance)
                       : 0
                   }`}
                   size={20}
@@ -508,7 +511,7 @@ const Home = ({navigation}: any) => {
                   // text={'NGN249,0000'}
                   text={`₦${
                     userData?.wallet?.availableBalance
-                      ? formatAmount(userData?.wallet?.availableBalance)
+                      ? formatAmount2(userData?.wallet?.availableBalance)
                       : 0
                   }`}
                   size={20}

@@ -315,7 +315,7 @@ const OrderDetails = () => {
                 multiline
                 placeholder="Enter brief description about the service to be rendered"
                 style={[
-                  tw` px-4 rounded-lg `,
+                  tw` px-4 rounded-lg text-black`,
                   {
                     height: perHeight(80),
                     backgroundColor: colors.greyLight1,

@@ -26,7 +26,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import socket from '../../utils/socket';
 import {roundToSingleDigit} from '../../utils/utils';
-import {formatAmount} from '../../utils/validations';
+import {formatAmount, formatAmount2} from '../../utils/validations';
 
 const Wallet = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -229,7 +229,7 @@ const Wallet = () => {
                   </View>
                   <View style={[tw``, {marginTop: perHeight(5)}]}>
                     <Textcomp
-                      text={`₦ ${formatAmount(
+                      text={`₦ ${formatAmount2(
                         userData?.wallet?.availableBalance,
                       )}`}
                       size={14}

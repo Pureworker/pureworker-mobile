@@ -21,7 +21,7 @@ import colors from '../../constants/colors';
 import Modal from 'react-native-modal/dist/modal';
 import {addUserData} from '../../store/reducer/mainSlice';
 import {getUser} from '../../utils/api/func';
-import {formatAmount} from '../../utils/validations';
+import {formatAmount, formatAmount2} from '../../utils/validations';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 
@@ -189,7 +189,7 @@ const Wallet = () => {
                   </View>
                   <View style={[tw``, {marginTop: perHeight(5)}]}>
                     <Textcomp
-                      text={`₦ ${formatAmount(
+                      text={`₦ ${formatAmount2(
                         userData?.wallet?.availableBalance,
                       )}`}
                       size={14}
