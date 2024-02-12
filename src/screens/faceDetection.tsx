@@ -250,13 +250,17 @@ export default function FaceDetection({navigation}: any) {
               tw`px-2 py-1 flex flex-row items-center justify-between w-full `,
               {paddingTop: perHeight(15)},
             ]}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              {/* <Backicon /> */}
+            {/* <Backicon /> */}
+            {/* <TouchableOpacity
+              onPress={() => {
+                // navigation.goBack()
+              }}>
+ 
               <Image
                 style={{width: 25, height: 25, tintColor: 'white'}}
                 source={images.back}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <View style={tw`mx-auto`}>
               <Text
                 style={[

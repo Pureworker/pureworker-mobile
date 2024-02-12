@@ -22,21 +22,25 @@ import React, {
 import tw from 'twrnc';
 // import {, FONTS, icons, images, } from '../../constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {perHeight, perWidth} from '../../../utils/position/sizes';
+import {SIZES, perHeight, perWidth} from '../../../utils/position/sizes';
 import Chatcomp from './chatcomp';
 import socket from '../../../utils/socket';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Modal from 'react-native-modal';
 import {ImageZoom} from '@likashefqet/react-native-image-zoom';
 
-import {addchatData} from '../../../store/reducer/mainSlice';
+import {addProfileData, addchatData} from '../../../store/reducer/mainSlice';
 import {useDispatch, useSelector} from 'react-redux';
-import {getMessagesbyuser, uploadAssetsDOCorIMG} from '../../../utils/api/func';
+import {
+  getMessagesbyuser,
+  getProviderNew,
+  uploadAssetsDOCorIMG,
+} from '../../../utils/api/func';
 import colors from '../../../constants/colors';
 import images from '../../../constants/images';
 import {HEIGHT_SCREEN, HEIGHT_WINDOW} from '../../../constants/generalStyles';
 import Textcomp from '../../../components/Textcomp';
-import {ToastShort, timeAgo} from '../../../utils/utils';
+import {ToastLong, ToastShort, timeAgo} from '../../../utils/utils';
 import useChat from '../../../hooks/useChat';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
@@ -228,6 +232,22 @@ export default function Inbox({navigation, route}: any) {
     };
   }, []);
 
+  const [showModal, setshowModal] = useState(false);
+  const [providerData, setproviderData] = useState(null);
+  useEffect(() => {
+    const initGetProviderNew = async () => {
+      const res: any = await getProviderNew(userId);
+      console.log('portfolio--', res?.data?.profile?.portfolios);
+      if (res?.status === 201 || res?.status === 200) {
+        // dispatch(addProfileData(res?.data?.profile));
+        setproviderData(res?.data?.profile);
+      }
+    };
+    initGetProviderNew();
+  }, []);
+
+  console.log('PROVIDER:', providerData);
+
   return (
     <SafeAreaView style={[tw`h-full bg-[#EBEBEB]  w-full`, styles.container]}>
       <KeyboardAvoidingView
@@ -402,12 +422,13 @@ export default function Inbox({navigation, route}: any) {
               {agentData?.accountType?.toLowerCase() === 'customer' ? (
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate('OrderDetails', {
-                      data: {
-                        _id: userId,
-                        businessName: userName,
-                      },
-                    });
+                    // navigation.navigate('OrderDetails', {
+                    //   data: {
+                    //     _id: userId,
+                    //     businessName: userName,
+                    //   },
+                    // });
+                    setshowModal(true);
                   }}
                   style={[
                     tw`bg-[#2D303C] absolute bottom-[11%] rounded-lg right-[5%]  items-center justify-center`,
@@ -572,6 +593,98 @@ export default function Inbox({navigation, route}: any) {
           }}
           resizeMode="contain"
         /> */}
+      </Modal>
+      <Modal
+        isVisible={showModal}
+        onModalHide={() => {
+          setshowModal(false);
+        }}
+        style={{width: SIZES.width, marginHorizontal: 0}}
+        deviceWidth={SIZES.width}
+        onBackdropPress={() => setshowModal(false)}
+        swipeThreshold={200}
+        // swipeDirection={['down']}
+        // onSwipeComplete={() => setshowModal(false)}
+        onBackButtonPress={() => setshowModal(false)}>
+        <View style={tw` h-full w-full bg-black bg-opacity-5`}>
+          <TouchableOpacity
+            onPress={() => setshowModal(false)}
+            style={tw`flex-1`}
+          />
+          <View style={[tw` mt-auto bg-[#D9D9D9]`, {maxHeight: '80%'}]}>
+            <TouchableOpacity
+              onPress={() => {}}
+              style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
+            />
+            <ScrollView contentContainerStyle={tw``}>
+              <View>
+                <View style={[tw` py-4 mt-4`, {marginLeft: perWidth(30)}]}>
+                  <Textcomp
+                    text={'Select service you need'}
+                    size={17}
+                    lineHeight={17}
+                    color={'#000000'}
+                    fontFamily={'Inter-Bold'}
+                  />
+                </View>
+
+                <View style={tw`px-[7.5%]`}>
+                  {providerData?.services?.map(
+                    (service: {name: any; _id: any}) => {
+                      return (
+                        <TouchableOpacity
+                          key={service?._id}
+                          onPress={() => {
+                            // navigation.navigate('ServiceProviderProfile', {
+                            //   item: item,
+                            //   serviceName: service?.name,
+                            //   id: service?._id,
+                            // });
+                            navigation.navigate('OrderDetails', {
+                              _id: userId,
+                              businessName: userName,
+                              data: providerData,
+                              service: service?._id,
+                            });
+                            setshowModal(false);
+                          }}
+                          style={[
+                            tw` mt-2.5 py-1.5 flex flex-row items-center justify-between px-3 border-2 border-[${colors.primary}] bg-[${colors.darkPurple}] `,
+                            {},
+                          ]}>
+                          <Textcomp
+                            text={`${service?.name}`}
+                            size={14}
+                            lineHeight={14}
+                            color={'white'}
+                            fontFamily={'Inter-Regular'}
+                          />
+                          <Image
+                            resizeMode="contain"
+                            style={{width: 12}}
+                            source={images.polygonForward}
+                          />
+                        </TouchableOpacity>
+                      );
+                    },
+                  )}
+                </View>
+              </View>
+              <View
+                style={[
+                  tw` mt-auto mb-4`,
+                  {height: 50, width: SIZES.width * 0.95},
+                ]}
+              />
+              <View
+                style={[
+                  tw`bg-black mt-auto mb-4`,
+                  {height: 2, width: SIZES.width * 0.95},
+                ]}
+              />
+            </ScrollView>
+          </View>
+        </View>
       </Modal>
 
       {/* <View

@@ -76,8 +76,8 @@ const BecomeAServiceProvider = () => {
           <TouchableOpacity
             onPress={() => {
               dispatch(logout());
-              // navigation.navigate('CustomerSignup');
-              navigation.navigate('OnboardingStack', { screen: 'BusinessSignup' });
+              navigation.navigate('CustomerSignup');
+              // navigation.navigate('OnboardingStack', { screen: 'BusinessSignup' });
             }}
             style={[
               tw` px-2 py-4  mx-auto `,

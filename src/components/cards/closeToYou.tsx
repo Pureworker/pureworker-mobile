@@ -49,8 +49,8 @@ const ClosetoYou = ({item, index, navigation}: any) => {
               ]}
               source={{
                 uri:
-                  item?.profilePicture ||
-                  'https://res.cloudinary.com/dr0pef3mn/image/upload/v1694275934/Assets/1694275933654-Ellipse%2014.png.png',
+                  item?.user?.profilePicture ||
+                  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                 headers: {Authorization: 'someAuthToken'},
                 priority: FastImage.priority.normal,
               }}
@@ -182,7 +182,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
                 </View>
 
                 <View style={tw`px-[7.5%]`}>
-                  {item?.services?.map((service: { name: any; _id: any; }) => {
+                  {item?.services?.map((service: {name: any; _id: any}) => {
                     return (
                       <TouchableOpacity
                         onPress={() => {
@@ -204,7 +204,11 @@ const ClosetoYou = ({item, index, navigation}: any) => {
                           color={'white'}
                           fontFamily={'Inter-Regular'}
                         />
-                        <Image resizeMode="contain" style={{width: 12}} source={images.polygonForward} />
+                        <Image
+                          resizeMode="contain"
+                          style={{width: 12}}
+                          source={images.polygonForward}
+                        />
                       </TouchableOpacity>
                     );
                   })}
