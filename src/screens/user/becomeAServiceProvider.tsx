@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Platform,
   StatusBar,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
@@ -15,8 +15,8 @@ import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import { perHeight } from '../../utils/position/sizes';
-import { logout } from '../../store/reducer/mainSlice';
+import {perHeight} from '../../utils/position/sizes';
+import {logout} from '../../store/reducer/mainSlice';
 
 const BecomeAServiceProvider = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -59,22 +59,25 @@ const BecomeAServiceProvider = () => {
         </View>
 
         <View style={tw`flex flex-1`}>
-
-        <View
+          <View
             style={[
               tw` px-2 py-4 w-[90%] mx-auto `,
               {marginTop: perHeight(144), borderRadius: 5},
             ]}>
             <Textcomp
-              text={'A service provider can be a freelancer or a business. This is someone or a company who offers a service to customers in exchange for payment.'}
+              text={
+                'A service provider can be a freelancer or a business. This is someone or a company who offers a service to customers in exchange for payment.'
+              }
               size={14}
               color={'#000000'}
               style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '500'}]}
             />
           </View>
-        <TouchableOpacity
+          <TouchableOpacity
             onPress={() => {
               dispatch(logout());
+              // navigation.navigate('CustomerSignup');
+              navigation.navigate('OnboardingStack', { screen: 'BusinessSignup' });
             }}
             style={[
               tw` px-2 py-4  mx-auto `,
@@ -87,7 +90,6 @@ const BecomeAServiceProvider = () => {
               style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '700'}]}
             />
           </TouchableOpacity>
-
         </View>
       </ScrollView>
     </View>
