@@ -1047,7 +1047,7 @@ export default function BusinessSignup() {
                   value={
                     birthDate.year !== undefined ? `${birthDate.year}` : ''
                   }
-                  placeholder="yyyy"
+                  placeholder="YYYY"
                   maxLength={4}
                   style={{
                     paddingHorizontal: 10,
@@ -1064,7 +1064,7 @@ export default function BusinessSignup() {
                   value={
                     birthDate.month !== undefined ? `${birthDate.month}` : ''
                   }
-                  placeholder="mm"
+                  placeholder="MM"
                   style={{
                     paddingHorizontal: 10,
                     borderRadius: 5,
@@ -1078,7 +1078,7 @@ export default function BusinessSignup() {
                 />
                 <TextInput
                   value={birthDate.day !== undefined ? `${birthDate.day}` : ''}
-                  placeholder="dd"
+                  placeholder="DD"
                   style={{
                     paddingHorizontal: 10,
                     borderRadius: 5,
