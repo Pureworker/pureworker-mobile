@@ -1,21 +1,22 @@
-import { Image, View, TouchableOpacity, Alert } from 'react-native';
-import { SIZES, perHeight, perWidth } from '../utils/position/sizes';
-import React, { useState } from 'react';
+import {Image, View, TouchableOpacity, Alert} from 'react-native';
+import {SIZES, perHeight, perWidth} from '../utils/position/sizes';
+import React, {useState} from 'react';
 import images from '../constants/images';
 import tw from 'twrnc';
 import Textcomp from './Textcomp';
 import colors from '../constants/colors';
 import Modal from 'react-native-modal';
-import { WIDTH_WINDOW } from '../constants/generalStyles';
-import { useDispatch } from 'react-redux';
-import { cancelOrder, getUserOrders } from '../utils/api/func';
-import { addcustomerOrders } from '../store/reducer/mainSlice';
+import {WIDTH_WINDOW} from '../constants/generalStyles';
+import {useDispatch} from 'react-redux';
+import {cancelOrder, getUserOrders} from '../utils/api/func';
+import {addcustomerOrders} from '../store/reducer/mainSlice';
 import socket from '../utils/socket';
 import Chat from '../assets/svg/Chat';
 import Location from '../assets/svg/Location';
 import DisputeIcon from '../assets/svg/Dispute';
 import Cross from '../assets/svg/Cross';
 import Snackbar from 'react-native-snackbar';
+import OrdersDeclineReason from './OrdersDeclineReason';
 
 const Orderscomponent3 = ({
   item,
@@ -90,6 +91,11 @@ const Orderscomponent3 = ({
     setInfoModal(false);
     setmodalSection('All');
   };
+  const [selectedReason, setSelectedReason] = useState<string>('');
+  const handleSelectedReasons = reason => {
+    setSelectedReason(reason);
+  };
+  const [otherReason, setOtherReason] = useState('');
   return (
     <>
       <>
@@ -328,10 +334,11 @@ const Orderscomponent3 = ({
               <TouchableOpacity
                 onPress={() => {
                   // setmodalSection('Cancel')
-                  setmodalSection('Cancel2');
+                  // setmodalSection('Cancel2');
                   // if (status === 'CANCELLED') {
                   //   ToastShort('This Order has already')
                   // }else{
+                  setmodalSection('reason');
 
                   // }
                 }}
@@ -375,32 +382,31 @@ const Orderscomponent3 = ({
                   />
                 </View>
               </TouchableOpacity>
-              {(status === 'TRACK') &&
-                item?.location !== 'online' && (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setInfoModal(false);
-                      navigation.navigate('ViewLocation');
-                    }}
-                    style={[
-                      tw`flex mt-10 flex-row`,
-                      {
-                        marginHorizontal: perWidth(30),
-                        marginTop: perHeight(25),
-                      },
-                    ]}>
-                    <Location />
-                    <View style={[tw``, {marginLeft: perWidth(30)}]}>
-                      <Textcomp
-                        text={'View Location'}
-                        size={14}
-                        lineHeight={17}
-                        color={'#000000'}
-                        fontFamily={'Inter-SemiBold'}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                )}
+              {status === 'TRACK' && item?.location !== 'online' && (
+                <TouchableOpacity
+                  onPress={() => {
+                    setInfoModal(false);
+                    navigation.navigate('ViewLocation');
+                  }}
+                  style={[
+                    tw`flex mt-10 flex-row`,
+                    {
+                      marginHorizontal: perWidth(30),
+                      marginTop: perHeight(25),
+                    },
+                  ]}>
+                  <Location />
+                  <View style={[tw``, {marginLeft: perWidth(30)}]}>
+                    <Textcomp
+                      text={'View Location'}
+                      size={14}
+                      lineHeight={17}
+                      color={'#000000'}
+                      fontFamily={'Inter-SemiBold'}
+                    />
+                  </View>
+                </TouchableOpacity>
+              )}
               {status !== 'PENDING' && (
                 <TouchableOpacity
                   onPress={() => {
@@ -615,6 +621,17 @@ const Orderscomponent3 = ({
               />
             </View>
           </View>
+        )}
+        {modalSection === 'reason' && (
+          <OrdersDeclineReason
+            selectedReason={selectedReason}
+            handleSelectedReasons={handleSelectedReasons}
+            otherReason={otherReason}
+            setOtherReason={setOtherReason}
+            handleCancel={handleCancel}
+            setModalSection={setmodalSection}
+            isLoading={isLoading}
+          />
         )}
       </Modal>
     </>

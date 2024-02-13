@@ -445,7 +445,7 @@ export const cancelOrder = async (param: any, data: any) => {
       },
     });
 
-    if (response?.status === 201 || response?.status === 200) {
+    if (response?.status === 201 || response?.status === 200 || response?.status === 204) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);

@@ -484,7 +484,8 @@ PODS:
     - Google-Maps-iOS-Utils (= 4.1.0)
     - GoogleMaps (= 7.4.0)
     - React-Core
-  - react-native-image-picker (5.7.0):
+  - react-native-image-picker (7.1.0):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-maps (1.7.1):
     - React-Core
@@ -632,6 +633,20 @@ PODS:
     - RNFBApp
   - RNGestureHandler (2.12.1):
     - React-Core
+  - RNImageCropPicker (0.40.2):
+    - React-Core
+    - React-RCTImage
+    - RNImageCropPicker/QBImagePickerController (= 0.40.2)
+    - TOCropViewController
+  - RNImageCropPicker/QBImagePickerController (0.40.2):
+    - React-Core
+    - React-RCTImage
+    - TOCropViewController
+  - RNNotifee (7.8.2):
+    - React-Core
+    - RNNotifee/NotifeeCore (= 7.8.2)
+  - RNNotifee/NotifeeCore (7.8.2):
+    - React-Core
   - RNPermissions (3.9.1):
     - React-Core
   - RNReanimated (2.17.0):
@@ -684,6 +699,7 @@ PODS:
   - SentryPrivate (8.17.1)
   - SSZipArchive (2.2.3)
   - Toast (4.0.0)
+  - TOCropViewController (2.6.1)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -759,6 +775,8 @@ DEPENDENCIES:
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - "RNFBStorage (from `../node_modules/@react-native-firebase/storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
+  - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -806,6 +824,7 @@ SPEC REPOS:
     - SentryPrivate
     - SSZipArchive
     - Toast
+    - TOCropViewController
 
 EXTERNAL SOURCES:
   appcenter-analytics:
@@ -934,6 +953,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/storage"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNImageCropPicker:
+    :path: "../node_modules/react-native-image-crop-picker"
+  RNNotifee:
+    :path: "../node_modules/@notifee/react-native"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
   RNReanimated:
@@ -1007,7 +1030,7 @@ SPEC CHECKSUMS:
   react-native-geolocation: ef66fb798d96284c6043f0b16c15d9d1d4955db4
   react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
   react-native-google-maps: dd12cdd86b8e3fedbbb671676aedaa2f656e2ccd
-  react-native-image-picker: 3269f75c251cdcd61ab51b911dd30d6fff8c6169
+  react-native-image-picker: 5e076db26cd81660cfb6db5bcf517cfa12054d45
   react-native-maps: 667f9b975549c6fa9b1631bf859440f68ebd3b8f
   react-native-paystack-webview: d8ed4a0300c7872673e186294cb6176cca46c696
   react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
@@ -1044,6 +1067,8 @@ SPEC CHECKSUMS:
   RNFBMessaging: 216693dd5ba4f18ba65fb39fc73a44a23c26190f
   RNFBStorage: b9daf1fcc51e6de5ed3781d36a2a795e90a9489d
   RNGestureHandler: c0d04458598fcb26052494ae23dda8f8f5162b13
+  RNImageCropPicker: d9616a0cb9b72e8551ff94a7a5021fbd29050aa5
+  RNNotifee: 8e2d3df3f0e9ce8f5d1fe4c967431138190b6175
   RNPermissions: 3c00c011b1c22747b0b31581f82e13b20e4a0038
   RNReanimated: f186e85d9f28c9383d05ca39e11dd194f59093ec
   RNScreens: 85d3880b52d34db7b8eeebe2f1a0e807c05e69fa
@@ -1056,6 +1081,7 @@ SPEC CHECKSUMS:
   SentryPrivate: 839b1e58addf58624087a80b2628e543193fa8ef
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   Yoga: d56980c8914db0b51692f55533409e844b66133c
 
 PODFILE CHECKSUM: c202c23b7f3d1c1e63105db6716400f332b3e51a

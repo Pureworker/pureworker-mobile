@@ -70,7 +70,6 @@ const Orderscomponent = ({
             : selectedReason,
       });
       if (res?.status === 200 || res?.status === 201) {
-        // navigation.navigate('PaymentConfirmed');
         await initGetOrders();
         Alert.alert('successful');
       } else {
@@ -360,7 +359,7 @@ const Orderscomponent = ({
                 style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
               />
 
-              {status !== 'DECLINED' && (
+              {(status !== 'DECLINED' && status !== 'INPROGRESS')  && (
                 <TouchableOpacity
                   onPress={() => {
                     // setmodalSection('Cancel')

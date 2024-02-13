@@ -147,6 +147,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: 'rgba(217, 217, 217, 1)',
     paddingHorizontal: 10,
+    minHeight: 70,
+    maxHeight: 80,
   },
   container: {
     width: WIDTH_WINDOW,

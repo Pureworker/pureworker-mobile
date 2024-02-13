@@ -546,7 +546,7 @@ const App = () => {
       </RouteContext.Provider>
       <Toast config={toastConfig} visibilityTime={5000} autoHide={true} />
     </>
-  );
+  );  
 };
 const codePushOptions = {
   checkFrequency:
