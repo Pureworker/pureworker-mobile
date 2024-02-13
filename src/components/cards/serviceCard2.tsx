@@ -195,8 +195,7 @@ const ServiceCard2 = ({
         <View style={[tw``, {width: perWidth(50), height: perWidth(50)}]}>
           {/*  */}
 
-          {item?.profilePic ? (
-            <>
+          <>
               <FastImage
                 style={{
                   width: perWidth(50),
@@ -204,7 +203,7 @@ const ServiceCard2 = ({
                   borderRadius: perWidth(50) / 2,
                 }}
                 source={{
-                  uri: item?.profilePic,
+                  uri: item?.profilePic ? item.profilePic : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                   headers: {Authorization: 'someAuthToken'},
                   priority: FastImage.priority.normal,
                 }}
@@ -217,6 +216,9 @@ const ServiceCard2 = ({
                 ]}
               />
             </>
+
+          {/* {item?.profilePic ? (
+<></>
           ) : (
             <Image
               resizeMode="cover"
@@ -227,7 +229,7 @@ const ServiceCard2 = ({
               }}
               source={images.welcome}
             />
-          )}
+          )} */}
         </View>
         <View style={[tw`flex-1`, {marginLeft: perWidth(12)}]}>
           <View style={[tw`flex flex-row justify-between`, {}]}>

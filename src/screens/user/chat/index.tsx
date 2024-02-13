@@ -33,9 +33,7 @@ const Index = () => {
   const chatList = useSelector((store: any) => store.user.chatList);
   const userData = useSelector((state: any) => state.user.userData);
   // const agentData = useSelector((store: any) => store.agent.agentData);
-
   // console.log(chatList.length);
-
   useEffect(() => {
     const handleFetch = async () => {
       // setloading(true);
@@ -50,11 +48,6 @@ const Index = () => {
     };
     handleFetch();
   }, []);
-  function formatDate(dateString) {
-    const options = {year: 'numeric', month: 'short', day: '2-digit'};
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-US', options).format(date);
-  }
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -64,7 +57,7 @@ const Index = () => {
       const res: any = await getChatsbyuser('');
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addchatList(res?.data.chats));
-        console.log(chatList);
+        console.log(chatList, res?.data.chats);
       }
       setisLoading(false);
       // setloading(false);
@@ -78,8 +71,30 @@ const Index = () => {
     }
   }, []);
 
+  const handleFetch = async () => {
+    setisLoading(true);
+    const res: any = await getChatsbyuser('');
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addchatList(res?.data.chats));
+      console.log(chatList);
+    }
+    setisLoading(false);
+  };
+
   useEffect(() => {
+    handleFetch();
     getUnreadMessages();
+  }, []);
+
+  useEffect(() => {
+    handleFetch();
+    getUnreadMessages();
+
+    return () => {
+      // Call getUnreadMessages() when the component unmounts (page is left)
+      handleFetch();
+      getUnreadMessages();
+    };
   }, []);
 
   return (
@@ -132,8 +147,7 @@ const Index = () => {
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        >
+        }>
         <View style={[tw` w-full pt-5`, {}]}>
           {chatList?.length < 1 ? (
             <View style={[tw`flex-1 items-center`, {}]}>

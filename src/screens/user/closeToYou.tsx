@@ -140,7 +140,7 @@ const CloseToYou = () => {
                 fontFamily={'Inter-SemiBold'}
               />
             </View>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 setsearchModal(true);
               }}>
@@ -149,7 +149,7 @@ const CloseToYou = () => {
                 style={{height: 25, width: 25}}
                 resizeMode="contain"
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         ) : (
           <View

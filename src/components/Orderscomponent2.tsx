@@ -24,6 +24,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {addproviderOrders} from '../store/reducer/mainSlice';
 import RateyourCustommer from './modals/rateYourCustomer';
 import {formatDateHistory, formatDateHistory2} from '../utils/utils';
+import FastImage from 'react-native-fast-image';
 
 const Orderscomponent2 = ({item, index, status, showall}: any) => {
   const [saved, setsaved] = useState(false);
@@ -299,7 +300,25 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
         ]}>
         <View style={tw`flex flex-row `}>
           <View style={[tw``, {width: perWidth(50), height: perWidth(50)}]}>
-            <Image
+            <FastImage
+              style={[
+                tw``,
+                {
+                  width: perWidth(50),
+                  height: perWidth(50),
+                  borderRadius: perWidth(50) / 2,
+                },
+              ]}
+              source={{
+                uri:
+                  item?.user?.profilePic ||
+                  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                headers: {Authorization: 'someAuthToken'},
+                priority: FastImage.priority.normal,
+              }}
+              resizeMode={FastImage.resizeMode.cover}
+            />
+            {/* <Image
               resizeMode="cover"
               style={{
                 width: perWidth(50),
@@ -307,7 +326,7 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
                 borderRadius: perWidth(50) / 2,
               }}
               source={images.welcome}
-            />
+            /> */}
             <View
               style={[
                 tw`absolute bottom-0 border-2 right-1 rounded-full`,

@@ -85,10 +85,10 @@ export default function ListComp({navigation, item}: any) {
                 item?.userA?._id === userData?._id
                   ? item?.userB?.profilePic
                     ? item?.userB?.profilePic
-                    : 'https://res.cloudinary.com/dpdytuqlf/image/upload/v1707651780/category/k17kfdlowt9qnflorody.jpg'
+                    : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
                   : item?.userA?.profilePic
                   ? item?.userA?.profilePic
-                  : 'https://res.cloudinary.com/dpdytuqlf/image/upload/v1707651780/category/k17kfdlowt9qnflorody.jpg',
+                  : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
 
               // item?.profilePicture ||
               // 'https://res.cloudinary.com/dpdytuqlf/image/upload/v1707651780/category/k17kfdlowt9qnflorody.jpg',

@@ -31,9 +31,14 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
 import {ImageZoom} from '@likashefqet/react-native-image-zoom';
 
-import {addProfileData, addchatData} from '../../../store/reducer/mainSlice';
+import {
+  addProfileData,
+  addchatData,
+  addchatList,
+} from '../../../store/reducer/mainSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  getChatsbyuser,
   getMessagesbyuser,
   getProviderNew,
   uploadAssetsDOCorIMG,
@@ -75,8 +80,8 @@ export default function Inbox({navigation, route}: any) {
     // console.log('userID', userId);
     // console.log('passed:', route.params);
     socket.connect();
-    // console.log('-idid', socket.id);
-    // socket.emit('authentication', agentData);
+    console.log('-idid', socket.id);
+    socket.emit('authentication', agentData);
     // console.log('got here');
   }, []);
   const dispatch = useDispatch();
@@ -226,12 +231,21 @@ export default function Inbox({navigation, route}: any) {
     };
   }, []);
 
+  const _handleFetch = async () => {
+    const res: any = await getChatsbyuser('');
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addchatList(res?.data.chats));
+    }
+  };
   useLayoutEffect(() => {
     dispatch(addchatData([]));
   }, []);
 
   useEffect(() => {
+    _handleFetch();
+    getUnreadMessages();
     return () => {
+      _handleFetch();
       getUnreadMessages();
       console.log('exiting screen');
       // dispatch(addchatData([]));
