@@ -23,6 +23,7 @@ import socket from '../../../utils/socket';
 import ListComp from './ListComp';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../../components/customLoading';
+import {getUnreadMessages} from '../../../utils/api/chat';
 
 const Index = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -48,7 +49,7 @@ const Index = () => {
       // setloading(false);
     };
     handleFetch();
-  }, []); 
+  }, []);
   function formatDate(dateString) {
     const options = {year: 'numeric', month: 'short', day: '2-digit'};
     const date = new Date(dateString);
@@ -68,15 +69,18 @@ const Index = () => {
       setisLoading(false);
       // setloading(false);
     };
-
     try {
       handleFetch();
+      getUnreadMessages();
     } catch (error) {
     } finally {
       setRefreshing(false);
     }
   }, []);
 
+  useEffect(() => {
+    getUnreadMessages();
+  }, []);
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -113,7 +117,7 @@ const Index = () => {
             fontFamily={'Inter-SemiBold'}
           />
         </View>
-        <TouchableOpacity onPress={()=>{}}>
+        <TouchableOpacity onPress={() => {}}>
           <View style={tw``}>
             <Textcomp
               text={''}

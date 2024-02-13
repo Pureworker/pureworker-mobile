@@ -207,7 +207,6 @@ const DrawerContent = () => {
     }
     setloading(false);
   };
-
   const uploadImgorDoc = async (param: {
     uri: string;
     name: string | null;
