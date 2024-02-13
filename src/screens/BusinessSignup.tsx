@@ -238,8 +238,6 @@ export default function BusinessSignup() {
     const combined = Object.values(birthDate).reverse().join('-');
     const finalBirthDate = new Date(combined);
 
-    // setDateTime(finalBirthDate);
-
     if (!email) {
       Snackbar.show({
         text: 'Please enter your email address',
@@ -352,10 +350,6 @@ export default function BusinessSignup() {
           fl_data.referralCode = referralCode;
         }
 
-        console.log(FREELANCER);
-        console.log(fl_data);
-        setisLoading(false);
-        return;
         const res: any = await Signup(
           userType === CUSTOMER
             ? fl_data
