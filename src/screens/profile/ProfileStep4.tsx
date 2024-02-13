@@ -395,7 +395,7 @@ const ProfileStep4 = () => {
                   keyBoardType={'numeric'}
                 />
               </>
-              <>
+              {/* <>
                 <TextWrapper
                   children="Date of Registration"
                   isRequired={true}
@@ -428,7 +428,7 @@ const ProfileStep4 = () => {
                   onConfirm={handleConfirm}
                   onCancel={hideDatePicker}
                 />
-              </>
+              </> */}
             </>
           )}
 
