@@ -62,6 +62,7 @@ export default function ListComp({navigation, item}: any) {
                 : item?.userA?.lastOnline,
           });
           handleFetch();
+          getUnreadMessages();
         }}
         style={tw`flex flex-row mt-2 py-2 mx-1 rounded justify-between bg-[#2D303C]`}>
         <View style={[tw`flex flex-row items-center px-2`, {}]}>
