@@ -235,11 +235,10 @@ export default function BusinessSignup() {
       return;
     }
 
-    birthDate.month = birthDate.month - 1;
     const combined = Object.values(birthDate).reverse().join('-');
     const finalBirthDate = new Date(combined);
 
-    setDateTime(finalBirthDate);
+    // setDateTime(finalBirthDate);
 
     if (!email) {
       Snackbar.show({
@@ -315,7 +314,7 @@ export default function BusinessSignup() {
           businessName: name,
           cacNo: cacNo,
           location: locationValue?.toLowerCase(),
-          dob: date,
+          dob: finalBirthDate,
           // userType: userType.toLowerCase(),
           // nationality: nationalityValue,
           // gender: genderValue?.toLowerCase().trim(),
@@ -327,7 +326,7 @@ export default function BusinessSignup() {
           firstName: firstName,
           lastName: lastName,
           phoneNumber: phoneName,
-          dob: date,
+          dob: finalBirthDate,
           // gender: genderValue?.toLowerCase().trim(),
           // nationality: nationalityValue,
           // address: address,
@@ -353,6 +352,10 @@ export default function BusinessSignup() {
           fl_data.referralCode = referralCode;
         }
 
+        console.log(FREELANCER);
+        console.log(fl_data);
+        setisLoading(false);
+        return;
         const res: any = await Signup(
           userType === CUSTOMER
             ? fl_data

@@ -62,7 +62,7 @@ export default function Inbox({navigation, route}: any) {
   const userName = route.params?.name?.trim();
   const lastOnline = route.params?.lastOnline;
 
-  const {getUnreadMessages} = useChat();
+  const {getUnreadMessages, getChatList} = useChat();
   const agentData = useSelector((state: any) => state.user.userData);
   const chatData = useSelector((store: any) => store.user.chatData);
 
@@ -247,7 +247,7 @@ export default function Inbox({navigation, route}: any) {
     return () => {
       _handleFetch();
       getUnreadMessages();
-      console.log('exiting screen');
+      getChatList();
       // dispatch(addchatData([]));
     };
   }, []);

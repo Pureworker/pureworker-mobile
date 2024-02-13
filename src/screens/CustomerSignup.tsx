@@ -192,11 +192,10 @@ export default function CustomerSignup() {
       return;
     }
 
-    birthDate.month = birthDate.month - 1;
     const combined = Object.values(birthDate).reverse().join('-');
     const finalBirthDate = new Date(combined);
 
-    setDateTime(finalBirthDate);
+    // setDateTime(finalBirthDate);
 
     if (!email) {
       Snackbar.show({
@@ -243,7 +242,7 @@ export default function CustomerSignup() {
           lastName: lastName,
           phoneNumber: phoneName,
           // address: address,
-          dob: date,
+          dob: finalBirthDate,
           // userType: userType,
           // gender: genderValue?.toLowerCase().trim(),
           // nationality: nationalityValue,
