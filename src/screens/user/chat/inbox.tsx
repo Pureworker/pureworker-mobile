@@ -17,6 +17,7 @@ import React, {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useRef,
   useState,
 } from 'react';
 import tw from 'twrnc';
@@ -26,6 +27,7 @@ import {SIZES, perHeight, perWidth} from '../../../utils/position/sizes';
 import Chatcomp from './chatcomp';
 import socket from '../../../utils/socket';
 import {launchImageLibrary} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
 import {ImageZoom} from '@likashefqet/react-native-image-zoom';
 
@@ -45,6 +47,7 @@ import useChat from '../../../hooks/useChat';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 export default function Inbox({navigation, route}: any) {
+  const scrollRef = useRef<ScrollView | null>(null);
   const [imageModal, setImageModal] = useState({
     isOpen: false,
     imageLink: '',
@@ -165,13 +168,16 @@ export default function Inbox({navigation, route}: any) {
   }, []);
 
   const selectImage = async () => {
-    const result = await launchImageLibrary({mediaType: 'photo'});
+    const result = await ImagePicker.openPicker({
+      mediaType: 'photo',
+      cropping: false,
+    });
 
-    if (result.assets!?.length > 0) {
+    if (result?.path!?.length > 0) {
       const uploadResponse = await uploadAssetsDOCorIMG({
-        uri: result.assets?.[0]?.uri,
-        name: result.assets?.[0]?.fileName,
-        type: result.assets?.[0]?.type,
+        uri: result?.path,
+        name: userId + ':: chatImage - ' + new Date(),
+        type: result?.mime,
       });
 
       try {
@@ -340,7 +346,10 @@ export default function Inbox({navigation, route}: any) {
               })}
               <View style={tw`h-20`} />
             </ScrollView> */}
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView
+              ref={scrollRef}
+              showsVerticalScrollIndicator={false}
+              onContentSizeChange={() => scrollRef!?.current!?.scrollToEnd()}>
               {Object.keys(groupedMessages).map((date, i) => (
                 <View key={date} style={tw`${i === 0 ? 'pt-5' : 'pt-2.5'}`}>
                   <View style={tw`flex flex-row items-center`}>
@@ -462,7 +471,7 @@ export default function Inbox({navigation, route}: any) {
               tw`w-full mx-auto mt-auto px-[4%]`,
               {
                 height: HEIGHT_SCREEN * 0.085,
-                marginBottom: isKeyboardOpen || Platform.OS === 'ios' ? 0 : 5,
+                marginBottom: isKeyboardOpen || Platform.OS === 'ios' ? 0 : 20,
                 borderStyle: isKeyboardOpen ? null : 'solid',
                 borderTopWidth: isKeyboardOpen ? 0 : 4,
                 borderTopColor: 'black',
@@ -576,11 +585,11 @@ export default function Inbox({navigation, route}: any) {
         <GestureHandlerRootView style={{width: '90%', height: '70%'}}>
           <ImageZoom
             uri={imageModal.imageLink}
-            minScale={0.5}
+            minScale={1}
             maxScale={3}
             style={{
               width: '100%',
-              height: '100%',
+              // height: '100%',
             }}
             resizeMode="contain"
           />

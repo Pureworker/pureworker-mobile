@@ -30,6 +30,8 @@ export default function Index({
 
   console.log(isUrl, time);
 
+  console.log(text);
+
   useEffect(() => {
     if (!isRead) {
       markAsRead(id);
