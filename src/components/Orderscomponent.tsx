@@ -634,6 +634,7 @@ const Orderscomponent = ({
             setOtherReason={setOtherReason}
             handleCancel={handleCancel}
             setModalSection={setmodalSection}
+            isLoading={isLoading}
           />
         )}
       </Modal>

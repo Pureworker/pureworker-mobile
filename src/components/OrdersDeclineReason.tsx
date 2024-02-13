@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Modal,
   Pressable,
   ScrollView,
@@ -17,6 +18,7 @@ const OrdersDeclineReason = ({
   setOtherReason,
   handleCancel,
   setModalSection,
+  isLoading,
 }) => {
   const DeclineReasons = [
     'Change of plans',
@@ -34,7 +36,11 @@ const OrdersDeclineReason = ({
       <ScrollView
         style={styles.reasonModalMainWrapper}
         contentContainerStyle={{paddingBottom: 200}}>
-        <Pressable onPress={() => setModalSection('All')}>
+        <Pressable
+          onPress={() => {
+            handleSelectedReasons('');
+            setModalSection('All');
+          }}>
           <Text style={styles.closeButtonText}>x</Text>
         </Pressable>
 
@@ -43,6 +49,7 @@ const OrdersDeclineReason = ({
             color: 'rgba(136, 8, 123, 1)',
             fontSize: 18,
             fontWeight: '500',
+            marginVertical: 10,
           }}>
           What went wrong?
         </Text>
@@ -76,8 +83,21 @@ const OrdersDeclineReason = ({
           </View>
         )}
 
-        <Pressable onPress={handleCancel} style={styles.done}>
-          <Text style={styles.doneText}>Done</Text>
+        <Pressable
+          onPress={() => {
+            if (!isLoading && selectedReason.length > 0) {
+              handleCancel();
+            }
+          }}
+          style={{
+            ...styles.done,
+            opacity: selectedReason.length > 0 ? 1 : 0.5,
+          }}>
+          {isLoading ? (
+            <ActivityIndicator size={20} color="white" />
+          ) : (
+            <Text style={styles.doneText}>Done</Text>
+          )}
         </Pressable>
       </ScrollView>
     </View>
