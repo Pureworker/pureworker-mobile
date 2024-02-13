@@ -392,6 +392,7 @@ const ProfileStep4 = () => {
                   labelText={'Enter CAC Number'}
                   state={idNumber}
                   setState={setIdNumber}
+                  keyBoardType={'numeric'}
                 />
               </>
               <>
