@@ -7,7 +7,7 @@ import Textcomp from './Textcomp';
 import colors from '../constants/colors';
 import {Rating, AirbnbRating} from 'react-native-ratings';
 import Modal from 'react-native-modal';
-import {WIDTH_WINDOW} from '../constants/generalStyles';
+import {HEIGHT_WINDOW, WIDTH_WINDOW} from '../constants/generalStyles';
 import {useDispatch} from 'react-redux';
 import {cancelOrder, getUserOrders} from '../utils/api/func';
 import {addcustomerOrders} from '../store/reducer/mainSlice';
@@ -18,6 +18,7 @@ import DisputeIcon from '../assets/svg/Dispute';
 import Cross from '../assets/svg/Cross';
 import Snackbar from 'react-native-snackbar';
 import {ToastShort} from '../utils/utils';
+import OrdersDeclineReason from './OrdersDeclineReason';
 
 const Orderscomponent = ({
   item,
@@ -30,10 +31,13 @@ const Orderscomponent = ({
   const [saved, setsaved] = useState(false);
   const [InfoModal, setInfoModal] = useState(false);
   const [isLoading, setisLoading] = useState(false);
-
   const [modalSection, setmodalSection] = useState('All');
+  const [otherReason, setOtherReason] = useState('');
+  const [selectedReason, setSelectedReason] = useState<string>('');
 
-  // console.log('OrderDetails', item);
+  const handleSelectedReasons = reason => {
+    setSelectedReason(reason);
+  };
 
   function formatDateToCustomFormat(dateString) {
     const options = {year: 'numeric', month: 'short', day: 'numeric'};
@@ -57,7 +61,12 @@ const Orderscomponent = ({
   const handleCancel = async () => {
     setisLoading(true);
     if (item?._id) {
-      const res = await cancelOrder(item?._id, {reason: 'Incorrect Request'});
+      const res = await cancelOrder(item?._id, {
+        reason:
+          selectedReason.toLowerCase() === 'others'
+            ? otherReason
+            : selectedReason,
+      });
       if (res?.status === 200 || res?.status === 201) {
         // navigation.navigate('PaymentConfirmed');
         await initGetOrders();
@@ -333,7 +342,8 @@ const Orderscomponent = ({
                 <TouchableOpacity
                   onPress={() => {
                     // setmodalSection('Cancel')
-                    setmodalSection('Cancel2');
+                    setmodalSection('reason');
+                    // handleCloseReasonModal();
                     // if (status === 'CANCELLED') {
                     //   ToastShort('This Order has already')
                     // }else{
@@ -431,12 +441,12 @@ const Orderscomponent = ({
                 </TouchableOpacity>
               )}
 
-              <View
+              {/* <View
                 style={[
                   tw`bg-black mt-auto mb-4`,
                   {height: 2, width: WIDTH_WINDOW * 0.95},
                 ]}
-              />
+              /> */}
             </View>
           </View>
         )}
@@ -556,6 +566,7 @@ const Orderscomponent = ({
               <TouchableOpacity
                 onPress={async () => {
                   if (status === 'ACCEPTED' || status === 'PENDING') {
+                    // setmodalSection('Cancel');
                     await handleCancel();
                   } else {
                     setmodalSection('All');
@@ -612,14 +623,18 @@ const Orderscomponent = ({
                   fontFamily={'Inter-SemiBold'}
                 />
               </TouchableOpacity>
-              <View
-                style={[
-                  tw`bg-black mt-auto mb-4`,
-                  {height: 2, width: WIDTH_WINDOW * 0.95},
-                ]}
-              />
             </View>
           </View>
+        )}
+        {modalSection === 'reason' && (
+          <OrdersDeclineReason
+            selectedReason={selectedReason}
+            handleSelectedReasons={handleSelectedReasons}
+            otherReason={otherReason}
+            setOtherReason={setOtherReason}
+            handleCancel={handleCancel}
+            setModalSection={setmodalSection}
+          />
         )}
       </Modal>
     </>
