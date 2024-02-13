@@ -169,7 +169,7 @@ const AddAddress = ({navigation}: any) => {
     const res: any = await updateUserData({
       geoLocation: {
         type: 'Point',
-        coordinates: [selectedLocation?.latitude, selectedLocation?.longitude],
+        coordinates: [selectedLocation?.longitude, selectedLocation?.latitude],
       },
       address: description,
     });

@@ -306,16 +306,15 @@ const TransactionHistory = () => {
                             }`}>
                             <View
                               style={[tw`flex flex-row items-center  `, {}]}>
-                              {/* <Image
-                                resizeMode="contain"
-                                source={images.pureWorkerLogo}
-                                style={{width: perWidth(25), aspectRatio: 1}}
-                              /> */}
-                              <View style={{}}>
+                              <View
+                                style={{
+                                  width: 50,
+                                  justifyContent: 'flex-start',
+                                }}>
                                 {item?.type === 'funding' ? (
                                   <FundingIcon />
                                 ) : item?.type === 'payment' ? (
-                                  <PaymentIcon />
+                                  <PaymentIcon /> 
                                 ) : item?.type === 'withdrawal' ? (
                                   <WithdrawalIcon />
                                 ) : item?.type === 'reversal' ? (

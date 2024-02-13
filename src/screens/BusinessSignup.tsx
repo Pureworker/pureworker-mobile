@@ -1054,6 +1054,7 @@ export default function BusinessSignup() {
                     birthDate.year !== undefined ? `${birthDate.year}` : ''
                   }
                   placeholder="YYYY"
+                  placeholderTextColor={'black'}
                   maxLength={4}
                   style={{
                     paddingHorizontal: 10,
@@ -1062,6 +1063,7 @@ export default function BusinessSignup() {
                     width: 60,
                     textAlign: 'center',
                     backgroundColor: 'white',
+                    color: 'black',
                   }}
                   inputMode="decimal"
                   onChangeText={e => handleBirthDate('year', Number(e))}
@@ -1071,6 +1073,7 @@ export default function BusinessSignup() {
                     birthDate.month !== undefined ? `${birthDate.month}` : ''
                   }
                   placeholder="MM"
+                  placeholderTextColor={'black'}
                   style={{
                     paddingHorizontal: 10,
                     borderRadius: 5,
@@ -1078,6 +1081,7 @@ export default function BusinessSignup() {
                     width: 50,
                     textAlign: 'center',
                     backgroundColor: 'white',
+                    color: 'black',
                   }}
                   inputMode="decimal"
                   onChangeText={e => handleBirthDate('month', Number(e))}
@@ -1085,11 +1089,13 @@ export default function BusinessSignup() {
                 <TextInput
                   value={birthDate.day !== undefined ? `${birthDate.day}` : ''}
                   placeholder="DD"
+                  placeholderTextColor={'black'}
                   style={{
                     paddingHorizontal: 10,
                     borderRadius: 5,
                     height: 45,
                     backgroundColor: 'white',
+                    color: 'black',
                   }}
                   inputMode="decimal"
                   onChangeText={e => handleBirthDate('day', Number(e))}

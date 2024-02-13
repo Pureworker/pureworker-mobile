@@ -221,41 +221,68 @@ const FundingHistory = () => {
                   {categorizedData[monthYear].map(
                     (item: any, index: number) => {
                       console.log('Item', item);
-                      return (
-                        <View
-                          style={tw`flex flex-row justify-between items-center px-4 mx-2 border-b border-[#00000033] ${
-                            index === 0 ? 'pb-4' : 'py-4'
-                          }`}>
-                          <View style={[tw`flex flex-row items-center  `, {}]}>
-                            <View style={{}}>
-                              {item?.type === 'funding' ? (
-                                <FundingIcon />
-                              ) : item?.type === 'payment' ? (
-                                <PaymentIcon />
-                              ) : item?.type === 'withdrawal' ? (
-                                <WithdrawalIcon />
-                              ) : item?.type === 'reversal' ? (
-                                <ReversalIcon />
-                              ) : item?.type === 'tip' ? (
-                                <TipIcon />
-                              ) : (
-                                <View>
-                                  <Image
-                                    resizeMode="contain"
-                                    source={images.pureWorkerLogo}
-                                    style={{
-                                      width: perWidth(20),
-                                      aspectRatio: 1,
-                                    }}
+                      if (item.type !== 'funding') {
+                        return null;
+                      } else {
+                        return (
+                          <View
+                            style={tw`flex flex-row justify-between items-center px-4 mx-2 border-b border-[#00000033] ${
+                              index === 0 ? 'pb-4' : 'py-4'
+                            }`}>
+                            <View
+                              style={[tw`flex flex-row items-center  `, {}]}>
+                              <View style={{}}>
+                                {item?.type === 'funding' ? (
+                                  <FundingIcon />
+                                ) : item?.type === 'payment' ? (
+                                  <PaymentIcon />
+                                ) : item?.type === 'withdrawal' ? (
+                                  <WithdrawalIcon />
+                                ) : item?.type === 'reversal' ? (
+                                  <ReversalIcon />
+                                ) : item?.type === 'tip' ? (
+                                  <TipIcon />
+                                ) : (
+                                  <View>
+                                    <Image
+                                      resizeMode="contain"
+                                      source={images.pureWorkerLogo}
+                                      style={{
+                                        width: perWidth(20),
+                                        aspectRatio: 1,
+                                      }}
+                                    />
+                                  </View>
+                                )}
+                              </View>
+
+                              <View style={tw`flex flex-col ml-4`}>
+                                <View style={[tw``, {marginTop: perHeight(0)}]}>
+                                  <Textcomp
+                                    text={'Flutterwave'}
+                                    size={15}
+                                    lineHeight={17}
+                                    color={'#000413'}
+                                    fontFamily={'Inter-SemiBold'}
                                   />
                                 </View>
-                              )}
+                                <View style={[tw``, {marginTop: perHeight(4)}]}>
+                                  <Textcomp
+                                    text={`${formatDateHistory(
+                                      item.createdAt,
+                                    )}`}
+                                    size={13}
+                                    lineHeight={15}
+                                    color={'#00041380'}
+                                    fontFamily={'Inter'}
+                                  />
+                                </View>
+                              </View>
                             </View>
-
-                            <View style={tw`flex flex-col ml-4`}>
+                            <View style={tw`flex flex-col`}>
                               <View style={[tw``, {marginTop: perHeight(0)}]}>
                                 <Textcomp
-                                  text={'Flutterwave'}
+                                  text={`₦${item?.amount}`}
                                   size={15}
                                   lineHeight={17}
                                   color={'#000413'}
@@ -264,45 +291,25 @@ const FundingHistory = () => {
                               </View>
                               <View style={[tw``, {marginTop: perHeight(4)}]}>
                                 <Textcomp
-                                  text={`${formatDateHistory(item.createdAt)}`}
+                                  // text={`${
+                                  //   item?.type?.slice(0, 1)?.toUpperCase() +
+                                  //   item?.type?.slice(1)
+                                  // }`}
+                                  text={`${item?.status}`}
                                   size={13}
                                   lineHeight={15}
-                                  color={'#00041380'}
-                                  fontFamily={'Inter'}
+                                  color={
+                                    item.status === 'successful'
+                                      ? 'green'
+                                      : '#00041380'
+                                  }
+                                  fontFamily={'Inter-SemiBold'}
                                 />
                               </View>
                             </View>
                           </View>
-                          <View style={tw`flex flex-col`}>
-                            <View style={[tw``, {marginTop: perHeight(0)}]}>
-                              <Textcomp
-                                text={`₦${item?.amount}`}
-                                size={15}
-                                lineHeight={17}
-                                color={'#000413'}
-                                fontFamily={'Inter-SemiBold'}
-                              />
-                            </View>
-                            <View style={[tw``, {marginTop: perHeight(4)}]}>
-                              <Textcomp
-                                // text={`${
-                                //   item?.type?.slice(0, 1)?.toUpperCase() +
-                                //   item?.type?.slice(1)
-                                // }`}
-                                text={`${item?.status}`}
-                                size={13}
-                                lineHeight={15}
-                                color={
-                                  item.status === 'successful'
-                                    ? 'green'
-                                    : '#00041380'
-                                }
-                                fontFamily={'Inter-SemiBold'}
-                              />
-                            </View>
-                          </View>
-                        </View>
-                      );
+                        );
+                      }
                     },
                   )}
                 </View>

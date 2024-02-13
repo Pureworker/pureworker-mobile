@@ -55,6 +55,7 @@ import {addcompleteProfile} from '../../store/reducer/mainSlice';
 import FastImage from 'react-native-fast-image';
 import TickIcon from '../../assets/svg/Tick';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import EditComp from './comp/EditComp';
 const ProfileStep21 = () => {
   const navigation = useNavigation<StackNavigation>();
   const route: Route = useRoute();
@@ -66,11 +67,11 @@ const ProfileStep21 = () => {
 
   const [allPotfolio, setAllPotfolio] = useState<any>([]);
   const [description, setDescription] = useState(
-    ProviderData?.description
-      ? ProviderData?.description
-      : completeProfileData?.description
-      ? completeProfileData?.description
-      : '',
+    ProviderData?.description ?? completeProfileData?.description ?? '',
+    // ? ProviderData?.description
+    // : completeProfileData?.description
+    // ? completeProfileData?.description
+    // : '',
   );
   const [shortDescription, setShortDescription] = useState('');
   const [potfolioImageUrl, setPotfolioImageUrl] = useState<any>([]);
@@ -206,7 +207,7 @@ const ProfileStep21 = () => {
       // console.log('portfolio--', res?.data?.profile?.portfolios);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addProfileData(res?.data?.profile));
-        setDescription(res?.data?.profile?.description);
+        // setDescription(res?.data?.profile?.description);
       }
     };
     // initGetProfile();
@@ -357,6 +358,8 @@ const ProfileStep21 = () => {
     }
     setisLoading(false);
   };
+  const [editModal, seteditModal] = useState(false);
+  const profileData = useSelector((state: any) => state.user.profileData);
 
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
@@ -607,13 +610,18 @@ const ProfileStep21 = () => {
                         <TouchableOpacity
                           style={tw`border bg-white rounded px-2 py-0.5`}
                           onPress={() => {
-                            const newPortfolioItem = {
-                              service: '',
-                              description: '',
-                              images: [],
-                            };
-                            setaddModal(true);
-                            setSelectedService(item);
+                            // const newPortfolioItem = {
+                            //   service: '',
+                            //   description: '',
+                            //   images: [],
+                            // };
+                            if (d?.length > 0) {
+                              seteditModal(true);
+                              setSelectedService(item);
+                            } else {
+                              setaddModal(true);
+                              setSelectedService(item);
+                            }
                           }}>
                           <Textcomp
                             text={d?.length > 0 ? 'Done' : 'Edit'}
@@ -791,6 +799,91 @@ const ProfileStep21 = () => {
           <TouchableOpacity
             onPress={() => {
               setaddModal(false);
+            }}
+            style={tw`absolute right-0 top-[-2]`}>
+            <Image
+              resizeMode="contain"
+              source={images.cancelCircle}
+              style={{
+                width: 30,
+                height: 30,
+                tintColor: '#000413',
+                marginLeft: 5,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+      </Modal>
+      {/* Edit Modal */}
+      <Modal
+        isVisible={editModal}
+        onModalHide={() => {
+          seteditModal(false);
+        }}
+        style={{width: SIZES.width, height: SIZES.height, marginHorizontal: 0}}
+        deviceWidth={SIZES.width}
+        onBackdropPress={() => seteditModal(false)}
+        swipeThreshold={200}
+        onBackButtonPress={() => seteditModal(false)}>
+        <View
+          style={[
+            tw`bg-[#EBEBEB]  mx-auto mt-auto   p-4 pb-8`,
+            {borderRadius: 20, maxHeight: SIZES.height * 0.8},
+          ]}>
+          <View style={tw`mx-auto`} />
+          <View style={[tw``]}>
+            <View style={[tw` mt-4`]}>
+              <Textcomp
+                text={'Edit Service Data'}
+                size={16}
+                lineHeight={16}
+                color={'#000413'}
+                fontFamily={'Inter-Bold'}
+              />
+            </View>
+            <View style={[tw` mt-1`]}>
+              <Textcomp
+                text={'Customers need assurance of your service proficiency.'}
+                size={10}
+                lineHeight={12}
+                color={'#000413'}
+                fontFamily={'Inter-Regular'}
+              />
+            </View>
+          </View>
+          <View>
+            <EditComp
+              lindex={0}
+              dlist={[]}
+              service={selectedService}
+              pdata={{
+                service: '',
+                description: '',
+                images: [],
+              }}
+              portfolioData={profileData?.portfolios}
+              handlePortfolioItemChange={(i: any, data: any) =>
+                // handlePortfolioItemChange(0, data)
+                {}
+              }
+              close={() => {
+                seteditModal(false);
+                //
+                const initGetProviderNew = async () => {
+                  const res: any = await getProviderNew(userData?._id);
+                  console.log('providerdatttttaaaaa', res?.data);
+                  console.log('portfolio--', res?.data?.profile?.portfolios);
+                  if (res?.status === 201 || res?.status === 200) {
+                    dispatch(addProfileData(res?.data?.profile));
+                  }
+                };
+                initGetProviderNew();
+              }}
+            />
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              seteditModal(false);
             }}
             style={tw`absolute right-0 top-[-2]`}>
             <Image

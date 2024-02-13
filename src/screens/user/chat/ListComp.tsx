@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, Image, TouchableOpacity, Text, StyleSheet} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import images from '../../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../../components/Textcomp';
@@ -12,6 +12,8 @@ import {WIDTH_WINDOW} from '../../../constants/generalStyles';
 import {timeAgo} from '../../../utils/utils';
 import {getUnreadMessages} from '../../../utils/api/chat';
 import FastImage from 'react-native-fast-image';
+import {getChatsbyuser} from '../../../utils/api/func';
+import {addchatList} from '../../../store/reducer/mainSlice';
 
 export default function ListComp({navigation, item}: any) {
   function formatDate(dateString) {
@@ -22,9 +24,13 @@ export default function ListComp({navigation, item}: any) {
   const userData = useSelector((state: any) => state.user.userData);
   const [visible, setvisible] = useState(false);
 
-  console.log('====================================');
-  console.log(item);
-  console.log('====================================');
+  const dispatch = useDispatch();
+  const handleFetch = async () => {
+    const res: any = await getChatsbyuser('');
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addchatList(res?.data.chats));
+    }
+  };
 
   return (
     <>
@@ -55,6 +61,8 @@ export default function ListComp({navigation, item}: any) {
                 ? item?.userB?.lastOnline
                 : item?.userA?.lastOnline,
           });
+          handleFetch();
+          getUnreadMessages();
         }}
         style={tw`flex flex-row mt-2 py-2 mx-1 rounded justify-between bg-[#2D303C]`}>
         <View style={[tw`flex flex-row items-center px-2`, {}]}>

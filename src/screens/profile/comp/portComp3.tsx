@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Platform,
+  Text,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigation} from '../../../constants/navigation';
@@ -56,11 +57,16 @@ export default function PortComp({
   const [selectedVerification, setSelectedVerification] = useState('');
   const [description, setDescription] = useState('');
   const dispatch = useDispatch();
-  const handleProfileSetup = async passedData => {
+  const handleProfileSetup = async (passedData: { serviceDescription: any; servicePriceMin: any; servicePriceMax: any; portfolios: any; }) => {
     console.log(passedData);
 
     const minPrice = Number(passedData?.servicePriceMin);
     const maxPrice = Number(passedData?.servicePriceMax);
+
+    if (!minPrice || !maxPrice) {
+      ToastShort('maxPrice and minPrice must be set.');
+      return;
+    }
 
     if (minPrice < 500) {
       ToastShort('Min Price cannot be less than 500 naira.');
@@ -70,7 +76,10 @@ export default function PortComp({
       ToastShort('Max Price must be greater than Min Price.');
       return;
     }
-    if (!passedData?.serviceDescription || passedData?.serviceDescription?.length < 1) {
+    if (
+      !passedData?.serviceDescription ||
+      passedData?.serviceDescription?.length < 1
+    ) {
       ToastShort('Service Description cannot be empty.');
       return;
     }
@@ -208,78 +217,19 @@ export default function PortComp({
         validationSchema={validationSchema}
         // onSubmit={handleProfileSetup}
         onSubmit={values => handleProfileSetup(values)}>
-        {({values, handleChange, handleBlur, handleSubmit, setFieldValue}) => (
+        {({
+          values,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          setFieldValue,
+          errors,
+        }) => (
           <KeyboardAwareScrollView
             contentContainerStyle={{}}
             style={{}}
             extraScrollHeight={Platform.OS === 'ios' ? 30 : 0} // Adjust as needed
             enableOnAndroid={true}>
-            {/* <ScrollView horizontal style={{width: '100%'}}>
-              <>
-                <View
-                  style={{
-                    zIndex: 1,
-                    height: 60,
-                  }}>
-                  <View style={tw``}>
-                    <DropDownPicker
-                      open={false}
-                      value={service}
-                      items={serviceList}
-                      disabled={false}
-                      // items={tempdata}
-                      setOpen={setdropdownOpen}
-                      setValue={setservice_}
-                      setItems={setserviceList}
-                      showArrowIcon={false}
-                      zIndex={10}
-                      maxHeight={200}
-                      dropDownContainerStyle={{
-                        borderWidth: 0,
-                      }}
-                      labelStyle={{
-                        fontFamily: commonStyle.fontFamily.regular,
-                        fontSize: 14,
-                        color: colors.white,
-                      }}
-                      arrowIconStyle={
-                        {
-                          // backgroundColor: 'red'
-                        }
-                      }
-                      placeholder={service?.name}
-                      placeholderStyle={{
-                        fontFamily: commonStyle.fontFamily.regular,
-                        fontSize: 14,
-                        color: '#FFFFFF',
-                      }}
-                      style={{
-                        backgroundColor: colors.lightBlack,
-                        borderColor: colors.primary,
-                        borderWidth: 2,
-                        width: WIDTH_WINDOW * 0.85,
-                      }}
-                      listMode="FLATLIST"
-                      showTickIcon={false}
-                      textStyle={{
-                        color: colors.white,
-                      }}
-                      listParentLabelStyle={{
-                        color: '#000',
-                        fontSize: 16,
-                        fontFamily: commonStyle.fontFamily.regular,
-                      }}
-                      listItemContainerStyle={{
-                        backgroundColor: '#F1F1F1',
-                        borderColor: 'red',
-                        opacity: 1,
-                        borderWidth: 0,
-                      }}
-                    />
-                  </View>
-                </View>
-              </>
-            </ScrollView> */}
             <View
               style={{
                 paddingHorizontal: 10,
@@ -347,6 +297,9 @@ export default function PortComp({
                 />
               </View>
             </>
+            {errors.serviceDescription && (
+              <Text style={{color: 'red'}}>{errors.serviceDescription}</Text>
+            )}
             <>
               <View
                 style={{
@@ -420,6 +373,12 @@ export default function PortComp({
                 </View>
               </View>
             </>
+            {errors.servicePriceMin && (
+              <Text style={{color: 'red'}}>{errors.servicePriceMin}</Text>
+            )}
+            {errors.servicePriceMax && (
+              <Text style={{color: 'red'}}>{errors.servicePriceMax}</Text>
+            )}
             <View style={[tw`border-b`, {borderWidth: 2}]} />
 
             <View style={[tw`mt-4`, {}]}>

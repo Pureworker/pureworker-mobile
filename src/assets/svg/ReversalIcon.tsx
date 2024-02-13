@@ -4,8 +4,8 @@ import Svg, { G, Path, Defs, ClipPath } from "react-native-svg"
 function ReversalIcon(props) {
   return (
     <Svg
-      width={35}
-      height={36}
+    width={39}
+    height={46}
       viewBox="0 0 35 36"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

@@ -62,6 +62,16 @@ const Orders = () => {
   const [filteredOrders, setFilteredOrders] = useState(customerOrders);
 
   useEffect(() => {
+    setactiveSection('Active');
+
+    // Cleanup function to be called when the component unmounts
+    return () => {
+      // Set activeSection to 'Active' when the component unmounts
+      setactiveSection('Active');
+    };
+  }, []);
+
+  useEffect(() => {
     setFilteredOrders(customerOrders);
   }, [customerOrders, dispatch]);
 
@@ -89,7 +99,6 @@ const Orders = () => {
       //     provider.fullName.toLowerCase().includes(query.toLowerCase()),
       //   ) || [];
 
-      
       console.log('qqqq::::::::', query);
       const filtered =
         customerOrders.filter(
@@ -102,7 +111,7 @@ const Orders = () => {
               ?.includes(query.toLowerCase()),
         ) || [];
 
-        console.log(filtered, '         ..............................');
+      console.log(filtered, '         ..............................');
       console.log('RESSSSS:', filtered);
       setFilteredOrders(filtered);
       // setSearchResults(filtered);
@@ -229,7 +238,7 @@ const Orders = () => {
               setsearchModal(false);
               setsearchInput('');
             }}>
-            <Image 
+            <Image
               source={images.cross}
               style={{height: 20, width: 20, tintColor: 'black'}}
               resizeMode="contain"

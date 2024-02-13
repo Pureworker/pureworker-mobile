@@ -19,6 +19,7 @@ import Cross from '../assets/svg/Cross';
 import Snackbar from 'react-native-snackbar';
 import {ToastShort} from '../utils/utils';
 import OrdersDeclineReason from './OrdersDeclineReason';
+import FastImage from 'react-native-fast-image';
 
 const Orderscomponent = ({
   item,
@@ -38,6 +39,7 @@ const Orderscomponent = ({
   const handleSelectedReasons = reason => {
     setSelectedReason(reason);
   };
+  console.log('OrderDetails', item);
 
   function formatDateToCustomFormat(dateString) {
     const options = {year: 'numeric', month: 'short', day: 'numeric'};
@@ -121,7 +123,7 @@ const Orderscomponent = ({
           ]}>
           <View style={tw`flex flex-row `}>
             <View style={[tw``, {width: perWidth(50), height: perWidth(50)}]}>
-              {item?.serviceProvider?.profilePic ? (
+              {/* {item?.serviceProvider?.profilePic ? (
                 <Image
                   resizeMode="cover"
                   style={{
@@ -141,7 +143,27 @@ const Orderscomponent = ({
                   }}
                   source={images.welcome}
                 />
-              )}
+              )} */}
+
+              <FastImage
+                style={[
+                  tw``,
+                  {
+                    width: perWidth(50),
+                    height: perWidth(50),
+                    borderRadius: perWidth(50) / 2,
+                  },
+                ]}
+                source={{
+                  uri:
+                    item?.serviceProvider?.profilePic ||
+                    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                  // 'https://res.cloudinary.com/dr0pef3mn/image/upload/v1694275934/Assets/1694275933654-Ellipse%2014.png.png',
+                  headers: {Authorization: 'someAuthToken'},
+                  priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+              />
 
               <View
                 style={[

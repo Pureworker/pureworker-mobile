@@ -247,7 +247,7 @@ const Account = () => {
     try {
       const res: any = await deletePortfolio(param);
       console.log('delete result:', res?.data);
-      if (res?.status === 200 || res?.status === 201) {
+      if (res?.status === 200 || res?.status === 201 || res?.status === 204) {
         ToastLong('Portfolio deleted successfully');
       } else {
         Snackbar.show({

@@ -4,8 +4,10 @@ import Svg, { G, Path, Defs, ClipPath } from "react-native-svg"
 function SvgComponent(props) {
   return (
     <Svg
-      width={44}
-      height={35}
+      // width={44}
+      // height={35}
+      width={39}
+      height={46}
       viewBox="0 0 44 35"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
