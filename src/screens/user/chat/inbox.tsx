@@ -34,6 +34,7 @@ import {ImageZoom} from '@likashefqet/react-native-image-zoom';
 import {addProfileData, addchatData} from '../../../store/reducer/mainSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  getChatsbyuser,
   getMessagesbyuser,
   getProviderNew,
   uploadAssetsDOCorIMG,
@@ -57,7 +58,7 @@ export default function Inbox({navigation, route}: any) {
   const userName = route.params?.name?.trim();
   const lastOnline = route.params?.lastOnline;
 
-  const {getUnreadMessages} = useChat();
+  const {getUnreadMessages, getChatList} = useChat();
   const agentData = useSelector((state: any) => state.user.userData);
   const chatData = useSelector((store: any) => store.user.chatData);
 
@@ -233,7 +234,7 @@ export default function Inbox({navigation, route}: any) {
   useEffect(() => {
     return () => {
       getUnreadMessages();
-      console.log('exiting screen');
+      getChatList();
       // dispatch(addchatData([]));
     };
   }, []);

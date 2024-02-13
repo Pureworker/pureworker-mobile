@@ -3,7 +3,8 @@ import axios from 'axios';
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {useDispatch} from 'react-redux';
-import {updateUnreadChat} from '../store/reducer/mainSlice';
+import {addchatList, updateUnreadChat} from '../store/reducer/mainSlice';
+import {getChatsbyuser} from '../utils/api/func';
 
 const API_BASE_URL = 'https://api.pureworker.com/api';
 
@@ -41,7 +42,15 @@ const useChat = () => {
     getUnreadMessages();
   };
 
-  return {getUnreadMessages, markAsRead};
+  const getChatList = async () => {
+    const res: any = await getChatsbyuser('');
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addchatList(res?.data.chats));
+    }
+    // setloading(false);
+  };
+
+  return {getChatList, getUnreadMessages, markAsRead};
 };
 
 export default useChat;
