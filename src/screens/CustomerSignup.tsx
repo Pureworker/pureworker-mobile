@@ -195,8 +195,6 @@ export default function CustomerSignup() {
     const combined = Object.values(birthDate).reverse().join('-');
     const finalBirthDate = new Date(combined);
 
-    // setDateTime(finalBirthDate);
-
     if (!email) {
       Snackbar.show({
         text: 'Please enter your email address',
