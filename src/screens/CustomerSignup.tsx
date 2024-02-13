@@ -580,6 +580,7 @@ export default function CustomerSignup() {
               <TextInput
                 value={birthDate.year !== undefined ? `${birthDate.year}` : ''}
                 placeholder="YYYY"
+                placeholderTextColor={'black'}
                 maxLength={4}
                 style={{
                   paddingHorizontal: 10,
@@ -598,6 +599,7 @@ export default function CustomerSignup() {
                   birthDate.month !== undefined ? `${birthDate.month}` : ''
                 }
                 placeholder="MM"
+                placeholderTextColor={'black'}
                 style={{
                   paddingHorizontal: 10,
                   borderRadius: 5,
@@ -613,6 +615,7 @@ export default function CustomerSignup() {
               <TextInput
                 value={birthDate.day !== undefined ? `${birthDate.day}` : ''}
                 placeholder="DD"
+                placeholderTextColor={'black'}
                 style={{
                   paddingHorizontal: 10,
                   borderRadius: 5,
