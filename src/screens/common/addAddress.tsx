@@ -30,7 +30,7 @@ import images from '../../constants/images';
 import {updateUserData} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import Button from '../../components/Button';
-import {ToastLong} from '../../utils/utils';
+import {ToastLong, ToastShort} from '../../utils/utils';
 
 const AddAddress = ({navigation}: any) => {
   const [description, setdescription] = useState('');
@@ -190,6 +190,35 @@ const AddAddress = ({navigation}: any) => {
     }
     setisLoading(false);
   };
+  const uploadCurremt = async (lat: any, lng: any) => {
+    if (!lat || !lng) {
+      ToastLong('Please pick an address!.');
+      return;
+    }
+    const res: any = await updateUserData({
+      geoLocation: {
+        type: 'Point',
+        coordinates: [lng, lat],
+      },
+      address: description,
+    });
+    console.log('result', res?.data);
+    if (res?.status === 200 || res?.status === 201) {
+      navigation.goBack();
+    } else {
+      Snackbar.show({
+        text: res?.error?.message
+          ? res?.error?.message
+          : res?.error?.data?.message
+          ? res?.error?.data?.message
+          : 'Oops!, an error occured',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+    }
+    setisLoading(false);
+  };
 
   const [regionParam, setregionParam] = useState({
     latitude: selectedLocation ? selectedLocation?.latitude : 0,
@@ -205,7 +234,7 @@ const AddAddress = ({navigation}: any) => {
         : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
     );
     console.log('loc_status', permissionStatus);
-
+    ToastShort(`Location permission : ${permissionStatus}`);
     if (permissionStatus === 'granted') {
       Geolocation.getCurrentPosition(
         async position => {
@@ -218,13 +247,17 @@ const AddAddress = ({navigation}: any) => {
             position.coords.latitude,
             position.coords.longitude,
           );
-          await upload('');
+          await uploadCurremt(
+            position.coords.latitude,
+            position.coords.longitude,
+          );
         },
         error => console.log('Error getting location:', error),
         {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
       );
     } else {
       console.warn('Location permission denied');
+      ToastShort('Location permission denied');
     }
   };
 

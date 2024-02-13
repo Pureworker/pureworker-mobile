@@ -494,7 +494,7 @@ const ProfileStep21 = () => {
                 style={styles.textarea}
                 onChangeText={(text: string) => {
                   setDescription(text);
-                  dispatch(addcompleteProfile({description: description}));
+                  dispatch(addcompleteProfile({description: text}));
                 }}
                 defaultValue={description}
                 maxLength={300}
