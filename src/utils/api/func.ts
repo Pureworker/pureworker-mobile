@@ -209,9 +209,9 @@ export const getTransactions = async (param: any) => {
       headers: {Authorization: `Bearer ${AuthToken}`},
     });
     if (response?.status === 201 || response?.status === 200) {
-      console.log('response data:', response?.data);
+      console.log('response data:', response?.status, response?.data?.length);
     }
-    console.log(response?.data);
+    console.log('getTransactions:', response?.status);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -367,7 +367,7 @@ export const onMYOrder = async (param: any) => {
     if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
-    console.log(response?.data);
+    console.log('onMYOrder:', response?.status);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -393,7 +393,7 @@ export const startOrder = async (param: any) => {
     if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
     }
-    console.log(response?.data);
+    console.log('startOrder:', response?.status);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);

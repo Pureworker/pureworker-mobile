@@ -31,7 +31,7 @@ const Account = () => {
   useEffect(() => {
     const initGetUsers = async () => {
       const res: any = await getUser('');
-      console.log('dddddddd', res);
+      // console.log('dddddddd', res);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addUserData(res?.data?.user));
       }

@@ -34,23 +34,13 @@ import {registerTransistorAuthorizationListener} from './src/tracking/authorizat
 import ENV from './src/tracking/ENV';
 import {PERMISSIONS, check, request, RESULTS} from 'react-native-permissions';
 import {ToastShort} from './src/utils/utils';
+import Geolocation from '@react-native-community/geolocation';
 Sentry.init({
   dsn: 'https://aaf6ecb52ce579d3e2a85f314f1773ad@o4506399508725760.ingest.sentry.io/4506410437509120',
 });
 
-
-
-
-
-
-
 // mark-messages-as-read
 // unread-chats
-
-
-
-
-
 
 const Stack = createStackNavigator();
 const App = () => {
@@ -345,13 +335,13 @@ const App = () => {
           });
       }),
     );
-//     }).then(state => {
-//       setEnabled(state.enabled);
-//       console.log(
-//         '- BackgroundGeolocation is configured and ready: ',
-//         state.enabled,
-//         'data-here:',
-//         state,
+    //     }).then(state => {
+    //       setEnabled(state.enabled);
+    //       console.log(
+    //         '- BackgroundGeolocation is configured and ready: ',
+    //         state.enabled,
+    //         'data-here:',
+    //         state,
     subscribe(
       BackgroundGeolocation.onPowerSaveChange(enabled => {
         console.log('[onPowerSaveChange]', enabled);
@@ -387,29 +377,32 @@ const App = () => {
     /// Set the default <Switch> state (disabled)
     setEnabled(state?.enabled);
   };
-
   const initBackgroundFetch = async () => {
     await BackgroundFetch.configure(
       {
         minimumFetchInterval: 15,
         stopOnTerminate: true,
       },
-      taskId => {
+      async taskId => {
         console.log('[BackgroundFetch] ', taskId);
-        axios
-          .post('http://localhost:3005/api/location3', {
-            long: `background:${taskId}`,
-            lat: `back:${taskId}`,
-          })
-          .then(response => {
-            console.log(
-              'BACKGROUND:Location sent successfully:',
-              response.data,
-            );
-          })
-          .catch(error => {
-            console.error('Error sending location:', error);
-          });
+        try {
+          // Code to fetch the user's location
+          const userLocation = await fetchUserLocation();
+          // Post the user's location to the endpoint
+          const response = await axios.post(
+            'http://localhost:3005/api/location3',
+            {
+              long: userLocation.longitude,
+              lat: userLocation.latitude,
+            },
+          );
+
+          console.log('Location sent successfully:', response.data);
+        } catch (error) {
+          console.error('Error sending location:', error);
+        }
+
+        // Finish the background fetch task
         BackgroundFetch.finish(taskId);
       },
       taskId => {
@@ -418,6 +411,79 @@ const App = () => {
       },
     );
   };
+  // Function to fetch user's location (replace this with your actual implementation)
+  const fetchUserLocation2 = async () => {
+    // Implement logic to fetch the user's location here
+    // This could involve using a geolocation API or accessing device sensors
+    // For simplicity, let's return a mock location object
+    return {
+      latitude: 123.456, // Replace with actual latitude
+      longitude: 789.012, // Replace with actual longitude
+    };
+  };
+
+  // Call initBackgroundFetch when appropriate in your app's lifecycle
+  // For example, when the app starts
+  initBackgroundFetch();
+
+  const fetchUserLocation = async () => {
+    const permissionStatus = await request(
+      Platform.OS === 'android'
+        ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
+        : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+    );
+    console.log('loc_status', permissionStatus);
+    if (permissionStatus === 'granted') {
+      Geolocation.getCurrentPosition(
+        position => {
+          console.log(position);
+          return {
+            latitude: position.coords.latitude, // Replace with actual latitude
+            longitude: position.coords.longitude, // Replace with actual longitude
+          };
+        },
+        error => console.log('Error getting location:', error),
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      );
+    } else {
+      console.warn('Location permission denied');
+      return {
+        latitude: 0,
+        longitude: 0,
+      };
+    }
+  };
+
+  // const initBackgroundFetch = async () => {
+  //   await BackgroundFetch.configure(
+  //     {
+  //       minimumFetchInterval: 15,
+  //       stopOnTerminate: true,
+  //     },
+  //     taskId => {
+  //       console.log('[BackgroundFetch] ', taskId);
+  //       axios
+  //         .post('http://localhost:3005/api/location3', {
+  //           long: `background:${taskId}`,
+  //           lat: `back:${taskId}`,
+  //         })
+  //         .then(response => {
+  //           console.log(
+  //             'BACKGROUND:Location sent successfully:',
+  //             response.data,
+  //           );
+  //         })
+  //         .catch(error => {
+  //           console.error('Error sending location:', error);
+  //         });
+  //       BackgroundFetch.finish(taskId);
+  //     },
+  //     taskId => {
+  //       console.log('[BackgroundFetch] TIMEOUT: ', taskId);
+  //       BackgroundFetch.finish(taskId);
+  //     },
+  //   );
+  // };
   //
   const get = async () => {
     let _fcmtoken = await AsyncStorage.getItem('fcmtoken');
@@ -546,7 +612,7 @@ const App = () => {
       </RouteContext.Provider>
       <Toast config={toastConfig} visibilityTime={5000} autoHide={true} />
     </>
-  );  
+  );
 };
 const codePushOptions = {
   checkFrequency:
@@ -563,4 +629,3 @@ export default codePush(codePushOptions)(App);
  * - react-native-notifications
  * - react-native-push-notification
  * */
-

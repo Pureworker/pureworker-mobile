@@ -65,7 +65,7 @@ export const Signup = async (param: any) => {
       };
       await storeTokenData(response);
     }
-    console.log('response', response);
+    // console.log('response', response);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
