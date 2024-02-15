@@ -18,6 +18,9 @@ import OrderReview from '../screens/user/orderReview';
 import PaymentConfirmed from '../screens/user/paymentConfirmed';
 import FaceDetection from '../screens/faceDetection';
 
+import PRofileStep11 from '../screens/profile/edit/ProfileStep11';
+import ProfileStep211 from '../screens/profile/edit/ProfileStep211';
+
 const Stack = createNativeStackNavigator();
 
 export default function VendorNavigation() {
@@ -96,6 +99,17 @@ export default function VendorNavigation() {
       <Stack.Screen
         name="FaceDetection"
         component={FaceDetection}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+
+      <Stack.Screen
+        name="ProfileStep11"
+        component={PRofileStep11}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="ProfileStep211"
+        component={ProfileStep211}
         options={{headerShown: false, animationEnabled: false}}
       />
     </Stack.Navigator>

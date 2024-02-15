@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, ActivityIndicator, ScrollView, Text} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
@@ -16,8 +16,12 @@ import {useCreateServiceMutation} from '../../store/slice/api';
 import {validateEmail} from '../../constants/utils';
 import tw from 'twrnc';
 import {useDispatch, useSelector} from 'react-redux';
-import {addcompleteProfile, addformStage} from '../../store/reducer/mainSlice';
-import {completeProfile} from '../../utils/api/func';
+import {
+  addProfileData,
+  addcompleteProfile,
+  addformStage,
+} from '../../store/reducer/mainSlice';
+import {completeProfile, getProviderNew} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import * as yup from 'yup';
@@ -81,38 +85,69 @@ const validationSchema = yup.object().shape({
 
 const ProfileStep3 = () => {
   const navigation = useNavigation<StackNavigation>();
+  const ProviderData = useSelector((state: any) => state.user.profileData);
+  const userData = useSelector((state: any) => state.user.userData);
+  useEffect(() => {
+    const initGetProviderNew = async () => {
+      const res: any = await getProviderNew(userData?._id);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addProfileData(res?.data?.profile));
+      }
+    };
+    initGetProviderNew();
+  }, []);
   const completeProfileData = useSelector(
     (state: any) => state.user.completeProfileData,
   );
   const [name1, setName1] = useState(
-    completeProfileData?.contact?.[0]?.fullName || '',
+    ProviderData?.contact?.[0]?.fullName ||
+      completeProfileData?.contact?.[0]?.fullName ||
+      '',
   );
   const [name2, setName2] = useState(
-    completeProfileData?.contact?.[1]?.fullName || '',
+    ProviderData?.contact?.[1]?.fullName ||
+      completeProfileData?.contact?.[1]?.fullName ||
+      '',
   );
   const [relation1, setRelation1] = useState(
-    completeProfileData?.contact?.[0]?.relationship || '',
+    ProviderData?.contact?.[0]?.relationship ||
+      completeProfileData?.contact?.[0]?.relationship ||
+      '',
   );
   const [relation2, setRelation2] = useState(
-    completeProfileData?.contact?.[1]?.relationship || '',
+    ProviderData?.contact?.[1]?.relationship ||
+      completeProfileData?.contact?.[1]?.relationship ||
+      '',
   );
   const [phoneNumber1, setPhoneNumber1] = useState(
-    completeProfileData?.contact?.[0]?.phoneNumber || '',
+    ProviderData?.contact?.[0]?.phoneNumber ||
+      completeProfileData?.contact?.[0]?.phoneNumber ||
+      '',
   );
   const [phoneNumber2, setPhoneNumber2] = useState(
-    completeProfileData?.contact?.[1]?.phoneNumber || '',
+    ProviderData?.contact?.[1]?.phoneNumber ||
+      completeProfileData?.contact?.[1]?.phoneNumber ||
+      '',
   );
   const [email1, setEmail1] = useState(
-    completeProfileData?.contact?.[0]?.email || '',
+    ProviderData?.contact?.[0]?.email ||
+      completeProfileData?.contact?.[0]?.email ||
+      '',
   );
   const [email2, setEmail2] = useState(
-    completeProfileData?.contact?.[1]?.email || '',
+    ProviderData?.contact?.[1]?.email ||
+      completeProfileData?.contact?.[1]?.email ||
+      '',
   );
   const [address1, setAddress1] = useState(
-    completeProfileData?.contact?.[0]?.address || '',
+    ProviderData?.contact?.[0]?.address ||
+      completeProfileData?.contact?.[0]?.address ||
+      '',
   );
   const [address2, setAddress2] = useState(
-    completeProfileData?.contact?.[1]?.address || '',
+    ProviderData?.contact?.[1]?.address ||
+      completeProfileData?.contact?.[1]?.address ||
+      '',
   );
   const route: Route = useRoute();
   const [isLoading, setisLoading] = useState(false);
@@ -123,16 +158,46 @@ const ProfileStep3 = () => {
 
   const formik = useFormik({
     initialValues: {
-      name1: completeProfileData?.contact?.[0]?.fullName || '',
-      relation1: completeProfileData?.contact?.[0]?.relationship || '',
-      phoneNumber1: completeProfileData?.contact?.[0]?.phoneNumber || '',
-      email1: completeProfileData?.contact?.[0]?.email || '',
-      address1: completeProfileData?.contact?.[0]?.address || '',
-      name2: completeProfileData?.contact?.[1]?.fullName || '',
-      relation2: completeProfileData?.contact?.[1]?.relationship || '',
-      phoneNumber2: completeProfileData?.contact?.[1]?.phoneNumber || '',
-      email2: completeProfileData?.contact?.[1]?.email || '',
-      address2: completeProfileData?.contact?.[1]?.address || '',
+      name1:
+        ProviderData?.contact?.[0]?.fullName ||
+        completeProfileData?.contact?.[0]?.fullName ||
+        '',
+      relation1:
+        ProviderData?.contact?.[0]?.relationship ||
+        completeProfileData?.contact?.[0]?.relationship ||
+        '',
+      phoneNumber1:
+        ProviderData?.contact?.[0]?.phoneNumber ||
+        completeProfileData?.contact?.[0]?.phoneNumber ||
+        '',
+      email1:
+        ProviderData?.contact?.[0]?.email ||
+        completeProfileData?.contact?.[0]?.email ||
+        '',
+      address1:
+        ProviderData?.contact?.[0]?.address ||
+        completeProfileData?.contact?.[0]?.address ||
+        '',
+      name2:
+        ProviderData?.contact?.[1]?.fullName ||
+        completeProfileData?.contact?.[1]?.fullName ||
+        '',
+      relation2:
+        ProviderData?.contact?.[1]?.relationship ||
+        completeProfileData?.contact?.[1]?.relationship ||
+        '',
+      phoneNumber2:
+        ProviderData?.contact?.[1]?.phoneNumber ||
+        completeProfileData?.contact?.[1]?.phoneNumber ||
+        '',
+      email2:
+        ProviderData?.contact?.[1]?.email ||
+        completeProfileData?.contact?.[1]?.email ||
+        '',
+      address2:
+        ProviderData?.contact?.[1]?.address ||
+        completeProfileData?.contact?.[1]?.address ||
+        '',
     },
     validationSchema: validationSchema,
     onSubmit: async values => {
@@ -275,6 +340,7 @@ const ProfileStep3 = () => {
     }
     setisLoading(false);
   };
+
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
       <Header
@@ -399,7 +465,11 @@ const ProfileStep3 = () => {
               marginTop: 13,
             }}>
             <TextInputs
-              styleInput={{color: colors.black, paddingHorizontal: 18, height: 120}}
+              styleInput={{
+                color: colors.black,
+                paddingHorizontal: 18,
+                height: 120,
+              }}
               style={{marginTop: 0, backgroundColor: colors.greyLight1}}
               labelText={'Enter address'}
               state={formik.values.address1}
@@ -520,7 +590,11 @@ const ProfileStep3 = () => {
               marginTop: 13,
             }}>
             <TextInputs
-              styleInput={{color: colors.black, paddingHorizontal: 18, height: 120}}
+              styleInput={{
+                color: colors.black,
+                paddingHorizontal: 18,
+                height: 120,
+              }}
               style={{marginTop: 0, backgroundColor: colors.greyLight1}}
               labelText={'Enter address'}
               // state={address2}

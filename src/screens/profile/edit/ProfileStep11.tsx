@@ -7,13 +7,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {StackNavigation} from '../../constants/navigation';
-import Header from '../../components/Header';
-import images from '../../constants/images';
-import Button from '../../components/Button';
-import TextWrapper from '../../components/TextWrapper';
-import commonStyle from '../../constants/commonStyle';
-import colors from '../../constants/colors';
+import {StackNavigation} from '../../../constants/navigation';
+import Header from '../../../components/Header';
+import images from '../../../constants/images';
+import Button from '../../../components/Button';
+import TextWrapper from '../../../components/TextWrapper';
+import commonStyle from '../../../constants/commonStyle';
+import colors from '../../../constants/colors';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   addCategory,
@@ -21,10 +21,10 @@ import {
   addformStage,
   addprovider_id,
   removeCategory,
-} from '../../store/reducer/mainSlice';
-import {generalStyles} from '../../constants/generalStyles';
-import ProfileStepWrapper from '../../components/ProfileStepWrapper';
-import TextInputs from '../../components/TextInputs';
+} from '../../../store/reducer/mainSlice';
+// import {generalStyles} from '../../constants/generalStyles';
+import ProfileStepWrapper from '../../../components/ProfileStepWrapper';
+import TextInputs from '../../../components/TextInputs';
 import tw from 'twrnc';
 
 import {
@@ -38,22 +38,18 @@ import {
   completeProfile,
   getProviderNew,
   getSubCategory,
-} from '../../utils/api/func';
-import {RouteContext} from '../../utils/context/route_context';
-import CustomLoading from '../../components/customLoading';
+} from '../../../utils/api/func';
+import {RouteContext} from '../../../utils/context/route_context';
+import CustomLoading from '../../../components/customLoading';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {ToastShort} from '../../utils/utils';
-import {SIZES} from '../../utils/position/sizes';
-import Textcomp from '../../components/Textcomp';
+import {ToastShort} from '../../../utils/utils';
+import {SIZES} from '../../../utils/position/sizes';
+import Textcomp from '../../../components/Textcomp';
 
-const PRofileStep1 = () => {
+const PRofileStep11 = () => {
   const navigation = useNavigation<StackNavigation>();
   const [addService, setAddService] = useState('');
   const [isAddService, setIsAddService] = useState(false);
-
-  // const {data: getCategoryData, isLoading, isError} = useGetCategoryQuery();
-  // const getCategory = getCategoryData ?? [];
-
   const _getCategory = useSelector((state: any) => state.user.category);
   const getCategory = _getCategory;
   const category = useSelector((state: any) => state.user.pickedServices);
@@ -71,30 +67,8 @@ const PRofileStep1 = () => {
   const [selectCategory, setselectCategory] = useState('');
   const [subCategory, setsubCategory] = useState([]);
   const [subLoading, setsubLoading] = useState(false);
-  // const [getSubCategories] = useGetSubCategoriesQuery()
-  const HandleGetSubCategory = async param => {
-    console.log('started');
-    try {
-      const response = await axios({
-        method: 'get',
-        url: `https://pureworkers.com/api/users/category/${param}`,
-      });
-      // console.log(response?.data);
-      setsubCategory(response?.data);
-    } catch (error) {
-      console.log('err', error);
-      Snackbar.show({
-        text: error?.data?.message,
-        duration: Snackbar.LENGTH_SHORT,
-        textColor: '#fff',
-        backgroundColor: '#88087B',
-      });
-    }
-  };
   const [_getSubCategory, set_getSubCategory] = useState([]);
   const initSubGetCategory = async param => {
-    // setisLoading(true);
-    // console.log(param);
     setsubLoading(true);
     const res: any = await getSubCategory(param);
     console.log('prssss', res?.data?.data);
@@ -103,7 +77,6 @@ const PRofileStep1 = () => {
       set_getSubCategory(res?.data?.data?.[0]?.services);
     }
     setsubLoading(false);
-    // setisLoading(false);
   };
   const {currentState, setCurrentState} = useContext(RouteContext);
   console.log(currentState);
@@ -146,16 +119,12 @@ const PRofileStep1 = () => {
   };
   const handleNext = async () => {
     if (category?.length < 1) {
-      ToastShort('Atleast 1 service is required!.');
+      ToastShort('No changes Made!.');
+      navigation.navigate('ProfileStep211');
       return;
     }
     console.log(categoryId);
     await handleProfileSetup();
-    // const data = completeProfileData;
-    // data.services = category;
-    // console.log(data, category, categoryId);
-    // dispatch(addcompleteProfile({services: categoryId}));
-    // navigation.navigate('ProfileStep2');
   };
   useEffect(() => {
     const initGetProviderNew = async () => {
@@ -490,8 +459,8 @@ const PRofileStep1 = () => {
         </View>
 
         <View style={{flexDirection: 'row', flexWrap: 'wrap', marginTop: 10}}>
-          {category?.length > 0
-            ? category?.map((item: any, index: any) => {
+          {ProviderData?.services?.length > 0
+            ? ProviderData?.services?.map((item: any, index: any) => {
                 return (
                   <View
                     key={index}
@@ -561,4 +530,4 @@ const PRofileStep1 = () => {
   );
 };
 
-export default PRofileStep1;
+export default PRofileStep11;

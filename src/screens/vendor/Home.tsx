@@ -718,7 +718,7 @@ const Home = ({navigation}: any) => {
             <TouchableOpacity
               // disabled={true}
               onPress={() => {
-                navigation.navigate('ProfileStep1');
+                navigation.navigate('ProfileStep11');
               }}
               style={[
                 tw`bg-[#2D303C] mx-auto flex flex-row items-center justify-center`,
