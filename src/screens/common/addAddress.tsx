@@ -409,10 +409,46 @@ const AddAddress = ({navigation}: any) => {
           </View>
         )}
         <TouchableOpacity
-          onPress={() => {
-            // upload('');
-            chooseCurrent();
+          onPress={async () => {
+            const permissionStatus = await request(
+              Platform.OS === 'android'
+                ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
+                : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+            );
+
+            if (permissionStatus === 'granted') {
+              Geolocation.getCurrentPosition(
+                async position => {
+                  setSelectedLocation({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                  });
+                  await fetchAddress(
+                    position.coords.latitude,
+                    position.coords.longitude,
+                  );
+                  await uploadCurremt(
+                    position.coords.latitude,
+                    position.coords.longitude,
+                  );
+                },
+                error => {
+                  console.log('Error getting location:', error);
+                  ToastLong(
+                    'Failed to get current location. Please try again.',
+                  );
+                },
+                {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+              );
+            } else {
+              console.warn('Location permission denied');
+              ToastShort('Location permission denied');
+            }
           }}
+          // onPress={() => {
+          //   // upload('');
+          //   chooseCurrent();
+          // }}
           style={tw`w-[90%] bg-[#A1A1A11A] p-2 px-3 rounded-lg mt-4 mx-auto `}>
           <View style={tw`flex flex-row items-center `}>
             <Image source={images.location} style={{width: 25, height: 25}} />

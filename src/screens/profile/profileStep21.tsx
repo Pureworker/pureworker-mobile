@@ -145,6 +145,14 @@ const ProfileStep21 = () => {
       ToastShort('Description is required!. ');
       return;
     }
+    if (
+      !ProviderData?.profilePic ||
+      ProviderData?.profilePic ===
+        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+    ) {
+      ToastShort('Profile Picture is required!. ');
+      return;
+    }
 
     // const d = ProviderData?.portfolios?.filter(s => s.service === item?._id);
     const ProviderDataLength = ProviderData?.portfolios?.length;
@@ -323,15 +331,18 @@ const ProfileStep21 = () => {
     type: string | null;
     size: number | null;
   }) => {
-    setisLoading(true);
-    const res: any = await uploadAssetsDOCorIMG(param);
-    if (res?.status === 201 || res?.status === 200) {
-      console.log('ApartmentType', res?.data);
+    try {
+      setisLoading(true);
+      const res: any = await uploadAssetsDOCorIMG(param);
+      if (res?.status === 201 || res?.status === 200) {
+        console.log('ApartmentType', res?.data);
+        setisLoading(false);
+        return res?.data?.url;
+      }
+    } catch (error) {
+    } finally {
       setisLoading(false);
-      // return res?.data?.doc?.url;
-      return res?.data?.url;
     }
-    setisLoading(false);
   };
   const [editModal, seteditModal] = useState(false);
   const profileData = useSelector((state: any) => state.user.profileData);
