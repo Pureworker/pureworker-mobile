@@ -152,7 +152,7 @@ const PRofileStep1 = () => {
     console.log(categoryId);
     await handleProfileSetup();
     // const data = completeProfileData;
-    // data.services = category;
+    // data?.services = category;
     // console.log(data, category, categoryId);
     // dispatch(addcompleteProfile({services: categoryId}));
     // navigation.navigate('ProfileStep2');
@@ -166,7 +166,7 @@ const PRofileStep1 = () => {
     };
     initGetProviderNew();
   }, []);
-  console.log('PROFILE:', ProviderData.services);
+  console.log('PROFILE:', ProviderData?.services);
 
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>

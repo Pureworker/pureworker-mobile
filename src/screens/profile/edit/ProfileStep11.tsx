@@ -135,7 +135,7 @@ const PRofileStep11 = () => {
     };
     initGetProviderNew();
   }, []);
-  console.log('PROFILE:', ProviderData.services);
+  console.log('PROFILE:', ProviderData?.services);
 
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
