@@ -359,7 +359,7 @@ const Orderscomponent = ({
                 style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
               />
 
-              {(status !== 'DECLINED' && status !== 'INPROGRESS')  && (
+              {status !== 'DECLINED' && status !== 'INPROGRESS' && (
                 <TouchableOpacity
                   onPress={() => {
                     // setmodalSection('Cancel')
@@ -412,11 +412,40 @@ const Orderscomponent = ({
                   />
                 </View>
               </TouchableOpacity>
+              {/* <TouchableOpacity
+                onPress={() => {
+                  setInfoModal(false);
+                  navigation.navigate('ViewLocation', {
+                    id: item?.serviceProvider._id || item?.serviceProvider?.id,
+                    item: item,
+                  });
+                }}
+                style={[
+                  tw`flex mt-10 flex-row`,
+                  {
+                    marginHorizontal: perWidth(30),
+                    marginTop: perHeight(25),
+                  },
+                ]}>
+                <Location />
+                <View style={[tw``, {marginLeft: perWidth(30)}]}>
+                  <Textcomp
+                    text={'View Location'}
+                    size={14}
+                    lineHeight={17}
+                    color={'#000000'}
+                    fontFamily={'Inter-SemiBold'}
+                  />
+                </View>
+              </TouchableOpacity> */}
               {status === 'TRACK' && item?.location !== 'online' && (
                 <TouchableOpacity
                   onPress={() => {
                     setInfoModal(false);
-                    navigation.navigate('ViewLocation');
+                    navigation.navigate('ViewLocation', {
+                      id: item?.serviceProvider._id || item?.serviceProvider?.id,
+                      item: item,
+                    });
                   }}
                   style={[
                     tw`flex mt-10 flex-row`,

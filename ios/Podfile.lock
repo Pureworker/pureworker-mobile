@@ -487,6 +487,8 @@ PODS:
   - react-native-image-picker (7.1.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
+  - react-native-location (2.5.0):
+    - React
   - react-native-maps (1.7.1):
     - React-Core
   - react-native-paystack-webview (4.0.3):
@@ -740,6 +742,7 @@ DEPENDENCIES:
   - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - react-native-location (from `../node_modules/react-native-location`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-paystack-webview (from `../node_modules/react-native-paystack-webview`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -883,6 +886,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-maps"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-location:
+    :path: "../node_modules/react-native-location"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
   react-native-paystack-webview:
@@ -1031,6 +1036,7 @@ SPEC CHECKSUMS:
   react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
   react-native-google-maps: dd12cdd86b8e3fedbbb671676aedaa2f656e2ccd
   react-native-image-picker: 5e076db26cd81660cfb6db5bcf517cfa12054d45
+  react-native-location: 5a40ec1cc6abf2f6d94df979f98ec76c3a415681
   react-native-maps: 667f9b975549c6fa9b1631bf859440f68ebd3b8f
   react-native-paystack-webview: d8ed4a0300c7872673e186294cb6176cca46c696
   react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284

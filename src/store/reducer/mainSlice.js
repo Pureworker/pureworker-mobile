@@ -50,6 +50,7 @@ const initialState = {
   welcomeModal: false,
   serviceProviderData: {},
   liveTest: false,
+  providerLocation : {},
 
   //provider-profileID
   provider_id: null,
@@ -259,6 +260,9 @@ export const mainSlice = createSlice({
     setbookMarkedProviders: (state, action) => {
       state.bookMarkedProviders = action.payload;
     },
+    setProviderLocation: (state, action) => {
+      state.providerLocation = action.payload;
+    },
   },
 });
 
@@ -299,6 +303,7 @@ export const {
   setbookMarkedProviders,
   updateUnreadChat,
   updateUnreadNotification,
+  setProviderLocation,
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);

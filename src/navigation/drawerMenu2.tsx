@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -25,6 +25,10 @@ import Referrals from '../screens/common/referrals';
 import {registerTransistorAuthorizationListener} from '../tracking/authorization';
 import useChat from '../hooks/useChat';
 import {useSelector} from 'react-redux';
+import TrackRiderLocation from '../tracking/trkLocation';
+import Geolocation from '@react-native-community/geolocation';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -33,20 +37,92 @@ const TabNavigator = () => {
   const {getUnreadMessages} = useChat();
   const unreadChats = useSelector((state: any) => state.user.unreadChats);
   const navigation = useNavigation();
+  
 
   useEffect(() => {
     getUnreadMessages();
   }, []);
 
-  React.useEffect(() => {
-    registerTransistorAuthorizationListener(navigation);
-    return () => {
-      // Remove BackgroundGeolocation event-subscribers when the View is removed or refreshed
-      // during development live-reload.  Without this, event-listeners will accumulate with
-      // each refresh during live-reload.
-      // unsubscribe();
+  const [accessToken, setToken]: any = useState(null);
+  useEffect(() => {
+    const getToken = async () => {
+      const _token = await AsyncStorage.getItem('AuthToken');
+      if (_token && _token !== null) {
+        setToken(_token);
+      } else {
+        setToken(null);
+      }
     };
+    getToken();
   }, []);
+
+  // React.useEffect(() => {
+  //   registerTransistorAuthorizationListener(navigation);
+  //   return () => {
+  //     // Remove BackgroundGeolocation event-subscribers when the View is removed or refreshed
+  //     // during development live-reload.  Without this, event-listeners will accumulate with
+  //     // each refresh during live-reload.
+  //     // unsubscribe();
+  //   };
+  // }, []);
+  Geolocation.setRNConfiguration({
+    authorizationLevel: 'always', // Request "always" location permission
+    skipPermissionRequests: false, // Prompt for permission if not granted
+  });
+  // Watch for position updates
+  const watchId = Geolocation.watchPosition(
+    async position => {
+      console.log('POSITION:', position);
+      const _token = await AsyncStorage.getItem('AuthToken');
+      // Send the position data to the server
+      axios
+        .post(
+          'https://api.pureworker.com/api/location',
+          {
+            long: position.coords.longitude,
+            lat: position.coords.latitude,
+            _type: 'PROVIDER',
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${_token}`,
+            },
+          },
+        )
+        .then(response => {
+          console.log(
+            '[PROVIDER-WATCH]: Watchposition sent successfully:',
+            response.data,
+          );
+        })
+        .catch(error => {
+          console.error('Error sending location2:', error, accessToken);
+        });
+    },
+    error => {
+      console.log(error);
+    },
+    {
+      distanceFilter: 10, // Minimum distance (in meters) to update the location
+      interval: 900000, // Update interval (in milliseconds), which is 15 minutes
+      fastestInterval: 300000, // Fastest update interval (in milliseconds)
+      accuracy: {
+        android: 'highAccuracy',
+        ios: 'best',
+      },
+      showsBackgroundLocationIndicator: true,
+      pausesLocationUpdatesAutomatically: false,
+      activityType: 'fitness', // Specify the activity type (e.g., 'fitness' or 'other')
+      useSignificantChanges: false,
+      deferredUpdatesInterval: 0,
+      deferredUpdatesDistance: 0,
+      foregroundService: {
+        notificationTitle: 'Tracking your location',
+        notificationBody: 'Enable location tracking to continue', // Add a notification body
+      },
+    },
+  );
+  //
   return (
     <Tab.Navigator
       screenOptions={{
@@ -182,6 +258,7 @@ const DrawerMenu = () => {
         />
         {/* Add other drawer screens as needed */}
       </Drawer.Navigator>
+      <TrackRiderLocation />
     </PaperProvider>
   );
 };

@@ -74,7 +74,6 @@
     "react-native-keyboard-avoiding-scroll-view": "^1.0.1",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-loading-spinner-overlay": "^3.0.1",
-    "react-native-location": "^2.5.0",
     "react-native-maps": "^1.7.1",
     "react-native-modal": "^13.0.1",
     "react-native-modal-datetime-picker": "^17.1.0",

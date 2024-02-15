@@ -68,8 +68,6 @@ const Home = () => {
 
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
-  const [search, setSearch] = useState('');
-  const [loading, setLoading] = useState(false);
   const [InfoModal, setInfoModal] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   useEffect(() => {
@@ -168,7 +166,6 @@ const Home = () => {
   //       return text.indexOf(textSearch) > -1;
   //     });
   //   }
-
   //   if (searchArray.length) {
   //     return searchArray;
   //   } else {

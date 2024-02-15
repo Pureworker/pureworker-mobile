@@ -716,9 +716,9 @@ const Home = ({navigation}: any) => {
           )}
           {userData?.isVerified === 'rejected' && (
             <TouchableOpacity
-              disabled={true}
+              // disabled={true}
               onPress={() => {
-                // navigation.navigate('ProfileStep21');
+                navigation.navigate('ProfileStep1');
               }}
               style={[
                 tw`bg-[#2D303C] mx-auto flex flex-row items-center justify-center`,

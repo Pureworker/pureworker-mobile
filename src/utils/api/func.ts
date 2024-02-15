@@ -1577,3 +1577,27 @@ export const deletePortfolio = async (param: any) => {
     };
   }
 };
+
+export const getProviderLocation = async (param) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getProviderLocation func started');
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/location/${param}`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};

@@ -101,7 +101,7 @@ const HelloWorldView = ({route, navigation}: any) => {
               );
             })
             .catch(error => {
-              console.error('Error sending location:', error);
+              console.error('Error sending location9:', error);
             });
         },
         error => {
@@ -154,7 +154,7 @@ const HelloWorldView = ({route, navigation}: any) => {
             );
           })
           .catch(error => {
-            console.error('Error sending location:', error);
+            console.error('Error sending location10:', error);
           });
       }),
     );
@@ -217,7 +217,7 @@ const HelloWorldView = ({route, navigation}: any) => {
             );
           })
           .catch(error => {
-            console.error('Error sending location:', error);
+            console.error('Error sending location11:', error);
           });
         BackgroundFetch.finish(taskId);
       },

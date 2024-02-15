@@ -1,55 +1,119 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
   Platform,
   StatusBar,
   ScrollView,
   ActivityIndicator,
-  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
-import {SIZES} from '../../utils/position/sizes';
+import MapView, {Marker} from 'react-native-maps';
+import {SIZES, perWidth} from '../../utils/position/sizes';
+import {getProviderLocation} from '../../utils/api/func';
+import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
+import {setProviderLocation} from '../../store/reducer/mainSlice';
+import FastImage from 'react-native-fast-image';
 
-const ViewLocation = () => {
+const ViewLocation = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
+  const providerLocation = useSelector(
+    (state: any) => state.user.providerLocation,
+  );
   const dispatch = useDispatch();
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const {id, item} = route.params;
 
-  //
+  useEffect(() => {
+    const fetchLocation = async () => {
+      try {
+        // const res: any = await getProviderLocation('65cb95af993d69fb83faf837');
+        const res: any = await getProviderLocation(id);
+        console.log('location.........', res?.data);
+        if (res?.status === 201 || res?.status === 200) {
+          if (res?.data?.data !== null) {
+            dispatch(setProviderLocation(res?.data?.data));
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching location:', error);
+      }
+    };
+    // Fetch location initially
+    fetchLocation();
+    // Fetch location every 30 seconds
+    const intervalId = setInterval(fetchLocation, 30000);
+
+    // Cleanup function to clear the interval
+    return () => clearInterval(intervalId);
+  }, []);
+
   const latitude = 6.5244;
   const longitude = 3.3792;
-  const fitToMarkers = () => {
-    setloading(false);
-    if (mapRef.current) {
-      mapRef.current.fitToCoordinates(
-        {
-          latitude: latitude,
-          longitude: longitude,
-        },
-        {
-          latitude: latitude + 0.00344,
-          longitude: longitude + 0.0023455,
-        },
-        {
-          edgePadding: {top: 50, right: 50, bottom: 50, left: 50},
-          animated: true,
-        },
-      );
+  const mapRef = useRef<MapView>(null);
+  const [region, setregion] = useState({
+    latitude: latitude,
+    longitude: longitude,
+    latitudeDelta: 0.26,
+    longitudeDelta: 0.26,
+  });
+
+  useEffect(() => {
+    if (mapRef.current && providerLocation.lat && providerLocation.long) {
+      const markers = [
+        {latitude: latitude, longitude: longitude},
+        {latitude: providerLocation.lat, longitude: providerLocation.long},
+      ];
+      const region = calculateRegion(markers);
+      mapRef.current.animateToRegion(region, 1000);
     }
+  }, [providerLocation.lat, providerLocation.long]);
+
+  const calculateRegion = (
+    markers: {latitude: number; longitude: number}[],
+  ) => {
+    const minLat = Math.min(...markers.map(marker => marker.latitude));
+    const maxLat = Math.max(...markers.map(marker => marker.latitude));
+    const minLng = Math.min(...markers.map(marker => marker.longitude));
+    const maxLng = Math.max(...markers.map(marker => marker.longitude));
+
+    const latitude = (minLat + maxLat) / 2;
+    const longitude = (minLng + maxLng) / 2;
+    const latitudeDelta = maxLat - minLat + 0.02;
+    const longitudeDelta = maxLng - minLng + 0.02;
+
+    setregion({
+      latitude,
+      longitude,
+      latitudeDelta,
+      longitudeDelta,
+    });
+
+    console.log({
+      latitude,
+      longitude,
+      latitudeDelta,
+      longitudeDelta,
+    });
+
+    return {
+      latitude,
+      longitude,
+      latitudeDelta,
+      longitudeDelta,
+    };
   };
-  const mapRef = React.createRef();
+
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+    <View style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <ScrollView>
         <View
           style={{
@@ -100,66 +164,53 @@ const ViewLocation = () => {
             ) : (
               <>
                 <MapView
-                  // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
                   style={{height: SIZES.height * 0.9, width: SIZES.width}}
                   ref={mapRef}
-                  mapType="standard"
-                  region={{
-                    latitude: latitude,
-                    longitude: longitude,
-                    // latitudeDelta: 0.005,
-                    // longitudeDelta: 0.005,
-                    latitudeDelta: 0.26,
-                    longitudeDelta: 0.26,
-                  }}
-                  //added
-                  userLocationFastestInterval={50}
-                  showsCompass={true}
-                  rotateEnabled={true}
-                  onMapReady={fitToMarkers} // Fit the map when it's ready
-                >
-                  <Marker
-                    coordinate={{
-                      latitude: latitude,
-                      longitude: longitude,
-                    }}
-                    title="Origin"
-                    description="You"
-                    identifier="Origin"
-                    pinColor="red">
-                    <Image
-                      resizeMode="contain"
-                      source={images.location}
-                      style={{
-                        width: 40,
-                        height: 40,
+                  initialRegion={region}
+                  // initialRegion={{
+                  //   latitude: latitude,
+                  //   longitude: longitude,
+                  //   latitudeDelta: 0.26,
+                  //   longitudeDelta: 0.26,
+                  // }}
+                  showsCompass={true}>
+                  {providerLocation.lat && (
+                    <Marker
+                      coordinate={{
+                        latitude: providerLocation.lat,
+                        longitude: providerLocation.long,
                       }}
-                    />
-                  </Marker>
-                  <Marker
-                    coordinate={{
-                      latitude: latitude - 0.059,
-                      longitude: longitude - 0.059,
-                    }}
-                    title="Service Provider"
-                    description="Service Provider"
-                    identifier="Service Provider"
-                    pinColor="red">
-                    <Image
-                      resizeMode="contain"
-                      source={images.location}
-                      style={{
-                        width: 40,
-                        height: 40,
-                      }}
-                    />
-                  </Marker>
+                      title={`${item?.serviceProvider?.fullName}`}
+                      description="Service Provider"
+                      identifier="Service Provider"
+                      pinColor="red">
+                      {item?.serviceProvider?.profilePic && (
+                        <FastImage
+                          style={[
+                            tw``,
+                            {
+                              width: perWidth(30),
+                              height: perWidth(30),
+                              borderRadius: perWidth(30) / 2,
+                            },
+                          ]}
+                          source={{
+                            uri: item?.serviceProvider?.profilePic,
+                            headers: {Authorization: 'someAuthToken'},
+                            priority: FastImage.priority.normal,
+                          }}
+                          resizeMode={FastImage.resizeMode.cover}
+                        />
+                      )}
+                    </Marker>
+                  )}
                 </MapView>
               </>
             )}
           </>
         </View>
       </ScrollView>
+      <Spinner visible={loading} customIndicator={<CustomLoading />} />
     </View>
   );
 };

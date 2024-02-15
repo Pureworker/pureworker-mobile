@@ -35,6 +35,10 @@ import ENV from './src/tracking/ENV';
 import {PERMISSIONS, check, request, RESULTS} from 'react-native-permissions';
 import {ToastShort} from './src/utils/utils';
 import Geolocation from '@react-native-community/geolocation';
+import TrackRiderLocation from './src/tracking/trkLocation';
+// import {DefaultTrack} from './src/tracking/default';
+// import ReactNativeForegroundService from '@supersami/rn-foreground-service';
+// import RNLocation from 'react-native-location';
 Sentry.init({
   dsn: 'https://aaf6ecb52ce579d3e2a85f314f1773ad@o4506399508725760.ingest.sentry.io/4506410437509120',
 });
@@ -214,7 +218,7 @@ const App = () => {
             );
           })
           .catch(error => {
-            console.error('Error sending location:', error);
+            console.error('Error sending location4:', error);
           });
 
         axios
@@ -270,7 +274,7 @@ const App = () => {
               );
             })
             .catch(error => {
-              console.error('Error sending location:', error);
+              console.error('Error sending location6:', error);
             });
         },
         error => {
@@ -386,11 +390,9 @@ const App = () => {
       async taskId => {
         console.log('[BackgroundFetch] ', taskId);
         try {
-          // Code to fetch the user's location
           const userLocation = await fetchUserLocation();
-          // Post the user's location to the endpoint
           const response = await axios.post(
-            'http://localhost:3005/api/location3',
+            'https://api.pureworker.com/api/location2',
             {
               long: userLocation.longitude,
               lat: userLocation.latitude,
@@ -399,7 +401,7 @@ const App = () => {
 
           console.log('Location sent successfully:', response.data);
         } catch (error) {
-          console.error('Error sending location:', error);
+          console.error('Error sending location7:', error);
         }
 
         // Finish the background fetch task
@@ -442,7 +444,7 @@ const App = () => {
             longitude: position.coords.longitude, // Replace with actual longitude
           };
         },
-        error => console.log('Error getting location:', error),
+        error => console.log('Error getting location2:', error),
         {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
       );
     } else {
@@ -598,6 +600,13 @@ const App = () => {
     loadState();
   }, []); // Empty dependency array to run this effect once on component mount
 
+  useEffect(() => {}, []); // Empty dependency array to run this effect once on component mount
+
+  Geolocation.setRNConfiguration({
+    authorizationLevel: 'always', // Request "always" location permission
+    skipPermissionRequests: false, // Prompt for permission if not granted
+  });
+  // Watch for position updates
   return (
     <>
       <RouteContext.Provider
@@ -610,6 +619,7 @@ const App = () => {
           </PersistGate>
         </Provider>
       </RouteContext.Provider>
+      {/* <TrackRiderLocation /> */}
       <Toast config={toastConfig} visibilityTime={5000} autoHide={true} />
     </>
   );
@@ -625,6 +635,9 @@ export default codePush(codePushOptions)(App);
 
 // Installed Packages
 /*****
+ *
+ *
+ *
  *
  * - react-native-notifications
  * - react-native-push-notification
