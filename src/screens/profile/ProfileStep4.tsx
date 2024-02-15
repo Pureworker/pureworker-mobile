@@ -69,7 +69,6 @@ const ProfileStep4 = () => {
   const dispatch = useDispatch();
 
   const verifyID = async () => {
-
     if (!selectedVerification) {
       ToastShort('Please choose a Means of ID');
       return;
@@ -93,7 +92,8 @@ const ProfileStep4 = () => {
     });
     console.log('result', res?.data);
     if (res?.status === 200 || res?.status === 201) {
-      navigation.navigate('Congratulations');
+      navigation.navigate('FaceDetection', {page: 'Profile'});
+      // navigation.navigate('Congratulations');
       dispatch(addformStage(6));
       setisLoading(false);
     } else {
@@ -139,7 +139,8 @@ const ProfileStep4 = () => {
     });
     console.log('result', res?.data);
     if (res?.status === 200 || res?.status === 201) {
-      navigation.navigate('Congratulations');
+      // navigation.navigate('Congratulations');
+      navigation.navigate('FaceDetection', {page: 'Profile'});
       dispatch(addformStage(6));
       setisLoading(false);
     } else {

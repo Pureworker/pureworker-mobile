@@ -63,10 +63,10 @@ const GetFCMToken = async (userData: any) => {
             //   text1: 'Token Added successfully',
             // });
           } else {
-            Toast.show({
-              type: 'error',
-              text1: res.error.data,
-            });
+            // Toast.show({
+            //   type: 'error',
+            //   text1: res.error.data,
+            // });
           }
         };
         await initToken({fcmToken: fcmtoken});

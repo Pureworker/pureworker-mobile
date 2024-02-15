@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   ScrollView,
@@ -10,28 +10,22 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import OtpInputs from 'react-native-otp-inputs';
-import {useDispatch} from 'react-redux';
+import { useRoute } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 import Snackbar from 'react-native-snackbar';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import tw from 'twrnc';
-import Loading from '../components/SpinnerScreen';
 import Button from '../components/Button';
 import colors from '../constants/colors';
 import MyStatusBar from '../components/MyStatusBar';
 import {
   useCreateOtpMutation,
-  useResetOtpMutation,
-  useVerifyOtpMutation,
+  useResetOtpMutation
 } from '../store/slice/api';
-import {loggedIn, setwelcomeModal} from '../store/reducer/mainSlice';
-import {resendOtp, verifyLogin, verifyUser} from '../utils/api/auth';
-import OtpInputComponent from '../components/OtpInputs';
-import {perHeight} from '../utils/position/sizes';
-import {updateUserData} from '../utils/api/func';
+import { loggedIn, setwelcomeModal } from '../store/reducer/mainSlice';
+import { resendOtp, verifyLogin, verifyUser } from '../utils/api/auth';
 import Toast from 'react-native-toast-message';
-import {ToastShort} from '../utils/utils';
+import { ToastShort } from '../utils/utils';
 type Route = {
   key: string;
   name: string;

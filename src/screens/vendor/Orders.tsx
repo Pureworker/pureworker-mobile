@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   StatusBar,
   ScrollView,
   FlatList,
+  RefreshControl,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Header from '../../components/Header';
@@ -61,7 +62,6 @@ const Orders = () => {
     setactiveSection('Active');
   }, [navigation]);
 
-
   const [filteredOrders, setFilteredOrders] = useState(providerOrders);
 
   useEffect(() => {
@@ -77,9 +77,7 @@ const Orders = () => {
             order?.user?.firstName
               ?.toLowerCase()
               ?.includes(query.toLowerCase()) ||
-            order?.user?.lastName
-              ?.toLowerCase()
-              ?.includes(query.toLowerCase()),
+            order?.user?.lastName?.toLowerCase()?.includes(query.toLowerCase()),
         ) || [];
 
       console.log(filtered, '         ..............................');
@@ -107,6 +105,26 @@ const Orders = () => {
     };
   };
   const debouncedHandleSearch = debounce(handleSearch, 500);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    const initGetOrders = async () => {
+      setisLoading(true);
+      const res: any = await getProviderOrders(userData?._id);
+      console.log('ooo...refresh', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addproviderOrders(res?.data?.data));
+      }
+      setisLoading(false);
+    };
+    try {
+      initGetOrders();
+    } catch (error) {
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -199,7 +217,10 @@ const Orders = () => {
           </TouchableOpacity>
         </View>
       )}
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View style={tw`flex flex-row mt-4`}>
           <TouchableOpacity
             onPress={() => {

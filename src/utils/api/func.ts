@@ -655,7 +655,7 @@ export const addRatingOrder = async (param: any, data: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   try {
     const response = await axios({
-      method: 'patch',
+      method: 'post',
       url: `${API_BASE_URL}/ordern/add-Rating/${param}`,
       data: data,
       headers: {

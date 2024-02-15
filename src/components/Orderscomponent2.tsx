@@ -8,6 +8,7 @@ import colors from '../constants/colors';
 import {Rating, AirbnbRating} from 'react-native-ratings';
 import {
   acceptOrder,
+  addRatingOrder,
   cancelOrder,
   completedOrder,
   declineOrder,
@@ -154,38 +155,39 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
   };
 
   const handleComplete = async (val: any) => {
-    setisLoading(true);
-    if (item?._id) {
-      const res = await completedOrder(item?._id, {...val});
-      if (res?.status === 200 || res?.status === 201) {
-        await initGetOrders();
-        Alert.alert('successful');
-        setrateYourExperience(false);
-        setrateYourExperience(false);
+    try {
+      setisLoading(true);
+      if (item?._id) {
+        const res = await addRatingOrder(item?._id, {...val});
+        if (res?.status === 200 || res?.status === 201) {
+          await initGetOrders();
+          Alert.alert('successful');
+          setrateYourExperience(false);
+          setrateYourExperience(false);
+        }
+        setisLoading(false);
       } else {
         Snackbar.show({
-          text: res?.error?.message
-            ? res?.error?.message
-            : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured',
+          text: 'Please fill all fields',
           duration: Snackbar.LENGTH_SHORT,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
-        setrateYourExperience(false);
+        setisLoading(false);
       }
+    } catch (error) {
+    } finally {
       setisLoading(false);
-    } else {
-      Snackbar.show({
-        text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_SHORT,
-        textColor: '#fff',
-        backgroundColor: '#88087B',
-      });
-      setisLoading(false);
+      const initGetOrders2 = async () => {
+        setisLoading(true);
+        const res: any = await getProviderOrders(userData?._id);
+        if (res?.status === 201 || res?.status === 200) {
+          dispatch(addproviderOrders(res?.data?.data));
+        }
+        setisLoading(false);
+      };
+      initGetOrders2();
     }
-    setisLoading(false);
   };
 
   const handleAccept = async () => {
@@ -645,7 +647,8 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
             </TouchableOpacity>
           </View>
         )}
-        {status === 'INPROGRESS' && (
+
+        {status === 'INPROGRESS' && item?.isCompletedByProvider !== true && (
           <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
             <TouchableOpacity
               onPress={() => {
@@ -682,6 +685,32 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
                     Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
                   borderRadius: 7,
                   marginLeft: perWidth(46),
+                },
+              ]}>
+              <Textcomp
+                text={'Dispute '}
+                size={12}
+                lineHeight={14}
+                color={colors.black}
+                fontFamily={'Inter-SemiBold'}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
+        {status === 'INPROGRESS' && item?.isCompletedByProvider === true && (
+          <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
+            <TouchableOpacity
+              onPress={() => {
+                setorderDispute(true);
+              }}
+              style={[
+                tw`bg-[${colors.primary}] items-center justify-center`,
+                {
+                  width: perWidth(150),
+                  height:
+                    Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
+                  borderRadius: 7,
+                  // marginLeft: perWidth(46),
                 },
               ]}>
               <Textcomp

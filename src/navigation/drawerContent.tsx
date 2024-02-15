@@ -22,7 +22,7 @@ import colors from '../constants/colors';
 import {getUser, updateUserData, uploadAssetsDOCorIMG} from '../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
-import Toast from 'react-native-toast-message';
+// import Toast from 'react-native-toast-message';
 import FastImage from 'react-native-fast-image';
 import socket from '../utils/socket';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
@@ -193,17 +193,17 @@ const DrawerContent = () => {
     if ([200, 201].includes(res?.status)) {
       // await initGetData();
       await initGetUsers();
-      Toast.show({
-        type: 'success',
-        text1: 'Picture uploaded successfully 🚀. ',
-      });
+      // Toast.show({
+      //   type: 'success',
+      //   text1: 'Picture uploaded successfully 🚀. ',
+      // });
     } else {
-      Toast.show({
-        type: 'error',
-        text1: `${
-          res?.error?.message ? res?.error?.message : 'Oops! An error occured!'
-        } 🚀. `,
-      });
+      // Toast.show({
+      //   type: 'error',
+      //   text1: `${
+      //     res?.error?.message ? res?.error?.message : 'Oops! An error occured!'
+      //   } 🚀. `,
+      // });
     }
     setloading(false);
   };
@@ -410,7 +410,7 @@ const DrawerContent = () => {
           )}
           <View style={[tw`mt-4 ml-3`, {}]}>
             <Textcomp
-              text={`Version: ${Platform.OS === 'ios' ? '1.0.2.4' : '1.0.2.4'}`}
+              text={`Version: ${Platform.OS === 'ios' ? '1.0.2.7' : '1.0.2.7'}`}
               size={14}
               color={'#000000'}
               style={[

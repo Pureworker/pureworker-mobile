@@ -86,13 +86,13 @@ const Home = ({navigation}: any) => {
         ToastLong('Address is required');
       } else {
         // Continue with your logic if geoLocation is valid
-        if (!_userData?.liveTest) {
-          if (userData?.liveTest) {
-          } else {
-            navigation.navigate('FaceDetection');
-            ToastLong('Virtual Interview is compulsory');
-          }
-        } 
+        // if (!_userData?.liveTest) {
+        //   if (userData?.liveTest) {
+        //   } else {
+        //     navigation.navigate('FaceDetection');
+        //     ToastLong('Virtual Interview is compulsory');
+        //   }
+        // } 
       }
       const emitProviderOnlineStatus = () => {
         // Emit an event to the backend indicating that the customer is still connected
@@ -111,19 +111,9 @@ const Home = ({navigation}: any) => {
       }
       setisLoading(false);
     };
-    // const initGetPopularServices = async () => {
-    //   setisLoading(true);
-    //   const res: any = await getPopularService('');
-    //   // console.log('ppppppppp', res?.data?.data);
-    //   if (res?.status === 201 || res?.status === 200) {
-    //     dispatch(addPopularServices(res?.data?.data));
-    //   }
-    //   setisLoading(false);
-    // };
     initGetUsers();
     getSupportUser('');
     initGetCategory();
-    // initGetPopularServices();
   }, [dispatch]);
   const providerOrders = useSelector((state: any) => state.user.providerOrders);
   useEffect(() => {
@@ -148,7 +138,6 @@ const Home = ({navigation}: any) => {
     initGetOrders();
     // }, [providerOrders, userData?._id]);
   }, []);
-
   useEffect(() => {
     const initGetOrders = async () => {
       setisLoading(true);
@@ -174,7 +163,6 @@ const Home = ({navigation}: any) => {
     const intervalId = setInterval(initGetOrders, 2.5 * 60 * 1000);
     return () => clearInterval(intervalId);
   }, []);
-
   useEffect(() => {
     // let inProgress = providerOrders?.filter(
     //   (item: {status: string}) => item?.status === 'INPROGRESS',
@@ -189,33 +177,8 @@ const Home = ({navigation}: any) => {
     setOinProgress(inProgress);
     setOinPending(pending);
   }, [providerOrders]);
-
-  //selectors
-  // const _getCategory = useSelector((state: any) => state.user.category);
-  // const _popularServices = useSelector(
-  //   (state: any) => state.user.popularServices,
-  // );
-  // const {currentState, setCurrentState} = useContext(RouteContext);
   const formStage = useSelector((state: any) => state.user.formStage);
   const supportUser = useSelector((store: any) => store.user.supportUser);
-  // console.log('stage', formStage, OinPending, 'progress:', OinProgress);
-  // useEffect(() => {
-  //   const emitProviderOnlineStatus = () => {
-  //     // Emit an event to the backend indicating that the customer is still connected
-  //     socket.emit('provideronlinestatus', {
-  //       customerId: userData?.id || userData?._id,
-  //     });
-  //   };
-  //   // Initial emit and set up the interval to emit every 30 seconds
-  //   emitProviderOnlineStatus();
-  //   console.log('Emiited oline');
-  //   const intervalId = setInterval(emitProviderOnlineStatus, 30000);
-  //   return () => {
-  //     // Clean up the interval when the component is unmounted
-  //     clearInterval(intervalId);
-  //     socket.disconnect();
-  //   };
-  // }, []);
   useEffect(() => {
     const emitProviderOnlineStatus = () => {
       // Emit an event to the backend indicating that the customer is still connected
@@ -239,10 +202,8 @@ const Home = ({navigation}: any) => {
       // Disconnect the socket when the component is unmounted
       socket.disconnect();
     };
-  }, []); // Include relevant dependencies in the array
-
+  }, []);
   const welcomeModal = useSelector((state: any) => state.user.welcomeModal);
-
   console.log(userData?.businessName);
 
   return (
@@ -262,11 +223,6 @@ const Home = ({navigation}: any) => {
               },
             ]}>
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              {/* <Image
-                source={images.profile}
-                style={{height: 40, width: 40}}
-                resizeMode="contain"
-              /> */}
               <FastImage
                 style={{width: 50, height: 50, borderRadius: 25}}
                 source={

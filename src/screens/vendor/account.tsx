@@ -75,7 +75,7 @@ const Account = () => {
       console.log('dddddddd-----', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addProfileData(res?.data?.profile));
-        setDescription(res?.data?.profile?.description)
+        setDescription(res?.data?.profile?.description);
       }
     };
     initGetProfile();
@@ -690,6 +690,22 @@ const Account = () => {
                 fontFamily={'Inter-SemiBold'}
               />
             </TouchableOpacity>
+
+            {userData?.liveTest === false && (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('FaceDetection', {page: 'Account'});
+                }}
+                style={tw`ml-auto mt-8 py-2 bg-[${colors.darkPurple}] w-6/10 rounded-lg items-center justify-center`}>
+                <Textcomp
+                  text={'Complete Liveness Check'}
+                  size={14}
+                  lineHeight={17}
+                  color={colors.white}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </TouchableOpacity>
+            )}
           </View>
           <View style={tw`h-30`} />
         </ScrollView>

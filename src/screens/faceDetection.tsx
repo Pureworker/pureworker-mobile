@@ -39,11 +39,13 @@ const eventManager = new NativeEventEmitter(RNFaceApi);
 var image1 = new MatchFacesImage();
 var image2 = new MatchFacesImage();
 
-export default function FaceDetection({navigation}: any) {
+export default function FaceDetection({navigation, route}: any) {
   const [img1, setImg1] = useState(require('../assets/images/us_flag.png'));
   const [img2, setImg2] = useState(require('../assets/images/welcome.png'));
   const [similarity, setSimilarity] = useState('nil');
   const [liveness, setLiveness] = useState('nil');
+
+  const {page} = route.params;
   useEffect(() => {
     eventManager.addListener('videoEncoderCompletionEvent', json => {
       const response = JSON.parse(json);
@@ -202,7 +204,11 @@ export default function FaceDetection({navigation}: any) {
           if (result.liveness === Enum.LivenessStatus.PASSED) {
             await updateLive();
             await initGetUsers();
-            navigation.navigate('Home');
+            if (page === 'Profile') {
+              navigation.navigate('Congratulations');
+            } else {
+              navigation.navigate('Home');
+            }
           }
         }
       },

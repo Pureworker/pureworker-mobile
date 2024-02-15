@@ -76,7 +76,7 @@ const ProfileStep21 = () => {
   const [shortDescription, setShortDescription] = useState('');
   const [potfolioImageUrl, setPotfolioImageUrl] = useState<any>([]);
   const [isLoading, setisLoading] = useState(false);
-  const [createService] = useCreateServiceMutation();
+  const [imageUrl, setImageUrl] = useState(ProviderData?.profilePic || '');
   const dispatch = useDispatch();
 
   const handleProfileSetup = async () => {
@@ -146,11 +146,11 @@ const ProfileStep21 = () => {
       return;
     }
     if (
-      !ProviderData?.profilePic ||
-      ProviderData?.profilePic ===
+      !imageUrl ||
+      imageUrl ===
         'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
     ) {
-      ToastShort('Profile Picture is required!. ');
+      ToastShort('Please upload a Profile Picture.');
       return;
     }
 
@@ -228,7 +228,6 @@ const ProfileStep21 = () => {
     setportfolioToServiceCount(updatedPortfolioData); // Update the state with the new data
     console.log('All Data here', updatedPortfolioData);
   };
-  const [imageUrl, setImageUrl] = useState('');
   const openLibraryfordp = () => {
     launchCamera(options, async (resp: unknown) => {
       if (resp?.assets?.length > 0) {
