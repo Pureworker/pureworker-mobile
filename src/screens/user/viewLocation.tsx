@@ -66,13 +66,36 @@ const ViewLocation = ({route}: any) => {
     longitudeDelta: 0.26,
   });
 
+  // useEffect(() => {
+  //   if (mapRef.current && providerLocation.lat && providerLocation.long) {
+  //     const markers = [
+  //       {latitude: latitude, longitude: longitude},
+  //       {latitude: providerLocation.lat, longitude: providerLocation.long},
+  //     ];
+  //     const region = calculateRegion(markers);
+  //     mapRef.current.animateToRegion(region, 1000);
+  //   }
+  // }, [providerLocation.lat, providerLocation.long]);
+
+  // useEffect(() => {
+  //   if (mapRef.current && providerLocation.lat && providerLocation.long) {
+  //     const markers = [
+  //       {latitude: latitude, longitude: longitude},
+  //       {latitude: providerLocation.lat, longitude: providerLocation.long},
+  //     ];
+  //     const region = calculateRegion(markers);
+  //     mapRef.current.animateToRegion(region, 1000);
+  //   }
+  // }, [providerLocation.lat, providerLocation.long]);
+
   useEffect(() => {
     if (mapRef.current && providerLocation.lat && providerLocation.long) {
-      const markers = [
-        {latitude: latitude, longitude: longitude},
-        {latitude: providerLocation.lat, longitude: providerLocation.long},
-      ];
-      const region = calculateRegion(markers);
+      const region = {
+        latitude: providerLocation.lat,
+        longitude: providerLocation.long,
+        latitudeDelta: 0.02,
+        longitudeDelta: 0.02,
+      };
       mapRef.current.animateToRegion(region, 1000);
     }
   }, [providerLocation.lat, providerLocation.long]);
@@ -87,22 +110,8 @@ const ViewLocation = ({route}: any) => {
 
     const latitude = (minLat + maxLat) / 2;
     const longitude = (minLng + maxLng) / 2;
-    const latitudeDelta = maxLat - minLat + 0.02;
-    const longitudeDelta = maxLng - minLng + 0.02;
-
-    setregion({
-      latitude,
-      longitude,
-      latitudeDelta,
-      longitudeDelta,
-    });
-
-    console.log({
-      latitude,
-      longitude,
-      latitudeDelta,
-      longitudeDelta,
-    });
+    const latitudeDelta = Math.abs(maxLat - minLat) * 1.5;
+    const longitudeDelta = Math.abs(maxLng - minLng) * 1.5;
 
     return {
       latitude,

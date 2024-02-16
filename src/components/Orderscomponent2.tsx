@@ -58,38 +58,6 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
     }
     setisLoading(false);
   };
-  // const handleUpdateStatus = async (param: any) => {
-  //   setisLoading(true);
-  //   if (item?._id) {
-  //     const res = await updateStatusOrder(item?._id, param);
-  //     if (res?.status === 200 || res?.status === 201) {
-  //       // navigation.navigate('PaymentConfirmed');
-  //       await initGetOrders();
-  //       Alert.alert('successful');
-  //     } else {
-  //       Snackbar.show({
-  //         text: res?.error?.message
-  //           ? res?.error?.message
-  //           : res?.error?.data?.message
-  //           ? res?.error?.data?.message
-  //           : 'Oops!, an error occured',
-  //         duration: Snackbar.LENGTH_SHORT,
-  //         textColor: '#fff',
-  //         backgroundColor: '#88087B',
-  //       });
-  //     }
-  //     setisLoading(false);
-  //   } else {
-  //     Snackbar.show({
-  //       text: 'Please fill all fields',
-  //       duration: Snackbar.LENGTH_SHORT,
-  //       textColor: '#fff',
-  //       backgroundColor: '#88087B',
-  //     });
-  //     setisLoading(false);
-  //   }
-  //   setisLoading(false);
-  // };
   const handleCancel = async () => {
     setisLoading(true);
     if (item?._id) {
@@ -155,6 +123,9 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
   };
 
   const handleComplete = async (val: any) => {
+    setrateYourExperience(false);
+    setrateYourExperience(false);
+    return 
     try {
       setisLoading(true);
       if (item?._id) {

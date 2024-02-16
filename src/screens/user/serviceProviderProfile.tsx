@@ -235,8 +235,6 @@ const ServiceProviderProfile = () => {
     }
   };
 
-
-
   const [savedProviders, setsavedProviders] = useState([]);
   useEffect(() => {
     const query = userData?.bookmarks?.filter(
@@ -255,7 +253,7 @@ const ServiceProviderProfile = () => {
     );
   }, [profileData?._id, savedProviders]);
 
-  // console.log('userData:', userData);
+  console.log('Reviews:', serviceProviderData?.reviews );
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -463,7 +461,7 @@ const ServiceProviderProfile = () => {
                 text={'Reviews'}
                 size={14}
                 lineHeight={16}
-                color={activeSection === 'Reviews' && '#000413'}
+                color={activeSection === 'Reviews' ? '#000413' : 'black'}
                 fontFamily={'Inter-SemiBold'}
               />
             </TouchableOpacity>
@@ -1163,6 +1161,8 @@ const ServiceProviderProfile = () => {
                 scrollEnabled={false}
                 data={serviceProviderData?.reviews || []}
                 renderItem={(item, index) => {
+                  console.log('Review-item', item);
+                  
                   return (
                     <>
                       <View

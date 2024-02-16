@@ -318,6 +318,7 @@ const ProfileStep21 = () => {
           });
         } else {
           console.log('Camera permission denied2');
+          ToastShort('Camera permission denied2');
         }
       }
     } catch (error) {}
@@ -439,8 +440,8 @@ const ProfileStep21 = () => {
                   flexDirection: 'row',
                 }}>
                 <TouchableOpacity
-                  onPress={async () => {
-                    openLibraryfordp();
+                  onPress={() => {
+                    opencamerafordp4();
                   }}>
                   <Image
                     source={images.edit}

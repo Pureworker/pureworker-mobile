@@ -9,8 +9,15 @@ import {Rating, AirbnbRating} from 'react-native-ratings';
 import Modal from 'react-native-modal';
 import {HEIGHT_WINDOW, WIDTH_WINDOW} from '../constants/generalStyles';
 import {useDispatch} from 'react-redux';
-import {cancelOrder, getUserOrders} from '../utils/api/func';
-import {addcustomerOrders} from '../store/reducer/mainSlice';
+import {
+  cancelOrder,
+  getProviderLocation,
+  getUserOrders,
+} from '../utils/api/func';
+import {
+  addcustomerOrders,
+  setProviderLocation,
+} from '../store/reducer/mainSlice';
 import socket from '../utils/socket';
 import Chat from '../assets/svg/Chat';
 import Location from '../assets/svg/Location';
@@ -101,6 +108,25 @@ const Orderscomponent = ({
     setisLoading(false);
     setInfoModal(false);
     setmodalSection('All');
+  };
+
+  const handleToLocation = async (data: any) => {
+    try {
+      setisLoading(true);
+      // const res: any = await getProviderLocation('65cb95af993d69fb83faf837');
+      const res: any = await getProviderLocation(data.id);
+      console.log('location.........', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        if (res?.data?.data !== null) {
+          dispatch(setProviderLocation(res?.data?.data));
+          navigation.navigate('ViewLocation', {...data});
+        } else {
+          ToastShort('Providers Location not available at the moment');
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching location:', error);
+    }
   };
 
   return (
@@ -359,34 +385,36 @@ const Orderscomponent = ({
                 style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
               />
 
-              {status !== 'DECLINED' && status !== 'INPROGRESS' && (
-                <TouchableOpacity
-                  onPress={() => {
-                    // setmodalSection('Cancel')
-                    setmodalSection('reason');
-                    // handleCloseReasonModal();
-                    // if (status === 'CANCELLED') {
-                    //   ToastShort('This Order has already')
-                    // }else{
+              {status !== 'DECLINED' &&
+                status !== 'INPROGRESS' &&
+                status !== 'COMPLETED' && (
+                  <TouchableOpacity
+                    onPress={() => {
+                      // setmodalSection('Cancel')
+                      setmodalSection('reason');
+                      // handleCloseReasonModal();
+                      // if (status === 'CANCELLED') {
+                      //   ToastShort('This Order has already')
+                      // }else{
 
-                    // }
-                  }}
-                  style={[
-                    tw`flex mt-10 flex-row`,
-                    {marginHorizontal: perWidth(30)},
-                  ]}>
-                  <Cross />
-                  <View style={[tw``, {marginLeft: perWidth(36)}]}>
-                    <Textcomp
-                      text={'Cancel Order'}
-                      size={14}
-                      lineHeight={17}
-                      color={'#000000'}
-                      fontFamily={'Inter-SemiBold'}
-                    />
-                  </View>
-                </TouchableOpacity>
-              )}
+                      // }
+                    }}
+                    style={[
+                      tw`flex mt-10 flex-row`,
+                      {marginHorizontal: perWidth(30)},
+                    ]}>
+                    <Cross />
+                    <View style={[tw``, {marginLeft: perWidth(36)}]}>
+                      <Textcomp
+                        text={'Cancel Order'}
+                        size={14}
+                        lineHeight={17}
+                        color={'#000000'}
+                        fontFamily={'Inter-SemiBold'}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                )}
 
               <TouchableOpacity
                 onPress={() => {
