@@ -446,7 +446,7 @@ const ServiceProviderProfile = () => {
                 text={'Jobs'}
                 size={14}
                 lineHeight={16}
-                color={activeSection === 'Jobs' && '#000413'}
+                color={activeSection === 'Jobs' ? '#000413' : 'black'}
                 fontFamily={'Inter-SemiBold'}
               />
             </TouchableOpacity>

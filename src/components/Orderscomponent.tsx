@@ -79,7 +79,7 @@ const Orderscomponent = ({
             : res?.error?.data?.message
             ? res?.error?.data?.message
             : 'Oops!, an error occured',
-          duration: Snackbar.LENGTH_SHORT,
+          duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
@@ -394,7 +394,9 @@ const Orderscomponent = ({
                   setInfoModal(false);
                   navigation.navigate('Inbox', {
                     id: item?.serviceProvider._id || item?.serviceProvider?.id,
-                    name: `${item?.serviceProvider?.firstName} ${item?.serviceProvider?.lastName}`,
+                    name: item?.serviceProvider?.fullName
+                      ? `${item?.serviceProvider?.fullName}`
+                      : `${item?.serviceProvider?.firstName} ${item?.serviceProvider?.lastName}`,
                   });
                 }}
                 style={[
@@ -443,7 +445,8 @@ const Orderscomponent = ({
                   onPress={() => {
                     setInfoModal(false);
                     navigation.navigate('ViewLocation', {
-                      id: item?.serviceProvider._id || item?.serviceProvider?.id,
+                      id:
+                        item?.serviceProvider._id || item?.serviceProvider?.id,
                       item: item,
                     });
                   }}

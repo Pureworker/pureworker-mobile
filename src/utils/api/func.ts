@@ -4,6 +4,7 @@ import {store} from '../../store/store';
 import {
   addUserData,
   addbanks,
+  addchatList,
   addprovidersByCateegory,
   addsupportUser,
 } from '../../store/reducer/mainSlice';
@@ -852,6 +853,32 @@ export const getChatsbyuser = async (param: any) => {
         response?.status,
         response?.data?.chats?.length,
       );
+    }
+    // console.log('res', response);
+    console.log('getChatsbyuser:', response?.status);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+export const getChatsbyuser2 = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getChatsbyuser func started', param);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/chats`,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
+    if (response?.status === 201 || response?.status === 200) {
+      store.dispatch(addchatList(response.data.chats))
     }
     // console.log('res', response);
     console.log('getChatsbyuser:', response?.status);

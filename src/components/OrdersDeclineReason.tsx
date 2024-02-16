@@ -78,6 +78,7 @@ const OrdersDeclineReason = ({
               onChangeText={e => setOtherReason(e)}
               numberOfLines={5}
               placeholder="Enter your reason"
+              placeholderTextColor={'#00000080'}
               style={styles.otherReasonTextBox}
             />
           </View>
@@ -149,6 +150,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     minHeight: 70,
     maxHeight: 80,
+    color: 'black',
   },
   container: {
     width: WIDTH_WINDOW,

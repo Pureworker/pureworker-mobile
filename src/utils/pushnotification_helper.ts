@@ -2,8 +2,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import Toast from 'react-native-toast-message';
 import {Alert, PermissionsAndroid, Platform} from 'react-native';
-import {addPushToken} from './api/func';
+import {addPushToken, getChatsbyuser, getChatsbyuser2} from './api/func';
 import {ToastLong} from './utils';
+import { useDispatch } from 'react-redux';
+
+
 
 // import inAppMessaging from '@react-native-firebase/in-app-messaging';
 async function requestUserPermission() {
@@ -109,6 +112,10 @@ const NotificationListner = () => {
   // Foreground Notification
   messaging().onMessage(async remoteMessage => {
     console.error(remoteMessage);
+    const handleFetch = async () => {
+      await getChatsbyuser2('');
+    };
+    handleFetch();
     Toast.show({
       type: 'success',
       position: 'top',
@@ -118,9 +125,10 @@ const NotificationListner = () => {
       bottomOffset: 60,
     });
 
+
     console.log('Notification on foreground state.....', remoteMessage);
     // Alert.alert('Push gotten here', remoteMessage?.data?.service);
-    ToastLong('Notification Received!, Please check!.');
+    // ToastLong('Notification Received!, Please check!.');
     console.log('app opened');
   });
   /*
