@@ -454,7 +454,9 @@ export default function Inbox({navigation, route}: any) {
                     setshowModal(true);
                   }}
                   style={[
-                    tw`bg-[#2D303C] absolute bottom-[11%] rounded-lg right-[5%]  items-center justify-center`,
+                    tw`bg-[#2D303C] absolute bottom-[${
+                      Platform.OS === 'android' ? '15%' : '11%'
+                    }] rounded-lg right-[5%]  items-center justify-center`,
                     {
                       width: perWidth(90),
                       aspectRatio: 1,

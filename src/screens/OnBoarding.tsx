@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,12 +7,12 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import images from '../constants/images';
 import Button from '../components/Button';
 import MyStatusBar from '../components/MyStatusBar';
 import colors from '../constants/colors';
-import { StackNavigation } from '../constants/navigation';
+import {StackNavigation} from '../constants/navigation';
 const {width, height} = Dimensions.get('screen');
 
 const OnboardingView = ({item, index, navigation}: any) => {
@@ -110,7 +110,7 @@ export default function OnBoarding() {
     {
       image: images.heroPix,
       text: 'Connecting you to trusted and verified service providers',
-      signup: 'CustomerSignup',
+      signup: 'Register',
       login: 'Login',
       key: 'first',
     },
@@ -145,7 +145,6 @@ export default function OnBoarding() {
       />
       <ScrollView
         style={{flex: 4}}
-        
         ref={excerciseScrollRef}
         scrollEventThrottle={16}
         horizontal
