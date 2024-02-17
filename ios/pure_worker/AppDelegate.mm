@@ -4,7 +4,7 @@
 #import "RNSplashScreen.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import <CodePush/CodePush.h>
-#import <TSBackgroundFetch/TSBackgroundFetch.h>
+// #import <TSBackgroundFetch/TSBackgroundFetch.h>
 
 @implementation AppDelegate
 
@@ -20,7 +20,7 @@
   self.initialProps = @{};
 
   // [REQUIRED] Register BackgroundFetch
-  [[TSBackgroundFetch sharedInstance] didFinishLaunching];
+  // [[TSBackgroundFetch sharedInstance] didFinishLaunching];
   
   bool didFinish=[super application:application didFinishLaunchingWithOptions:launchOptions];
   [RNSplashScreen show];  // here

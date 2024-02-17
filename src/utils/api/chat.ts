@@ -1,5 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { store } from '../../store/store';
+import { updateUnreadChat } from '../../store/reducer/mainSlice';
 
 const API_BASE_URL = 'https://api.pureworker.com/api';
 
@@ -14,6 +16,9 @@ export const getUnreadMessages = async (): Promise<number> => {
 
   console.log(response?.data?.chats?.[0]?.chatsWithUnreadMessages);
 
+  store.dispatch(
+    updateUnreadChat(response?.data?.chats?.[0]?.chatsWithUnreadMessages),
+  );
   return response?.data?.chats?.[0]?.chatsWithUnreadMessages;
   //   {"chats": [{"chatsWithUnreadMessages": 3}], "status": "success"}
 };

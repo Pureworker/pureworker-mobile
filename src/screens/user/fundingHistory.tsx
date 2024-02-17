@@ -259,7 +259,11 @@ const FundingHistory = () => {
                               <View style={tw`flex flex-col ml-4`}>
                                 <View style={[tw``, {marginTop: perHeight(0)}]}>
                                   <Textcomp
-                                    text={'Flutterwave'}
+                                    text={
+                                      item?.channel === 'admin'
+                                        ? 'Admin'
+                                        : 'Flutterwave'
+                                    }
                                     size={15}
                                     lineHeight={17}
                                     color={'#000413'}

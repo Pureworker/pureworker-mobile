@@ -333,108 +333,91 @@ const Home = () => {
               />
             </TouchableOpacity>
           </View>
-          {/* <View
-            style={[
-              tw`ml-4 mt-4 border-[#FFC727]`,
-              {
-                height: perWidth(130),
-                width: perWidth(150),
-                borderWidth: 3,
-                borderRadius: 20,
-              },
-            ]}>
-            <Image
-              resizeMode="cover"
-              style={{
-                width: perWidth(145),
-                height: '65%',
-                borderTopLeftRadius: 20,
-                borderTopRightRadius: 20,
-              }}
-              source={images.welcome}
-            />
-            <View
-              style={[
-                tw`bg-[${colors.darkPurple}] flex-1`,
-                {borderBottomLeftRadius: 20, borderBottomRightRadius: 20},
-              ]}>
-              <View style={[tw``, {marginLeft: 10, marginTop: perHeight(6)}]}>
-                <Textcomp
-                  text={'Plumbing'}
-                  size={12}
-                  lineHeight={14}
-                  color={colors.white}
-                  fontFamily={'Inter-SemiBold'}
+          {_popularServices?.length > 0 && (
+            <>
+              <View style={{flex: 1}}>
+                <FlatList
+                  data={_popularServices.slice(0, 10)}
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  renderItem={(item: any) => {
+                    return (
+                      <ServiceCard
+                        navigation={navigation}
+                        item={item.item}
+                        index={item.index}
+                        key={item?.index}
+                      />
+                    );
+                  }}
+                  keyExtractor={item => item.id}
                 />
               </View>
+            </>
+          )}
+          {_popularServices?.length < 1 && (
+            <View style={[tw`mt-4`, {marginLeft: perWidth(27)}]}>
+              <Textcomp
+                text={'No popular service yet'}
+                size={18}
+                lineHeight={18}
+                color={'#88087B'}
+                fontFamily={'Inter-SemiBold'}
+              />
             </View>
-          </View> */}
-          <View style={{flex: 1}}>
-            <FlatList
-              data={_popularServices.slice(0, 10)}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              renderItem={(item: any) => {
-                return (
-                  <ServiceCard
-                    navigation={navigation}
-                    item={item.item}
-                    index={item.index}
-                    key={item?.index}
-                  />
-                );
-              }}
-              keyExtractor={item => item.id}
-            />
-          </View>
+          )}
           {/*Close to You Section */}
-          <View
-            style={[
-              tw`flex flex-row items-center justify-between`,
-              {marginLeft: perWidth(24), marginTop: perHeight(52)},
-            ]}>
-            <View style={[tw``]}>
-              <Textcomp
-                text={'Close to you'}
-                size={25}
-                lineHeight={28}
-                color={'#000413'}
-                fontFamily={'Inter-Medium'}
-              />
-            </View>
-
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('CloseToYou');
-              }}
-              style={[tw`mr-4`]}>
-              <Textcomp
-                text={'See All'}
-                size={14}
-                lineHeight={16}
-                color={'#000413'}
-                fontFamily={'Inter-Medium'}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={{flex: 1}}>
-            <FlatList
-              data={closeProvider}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              renderItem={(item: any, index: any) => {
-                return (
-                  <ClosetoYou
-                    navigation={navigation}
-                    item={item?.item}
-                    index={index}
+          {closeProvider?.length > 0 && (
+            <>
+              <View
+                style={[
+                  tw`flex flex-row items-center justify-between`,
+                  {marginLeft: perWidth(24), marginTop: perHeight(52)},
+                ]}>
+                <View style={[tw``]}>
+                  <Textcomp
+                    text={'Close to you'}
+                    size={25}
+                    lineHeight={28}
+                    color={'#000413'}
+                    fontFamily={'Inter-Medium'}
                   />
-                );
-              }}
-              style={{paddingLeft: 20}}
-              keyExtractor={item => item.id}
-            />
-          </View>
+                </View>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('CloseToYou');
+                  }}
+                  style={[tw`mr-4`]}>
+                  <Textcomp
+                    text={'See All'}
+                    size={14}
+                    lineHeight={16}
+                    color={'#000413'}
+                    fontFamily={'Inter-Medium'}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={{flex: 1}}>
+                <FlatList
+                  data={closeProvider}
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  renderItem={(item: any, index: any) => {
+                    return (
+                      <ClosetoYou
+                        navigation={navigation}
+                        item={item?.item}
+                        index={index}
+                      />
+                    );
+                  }}
+                  style={{paddingLeft: 20}}
+                  keyExtractor={item => item.id}
+                />
+              </View>
+            </>
+          )}
           {/* Service Ctagories */}
           <View>
             <View

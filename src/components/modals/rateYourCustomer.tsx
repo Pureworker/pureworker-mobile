@@ -174,11 +174,12 @@ export default function RateyourCustommer({
                   multiline
                   style={[
                     tw`bg-[#EBEBEB] px-4 rounded-lg`,
-                    {height: perHeight(60)},
+                    {height: perHeight(60), color: 'black'},
                   ]}
                   onChangeText={text => {
                     setcomment(text);
                   }}
+                  placeholderTextColor={'black'}
                   placeholder="Satisfied with the customer? Share your review"
                 />
               </View>
