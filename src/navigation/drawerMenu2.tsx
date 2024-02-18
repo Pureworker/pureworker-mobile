@@ -103,7 +103,7 @@ const TabNavigator = () => {
       console.log(error);
     },
     {
-      distanceFilter: 10, // Minimum distance (in meters) to update the location
+      distanceFilter: 5, // Minimum distance (in meters) to update the location
       interval: 900000, // Update interval (in milliseconds), which is 15 minutes
       fastestInterval: 300000, // Fastest update interval (in milliseconds)
       accuracy: {

@@ -41,24 +41,20 @@ export default function BusinessSignup() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [cacNo, setCacNo] = useState('');
-  // const [address, setAddress] = useState('');
   const [userType, setUserType] = useState('FREELANCER');
   const [locationOpen, setLocationOpen] = useState(false);
   const [locationValue, setLocationValue] = useState('');
   const [date, setDate] = useState(new Date());
-
   const [birthDate, setBirthDate] = useState({
     day: undefined,
     month: undefined,
     year: undefined,
   });
-
   const [birthDateError, setBirthDateError] = useState({
     day: null,
     month: null,
     year: null,
   });
-
   const handleBirthDate = (key: string, value: number) => {
     const newDate = new Date();
 
@@ -113,7 +109,6 @@ export default function BusinessSignup() {
 
     setBirthDate(newBirthDateObj);
   };
-
   const setDateTime = (dateTime: any) => {
     setDate(dateTime);
   };
@@ -134,14 +129,10 @@ export default function BusinessSignup() {
     {label: 'Choose not to answer', value: 'Choose not to answer'},
   ]);
   const [nationalityOpen, setNationalityOpen] = useState(false);
-  // const [nationalityValue, setNationalityValue] = useState(null);
-  // const [nationalityItems, setNationalityItems] = useState<any>([]);
-  // const [signup, { isLoading }] = useSignupMutation();
   const [toolTipLeftVisible, setToolTipLeftVisible] = useState(false);
   const [toolTipRightVisible, setToolTipRightVisible] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const [stateValue, setStateValue] = useState('');
-
   const navigation = useNavigation<StackNavigation>();
   const validationSchema = Yup.object().shape({
     firstName: Yup.string().when('accountType', {
@@ -189,7 +180,6 @@ export default function BusinessSignup() {
     }),
     location: Yup.string().oneOf(['online', 'offline', 'hybrid']).optional(),
   });
-
   const handleSignup = async () => {
     let dateErrorMessage = '';
     // Validate input data
@@ -393,12 +383,7 @@ export default function BusinessSignup() {
       setisLoading(false);
     }
   };
-
-  useEffect(() => {
-    // setNationalityItems([...allCountry]);
-  }, []);
   const [referralCode, setReferralCode] = useState('');
-
   //
   const [schdeuleIsoDate, setschdeuleIsoDate] = useState('');
   const [displayDate, setdisplayDate] = useState('');
