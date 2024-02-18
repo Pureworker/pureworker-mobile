@@ -71,7 +71,7 @@ export default function WaitingList({navigation}: any) {
                 style={{
                   height: 50,
                   width: 200,
-                  marginTop: Platform.OS === 'ios' ? 20 : 25,
+                  marginTop: Platform.OS === 'ios' ? 20 : 40,
                 }}
                 resizeMode="contain"
               />

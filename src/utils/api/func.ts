@@ -143,9 +143,11 @@ export const uploadAssetsDOCorIMG = async (
     type: param.type, // Adjust the MIME type based on your image type
     name: param?.name ? param?.name : 'profile-picture',
     fieldname: formDataKey,
-    // name: param.name || param?.fileName, // Adjust the filename as needed
   });
   formData.append('folder', 'profile');
+  if (param.section && param.section === 'chat') {
+    formData.append('chat', true);
+  }
   console.log('uploadAssetsDOCorIMG started', param, formData);
   try {
     const response = await axios.post(`${API_BASE_URL}/upload`, formData, {
@@ -446,7 +448,11 @@ export const cancelOrder = async (param: any, data: any) => {
       },
     });
 
-    if (response?.status === 201 || response?.status === 200 || response?.status === 204) {
+    if (
+      response?.status === 201 ||
+      response?.status === 200 ||
+      response?.status === 204
+    ) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
@@ -878,7 +884,7 @@ export const getChatsbyuser2 = async (param: any) => {
       },
     });
     if (response?.status === 201 || response?.status === 200) {
-      store.dispatch(addchatList(response.data.chats))
+      store.dispatch(addchatList(response.data.chats));
     }
     // console.log('res', response);
     console.log('getChatsbyuser:', response?.status);
@@ -1590,7 +1596,11 @@ export const deletePortfolio = async (param: any) => {
       },
     });
 
-    if (response?.status === 201 || response?.status === 200 || response?.status === 204) {
+    if (
+      response?.status === 201 ||
+      response?.status === 200 ||
+      response?.status === 204
+    ) {
       console.log('deletePortfolio', response?.status);
     }
     console.log('deletePortfolio:', response?.status);
@@ -1605,7 +1615,7 @@ export const deletePortfolio = async (param: any) => {
   }
 };
 
-export const getProviderLocation = async (param) => {
+export const getProviderLocation = async param => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   console.log('getProviderLocation func started');
   try {

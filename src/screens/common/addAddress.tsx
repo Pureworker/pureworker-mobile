@@ -234,7 +234,7 @@ const AddAddress = ({navigation}: any) => {
         : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
     );
     console.log('loc_status', permissionStatus);
-    ToastShort(`Location permission : ${permissionStatus}`);
+    // ToastShort(`Location permission : ${permissionStatus}`);
     if (permissionStatus === 'granted') {
       Geolocation.getCurrentPosition(
         async position => {
@@ -257,7 +257,7 @@ const AddAddress = ({navigation}: any) => {
       );
     } else {
       console.warn('Location permission denied');
-      ToastShort('Location permission denied');
+      // ToastShort('Location permission denied');
     }
   };
 

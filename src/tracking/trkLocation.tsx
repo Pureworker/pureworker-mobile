@@ -80,7 +80,7 @@ const TrackRiderLocation = () => {
     check();
     let permissionStatus = status;
     console.log('[loc_status]', permissionStatus);
-    ToastShort(`Location permission : ${permissionStatus}`);
+    // ToastShort(`Location permission : ${permissionStatus}`);
     const trackLocation = () => {
       if (permissionStatus === 'granted') {
         Geolocation.getCurrentPosition(

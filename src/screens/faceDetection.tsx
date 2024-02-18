@@ -206,6 +206,7 @@ export default function FaceDetection({navigation, route}: any) {
             await initGetUsers();
             if (page === 'Profile') {
               navigation.navigate('Congratulations');
+              navigation.navigate('Congratulations');
             } else {
               navigation.navigate('Home');
             }

@@ -566,7 +566,6 @@ export default function CustomerSignup() {
               }}>
               <DateTimesPicker updateDate={setDateTime} />
             </TouchableOpacity> */}
-
             <View
               style={{
                 flexDirection: 'row',
@@ -648,7 +647,6 @@ export default function CustomerSignup() {
                 style={{fontWeight: 300}}
               />
             </TouchableOpacity> */}
-            {/* <ScrollView horizontal style={{width: SIZES.width * 0.9, backgroundColor: 'red'}}> */}
             {/* <View
               style={{
                 zIndex: 1,

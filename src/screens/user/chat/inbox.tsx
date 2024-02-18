@@ -183,6 +183,7 @@ export default function Inbox({navigation, route}: any) {
         uri: result?.path,
         name: userId + ':: chatImage - ' + new Date(),
         type: result?.mime,
+        section: 'chat',
       });
 
       try {
@@ -474,14 +475,6 @@ export default function Inbox({navigation, route}: any) {
               ) : null}
             </>
           )}
-          {/* <View
-            style={[
-              tw` w-full mx-auto mt-auto  px-[4%] border-t-4 border-black `,
-              {
-                height: HEIGHT_SCREEN * 0.085,
-                marginBottom: Platform.OS === 'ios' ? 0 : 5,
-              },
-            ]}> */}
           <View
             style={[
               tw`w-full mx-auto mt-auto px-[4%]`,
@@ -544,41 +537,6 @@ export default function Inbox({navigation, route}: any) {
                   />
                 )}
               </TouchableOpacity>
-              {/* {boxFocuss || message?.length > 0 ? (
-                <TouchableOpacity
-                  onPress={() => {
-                    onSubmit();
-                  }}>
-                  <Image
-                    resizeMode="contain"
-                    source={images.send2}
-                    style={[
-                      tw`w-full `,
-                      {
-                        height: 30,
-                        width: 30,
-                      },
-                    ]}
-                  />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  onPress={() => {
-                    onSubmit();
-                  }}>
-                  <Image
-                    resizeMode="contain"
-                    source={images.camera}
-                    style={[
-                      tw`w-full `,
-                      {
-                        height: 30,
-                        width: 30,
-                      },
-                    ]}
-                  />
-                </TouchableOpacity>
-              )} */}
             </View>
           </View>
         </View>
@@ -610,14 +568,6 @@ export default function Inbox({navigation, route}: any) {
             resizeMode="contain"
           />
         </GestureHandlerRootView>
-        {/* <Image
-          source={{uri: imageModal.imageLink}}
-          style={{
-            width: '80%',
-            height: '70%',
-          }}
-          resizeMode="contain"
-        /> */}
       </Modal>
       <Modal
         isVisible={showModal}
