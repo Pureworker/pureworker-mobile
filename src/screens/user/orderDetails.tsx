@@ -407,6 +407,7 @@ const OrderDetails = () => {
               mode="datetime"
               onConfirm={handleConfirm}
               onCancel={hideDatePicker}
+              minimumDate={new Date()}
             />
 
             <TouchableOpacity

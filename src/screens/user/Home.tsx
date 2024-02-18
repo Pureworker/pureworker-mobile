@@ -404,13 +404,28 @@ const Home = () => {
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   renderItem={(item: any, index: any) => {
-                    return (
-                      <ClosetoYou
-                        navigation={navigation}
-                        item={item?.item}
-                        index={index}
-                      />
-                    );
+                    if (item.index === closeProvider?.length - 1) {
+                      return (
+                        <>
+                          <ClosetoYou
+                            navigation={navigation}
+                            item={item?.item}
+                            index={index}
+                          />
+                          <View
+                            style={{marginRight: 50}}
+                          />
+                        </>
+                      );
+                    } else {
+                      return (
+                        <ClosetoYou
+                          navigation={navigation}
+                          item={item?.item}
+                          index={index}
+                        />
+                      );
+                    }
                   }}
                   style={{paddingLeft: 20}}
                   keyExtractor={item => item.id}

@@ -403,7 +403,6 @@ const OrderReview = ({route}: any) => {
             <TouchableOpacity
               onPress={() => {
                 handleCreate();
-                // navigation.navigate('PaymentConfirmed');
                 // navigation.navigate('PaymentMethod2', {amount: 4000});
               }}
               style={[

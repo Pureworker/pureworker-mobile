@@ -92,7 +92,15 @@ const ProfileStep4 = () => {
     });
     console.log('result', res?.data);
     if (res?.status === 200 || res?.status === 201) {
-      navigation.navigate('FaceDetection', {page: 'Profile'});
+      Snackbar.show({
+        text: 'Identity Submitted Successfully!.  Proceeding to Virtual Interview',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      setTimeout(() => {
+        navigation.navigate('FaceDetection', {page: 'Profile'});
+      }, 5000);
       // navigation.navigate('Congratulations');
       dispatch(addformStage(6));
       setisLoading(false);
