@@ -92,7 +92,7 @@ const Home = ({navigation}: any) => {
         //     navigation.navigate('FaceDetection');
         //     ToastLong('Virtual Interview is compulsory');
         //   }
-        // } 
+        // }
       }
       const emitProviderOnlineStatus = () => {
         // Emit an event to the backend indicating that the customer is still connected
@@ -631,15 +631,15 @@ const Home = ({navigation}: any) => {
               style={[
                 tw`bg-[#2D303C] mx-auto items-center justify-center`,
                 {
-                  width: perWidth(309),
-                  height: perHeight(30),
+                  width: Platform.OS === 'ios' ? perWidth(309) : perWidth(315),
+                  height: Platform.OS === 'ios' ? perHeight(30) : perHeight(35),
                   borderRadius: 7,
                   marginTop: perHeight(43),
                 },
               ]}>
               <Textcomp
                 text={'Complete your registration to accept orders'}
-                size={14}
+                size={Platform.OS === 'ios' ? 14 : 13}
                 lineHeight={16}
                 color={colors.primary}
                 fontFamily={'Inter-Medium'}

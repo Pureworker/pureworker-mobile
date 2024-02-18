@@ -16,6 +16,7 @@ type TextInputsProps = {
   maxLength?: number;
   styleInput?: any;
   error?: any;
+  blur?: any;
 };
 
 const TextInputs = ({
@@ -33,6 +34,7 @@ const TextInputs = ({
   maxLength,
   styleInput,
   error,
+  blur
 }: TextInputsProps) => {
   const [focuse, setFocuse] = useState(false);
   const [secureText, setSecureTextEntry] = useState(true);
@@ -83,7 +85,7 @@ const TextInputs = ({
         )}
         <TextInput
           onFocus={onFocusChange}
-          onBlur={onBlur}
+          onBlur={blur}
           keyboardType={keyBoardType}
           selectionColor="#048bf8"
           secureTextEntry={secure ? secureText : undefined}
