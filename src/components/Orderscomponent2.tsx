@@ -383,6 +383,17 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
                   />
                 </View>
               )}
+                              {status === 'DISPUTE' && (
+                  <View style={[tw``, {}]}>
+                    <Textcomp
+                      text={'DISPUTE'}
+                      size={14}
+                      lineHeight={16}
+                      color={'#EB001B'}
+                      fontFamily={'Inter-Bold'}
+                    />
+                  </View>
+                )}
 
               <View style={[tw``, {}]}>
                 <Textcomp
@@ -615,7 +626,6 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
             </TouchableOpacity>
           </View>
         )}
-
         {status === 'INPROGRESS' && item?.isCompletedByProvider !== true && (
           <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
             <TouchableOpacity
@@ -768,6 +778,7 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
       </View>
       <OrderDispute
         navigation={null}
+        item={item}
         func={(text: boolean | ((prevState: boolean) => boolean)) => {
           setorderDispute(text);
         }}

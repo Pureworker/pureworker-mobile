@@ -394,7 +394,8 @@ const Orders = () => {
                         if (
                           item?.item?.status === 'CANCELLED' ||
                           item?.item?.status === 'COMPLETED' ||
-                          item?.item?.status === 'DECLINED'
+                          item?.item?.status === 'DECLINED' ||
+                          item?.item?.status === 'DISPUTE'
                         ) {
                           return null;
                         } else {
@@ -462,7 +463,8 @@ const Orders = () => {
                       if (
                         item?.item?.status === 'CANCELLED' ||
                         item?.item?.status === 'COMPLETED' ||
-                        item?.item?.status === 'DECLINED'
+                        item?.item?.status === 'DECLINED' ||
+                        item?.item?.status === 'DISPUTE'
                       ) {
                         return (
                           <Orderscomponent

@@ -257,6 +257,7 @@ const Orderscomponent = ({
                     />
                   </View>
                 )}
+
                 {(status === 'COMPLETED' ||
                   item?.isCompletedByProvider === true) && (
                   <View style={[tw``, {}]}>
@@ -295,6 +296,17 @@ const Orderscomponent = ({
                   <View style={[tw``, {}]}>
                     <Textcomp
                       text={'IN TRANSIT'}
+                      size={14}
+                      lineHeight={16}
+                      color={'#EB001B'}
+                      fontFamily={'Inter-Bold'}
+                    />
+                  </View>
+                )}
+                {status === 'DISPUTE' && (
+                  <View style={[tw``, {}]}>
+                    <Textcomp
+                      text={'DISPUTE'}
                       size={14}
                       lineHeight={16}
                       color={'#EB001B'}
@@ -725,7 +737,7 @@ const Orderscomponent = ({
           <OrderDispute
             navigation={null}
             item={item}
-            func={(text) => {
+            func={text => {
               setInfoModal(false);
               setmodalSection('All');
             }}
