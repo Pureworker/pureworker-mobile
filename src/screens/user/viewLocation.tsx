@@ -22,6 +22,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import {setProviderLocation} from '../../store/reducer/mainSlice';
 import FastImage from 'react-native-fast-image';
+import ProviderIcon from '../../assets/svg/provider';
 
 const ViewLocation = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -194,22 +195,23 @@ const ViewLocation = ({route}: any) => {
                       identifier="Service Provider"
                       pinColor="red">
                       {item?.serviceProvider?.profilePic && (
-                        <FastImage
-                          style={[
-                            tw``,
-                            {
-                              width: perWidth(30),
-                              height: perWidth(30),
-                              borderRadius: perWidth(30) / 2,
-                            },
-                          ]}
-                          source={{
-                            uri: item?.serviceProvider?.profilePic,
-                            headers: {Authorization: 'someAuthToken'},
-                            priority: FastImage.priority.normal,
-                          }}
-                          resizeMode={FastImage.resizeMode.cover}
-                        />
+                        <ProviderIcon />
+                        // <FastImage
+                        //   style={[
+                        //     tw``,
+                        //     {
+                        //       width: perWidth(30),
+                        //       height: perWidth(30),
+                        //       borderRadius: perWidth(30) / 2,
+                        //     },
+                        //   ]}
+                        //   source={{
+                        //     uri: item?.serviceProvider?.profilePic,
+                        //     headers: {Authorization: 'someAuthToken'},
+                        //     priority: FastImage.priority.normal,
+                        //   }}
+                        //   resizeMode={FastImage.resizeMode.cover}
+                        // />
                       )}
                     </Marker>
                   )}

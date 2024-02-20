@@ -703,6 +703,7 @@ const OrderDetails = () => {
                 backgroundColor: 'D9D9D9',
                 borderColor: 'red',
                 opacity: 1,
+                marginTop: 5,
                 borderWidth: 0,
               }}
             />

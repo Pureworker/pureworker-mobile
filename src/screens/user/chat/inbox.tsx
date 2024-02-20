@@ -179,12 +179,15 @@ export default function Inbox({navigation, route}: any) {
     });
 
     if (result?.path!?.length > 0) {
-      const uploadResponse = await uploadAssetsDOCorIMG({
-        uri: result?.path,
-        name: userId + ':: chatImage - ' + new Date(),
-        type: result?.mime,
-        section: 'chat',
-      });
+      const uploadResponse = await uploadAssetsDOCorIMG(
+        {
+          uri: result?.path,
+          name: userId + ':: chatImage - ' + new Date(),
+          type: result?.mime,
+          section: 'chat',
+        },
+        'chat',
+      );
 
       try {
         const data = {

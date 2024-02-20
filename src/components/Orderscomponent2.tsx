@@ -123,9 +123,6 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
   };
 
   const handleComplete = async (val: any) => {
-    setrateYourExperience(false);
-    setrateYourExperience(false);
-    return 
     try {
       setisLoading(true);
       if (item?._id) {
@@ -389,7 +386,7 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
 
               <View style={[tw``, {}]}>
                 <Textcomp
-                  text={`₦ ${item?.totalPrice}`}
+                  text={`₦ ${item?.agentAmount}`}
                   size={14}
                   lineHeight={16}
                   color={colors.white}
