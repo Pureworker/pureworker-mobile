@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  ActivityIndicator,
 } from 'react-native';
 import tw from 'twrnc';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
@@ -25,6 +26,7 @@ export default function RateyourCustommer({
   func,
   item,
   OnFinish,
+  loading,
 }: any) {
   const [InfoModal, setInfoModal] = useState(visible);
 
@@ -184,6 +186,7 @@ export default function RateyourCustommer({
                 />
               </View>
               <TouchableOpacity
+                disabled={loading}
                 onPress={handleFinish} // Use the handleFinish function for the "Done" button
                 style={[
                   {
@@ -197,13 +200,17 @@ export default function RateyourCustommer({
                   },
                   tw`mx-auto`,
                 ]}>
-                <Textcomp
-                  text={'Done'}
-                  size={14}
-                  lineHeight={17}
-                  color={'#FFC727'}
-                  fontFamily={'Inter-SemiBold'}
-                />
+                {loading === true ? (
+                  <ActivityIndicator size={'small'} color={'white'} />
+                ) : (
+                  <Textcomp
+                    text={'Done'}
+                    size={14}
+                    lineHeight={17}
+                    color={'#FFC727'}
+                    fontFamily={'Inter-SemiBold'}
+                  />
+                )}
               </TouchableOpacity>
             </View>
             <View

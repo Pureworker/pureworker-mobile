@@ -1,41 +1,32 @@
-import {Image, View, TouchableOpacity, Platform, Alert} from 'react-native';
-import {SIZES, perHeight, perWidth} from '../utils/position/sizes';
-import React, {useEffect, useState} from 'react';
-import images from '../constants/images';
+import { View, TouchableOpacity, Platform, Alert } from 'react-native';
+import { SIZES, perHeight, perWidth } from '../utils/position/sizes';
+import React, { useEffect, useState } from 'react';
 import tw from 'twrnc';
 import Textcomp from './Textcomp';
 import colors from '../constants/colors';
-import {Rating, AirbnbRating} from 'react-native-ratings';
 import {
   acceptOrder,
   addRatingOrder,
-  cancelOrder,
-  completedOrder,
-  declineOrder,
+  cancelOrder, declineOrder,
   getProviderOrders,
   onMYOrder,
-  startOrder,
-  updateStatusOrder,
+  startOrder
 } from '../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import OrderDispute from './modals/orderDispute';
-import RateyourExperience from './modals/rateyourexperience';
 import ScheduledDeliveryDate from './modals/scheduledDeliveryDate';
-import {useDispatch, useSelector} from 'react-redux';
-import {addproviderOrders} from '../store/reducer/mainSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addproviderOrders } from '../store/reducer/mainSlice';
 import RateyourCustommer from './modals/rateYourCustomer';
-import {formatDateHistory, formatDateHistory2} from '../utils/utils';
+import { formatDateHistory2 } from '../utils/utils';
 import FastImage from 'react-native-fast-image';
-
 const Orderscomponent2 = ({item, index, status, showall}: any) => {
   const [saved, setsaved] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const [orderDispute, setorderDispute] = useState(false);
   const [scheduledDeliveryDate, setscheduledDeliveryDate] = useState(false);
   const [rateYourExperience, setrateYourExperience] = useState(false);
-
   // console.log('ORDER:', item);
-
   useEffect(() => {
     const initGetOrders2 = async () => {
       setisLoading(true);
@@ -47,7 +38,6 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
     };
     initGetOrders2();
   }, []);
-
   const dispatch = useDispatch();
   const userData = useSelector((state: any) => state.user.userData);
   const initGetOrders = async () => {
@@ -129,7 +119,7 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
         const res = await addRatingOrder(item?._id, {...val});
         if (res?.status === 200 || res?.status === 201) {
           await initGetOrders();
-          Alert.alert('successful');
+          Alert.alert('Rating successful!.');
           setrateYourExperience(false);
           setrateYourExperience(false);
         }
@@ -288,15 +278,6 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
               }}
               resizeMode={FastImage.resizeMode.cover}
             />
-            {/* <Image
-              resizeMode="cover"
-              style={{
-                width: perWidth(50),
-                height: perWidth(50),
-                borderRadius: perWidth(50) / 2,
-              }}
-              source={images.welcome}
-            /> */}
             <View
               style={[
                 tw`absolute bottom-0 border-2 right-1 rounded-full`,
@@ -812,6 +793,7 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
         OnFinish={(values: any) => {
           handleComplete(values);
         }}
+        loading={isLoading}
       />
     </>
   );
