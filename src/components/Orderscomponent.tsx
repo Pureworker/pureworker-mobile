@@ -27,6 +27,7 @@ import Snackbar from 'react-native-snackbar';
 import {ToastShort} from '../utils/utils';
 import OrdersDeclineReason from './OrdersDeclineReason';
 import FastImage from 'react-native-fast-image';
+import OrderDispute from './modals/orderDispute';
 
 const Orderscomponent = ({
   item,
@@ -500,7 +501,8 @@ const Orderscomponent = ({
               {status !== 'PENDING' && (
                 <TouchableOpacity
                   onPress={() => {
-                    setInfoModal(false);
+                    // setInfoModal(false);
+                    setmodalSection('dispute');
                   }}
                   style={[
                     tw`flex mt-10 flex-row`,
@@ -716,6 +718,18 @@ const Orderscomponent = ({
             handleCancel={handleCancel}
             setModalSection={setmodalSection}
             isLoading={isLoading}
+          />
+        )}
+
+        {modalSection === 'dispute' && (
+          <OrderDispute
+            navigation={null}
+            item={item}
+            func={(text) => {
+              setInfoModal(false);
+              setmodalSection('All');
+            }}
+            visible={true}
           />
         )}
       </Modal>

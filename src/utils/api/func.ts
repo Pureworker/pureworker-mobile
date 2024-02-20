@@ -494,6 +494,33 @@ export const rescheduleOrder = async (param: any, data: any) => {
   }
 };
 
+export const orderDispute = async (param: any, data: any) => {
+  console.log('orderDispute func started', param);
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${API_BASE_URL}/ordern/dispute-order/${param}`,
+      data: data,
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    });
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('response data:', response?.data);
+    }
+    console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
 export const declineOrder = async (param: any) => {
   console.log('declineOrder func started', param);
   const AuthToken = await AsyncStorage.getItem('AuthToken');
