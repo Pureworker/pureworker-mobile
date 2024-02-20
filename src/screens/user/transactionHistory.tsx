@@ -30,6 +30,7 @@ import PaymentIcon from '../../assets/svg/PayentIcon';
 import WithdrawalIcon from '../../assets/svg/WithdrawalIcon';
 import TipIcon from '../../assets/svg/TipIcon';
 import ReversalIcon from '../../assets/svg/ReversalIcon';
+import ReferralIcon from '../../assets/svg/referralIcon';
 
 const TransactionHistory = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -314,18 +315,21 @@ const TransactionHistory = () => {
                                 {item?.type === 'funding' ? (
                                   <FundingIcon />
                                 ) : item?.type === 'payment' ? (
-                                  <PaymentIcon /> 
+                                  <PaymentIcon />
                                 ) : item?.type === 'withdrawal' ? (
                                   <WithdrawalIcon />
                                 ) : item?.type === 'reversal' ? (
                                   <ReversalIcon />
                                 ) : item?.type === 'tip' ? (
                                   <TipIcon />
-                                ) : (
+                                ) : item?.type === 'referral' ? (
+                                  <ReferralIcon />
+                                )
+                                : (
                                   <View>
                                     <Image
                                       resizeMode="contain"
-                                      source={images.pureWorkerLogo}
+                                      source={images.logo2}
                                       style={{
                                         width: perWidth(20),
                                         aspectRatio: 1,
