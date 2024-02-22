@@ -22,6 +22,15 @@ export function roundToSingleDigit(number: number) {
   return Math.round(number);
 }
 
+export function formatDateToCustomFormat(dateString: any) {
+  const options = {year: 'numeric', month: 'short', day: 'numeric'};
+  const formattedDate = new Date(dateString).toLocaleDateString(
+    undefined,
+    options,
+  );
+  return formattedDate;
+}
+
 // export function formatDateHistory(inputDateStr) {
 //   const inputDate = new Date(inputDateStr);
 
@@ -115,7 +124,6 @@ export function timeAgo(lastOnline) {
     }
   }
 }
-
 
 // export function timeAgo(lastOnline) {
 //   const currentTime = new Date();

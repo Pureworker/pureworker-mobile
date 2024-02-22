@@ -1,25 +1,34 @@
-import { View, TouchableOpacity, Platform, Alert } from 'react-native';
-import { SIZES, perHeight, perWidth } from '../utils/position/sizes';
-import React, { useEffect, useState } from 'react';
+import {
+  View,
+  TouchableOpacity,
+  Platform,
+  Alert,
+  StyleSheet,
+  Text,
+} from 'react-native';
+import {SIZES, perHeight, perWidth} from '../utils/position/sizes';
+import React, {useEffect, useState} from 'react';
 import tw from 'twrnc';
 import Textcomp from './Textcomp';
 import colors from '../constants/colors';
 import {
   acceptOrder,
   addRatingOrder,
-  cancelOrder, declineOrder,
+  cancelOrder,
+  declineOrder,
   getProviderOrders,
   onMYOrder,
-  startOrder
+  startOrder,
 } from '../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import OrderDispute from './modals/orderDispute';
 import ScheduledDeliveryDate from './modals/scheduledDeliveryDate';
-import { useDispatch, useSelector } from 'react-redux';
-import { addproviderOrders } from '../store/reducer/mainSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {addproviderOrders} from '../store/reducer/mainSlice';
 import RateyourCustommer from './modals/rateYourCustomer';
-import { formatDateHistory2 } from '../utils/utils';
+import {formatDateHistory2} from '../utils/utils';
 import FastImage from 'react-native-fast-image';
+import Modal from 'react-native-modal/dist/modal';
 const Orderscomponent2 = ({item, index, status, showall}: any) => {
   const [saved, setsaved] = useState(false);
   const [isLoading, setisLoading] = useState(false);
@@ -243,6 +252,7 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
     }
     setisLoading(false);
   };
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <>
@@ -364,17 +374,17 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
                   />
                 </View>
               )}
-                              {status === 'DISPUTE' && (
-                  <View style={[tw``, {}]}>
-                    <Textcomp
-                      text={'DISPUTE'}
-                      size={14}
-                      lineHeight={16}
-                      color={'#EB001B'}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </View>
-                )}
+              {status === 'DISPUTE' && (
+                <View style={[tw``, {}]}>
+                  <Textcomp
+                    text={'DISPUTE'}
+                    size={14}
+                    lineHeight={16}
+                    color={'#EB001B'}
+                    fontFamily={'Inter-Bold'}
+                  />
+                </View>
+              )}
 
               <View style={[tw``, {}]}>
                 <Textcomp
@@ -386,7 +396,21 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
                 />
               </View>
             </View>
-            <View
+            <TouchableOpacity
+              onPress={() => {
+                setShowModal(true);
+              }}
+              style={[tw``, {width: perWidth(252), marginTop: perHeight(4)}]}>
+              <Textcomp
+                text={`${item?.description}`}
+                size={11}
+                lineHeight={14}
+                color={colors.white}
+                fontFamily={'Inter-SemiBold'}
+                numberOfLines={2}
+              />
+            </TouchableOpacity>
+            {/* <View
               style={[tw``, {width: perWidth(252), marginTop: perHeight(4)}]}>
               <Textcomp
                 text={`${item?.description}`}
@@ -396,7 +420,7 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
                 fontFamily={'Inter-SemiBold'}
                 numberOfLines={2}
               />
-            </View>
+            </View> */}
           </View>
         </View>
         <View>
@@ -795,7 +819,61 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
         }}
         loading={isLoading}
       />
+
+      <Modal
+        isVisible={showModal}
+        onModalHide={() => {
+          setShowModal(false);
+        }}
+        style={{width: SIZES.width, marginHorizontal: 0}}
+        deviceWidth={SIZES.width}
+        onBackdropPress={() => setShowModal(false)}
+        swipeThreshold={200}
+        swipeDirection={['down']}
+        onSwipeComplete={() => setShowModal(false)}
+        onBackButtonPress={() => setShowModal(false)}>
+        <View style={tw` h-full w-full bg-black bg-opacity-5`}>
+          <TouchableOpacity
+            onPress={() => setShowModal(false)}
+            style={tw`flex-1`}
+          />
+          <View style={[tw`mx-auto w-4/5`, styles.modalContent]}>
+            <Textcomp
+              text={`${item?.description}`}
+              size={14}
+              lineHeight={18}
+              color={colors.black}
+              fontFamily={'Inter-Regular'}
+            />
+            <TouchableOpacity
+              onPress={() => setShowModal(false)}
+              style={styles.closeButton}>
+              <Text style={{color: colors.primary, fontSize: 16}}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    // width: '80%',
+    // marginleft: '10%'
+  },
+  closeButton: {
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+});
 export default Orderscomponent2;

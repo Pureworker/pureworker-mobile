@@ -1,4 +1,11 @@
-import {Image, View, TouchableOpacity, Alert} from 'react-native';
+import {
+  Image,
+  View,
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+  Text,
+} from 'react-native';
 import {SIZES, perHeight, perWidth} from '../utils/position/sizes';
 import React, {useState} from 'react';
 import images from '../constants/images';
@@ -18,6 +25,7 @@ import Cross from '../assets/svg/Cross';
 import Snackbar from 'react-native-snackbar';
 import OrdersDeclineReason from './OrdersDeclineReason';
 import FastImage from 'react-native-fast-image';
+import {formatDateToCustomFormat} from '../utils/utils';
 
 const Orderscomponent3 = ({
   item,
@@ -35,14 +43,6 @@ const Orderscomponent3 = ({
 
   // console.log('OrderDetails', item);
 
-  function formatDateToCustomFormat(dateString) {
-    const options = {year: 'numeric', month: 'short', day: 'numeric'};
-    const formattedDate = new Date(dateString).toLocaleDateString(
-      undefined,
-      options,
-    );
-    return formattedDate;
-  }
   const dispatch = useDispatch();
   const initGetOrders = async () => {
     setisLoading(true);
@@ -97,6 +97,8 @@ const Orderscomponent3 = ({
     setSelectedReason(reason);
   };
   const [otherReason, setOtherReason] = useState('');
+
+  const [showModal, setShowModal] = useState(false);
   return (
     <>
       <>
@@ -116,28 +118,6 @@ const Orderscomponent3 = ({
           ]}>
           <View style={tw`flex flex-row `}>
             <View style={[tw``, {width: perWidth(50), height: perWidth(50)}]}>
-              {/* {item?.serviceProvider?.profilePic ? (
-                <Image
-                  resizeMode="cover"
-                  style={{
-                    width: perWidth(50),
-                    height: perWidth(50),
-                    borderRadius: perWidth(50) / 2,
-                  }}
-                  source={{uri: item?.serviceProvider?.profilePic}}
-                />
-              ) : (
-                <Image
-                  resizeMode="cover"
-                  style={{
-                    width: perWidth(50),
-                    height: perWidth(50),
-                    borderRadius: perWidth(50) / 2,
-                  }}
-                  source={images.welcome}
-                />
-              )} */}
-
               <FastImage
                 style={[
                   tw``,
@@ -168,7 +148,6 @@ const Orderscomponent3 = ({
               <View style={[tw`flex flex-row justify-between`, {}]}>
                 <View style={[tw``, {}]}>
                   <Textcomp
-                    // text={`₦ ${item?.amount || item?.totalPrice}`}
                     text={`₦ ${item?.totalPrice || item?.amount}`}
                     size={14}
                     lineHeight={16}
@@ -251,6 +230,17 @@ const Orderscomponent3 = ({
                         text={'IN TRANSIT'}
                         size={14}
                         lineHeight={16}
+                        color={'#FFC727'}
+                        fontFamily={'Inter-Bold'}
+                      />
+                    </View>
+                  )}
+                  {status === 'DISPUTE' && (
+                    <View style={[tw``, {}]}>
+                      <Textcomp
+                        text={'DISPUTE'}
+                        size={14}
+                        lineHeight={16}
                         color={'#EB001B'}
                         fontFamily={'Inter-Bold'}
                       />
@@ -258,7 +248,10 @@ const Orderscomponent3 = ({
                   )}
                 </View>
               </View>
-              <View
+              <TouchableOpacity
+                onPress={() => {
+                  setShowModal(true);
+                }}
                 style={[tw``, {width: perWidth(252), marginTop: perHeight(4)}]}>
                 <Textcomp
                   text={`${item?.description}`}
@@ -266,8 +259,9 @@ const Orderscomponent3 = ({
                   lineHeight={14}
                   color={colors.white}
                   fontFamily={'Inter-SemiBold'}
+                  numberOfLines={2}
                 />
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
           <View>
@@ -654,7 +648,64 @@ const Orderscomponent3 = ({
           />
         )}
       </Modal>
+
+      <Modal
+        isVisible={showModal}
+        onModalHide={() => {
+          setShowModal(false);
+        }}
+        style={{width: SIZES.width, marginHorizontal: 0}}
+        deviceWidth={SIZES.width}
+        onBackdropPress={() => setShowModal(false)}
+        swipeThreshold={200}
+        swipeDirection={['down']}
+        onSwipeComplete={() => setShowModal(false)}
+        onBackButtonPress={() => setShowModal(false)}>
+        <View style={tw` h-full w-full bg-black bg-opacity-5`}>
+          <TouchableOpacity
+            onPress={() => setShowModal(false)}
+            style={tw`flex-1`}
+          />
+          <View style={[tw`mx-auto w-4/5`, styles.modalContent]}>
+            <Textcomp
+              text={`${item?.description}`}
+              size={14}
+              lineHeight={18}
+              color={colors.black}
+              fontFamily={'Inter-Regular'}
+            />
+            <TouchableOpacity
+              onPress={() => setShowModal(false)}
+              style={styles.closeButton}>
+              <Text style={{color: colors.primary, fontSize: 16}}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 };
 export default Orderscomponent3;
+
+const styles = StyleSheet.create({
+  container: {
+    // Your container styles here
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    // width: '80%',
+    // marginleft: '10%'
+  },
+  closeButton: {
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+});
