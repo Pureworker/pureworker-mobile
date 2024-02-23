@@ -25,7 +25,7 @@ import codePush from 'react-native-code-push';
 //   Location,
 //   Subscription,
 // } from 'react-native-background-geolocation';
-import BackgroundFetch from 'react-native-background-fetch';
+// import BackgroundFetch from 'react-native-background-fetch';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
 import toastConfig from './src/utils/toastConfig';
