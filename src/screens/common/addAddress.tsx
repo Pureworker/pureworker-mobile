@@ -442,7 +442,7 @@ const AddAddress = ({navigation}: any) => {
               );
             } else {
               console.warn('Location permission denied');
-              ToastShort('Location permission denied');
+              // ToastShort('Location permission denied');
             }
           }}
           // onPress={() => {

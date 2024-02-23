@@ -24,15 +24,50 @@ const TrackRiderLocation = () => {
   }, []);
   useEffect(() => {
     // Function to track rider's location
+    // const check = async () => {
+    //   const permissionStatus = await request(
+    //     Platform.OS === 'android'
+    //       ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
+    //       : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+    //   );
+    //   setstatus(permissionStatus);
+    //   return permissionStatus;
+    // };
+
     const check = async () => {
-      const permissionStatus = await request(
-        Platform.OS === 'android'
-          ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
-          : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
-      );
-      setstatus(permissionStatus);
-      return permissionStatus;
+      try {
+        const isLocationEnabled = await new Promise((resolve, reject) => {
+          Geolocation.getCurrentPosition(
+            position => {
+              resolve(true);
+            },
+            error => {
+              resolve(false);
+            },
+            {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+          );
+        });
+
+        if (!isLocationEnabled) {
+          // Location services are not enabled
+          console.log('Location services are not enabled');
+          return false;
+        }
+
+        // Location services are enabled, proceed to request permission
+        const permissionStatus = await request(
+          Platform.OS === 'android'
+            ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
+            : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+        );
+        setstatus(permissionStatus);
+        return permissionStatus;
+      } catch (error) {
+        console.error('Error checking location services:', error);
+        return false;
+      }
     };
+
     const watchPosition = () => {
       try {
         const watchID = Geolocation.watchPosition(
@@ -121,7 +156,7 @@ const TrackRiderLocation = () => {
           {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
         );
       } else {
-        ToastShort('Location-permision is off');
+        // ToastShort('Location-permision is off');
       }
     };
     // Callback function to track location when app state changes

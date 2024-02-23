@@ -186,7 +186,7 @@ export default function Inbox({navigation, route}: any) {
           type: result?.mime,
           section: 'chat',
         },
-        'chat',
+        // 'chat',
       );
 
       try {
@@ -196,7 +196,7 @@ export default function Inbox({navigation, route}: any) {
           body: uploadResponse?.data?.url ?? '',
           updatedAt: new Date().toISOString(),
         };
-        console.log(data);
+        console.log('----image data now:',data);
         const currentDate = new Date();
         const createdAt = currentDate.toISOString();
         const _data = [...chatData, {...data, createdAt: createdAt}];

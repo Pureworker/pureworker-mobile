@@ -82,7 +82,7 @@ const Home = ({navigation}: any) => {
           _userData.geoLocation.coordinates[1] === 0) ||
         !_userData.geoLocation.coordinates.length
       ) {
-        // navigation.navigate('AddAddress');
+        navigation.navigate('AddAddress');
         ToastLong('Address is required');
       } else {
         // Continue with your logic if geoLocation is valid

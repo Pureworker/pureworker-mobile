@@ -130,87 +130,106 @@ const OrderActive = ({route}: any) => {
   }, []);
 
   const item = route.params.data;
+
   const links = [
     {
       title: 'Order Placed',
       func: () => setorderPlacing(true),
     },
     {
-      title: 'Order In Progress',
-      func: () => setorderInProgress(true),
+      title: 'Order Accepted',
+      func: () => setorderDelivered(true),
     },
     {
-      title: 'Order Delivered',
-      func: () => setorderDelivered(true),
+      title: 'Service Provider in Transit',
+      func: () => {},
+    },
+    {
+      title: 'Order In Progress',
+      func: () => setorderInProgress(true),
     },
     {
       title: 'Order Completed',
       func: () => setorderCompleted(true),
     },
     {
+      title: 'Thank you for the tip',
+      func: () => {},
+    },
+    {
       title: 'Order Dispute',
       func: () => setorderDispute(true),
     },
-    {
-      title: 'Rate Your Experience',
-      func: () => setrateYourExperience(true),
-    },
-    {
-      title: 'Private Feedback',
-      func: function () {
-        setprivateFeedback(!privateFeedback);
-        console.log('hey', privateFeedback);
-      },
-    },
+    // {
+    //   title: 'Rate Your Experience',
+    //   func: () => setrateYourExperience(true),
+    // },
+    // {
+    //   title: 'Private Feedback',
+    //   func: function () {
+    //     setprivateFeedback(!privateFeedback);
+    //     console.log('hey', privateFeedback);
+    //   },
+    // },
     {
       title: 'Service Provider Review',
       func: () => setserviceProviderModal(true),
     },
-    {
-      title: 'Scheduled Delivery Date',
-      func: () => setscheduledDeliveryDate(true),
-    },
+    // {
+    //   title: 'Scheduled Delivery Date',
+    //   func: () => setscheduledDeliveryDate(true),
+    // },
   ];
-  const providerLinks = [
-    {
-      title: 'Private Feedback',
-      func: function () {
-        setprivateFeedback(!privateFeedback);
-        console.log('hey', privateFeedback);
-      },
-    },
-    {
-      title: 'Rate your Customer',
-      func: () => setrateYourExperience(true),
-    },
-    {
-      title: 'Service Provider Review',
-      func: () => setserviceProviderModal(true),
-    },
-    {
-      title: 'Order Completed',
-      func: () => setorderCompleted(true),
-    },
-    {
-      title: 'Order Dispute',
-      func: () => setorderDispute(true),
-    },
-    {
-      title: 'Order Delivered',
-      func: () => setorderDelivered(true),
-    },
-    {
-      title: 'Order In Progress',
-      func: () => setorderInProgress(true),
-    },
-    {
-      title: 'Scheduled Delivery Date',
-      func: () => setscheduledDeliveryDate(true),
-    },
-    {
-      title: 'Order Placed',
-      func: () => setorderPlacing(true),
-    },
+  // const providerLinks = [
+  //   {
+  //     title: 'Private Feedback',
+  //     func: function () {
+  //       setprivateFeedback(!privateFeedback);
+  //       console.log('hey', privateFeedback);
+  //     },
+  //   },
+  //   {
+  //     title: 'Rate your Customer',
+  //     func: () => setrateYourExperience(true),
+  //   },
+  //   {
+  //     title: 'Service Provider Review',
+  //     func: () => setserviceProviderModal(true),
+  //   },
+  //   {
+  //     title: 'Order Completed',
+  //     func: () => setorderCompleted(true),
+  //   },
+  //   {
+  //     title: 'Order Dispute',
+  //     func: () => setorderDispute(true),
+  //   },
+  //   {
+  //     title: 'Order Delivered',
+  //     func: () => setorderDelivered(true),
+  //   },
+  //   {
+  //     title: 'Order In Progress',
+  //     func: () => setorderInProgress(true),
+  //   },
+  //   {
+  //     title: 'Scheduled Delivery Date',
+  //     func: () => setscheduledDeliveryDate(true),
+  //   },
+  //   {
+  //     title: 'Order Placed',
+  //     func: () => setorderPlacing(true),
+  //   },
+  // ];
+  const orderStatus = [
+    'PENDING',
+    'INPROGRESS',
+    'ACCEPTED',
+    'DISPUTE',
+    'COMPLETED',
+    'DECLINED',
+    'CANCELLED',
+    'TRACK',
   ];
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -496,7 +515,13 @@ const OrderActive = ({route}: any) => {
                                     ]}
                                   />
                                   <Textcomp
-                                    text={`${passedData?.serviceProvider?.fullName ?? `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`} has completed the job.Click Job Complete and review Jennifer so they get paid.`}
+                                    text={`${
+                                      passedData?.serviceProvider?.fullName ??
+                                      `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
+                                    } has completed the job.Click Job Complete and review ${
+                                      passedData?.serviceProvider?.fullName ??
+                                      `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
+                                    } so they get paid.`}
                                     size={12}
                                     lineHeight={16.5}
                                     color={'#BABABA'}
@@ -512,7 +537,11 @@ const OrderActive = ({route}: any) => {
                           );
                         }
                       } else if (item.title === 'Order In Progress') {
-                        if (passedData?.status === 'INPROGRESS') {
+                        if (
+                          passedData?.status === 'INPROGRESS' ||
+                          passedData?.status === 'INTRANSIT' ||
+                          passedData?.status === 'COMPLETED'
+                        ) {
                           return (
                             <>
                               <TouchableOpacity
@@ -521,29 +550,59 @@ const OrderActive = ({route}: any) => {
                                 onPress={() => {
                                   item.func();
                                 }}>
-                                {/* <View
-                                style={[
-                                  tw`rounded-full mr-4 border border-[${colors.primary}]`,
-                                  {width: 10, height: 10},
-                                ]}
-                              /> */}
                                 <Checked style={{marginRight: 10}} />
-                                <Textcomp
-                                  text={item?.title}
-                                  size={14.5}
-                                  lineHeight={16.5}
-                                  color={'#FFFFFF'}
-                                  fontFamily={'Inter-Bold'}
-                                  style={{textAlign: 'center'}}
-                                />
-                              </TouchableOpacity>
-                              {index < links.length - 1 && (
                                 <View
                                   style={[
-                                    tw`border-l-2  ml-2 border-[${colors.primary}] w-full`,
-                                    {height: 50},
-                                  ]}
-                                />
+                                    tw`flex flex-row  justify-between `,
+                                    {width: perWidth(290)},
+                                  ]}>
+                                  <View>
+                                    <Textcomp
+                                      text={item?.title}
+                                      size={14.5}
+                                      lineHeight={16.5}
+                                      color={'#FFFFFF'}
+                                      fontFamily={'Inter-Bold'}
+                                      style={{textAlign: 'center'}}
+                                    />
+                                  </View>
+                                  <View>
+                                    <Textcomp
+                                      text={'0:00pm'}
+                                      size={10}
+                                      lineHeight={16.5}
+                                      color={'#BABABA'}
+                                      fontFamily={'Inter-Regular'}
+                                      style={{
+                                        textAlign: 'center',
+                                      }}
+                                    />
+                                  </View>
+                                </View>
+                              </TouchableOpacity>
+                              {index < links.length - 1 && (
+                                <View style={tw`flex flex-row `}>
+                                  <View
+                                    style={[
+                                      tw`border-l-2  ml-2 border-[${colors.primary}] `,
+                                      {height: 50},
+                                    ]}
+                                  />
+                                  <Textcomp
+                                    text={`${
+                                      passedData?.serviceProvider?.fullName ??
+                                      `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
+                                    } has started the job. pay attention.`}
+                                    size={12}
+                                    lineHeight={16.5}
+                                    color={'#BABABA'}
+                                    fontFamily={'Inter-Regular'}
+                                    style={{
+                                      textAlign: 'left',
+                                      marginLeft: 20,
+                                    }}
+                                  />
+                                </View>
                               )}
                             </>
                           );
@@ -558,12 +617,6 @@ const OrderActive = ({route}: any) => {
                                 onPress={() => {
                                   item.func();
                                 }}>
-                                {/* <View
-                                style={[
-                                  tw`rounded-full mr-4 border border-[${colors.primary}]`,
-                                  {width: 10, height: 10},
-                                ]}
-                              /> */}
                                 <Checked style={{marginRight: 10}} />
                                 <Textcomp
                                   text={item?.title}
@@ -598,12 +651,6 @@ const OrderActive = ({route}: any) => {
                                 onPress={() => {
                                   item.func();
                                 }}>
-                                {/* <View
-                                style={[
-                                  tw`rounded-full mr-4 border border-[${colors.primary}]`,
-                                  {width: 10, height: 10},
-                                ]}
-                              /> */}
                                 <Checked style={{marginRight: 10}} />
                                 <Textcomp
                                   text={item?.title}
@@ -735,6 +782,286 @@ const OrderActive = ({route}: any) => {
                                     {height: 50},
                                   ]}
                                 />
+                              )}
+                            </>
+                          );
+                        }
+                      } else if (item.title === 'Order Placed') {
+                        if (true) {
+                          return (
+                            <>
+                              <TouchableOpacity
+                                key={index}
+                                style={[tw`flex flex-row items-center `, {}]}
+                                onPress={() => {
+                                  item.func();
+                                }}>
+                                <Checked style={{marginRight: 10}} />
+                                <View
+                                  style={[
+                                    tw`flex flex-row  justify-between `,
+                                    {width: perWidth(290)},
+                                  ]}>
+                                  <View>
+                                    <Textcomp
+                                      text={item?.title}
+                                      size={14.5}
+                                      lineHeight={16.5}
+                                      color={'#FFFFFF'}
+                                      fontFamily={'Inter-Bold'}
+                                      style={{textAlign: 'center'}}
+                                    />
+                                  </View>
+                                  <View>
+                                    <Textcomp
+                                      text={'0:00pm'}
+                                      size={10}
+                                      lineHeight={16.5}
+                                      color={'#BABABA'}
+                                      fontFamily={'Inter-Regular'}
+                                      style={{
+                                        textAlign: 'center',
+                                      }}
+                                    />
+                                  </View>
+                                </View>
+                              </TouchableOpacity>
+                              {index < links.length - 1 && (
+                                <View style={tw`flex flex-row `}>
+                                  <View
+                                    style={[
+                                      tw`border-l-2  ml-2 border-[${colors.primary}] `,
+                                      {height: 50},
+                                    ]}
+                                  />
+                                  <Textcomp
+                                    text={`Waiting for ${
+                                      passedData?.serviceProvider?.fullName ??
+                                      `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
+                                    } to accept your order.`}
+                                    size={12}
+                                    lineHeight={16.5}
+                                    color={'#BABABA'}
+                                    fontFamily={'Inter-Regular'}
+                                    style={{
+                                      textAlign: 'left',
+                                      marginLeft: 20,
+                                    }}
+                                  />
+                                </View>
+                              )}
+                            </>
+                          );
+                        }
+                      } else if (item.title === 'Order Accepted') {
+                        if (
+                          passedData?.status === 'ACCEPTED' ||
+                          passedData?.status === 'INPROGRESS' ||
+                          passedData?.status === 'COMPLETED'
+                        ) {
+                          return (
+                            <>
+                              <TouchableOpacity
+                                key={index}
+                                style={[tw`flex flex-row items-center `, {}]}
+                                onPress={() => {
+                                  item.func();
+                                }}>
+                                <Checked style={{marginRight: 10}} />
+                                <View
+                                  style={[
+                                    tw`flex flex-row  justify-between `,
+                                    {width: perWidth(290)},
+                                  ]}>
+                                  <View>
+                                    <Textcomp
+                                      text={item?.title}
+                                      size={14.5}
+                                      lineHeight={16.5}
+                                      color={'#FFFFFF'}
+                                      fontFamily={'Inter-Bold'}
+                                      style={{textAlign: 'center'}}
+                                    />
+                                  </View>
+                                  <View>
+                                    <Textcomp
+                                      text={'0:00pm'}
+                                      size={10}
+                                      lineHeight={16.5}
+                                      color={'#BABABA'}
+                                      fontFamily={'Inter-Regular'}
+                                      style={{
+                                        textAlign: 'center',
+                                      }}
+                                    />
+                                  </View>
+                                </View>
+                              </TouchableOpacity>
+                              {index < links.length - 1 && (
+                                <View style={tw`flex flex-row `}>
+                                  <View
+                                    style={[
+                                      tw`border-l-2  ml-2 border-[${colors.primary}] `,
+                                      {height: 50},
+                                    ]}
+                                  />
+                                  <Textcomp
+                                    text={`${
+                                      passedData?.serviceProvider?.fullName ??
+                                      `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
+                                    } has accepted your order.`}
+                                    size={12}
+                                    lineHeight={16.5}
+                                    color={'#BABABA'}
+                                    fontFamily={'Inter-Regular'}
+                                    style={{
+                                      textAlign: 'left',
+                                      marginLeft: 20,
+                                    }}
+                                  />
+                                </View>
+                              )}
+                            </>
+                          );
+                        }
+                      } else if (item.title === 'Service Provider in Transit') {
+                        if (
+                          passedData?.status === 'INTRANSIT' ||
+                          passedData?.status === 'INPROGRESS' ||
+                          passedData?.status === 'COMPLETED' ||
+                          passedData?.status === 'COMPLETED'
+                        ) {
+                          return (
+                            <>
+                              <TouchableOpacity
+                                key={index}
+                                style={[tw`flex flex-row items-center `, {}]}
+                                onPress={() => {
+                                  item.func();
+                                }}>
+                                <Checked style={{marginRight: 10}} />
+                                <View
+                                  style={[
+                                    tw`flex flex-row  justify-between `,
+                                    {width: perWidth(290)},
+                                  ]}>
+                                  <View>
+                                    <Textcomp
+                                      text={item?.title}
+                                      size={14.5}
+                                      lineHeight={16.5}
+                                      color={'#FFFFFF'}
+                                      fontFamily={'Inter-Bold'}
+                                      style={{textAlign: 'center'}}
+                                    />
+                                  </View>
+                                  <View>
+                                    <Textcomp
+                                      text={'0:00pm'}
+                                      size={10}
+                                      lineHeight={16.5}
+                                      color={'#BABABA'}
+                                      fontFamily={'Inter-Regular'}
+                                      style={{
+                                        textAlign: 'center',
+                                      }}
+                                    />
+                                  </View>
+                                </View>
+                              </TouchableOpacity>
+                              {index < links.length - 1 && (
+                                <View style={tw`flex flex-row `}>
+                                  <View
+                                    style={[
+                                      tw`border-l-2  ml-2 border-[${colors.primary}] `,
+                                      {height: 50},
+                                    ]}
+                                  />
+                                  <Textcomp
+                                    text={`${
+                                      passedData?.serviceProvider?.fullName ??
+                                      `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
+                                    } is on the way. Click View Location to see ${
+                                      passedData?.serviceProvider?.fullName ??
+                                      `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
+                                    }  movements.`}
+                                    size={12}
+                                    lineHeight={16.5}
+                                    color={'#BABABA'}
+                                    fontFamily={'Inter-Regular'}
+                                    style={{
+                                      textAlign: 'left',
+                                      marginLeft: 20,
+                                    }}
+                                  />
+                                </View>
+                              )}
+                            </>
+                          );
+                        }
+                      } else if (item.title === 'Thank you for the tip') {
+                        if (passedData?.status === 'COMPLETED') {
+                          return (
+                            <>
+                              <TouchableOpacity
+                                key={index}
+                                style={[tw`flex flex-row items-center `, {}]}
+                                onPress={() => {
+                                  item.func();
+                                }}>
+                                <Checked style={{marginRight: 10}} />
+                                <View
+                                  style={[
+                                    tw`flex flex-row  justify-between `,
+                                    {width: perWidth(290)},
+                                  ]}>
+                                  <View>
+                                    <Textcomp
+                                      text={item?.title}
+                                      size={14.5}
+                                      lineHeight={16.5}
+                                      color={'#FFFFFF'}
+                                      fontFamily={'Inter-Bold'}
+                                      style={{textAlign: 'center'}}
+                                    />
+                                  </View>
+                                  <View>
+                                    <Textcomp
+                                      text={'0:00pm'}
+                                      size={10}
+                                      lineHeight={16.5}
+                                      color={'#BABABA'}
+                                      fontFamily={'Inter-Regular'}
+                                      style={{
+                                        textAlign: 'center',
+                                      }}
+                                    />
+                                  </View>
+                                </View>
+                              </TouchableOpacity>
+                              {index < links.length - 1 && (
+                                <View style={tw`flex flex-row `}>
+                                  <View
+                                    style={[
+                                      tw`border-l-2  ml-2 border-[${colors.primary}] `,
+                                      {height: 50},
+                                    ]}
+                                  />
+                                  <Textcomp
+                                    text={` you tipped ${
+                                      passedData?.serviceProvider?.fullName ??
+                                      `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
+                                    }  N500.`}
+                                    size={12}
+                                    lineHeight={16.5}
+                                    color={'#BABABA'}
+                                    fontFamily={'Inter-Regular'}
+                                    style={{
+                                      textAlign: 'left',
+                                      marginLeft: 20,
+                                    }}
+                                  />
+                                </View>
                               )}
                             </>
                           );

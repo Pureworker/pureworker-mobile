@@ -25,7 +25,6 @@ import Cross from '../assets/svg/Cross';
 import Snackbar from 'react-native-snackbar';
 import OrdersDeclineReason from './OrdersDeclineReason';
 import FastImage from 'react-native-fast-image';
-import {formatDateToCustomFormat} from '../utils/utils';
 
 const Orderscomponent3 = ({
   item,
@@ -284,7 +283,7 @@ const Orderscomponent3 = ({
               />
             </View>
           </View>
-          <View style={tw`flex flex-row mt-3 justify-between`}>
+          {/* <View style={tw`flex flex-row mt-3 justify-between`}>
             <View>
               <Textcomp
                 text={`${formatDateToCustomFormat(
@@ -296,7 +295,7 @@ const Orderscomponent3 = ({
                 fontFamily={'Inter-Bold'}
               />
             </View>
-          </View>
+          </View> */}
         </TouchableOpacity>
         <TouchableOpacity
           style={tw` absolute right-[0%]  pr-4 bottom-[5%] py-2 w-[25%] items-end`}
@@ -648,7 +647,6 @@ const Orderscomponent3 = ({
           />
         )}
       </Modal>
-
       <Modal
         isVisible={showModal}
         onModalHide={() => {

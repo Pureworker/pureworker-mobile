@@ -8,6 +8,7 @@ import colors from '../../../constants/colors';
 import {messageTimeStamp} from '../../../utils/utils';
 import {urlValidator} from '../../../utils/chat';
 import {markAsRead} from '../../../utils/api/chat';
+import FastImage from 'react-native-fast-image';
 
 interface params {
   text: string;
@@ -57,11 +58,20 @@ export default function Index({
               marginTop: perHeight(12),
             },
           ]}>
-          <Image
+          <FastImage
+            style={{width: 100, height: 100}}
+            source={{
+              uri: text,
+              headers: {Authorization: 'someAuthToken'},
+              priority: FastImage.priority.normal,
+            }}
+            resizeMode={FastImage.resizeMode.contain}
+          />
+          {/* <Image
             source={{uri: text}}
             style={{width: 100, height: 100}}
             resizeMode="contain"
-          />
+          /> */}
         </Pressable>
       ) : (
         <View
