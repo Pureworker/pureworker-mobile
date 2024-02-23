@@ -94,7 +94,7 @@ const ProfileStep4 = () => {
     if (res?.status === 200 || res?.status === 201) {
       Snackbar.show({
         text: 'Identity Submitted Successfully!.  Proceeding to Virtual Interview',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });

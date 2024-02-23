@@ -18,6 +18,7 @@ PODS:
   - AppCenterReactNativeShared (5.0.0):
     - AppCenter/Core (= 5.0.3)
   - Base64 (1.1.2)
+  - BEMCheckBox (1.4.1)
   - boost (1.76.0)
   - CocoaLumberjack (3.7.4):
     - CocoaLumberjack/Core (= 3.7.4)
@@ -592,6 +593,9 @@ PODS:
     - React-Core
   - RNCAsyncStorage (1.19.3):
     - React-Core
+  - RNCCheckbox (0.5.17):
+    - BEMCheckBox (~> 1.4)
+    - React-Core
   - RNCClipboard (1.13.2):
     - React-Core
   - RNCMaskedView (0.1.11):
@@ -762,6 +766,7 @@ DEPENDENCIES:
   - RNBackgroundFetch (from `../node_modules/react-native-background-fetch`)
   - RNBackgroundGeolocation (from `../node_modules/react-native-background-geolocation`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
@@ -790,6 +795,7 @@ SPEC REPOS:
     - AppCenter
     - AppCenterReactNativeShared
     - Base64
+    - BEMCheckBox
     - CocoaLumberjack
     - FaceCoreSDK
     - FaceSDK
@@ -927,6 +933,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-background-geolocation"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCCheckbox:
+    :path: "../node_modules/@react-native-community/checkbox"
   RNCClipboard:
     :path: "../node_modules/@react-native-clipboard/clipboard"
   RNCMaskedView:
@@ -979,6 +987,7 @@ SPEC CHECKSUMS:
   appcenter-crashes: 266063788bcebd553e621344a54286395a8e2010
   AppCenterReactNativeShared: 01df23849b1c3c6eb8c4049f54322635650e98f0
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
+  BEMCheckBox: 5ba6e37ade3d3657b36caecc35c8b75c6c2b1a4e
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   CocoaLumberjack: 543c79c114dadc3b1aba95641d8738b06b05b646
   CodePush: 9eddecce05cd10491e2673b259c85885a462be33
@@ -1054,6 +1063,7 @@ SPEC CHECKSUMS:
   RNBackgroundFetch: 35c7183f6eeff69396d42c4b206e1ae2a21e9327
   RNBackgroundGeolocation: 7dde6957120db41209f0d11427c425f368416afa
   RNCAsyncStorage: c913ede1fa163a71cea118ed4670bbaaa4b511bb
+  RNCCheckbox: a3ca9978cb0846b981d28da4e9914bd437403d77
   RNCClipboard: 60fed4b71560d7bfe40e9d35dea9762b024da86d
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 32ca102146bc7d34a8b93a998d9938d9f9ec7898

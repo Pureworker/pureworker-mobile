@@ -187,7 +187,6 @@ export default function FaceDetection({navigation, route}: any) {
     }
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const startLiveness = () => {
     FaceSDK.startLiveness(
       async result => {
@@ -207,8 +206,16 @@ export default function FaceDetection({navigation, route}: any) {
             if (page === 'Profile') {
               navigation.navigate('Congratulations');
               navigation.navigate('Congratulations');
+              FaceSDK.stopLivenessProcessing(
+                () => {},
+                () => {},
+              );
             } else {
               navigation.navigate('Home');
+              FaceSDK.stopLivenessProcessing(
+                () => {},
+                () => {},
+              );
             }
           }
         }
@@ -224,7 +231,7 @@ export default function FaceDetection({navigation, route}: any) {
       setloader(false);
       startLiveness();
     }, 10000);
-  }, [startLiveness]);
+  }, []);
 
   const updateLive = async () => {
     try {

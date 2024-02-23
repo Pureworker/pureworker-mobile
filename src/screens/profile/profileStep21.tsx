@@ -251,6 +251,7 @@ const ProfileStep21 = () => {
       mediaType: 'photo',
       selectionLimit: 1,
       cameraType: 'front',
+      rotation: 0,
     };
     try {
       if (Platform.OS === 'ios') {
@@ -379,7 +380,6 @@ const ProfileStep21 = () => {
             <View>
               <TouchableOpacity
                 onPress={() => {
-                  // openLibraryfordp();
                   opencamerafordp4();
                 }}
                 style={[
@@ -393,7 +393,10 @@ const ProfileStep21 = () => {
                   },
                 ]}>
                 {!profileImageLoading ? (
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      opencamerafordp4();
+                    }}>
                     {!completeProfileData?.profilePic &&
                     imageUrl?.length < 1 ? (
                       <TextWrapper

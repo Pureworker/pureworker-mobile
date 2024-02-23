@@ -87,6 +87,7 @@ const Home = () => {
         !userData.geoLocation.coordinates.length
       ) {
         // navigation.navigate('AddAddress');
+        navigation.navigate('OrderDetails');
         ToastLong('Address is required');
       } else {
         // Continue with your logic if geoLocation is valid

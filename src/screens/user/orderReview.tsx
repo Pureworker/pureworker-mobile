@@ -14,13 +14,15 @@ import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {perHeight, perWidth} from '../../utils/position/sizes';
+import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
 import {createOrder} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import {ToastShort} from '../../utils/utils';
+import Modal from 'react-native-modal/dist/modal';
+import CheckBox from '@react-native-community/checkbox';
 
 const OrderReview = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -111,6 +113,9 @@ const OrderReview = ({route}: any) => {
       setisLoading(false);
     }
   };
+
+  const [ready, setready] = useState(false);
+  const [toggleCheckBox, setToggleCheckBox] = useState(false);
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView style={tw`flex-1 h-full `} contentContainerStyle={{flex: 1}}>
@@ -327,17 +332,6 @@ const OrderReview = ({route}: any) => {
                     />
                   </View>
                 </View>
-                {/* <View style={tw`mt-2`}>
-                  <View style={tw``}>
-                    <Textcomp
-                      text={'Promo code'}
-                      size={14}
-                      lineHeight={15}
-                      color={'#000413'}
-                      fontFamily={'Inter-Medium'}
-                    />
-                  </View>
-                </View> */}
               </View>
               <View style={tw`items-end pr-3`}>
                 <Image
@@ -364,15 +358,6 @@ const OrderReview = ({route}: any) => {
                     fontFamily={'Inter-SemiBold'}
                   />
                 </View>
-                {/* <TouchableOpacity onPress={() => {}} style={tw`mt-2`}>
-                  <Textcomp
-                    text={'Enter a Code'}
-                    size={13}
-                    lineHeight={15}
-                    color={'#88087B'}
-                    fontFamily={'Inter-Regular'}
-                  />
-                </TouchableOpacity> */}
               </View>
             </View>
           </View>
@@ -402,7 +387,8 @@ const OrderReview = ({route}: any) => {
           <View style={tw`mt-auto mb-[8%]`}>
             <TouchableOpacity
               onPress={() => {
-                handleCreate();
+                setready(true);
+                // handleCreate();
                 // navigation.navigate('PaymentMethod2', {amount: 4000});
               }}
               style={[
@@ -431,6 +417,103 @@ const OrderReview = ({route}: any) => {
         </View>
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
+      <Modal
+        isVisible={ready}
+        onModalHide={() => {
+          setready(false);
+        }}
+        style={{width: SIZES.width, marginHorizontal: 0}}
+        deviceWidth={SIZES.width}
+        onBackdropPress={() => setready(false)}
+        swipeThreshold={200}
+        swipeDirection={['down']}
+        onSwipeComplete={() => setready(false)}
+        onBackButtonPress={() => setready(false)}>
+        <View style={tw` h-full w-full bg-black bg-opacity-5`}>
+          <TouchableOpacity
+            onPress={() => setready(false)}
+            style={tw`flex-1`}
+          />
+          <View style={[tw`p-4 mt-auto bg-[#D9D9D9]`, {minHeight: '55%'}]}>
+            <TouchableOpacity
+              onPress={() => {
+                setready(false);
+              }}
+              style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
+            />
+            <View style={tw`flex-1`}>
+              <View style={tw``}>
+                <Textcomp
+                  text={'!!!IMPORTANT !!!'}
+                  size={16}
+                  lineHeight={14.5}
+                  color={'black'}
+                  fontFamily={'Inter-Bold'}
+                />
+              </View>
+              <View style={tw`mt-10`}>
+                <Textcomp
+                  text={'Take note of the following:'}
+                  size={14}
+                  lineHeight={14.5}
+                  color={'black'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </View>
+              <View style={tw`mt-4`}/>
+              {[1, 2, 3, 4, 5, 6]?.map((item, index) => {
+                return (
+                  <View key={index} style={tw`flex flex-row items-center mt-2`}>
+                    <View style={tw`w-2 h-2 rounded-full mr-2 bg-black`} />
+                    <Textcomp
+                      text={'Provide accurate descriptions as the scope'}
+                      size={12}
+                      lineHeight={14.5}
+                      color={'#00041380'}
+                      fontFamily={'Inter-SemiBold'}
+                    />
+                  </View>
+                );
+              })}
+
+              <View style={tw`flex flex-row items-center mt-auto mb-4 ml-4`}>
+                <CheckBox
+                  disabled={false}
+                  value={toggleCheckBox}
+                  style={{backgroundColor: 'white'}}
+                  boxType={'square'}
+                  onTintColor={colors.parpal}
+                  onCheckColor={colors.parpal}
+                  onValueChange={newValue => setToggleCheckBox(newValue)}
+                />
+                <View style={tw`ml-4`}>
+                  <Textcomp
+                    text={'I agree to the above terms.'}
+                    size={12}
+                    lineHeight={14.5}
+                    color={'#00041380'}
+                    fontFamily={'Inter-SemiBold'}
+                  />
+                </View>
+              </View>
+
+              <TouchableOpacity
+                style={tw`bg-[${colors.parpal}] w-3/4 py-3 mb-4 items-center  mx-auto rounded`}
+                onPress={() => {
+                  handleCreate();
+                }}>
+                <Textcomp
+                  text={'Continue'}
+                  size={12}
+                  lineHeight={14.5}
+                  color={'white'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
