@@ -17,7 +17,27 @@ export const getUnreadMessages = async (): Promise<number> => {
   console.log(response?.data?.chats?.[0]?.chatsWithUnreadMessages);
 
   store.dispatch(
-    updateUnreadChat(response?.data?.chats?.[0]?.chatsWithUnreadMessages),
+    // updateUnreadChat(response?.data?.chats?.[0]?.chatsWithUnreadMessages),
+    updateUnreadChat(response?.data?.number),
+  );
+  return response?.data?.chats?.[0]?.chatsWithUnreadMessages;
+  //   {"chats": [{"chatsWithUnreadMessages": 3}], "status": "success"}
+};
+
+export const _getUnreadMessages = async (): Promise<number> => {
+  console.log('testinggg');
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  // unread-chats
+  const response = await axios.get(`${API_BASE_URL}/unread-chats`, {
+    headers: {
+      Authorization: `Bearer ${AuthToken}`,
+    },
+  });
+  console.log('ehn:', response?.data);
+  console.log(response?.data?.chats?.[0]?.chatsWithUnreadMessages);
+  store.dispatch(
+    // updateUnreadChat(response?.data?.chats?.[0]?.chatsWithUnreadMessages),
+    updateUnreadChat(response?.data?.number),
   );
   return response?.data?.chats?.[0]?.chatsWithUnreadMessages;
   //   {"chats": [{"chatsWithUnreadMessages": 3}], "status": "success"}

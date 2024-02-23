@@ -50,6 +50,7 @@ import Textcomp from '../../../components/Textcomp';
 import {ToastLong, ToastShort, timeAgo} from '../../../utils/utils';
 import useChat from '../../../hooks/useChat';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {_getUnreadMessages} from '../../../utils/api/chat';
 
 export default function Inbox({navigation, route}: any) {
   const scrollRef = useRef<ScrollView | null>(null);
@@ -129,7 +130,17 @@ export default function Inbox({navigation, route}: any) {
     const _data = [...chatData, data];
 
     dispatch(addchatData(_data));
+
+    fetch_();
   });
+
+  const fetch_ = async () => {
+    try {
+      await _getUnreadMessages();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const [boxFocuss, setboxFocuss] = useState(false);
   function groupMessagesByDate(messages) {
@@ -171,13 +182,11 @@ export default function Inbox({navigation, route}: any) {
       setRefreshing(false);
     }
   }, []);
-
   const selectImage = async () => {
     const result = await ImagePicker.openPicker({
       mediaType: 'photo',
       cropping: false,
     });
-
     if (result?.path!?.length > 0) {
       const uploadResponse = await uploadAssetsDOCorIMG(
         {
@@ -188,7 +197,6 @@ export default function Inbox({navigation, route}: any) {
         },
         // 'chat',
       );
-
       try {
         const data = {
           from: agentData?._id,
@@ -196,7 +204,7 @@ export default function Inbox({navigation, route}: any) {
           body: uploadResponse?.data?.url ?? '',
           updatedAt: new Date().toISOString(),
         };
-        console.log('----image data now:',data);
+        console.log('----image data now:', data);
         const currentDate = new Date();
         const createdAt = currentDate.toISOString();
         const _data = [...chatData, {...data, createdAt: createdAt}];

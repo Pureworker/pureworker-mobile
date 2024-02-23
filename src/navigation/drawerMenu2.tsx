@@ -22,7 +22,7 @@ import VendorHomeStack from './vendorHome';
 import AddAddress from '../screens/common/addAddress';
 import TabServices from '../screens/user/tab_servicess2';
 import Referrals from '../screens/common/referrals';
-import {registerTransistorAuthorizationListener} from '../tracking/authorization';
+// import {registerTransistorAuthorizationListener} from '../tracking/authorization';
 import useChat from '../hooks/useChat';
 import {useSelector} from 'react-redux';
 import TrackRiderLocation from '../tracking/trkLocation';

@@ -261,6 +261,17 @@ const AddAddress = ({navigation}: any) => {
     }
   };
 
+  useEffect(() => {
+    const requestLocation = async () => {
+      const permissionStatus = await request(
+        Platform.OS === 'android'
+          ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
+          : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+      );
+    };
+    requestLocation();
+  }, []);
+
   return (
     <View style={{flex: 1}}>
       <View style={[tw`h-[40%]`]}>

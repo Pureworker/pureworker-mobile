@@ -12,6 +12,8 @@ const useChat = () => {
   const dispatch = useDispatch();
 
   const getUnreadMessages = async (): Promise<number> => {
+    console.log('---qewrt');
+    
     const AuthToken = await AsyncStorage.getItem('AuthToken');
     // unread-chats
     const response = await axios.get(`${API_BASE_URL}/unread-chats`, {

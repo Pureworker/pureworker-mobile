@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   Image,
@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   Share,
   Clipboard,
+  RefreshControl,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -70,12 +71,34 @@ const Referrals = () => {
   const handleShare = async (contentToShare: any) => {
     try {
       await Share.share({
-        message: 'I use Pureworker when I need any and all artisans and service providers. Download the app at https://www.pureworker.com/, then use my referral code: "qKAmeHPx" to sign up.',
+        message:
+          'I use Pureworker when I need any and all artisans and service providers. Download the app at https://www.pureworker.com/, then use my referral code: "qKAmeHPx" to sign up.',
       });
     } catch (error) {
       console.error('Error sharing content:', error.message);
     }
   };
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    const initReferralDetails = async () => {
+      setisLoading(true);
+      const res: any = await getReferralDetails('');
+      console.log('rrrDetails', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addReferralDetails(res?.data?.data));
+      }
+      setisLoading(false);
+    };
+    try {
+      initReferralDetails();
+    } catch (error) {
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
 
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -115,7 +138,10 @@ const Referrals = () => {
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{minHeight: SIZES.height}}>
+        contentContainerStyle={{minHeight: SIZES.height}}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View style={[tw``]}>
           <View style={[tw``]}>
             <Image

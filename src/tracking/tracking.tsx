@@ -1,235 +1,235 @@
-import React from 'react';
-import {
-  Text,
-  View,
-  Linking,
-  Alert,
-  Platform,
-  TouchableOpacity,
-} from 'react-native';
-
+// import React from 'react';
 // import {
-//   Button,
-//   //   Icon,
-// } from 'react-native-elements';
+//   Text,
+//   View,
+//   Linking,
+//   Alert,
+//   Platform,
+//   TouchableOpacity,
+// } from 'react-native';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// // import {
+// //   Button,
+// //   //   Icon,
+// // } from 'react-native-elements';
 
-import SettingsService from './SettingsService';
-import BackgroundGeolocation from './react-native-background-geolocation';
-import PoorIcon from '../assets/svg/Poor';
-import colors from '../constants/colors';
-import ENV from './ENV';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const HomeView = ({route, navigation}: any) => {
-  const [org, setOrg] = React.useState('');
-  const [username, setUsername] = React.useState('');
-  const [deviceModel, setDeviceModel] = React.useState('');
+// // import SettingsService from './SettingsService';
+// // import BackgroundGeolocation from './react-native-background-geolocation';
+// import PoorIcon from '../assets/svg/Poor';
+// import colors from '../constants/colors';
+// import ENV from './ENV';
 
-  const settingsService = SettingsService.getInstance();
+// const HomeView = ({route, navigation}: any) => {
+//   const [org, setOrg] = React.useState('');
+//   const [username, setUsername] = React.useState('');
+//   const [deviceModel, setDeviceModel] = React.useState('');
 
-  React.useEffect(() => {
-    if (route.params) {
-      setOrg(route.params.org);
-      setUsername(route.params.username);
-    }
-  }, [route, navigation]);
+//   // const settingsService = SettingsService.getInstance();
 
-  React.useLayoutEffect(() => {
-    // Restore org/username from AsyncStorage.
-    AsyncStorage.getItem('@transistorsoft:org').then(value => {
-      if (value != null) {
-        setOrg(value);
-      }
-    });
+//   React.useEffect(() => {
+//     if (route.params) {
+//       setOrg(route.params.org);
+//       setUsername(route.params.username);
+//     }
+//   }, [route, navigation]);
 
-    AsyncStorage.getItem('@transistorsoft:username').then(value => {
-      if (value != null) {
-        setUsername(value);
-      }
-    });
+//   React.useLayoutEffect(() => {
+//     // Restore org/username from AsyncStorage.
+//     AsyncStorage.getItem('@transistorsoft:org').then(value => {
+//       if (value != null) {
+//         setOrg(value);
+//       }
+//     });
 
-    // Set DeviceModel.
-    BackgroundGeolocation.getDeviceInfo().then(deviceInfo => {
-      setDeviceModel(deviceInfo.model);
-    });
-  }, [navigation]);
+//     AsyncStorage.getItem('@transistorsoft:username').then(value => {
+//       if (value != null) {
+//         setUsername(value);
+//       }
+//     });
 
-  const onClickRegister = () => {
-    settingsService.playSound('OPEN');
-    navigation.navigate('Registration', {org: org, username: username});
-  };
+//     // Set DeviceModel.
+//     BackgroundGeolocation.getDeviceInfo().then(deviceInfo => {
+//       setDeviceModel(deviceInfo.model);
+//     });
+//   }, [navigation]);
 
-  const validate = (value: string) => {
-    if (value == null) {
-      return false;
-    }
-    if (value.length === 0) {
-      return false;
-    }
-    return true;
-  };
+//   const onClickRegister = () => {
+//     settingsService.playSound('OPEN');
+//     navigation.navigate('Registration', {org: org, username: username});
+//   };
 
-  const onClickNavigate = async (route: string) => {
-    if (!validate(route) || !validate(org) || !validate(username)) {
-      // Re-direct to registration screen
-      onClickRegister();
-      return;
-    }
+//   const validate = (value: string) => {
+//     if (value == null) {
+//       return false;
+//     }
+//     if (value.length === 0) {
+//       return false;
+//     }
+//     return true;
+//   };
 
-    // Have we shown the one-time Alert for "background permission disclosure"?
-    const hasDisclosedBackgroundPermission =
-      (await AsyncStorage.getItem(
-        '@transistorsoft:hasDisclosedBackgroundPermission',
-      )) == 'true';
+//   const onClickNavigate = async (route: string) => {
+//     if (!validate(route) || !validate(org) || !validate(username)) {
+//       // Re-direct to registration screen
+//       onClickRegister();
+//       return;
+//     }
 
-    if (Platform.OS === 'android' && !hasDisclosedBackgroundPermission) {
-      // For Google Play Console Submission:  "disclosure for background permission".
-      // This is just a simple one-time Alert.  This is your own responsibility to do this.
-      Alert.alert(
-        'Background Location Access',
-        [
-          'BG Geo collects location data to enable tracking your trips to work and calculate distance travelled even when the app is closed or not in use.',
-          'This data will be uploaded to tracker.transistorsoft.com where you may view and/or delete your location history.',
-        ].join('\n\n'),
-        [
-          {
-            text: 'Close',
-            onPress: () => {
-              onDiscloseBackgroundPermission(route);
-            },
-          },
-        ],
-      );
-      return;
-    }
+//     // Have we shown the one-time Alert for "background permission disclosure"?
+//     const hasDisclosedBackgroundPermission =
+//       (await AsyncStorage.getItem(
+//         '@transistorsoft:hasDisclosedBackgroundPermission',
+//       )) == 'true';
 
-    settingsService.playSound('OPEN');
-    navigation.navigate(route, {
-      screen: route,
-      params: {
-        username: username,
-        org: org,
-      },
-    });
-  };
+//     if (Platform.OS === 'android' && !hasDisclosedBackgroundPermission) {
+//       // For Google Play Console Submission:  "disclosure for background permission".
+//       // This is just a simple one-time Alert.  This is your own responsibility to do this.
+//       Alert.alert(
+//         'Background Location Access',
+//         [
+//           'BG Geo collects location data to enable tracking your trips to work and calculate distance travelled even when the app is closed or not in use.',
+//           'This data will be uploaded to tracker.transistorsoft.com where you may view and/or delete your location history.',
+//         ].join('\n\n'),
+//         [
+//           {
+//             text: 'Close',
+//             onPress: () => {
+//               onDiscloseBackgroundPermission(route);
+//             },
+//           },
+//         ],
+//       );
+//       return;
+//     }
 
-  const onDiscloseBackgroundPermission = async (route: string) => {
-    await AsyncStorage.setItem(
-      '@transistorsoft:hasDisclosedBackgroundPermission',
-      'true',
-    );
-    onClickNavigate(route);
-  };
-  const onClickViewServer = async () => {
-    if (!validate(route) || !validate(org) || !validate(username)) {
-      // Re-direct to registration screen
-      onClickRegister();
-      return;
-    }
-    const url = `${ENV.TRACKER_HOST}/${org}`;
-    Linking.openURL(url).catch(err => {
-      settingsService.alert('Error', `Could not open url ${url}`);
-    });
-  };
+//     settingsService.playSound('OPEN');
+//     navigation.navigate(route, {
+//       screen: route,
+//       params: {
+//         username: username,
+//         org: org,
+//       },
+//     });
+//   };
 
-  return (
-    <View
-      style={{
-        flexDirection: 'column',
-        flex: 1,
-        backgroundColor: '#111',
-      }}>
-      <View style={{height: 70, alignItems: 'center'}}>
-        <Text
-          style={{
-            fontSize: 20,
-            color: '#fff',
-            fontWeight: 'bold',
-            padding: 20,
-          }}>
-          Example Applications
-        </Text>
-      </View>
-      <View
-        style={{
-          padding: 20,
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'space-around',
-        }}>
-        {/* <Button
-          buttonStyle={{backgroundColor: colors.parpal}}
-          titleStyle={{color: colors.black}}
-          title="Advanced App"
-          onPress={() => onClickNavigate('AdvancedApp')}
-        /> */}
-        {/* <Button
-          buttonStyle={{backgroundColor: colors.parpal}}
-          titleStyle={{color: colors.black}}
-          title="Hello World App"
-          onPress={() => onClickNavigate('HelloWorldApp')}
-        /> */}
-        <TouchableOpacity onPress={() => onClickNavigate('HelloWorldApp')}>
-          <Text> Hello World App </Text>
-        </TouchableOpacity>
-      </View>
-      <View style={{padding: 10, backgroundColor: '#fff'}}>
-        <Text style={{marginBottom: 10, color: colors.black}}>
-          These apps will post locations to Transistor Software's demo server.
-          You can view your tracking in the browser by visiting:
-        </Text>
-        <Text
-          style={{
-            fontWeight: 'bold',
-            textAlign: 'center',
-            marginBottom: 10,
-            color: colors.black,
-          }}>
-          {ENV.TRACKER_HOST}/{org}
-        </Text>
-        <View style={{flexDirection: 'row', marginBottom: 10, height: 50}}>
-          <PoorIcon />
-          <View style={{flex: 1, marginLeft: 10}}>
-            <View style={{flexDirection: 'row'}}>
-              <Text
-                style={{fontWeight: 'bold', width: 75, color: colors.black}}>
-                Org:
-              </Text>
-              <Text style={{flex: 1, color: colors.black}}>{org}</Text>
-            </View>
-            <View style={{flexDirection: 'row'}}>
-              <Text
-                style={{fontWeight: 'bold', width: 75, color: colors.black}}>
-                Device ID:
-              </Text>
-              <Text style={{color: colors.black}}>
-                {deviceModel}-{username}
-              </Text>
-            </View>
-          </View>
-        </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-          <Button
-            title="Edit"
-            onPress={onClickRegister}
-            buttonStyle={{width: 150, backgroundColor: '#c00'}}
-          />
-          <Button
-            title="View Tracking"
-            onPress={onClickViewServer}
-            buttonStyle={{width: 150}}
-          />
-        </View>
-      </View>
-    </View>
-  );
-};
+//   const onDiscloseBackgroundPermission = async (route: string) => {
+//     await AsyncStorage.setItem(
+//       '@transistorsoft:hasDisclosedBackgroundPermission',
+//       'true',
+//     );
+//     onClickNavigate(route);
+//   };
+//   const onClickViewServer = async () => {
+//     if (!validate(route) || !validate(org) || !validate(username)) {
+//       // Re-direct to registration screen
+//       onClickRegister();
+//       return;
+//     }
+//     const url = `${ENV.TRACKER_HOST}/${org}`;
+//     Linking.openURL(url).catch(err => {
+//       settingsService.alert('Error', `Could not open url ${url}`);
+//     });
+//   };
 
-export default HomeView;
+//   return (
+//     <View
+//       style={{
+//         flexDirection: 'column',
+//         flex: 1,
+//         backgroundColor: '#111',
+//       }}>
+//       <View style={{height: 70, alignItems: 'center'}}>
+//         <Text
+//           style={{
+//             fontSize: 20,
+//             color: '#fff',
+//             fontWeight: 'bold',
+//             padding: 20,
+//           }}>
+//           Example Applications
+//         </Text>
+//       </View>
+//       <View
+//         style={{
+//           padding: 20,
+//           flex: 1,
+//           flexDirection: 'column',
+//           justifyContent: 'space-around',
+//         }}>
+//         {/* <Button
+//           buttonStyle={{backgroundColor: colors.parpal}}
+//           titleStyle={{color: colors.black}}
+//           title="Advanced App"
+//           onPress={() => onClickNavigate('AdvancedApp')}
+//         /> */}
+//         {/* <Button
+//           buttonStyle={{backgroundColor: colors.parpal}}
+//           titleStyle={{color: colors.black}}
+//           title="Hello World App"
+//           onPress={() => onClickNavigate('HelloWorldApp')}
+//         /> */}
+//         <TouchableOpacity onPress={() => onClickNavigate('HelloWorldApp')}>
+//           <Text> Hello World App </Text>
+//         </TouchableOpacity>
+//       </View>
+//       <View style={{padding: 10, backgroundColor: '#fff'}}>
+//         <Text style={{marginBottom: 10, color: colors.black}}>
+//           These apps will post locations to Transistor Software's demo server.
+//           You can view your tracking in the browser by visiting:
+//         </Text>
+//         <Text
+//           style={{
+//             fontWeight: 'bold',
+//             textAlign: 'center',
+//             marginBottom: 10,
+//             color: colors.black,
+//           }}>
+//           {ENV.TRACKER_HOST}/{org}
+//         </Text>
+//         <View style={{flexDirection: 'row', marginBottom: 10, height: 50}}>
+//           <PoorIcon />
+//           <View style={{flex: 1, marginLeft: 10}}>
+//             <View style={{flexDirection: 'row'}}>
+//               <Text
+//                 style={{fontWeight: 'bold', width: 75, color: colors.black}}>
+//                 Org:
+//               </Text>
+//               <Text style={{flex: 1, color: colors.black}}>{org}</Text>
+//             </View>
+//             <View style={{flexDirection: 'row'}}>
+//               <Text
+//                 style={{fontWeight: 'bold', width: 75, color: colors.black}}>
+//                 Device ID:
+//               </Text>
+//               <Text style={{color: colors.black}}>
+//                 {deviceModel}-{username}
+//               </Text>
+//             </View>
+//           </View>
+//         </View>
+//         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+//           <Button
+//             title="Edit"
+//             onPress={onClickRegister}
+//             buttonStyle={{width: 150, backgroundColor: '#c00'}}
+//           />
+//           <Button
+//             title="View Tracking"
+//             onPress={onClickViewServer}
+//             buttonStyle={{width: 150}}
+//           />
+//         </View>
+//       </View>
+//     </View>
+//   );
+// };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     padding: 20,
-//   },
-// });
+// export default HomeView;
+
+// // const styles = StyleSheet.create({
+// //   container: {
+// //     padding: 20,
+// //   },
+// // });

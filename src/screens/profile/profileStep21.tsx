@@ -251,13 +251,12 @@ const ProfileStep21 = () => {
       mediaType: 'photo',
       selectionLimit: 1,
       cameraType: 'front',
-      rotation: 0,
+      rotation: 360,
     };
     try {
       if (Platform.OS === 'ios') {
         const openCamera = async () => {
           const cameraStatus = await check(PERMISSIONS.IOS.CAMERA);
-
           if (cameraStatus === RESULTS.GRANTED) {
             // Camera permission is granted, open camera here
             await launchCamera(options, async (resp: unknown) => {
@@ -268,7 +267,6 @@ const ProfileStep21 = () => {
                 console.warn('processed pic', data);
                 dispatch(addcompleteProfile({profilePic: data}));
                 const res: any = await completeProfile({profilePic: data});
-
                 // await uploadImgorDoc(resp?.assets[0]);
               }
             });

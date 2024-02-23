@@ -455,7 +455,7 @@ const ProfileStep4 = () => {
                 backgroundColor: colors.lightBlack,
               }}
               textStyle={{color: colors.primary}}
-              text={'Verify'}
+              text={'Proceed'}
             />
           ) : (
             <ActivityIndicator

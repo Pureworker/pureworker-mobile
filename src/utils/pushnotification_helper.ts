@@ -124,7 +124,6 @@ const NotificationListner = () => {
       topOffset: 30,
       bottomOffset: 60,
     });
-
     console.log('Notification on foreground state.....', remoteMessage);
     // Alert.alert('Push gotten here', remoteMessage?.data?.service);
     // ToastLong('Notification Received!, Please check!.');

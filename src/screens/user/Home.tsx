@@ -86,8 +86,7 @@ const Home = () => {
           userData.geoLocation.coordinates[1] === 0) ||
         !userData.geoLocation.coordinates.length
       ) {
-        // navigation.navigate('AddAddress');
-        navigation.navigate('OrderDetails');
+        navigation.navigate('AddAddress');
         ToastLong('Address is required');
       } else {
         // Continue with your logic if geoLocation is valid
@@ -368,37 +367,37 @@ const Home = () => {
             </View>
           )}
           {/*Close to You Section */}
-          {closeProvider?.length > 0 && (
-            <>
-              <View
-                style={[
-                  tw`flex flex-row items-center justify-between`,
-                  {marginLeft: perWidth(24), marginTop: perHeight(52)},
-                ]}>
-                <View style={[tw``]}>
-                  <Textcomp
-                    text={'Close to you'}
-                    size={25}
-                    lineHeight={28}
-                    color={'#000413'}
-                    fontFamily={'Inter-Medium'}
-                  />
-                </View>
-
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('CloseToYou');
-                  }}
-                  style={[tw`mr-4`]}>
-                  <Textcomp
-                    text={'See All'}
-                    size={14}
-                    lineHeight={16}
-                    color={'#000413'}
-                    fontFamily={'Inter-Medium'}
-                  />
-                </TouchableOpacity>
+          <>
+            <View
+              style={[
+                tw`flex flex-row items-center justify-between`,
+                {marginLeft: perWidth(24), marginTop: perHeight(52)},
+              ]}>
+              <View style={[tw``]}>
+                <Textcomp
+                  text={'Close to you'}
+                  size={25}
+                  lineHeight={28}
+                  color={'#000413'}
+                  fontFamily={'Inter-Medium'}
+                />
               </View>
+
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('CloseToYou');
+                }}
+                style={[tw`mr-4`]}>
+                <Textcomp
+                  text={'See All'}
+                  size={14}
+                  lineHeight={16}
+                  color={'#000413'}
+                  fontFamily={'Inter-Medium'}
+                />
+              </TouchableOpacity>
+            </View>
+            {closeProvider?.length > 0 && (
               <View style={{flex: 1}}>
                 <FlatList
                   data={closeProvider}
@@ -413,9 +412,7 @@ const Home = () => {
                             item={item?.item}
                             index={index}
                           />
-                          <View
-                            style={{marginRight: 50}}
-                          />
+                          <View style={{marginRight: 50}} />
                         </>
                       );
                     } else {
@@ -432,8 +429,20 @@ const Home = () => {
                   keyExtractor={item => item.id}
                 />
               </View>
-            </>
-          )}
+            )}
+            {closeProvider?.length < 1 && (
+              <View style={[tw`mt-4`, {marginLeft: perWidth(27)}]}>
+                <Textcomp
+                  text={'No Service Provider within your location'}
+                  size={18}
+                  lineHeight={18}
+                  color={'#88087B'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </View>
+            )}
+          </>
+
           {/* Service Ctagories */}
           <View>
             <View

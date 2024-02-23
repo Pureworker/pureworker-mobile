@@ -8,6 +8,7 @@ import {
   StatusBar,
   ScrollView,
   FlatList,
+  StyleSheet,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -253,7 +254,9 @@ const ServiceProviderProfile = () => {
     );
   }, [profileData?._id, savedProviders]);
 
-  console.log('Reviews:', serviceProviderData?.reviews );
+  console.log('Reviews:', serviceProviderData?.reviews);
+
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -474,7 +477,7 @@ const ServiceProviderProfile = () => {
               ]}>
               <View
                 style={[
-                  tw`border-b border-[#FFF] pt-4 mx-2`,
+                  tw`border-b border-[#FFFFFF80]  pt-4 mx-2`,
                   {paddingBottom: perHeight(11)},
                 ]}>
                 <View style={tw` pt-2`}>
@@ -487,23 +490,45 @@ const ServiceProviderProfile = () => {
                   />
                 </View>
               </View>
-              <View style={tw`border-b border-[#FFF] pb-4 mx-2`}>
+              <View style={tw`border-b border-[#FFFFFF80]  pb-4 mx-2`}>
                 <View style={tw` pt-3`}>
                   <Textcomp
                     text={
                       profileData?.portfolio?.description ||
                       serviceProviderData?.description
                     }
+                    // text={
+                    //   'heguide heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew  wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiewheguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiewu'
+                    // }
                     size={13}
                     lineHeight={14}
                     color={'#FFFFFF'}
                     fontFamily={'Inter-SemiBold'}
+                    numberOfLines={6}
                   />
+                  {(
+                    profileData?.portfolio?.description ||
+                    serviceProviderData?.description
+                  )?.split(' ')?.length > 20 && (
+                    <TouchableOpacity
+                      style={tw`ml-auto`}
+                      onPress={() => {
+                        setShowModal(true);
+                      }}>
+                      <Textcomp
+                        text={'...see more'}
+                        size={12}
+                        lineHeight={15}
+                        color={'green'}
+                        fontFamily={'Inter-Bold'}
+                      />
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
               <View
                 style={[
-                  tw`border-b border-[#FFF] flex flex-row items-center pt-4 mx-2`,
+                  tw`border-b border-[#FFFFFF80]  flex flex-row items-center pt-4 mx-2`,
                   {paddingVertical: perHeight(11)},
                 ]}>
                 <View style={tw`ml-1`}>
@@ -539,7 +564,7 @@ const ServiceProviderProfile = () => {
               </View>
               <View
                 style={[
-                  tw`border-b border-[#FFF] flex flex-row items-center pt-4 mx-2`,
+                  tw`border-b border-[#FFFFFF80]  flex flex-row items-center pt-4 mx-2`,
                   {paddingVertical: perHeight(11)},
                 ]}>
                 <View style={tw`ml-1`}>
@@ -612,7 +637,7 @@ const ServiceProviderProfile = () => {
               </View> */}
               <View
                 style={[
-                  tw`border-b border-[#FFF] flex flex-row items-center pt-4 mx-2`,
+                  tw`border-b border-[#FFFFFF80] flex flex-row items-center pt-4 mx-2`,
                   {paddingVertical: perHeight(11)},
                 ]}>
                 <View style={tw`ml-1`}>
@@ -650,7 +675,7 @@ const ServiceProviderProfile = () => {
               </View>
               <View
                 style={[
-                  tw`border-b border-[#FFF] flex flex-row items-center pt-4 mx-2`,
+                  tw`border-b border-[#FFFFFF80]  flex flex-row items-center pt-4 mx-2`,
                   {paddingVertical: perHeight(11)},
                 ]}>
                 <View style={[tw` `, {marginLeft: perWidth(30)}]}>
@@ -709,10 +734,10 @@ const ServiceProviderProfile = () => {
                 <>
                   <View
                     style={[
-                      tw`border-b border-[#FFF] items-center pt-4 mx-2`,
+                      tw`border-b border-[#FFFFFF80] w-9/10 mx-auto  items-center pt-4 `,
                       {paddingVertical: perHeight(11)},
                     ]}>
-                    <View style={tw`w-full `}>
+                    <View style={tw`mr-auto `}>
                       <Textcomp
                         text={'PortFolio'}
                         size={14}
@@ -780,7 +805,7 @@ const ServiceProviderProfile = () => {
               {firstPotfolio?.length || secondPotfolio?.length ? (
                 <View
                   style={[
-                    tw`border-b border-[#FFF] flex flex-row items-center pt-4 mx-2`,
+                    tw`border-b border-[#FFFFFF80]  flex flex-row items-center pt-4 mx-2`,
                     {paddingVertical: perHeight(11)},
                   ]}>
                   <View style={[tw` `, {marginLeft: perWidth(25)}]}>
@@ -1162,7 +1187,7 @@ const ServiceProviderProfile = () => {
                 data={serviceProviderData?.reviews || []}
                 renderItem={(item, index) => {
                   console.log('Review-item', item);
-                  
+
                   return (
                     <>
                       <View
@@ -1365,8 +1390,63 @@ const ServiceProviderProfile = () => {
           />
         </View>
       </Modal>
+
+      <Modal
+        isVisible={showModal}
+        onModalHide={() => {
+          setShowModal(false);
+        }}
+        style={{width: SIZES.width, marginHorizontal: 0}}
+        deviceWidth={SIZES.width}
+        onBackdropPress={() => setShowModal(false)}
+        swipeThreshold={200}
+        swipeDirection={['down']}
+        onSwipeComplete={() => setShowModal(false)}
+        onBackButtonPress={() => setShowModal(false)}>
+        <View style={tw` h-full w-full bg-black bg-opacity-5`}>
+          <TouchableOpacity
+            onPress={() => setShowModal(false)}
+            style={tw`flex-1`}
+          />
+          <View style={[tw`mx-auto w-4/5`, styles.modalContent]}>
+            <Textcomp
+              text={`${
+                profileData?.portfolio?.description ||
+                serviceProviderData?.description
+              }`}
+              size={14}
+              lineHeight={18}
+              color={colors.black}
+              fontFamily={'Inter-Regular'}
+            />
+            <TouchableOpacity
+              onPress={() => setShowModal(false)}
+              style={styles.closeButton}>
+              <Text style={{color: colors.primary, fontSize: 16}}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+  },
+  closeButton: {
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+});
 
 export default ServiceProviderProfile;

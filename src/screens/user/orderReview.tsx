@@ -22,7 +22,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import {ToastShort} from '../../utils/utils';
 import Modal from 'react-native-modal/dist/modal';
-import CheckBox from '@react-native-community/checkbox';
+// import CheckBox from '@react-native-community/checkbox';
+import CheckBox from 'react-native-check-box';
 
 const OrderReview = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -444,7 +445,7 @@ const OrderReview = ({route}: any) => {
             <View style={tw`flex-1`}>
               <View style={tw``}>
                 <Textcomp
-                  text={'!!!IMPORTANT !!!'}
+                  text={'!!! IMPORTANT !!!'}
                   size={16}
                   lineHeight={14.5}
                   color={'black'}
@@ -460,24 +461,56 @@ const OrderReview = ({route}: any) => {
                   fontFamily={'Inter-SemiBold'}
                 />
               </View>
-              <View style={tw`mt-4`}/>
-              {[1, 2, 3, 4, 5, 6]?.map((item, index) => {
-                return (
-                  <View key={index} style={tw`flex flex-row items-center mt-2`}>
-                    <View style={tw`w-2 h-2 rounded-full mr-2 bg-black`} />
-                    <Textcomp
-                      text={'Provide accurate descriptions as the scope'}
-                      size={12}
-                      lineHeight={14.5}
-                      color={'#00041380'}
-                      fontFamily={'Inter-SemiBold'}
-                    />
-                  </View>
-                );
-              })}
+              <View style={tw`mt-4`} />
+              <View style={tw`flex flex-row items-center mt-2`}>
+                <View style={tw`w-2 h-2 rounded-full mr-2 bg-black`} />
+                <Textcomp
+                  text={
+                    'Provide accurate descriptions as the scope of work cannot be modified once submitted.'
+                  }
+                  size={12}
+                  lineHeight={14.5}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+              <View style={tw`flex flex-row items-center mt-2`}>
+                <View style={tw`w-2 h-2 rounded-full mr-2 bg-black`} />
+                <Textcomp
+                  text={
+                    '⁠Prioritize safety, both yours and the service provider’s, during the job.'
+                  }
+                  size={12}
+                  lineHeight={14.5}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+              <View style={tw`flex flex-row items-center mt-2`}>
+                <View style={tw`w-2 h-2 rounded-full mr-2 bg-black`} />
+                <Textcomp
+                  text={
+                    '⁠Pureworker is not liable for any issues or disputes that arise from interactions with service providers conducted outside the app.'
+                  }
+                  size={12}
+                  lineHeight={14.5}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+              <View style={tw`flex flex-row items-center mt-2`}>
+                <View style={tw`w-2 h-2 rounded-full mr-2 bg-black`} />
+                <Textcomp
+                  text={'⁠No inappropriate touching or verbal sexual remarks.'}
+                  size={12}
+                  lineHeight={14.5}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
 
               <View style={tw`flex flex-row items-center mt-auto mb-4 ml-4`}>
-                <CheckBox
+                {/* <CheckBox
                   disabled={false}
                   value={toggleCheckBox}
                   style={{backgroundColor: 'white'}}
@@ -485,26 +518,34 @@ const OrderReview = ({route}: any) => {
                   onTintColor={colors.parpal}
                   onCheckColor={colors.parpal}
                   onValueChange={newValue => setToggleCheckBox(newValue)}
+                /> */}
+                <CheckBox
+                  style={{width: 30, padding: 10}}
+                  onClick={() => {
+                    setToggleCheckBox(!toggleCheckBox);
+                  }}
+                  isChecked={toggleCheckBox}
+                  // leftText={'CheckBox'}
                 />
                 <View style={tw`ml-4`}>
                   <Textcomp
                     text={'I agree to the above terms.'}
                     size={12}
                     lineHeight={14.5}
-                    color={'#00041380'}
-                    fontFamily={'Inter-SemiBold'}
+                    color={'#000000'}
+                    fontFamily={'Inter-Regular'}
                   />
                 </View>
               </View>
-
               <TouchableOpacity
-                style={tw`bg-[${colors.parpal}] w-3/4 py-3 mb-4 items-center  mx-auto rounded`}
+                disabled={!toggleCheckBox}
+                style={tw`bg-[${colors.parpal}] w-[85%] py-4 mb-4 items-center  mx-auto rounded`}
                 onPress={() => {
                   handleCreate();
                 }}>
                 <Textcomp
                   text={'Continue'}
-                  size={12}
+                  size={14}
                   lineHeight={14.5}
                   color={'white'}
                   fontFamily={'Inter-SemiBold'}

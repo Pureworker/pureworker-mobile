@@ -29,7 +29,7 @@ import OrderActive from '../screens/user/orderActive';
 import Inbox from '../screens/user/chat/inbox';
 import Withdraw from '../screens/user/withdraw';
 import FaceDetection from '../screens/faceDetection';
-import HelloWorldView from '../tracking/TrackView';
+// import HelloWorldView from '../tracking/TrackView';
 
 const Stack = createNativeStackNavigator();
 
@@ -171,11 +171,11 @@ export default function CustomerNavigation() {
         component={FaceDetection}
         options={{headerShown: false, animationEnabled: false}}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Tracking"
         component={HelloWorldView}
         options={{headerShown: false, animationEnabled: false}}
-      />
+      /> */}
     </Stack.Navigator>
   );
 }
