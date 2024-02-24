@@ -124,8 +124,12 @@ const Withdraw = () => {
     setprocessing(true);
     try {
       const res: any = await fetchAccountDetails(_data);
-      console.log(res?.data);
+      console.log('res--', res)?.data;
       if (res?.data?.data) {
+      }
+      if (res.status === 400 || res.status === 401) {
+        ToastShort('No match found');
+        return;
       }
       setaccountName(res?.data?.data);
     } catch (error) {

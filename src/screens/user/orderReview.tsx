@@ -46,6 +46,7 @@ const OrderReview = ({route}: any) => {
   );
 
   const handleCreate = async () => {
+    setready(false);
     // setisLoading(true);
     const scheduledDeliveryDate = new Date(_data.scheduledDeliveryDate);
     const formattedScheduledDate = new Intl.DateTimeFormat('en-US', {

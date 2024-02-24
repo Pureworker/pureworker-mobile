@@ -79,6 +79,7 @@ const Home = () => {
       }
       console.error('GEOLOCATION::', res?.data?.user?.geoLocation);
       const userData = res?.data?.user;
+      // navigation.navigate('AddAddress');
       if (
         !userData?.geoLocation ||
         !userData.geoLocation.coordinates ||
@@ -86,7 +87,7 @@ const Home = () => {
           userData.geoLocation.coordinates[1] === 0) ||
         !userData.geoLocation.coordinates.length
       ) {
-        navigation.navigate('AddAddress');
+        // navigation.navigate('AddAddress');
         ToastLong('Address is required');
       } else {
         // Continue with your logic if geoLocation is valid

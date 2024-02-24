@@ -27,19 +27,19 @@ export default function NotificationComp({item, seen, seen_}: any) {
       const minutesAgo = Math.floor(
         timeDifferenceInMilliseconds / millisecondsPerMinute,
       );
-      return `${minutesAgo}m`;
+      return `${minutesAgo} min`;
     } else if (timeDifferenceInMilliseconds < millisecondsPerDay) {
       // Less than a day ago
       const hoursAgo = Math.floor(
         timeDifferenceInMilliseconds / millisecondsPerHour,
       );
-      return `${hoursAgo}h`;
+      return `${hoursAgo} hr`;
     } else {
       // More than a day ago
       const daysAgo = Math.floor(
         timeDifferenceInMilliseconds / millisecondsPerDay,
       );
-      return `${daysAgo}d`;
+      return `${daysAgo} days`;
     }
   }
 

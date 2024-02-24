@@ -8,7 +8,7 @@ import colors from '../constants/colors';
 import {Rating, AirbnbRating} from 'react-native-ratings';
 import Modal from 'react-native-modal';
 import {HEIGHT_WINDOW, WIDTH_WINDOW} from '../constants/generalStyles';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   cancelOrder,
   getProviderLocation,
@@ -28,6 +28,8 @@ import {ToastShort} from '../utils/utils';
 import OrdersDeclineReason from './OrdersDeclineReason';
 import FastImage from 'react-native-fast-image';
 import OrderDispute from './modals/orderDispute';
+import LocationIcon2 from '../assets/svg/Location2';
+import ContactSupportIcon from '../assets/svg/contactSupport';
 
 const Orderscomponent = ({
   item,
@@ -129,7 +131,7 @@ const Orderscomponent = ({
       console.error('Error fetching location:', error);
     }
   };
-
+  const supportUser = useSelector((store: any) => store.user.supportUser);
   return (
     <>
       <>
@@ -498,7 +500,8 @@ const Orderscomponent = ({
                       marginTop: perHeight(25),
                     },
                   ]}>
-                  <Location />
+                  {/* <Location /> */}
+                  <LocationIcon2 />
                   <View style={[tw``, {marginLeft: perWidth(30)}]}>
                     <Textcomp
                       text={'View Location'}
@@ -510,7 +513,7 @@ const Orderscomponent = ({
                   </View>
                 </TouchableOpacity>
               )}
-              {status !== 'PENDING' && (
+              {/* {status !== 'PENDING' && (
                 <TouchableOpacity
                   onPress={() => {
                     // setInfoModal(false);
@@ -527,6 +530,35 @@ const Orderscomponent = ({
                   <View style={[tw``, {marginLeft: perWidth(36)}]}>
                     <Textcomp
                       text={'Order Dispute'}
+                      size={14}
+                      lineHeight={17}
+                      color={'#000000'}
+                      fontFamily={'Inter-SemiBold'}
+                    />
+                  </View>
+                </TouchableOpacity>
+              )} */}
+              {true && (
+                <TouchableOpacity
+                  onPress={() => {
+                    socket.connect();
+                    setInfoModal(false);
+                    navigation.navigate('Inbox', {
+                      id: supportUser?._id || supportUser?.id,
+                      name: 'Support',
+                    });
+                  }}
+                  style={[
+                    tw`flex mt-10 flex-row`,
+                    {
+                      marginHorizontal: perWidth(30),
+                      marginTop: perHeight(25),
+                    },
+                  ]}>
+                  <ContactSupportIcon/>
+                  <View style={[tw``, {marginLeft: perWidth(27)}]}>
+                    <Textcomp
+                      text={'Contact Support'}
                       size={14}
                       lineHeight={17}
                       color={'#000000'}

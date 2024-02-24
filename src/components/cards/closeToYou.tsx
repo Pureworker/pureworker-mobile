@@ -49,7 +49,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
               ]}
               source={{
                 uri:
-                  item?.user?.profilePic ||
+                  item?.profilePic ||
                   'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                 headers: {Authorization: 'someAuthToken'},
                 priority: FastImage.priority.normal,
@@ -182,14 +182,18 @@ const ClosetoYou = ({item, index, navigation}: any) => {
                 </View>
 
                 <View style={tw`px-[7.5%]`}>
-                  {item?.services?.map((service: {name: any; _id: any}) => {
+                  {item?.services?.map((service: {name: any; _id: any}, index) => {
                     return (
                       <TouchableOpacity
+                      key={index}
                         onPress={() => {
+                          // console.log(item.portfolios?.[index]);
+                          
                           navigation.navigate('ServiceProviderProfile', {
                             item: item,
                             serviceName: service?.name,
                             id: service?._id,
+                            portfolio: item.portfolios?.[index],
                           });
                           setshowModal(false);
                         }}

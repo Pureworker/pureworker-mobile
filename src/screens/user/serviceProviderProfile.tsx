@@ -45,6 +45,7 @@ import {
   formatDateHistory,
   formatDateHistory2,
   formatDateHistory3,
+  removeUnnecessaryNewLines,
   timeAgo,
 } from '../../utils/utils';
 import socket from '../../utils/socket';
@@ -61,6 +62,7 @@ const ServiceProviderProfile = () => {
   const [saved, setsaved] = useState(false);
   const route: any = useRoute();
   console.log('ps-data:', route.params);
+  const closeToData = route.params?.portfolio;
   const profileData = route.params?.item;
   const serviceName = route.params?.serviceName;
   const id = route.params?.id;
@@ -493,10 +495,11 @@ const ServiceProviderProfile = () => {
               <View style={tw`border-b border-[#FFFFFF80]  pb-4 mx-2`}>
                 <View style={tw` pt-3`}>
                   <Textcomp
-                    text={
-                      profileData?.portfolio?.description ||
-                      serviceProviderData?.description
-                    }
+                    text={removeUnnecessaryNewLines(
+                      closeToData?.description ??
+                        profileData?.portfolio?.description ??
+                        serviceProviderData?.description,
+                    )}
                     // text={
                     //   'heguide heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew  wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiewheguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiewu'
                     // }

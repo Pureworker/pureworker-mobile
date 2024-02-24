@@ -330,7 +330,7 @@ const EditAccount = () => {
               tw`bg-[${colors.darkPurple}] mt-4 pl-5 justify-center`,
               {height: perHeight(60)},
             ]}>
-            <View>
+            <TouchableOpacity onPress={()=>{navigation.navigate('AddAddress')}} style={tw``}>
               <View style={tw``}>
                 <Textcomp
                   text={'Address'}
@@ -345,9 +345,10 @@ const EditAccount = () => {
                 onChangeText={text => {
                   setaddress(text);
                 }}
+                editable={false}
                 value={address}
               />
-            </View>
+            </TouchableOpacity>
           </View>
           {/* <View
             style={[

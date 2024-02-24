@@ -260,6 +260,22 @@ const Orderscomponent3 = ({
                   fontFamily={'Inter-SemiBold'}
                   numberOfLines={2}
                 />
+
+                {item?.description?.split(' ')?.length > 15 && (
+                  <TouchableOpacity
+                    style={tw`ml-auto`}
+                    onPress={() => {
+                      setShowModal(true);
+                    }}>
+                    <Textcomp
+                      text={'...see more'}
+                      size={12}
+                      lineHeight={15}
+                      color={'green'}
+                      fontFamily={'Inter-Bold'}
+                    />
+                  </TouchableOpacity>
+                )}
               </TouchableOpacity>
             </View>
           </View>

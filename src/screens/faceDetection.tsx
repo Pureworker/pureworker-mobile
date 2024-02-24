@@ -199,23 +199,22 @@ export default function FaceDetection({navigation, route}: any) {
               ? 'passed'
               : 'unknown',
           );
-
           if (result.liveness === Enum.LivenessStatus.PASSED) {
             await updateLive();
             await initGetUsers();
             if (page === 'Profile') {
-              navigation.navigate('Congratulations');
-              navigation.navigate('Congratulations');
               FaceSDK.stopLivenessProcessing(
                 () => {},
                 () => {},
               );
+              navigation.navigate('Congratulations');
+              navigation.navigate('Congratulations');
             } else {
-              navigation.navigate('Home');
               FaceSDK.stopLivenessProcessing(
                 () => {},
                 () => {},
               );
+              navigation.navigate('Home');
             }
           }
         }
@@ -241,7 +240,7 @@ export default function FaceDetection({navigation, route}: any) {
       console.log('result', res?.data);
       if (res?.status === 200 || res?.status === 201) {
         ToastLong('LIve Test Passed');
-        navigation.navigate('Home');
+        // navigation.navigate('Home');
       }
     } catch (error) {
       Snackbar.show({

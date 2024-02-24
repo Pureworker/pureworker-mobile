@@ -19,7 +19,7 @@ import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {perHeight, perWidth} from '../../utils/position/sizes';
+import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import TextInputs from '../../components/TextInput2';
 import CloseToYouCard2 from '../../components/cards/closeToYou2';
 import Orderscomponent from '../../components/Orderscomponent';
@@ -33,7 +33,7 @@ import OrderInProgress from '../../components/modals/OrderinProgress';
 import OrderPlaced from '../../components/modals/orderPlaced';
 import ScheduledDeliveryDate from '../../components/modals/scheduledDeliveryDate';
 import colors from '../../constants/colors';
-import {completedOrder, getUserOrders} from '../../utils/api/func';
+import {cancelOrder, completedOrder, getUserOrders} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import {
   addcustomerOrders,
@@ -41,7 +41,12 @@ import {
 } from '../../store/reducer/mainSlice';
 import Orderscomponent3 from '../../components/Orderscomponent3';
 import Checked from '../../assets/svg/checked';
-import {formatDateToCustomFormat} from '../../utils/utils';
+import {formatDate3, formatDateToCustomFormat} from '../../utils/utils';
+import ContactSupportIcon from '../../assets/svg/contactSupport';
+import Cross from '../../assets/svg/Cross';
+import socket from '../../utils/socket';
+import Modal from 'react-native-modal/dist/modal';
+import OrdersDeclineReason from '../../components/OrdersDeclineReason';
 
 const OrderActive = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -231,6 +236,72 @@ const OrderActive = ({route}: any) => {
     'CANCELLED',
     'TRACK',
   ];
+
+  const supportUser = useSelector((store: any) => store.user.supportUser);
+
+  const initGetOrders = async () => {
+    setisLoading(true);
+    const res: any = await getUserOrders('');
+    console.log('oooooooo', res?.data);
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addcustomerOrders(res?.data?.data));
+    }
+    setisLoading(false);
+  };
+
+  const [modalSection, setmodalSection] = useState('All');
+  const [InfoModal, setInfoModal] = useState(false);
+
+  const [otherReason, setOtherReason] = useState('');
+  const [selectedReason, setSelectedReason] = useState<string>('');
+
+  const handleCancel = async () => {
+    setisLoading(true);
+    if (passedData?._id) {
+      const res = await cancelOrder(passedData?._id, {
+        reason:
+          selectedReason.toLowerCase() === 'others'
+            ? otherReason
+            : selectedReason,
+      });
+      if (res?.status === 200 || res?.status === 201) {
+        await initGetOrders();
+        Alert.alert('successful');
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_LONG,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+      setisLoading(false);
+      setInfoModal(false);
+      setmodalSection('All');
+    } else {
+      Snackbar.show({
+        text: 'Please fill all fields',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+      setisLoading(false);
+      setInfoModal(false);
+      setmodalSection('All');
+    }
+    setisLoading(false);
+    setInfoModal(false);
+    setmodalSection('All');
+  };
+
+  const handleSelectedReasons = reason => {
+    setSelectedReason(reason);
+  };
+
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
@@ -1103,11 +1174,72 @@ const OrderActive = ({route}: any) => {
                         );
                       }
                     })}
+
+                    <View
+                      style={[
+                        tw`flex flex-row mt-auto  justify-between ml-auto`,
+                      ]}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          socket.connect();
+
+                          navigation.navigate('Inbox', {
+                            id: supportUser?._id || supportUser?.id,
+                            name: 'Support',
+                          });
+                        }}
+                        style={[
+                          {
+                            height: perHeight(30),
+                            borderRadius: 8,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+
+                            backgroundColor: '#B9B7B3',
+                            marginTop: 20,
+                          },
+                          tw`flex flex-row px-3`,
+                        ]}>
+                        <ContactSupportIcon style={tw`mr-2`} />
+                        <Textcomp
+                          text={'Contact Support'}
+                          size={11}
+                          lineHeight={17}
+                          color={'#000000'}
+                          fontFamily={'Inter-Semibold'}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setInfoModal(true);
+                          setmodalSection('reason');
+                        }}
+                        style={[
+                          {
+                            height: perHeight(30),
+                            borderRadius: 8,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: colors.primary,
+                            marginTop: 20,
+                          },
+                          tw`flex flex-row px-3 mx-4`,
+                        ]}>
+                        <Cross style={tw`mr-2`} />
+                        <Textcomp
+                          text={'Cancel Order'}
+                          size={11}
+                          lineHeight={17}
+                          color={'#000000'}
+                          fontFamily={'Inter-Semibold'}
+                        />
+                      </TouchableOpacity>
+                    </View>
                   </ScrollView>
                 </View>
                 <View
                   style={[
-                    tw`bg-[#2D303C]  rounded p-4 mt-1`,
+                    tw`bg-[#2D303C]  rounded p-4 pb-1 mt-1`,
                     {width: perWidth(355)},
                   ]}>
                   <View style={tw`flex flex-row`}>
@@ -1134,7 +1266,7 @@ const OrderActive = ({route}: any) => {
                   </View>
                   <View style={tw`flex mt-2 flex-row`}>
                     <Textcomp
-                      text={'Delivery Date: '}
+                      text={'Delivery Date:'}
                       size={14.5}
                       lineHeight={16.5}
                       color={'#FFFFFF'}
@@ -1142,18 +1274,44 @@ const OrderActive = ({route}: any) => {
                       style={{textAlign: 'center'}}
                     />
                     <Textcomp
-                      text={`${formatDateToCustomFormat(
-                        passedData?.scheduledDeliveryDate,
-                      )}`}
-                      size={14.5}
+                      text={`${formatDate3(passedData?.scheduledDeliveryDate)}`}
+                      size={12.5}
                       lineHeight={16.5}
                       color={'#FFFFFF'}
                       fontFamily={'Inter-Regular'}
                       style={{textAlign: 'center', marginLeft: 10}}
                     />
                   </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      socket.connect();
+                      navigation.navigate('Inbox', {
+                        id: passedData?.serviceProvider._id || passedData?.serviceProvider?.id,
+                        name: passedData?.serviceProvider?.fullName
+                          ? `${passedData?.serviceProvider?.fullName}`
+                          : `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`,
+                      });
+                    }}
+                    style={[
+                      {
+                        borderRadius: 8,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: colors.primary,
+                        marginTop: 20,
+                      },
+                      tw`flex flex-row px-3 mx-4 py-2 ml-auto`,
+                    ]}>
+                    <Textcomp
+                      text={`Contact ${passedData?.serviceProvider?.firstName}`}
+                      size={11}
+                      lineHeight={17}
+                      color={'#000000'}
+                      fontFamily={'Inter-Semibold'}
+                    />
+                  </TouchableOpacity>
                 </View>
-                {passedData?.status === 'INPROGRESS' && (
+                {false && (
                   <TouchableOpacity
                     onPress={() => {
                       setrateYourExperience(true);
@@ -1260,6 +1418,31 @@ const OrderActive = ({route}: any) => {
         visible={scheduledDeliveryDate}
         item={item}
       />
+
+      <Modal
+        isVisible={InfoModal}
+        onModalHide={() => {
+          false;
+        }}
+        style={{width: SIZES.width, marginHorizontal: 0}}
+        deviceWidth={SIZES.width}
+        onBackdropPress={() => setInfoModal(false)}
+        swipeThreshold={200}
+        swipeDirection={['down']}
+        onSwipeComplete={() => setInfoModal(false)}
+        onBackButtonPress={() => setInfoModal(false)}>
+        <OrdersDeclineReason
+          selectedReason={selectedReason}
+          handleSelectedReasons={handleSelectedReasons}
+          otherReason={otherReason}
+          setOtherReason={setOtherReason}
+          handleCancel={handleCancel}
+          setModalSection={() => {
+            setInfoModal(false);
+          }}
+          isLoading={isLoading}
+        />
+      </Modal>
     </SafeAreaView>
   );
 };

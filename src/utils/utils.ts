@@ -31,6 +31,15 @@ export function formatDateToCustomFormat(dateString: any) {
   return formattedDate;
 }
 
+export function removeUnnecessaryNewLines(text) {
+  // Define the regular expression pattern to match unnecessary new lines
+  const pattern = /(\r?\n){2,}/g; // Matches two or more consecutive new lines
+
+  // Replace unnecessary new lines with a single new line
+  const cleanText = text.replace(pattern, '\n');
+
+  return cleanText;
+}
 // export function formatDateHistory(inputDateStr) {
 //   const inputDate = new Date(inputDateStr);
 
@@ -67,10 +76,14 @@ export function formatDateHistory2(inputDateStr: any) {
   const dayOfMonth = inputDate.toFormat('d');
   const month = inputDate.toFormat('LLL'); // Month abbreviation
   const year = inputDate.toFormat('yyyy');
-  const hours = inputDate.toFormat('H');
+  let hours = inputDate.toFormat('h');
   const minutes = inputDate.toFormat('mm');
+  const period = inputDate.toFormat('a'); // AM/PM
 
-  const formattedDate = `${dayOfWeek} ${dayOfMonth} ${month}, ${year}, ${hours}:${minutes}`;
+  // Ensure single digit hours have leading zero for consistency
+  hours = hours.padStart(2, '0');
+
+  const formattedDate = `${dayOfWeek} ${dayOfMonth} ${month}, ${year}, ${hours}:${minutes} ${period.toLowerCase()}`;
 
   return formattedDate;
 }
@@ -164,6 +177,23 @@ export function messageTimeStamp(timestamp: string | number | Date) {
   const hours = String(date.getUTCHours()).padStart(2, '0');
   const minutes = String(date.getUTCMinutes()).padStart(2, '0');
   return `${hours}:${minutes}`;
+}
+
+export function formatDate3(dateString) {
+  const options = {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+    timeZone: 'UTC', // Assuming the input date string is in UTC timezone
+  };
+  const date = new Date(dateString);
+  date.setUTCHours(date.getUTCHours() + 1);
+  const formattedDate = date.toLocaleDateString('en-GB', options);
+  const formattedTime = date.toLocaleTimeString('en-GB', options);
+  return formattedDate;
 }
 
 // Example usage:
