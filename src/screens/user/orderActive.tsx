@@ -143,7 +143,8 @@ const OrderActive = ({route}: any) => {
     },
     {
       title: 'Order Accepted',
-      func: () => setorderDelivered(true),
+      // func: () => setorderDelivered(true),
+      func: () => {},
     },
     {
       title: 'Service Provider in Transit',
@@ -1209,31 +1210,125 @@ const OrderActive = ({route}: any) => {
                           fontFamily={'Inter-Semibold'}
                         />
                       </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => {
-                          setInfoModal(true);
-                          setmodalSection('reason');
-                        }}
-                        style={[
-                          {
-                            height: perHeight(30),
-                            borderRadius: 8,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            backgroundColor: colors.primary,
-                            marginTop: 20,
-                          },
-                          tw`flex flex-row px-3 mx-4`,
-                        ]}>
-                        <Cross style={tw`mr-2`} />
-                        <Textcomp
-                          text={'Cancel Order'}
-                          size={11}
-                          lineHeight={17}
-                          color={'#000000'}
-                          fontFamily={'Inter-Semibold'}
-                        />
-                      </TouchableOpacity>
+
+                      {item.status === 'TRACK' &&
+                        item?.location !== 'online' && (
+                          <TouchableOpacity
+                            onPress={() => {
+                              navigation.navigate('ViewLocation', {
+                                id:
+                                  item?.serviceProvider._id ||
+                                  item?.serviceProvider?.id,
+                                item: item,
+                              });
+                            }}
+                            style={[
+                              {
+                                height: perHeight(30),
+                                borderRadius: 8,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                backgroundColor: colors.primary,
+                                marginTop: 20,
+                              },
+                              tw`flex flex-row px-3 mx-4`,
+                            ]}>
+                            <Cross style={tw`mr-2`} />
+                            <Textcomp
+                              text={'Cancel Order'}
+                              size={11}
+                              lineHeight={17}
+                              color={'#000000'}
+                              fontFamily={'Inter-Semibold'}
+                            />
+                          </TouchableOpacity>
+                        )}
+
+                      {item.status === 'COMPLETED' && (
+                        <TouchableOpacity
+                          onPress={() => {
+                            navigation.navigate('TipServiceProvider', {
+                              item: item,
+                            });
+                          }}
+                          style={[
+                            {
+                              height: perHeight(30),
+                              borderRadius: 8,
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              backgroundColor: colors.primary,
+                              marginTop: 20,
+                            },
+                            tw`flex flex-row px-3 mx-4`,
+                          ]}>
+                          <Cross style={tw`mr-2`} />
+                          <Textcomp
+                            text={'Tip Service Provider'}
+                            size={11}
+                            lineHeight={17}
+                            color={'#000000'}
+                            fontFamily={'Inter-Semibold'}
+                          />
+                        </TouchableOpacity>
+                      )}
+
+                      {item.status === 'INPROGRESS' && (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setrateYourExperience(true);
+                          }}
+                          style={[
+                            {
+                              height: perHeight(30),
+                              borderRadius: 8,
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              backgroundColor: colors.primary,
+                              marginTop: 20,
+                            },
+                            tw`flex flex-row px-3 mx-4`,
+                          ]}>
+                          <Cross style={tw`mr-2`} />
+                          <Textcomp
+                            text={'Job Complete '}
+                            size={11}
+                            lineHeight={17}
+                            color={'#000000'}
+                            fontFamily={'Inter-Semibold'}
+                          />
+                        </TouchableOpacity>
+                      )}
+
+                      {item.status !== 'DECLINED' &&
+                        item.status !== 'INPROGRESS' &&
+                        item.status !== 'COMPLETED' && (
+                          <TouchableOpacity
+                            onPress={() => {
+                              setInfoModal(true);
+                              setmodalSection('reason');
+                            }}
+                            style={[
+                              {
+                                height: perHeight(30),
+                                borderRadius: 8,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                backgroundColor: colors.primary,
+                                marginTop: 20,
+                              },
+                              tw`flex flex-row px-3 mx-4`,
+                            ]}>
+                            <Cross style={tw`mr-2`} />
+                            <Textcomp
+                              text={'Cancel Order'}
+                              size={11}
+                              lineHeight={17}
+                              color={'#000000'}
+                              fontFamily={'Inter-Semibold'}
+                            />
+                          </TouchableOpacity>
+                        )}
                     </View>
                   </ScrollView>
                 </View>
@@ -1286,7 +1381,9 @@ const OrderActive = ({route}: any) => {
                     onPress={() => {
                       socket.connect();
                       navigation.navigate('Inbox', {
-                        id: passedData?.serviceProvider._id || passedData?.serviceProvider?.id,
+                        id:
+                          passedData?.serviceProvider._id ||
+                          passedData?.serviceProvider?.id,
                         name: passedData?.serviceProvider?.fullName
                           ? `${passedData?.serviceProvider?.fullName}`
                           : `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`,
