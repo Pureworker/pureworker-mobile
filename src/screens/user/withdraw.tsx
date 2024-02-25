@@ -222,9 +222,12 @@ const Withdraw = () => {
                               color: '#00000080',
                             },
                           ]}
+                          // placeholderStyle={{
+                          //   color: '#00000080',
+                          //   fontWeight: 400,
+                          // }}
                           placeholderStyle={{
-                            color: '#00000080',
-                            fontWeight: 400,
+                            color: '#757575',
                           }}
                           data={bankList}
                           search

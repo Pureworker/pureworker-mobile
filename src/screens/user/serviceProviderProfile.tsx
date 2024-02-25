@@ -260,6 +260,8 @@ const ServiceProviderProfile = () => {
 
   const [showModal, setShowModal] = useState(false);
 
+  const [display, setDisplay] = useState('');
+
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View>
@@ -299,9 +301,10 @@ const ServiceProviderProfile = () => {
         <FastImage
           style={[tw``, {width: SIZES.width, height: 200}]}
           source={{
-            uri: profileData?.profilePic
-              ? profileData?.profilePic
-              : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
+            uri:
+              profileData?.profilePic ??
+              'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+            // 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
             headers: {Authorization: 'someAuthToken'},
             priority: FastImage.priority.normal,
           }}
@@ -493,12 +496,10 @@ const ServiceProviderProfile = () => {
                 </View>
               </View>
               <View style={tw`border-b border-[#FFFFFF80]  pb-4 mx-2`}>
-                <View style={tw` pt-3`}>
+                <View style={tw` pt-3 `}>
                   <Textcomp
                     text={removeUnnecessaryNewLines(
-                      closeToData?.description ??
-                        profileData?.portfolio?.description ??
-                        serviceProviderData?.description,
+                      serviceProviderData?.description,
                     )}
                     // text={
                     //   'heguide heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew  wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiewheguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiewu'
@@ -509,13 +510,12 @@ const ServiceProviderProfile = () => {
                     fontFamily={'Inter-SemiBold'}
                     numberOfLines={6}
                   />
-                  {(
-                    profileData?.portfolio?.description ||
-                    serviceProviderData?.description
-                  )?.split(' ')?.length > 20 && (
+                  {serviceProviderData?.description?.split(' ')?.length >
+                    20 && (
                     <TouchableOpacity
                       style={tw`ml-auto`}
                       onPress={() => {
+                        setDisplay(serviceProviderData?.description);
                         setShowModal(true);
                       }}>
                       <Textcomp
@@ -528,6 +528,46 @@ const ServiceProviderProfile = () => {
                     </TouchableOpacity>
                   )}
                 </View>
+
+                {(closeToData?.description ||
+                  profileData?.portfolio?.description) && (
+                  <View style={tw` pt-3 border-t mt-2 border-[#FFFFFF80]`}>
+                    <Textcomp
+                      text={removeUnnecessaryNewLines(
+                        closeToData?.description ??
+                          profileData?.portfolio?.description ??
+                          '',
+                      )}
+                      size={13}
+                      lineHeight={14}
+                      color={'#FFFFFF'}
+                      fontFamily={'Inter-SemiBold'}
+                      numberOfLines={6}
+                    />
+                    {(
+                      profileData?.portfolio?.description ||
+                      serviceProviderData?.description
+                    )?.split(' ')?.length > 20 && (
+                      <TouchableOpacity
+                        style={tw`ml-auto`}
+                        onPress={() => {
+                          setShowModal(true);
+                          setDisplay(
+                            closeToData?.description ??
+                              profileData?.portfolio?.description,
+                          );
+                        }}>
+                        <Textcomp
+                          text={'...see more'}
+                          size={12}
+                          lineHeight={15}
+                          color={'green'}
+                          fontFamily={'Inter-Bold'}
+                        />
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                )}
               </View>
               <View
                 style={[
@@ -1414,8 +1454,9 @@ const ServiceProviderProfile = () => {
           <View style={[tw`mx-auto w-4/5`, styles.modalContent]}>
             <Textcomp
               text={`${
-                profileData?.portfolio?.description ||
-                serviceProviderData?.description
+                display
+                // profileData?.portfolio?.description ||
+                // serviceProviderData?.description
               }`}
               size={14}
               lineHeight={18}

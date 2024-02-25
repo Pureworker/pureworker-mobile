@@ -30,6 +30,7 @@ import FastImage from 'react-native-fast-image';
 import OrderDispute from './modals/orderDispute';
 import LocationIcon2 from '../assets/svg/Location2';
 import ContactSupportIcon from '../assets/svg/contactSupport';
+import CancelIcon from '../assets/svg/cancel3';
 
 const Orderscomponent = ({
   item,
@@ -402,6 +403,7 @@ const Orderscomponent = ({
 
               {status !== 'DECLINED' &&
                 status !== 'INPROGRESS' &&
+                status !== 'TRACK' &&
                 status !== 'COMPLETED' && (
                   <TouchableOpacity
                     onPress={() => {
@@ -418,7 +420,7 @@ const Orderscomponent = ({
                       tw`flex mt-10 flex-row`,
                       {marginHorizontal: perWidth(30)},
                     ]}>
-                    <Cross />
+                    <CancelIcon />
                     <View style={[tw``, {marginLeft: perWidth(36)}]}>
                       <Textcomp
                         text={'Cancel Order'}
@@ -555,7 +557,7 @@ const Orderscomponent = ({
                       marginTop: perHeight(25),
                     },
                   ]}>
-                  <ContactSupportIcon/>
+                  <ContactSupportIcon />
                   <View style={[tw``, {marginLeft: perWidth(27)}]}>
                     <Textcomp
                       text={'Contact Support'}

@@ -162,7 +162,7 @@ const _Services = ({route}: any) => {
               Platform.OS === 'ios'
                 ? getStatusBarHeight(true)
                 : StatusBar.currentHeight &&
-                  StatusBar.currentHeight + getStatusBarHeight(true),
+                  StatusBar.currentHeight + getStatusBarHeight(true) + 20,
           }}
         />
 

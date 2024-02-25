@@ -131,14 +131,6 @@ const Home = () => {
     initGetPopularServices();
     initGetProviderByProximity();
     getSupportUser('');
-    // axios
-    // .post('https://api.pureworker.com/api/location', {long: 0, lat: 1})
-    // .then(response => {
-    //   console.log('Location sent successfully:', response.data);
-    // })
-    // .catch(error => {
-    //   console.error('Error sending location:', error);
-    // });
   }, [dispatch]);
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
@@ -150,32 +142,10 @@ const Home = () => {
   const closeProvider = useSelector((state: any) => state.user.closeProvider);
   // console.log('daaaaattttttaaaa', 'here:', closeProvider);
   const welcomeModal = useSelector((state: any) => state.user.welcomeModal);
-  // const filterBySearchProduct = useMemo(() => {
-  //   var searchArray = [];
-  //   console.log("🚀 ~ file: Home.tsx:64 ~ filterBySearchProduct ~ getServiceProviderProfile:", getServiceProviderProfile)
-  //   if (
-  //     Array.isArray(getServiceProviderProfile) &&
-  //     getServiceProviderProfile.length
-  //   ) {
-  //     searchArray = getServiceProviderProfile.filter(txt => {
-  //       const data = txt?.price ? JSON.parse(txt?.price) : ''
-  //       const serviceName = data[0].serviceName;
-  //       const text = serviceName
-  //         ? serviceName.toUpperCase()
-  //         : ''.toUpperCase();
-  //       const textSearch = search.toUpperCase();
-  //       return text.indexOf(textSearch) > -1;
-  //     });
-  //   }
-  //   if (searchArray.length) {
-  //     return searchArray;
-  //   } else {
-  //     return [];
-  //   }
-  // }, [search, getServiceProviderProfile]);
   const [ContactAgent, setContactAgent] = useState(false);
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const handleDropdownClick = (catId: React.SetStateAction<null>) => {
+    console.log(catId);
     if (catId === openDropdownId) {
       setOpenDropdownId(null); // Close the dropdown if it's already open
     } else {
@@ -183,10 +153,7 @@ const Home = () => {
     }
   };
   // Sentry.nativeCrash();
-  const [welcomeshow, setwelcomeshow] = useState(true);
-
   const [refreshing, setRefreshing] = useState(false);
-
   const onRefresh = () => {
     setRefreshing(true);
     // Call your refresh function here
@@ -475,8 +442,8 @@ const Home = () => {
                         key={index}
                         categoryName={item?.name}
                         catId={item?._id || item?.id}
-                        isOpen={item?.id === openDropdownId}
-                        onDropdownClick={handleDropdownClick}
+                        isOpen={item?._id === openDropdownId}
+                        onDropdownClick={(catId:any) => handleDropdownClick(catId)}
                       />
                     );
                   })}

@@ -9,6 +9,7 @@ import {
   ScrollView,
   FlatList,
   ActivityIndicator,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -119,9 +120,17 @@ const TabServices = () => {
   };
   const [openDropdownId, setOpenDropdownId] = useState(null);
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
+          style={{
+            marginTop:
+              Platform.OS === 'ios'
+                ? getStatusBarHeight(true)
+                : getStatusBarHeight(true) + 20,
+          }}
+        />
+        {/* <View
           style={{
             marginTop:
               Platform.OS === 'ios'
@@ -129,7 +138,7 @@ const TabServices = () => {
                 : StatusBar.currentHeight &&
                   StatusBar.currentHeight + getStatusBarHeight(true),
           }}
-        />
+        /> */}
 
         {!searchModal ? (
           <View
@@ -200,7 +209,10 @@ const TabServices = () => {
               />
             </TouchableOpacity>
             <TextInputs
-              style={[tw`rounded-full`,{marginTop: 0, width: '75%', paddingHorizontal: 10}]}
+              style={[
+                tw`rounded-full`,
+                {marginTop: 0, width: '75%', paddingHorizontal: 10},
+              ]}
               labelText={'Search for service'}
               state={searchInput}
               setState={text => {
@@ -240,7 +252,7 @@ const TabServices = () => {
           {/* Display search results */}
           {loading ? (
             <View style={tw`mt-[20%]`}>
-              <ActivityIndicator size={"large"} color={colors.parpal} />
+              <ActivityIndicator size={'large'} color={colors.parpal} />
             </View>
           ) : (
             <>
@@ -304,7 +316,7 @@ const TabServices = () => {
         <View style={tw`h-20`} />
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -256,7 +256,6 @@ const DrawerContent = () => {
             <TouchableOpacity
               style={[tw`rounded-full`, {width: 50, height: 50}]}
               onPress={() => {
-                // openLibraryfordp2();
                 opencamerafordp4();
                 // if (
                 //   userType.userType === BUSINESS ||
@@ -292,13 +291,17 @@ const DrawerContent = () => {
                   onPress={() => {
                     navigation.navigate('Rating');
                   }}
-                  style={tw`mt-3 flex flex-row`}>
+                  style={tw`mt-3 flex flex-row items-center`}>
                   <View style={tw``}>
                     <Textcomp
-                      text={`${userData?.averageRating}`}
+                      text={`${Number(userData?.averageRating).toFixed(2)}`}
                       size={14}
                       color={'#FFCD1E'}
-                      style={[tw`ml-3`, {lineHeight: 14}, {fontWeight: '500'}]}
+                      style={[
+                        tw`ml-3 mr-1`,
+                        {lineHeight: 14},
+                        {fontWeight: '500'},
+                      ]}
                     />
                   </View>
                   <View>
@@ -313,7 +316,7 @@ const DrawerContent = () => {
                       text={'Rating'}
                       size={14}
                       color={'#FFCD1E'}
-                      style={[tw`ml-1`, {lineHeight: 14}, {fontWeight: '500'}]}
+                      style={[tw`ml-2`, {lineHeight: 14}, {fontWeight: '500'}]}
                     />
                   </View>
                 </TouchableOpacity>
@@ -410,7 +413,7 @@ const DrawerContent = () => {
           )}
           <View style={[tw`mt-4 ml-3`, {}]}>
             <Textcomp
-              text={`Version: ${Platform.OS === 'ios' ? '1.0.4.2' : '1.0.4.2'}`}
+              text={`Version: ${Platform.OS === 'ios' ? '1.0.4.5' : '1.0.4.5'}`}
               size={14}
               color={'#000000'}
               style={[

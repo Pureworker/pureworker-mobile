@@ -696,7 +696,7 @@ const Account = () => {
                 onPress={() => {
                   navigation.navigate('FaceDetection', {page: 'Account'});
                 }}
-                style={tw`ml-auto mt-8 py-2 bg-[${colors.darkPurple}] w-6/10 rounded-lg items-center justify-center`}>
+                style={tw`mx-auto mt-10 py-3 bg-[${colors.darkPurple}] w-8/10 rounded-lg items-center justify-center`}>
                 <Textcomp
                   text={'Complete Liveness Check'}
                   size={14}

@@ -277,6 +277,7 @@ export default function ScheduledDeliveryDate({
               mode="datetime"
               onConfirm={handleConfirm}
               onCancel={hideDatePicker}
+              minimumDate={new Date()}
             />
 
             {schdeuleIsoDate ? (

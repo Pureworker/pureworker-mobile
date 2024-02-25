@@ -10,6 +10,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import FaceSDK, {
@@ -28,11 +29,12 @@ import tw from 'twrnc';
 import {perHeight, perWidth} from '../utils/position/sizes';
 import colors from '../constants/colors';
 import images from '../constants/images';
-import {getUser, updateUserData} from '../utils/api/func';
+import {completeProfile, getUser, updateUserData} from '../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import {ToastLong} from '../utils/utils';
 import {addUserData} from '../store/reducer/mainSlice';
 import {useDispatch} from 'react-redux';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 LogBox.ignoreLogs(['new NativeEventEmitter']);
 const eventManager = new NativeEventEmitter(RNFaceApi);
@@ -234,12 +236,15 @@ export default function FaceDetection({navigation, route}: any) {
 
   const updateLive = async () => {
     try {
-      const res: any = await updateUserData({
+      // const res: any = await updateUserData({
+      //   liveTest: true,
+      // });
+      const res: any = await completeProfile({
         liveTest: true,
       });
       console.log('result', res?.data);
       if (res?.status === 200 || res?.status === 201) {
-        ToastLong('LIve Test Passed');
+        ToastLong('Live Test Passed');
         // navigation.navigate('Home');
       }
     } catch (error) {
@@ -271,7 +276,12 @@ export default function FaceDetection({navigation, route}: any) {
           <View
             style={[
               tw`px-2 py-1 flex flex-row items-center justify-between w-full `,
-              {paddingTop: perHeight(15)},
+              {
+                paddingTop:
+                  Platform.OS === 'ios'
+                    ? getStatusBarHeight(true)
+                    : getStatusBarHeight(true) + 20,
+              },
             ]}>
             {/* <Backicon /> */}
             {/* <TouchableOpacity

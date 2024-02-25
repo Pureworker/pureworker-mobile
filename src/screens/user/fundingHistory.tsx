@@ -299,7 +299,11 @@ const FundingHistory = () => {
                                   //   item?.type?.slice(0, 1)?.toUpperCase() +
                                   //   item?.type?.slice(1)
                                   // }`}
-                                  text={`${item?.status}`}
+                                  text={`${
+                                    item?.status === 'successfull'
+                                      ? 'sucessful'
+                                      : item?.status
+                                  }`}
                                   size={13}
                                   lineHeight={15}
                                   color={

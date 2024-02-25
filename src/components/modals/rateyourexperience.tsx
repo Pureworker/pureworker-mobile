@@ -234,18 +234,19 @@ export default function RateyourExperience({
 
   const [modalHeight, setModalHeight] = useState('70%'); // Initial modal height
 
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
-        setModalHeight('90%'); // Update modal height when keyboard is shown
+        setIsKeyboardOpen(true);
       },
     );
-
     const keyboardDidHideListener = Keyboard.addListener(
       'keyboardDidHide',
       () => {
-        setModalHeight('70%'); // Reset modal height when keyboard is hidden
+        setIsKeyboardOpen(false);
       },
     );
 
@@ -381,12 +382,14 @@ export default function RateyourExperience({
               />
             </TouchableOpacity>
           </View>
-          <View
-            style={[
-              tw`bg-black mt-auto mb-4`,
-              {height: 2, width: WIDTH_WINDOW * 0.95},
-            ]}
-          />
+          {!isKeyboardOpen && (
+            <View
+              style={[
+                tw`bg-black mt-auto mb-4`,
+                {height: 2, width: WIDTH_WINDOW * 0.95},
+              ]}
+            />
+          )}
         </View>
       </View>
     </Modal>

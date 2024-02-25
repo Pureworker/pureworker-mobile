@@ -463,8 +463,8 @@ const OrderReview = ({route}: any) => {
                 />
               </View>
               <View style={tw`mt-4`} />
-              <View style={tw`flex flex-row items-center mt-2`}>
-                <View style={tw`w-2 h-2 rounded-full mr-2 bg-black`} />
+              <View style={tw`flex flex-row items-start mt-2`}>
+                <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
                 <Textcomp
                   text={
                     'Provide accurate descriptions as the scope of work cannot be modified once submitted.'
@@ -475,8 +475,8 @@ const OrderReview = ({route}: any) => {
                   fontFamily={'Inter-Regular'}
                 />
               </View>
-              <View style={tw`flex flex-row items-center mt-2`}>
-                <View style={tw`w-2 h-2 rounded-full mr-2 bg-black`} />
+              <View style={tw`flex flex-row items-start mt-2`}>
+                <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
                 <Textcomp
                   text={
                     '⁠Prioritize safety, both yours and the service provider’s, during the job.'
@@ -487,8 +487,8 @@ const OrderReview = ({route}: any) => {
                   fontFamily={'Inter-Regular'}
                 />
               </View>
-              <View style={tw`flex flex-row items-center mt-2`}>
-                <View style={tw`w-2 h-2 rounded-full mr-2 bg-black`} />
+              <View style={tw`flex flex-row items-start mt-2`}>
+                <View style={tw`w-2 h-2  mt-1 rounded-full mr-2 bg-black`} />
                 <Textcomp
                   text={
                     '⁠Pureworker is not liable for any issues or disputes that arise from interactions with service providers conducted outside the app.'
@@ -499,8 +499,8 @@ const OrderReview = ({route}: any) => {
                   fontFamily={'Inter-Regular'}
                 />
               </View>
-              <View style={tw`flex flex-row items-center mt-2`}>
-                <View style={tw`w-2 h-2 rounded-full mr-2 bg-black`} />
+              <View style={tw`flex flex-row items-start mt-2`}>
+                <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
                 <Textcomp
                   text={'⁠No inappropriate touching or verbal sexual remarks.'}
                   size={12}
@@ -539,10 +539,14 @@ const OrderReview = ({route}: any) => {
                 </View>
               </View>
               <TouchableOpacity
-                disabled={!toggleCheckBox}
+                // disabled={!toggleCheckBox}
                 style={tw`bg-[${colors.parpal}] w-[85%] py-4 mb-4 items-center  mx-auto rounded`}
                 onPress={() => {
-                  handleCreate();
+                  if (toggleCheckBox) {
+                    handleCreate();
+                  } else {
+                    ToastShort('Terms and conditions required!. Please check the radio button');
+                  }
                 }}>
                 <Textcomp
                   text={'Continue'}

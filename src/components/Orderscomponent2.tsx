@@ -29,7 +29,8 @@ import RateyourCustommer from './modals/rateYourCustomer';
 import {formatDateHistory2} from '../utils/utils';
 import FastImage from 'react-native-fast-image';
 import Modal from 'react-native-modal/dist/modal';
-const Orderscomponent2 = ({item, index, status, showall}: any) => {
+import socket from '../utils/socket';
+const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
   const [saved, setsaved] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const [orderDispute, setorderDispute] = useState(false);
@@ -143,6 +144,16 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
         setisLoading(false);
       }
     } catch (error) {
+      Snackbar.show({
+        text: error?.message
+          ? error?.message
+          : error?.data?.message
+          ? error?.data?.message
+          : 'Oops!, an error occured',
+        duration: Snackbar.LENGTH_SHORT,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
     } finally {
       setisLoading(false);
       const initGetOrders2 = async () => {
@@ -253,6 +264,7 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
     setisLoading(false);
   };
   const [showModal, setShowModal] = useState(false);
+  const supportUser = useSelector((store: any) => store.user.supportUser);
 
   return (
     <>
@@ -260,7 +272,8 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
         style={[
           tw` mt-4 mx-auto bg-[${colors.darkPurple}]`,
           {
-            height: perWidth(195),
+            // height: perWidth(205),
+            minHeight:  perWidth(180),
             width: SIZES.width * 0.95,
             borderWidth: 0,
             borderRadius: 5,
@@ -409,6 +422,21 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
                 fontFamily={'Inter-SemiBold'}
                 numberOfLines={2}
               />
+              {item?.description?.split(' ')?.length > 15 && (
+                <TouchableOpacity
+                  style={tw`ml-auto`}
+                  onPress={() => {
+                    setShowModal(true);
+                  }}>
+                  <Textcomp
+                    text={'...see more'}
+                    size={12}
+                    lineHeight={15}
+                    color={'green'}
+                    fontFamily={'Inter-Bold'}
+                  />
+                </TouchableOpacity>
+              )}
             </TouchableOpacity>
             {/* <View
               style={[tw``, {width: perWidth(252), marginTop: perHeight(4)}]}>
@@ -658,7 +686,12 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                setorderDispute(true);
+                // setorderDispute(true);
+                socket.connect();
+                navigation.navigate('Inbox', {
+                  id: supportUser?._id || supportUser?.id,
+                  name: 'Support',
+                });
               }}
               style={[
                 tw`bg-[${colors.primary}] items-center justify-center`,
@@ -671,7 +704,8 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
                 },
               ]}>
               <Textcomp
-                text={'Dispute '}
+                // text={'Dispute '}
+                text={'Contact Support'}
                 size={12}
                 lineHeight={14}
                 color={colors.black}
@@ -684,7 +718,12 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
           <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
             <TouchableOpacity
               onPress={() => {
-                setorderDispute(true);
+                // setorderDispute(true);
+                socket.connect();
+                navigation.navigate('Inbox', {
+                  id: supportUser?._id || supportUser?.id,
+                  name: 'Support',
+                });
               }}
               style={[
                 tw`bg-[${colors.primary}] items-center justify-center`,
@@ -697,7 +736,8 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
                 },
               ]}>
               <Textcomp
-                text={'Dispute '}
+                // text={'Dispute '}
+                text={'Contact Support'}
                 size={12}
                 lineHeight={14}
                 color={colors.black}
@@ -759,7 +799,12 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
           <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
             <TouchableOpacity
               onPress={() => {
-                setorderDispute(true);
+                // setorderDispute(true);
+                socket.connect();
+                navigation.navigate('Inbox', {
+                  id: supportUser?._id || supportUser?.id,
+                  name: 'Support',
+                });
               }}
               style={[
                 tw`bg-[${colors.primary}] items-center justify-center`,
@@ -771,7 +816,8 @@ const Orderscomponent2 = ({item, index, status, showall}: any) => {
                 },
               ]}>
               <Textcomp
-                text={'Dispute'}
+                // text={'Dispute'}
+                text={'Contact Support'}
                 size={12}
                 lineHeight={14}
                 color={colors.black}

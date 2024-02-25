@@ -47,6 +47,8 @@ import Cross from '../../assets/svg/Cross';
 import socket from '../../utils/socket';
 import Modal from 'react-native-modal/dist/modal';
 import OrdersDeclineReason from '../../components/OrdersDeclineReason';
+import LocationIcon2 from '../../assets/svg/Location2';
+import TipProvider from '../../assets/svg/tipProvider';
 
 const OrderActive = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -140,28 +142,41 @@ const OrderActive = ({route}: any) => {
     {
       title: 'Order Placed',
       func: () => setorderPlacing(true),
+      check: [
+        'PENDING',
+        'ACCEPTED',
+        'TRACK',
+        'INPROGRESS',
+        'COMPLETED',
+        'DISPUTE',
+        'DECLINED',
+      ],
     },
     {
       title: 'Order Accepted',
       // func: () => setorderDelivered(true),
       func: () => {},
+      check: ['PENDING', 'ACCEPTED'],
     },
     {
       title: 'Service Provider in Transit',
       func: () => {},
+      check: ['PENDING', 'ACCEPTED', 'TRACK'],
     },
     {
       title: 'Order In Progress',
       func: () => setorderInProgress(true),
+      check: ['PENDING', 'ACCEPTED', 'TRACK', 'INPROGRESS'],
     },
     {
       title: 'Order Completed',
       func: () => setorderCompleted(true),
+      check: ['PENDING', 'ACCEPTED', 'TRACK', 'INPROGRESS', 'COMPLETED'],
     },
-    {
-      title: 'Thank you for the tip',
-      func: () => {},
-    },
+    // {
+    //   title: 'Thank you for the tip',
+    //   func: () => {},
+    // },
     {
       title: 'Order Dispute',
       func: () => setorderDispute(true),
@@ -566,7 +581,7 @@ const OrderActive = ({route}: any) => {
                                   </View>
                                   <View>
                                     <Textcomp
-                                      text={'0:00pm'}
+                                      text={''}
                                       size={10}
                                       lineHeight={16.5}
                                       color={'#BABABA'}
@@ -611,7 +626,7 @@ const OrderActive = ({route}: any) => {
                       } else if (item.title === 'Order In Progress') {
                         if (
                           passedData?.status === 'INPROGRESS' ||
-                          passedData?.status === 'INTRANSIT' ||
+                          passedData?.status === 'TRACK' ||
                           passedData?.status === 'COMPLETED'
                         ) {
                           return (
@@ -640,7 +655,7 @@ const OrderActive = ({route}: any) => {
                                   </View>
                                   <View>
                                     <Textcomp
-                                      text={'0:00pm'}
+                                      text={''}
                                       size={10}
                                       lineHeight={16.5}
                                       color={'#BABABA'}
@@ -886,7 +901,7 @@ const OrderActive = ({route}: any) => {
                                   </View>
                                   <View>
                                     <Textcomp
-                                      text={'0:00pm'}
+                                      text={''}
                                       size={10}
                                       lineHeight={16.5}
                                       color={'#BABABA'}
@@ -928,6 +943,7 @@ const OrderActive = ({route}: any) => {
                       } else if (item.title === 'Order Accepted') {
                         if (
                           passedData?.status === 'ACCEPTED' ||
+                          passedData?.status === 'TRACK' ||
                           passedData?.status === 'INPROGRESS' ||
                           passedData?.status === 'COMPLETED'
                         ) {
@@ -957,7 +973,7 @@ const OrderActive = ({route}: any) => {
                                   </View>
                                   <View>
                                     <Textcomp
-                                      text={'0:00pm'}
+                                      text={''}
                                       size={10}
                                       lineHeight={16.5}
                                       color={'#BABABA'}
@@ -998,7 +1014,7 @@ const OrderActive = ({route}: any) => {
                         }
                       } else if (item.title === 'Service Provider in Transit') {
                         if (
-                          passedData?.status === 'INTRANSIT' ||
+                          passedData?.status === 'TRACK' ||
                           passedData?.status === 'INPROGRESS' ||
                           passedData?.status === 'COMPLETED' ||
                           passedData?.status === 'COMPLETED'
@@ -1029,7 +1045,7 @@ const OrderActive = ({route}: any) => {
                                   </View>
                                   <View>
                                     <Textcomp
-                                      text={'0:00pm'}
+                                      text={''}
                                       size={10}
                                       lineHeight={16.5}
                                       color={'#BABABA'}
@@ -1099,7 +1115,7 @@ const OrderActive = ({route}: any) => {
                                   </View>
                                   <View>
                                     <Textcomp
-                                      text={'0:00pm'}
+                                      text={''}
                                       size={10}
                                       lineHeight={16.5}
                                       color={'#BABABA'}
@@ -1233,9 +1249,9 @@ const OrderActive = ({route}: any) => {
                               },
                               tw`flex flex-row px-3 mx-4`,
                             ]}>
-                            <Cross style={tw`mr-2`} />
+                            <LocationIcon2 style={tw`mr-2`} />
                             <Textcomp
-                              text={'Cancel Order'}
+                              text={'View Location'}
                               size={11}
                               lineHeight={17}
                               color={'#000000'}
@@ -1262,7 +1278,7 @@ const OrderActive = ({route}: any) => {
                             },
                             tw`flex flex-row px-3 mx-4`,
                           ]}>
-                          <Cross style={tw`mr-2`} />
+                          <TipProvider style={tw`mr-2`} />
                           <Textcomp
                             text={'Tip Service Provider'}
                             size={11}
@@ -1302,7 +1318,8 @@ const OrderActive = ({route}: any) => {
 
                       {item.status !== 'DECLINED' &&
                         item.status !== 'INPROGRESS' &&
-                        item.status !== 'COMPLETED' && (
+                        item.status !== 'COMPLETED' &&
+                        item.status !== 'TRACK' && (
                           <TouchableOpacity
                             onPress={() => {
                               setInfoModal(true);

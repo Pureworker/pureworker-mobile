@@ -232,7 +232,7 @@ const EditAccount = () => {
           <View
             style={[
               tw`bg-[${colors.darkPurple}] pt-4 mt-4 pl-5 justify-center`,
-              {height: perHeight(60)},
+              {height: Platform.OS === 'ios' ? perHeight(60) : perHeight(65)},
             ]}>
             <View>
               <View style={tw``}>
@@ -256,7 +256,7 @@ const EditAccount = () => {
           <View
             style={[
               tw`bg-[${colors.darkPurple}] mt-4 pl-5 justify-center`,
-              {height: perHeight(60)},
+              {height: Platform.OS === 'ios' ? perHeight(60) : perHeight(65)},
             ]}>
             <View>
               <View style={tw``}>
@@ -280,7 +280,7 @@ const EditAccount = () => {
           <View
             style={[
               tw`bg-[${colors.darkPurple}] mt-4 pl-5 justify-center`,
-              {height: perHeight(60)},
+              {height: Platform.OS === 'ios' ? perHeight(60) : perHeight(65)},
             ]}>
             <View>
               <View style={tw``}>
@@ -304,7 +304,7 @@ const EditAccount = () => {
           <View
             style={[
               tw`bg-[${colors.darkPurple}] mt-4 pl-5 justify-center`,
-              {height: perHeight(60)},
+              {height: Platform.OS === 'ios' ? perHeight(60) : perHeight(65)},
             ]}>
             <View>
               <View style={tw``}>
@@ -328,9 +328,13 @@ const EditAccount = () => {
           <View
             style={[
               tw`bg-[${colors.darkPurple}] mt-4 pl-5 justify-center`,
-              {height: perHeight(60)},
+              {height: Platform.OS === 'ios' ? perHeight(60) : perHeight(65)},
             ]}>
-            <TouchableOpacity onPress={()=>{navigation.navigate('AddAddress')}} style={tw``}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('AddAddress');
+              }}
+              style={tw``}>
               <View style={tw``}>
                 <Textcomp
                   text={'Address'}
@@ -353,7 +357,7 @@ const EditAccount = () => {
           {/* <View
             style={[
               tw`bg-[${colors.darkPurple}] mt-4 pl-5 justify-center`,
-              {height: perHeight(60)},
+                            {height: Platform.OS === "ios" ? perHeight(60) : perHeight(65)},
             ]}>
             <View>
               <View style={tw``}>
@@ -380,7 +384,7 @@ const EditAccount = () => {
             }}
             style={[
               tw`bg-[${colors.darkPurple}] mt-4 pl-5 justify-center`,
-              {height: perHeight(60)},
+              {height: Platform.OS === 'ios' ? perHeight(60) : perHeight(65)},
             ]}>
             <View>
               <View style={tw``}>

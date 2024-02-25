@@ -162,8 +162,10 @@ const AddAddress = ({navigation}: any) => {
   }
 
   const upload = async (param: string) => {
+    setisLoading(false);
     if (!selectedLocation) {
       ToastLong('Please pick an address!.');
+      setisLoading(false);
       return;
     }
     const res: any = await updateUserData({
@@ -175,6 +177,7 @@ const AddAddress = ({navigation}: any) => {
     });
     console.log('result', res?.data);
     if (res?.status === 200 || res?.status === 201) {
+      setisLoading(false);
       navigation.goBack();
     } else {
       Snackbar.show({
@@ -187,37 +190,53 @@ const AddAddress = ({navigation}: any) => {
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
+      setisLoading(false);
     }
     setisLoading(false);
   };
   const uploadCurremt = async (lat: any, lng: any) => {
+    setisLoading(true);
     if (!lat || !lng) {
       ToastLong('Please pick an address!.');
+      setisLoading(false);
       return;
     }
-    const res: any = await updateUserData({
-      geoLocation: {
-        type: 'Point',
-        coordinates: [lng, lat],
-      },
-      address: description,
-    });
-    console.log('result', res?.data);
-    if (res?.status === 200 || res?.status === 201) {
-      navigation.goBack();
-    } else {
-      Snackbar.show({
-        text: res?.error?.message
-          ? res?.error?.message
-          : res?.error?.data?.message
-          ? res?.error?.data?.message
-          : 'Oops!, an error occured',
-        duration: Snackbar.LENGTH_SHORT,
-        textColor: '#fff',
-        backgroundColor: '#88087B',
+    try {
+      let desp ;
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyDp32iWaShk9E_wTNtJbAkNXqdishmZnE8`,
+      );
+      if (response.data.results.length > 0) {
+        setdescription(response.data.results[0].formatted_address);
+        desp = response.data.results[0].formatted_address
+      }
+      const res: any = await updateUserData({
+        geoLocation: {
+          type: 'Point',
+          coordinates: [lng, lat],
+        },
+        address: desp ?? description,
       });
+      console.log('result', res?.data);
+      if (res?.status === 200 || res?.status === 201) {
+        navigation.goBack();
+        setisLoading(false);
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+      setisLoading(false);
+    } catch (error) {
+      setisLoading(false);
     }
-    setisLoading(false);
   };
 
   const [regionParam, setregionParam] = useState({
@@ -533,19 +552,25 @@ const AddAddress = ({navigation}: any) => {
 
         {!isLoading ? (
           <View style={{marginHorizontal: 25, marginTop: 45}}>
-            <Button
-              onClick={() => {
-                upload('');
-              }}
-              style={{
-                marginBottom: 20,
-                marginTop: 20,
-                marginHorizontal: 40,
-                backgroundColor: colors.lightBlack,
-              }}
-              textStyle={{color: colors.primary}}
-              text={'Save'}
-            />
+            {isLoading ? (
+              <View style={tw`mx-auto justify-center items-center`}>
+                <ActivityIndicator size={'small'} color={colors.parpal} />
+              </View>
+            ) : (
+              <Button
+                onClick={() => {
+                  upload('');
+                }}
+                style={{
+                  marginBottom: 20,
+                  marginTop: 20,
+                  marginHorizontal: 40,
+                  backgroundColor: colors.lightBlack,
+                }}
+                textStyle={{color: colors.primary}}
+                text={'Save'}
+              />
+            )}
           </View>
         ) : (
           <ActivityIndicator

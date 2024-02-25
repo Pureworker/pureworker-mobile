@@ -52,8 +52,6 @@
 	<string>Pureworker requires access your location for provider mapping.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Pureworker requires access your location for provider mapping.</string>
-	<key>NSMotionUsageDescription</key>
-	<string>Pureworker requires access to Motion</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Pureworker requires access to the photo library to upload pictures.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
