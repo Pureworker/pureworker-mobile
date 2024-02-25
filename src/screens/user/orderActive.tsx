@@ -626,7 +626,7 @@ const OrderActive = ({route}: any) => {
                       } else if (item.title === 'Order In Progress') {
                         if (
                           passedData?.status === 'INPROGRESS' ||
-                          passedData?.status === 'TRACK' ||
+                          // passedData?.status !== 'TRACK' ||
                           passedData?.status === 'COMPLETED'
                         ) {
                           return (

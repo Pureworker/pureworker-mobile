@@ -475,23 +475,37 @@ const ProfileStep21 = () => {
               fontType={'semiBold'}
               style={{fontSize: 16, marginTop: 20, color: colors.black}}
             />
-            <View style={styles.container1}>
+            <View style={tw``}>
               <Textarea
                 containerStyle={styles.textareaContainer}
                 style={styles.textarea}
                 onChangeText={(text: string) => {
-                  setDescription(text);
-                  dispatch(addcompleteProfile({description: text}));
+                  const words = text.split(' ');
+                  const limitedWords = words.slice(0, 300);
+                  const limitedText = limitedWords.join(' ');
+                  // setShortDescription(limitedText);
+                  setDescription(limitedText);
+                  dispatch(addcompleteProfile({description: limitedText}));
                 }}
                 defaultValue={description}
-                maxLength={300}
+                // maxLength={300}
                 placeholder={
                   'Introduce yourself and enter your profile description.'
                 }
                 placeholderTextColor={'black'}
                 underlineColorAndroid={'transparent'}
               />
+              <View style={tw`mt-1 ml-auto`}>
+                <Textcomp
+                  text={'Max 300 words'}
+                  size={12}
+                  lineHeight={16}
+                  color={'#000413'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
             </View>
+
             {/* <View
               style={{
                 height: 130,

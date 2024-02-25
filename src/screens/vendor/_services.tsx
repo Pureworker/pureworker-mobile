@@ -228,6 +228,7 @@ const _Services = ({route}: any) => {
                                     index={item.index}
                                     id={id}
                                     serviceName={passedService}
+                                    noBookmark={true}
                                   />
                                 );
                               }}
@@ -279,6 +280,7 @@ const _Services = ({route}: any) => {
                                         index={item.index}
                                         id={id}
                                         serviceName={passedService}
+                                        noBookmark={true}
                                       />
                                     </TouchableOpacity>
                                   );

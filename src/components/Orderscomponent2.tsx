@@ -26,10 +26,11 @@ import ScheduledDeliveryDate from './modals/scheduledDeliveryDate';
 import {useDispatch, useSelector} from 'react-redux';
 import {addproviderOrders} from '../store/reducer/mainSlice';
 import RateyourCustommer from './modals/rateYourCustomer';
-import {formatDateHistory2} from '../utils/utils';
+import {ToastShort, formatDateHistory2} from '../utils/utils';
 import FastImage from 'react-native-fast-image';
 import Modal from 'react-native-modal/dist/modal';
 import socket from '../utils/socket';
+import CheckBox from 'react-native-check-box';
 const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
   const [saved, setsaved] = useState(false);
   const [isLoading, setisLoading] = useState(false);
@@ -154,6 +155,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
+      setrateYourExperience(false);
     } finally {
       setisLoading(false);
       const initGetOrders2 = async () => {
@@ -165,6 +167,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
         setisLoading(false);
       };
       initGetOrders2();
+      setrateYourExperience(false);
     }
   };
 
@@ -266,6 +269,8 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
   const [showModal, setShowModal] = useState(false);
   const supportUser = useSelector((store: any) => store.user.supportUser);
 
+  const [ready, setready] = useState(false);
+  const [toggleCheckBox, setToggleCheckBox] = useState(false);
   return (
     <>
       <View
@@ -273,7 +278,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           tw` mt-4 mx-auto bg-[${colors.darkPurple}]`,
           {
             // height: perWidth(205),
-            minHeight:  perWidth(180),
+            minHeight: perWidth(180),
             width: SIZES.width * 0.95,
             borderWidth: 0,
             borderRadius: 5,
@@ -517,54 +522,58 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           </View>
         </View>
 
-        {status === 'PENDING' && (
-          <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
-            <TouchableOpacity
-              onPress={() => {
-                // handleUpdateStatus('ACCEPTED');
-                handleAccept();
-              }}
-              style={[
-                tw`bg-[${colors.primary}] items-center justify-center`,
-                {
-                  width: perWidth(90),
-                  height:
-                    Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
-                  borderRadius: 7,
-                },
-              ]}>
-              <Textcomp
-                text={'Accept'}
-                size={12}
-                lineHeight={14}
-                color={colors.black}
-                fontFamily={'Inter-SemiBold'}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                handleDecline();
-              }}
-              style={[
-                tw`bg-[${colors.primary}] items-center justify-center`,
-                {
-                  width: perWidth(90),
-                  height:
-                    Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
-                  borderRadius: 7,
-                  marginLeft: perWidth(46),
-                },
-              ]}>
-              <Textcomp
-                text={'Decline '}
-                size={12}
-                lineHeight={14}
-                color={colors.black}
-                fontFamily={'Inter-SemiBold'}
-              />
-            </TouchableOpacity>
-          </View>
-        )}
+        {
+          status === 'PENDING'
+           && (
+            <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
+              <TouchableOpacity
+                onPress={() => {
+                  // handleUpdateStatus('ACCEPTED');
+                  // handleAccept();
+                  setready(true);
+                }}
+                style={[
+                  tw`bg-[${colors.primary}] items-center justify-center`,
+                  {
+                    width: perWidth(90),
+                    height:
+                      Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
+                    borderRadius: 7,
+                  },
+                ]}>
+                <Textcomp
+                  text={'Accept'}
+                  size={12}
+                  lineHeight={14}
+                  color={colors.black}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  handleDecline();
+                }}
+                style={[
+                  tw`bg-[${colors.primary}] items-center justify-center`,
+                  {
+                    width: perWidth(90),
+                    height:
+                      Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
+                    borderRadius: 7,
+                    marginLeft: perWidth(46),
+                  },
+                ]}>
+                <Textcomp
+                  text={'Decline '}
+                  size={12}
+                  lineHeight={14}
+                  color={colors.black}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </TouchableOpacity>
+            </View>
+          )
+        }
         {status === 'ACCEPTED' && (
           <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
             <TouchableOpacity
@@ -696,7 +705,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
               style={[
                 tw`bg-[${colors.primary}] items-center justify-center`,
                 {
-                  width: perWidth(90),
+                  width: perWidth(100),
                   height:
                     Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
                   borderRadius: 7,
@@ -896,6 +905,140 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
               style={styles.closeButton}>
               <Text style={{color: colors.primary, fontSize: 16}}>Close</Text>
             </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        isVisible={ready}
+        onModalHide={() => {
+          setready(false);
+        }}
+        style={{width: SIZES.width, marginHorizontal: 0}}
+        deviceWidth={SIZES.width}
+        onBackdropPress={() => setready(false)}
+        swipeThreshold={200}
+        swipeDirection={['down']}
+        onSwipeComplete={() => setready(false)}
+        onBackButtonPress={() => setready(false)}>
+        <View style={tw` h-full w-full bg-black bg-opacity-5`}>
+          <TouchableOpacity
+            onPress={() => setready(false)}
+            style={tw`flex-1`}
+          />
+          <View style={[tw`p-4 mt-auto bg-[#D9D9D9]`, {minHeight: '55%'}]}>
+            <TouchableOpacity
+              onPress={() => {
+                setready(false);
+              }}
+              style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
+            />
+            <View style={tw`flex-1`}>
+              <View style={tw``}>
+                <Textcomp
+                  text={'!!! IMPORTANT !!!'}
+                  size={16}
+                  lineHeight={14.5}
+                  color={'black'}
+                  fontFamily={'Inter-Bold'}
+                />
+              </View>
+              <View style={tw`mt-10`}>
+                <Textcomp
+                  text={'Take note of the following:'}
+                  size={14}
+                  lineHeight={14.5}
+                  color={'black'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </View>
+              <View style={tw`mt-4`} />
+              <View style={tw`flex flex-row items-start mt-2`}>
+                <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
+                <Textcomp
+                  text={
+                    'Provide accurate descriptions as the scope of work cannot be modified once submitted.'
+                  }
+                  size={12}
+                  lineHeight={14.5}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+              <View style={tw`flex flex-row items-start mt-2`}>
+                <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
+                <Textcomp
+                  text={
+                    '⁠Prioritize safety, both yours and the service provider’s, during the job.'
+                  }
+                  size={12}
+                  lineHeight={14.5}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+              <View style={tw`flex flex-row items-start mt-2`}>
+                <View style={tw`w-2 h-2  mt-1 rounded-full mr-2 bg-black`} />
+                <Textcomp
+                  text={
+                    '⁠Pureworker is not liable for any issues or disputes that arise from interactions with service providers conducted outside the app.'
+                  }
+                  size={12}
+                  lineHeight={14.5}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+              <View style={tw`flex flex-row items-start mt-2`}>
+                <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
+                <Textcomp
+                  text={'⁠No inappropriate touching or verbal sexual remarks.'}
+                  size={12}
+                  lineHeight={14.5}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+
+              <View style={tw`flex flex-row items-center mt-auto mb-4 ml-4`}>
+                <CheckBox
+                  style={{width: 30, padding: 10}}
+                  onClick={() => {
+                    setToggleCheckBox(!toggleCheckBox);
+                  }}
+                  isChecked={toggleCheckBox}
+                  // leftText={'CheckBox'}
+                />
+                <View style={tw`ml-4`}>
+                  <Textcomp
+                    text={'I agree to the above terms.'}
+                    size={12}
+                    lineHeight={14.5}
+                    color={'#000000'}
+                    fontFamily={'Inter-Regular'}
+                  />
+                </View>
+              </View>
+              <TouchableOpacity
+                style={tw`bg-[${colors.parpal}] w-[85%] py-4 mb-4 items-center  mx-auto rounded`}
+                onPress={() => {
+                  if (toggleCheckBox) {
+                    handleAccept();
+                  } else {
+                    ToastShort(
+                      'Terms and conditions required!. Please check the radio button',
+                    );
+                  }
+                }}>
+                <Textcomp
+                  text={'Continue'}
+                  size={14}
+                  lineHeight={14.5}
+                  color={'white'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>

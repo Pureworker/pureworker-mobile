@@ -75,7 +75,7 @@ const TipServiceProvider = () => {
       if (res?.status === 201 || res?.status === 200) {
         Snackbar.show({
           text: 'This provider has been tipped!.',
-          duration: Snackbar.LENGTH_SHORT,
+          duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });

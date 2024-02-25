@@ -66,7 +66,7 @@ export default function Portfoliocomp2({servicePrice, index, service}: any) {
         console.log('kkkk', response);
         const uploadUri =
           Platform.OS === 'ios'
-            ? response?.uri.replace('file://', '')
+            ? response?.uri?.replace('file://', '')
             : response.uri;
         const task = await storage().ref(filename).putFile(uploadUri);
         console.log('kkkk2', task);

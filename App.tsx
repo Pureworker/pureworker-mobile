@@ -124,7 +124,7 @@ const App = () => {
   const bgGeoEventSubscriptions: Subscription[] = [];
 
   React.useEffect(() => {
-    initBackgroundFetch(); // <-- optional
+    // initBackgroundFetch(); // <-- optional
     // initBackgroundGeolocation();
     // registerTransistorAuthorizationListener(navigation);
     return () => {
@@ -158,40 +158,40 @@ const App = () => {
     };
     setEvents(previous => [...previous, event]);
   };
-  const initBackgroundFetch = async () => {
-    await BackgroundFetch.configure(
-      {
-        minimumFetchInterval: 15,
-        stopOnTerminate: true,
-      },
-      async taskId => {
-        console.log('[BackgroundFetch] ', taskId);
-        try {
-          const userLocation = await fetchUserLocation();
-          const response = await axios.post(
-            'https://api.pureworker.com/api/location2',
-            {
-              long: userLocation.longitude,
-              lat: userLocation.latitude,
-            },
-          );
+  // const initBackgroundFetch = async () => {
+  //   await BackgroundFetch.configure(
+  //     {
+  //       minimumFetchInterval: 15,
+  //       stopOnTerminate: true,
+  //     },
+  //     async taskId => {
+  //       console.log('[BackgroundFetch] ', taskId);
+  //       try {
+  //         const userLocation = await fetchUserLocation();
+  //         const response = await axios.post(
+  //           'https://api.pureworker.com/api/location2',
+  //           {
+  //             long: userLocation.longitude,
+  //             lat: userLocation.latitude,
+  //           },
+  //         );
 
-          console.log('Location sent successfully:', response.data);
-        } catch (error) {
-          console.error('Error sending location7:', error);
-        }
+  //         console.log('Location sent successfully:', response.data);
+  //       } catch (error) {
+  //         console.error('Error sending location7:', error);
+  //       }
 
-        // Finish the background fetch task
-        BackgroundFetch.finish(taskId);
-      },
-      taskId => {
-        console.log('[BackgroundFetch] TIMEOUT: ', taskId);
-        BackgroundFetch.finish(taskId);
-      },
-    );
-  };
+  //       // Finish the background fetch task
+  //       BackgroundFetch.finish(taskId);
+  //     },
+  //     taskId => {
+  //       console.log('[BackgroundFetch] TIMEOUT: ', taskId);
+  //       BackgroundFetch.finish(taskId);
+  //     },
+  //   );
+  // };
   // For example, when the app starts
-  initBackgroundFetch();
+  // initBackgroundFetch();
   const fetchUserLocation = async () => {
     const permissionStatus = await request(
       Platform.OS === 'android'

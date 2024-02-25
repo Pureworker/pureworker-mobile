@@ -22,6 +22,15 @@ import {
   setbookMarkedProviders,
 } from '../../store/reducer/mainSlice';
 
+interface Data {
+  item: any;
+  navigation: any;
+  id: any;
+  serviceName: any;
+  save: any;
+  savedProviders: any;
+  noBookmark?: any;
+}
 const ServiceCard2 = ({
   item,
   // index,
@@ -30,7 +39,8 @@ const ServiceCard2 = ({
   serviceName,
   save,
   savedProviders,
-}: any) => {
+  noBookmark,
+}: Data) => {
   const [saved, setsaved] = useState(save);
   // const portfolio = item?.portfolio?.filter(_item => _item?.service === id);
   const price = item?.priceRange?.filter(
@@ -170,6 +180,14 @@ const ServiceCard2 = ({
     }
   };
 
+  const [noBook, setnoBook] = useState(false);
+
+  useEffect(() => {
+    if (noBookmark && noBookmark === true) {
+      setnoBook(true);
+    }
+  }, []);
+
   return (
     <TouchableOpacity
       onPress={() => {
@@ -196,26 +214,28 @@ const ServiceCard2 = ({
           {/*  */}
 
           <>
-              <FastImage
-                style={{
-                  width: perWidth(50),
-                  height: perWidth(50),
-                  borderRadius: perWidth(50) / 2,
-                }}
-                source={{
-                  uri: item?.profilePic ? item.profilePic : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                  headers: {Authorization: 'someAuthToken'},
-                  priority: FastImage.priority.normal,
-                }}
-                resizeMode={FastImage.resizeMode.cover}
-              />
-              <View
-                style={[
-                  tw`absolute bottom-0 border-2 right-1 rounded-full`,
-                  {width: 8, height: 8, backgroundColor: colors.green},
-                ]}
-              />
-            </>
+            <FastImage
+              style={{
+                width: perWidth(50),
+                height: perWidth(50),
+                borderRadius: perWidth(50) / 2,
+              }}
+              source={{
+                uri: item?.profilePic
+                  ? item.profilePic
+                  : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                headers: {Authorization: 'someAuthToken'},
+                priority: FastImage.priority.normal,
+              }}
+              resizeMode={FastImage.resizeMode.cover}
+            />
+            <View
+              style={[
+                tw`absolute bottom-0 border-2 right-1 rounded-full`,
+                {width: 8, height: 8, backgroundColor: colors.green},
+              ]}
+            />
+          </>
 
           {/* {item?.profilePic ? (
 <></>
@@ -242,23 +262,25 @@ const ServiceCard2 = ({
                 fontFamily={'Inter-SemiBold'}
               />
             </View>
-            <TouchableOpacity
-              onPress={() => {
-                if (ch?.length > 0) {
-                  handleRemoveBookmark();
-                } else {
-                  handleBookmark();
-                }
-              }}>
-              <Image
-                resizeMode="contain"
-                style={{
-                  width: perWidth(20),
-                  height: perWidth(20),
-                }}
-                source={saved ? images.saved : images.save}
-              />
-            </TouchableOpacity>
+            {noBookmark && noBookmark === false && (
+              <TouchableOpacity
+                onPress={() => {
+                  if (ch?.length > 0) {
+                    handleRemoveBookmark();
+                  } else {
+                    handleBookmark();
+                  }
+                }}>
+                <Image
+                  resizeMode="contain"
+                  style={{
+                    width: perWidth(20),
+                    height: perWidth(20),
+                  }}
+                  source={saved ? images.saved : images.save}
+                />
+              </TouchableOpacity>
+            )}
           </View>
           <View style={[tw``, {width: perWidth(252), marginTop: perHeight(4)}]}>
             <Textcomp

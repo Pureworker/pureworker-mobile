@@ -229,6 +229,9 @@ const Withdraw = () => {
                           placeholderStyle={{
                             color: '#757575',
                           }}
+                          inputSearchStyle={{
+                            color: '#757575',
+                          }}
                           data={bankList}
                           search
                           maxHeight={300}

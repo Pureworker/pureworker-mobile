@@ -183,11 +183,14 @@ const OrderReview = ({route}: any) => {
                   </View>
                   <View style={[tw` mt-2`, {maxHeight: 200, minHeight: 50}]}>
                     <Textcomp
-                      text={`${_data?.description}`}
+                      text={`${_data?.description} ${
+                        _data.description?.split('')?.length > 60 ? '...' : ''
+                      }`}
                       size={12}
                       lineHeight={14}
                       color={'#000413'}
                       fontFamily={'Inter'}
+                      numberOfLines={10}
                     />
                   </View>
                 </View>
@@ -545,7 +548,9 @@ const OrderReview = ({route}: any) => {
                   if (toggleCheckBox) {
                     handleCreate();
                   } else {
-                    ToastShort('Terms and conditions required!. Please check the radio button');
+                    ToastShort(
+                      'Terms and conditions required!. Please check the radio button',
+                    );
                   }
                 }}>
                 <Textcomp

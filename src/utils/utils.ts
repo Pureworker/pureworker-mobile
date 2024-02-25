@@ -36,7 +36,7 @@ export function removeUnnecessaryNewLines(text) {
   const pattern = /(\r?\n){2,}/g; // Matches two or more consecutive new lines
 
   // Replace unnecessary new lines with a single new line
-  const cleanText = text.replace(pattern, '\n');
+  const cleanText = text?.replace(pattern, '\n');
 
   return cleanText;
 }

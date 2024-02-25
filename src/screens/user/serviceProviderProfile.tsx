@@ -496,7 +496,16 @@ const ServiceProviderProfile = () => {
                 </View>
               </View>
               <View style={tw`border-b border-[#FFFFFF80]  pb-4 mx-2`}>
-                <View style={tw` pt-3 `}>
+                <View style={tw`pt-2 `}>
+                  <Textcomp
+                    text={'User Description'}
+                    size={12}
+                    lineHeight={15}
+                    color={'#FFFFFF80'}
+                    fontFamily={'Inter-Bold'}
+                  />
+                </View>
+                <View style={tw` pt-2 `}>
                   <Textcomp
                     text={removeUnnecessaryNewLines(
                       serviceProviderData?.description,
@@ -513,7 +522,7 @@ const ServiceProviderProfile = () => {
                   {serviceProviderData?.description?.split(' ')?.length >
                     20 && (
                     <TouchableOpacity
-                      style={tw`ml-auto`}
+                      style={tw`ml-auto `}
                       onPress={() => {
                         setDisplay(serviceProviderData?.description);
                         setShowModal(true);
@@ -532,6 +541,15 @@ const ServiceProviderProfile = () => {
                 {(closeToData?.description ||
                   profileData?.portfolio?.description) && (
                   <View style={tw` pt-3 border-t mt-2 border-[#FFFFFF80]`}>
+                    <View style={tw`mb-2 `}>
+                      <Textcomp
+                        text={'Service Description'}
+                        size={12}
+                        lineHeight={15}
+                        color={'#FFFFFF80'}
+                        fontFamily={'Inter-Bold'}
+                      />
+                    </View>
                     <Textcomp
                       text={removeUnnecessaryNewLines(
                         closeToData?.description ??
