@@ -157,7 +157,6 @@ const ProfileStep211 = () => {
               }
             });
           } else {
-            // Camera permission is not granted, request it
             const newCameraStatus = await request(PERMISSIONS.IOS.CAMERA);
             if (newCameraStatus === RESULTS.GRANTED) {
               // Camera permission granted after request, open camera

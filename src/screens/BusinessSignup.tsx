@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import {
-  StyleSheet,
   Text,
   View,
   Image,
@@ -19,7 +18,7 @@ import MyStatusBar from '../components/MyStatusBar';
 import colors from '../constants/colors';
 import TextInputs from '../components/TextInputs';
 import Snackbar from 'react-native-snackbar';
-import {allCountry, allState, validateEmail} from '../constants/utils';
+import {allState, validateEmail} from '../constants/utils';
 import {BUSINESS, CUSTOMER, FREELANCER} from '../constants/userType';
 import {StackNavigation} from '../constants/navigation';
 import {generalStyles} from '../constants/generalStyles';
@@ -27,11 +26,9 @@ import Tooltip from 'react-native-walkthrough-tooltip';
 import {Signup} from '../utils/api/auth';
 import {ToastLong, isValidPhoneNumber} from '../utils/utils';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {SIZES, perHeight} from '../utils/position/sizes';
+import {SIZES} from '../utils/position/sizes';
 import {Dropdown} from 'react-native-element-dropdown';
 import * as Yup from 'yup';
-import Textcomp from '../components/Textcomp';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {DateTime} from 'luxon';
 import {isLeapYear, validateDate} from '../utils/auth';
 export default function BusinessSignup() {
@@ -508,8 +505,6 @@ export default function BusinessSignup() {
               }}
               onClose={() => setToolTipLeftVisible(false)}
               useInteractionManager={true} // need this prop to wait for react navigation
-              // below is for the status bar of react navigation bar
-              // topAdjustment={Platform.OS === 'android' ? StatusBar.currentHeight : 0}
             >
               <TouchableOpacity onPress={() => setToolTipLeftVisible(true)}>
                 <Image source={images.info} style={{width: 15, height: 15}} />
@@ -544,8 +539,6 @@ export default function BusinessSignup() {
               }}
               onClose={() => setToolTipRightVisible(false)}
               useInteractionManager={true} // need this prop to wait for react navigation
-              // below is for the status bar of react navigation bar
-              // topAdjustment={Platform.OS === 'android' ? StatusBar.currentHeight : 0}
             >
               <TouchableOpacity onPress={() => setToolTipRightVisible(true)}>
                 <Image source={images.info} style={{width: 15, height: 15}} />
@@ -631,84 +624,6 @@ export default function BusinessSignup() {
                 setState={setCacNo}
                 keyBoardType={'numeric'}
               />
-              {/* <View
-                style={{
-                  zIndex: 1,
-                  // marginTop: 15,
-                  minHeight: 500,
-                  marginBottom: -400,
-                }}>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontFamily: commonStyle.fontFamily.medium,
-                    color: '#fff',
-                    marginTop: 15,
-                    marginBottom: 15,
-                  }}>
-                  Location
-                </Text>
-                <DropDownPicker
-                  open={locationOpen}
-                  value={locationValue}
-                  items={locationItems}
-                  setOpen={setLocationOpen}
-                  setValue={setLocationValue}
-                  setItems={setLocationItems}
-                  showArrowIcon={true}
-                  ArrowDownIconComponent={({style}) => (
-                    <Image
-                      resizeMode="contain"
-                      style={{width: 15, height: 15, tintColor: '#010B2D'}}
-                      source={!locationOpen && images.polygonForward}
-                    />
-                  )}
-                  ArrowUpIconComponent={({style}) => (
-                    <Image
-                      resizeMode="contain"
-                      style={{width: 15, height: 15, tintColor: '#010B2D'}}
-                      source={locationOpen && images.polygonDown}
-                    />
-                  )}
-                  zIndex={10}
-                  dropDownContainerStyle={{
-                    borderWidth: 0,
-                  }}
-                  labelStyle={{
-                    fontFamily: commonStyle.fontFamily.regular,
-                    fontSize: 14,
-                    color: '#000',
-                  }}
-                  // arrowIconStyle={{
-
-                  // }}
-                  placeholderStyle={{
-                    fontFamily: commonStyle.fontFamily.regular,
-                    fontSize: 14,
-                    color: '#9E9E9E',
-                  }}
-                  style={{
-                    backgroundColor: '#F7F5F5',
-                    borderColor: '#9E9E9E14',
-                  }}
-                  listMode="FLATLIST"
-                  showTickIcon={false}
-                  textStyle={{
-                    color: '#9E9E9E',
-                  }}
-                  listParentLabelStyle={{
-                    color: '#000',
-                    fontSize: 16,
-                    fontFamily: commonStyle.fontFamily.regular,
-                  }}
-                  listItemContainerStyle={{
-                    backgroundColor: '#F1F1F1',
-                    borderColor: 'red',
-                    opacity: 1,
-                    borderWidth: 0,
-                  }}
-                />
-              </View> */}
               <View
                 style={{
                   zIndex: genderOpen ? 0 : 2,
@@ -739,9 +654,6 @@ export default function BusinessSignup() {
                       color: '#757575',
                     },
                   ]}
-                  // placeholderStyle={{
-                  //   color: '#757575',
-                  // }}
                   data={locationItems}
                   search
                   maxHeight={300}
@@ -1230,21 +1142,6 @@ export default function BusinessSignup() {
                   setState={setEmail}
                   keyBoardType={'email-address'}
                 />
-                {/* <Text
-                  style={{
-                    fontSize: 16,
-                    fontFamily: commonStyle.fontFamily.medium,
-                    color: '#fff',
-                    marginTop: 15,
-                  }}>
-                  Address
-                </Text>
-                <TextInputs
-                  style={{marginTop: 17}}
-                  labelText={'Enter Address'}
-                  state={address}
-                  setState={setAddress}
-                /> */}
                 <Text
                   style={{
                     fontSize: 16,
@@ -1303,7 +1200,6 @@ export default function BusinessSignup() {
           </Text>
         </Text>
       </KeyboardAwareScrollView>
-      {/* </ScrollView> */}
     </View>
   );
 }
