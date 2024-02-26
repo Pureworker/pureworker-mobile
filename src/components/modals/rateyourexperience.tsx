@@ -240,13 +240,16 @@ export default function RateyourExperience({
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
+        setModalHeight('90%'); // Update modal height when keyboard is shown
         setIsKeyboardOpen(true);
       },
     );
+
     const keyboardDidHideListener = Keyboard.addListener(
       'keyboardDidHide',
       () => {
         setIsKeyboardOpen(false);
+        setModalHeight('70%'); // Reset modal height when keyboard is hidden
       },
     );
 
@@ -255,6 +258,26 @@ export default function RateyourExperience({
       keyboardDidHideListener.remove();
     };
   }, []);
+
+  // useEffect(() => {
+  //   const keyboardDidShowListener = Keyboard.addListener(
+  //     'keyboardDidShow',
+  //     () => {
+  //       setIsKeyboardOpen(true);
+  //     },
+  //   );
+  //   const keyboardDidHideListener = Keyboard.addListener(
+  //     'keyboardDidHide',
+  //     () => {
+  //       setIsKeyboardOpen(false);
+  //     },
+  //   );
+
+  //   return () => {
+  //     keyboardDidShowListener.remove();
+  //     keyboardDidHideListener.remove();
+  //   };
+  // }, []);
 
   return (
     <Modal

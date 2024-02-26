@@ -447,7 +447,7 @@ const OrderReview = ({route}: any) => {
               style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
             />
             <View style={tw`flex-1`}>
-              <View style={tw``}>
+            <View style={tw`pt-3`}>
                 <Textcomp
                   text={'!!! IMPORTANT !!!'}
                   size={16}

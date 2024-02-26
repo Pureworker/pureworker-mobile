@@ -239,13 +239,13 @@ const EditAccount = () => {
                 <Textcomp
                   text={'First name'}
                   size={14}
-                  lineHeight={15}
+                  lineHeight={14}
                   color={'#FFFFFF80'}
                   fontFamily={'Inter-SemiBold'}
                 />
               </View>
               <TextInput
-                style={[tw` text-white py-3 w-9/10`, {fontSize: 16}]}
+                style={[tw`mt-0 text-white py-3 pt-2 w-9/10`, {fontSize: 16}]}
                 onChangeText={text => {
                   setfirstName(text);
                 }}
@@ -269,7 +269,7 @@ const EditAccount = () => {
                 />
               </View>
               <TextInput
-                style={[tw` text-white py-3 w-9/10`, {fontSize: 16}]}
+                style={[tw` text-white py-3 pt-2 w-9/10`, {fontSize: 16}]}
                 onChangeText={text => {
                   setlastName(text);
                 }}
@@ -293,7 +293,7 @@ const EditAccount = () => {
                 />
               </View>
               <TextInput
-                style={[tw` text-white py-3 w-9/10`, {fontSize: 16}]}
+                style={[tw` text-white py-3 pt-2 w-9/10`, {fontSize: 16}]}
                 onChangeText={text => {
                   setemail(text);
                 }}
@@ -307,7 +307,7 @@ const EditAccount = () => {
               {height: Platform.OS === 'ios' ? perHeight(60) : perHeight(65)},
             ]}>
             <View>
-              <View style={tw``}>
+              <View style={tw`pt-4`}>
                 <Textcomp
                   text={'Phone Number'}
                   size={14}
@@ -317,7 +317,7 @@ const EditAccount = () => {
                 />
               </View>
               <TextInput
-                style={[tw` text-white py-3 w-9/10`, {fontSize: 16}]}
+                style={[tw` text-white py-3 pt-2 w-9/10`, {fontSize: 16}]}
                 onChangeText={text => {
                   setphoneNumber(text);
                 }}
@@ -345,7 +345,7 @@ const EditAccount = () => {
                 />
               </View>
               <TextInput
-                style={[tw` text-white py-3 w-9/10`, {fontSize: 16}]}
+                style={[tw` text-white py-3 pt-2 w-9/10`, {fontSize: 16}]}
                 onChangeText={text => {
                   setaddress(text);
                 }}

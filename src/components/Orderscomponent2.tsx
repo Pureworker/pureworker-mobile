@@ -179,6 +179,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
         // navigation.navigate('PaymentConfirmed');
         await initGetOrders();
         Alert.alert('Order Accepted');
+        setready(false);
       } else {
         Snackbar.show({
           text: res?.error?.message
@@ -190,6 +191,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
+        setready(false);
       }
       setisLoading(false);
     } else {
@@ -200,8 +202,10 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
         backgroundColor: '#88087B',
       });
       setisLoading(false);
+      setready(false);
     }
     setisLoading(false);
+    setready(false);
   };
 
   const handleOnMyWay = async () => {
@@ -934,7 +938,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
               style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
             />
             <View style={tw`flex-1`}>
-              <View style={tw``}>
+              <View style={tw`pt-3`}>
                 <Textcomp
                   text={'!!! IMPORTANT !!!'}
                   size={16}
@@ -957,7 +961,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
                 <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
                 <Textcomp
                   text={
-                    'Provide accurate descriptions as the scope of work cannot be modified once submitted.'
+                    '⁠Notify in advance if running late.'
                   }
                   size={12}
                   lineHeight={14.5}
@@ -969,7 +973,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
                 <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
                 <Textcomp
                   text={
-                    '⁠Prioritize safety, both yours and the service provider’s, during the job.'
+                    '⁠⁠Get approval from the customer for any alterations.'
                   }
                   size={12}
                   lineHeight={14.5}
@@ -981,7 +985,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
                 <View style={tw`w-2 h-2  mt-1 rounded-full mr-2 bg-black`} />
                 <Textcomp
                   text={
-                    '⁠Pureworker is not liable for any issues or disputes that arise from interactions with service providers conducted outside the app.'
+                    '⁠⁠Keep noise to a minimum.'
                   }
                   size={12}
                   lineHeight={14.5}
@@ -993,6 +997,56 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
                 <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
                 <Textcomp
                   text={'⁠No inappropriate touching or verbal sexual remarks.'}
+                  size={12}
+                  lineHeight={14.5}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+              <View style={tw`flex flex-row items-start mt-2`}>
+                <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
+                <Textcomp
+                  text={'⁠⁠Do not ask for gifts or extra fees.'}
+                  size={12}
+                  lineHeight={14.5}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+              <View style={tw`flex flex-row items-start mt-2`}>
+                <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
+                <Textcomp
+                  text={'⁠⁠Be on time for the job.'}
+                  size={12}
+                  lineHeight={14.5}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+              <View style={tw`flex flex-row items-start mt-2`}>
+                <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
+                <Textcomp
+                  text={'⁠⁠ ⁠Maintain a professional look.'}
+                  size={12}
+                  lineHeight={14.5}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+              <View style={tw`flex flex-row items-start mt-2`}>
+                <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
+                <Textcomp
+                  text={`⁠Prioritize safety, both yours and the customer's, during the job.`}
+                  size={12}
+                  lineHeight={14.5}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+              <View style={tw`flex flex-row items-start mt-2`}>
+                <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
+                <Textcomp
+                  text={`⁠⁠Leave the work area as clean or cleaner than you found it.`}
                   size={12}
                   lineHeight={14.5}
                   color={'#000000'}

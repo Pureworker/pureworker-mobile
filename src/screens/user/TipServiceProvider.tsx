@@ -231,8 +231,16 @@ const TipServiceProvider = () => {
                 placeholderTextColor={'#00000080'}
                 keyboardType="numeric"
                 style={[tw`border-b pb-2 `, {width: perWidth(311)}]}
+                // onChangeText={text => {
+                //   setamount(text);
+                // }}
                 onChangeText={text => {
-                  setamount(text);
+                  // Ensure the input is numeric
+                  const numericValue = parseFloat(text);
+                  if (!isNaN(numericValue) && numericValue >= 0) {
+                    // Update the amount only if it's a valid positive number
+                    setamount(numericValue.toString());
+                  }
                 }}
                 value={`${amount}`}
               />

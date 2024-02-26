@@ -477,8 +477,13 @@ const ServiceProviderProfile = () => {
           {activeSection === 'About' && (
             <ScrollView
               contentContainerStyle={[
-                tw`mx-2 h-[140%] bg-[${colors.darkPurple}]`,
-                {flex: 0, borderRadius: 5, marginTop: perHeight(12)},
+                tw`mx-2  bg-[${colors.darkPurple}]`,
+                {
+                  flex: 0,
+                  borderRadius: 5,
+                  marginTop: perHeight(12),
+                  minHeight: SIZES.height * 1.4,
+                },
               ]}>
               <View
                 style={[
@@ -860,6 +865,7 @@ const ServiceProviderProfile = () => {
                       );
                     })}
                   </View>
+                  <View style={tw`h-20`} />
                 </>
               )}
 

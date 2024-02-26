@@ -131,7 +131,6 @@ export const getPopularService = async (param: any) => {
     };
   }
 };
-
 export const uploadAssetsDOCorIMG = async (
   param: any,
   formDataKey = 'profile-picture',

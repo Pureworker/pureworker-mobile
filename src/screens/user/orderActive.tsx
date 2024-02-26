@@ -10,6 +10,7 @@ import {
   FlatList,
   Alert,
   SafeAreaView,
+  StyleSheet,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Header from '../../components/Header';
@@ -49,6 +50,7 @@ import Modal from 'react-native-modal/dist/modal';
 import OrdersDeclineReason from '../../components/OrdersDeclineReason';
 import LocationIcon2 from '../../assets/svg/Location2';
 import TipProvider from '../../assets/svg/tipProvider';
+import CompleteTick from '../../assets/svg/complete';
 
 const OrderActive = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -98,38 +100,49 @@ const OrderActive = ({route}: any) => {
 
   const handleComplete = async (val: any) => {
     setisLoading(true);
-    if (item?._id) {
-      const res = await completedOrder(item?._id, {...val});
-      if (res?.status === 200 || res?.status === 201) {
-        // navigation.navigate('PaymentConfirmed');
-        // await initGetOrders();
-        await initGetOrders2();
-        setrateYourExperience(false);
-        Alert.alert('successful');
+    try {
+      if (item?._id) {
+        const res = await completedOrder(item?._id, {...val});
+        if (res?.status === 200 || res?.status === 201) {
+          // navigation.navigate('PaymentConfirmed');
+          // await initGetOrders();
+          await initGetOrders2();
+          setrateYourExperience(false);
+          Alert.alert('successful');
+        } else {
+          Snackbar.show({
+            text: res?.error?.message
+              ? res?.error?.message
+              : res?.error?.data?.message
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured',
+            duration: Snackbar.LENGTH_SHORT,
+            textColor: '#fff',
+            backgroundColor: '#88087B',
+          });
+          setrateYourExperience(false);
+        }
+        setisLoading(false);
       } else {
         Snackbar.show({
-          text: res?.error?.message
-            ? res?.error?.message
-            : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured',
+          text: 'Please fill all fields',
           duration: Snackbar.LENGTH_SHORT,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
-        setrateYourExperience(false);
+        setisLoading(false);
       }
-      setisLoading(false);
-    } else {
+    } catch (error) {
       Snackbar.show({
         text: 'Please fill all fields',
         duration: Snackbar.LENGTH_SHORT,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
+    } finally {
+      await initGetOrders();
       setisLoading(false);
     }
-    setisLoading(false);
   };
 
   useEffect(() => {
@@ -317,6 +330,8 @@ const OrderActive = ({route}: any) => {
   const handleSelectedReasons = reason => {
     setSelectedReason(reason);
   };
+
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -1305,7 +1320,7 @@ const OrderActive = ({route}: any) => {
                             },
                             tw`flex flex-row px-3 mx-4`,
                           ]}>
-                          <Cross style={tw`mr-2`} />
+                          <CompleteTick style={tw`mr-2`} />
                           <Textcomp
                             text={'Job Complete '}
                             size={11}
@@ -1363,18 +1378,42 @@ const OrderActive = ({route}: any) => {
                       fontFamily={'Inter-Bold'}
                       style={{textAlign: 'center'}}
                     />
-                    <Textcomp
-                      text={`${
-                        passedData?.location === 'online'
-                          ? 'online'
-                          : passedData?.address
-                      }`}
-                      size={14.5}
-                      lineHeight={16.5}
-                      color={'#FFFFFF'}
-                      fontFamily={'Inter-Regular'}
-                      style={{textAlign: 'center', marginLeft: 10}}
-                    />
+                    <View style={tw` w-[80%]`}>
+                      <Textcomp
+                        text={`${
+                          passedData?.location === 'online'
+                            ? 'online'
+                            : passedData?.address
+                        }`}
+                        size={
+                          passedData?.location !== 'online'
+                            ? passedData?.address?.split(' ')?.length > 5
+                              ? 11
+                              : 13.5
+                            : 13.5
+                        }
+                        lineHeight={16.5}
+                        color={'#FFFFFF'}
+                        fontFamily={'Inter-Regular'}
+                        style={{textAlign: 'left', marginLeft: 10}}
+                        numberOfLines={2}
+                      />
+                      {passedData?.address?.split(' ')?.length > 8 && (
+                        <TouchableOpacity
+                          style={tw`ml-auto`}
+                          onPress={() => {
+                            setShowModal(true);
+                          }}>
+                          <Textcomp
+                            text={'...see more'}
+                            size={12}
+                            lineHeight={15}
+                            color={'green'}
+                            fontFamily={'Inter-Bold'}
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
                   </View>
                   <View style={tw`flex mt-2 flex-row`}>
                     <Textcomp
@@ -1557,8 +1596,60 @@ const OrderActive = ({route}: any) => {
           isLoading={isLoading}
         />
       </Modal>
+
+      <Modal
+        isVisible={showModal}
+        onModalHide={() => {
+          setShowModal(false);
+        }}
+        style={{width: SIZES.width, marginHorizontal: 0}}
+        deviceWidth={SIZES.width}
+        onBackdropPress={() => setShowModal(false)}
+        swipeThreshold={200}
+        swipeDirection={['down']}
+        onSwipeComplete={() => setShowModal(false)}
+        onBackButtonPress={() => setShowModal(false)}>
+        <View style={tw` h-full w-full bg-black bg-opacity-5`}>
+          <TouchableOpacity
+            onPress={() => setShowModal(false)}
+            style={tw`flex-1`}
+          />
+          <View style={[tw`mx-auto w-4/5`, styles.modalContent]}>
+            <Textcomp
+              text={`${passedData?.address}`}
+              size={14}
+              lineHeight={18}
+              color={colors.black}
+              fontFamily={'Inter-Regular'}
+            />
+            <TouchableOpacity
+              onPress={() => setShowModal(false)}
+              style={styles.closeButton}>
+              <Text style={{color: colors.primary, fontSize: 16}}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+  },
+  closeButton: {
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+});
 
 export default OrderActive;
