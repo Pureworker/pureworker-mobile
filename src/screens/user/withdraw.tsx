@@ -219,7 +219,7 @@ const Withdraw = () => {
                               borderRadius: 10,
                               paddingHorizontal: 10,
                               marginTop: 15,
-                              color: '#00000080',
+                              color: '#000000',
                             },
                           ]}
                           // placeholderStyle={{
@@ -232,6 +232,7 @@ const Withdraw = () => {
                           inputSearchStyle={{
                             color: '#757575',
                           }}
+                          
                           data={bankList}
                           search
                           maxHeight={300}

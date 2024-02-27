@@ -1693,3 +1693,27 @@ export const addToWait = async (param: any) => {
     };
   }
 };
+
+export const getContent = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getContent func started', param);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/get-content/${param}`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('getContent', response?.status);
+    }
+    console.log('getContent:', response?.status);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};

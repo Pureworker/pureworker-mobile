@@ -187,6 +187,11 @@ const OrderActive = ({route}: any) => {
       func: () => setorderCompleted(true),
       check: ['PENDING', 'ACCEPTED', 'TRACK', 'INPROGRESS', 'COMPLETED'],
     },
+    {
+      title: 'Order Declined',
+      func: () => {},
+      check: ['DECLINED'],
+    },
     // {
     //   title: 'Thank you for the tip',
     //   func: () => {},
@@ -286,46 +291,59 @@ const OrderActive = ({route}: any) => {
   const [selectedReason, setSelectedReason] = useState<string>('');
 
   const handleCancel = async () => {
-    setisLoading(true);
-    if (passedData?._id) {
-      const res = await cancelOrder(passedData?._id, {
-        reason:
-          selectedReason.toLowerCase() === 'others'
-            ? otherReason
-            : selectedReason,
-      });
-      if (res?.status === 200 || res?.status === 201) {
-        await initGetOrders();
-        Alert.alert('successful');
+    try {
+      setisLoading(true);
+      if (passedData?._id) {
+        const res = await cancelOrder(passedData?._id, {
+          reason:
+            selectedReason.toLowerCase() === 'others'
+              ? otherReason
+              : selectedReason,
+        });
+        if (res?.status === 200 || res?.status === 201) {
+          await initGetOrders();
+          Alert.alert('successful');
+        } else {
+          Snackbar.show({
+            text: res?.error?.message
+              ? res?.error?.message
+              : res?.error?.data?.message
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured',
+            duration: Snackbar.LENGTH_LONG,
+            textColor: '#fff',
+            backgroundColor: '#88087B',
+          });
+        }
+        setisLoading(false);
+        setInfoModal(false);
+        setmodalSection('All');
       } else {
         Snackbar.show({
-          text: res?.error?.message
-            ? res?.error?.message
-            : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured',
+          text: 'Please fill all fields',
           duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
+        setisLoading(false);
+        setInfoModal(false);
+        setmodalSection('All');
       }
-      setisLoading(false);
-      setInfoModal(false);
-      setmodalSection('All');
-    } else {
+    } catch (error) {
       Snackbar.show({
-        text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_SHORT,
+        text: `${error?.data?.message ?? 'An error occured!.'}`,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
       setisLoading(false);
       setInfoModal(false);
       setmodalSection('All');
+    } finally {
+      setisLoading(false);
+      setInfoModal(false);
+      setmodalSection('All');
     }
-    setisLoading(false);
-    setInfoModal(false);
-    setmodalSection('All');
   };
 
   const handleSelectedReasons = reason => {
@@ -844,6 +862,73 @@ const OrderActive = ({route}: any) => {
                                     {height: 50},
                                   ]}
                                 />
+                              )}
+                            </>
+                          );
+                        }
+                      } else if (item.title === 'Order Declined') {
+                        if (passedData?.status === 'DECLINED') {
+                          return (
+                            <>
+                              <TouchableOpacity
+                                key={index}
+                                style={[tw`flex flex-row items-center `, {}]}
+                                onPress={() => {
+                                  item.func();
+                                }}>
+                                <Checked style={{marginRight: 10}} />
+                                <View
+                                  style={[
+                                    tw`flex flex-row  justify-between `,
+                                    {width: perWidth(290)},
+                                  ]}>
+                                  <View>
+                                    <Textcomp
+                                      text={item?.title}
+                                      size={14.5}
+                                      lineHeight={16.5}
+                                      color={'#FFFFFF'}
+                                      fontFamily={'Inter-Bold'}
+                                      style={{textAlign: 'center'}}
+                                    />
+                                  </View>
+                                  <View>
+                                    <Textcomp
+                                      text={''}
+                                      size={10}
+                                      lineHeight={16.5}
+                                      color={'#BABABA'}
+                                      fontFamily={'Inter-Regular'}
+                                      style={{
+                                        textAlign: 'center',
+                                      }}
+                                    />
+                                  </View>
+                                </View>
+                              </TouchableOpacity>
+                              {index < links.length - 1 && (
+                                <View style={tw`flex flex-row `}>
+                                  <View
+                                    style={[
+                                      tw`border-l-2  ml-2 border-[${colors.primary}] `,
+                                      {height: 50},
+                                    ]}
+                                  />
+                                  <Textcomp
+                                    text={`${
+                                      passedData?.serviceProvider?.fullName ??
+                                      `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
+                                    } has declined your order.`}
+                                    size={12}
+                                    lineHeight={16.5}
+                                    color={'#BABABA'}
+                                    fontFamily={'Inter-Regular'}
+                                    style={{
+                                      textAlign: 'left',
+                                      marginLeft: 20,
+                                    }}
+                                  />
+                                </View>
                               )}
                             </>
                           );

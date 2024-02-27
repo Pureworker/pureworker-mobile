@@ -6,6 +6,7 @@ import {
   Platform,
   StatusBar,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
@@ -119,13 +120,14 @@ const OrderReview = ({route}: any) => {
   const [ready, setready] = useState(false);
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView style={tw`flex-1 h-full `} contentContainerStyle={{flex: 1}}>
         <View
           style={{
             marginTop:
               Platform.OS === 'ios'
-                ? getStatusBarHeight(true)
+                ? 10
+                // getStatusBarHeight(true)
                 : StatusBar.currentHeight &&
                   StatusBar.currentHeight + getStatusBarHeight(true),
           }}
@@ -565,7 +567,7 @@ const OrderReview = ({route}: any) => {
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 

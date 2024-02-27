@@ -7,6 +7,7 @@ import {
   Platform,
   StatusBar,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -17,6 +18,8 @@ import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
+import {getContent, getUser} from '../../utils/api/func';
+import {addPrivacyPolicy, addUserData} from '../../store/reducer/mainSlice';
 
 const PrivacyPolicy = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -129,13 +132,27 @@ To send you important updates, notifications, and promotional messages related t
     },
   ];
   const userType = useSelector((state: any) => state.user.isLoggedIn);
+  const privacyPolicy = useSelector((state: any) => state.user.privacyPolicy);
+
+  useEffect(() => {
+    const initGetUsers = async () => {
+      const res: any = await getContent('Privacy Policy');
+      console.log(res?.data);
+
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addPrivacyPolicy(res?.data?.data));
+      }
+    };
+    initGetUsers();
+  }, []);
+
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
         style={{
           marginTop:
             Platform.OS === 'ios'
-              ? getStatusBarHeight(true)
+              ? 10
               : StatusBar.currentHeight &&
                 StatusBar.currentHeight + getStatusBarHeight(true),
         }}
@@ -168,7 +185,7 @@ To send you important updates, notifications, and promotional messages related t
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{minHeight: SIZES.height}}>
-          {userType.userType && (
+          {/* {userType.userType && (
             <View style={[tw` flex-1`]}>
               <View style={tw`mx-auto mt-[5%]`}>
                 <Textcomp
@@ -203,37 +220,11 @@ To send you important updates, notifications, and promotional messages related t
                   />
                 </View>
               </View>
-              {/* {data.map((item, index) => {
-              return (
-                <View
-                  key={index}
-                  style={[tw` mt-[5%] mx-auto`, {width: perWidth(332)}]}>
-                  <View style={tw``}>
-                    <Textcomp
-                      text={item?.header}
-                      size={16}
-                      lineHeight={17}
-                      color={'#000000'}
-                      fontFamily={'Inter-SemiBold'}
-                    />
-                  </View>
-                  <View style={tw`mt-1`}>
-                    <Textcomp
-                      text={item?.text}
-                      size={12}
-                      lineHeight={14.5}
-                      color={'#000000'}
-                      fontFamily={'Inter'}
-                    />
-                  </View>
-                </View>
-              );
-            })} */}
             </View>
-          )}
+          )} */}
           {userType.userType !== 'CUSTOMER' && (
             <>
-              {data_customer.map((item, index) => {
+              {privacyPolicy.map((item, index) => {
                 return (
                   <View
                     key={index}
@@ -336,7 +327,7 @@ To send you important updates, notifications, and promotional messages related t
             //             </View>
             //           </View>
             <>
-              {data_customer.map((item, index) => {
+              {privacyPolicy?.map((item, index) => {
                 return (
                   <View
                     key={index}
@@ -352,7 +343,7 @@ To send you important updates, notifications, and promotional messages related t
                     </View>
                     <View style={tw`mt-1`}>
                       <Textcomp
-                        text={item?.text}
+                        text={item?.body}
                         size={12}
                         lineHeight={14.5}
                         color={'#000000'}
@@ -368,7 +359,7 @@ To send you important updates, notifications, and promotional messages related t
         </ScrollView>
       </View>
       <View style={tw`h-0.5 w-full bg-black absolute  bottom-[3%]`} />
-    </View>
+    </SafeAreaView>
   );
 };
 

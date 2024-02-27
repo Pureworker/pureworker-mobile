@@ -8,6 +8,7 @@ import {
   StatusBar,
   ScrollView,
   TextInput,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
@@ -208,12 +209,13 @@ const OrderDetails = () => {
   }
 
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
         style={{
           marginTop:
             Platform.OS === 'ios'
-              ? getStatusBarHeight(true)
+              ? 10
+              // getStatusBarHeight(true)
               : StatusBar.currentHeight &&
                 StatusBar.currentHeight + getStatusBarHeight(true),
         }}
@@ -792,7 +794,7 @@ const OrderDetails = () => {
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
       <View style={tw`h-1 w-full mb-5 bg-black`} />
-    </View>
+    </SafeAreaView>
   );
 };
 

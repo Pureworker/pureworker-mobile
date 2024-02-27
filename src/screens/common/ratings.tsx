@@ -13,8 +13,12 @@ import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
-import {getFAQ} from '../../utils/api/func';
-import {addfaq} from '../../store/reducer/mainSlice';
+import {getContent, getFAQ} from '../../utils/api/func';
+import {
+  addContentRating,
+  addPrivacyPolicy,
+  addfaq,
+} from '../../store/reducer/mainSlice';
 
 const Ratings = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -26,19 +30,30 @@ const Ratings = () => {
   const faq = useSelector((state: any) => state.user.faq);
   const userType = useSelector((state: any) => state.user.isLoggedIn);
 
-  // useEffect(() => {
-  //   const initGetOrders = async () => {
-  //     setisLoading(true);
-  //     const res: any = await getFAQ('');
-  //     // console.log('fffffff', res?.data);
-  //     if (res?.status === 201 || res?.status === 200) {
-  //       dispatch(addfaq(res?.data?.data));
-  //     }
-  //     // setloading(false);
-  //     setisLoading(false);
-  //   };
-  //   initGetOrders();
-  // }, []);
+  const customerratings = useSelector((state: any) => state.user.anyratings);
+  const spratings = useSelector((state: any) => state.user.spratings);
+
+  useEffect(() => {
+    const fetchProviderRating = async () => {
+      const res: any = await getContent('SP Rating');
+      console.log(res?.data);
+
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addContentRating(res?.data?.data));
+      }
+    };
+    const fetchCustomerRating = async () => {
+      const res: any = await getContent('Customer Rating');
+      console.log(res?.data);
+
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addContentRating(res?.data?.data));
+      }
+    };
+    fetchCustomerRating();
+    fetchProviderRating();
+  }, []);
+
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       {/* <View
@@ -75,7 +90,38 @@ const Ratings = () => {
           />
         </View>
       </View>
-      {userType.userType === 'CUSTOMER' && (
+      <>
+        {(userType.userType === 'CUSTOMER' ? customerratings : spratings).map(
+          (item: any, index: any) => {
+            return (
+              <View
+                key={index}
+                style={[tw` mt-[5%] mx-auto`, {width: perWidth(332)}]}>
+                <View style={tw``}>
+                  <Textcomp
+                    text={item?.title}
+                    size={16}
+                    lineHeight={17}
+                    color={'#000000'}
+                    fontFamily={'Inter-SemiBold'}
+                  />
+                </View>
+                <View style={tw`mt-1`}>
+                  <Textcomp
+                    text={item?.body}
+                    size={12}
+                    lineHeight={14.5}
+                    color={'#000000'}
+                    fontFamily={'Inter'}
+                  />
+                </View>
+              </View>
+            );
+          },
+        )}
+      </>
+      {false && (
+        // userType.userType === 'CUSTOMER'
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{minHeight: SIZES.height}}>
@@ -144,30 +190,6 @@ const Ratings = () => {
                   fontFamily={'Inter-SemiBold'}
                 />
               </View>
-              {/* <View style={tw`mt-1`}>
-              <Textcomp
-                text={`Here are some top tips on how to maintain a high customer rating score:
-- Be respectful and considerate
-We want customers and service providers to have a positive experience on the Pureworker platform. Please be mindful of your language and behavior while communicating with the service provider and always treat them with respect.
-
-- Provide clear instructions and timely feedback
-Be clear about what you want and provide specific instructions to the service provider. After the service is completed, leave timely and honest feedback on their performance.
-
-- Be punctual
-Respect the service provider's time and arrive on time for scheduled appointments. If you need to cancel or reschedule, give them sufficient notice.
-
-- Pay fairly and promptly
-Agree on a fair price with the service provider before they begin the work, and pay promptly after the service is completed. Avoid haggling or negotiating after the service is completed.
-
-- Avoid cancelling service requests (if possible)
-In some situations, we understand that you may need to cancel a service request. However, if you do this continuously or cancel just before the service provider arrives, you may receive a low rating.
-                `}
-                size={12}
-                lineHeight={14.5}
-                color={'#000000'}
-                fontFamily={'Inter'}
-              />
-            </View> */}
               <View style={tw`mt-1`}>
                 <Textcomp
                   text={
@@ -277,7 +299,8 @@ In some situations, we understand that you may need to cancel a service request.
           <View style={tw`h-40`} />
         </ScrollView>
       )}
-      {userType.userType !== 'CUSTOMER' && (
+      {false && (
+        // userType.userType !== 'CUSTOMER'
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{minHeight: SIZES.height}}>

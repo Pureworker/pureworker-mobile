@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native';
 import images from '../constants/images';
 import commonStyle from '../constants/commonStyle';
 import Header from '../components/Header';
@@ -7,7 +7,7 @@ import Header from '../components/Header';
 
 const TermAndCondition = () => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header
         image={images.back}
         title={'Privacy Policy'}
@@ -361,7 +361,7 @@ const TermAndCondition = () => {
           </View>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

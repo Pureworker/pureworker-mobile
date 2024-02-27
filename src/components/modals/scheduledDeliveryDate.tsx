@@ -132,6 +132,8 @@ export default function ScheduledDeliveryDate({
       }
     } catch (error) {
     } finally {
+      setschdeuleIsoDate('');
+      setisLoading(false);
     }
 
     setisLoading(false);

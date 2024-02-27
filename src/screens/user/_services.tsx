@@ -167,7 +167,6 @@ const _Services = ({route}: any) => {
                   StatusBar.currentHeight + getStatusBarHeight(true) + 20,
           }}
         />
-
         {!searchModal ? (
           <View
             style={[
