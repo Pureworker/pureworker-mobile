@@ -8,6 +8,7 @@ import {
   StatusBar,
   ScrollView,
   RefreshControl,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -73,7 +74,7 @@ const Wallet = () => {
 
   return (
     <>
-      <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+      <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
         <ScrollView
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -84,7 +85,8 @@ const Wallet = () => {
             style={{
               marginTop:
                 Platform.OS === 'ios'
-                  ? getStatusBarHeight(true)
+                  ? 10
+                  // getStatusBarHeight(true)
                   : StatusBar.currentHeight &&
                     StatusBar.currentHeight + getStatusBarHeight(true),
             }}
@@ -426,7 +428,7 @@ const Wallet = () => {
           </View>
         </ScrollView>
         <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
-      </View>
+      </SafeAreaView>
       <Modal
         isVisible={InfoModal}
         onModalHide={() => {

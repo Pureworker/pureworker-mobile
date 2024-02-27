@@ -254,16 +254,6 @@ export default function FaceDetection({navigation, route}: any) {
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
-      // Snackbar.show({
-      //   text: res?.error?.message
-      //     ? res?.error?.message
-      //     : res?.error?.data?.message
-      //     ? res?.error?.data?.message
-      //     : 'Oops!, an error occured',
-      //   duration: Snackbar.LENGTH_SHORT,
-      //   textColor: '#fff',
-      //   backgroundColor: '#88087B',
-      // });
     } finally {
       initGetUsers();
     }
@@ -284,16 +274,27 @@ export default function FaceDetection({navigation, route}: any) {
               },
             ]}>
             {/* <Backicon /> */}
-            {/* <TouchableOpacity
+            <TouchableOpacity
               onPress={() => {
                 // navigation.goBack()
               }}>
- 
-              <Image
+              <Text
+                style={[
+                  tw`text-center text-[${colors.white}]`,
+                  {
+                    fontSize: 20,
+                    lineHeight: 24,
+                    marginLeft: perWidth(15),
+                    fontFamily: 'Inter-Bold',
+                  },
+                ]}>
+                Skip
+              </Text>
+              {/* <Image
                 style={{width: 25, height: 25, tintColor: 'white'}}
                 source={images.back}
-              />
-            </TouchableOpacity> */}
+              /> */}
+            </TouchableOpacity>
             <View style={tw`mx-auto`}>
               <Text
                 style={[

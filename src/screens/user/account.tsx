@@ -7,6 +7,7 @@ import {
   Platform,
   StatusBar,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Header from '../../components/Header';
@@ -60,13 +61,14 @@ const Account = () => {
   }
 
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
         style={{
           marginTop:
             Platform.OS === 'ios'
-              ? getStatusBarHeight(true)
-              : StatusBar.currentHeight &&
+              ? 12
+              : // getStatusBarHeight(true)
+                StatusBar.currentHeight &&
                 StatusBar.currentHeight + getStatusBarHeight(true),
         }}
       />
@@ -337,7 +339,7 @@ const Account = () => {
         <View style={tw`h-20`} />
       </ScrollView>
       <View style={tw`h-0.5 w-full bg-black absolute  bottom-[3%]`} />
-    </View>
+    </SafeAreaView>
   );
 };
 

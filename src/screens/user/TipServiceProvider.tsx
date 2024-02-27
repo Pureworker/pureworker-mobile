@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
   Platform,
@@ -9,6 +8,7 @@ import {
   ScrollView,
   FlatList,
   TextInput,
+  SafeAreaView,
 } from 'react-native';
 import {Route, useNavigation, useRoute} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
@@ -20,13 +20,12 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import colors from '../../constants/colors';
 import {perHeight, perWidth} from '../../utils/position/sizes';
 import {HEIGHT_WINDOW, WIDTH_WINDOW} from '../../constants/generalStyles';
-import {PLATFORMS} from 'twrnc/dist/esm/types';
 import {getTransactions, tipProvider} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import {ActivityIndicator} from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
-import {ToastShort} from '../../utils/utils';
+import {ToastLong, ToastShort} from '../../utils/utils';
 import {addTransactions} from '../../store/reducer/mainSlice';
 
 const TipServiceProvider = () => {
@@ -71,15 +70,24 @@ const TipServiceProvider = () => {
         orderID: item?._id,
       };
       const res: any = await tipProvider(_data);
-      console.log('tippppp', res?.data);
+      console.log('tippppp', res);
       if (res?.status === 201 || res?.status === 200) {
+        navigation.navigate('Orders');
+        ToastLong('This provider has been tipped!.');
+      };
+      if (
+        res?.status === 400 ||
+        res?.status === 401 ||
+        res?.status === 404 ||
+        res?.status === 500
+      ) {
+        console.log('kkhmm--', res?.error?.message);
         Snackbar.show({
-          text: 'This provider has been tipped!.',
+          text: `${res?.error?.message}`,
           duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
-        navigation.navigate('Orders');
       }
     } catch (error) {
       ToastShort(error?.data?.message);
@@ -99,13 +107,13 @@ const TipServiceProvider = () => {
     }
   };
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView style={{height: '100%'}}>
         <View
           style={{
             marginTop:
               Platform.OS === 'ios'
-                ? getStatusBarHeight(true) + 10
+                ? 10
                 : StatusBar.currentHeight &&
                   StatusBar.currentHeight + getStatusBarHeight(true),
           }}
@@ -230,7 +238,10 @@ const TipServiceProvider = () => {
                 placeholder="Enter Amount"
                 placeholderTextColor={'#00000080'}
                 keyboardType="numeric"
-                style={[tw`border-b pb-2 `, {width: perWidth(311)}]}
+                style={[
+                  tw`border-b pb-2 text-black`,
+                  {width: perWidth(311), color: 'black'},
+                ]}
                 // onChangeText={text => {
                 //   setamount(text);
                 // }}
@@ -238,6 +249,7 @@ const TipServiceProvider = () => {
                   // Ensure the input is numeric
                   const numericValue = parseFloat(text);
                   if (!isNaN(numericValue) && numericValue >= 0) {
+                    1;
                     // Update the amount only if it's a valid positive number
                     setamount(numericValue.toString());
                   }
@@ -290,7 +302,7 @@ const TipServiceProvider = () => {
         />
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
-    </View>
+    </SafeAreaView>
   );
 };
 

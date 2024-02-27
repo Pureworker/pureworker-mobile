@@ -27,10 +27,12 @@ import {PERMISSIONS, request} from 'react-native-permissions';
 // import Buttonreactive from '../../components/common/Buttonreactive';
 import axios from 'axios';
 import images from '../../constants/images';
-import {updateUserData} from '../../utils/api/func';
+import {getUser, updateUserData} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import Button from '../../components/Button';
 import {ToastLong, ToastShort} from '../../utils/utils';
+import {useDispatch} from 'react-redux';
+import {addUserData} from '../../store/reducer/mainSlice';
 
 const AddAddress = ({navigation}: any) => {
   const [description, setdescription] = useState('');
@@ -56,6 +58,8 @@ const AddAddress = ({navigation}: any) => {
     longitudeDelta,
   };
 
+  const [currentLocation, setcurrentLocation] = useState(null);
+
   //
   const [menumodal, setmenumodal] = useState(false);
   useEffect(() => {
@@ -76,13 +80,20 @@ const AddAddress = ({navigation}: any) => {
 
       if (permissionStatus === 'granted') {
         Geolocation.getCurrentPosition(
-          position => {
+          async position => {
+            setcurrentLocation({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
             setSelectedLocation({
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
             });
             console.log(position);
-            fetchAddress(position.coords.latitude, position.coords.longitude);
+            await fetchAddress(
+              position.coords.latitude,
+              position.coords.longitude,
+            );
           },
           error => console.log('Error getting location:', error),
           {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
@@ -161,38 +172,55 @@ const AddAddress = ({navigation}: any) => {
     };
   }
 
+  const dispatch = useDispatch();
+
   const upload = async (param: string) => {
-    setisLoading(false);
-    if (!selectedLocation) {
-      ToastLong('Please pick an address!.');
+    try {
       setisLoading(false);
-      return;
-    }
-    const res: any = await updateUserData({
-      geoLocation: {
-        type: 'Point',
-        coordinates: [selectedLocation?.longitude, selectedLocation?.latitude],
-      },
-      address: description,
-    });
-    console.log('result', res?.data);
-    if (res?.status === 200 || res?.status === 201) {
-      setisLoading(false);
-      navigation.goBack();
-    } else {
-      Snackbar.show({
-        text: res?.error?.message
-          ? res?.error?.message
-          : res?.error?.data?.message
-          ? res?.error?.data?.message
-          : 'Oops!, an error occured',
-        duration: Snackbar.LENGTH_SHORT,
-        textColor: '#fff',
-        backgroundColor: '#88087B',
+      if (!selectedLocation) {
+        ToastLong('Please pick an address!.');
+        setisLoading(false);
+        return;
+      }
+      const res: any = await updateUserData({
+        geoLocation: {
+          type: 'Point',
+          coordinates: [
+            selectedLocation?.longitude,
+            selectedLocation?.latitude,
+          ],
+        },
+        address: description,
       });
+      console.log('result', res?.data);
+      if (res?.status === 200 || res?.status === 201) {
+        setisLoading(false);
+        ToastLong('Address Updated!.');
+        navigation.goBack();
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+        setisLoading(false);
+      }
+    } catch (error) {
+    } finally {
+      const initGetUsers = async () => {
+        const res: any = await getUser('');
+        if (res?.status === 201 || res?.status === 200) {
+          dispatch(addUserData(res?.data?.user));
+        }
+      };
+      initGetUsers();
       setisLoading(false);
     }
-    setisLoading(false);
   };
   const uploadCurremt = async (lat: any, lng: any) => {
     setisLoading(true);
@@ -202,13 +230,13 @@ const AddAddress = ({navigation}: any) => {
       return;
     }
     try {
-      let desp ;
+      let desp;
       const response = await axios.get(
         `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyDp32iWaShk9E_wTNtJbAkNXqdishmZnE8`,
       );
       if (response.data.results.length > 0) {
         setdescription(response.data.results[0].formatted_address);
-        desp = response.data.results[0].formatted_address
+        desp = response.data.results[0].formatted_address;
       }
       const res: any = await updateUserData({
         geoLocation: {
@@ -219,6 +247,7 @@ const AddAddress = ({navigation}: any) => {
       });
       console.log('result', res?.data);
       if (res?.status === 200 || res?.status === 201) {
+        ToastLong('Address Updated!.');
         navigation.goBack();
         setisLoading(false);
       } else {
@@ -438,28 +467,62 @@ const AddAddress = ({navigation}: any) => {
             </View>
           </View>
         )}
-        <TouchableOpacity
-          onPress={async () => {
-            const isLocationEnabled = await new Promise((resolve, reject) => {
-              Geolocation.getCurrentPosition(
-                position => {
-                  resolve(true);
-                },
-                error => {
-                  resolve(false);
-                },
-                {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
-              );
-            });
 
-            if (!isLocationEnabled) {
-              const permissionStatus = await request(
-                Platform.OS === 'android'
-                  ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
-                  : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
-              );
+        {currentLocation !== null && (
+          <TouchableOpacity
+            onPress={async () => {
+              const isLocationEnabled = await new Promise((resolve, reject) => {
+                Geolocation.getCurrentPosition(
+                  position => {
+                    resolve(true);
+                  },
+                  error => {
+                    resolve(false);
+                  },
+                  {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+                );
+              });
 
-              if (permissionStatus === 'granted') {
+              if (!isLocationEnabled) {
+                const permissionStatus = await request(
+                  Platform.OS === 'android'
+                    ? PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
+                    : PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+                );
+
+                if (permissionStatus === 'granted') {
+                  Geolocation.getCurrentPosition(
+                    async position => {
+                      setSelectedLocation({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                      });
+                      await fetchAddress(
+                        position.coords.latitude,
+                        position.coords.longitude,
+                      );
+                      await uploadCurremt(
+                        position.coords.latitude,
+                        position.coords.longitude,
+                      );
+                    },
+                    error => {
+                      console.log('Error getting location:', error);
+                      ToastLong(
+                        `Failed to get current location. Please try again. ${error}`,
+                      );
+                    },
+                    {
+                      enableHighAccuracy: true,
+                      timeout: 15000,
+                      maximumAge: 10000,
+                    },
+                  );
+                } else {
+                  console.warn('Location permission denied');
+                  ToastShort('Location permission denied');
+                }
+              } else {
                 Geolocation.getCurrentPosition(
                   async position => {
                     setSelectedLocation({
@@ -478,60 +541,33 @@ const AddAddress = ({navigation}: any) => {
                   error => {
                     console.log('Error getting location:', error);
                     ToastLong(
-                      `Failed to get current location. Please try again. ${error}`,
+                      'Failed to get current location. Please try again.',
                     );
                   },
                   {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
                 );
-              } else {
-                console.warn('Location permission denied');
-                ToastShort('Location permission denied');
               }
-            } else {
-              Geolocation.getCurrentPosition(
-                async position => {
-                  setSelectedLocation({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                  });
-                  await fetchAddress(
-                    position.coords.latitude,
-                    position.coords.longitude,
-                  );
-                  await uploadCurremt(
-                    position.coords.latitude,
-                    position.coords.longitude,
-                  );
-                },
-                error => {
-                  console.log('Error getting location:', error);
-                  ToastLong(
-                    'Failed to get current location. Please try again.',
-                  );
-                },
-                {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-              );
-            }
-          }}
-          style={tw`w-[90%] bg-[#A1A1A11A] p-2 px-3 rounded-lg mt-4 mx-auto `}>
-          <View style={tw`flex flex-row items-center `}>
-            <Image source={images.location} style={{width: 25, height: 25}} />
+            }}
+            style={tw`w-[90%] bg-[#A1A1A11A] p-2 px-3 rounded-lg mt-4 mx-auto `}>
+            <View style={tw`flex flex-row items-center `}>
+              <Image source={images.location} style={{width: 25, height: 25}} />
+              <Text1
+                text={'Current Location'}
+                size={14}
+                color={colors.parpal}
+                lineHeight={16}
+                style={[tw`font-600 ml-2`]}
+              />
+            </View>
             <Text1
-              text={'Current Location'}
-              size={14}
-              color={colors.parpal}
+              text={'Tap to select current Location'}
+              size={12}
+              color={'#000000'}
               lineHeight={16}
-              style={[tw`font-600 ml-2`]}
+              style={[tw`font-600 `]}
             />
-          </View>
-          <Text1
-            text={'Tap to select current Location'}
-            size={12}
-            color={'#000000'}
-            lineHeight={16}
-            style={[tw`font-600 `]}
-          />
-        </TouchableOpacity>
+          </TouchableOpacity>
+        )}
         {/* <View style={[tw`mx-auto mt-4`, {width: perWidth(364)}]}>
           <TextInput
             style={[

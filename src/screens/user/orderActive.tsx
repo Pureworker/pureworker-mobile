@@ -51,6 +51,7 @@ import OrdersDeclineReason from '../../components/OrdersDeclineReason';
 import LocationIcon2 from '../../assets/svg/Location2';
 import TipProvider from '../../assets/svg/tipProvider';
 import CompleteTick from '../../assets/svg/complete';
+import CalendarIcon from '../../assets/svg/calendar';
 
 const OrderActive = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -333,6 +334,20 @@ const OrderActive = ({route}: any) => {
 
   const [showModal, setShowModal] = useState(false);
 
+  function isCurrentTimeGreaterThanScheduledTime(
+    scheduledTime: string | number | Date,
+  ) {
+    // Convert scheduledTime to a Date object
+    const scheduledDateTime = new Date(scheduledTime);
+
+    // Calculate the current time 2 hours ahead
+    const currentTimePlusTwoHours = new Date();
+    currentTimePlusTwoHours.setHours(currentTimePlusTwoHours.getHours() + 2);
+
+    // Compare the current time with the scheduled time plus 2 hours
+    return currentTimePlusTwoHours > scheduledDateTime;
+  }
+
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
@@ -525,6 +540,23 @@ const OrderActive = ({route}: any) => {
                     {width: perWidth(355)},
                   ]}>
                   <ScrollView contentContainerStyle={tw`flex-1`}>
+                    {true && (
+                      <TouchableOpacity
+                        onPress={() => {
+                          setscheduledDeliveryDate(true);
+                        }}
+                        style={tw`flex flex-row items-center ml-auto `}>
+                        <CalendarIcon style={tw`mr-2`} />
+                        <Textcomp
+                          text={'Modify Delivery Date'}
+                          size={11}
+                          lineHeight={17}
+                          color={'#FFF'}
+                          fontFamily={'Inter-Semibold'}
+                          style={tw`underline `}
+                        />
+                      </TouchableOpacity>
+                    )}
                     {links?.map((item, index) => {
                       if (item?.title === 'Service Provider Review') {
                         if (userData?.accountType === 'customer') {
@@ -569,7 +601,7 @@ const OrderActive = ({route}: any) => {
                           );
                         }
                       } else if (item.title === 'Order Completed') {
-                        if (passedData?.status === 'COMPLETED') {
+                        if (passedData?.isCompletedByProvider === true) {
                           return (
                             <>
                               <TouchableOpacity
@@ -635,6 +667,48 @@ const OrderActive = ({route}: any) => {
                                   />
                                 </View>
                               )}
+                            </>
+                          );
+                        }
+                        if (passedData?.status === 'COMPLETED') {
+                          return (
+                            <>
+                              <TouchableOpacity
+                                key={index}
+                                style={[tw`flex flex-row items-center `, {}]}
+                                onPress={() => {
+                                  item.func();
+                                }}>
+                                <Checked style={{marginRight: 10}} />
+                                <View
+                                  style={[
+                                    tw`flex flex-row  justify-between `,
+                                    {width: perWidth(290)},
+                                  ]}>
+                                  <View>
+                                    <Textcomp
+                                      text={item?.title}
+                                      size={14.5}
+                                      lineHeight={16.5}
+                                      color={'#FFFFFF'}
+                                      fontFamily={'Inter-Bold'}
+                                      style={{textAlign: 'center'}}
+                                    />
+                                  </View>
+                                  <View>
+                                    <Textcomp
+                                      text={''}
+                                      size={10}
+                                      lineHeight={16.5}
+                                      color={'#BABABA'}
+                                      fontFamily={'Inter-Regular'}
+                                      style={{
+                                        textAlign: 'center',
+                                      }}
+                                    />
+                                  </View>
+                                </View>
+                              </TouchableOpacity>
                             </>
                           );
                         }
@@ -742,8 +816,8 @@ const OrderActive = ({route}: any) => {
                         }
                       } else if (item.title === 'Order Dispute') {
                         if (
-                          passedData?.status === 'DISPUTE' ||
-                          passedData?.status === 'CANCELLED'
+                          passedData?.status === 'DISPUTE'
+                          // ||passedData?.status === 'CANCELLED'
                         ) {
                           return (
                             <>
@@ -1334,6 +1408,7 @@ const OrderActive = ({route}: any) => {
                       {item.status !== 'DECLINED' &&
                         item.status !== 'INPROGRESS' &&
                         item.status !== 'COMPLETED' &&
+                        item.status !== 'CANCELLED' &&
                         item.status !== 'TRACK' && (
                           <TouchableOpacity
                             onPress={() => {

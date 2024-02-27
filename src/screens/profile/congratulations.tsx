@@ -60,10 +60,10 @@ const Congratulations = () => {
           />
           <Button
             onClick={() => {
-              navigation.navigate('Home');
+              navigation.navigate('Homes');
               // navigation.navigate('Index');
               // navigation.navigate('Index');
-              navigation.navigate('Home');
+              navigation.navigate('Homes');
             }}
             style={{
               marginHorizontal: 40,

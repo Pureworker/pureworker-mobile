@@ -9,6 +9,7 @@ import {
   ScrollView,
   FlatList,
   RefreshControl,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Header from '../../components/Header';
@@ -174,12 +175,13 @@ const Orders = () => {
     }
   }, []);
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
         style={{
           marginTop:
             Platform.OS === 'ios'
-              ? getStatusBarHeight(true)
+              ? 10
+              // getStatusBarHeight(true)
               : StatusBar.currentHeight &&
                 StatusBar.currentHeight + getStatusBarHeight(true),
         }}
@@ -554,7 +556,7 @@ const Orders = () => {
         visible={scheduledDeliveryDate}
       />
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
-    </View>
+    </SafeAreaView>
   );
 };
 
