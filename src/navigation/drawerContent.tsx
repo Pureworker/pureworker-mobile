@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import tw from 'twrnc';
-// import {useStoreActions, useStoreState} from 'easy-peasy';
 import {SIZES, perHeight, perWidth} from '../utils/position/sizes';
 import images from '../constants/images';
 import Textcomp from '../components/Textcomp';
@@ -413,7 +412,7 @@ const DrawerContent = () => {
           )}
           <View style={[tw`mt-4 ml-3`, {}]}>
             <Textcomp
-              text={`Version: ${Platform.OS === 'ios' ? '1.0.4.8' : '1.0.4.8'}`}
+              text={`Version: ${Platform.OS === 'ios' ? '1.0.4.9' : '1.0.4.9'}`}
               size={14}
               color={'#000000'}
               style={[

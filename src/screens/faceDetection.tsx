@@ -282,9 +282,9 @@ export default function FaceDetection({navigation, route}: any) {
                 style={[
                   tw`text-center text-[${colors.white}]`,
                   {
-                    fontSize: 20,
-                    lineHeight: 24,
-                    marginLeft: perWidth(15),
+                    fontSize: 14,
+                    lineHeight: 18,
+                    marginLeft: perWidth(3),
                     fontFamily: 'Inter-Bold',
                   },
                 ]}>
