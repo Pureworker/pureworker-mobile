@@ -102,12 +102,10 @@ const NotificationListner = () => {
         );
       }
     });
-
   // Register background handler
   messaging().setBackgroundMessageHandler(async remoteMessage => {
     console.log('Message handled in the background!', remoteMessage);
   });
-
   // Foreground Notification
   messaging().onMessage(async remoteMessage => {
     console.error(remoteMessage);

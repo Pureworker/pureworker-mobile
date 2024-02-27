@@ -72,27 +72,29 @@ const _Services = ({route}: any) => {
   }, [id, userData?.bookmarks]);
 
   useEffect(() => {
+    setisLoading(true);
     const initGetUsers = async () => {
-      setisLoading(true);
+      // setisLoading(true);
       const res: any = await getProviderByService(id);
       console.log('dddddddd', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addprovidersByCateegory(res?.data?.data));
       }
-      setisLoading(false);
+      // setisLoading(false);
     };
     const initBookmarked = async () => {
-      setisLoading(true);
+      // setisLoading(true);
       const res: any = await getBookMarkedProviders(id);
       console.log('bbbbbmmm', res?.data?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(setbookMarkedProviders(res?.data?.data));
         // dispatch(addprovidersByCateegory(res?.data?.data));
       }
-      setisLoading(false);
+      // setisLoading(false);
     };
     initGetUsers();
     initBookmarked();
+    setisLoading(false);
   }, [dispatch, id]);
   const [searchResults, setSearchResults] = useState(_providersByCateegory);
   const [loading, setLoading] = useState(false);
@@ -177,7 +179,11 @@ const _Services = ({route}: any) => {
                 marginHorizontal: 20,
               },
             ]}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.goBack();
+                dispatch(addprovidersByCateegory([]));
+              }}>
               <Image
                 source={images.back}
                 style={{height: 25, width: 25}}

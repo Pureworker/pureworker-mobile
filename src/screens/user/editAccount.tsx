@@ -345,6 +345,15 @@ const EditAccount = () => {
                 />
               </View>
               <TextInput
+                onPressIn={() => {
+                  navigation.navigate('AddAddress');
+                }}
+                onFocus={() => {
+                  navigation.navigate('AddAddress');
+                }}
+                onTouchStart={() => {
+                  navigation.navigate('AddAddress');
+                }}
                 style={[tw` text-white py-3 pt-2 w-9/10`, {fontSize: 16}]}
                 onChangeText={text => {
                   setaddress(text);
