@@ -119,7 +119,11 @@ const NotificationListner = () => {
     Toast.show({
       type: 'success',
       position: 'top',
-      text1: `${remoteMessage?.notification?.title}`,
+      text1: `${
+        remoteMessage?.notification?.title === 'Support Support'
+          ? 'Support'
+          : remoteMessage?.notification?.title
+      }`,
       text2: `${remoteMessage?.notification?.body}`,
       topOffset: 30,
       bottomOffset: 60,

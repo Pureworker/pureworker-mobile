@@ -107,7 +107,6 @@ const DrawerContent = () => {
       }
     });
   };
-
   const opencamerafordp4 = async () => {
     const options = {
       mediaType: 'photo',

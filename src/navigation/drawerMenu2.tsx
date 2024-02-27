@@ -37,8 +37,6 @@ const TabNavigator = () => {
   const {getUnreadMessages} = useChat();
   const unreadChats = useSelector((state: any) => state.user.unreadChats);
   const navigation = useNavigation();
-  
-
   useEffect(() => {
     getUnreadMessages();
   }, []);
@@ -55,7 +53,6 @@ const TabNavigator = () => {
     };
     getToken();
   }, []);
-
   // React.useEffect(() => {
   //   registerTransistorAuthorizationListener(navigation);
   //   return () => {

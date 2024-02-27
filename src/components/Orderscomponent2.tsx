@@ -577,27 +577,51 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
         )}
         {status === 'ACCEPTED' && (
           <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
-            <TouchableOpacity
-              onPress={() => {
-                handleOnMyWay();
-              }}
-              style={[
-                tw`bg-[${colors.primary}] items-center justify-center`,
-                {
-                  width: perWidth(90),
-                  height:
-                    Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
-                  borderRadius: 7,
-                },
-              ]}>
-              <Textcomp
-                text={'On My way'}
-                size={12}
-                lineHeight={14}
-                color={colors.black}
-                fontFamily={'Inter-SemiBold'}
-              />
-            </TouchableOpacity>
+            {item?.location === 'online' ? (
+              <TouchableOpacity
+                onPress={() => {
+                  handleStart();
+                }}
+                style={[
+                  tw`bg-[${colors.primary}] items-center justify-center`,
+                  {
+                    width: perWidth(90),
+                    height:
+                      Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
+                    borderRadius: 7,
+                  },
+                ]}>
+                <Textcomp
+                  text={'Start Job '}
+                  size={12}
+                  lineHeight={14}
+                  color={colors.black}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  handleOnMyWay();
+                }}
+                style={[
+                  tw`bg-[${colors.primary}] items-center justify-center`,
+                  {
+                    width: perWidth(90),
+                    height:
+                      Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
+                    borderRadius: 7,
+                  },
+                ]}>
+                <Textcomp
+                  text={'On My way'}
+                  size={12}
+                  lineHeight={14}
+                  color={colors.black}
+                  fontFamily={'Inter-SemiBold'}
+                />
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
               onPress={() => {
                 setscheduledDeliveryDate(true);
