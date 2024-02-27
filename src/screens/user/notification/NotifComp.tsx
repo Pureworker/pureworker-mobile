@@ -86,10 +86,10 @@ export default function NotificationComp({item, seen, seen_}: any) {
             <Textcomp
               //   text={moment(`${item?.date}`).fromNow()}
               text={convertToRelativeTime(item?.createdAt)}
-              size={17}
-              lineHeight={17}
+              size={14}
+              lineHeight={14}
               color={'#000413'}
-              fontFamily={'Inter'}
+              fontFamily={'Inter-Regular'}
             />
           </View>
         </View>

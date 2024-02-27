@@ -526,58 +526,55 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           </View>
         </View>
 
-        {
-          status === 'PENDING'
-           && (
-            <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
-              <TouchableOpacity
-                onPress={() => {
-                  // handleUpdateStatus('ACCEPTED');
-                  // handleAccept();
-                  setready(true);
-                }}
-                style={[
-                  tw`bg-[${colors.primary}] items-center justify-center`,
-                  {
-                    width: perWidth(90),
-                    height:
-                      Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
-                    borderRadius: 7,
-                  },
-                ]}>
-                <Textcomp
-                  text={'Accept'}
-                  size={12}
-                  lineHeight={14}
-                  color={colors.black}
-                  fontFamily={'Inter-SemiBold'}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  handleDecline();
-                }}
-                style={[
-                  tw`bg-[${colors.primary}] items-center justify-center`,
-                  {
-                    width: perWidth(90),
-                    height:
-                      Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
-                    borderRadius: 7,
-                    marginLeft: perWidth(46),
-                  },
-                ]}>
-                <Textcomp
-                  text={'Decline '}
-                  size={12}
-                  lineHeight={14}
-                  color={colors.black}
-                  fontFamily={'Inter-SemiBold'}
-                />
-              </TouchableOpacity>
-            </View>
-          )
-        }
+        {status === 'PENDING' && (
+          <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
+            <TouchableOpacity
+              onPress={() => {
+                // handleUpdateStatus('ACCEPTED');
+                // handleAccept();
+                setready(true);
+              }}
+              style={[
+                tw`bg-[${colors.primary}] items-center justify-center`,
+                {
+                  width: perWidth(90),
+                  height:
+                    Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
+                  borderRadius: 7,
+                },
+              ]}>
+              <Textcomp
+                text={'Accept'}
+                size={12}
+                lineHeight={14}
+                color={colors.black}
+                fontFamily={'Inter-SemiBold'}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                handleDecline();
+              }}
+              style={[
+                tw`bg-[${colors.primary}] items-center justify-center`,
+                {
+                  width: perWidth(90),
+                  height:
+                    Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
+                  borderRadius: 7,
+                  marginLeft: perWidth(46),
+                },
+              ]}>
+              <Textcomp
+                text={'Decline '}
+                size={12}
+                lineHeight={14}
+                color={colors.black}
+                fontFamily={'Inter-SemiBold'}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
         {status === 'ACCEPTED' && (
           <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
             <TouchableOpacity
@@ -867,17 +864,19 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           handleComplete(values);
         }}
       /> */}
-      <RateyourCustommer
-        navigation={null}
-        func={(text: boolean | ((prevState: boolean) => boolean)) => {
-          setrateYourExperience(text);
-        }}
-        visible={rateYourExperience}
-        OnFinish={(values: any) => {
-          handleComplete(values);
-        }}
-        loading={isLoading}
-      />
+      {rateYourExperience && (
+        <RateyourCustommer
+          navigation={null}
+          func={(text: boolean | ((prevState: boolean) => boolean)) => {
+            setrateYourExperience(text);
+          }}
+          visible={rateYourExperience}
+          OnFinish={(values: any) => {
+            handleComplete(values);
+          }}
+          loading={isLoading}
+        />
+      )}
 
       <Modal
         isVisible={showModal}
@@ -960,9 +959,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
               <View style={tw`flex flex-row items-start mt-2`}>
                 <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
                 <Textcomp
-                  text={
-                    '⁠Notify in advance if running late.'
-                  }
+                  text={'⁠Notify in advance if running late.'}
                   size={12}
                   lineHeight={14.5}
                   color={'#000000'}
@@ -972,9 +969,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
               <View style={tw`flex flex-row items-start mt-2`}>
                 <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
                 <Textcomp
-                  text={
-                    '⁠⁠Get approval from the customer for any alterations.'
-                  }
+                  text={'⁠⁠Get approval from the customer for any alterations.'}
                   size={12}
                   lineHeight={14.5}
                   color={'#000000'}
@@ -984,9 +979,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
               <View style={tw`flex flex-row items-start mt-2`}>
                 <View style={tw`w-2 h-2  mt-1 rounded-full mr-2 bg-black`} />
                 <Textcomp
-                  text={
-                    '⁠⁠Keep noise to a minimum.'
-                  }
+                  text={'⁠⁠Keep noise to a minimum.'}
                   size={12}
                   lineHeight={14.5}
                   color={'#000000'}

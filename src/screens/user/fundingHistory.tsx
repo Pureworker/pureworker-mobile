@@ -301,13 +301,14 @@ const FundingHistory = () => {
                                   // }`}
                                   text={`${
                                     item?.status === 'successfull'
-                                      ? 'sucessful'
+                                      ? 'successful'
                                       : item?.status
                                   }`}
                                   size={13}
                                   lineHeight={15}
                                   color={
-                                    item.status === 'successful'
+                                    item.status === 'successful' ||
+                                    item.status === 'successfull'
                                       ? 'green'
                                       : '#00041380'
                                   }
