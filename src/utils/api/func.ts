@@ -1745,3 +1745,27 @@ export const InTrackOrders = async (param: any) => {
     };
   }
 };
+
+export const triggerComplete = async () => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('triggerComplete func started');
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/provider/complete-profile`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('triggerComplete:', response?.status);
+    }
+    console.log('triggerComplete:', response?.status);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};

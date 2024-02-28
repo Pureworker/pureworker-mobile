@@ -23,9 +23,7 @@ type Route = {
 const Congratulations = () => {
   const route: Route = useRoute();
   const dispatch = useDispatch();
-
   const navigation = useNavigation<StackNavigation>();
-
   const [createService, {isLoading}] = useCreateServiceMutation();
   const completeProfileData = useSelector(
     (state: any) => state.user.completeProfileData,
@@ -40,6 +38,13 @@ const Congratulations = () => {
         dispatch(addUserData(res?.data?.user));
       }
     };
+    const triggerComplete = async () => {
+      const res: any = await triggerComplete();
+      console.log('dd', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+      }
+    };
+    triggerComplete();
     initGetUsers();
   }, []);
 
