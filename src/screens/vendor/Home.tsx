@@ -8,6 +8,7 @@ import {
   StatusBar,
   ScrollView,
   Platform,
+  RefreshControl,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import images from '../../constants/images';
@@ -206,11 +207,59 @@ const Home = ({navigation}: any) => {
   const welcomeModal = useSelector((state: any) => state.user.welcomeModal);
   console.log(userData?.businessName);
 
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = () => {
+    setRefreshing(true);
+    const initGetUsers = async () => {
+      const res: any = await getUser('');
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addUserData(res?.data?.user));
+      }
+      const _userData = res?.data?.user;
+      if (
+        !_userData?.geoLocation ||
+        !_userData.geoLocation.coordinates ||
+        (_userData.geoLocation.coordinates[0] === 0 &&
+          _userData.geoLocation.coordinates[1] === 0) ||
+        !_userData.geoLocation.coordinates.length
+      ) {
+        navigation.navigate('AddAddress');
+        ToastLong('Address is required');
+      } else {
+      }
+      const emitProviderOnlineStatus = () => {
+        // Emit an event to the backend indicating that the customer is still connected
+        socket.connect();
+        socket.emit('provideronlinestatus', {
+          customerId: userData?.id || userData?._id,
+        });
+      };
+      emitProviderOnlineStatus();
+    };
+    const initGetCategory = async () => {
+      setisLoading(true);
+      const res: any = await getCategory('');
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addSCategory(res?.data?.data));
+      }
+      setisLoading(false);
+    };
+    initGetUsers();
+    getSupportUser('');
+    initGetCategory();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  };
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
       <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           <View
             style={[
               tw`items-center justify-center`,

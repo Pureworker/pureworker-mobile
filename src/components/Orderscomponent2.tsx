@@ -15,6 +15,7 @@ import {
   acceptOrder,
   addRatingOrder,
   cancelOrder,
+  completedOrder,
   declineOrder,
   getProviderOrders,
   onMYOrder,
@@ -127,7 +128,8 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
     try {
       setisLoading(true);
       if (item?._id) {
-        const res = await addRatingOrder(item?._id, {...val});
+        const res = await completedOrder(item?._id, {...val});
+        // const res = await addRatingOrder(item?._id, {...val});
         if (res?.status === 200 || res?.status === 201) {
           await initGetOrders();
           Alert.alert('Rating successful!.');
@@ -953,7 +955,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
             onPress={() => setready(false)}
             style={tw`flex-1`}
           />
-          <View style={[tw`p-4 mt-auto bg-[#D9D9D9]`, {minHeight: '55%'}]}>
+          <View style={[tw`p-4 mt-auto bg-[#D9D9D9]`, {minHeight: '65%'}]}>
             <TouchableOpacity
               onPress={() => {
                 setready(false);
@@ -1060,7 +1062,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
                   fontFamily={'Inter-Regular'}
                 />
               </View>
-              <View style={tw`flex flex-row items-start mt-2`}>
+              <View style={tw`flex flex-row items-start mt-2 mb-6`}>
                 <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
                 <Textcomp
                   text={`⁠⁠Leave the work area as clean or cleaner than you found it.`}
@@ -1071,7 +1073,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
                 />
               </View>
 
-              <View style={tw`flex flex-row items-center mt-auto mb-4 ml-4`}>
+              <View style={tw`flex flex-row items-center  mb-4 ml-4`}>
                 <CheckBox
                   style={{width: 30, padding: 10}}
                   onClick={() => {

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
   Platform,
@@ -18,7 +17,6 @@ import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
-import {color} from 'react-native-reanimated';
 import colors from '../../constants/colors';
 import Modal from 'react-native-modal/dist/modal';
 import {addUserData} from '../../store/reducer/mainSlice';
@@ -26,8 +24,7 @@ import {getUser} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import socket from '../../utils/socket';
-import {roundToSingleDigit} from '../../utils/utils';
-import {formatAmount, formatAmount2} from '../../utils/validations';
+import {formatAmount2} from '../../utils/validations';
 
 const Wallet = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -46,21 +43,18 @@ const Wallet = () => {
       dispatch(addUserData(res?.data?.user));
     }
     setisLoading(false);
-    // setloading(false);
   };
-  
   useEffect(() => {
-    const initGetUsers = async () => {
+    const initGetUsers_ = async () => {
       setisLoading(true);
       const res: any = await getUser('');
-      // console.log('dddddddd', res);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addUserData(res?.data?.user));
       }
       setisLoading(false);
       // setloading(false);
     };
-    initGetUsers();
+    initGetUsers_();
   }, [dispatch, navigation]);
   const supportUser = useSelector((store: any) => store.user.supportUser);
 
@@ -86,8 +80,8 @@ const Wallet = () => {
               marginTop:
                 Platform.OS === 'ios'
                   ? 10
-                  // getStatusBarHeight(true)
-                  : StatusBar.currentHeight &&
+                  : // getStatusBarHeight(true)
+                    StatusBar.currentHeight &&
                     StatusBar.currentHeight + getStatusBarHeight(true),
             }}
           />

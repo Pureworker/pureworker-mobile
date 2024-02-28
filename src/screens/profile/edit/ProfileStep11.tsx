@@ -81,6 +81,45 @@ const PRofileStep11 = () => {
   const {currentState, setCurrentState} = useContext(RouteContext);
   console.log(currentState);
   const [isLoading, setisLoading] = useState(false);
+
+  const handleAddRemove = async (arr: any[], action: string, item: any) => {
+    try {
+      // {services: arr, action: 'add'}
+      setisLoading(true);
+      const res = await completeProfile({services: arr, action: action});
+      if (res?.status === 200 || res?.status === 201) {
+        ToastShort('Service added');
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_SHORT,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+    } catch (error) {
+    } finally {
+      const initGetProviderNew = async () => {
+        const res: any = await getProviderNew(userData?._id);
+        if (res?.status === 201 || res?.status === 200) {
+          dispatch(addProfileData(res?.data?.profile));
+        }
+      };
+      initGetProviderNew();
+      setisLoading(false);
+
+      if (action === 'remove') {
+        dispatch(removeCategory(item));
+      }
+      if (action === 'add') {
+        dispatch(addCategory(item));
+      }
+    }
+  };
   const handleProfileSetup = async () => {
     console.log(categoryId);
     setisLoading(true);
@@ -374,7 +413,7 @@ const PRofileStep11 = () => {
                             return (
                               <TouchableOpacity
                                 key={index}
-                                onPress={() => {
+                                onPress={async () => {
                                   if (
                                     Array.isArray(category) &&
                                     category.length &&
@@ -382,12 +421,21 @@ const PRofileStep11 = () => {
                                       catItem => catItem.name === item.name,
                                     )
                                   ) {
-                                    dispatch(removeCategory(item));
+                                    await handleAddRemove(
+                                      [item._id ?? item.id],
+                                      'remove',
+                                      item,
+                                    );
+                                    // dispatch(removeCategory(item));
                                   } else {
-                                    dispatch(addCategory(item));
+                                    // dispatch(addCategory(item));
+                                    await handleAddRemove(
+                                      [item._id ?? item.id],
+                                      'add',
+                                      item,
+                                    );
                                   }
                                   setCollapseState2(false);
-                                  // console.log(category);
                                 }}
                                 style={{marginTop: 8}}>
                                 <TextWrapper
@@ -491,8 +539,15 @@ const PRofileStep11 = () => {
                       </TextWrapper>
                     </View>
                     <TouchableOpacity
-                      onPress={() => {
-                        dispatch(removeCategory(item));
+                      onPress={async () => {
+                        // dispatch(removeCategory(item));
+                        await handleAddRemove(
+                          [item._id ?? item.id],
+                          'remove',
+                          item,
+                        );
+
+                        //  dispatch(addCategory(item));
                       }}>
                       <Image
                         source={images.cross}

@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -30,6 +30,7 @@ const OrderReview = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
   const [isLoading, setisLoading] = useState(false);
   const _data = route.params;
+  const userData = useSelector((state: any) => state.user.userData);
   console.log('here', `${_data?.scheduledDeliveryDate}`, _data);
   const dispatch = useDispatch();
   function formatTimestampToTime(timestamp) {
@@ -56,6 +57,8 @@ const OrderReview = ({route}: any) => {
       day: '2-digit',
     }).format(scheduledDeliveryDate);
 
+    const tp = Number(_data?.totalPrice) + Number(_data?.totalPrice * 0.075);
+
     const Data = {
       serviceProvider: _data.serviceProvider,
       totalPrice: Number(_data?.totalPrice) + Number(_data?.totalPrice * 0.075),
@@ -70,6 +73,15 @@ const OrderReview = ({route}: any) => {
     };
     console.log(Data);
     try {
+      if (Number(userData?.wallet?.availableBalance) < Number(tp)) {
+        Snackbar.show({
+          text: 'Insufficient Balance.',
+          duration: Snackbar.LENGTH_LONG,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+        return;
+      }
       if (Data?.serviceProvider) {
         const res = await createOrder(Data);
         console.log(res?.data);
@@ -127,8 +139,8 @@ const OrderReview = ({route}: any) => {
             marginTop:
               Platform.OS === 'ios'
                 ? 10
-                // getStatusBarHeight(true)
-                : StatusBar.currentHeight &&
+                : // getStatusBarHeight(true)
+                  StatusBar.currentHeight &&
                   StatusBar.currentHeight + getStatusBarHeight(true),
           }}
         />
@@ -449,7 +461,7 @@ const OrderReview = ({route}: any) => {
               style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
             />
             <View style={tw`flex-1`}>
-            <View style={tw`pt-3`}>
+              <View style={tw`pt-3`}>
                 <Textcomp
                   text={'!!! IMPORTANT !!!'}
                   size={16}
@@ -504,7 +516,7 @@ const OrderReview = ({route}: any) => {
                   fontFamily={'Inter-Regular'}
                 />
               </View>
-              <View style={tw`flex flex-row items-start mt-2`}>
+              <View style={tw`flex flex-row items-start mt-2 mb-4`}>
                 <View style={tw`w-2 h-2 mt-1 rounded-full mr-2 bg-black`} />
                 <Textcomp
                   text={'⁠No inappropriate touching or verbal sexual remarks.'}

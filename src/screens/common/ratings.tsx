@@ -17,6 +17,7 @@ import {getContent, getFAQ} from '../../utils/api/func';
 import {
   addContentRating,
   addPrivacyPolicy,
+  addSPRating,
   addfaq,
 } from '../../store/reducer/mainSlice';
 
@@ -39,7 +40,7 @@ const Ratings = () => {
       console.log(res?.data);
 
       if (res?.status === 201 || res?.status === 200) {
-        dispatch(addContentRating(res?.data?.data));
+        dispatch(addSPRating(res?.data?.data));
       }
     };
     const fetchCustomerRating = async () => {

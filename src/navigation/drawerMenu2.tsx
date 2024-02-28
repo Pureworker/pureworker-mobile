@@ -29,6 +29,9 @@ import TrackRiderLocation from '../tracking/trkLocation';
 import Geolocation from '@react-native-community/geolocation';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {InTrackOrders} from '../utils/api/func';
+import {dispatch} from '../../RootNavigation';
+import {addProviderInTrackOrder} from '../store/reducer/mainSlice';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -36,6 +39,9 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = () => {
   const {getUnreadMessages} = useChat();
   const unreadChats = useSelector((state: any) => state.user.unreadChats);
+  const providerintrackOrders = useSelector(
+    (state: any) => state.user.providerintrackOrders,
+  );
   const navigation = useNavigation();
   useEffect(() => {
     getUnreadMessages();
@@ -62,63 +68,84 @@ const TabNavigator = () => {
   //     // unsubscribe();
   //   };
   // }, []);
-  Geolocation.setRNConfiguration({
-    authorizationLevel: 'always', // Request "always" location permission
-    skipPermissionRequests: false, // Prompt for permission if not granted
-  });
-  // Watch for position updates
-  const watchId = Geolocation.watchPosition(
-    async position => {
-      console.log('POSITION:', position);
-      const _token = await AsyncStorage.getItem('AuthToken');
-      // Send the position data to the server
-      axios
-        .post(
-          'https://api.pureworker.com/api/location',
-          {
-            long: position.coords.longitude,
-            lat: position.coords.latitude,
-            _type: 'PROVIDER',
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${_token}`,
+  useEffect(() => {
+    getInTransitOrders();
+  }, []);
+
+  const getInTransitOrders = async () => {
+    try {
+      const res: any = await InTrackOrders('');
+      console.log('PROVTRACK', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        // if (res?.data) {
+        //   dispatch(addProviderInTrackOrder(res?.data?.data || []));
+        // } 
+      }  
+      console.log('PROVTRAC2', providerintrackOrders?.length);
+    } catch (error) {}
+  };
+ 
+  {
+    providerintrackOrders?.length > 0 &&
+      Geolocation.setRNConfiguration({
+        authorizationLevel: 'always', // Request "always" location permission
+        skipPermissionRequests: false, // Prompt for permission if not granted
+      });
+    // Watch for position updates
+    const watchId = Geolocation.watchPosition(
+      async position => {
+        console.log('POSITION:', position);
+        const _token = await AsyncStorage.getItem('AuthToken');
+        // Send the position data to the server
+        axios
+          .post(
+            'https://api.pureworker.com/api/location',
+            {
+              long: position.coords.longitude,
+              lat: position.coords.latitude,
+              _type: 'PROVIDER',
             },
-          },
-        )
-        .then(response => {
-          console.log(
-            '[PROVIDER-WATCH]: Watchposition sent successfully:',
-            response.data,
-          );
-        })
-        .catch(error => {
-          console.error('Error sending location2:', error, accessToken);
-        });
-    },
-    error => {
-      console.log(error);
-    },
-    {
-      distanceFilter: 5, // Minimum distance (in meters) to update the location
-      interval: 900000, // Update interval (in milliseconds), which is 15 minutes
-      fastestInterval: 300000, // Fastest update interval (in milliseconds)
-      accuracy: {
-        android: 'highAccuracy',
-        ios: 'best',
+            {
+              headers: {
+                Authorization: `Bearer ${_token}`,
+              },
+            },
+          )
+          .then(response => {
+            console.log(
+              '[PROVIDER-WATCH]: Watchposition sent successfully:',
+              response.data,
+            );
+          })
+          .catch(error => {
+            console.error('Error sending location2:', error, accessToken);
+          });
       },
-      showsBackgroundLocationIndicator: true,
-      pausesLocationUpdatesAutomatically: false,
-      activityType: 'fitness', // Specify the activity type (e.g., 'fitness' or 'other')
-      useSignificantChanges: false,
-      deferredUpdatesInterval: 0,
-      deferredUpdatesDistance: 0,
-      foregroundService: {
-        notificationTitle: 'Tracking your location',
-        notificationBody: 'Enable location tracking to continue', // Add a notification body
+      error => {
+        console.log(error);
       },
-    },
-  );
+      {
+        distanceFilter: 5, // Minimum distance (in meters) to update the location
+        interval: 900000, // Update interval (in milliseconds), which is 15 minutes
+        fastestInterval: 300000, // Fastest update interval (in milliseconds)
+        accuracy: {
+          android: 'highAccuracy',
+          ios: 'best',
+        },
+        showsBackgroundLocationIndicator: true,
+        pausesLocationUpdatesAutomatically: false,
+        activityType: 'fitness', // Specify the activity type (e.g., 'fitness' or 'other')
+        useSignificantChanges: false,
+        deferredUpdatesInterval: 0,
+        deferredUpdatesDistance: 0,
+        foregroundService: {
+          notificationTitle: 'Tracking your location',
+          notificationBody: 'Enable location tracking to continue', // Add a notification body
+        },
+      },
+    );
+  }
+
   //
   return (
     <Tab.Navigator

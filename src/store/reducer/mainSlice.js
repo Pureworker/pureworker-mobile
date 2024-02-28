@@ -50,10 +50,11 @@ const initialState = {
   welcomeModal: false,
   serviceProviderData: {},
   liveTest: false,
-  providerLocation : {},
+  providerLocation: {},
   privacyPolicy: [],
-  anyratings : [],
+  anyratings: [],
   spratings: [],
+  providerintrackOrders: [],
 
   //provider-profileID
   provider_id: null,
@@ -90,6 +91,7 @@ export const mainSlice = createSlice({
       state.formStage = 1;
       state.serviceView = null;
       state.banks = [];
+      state.providerintrackOrders = [];
     },
 
     logout: state => {
@@ -114,6 +116,7 @@ export const mainSlice = createSlice({
       state.bookMarkedProviders = [];
       state.privacyPolicy = [];
       state.anyratings = [];
+      state.providerintrackOrders = [];
     },
 
     addCategory: (state, action) => {
@@ -275,10 +278,12 @@ export const mainSlice = createSlice({
     addContentRating: (state, action) => {
       state.anyratings = action.payload;
     },
-        addSPRating: (state, action) => {
+    addSPRating: (state, action) => {
       state.spratings = action.payload;
     },
-    
+    addProviderInTrackOrder: (state, action) => {
+      state.providerintrackOrders = action.payload;
+    },
   },
 });
 
@@ -322,7 +327,8 @@ export const {
   setProviderLocation,
   addPrivacyPolicy,
   addContentRating,
-  addSPRating
+  addSPRating,
+  addProviderInTrackOrder,
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);

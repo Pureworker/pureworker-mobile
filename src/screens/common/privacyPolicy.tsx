@@ -135,15 +135,31 @@ To send you important updates, notifications, and promotional messages related t
   const privacyPolicy = useSelector((state: any) => state.user.privacyPolicy);
 
   useEffect(() => {
-    const initGetUsers = async () => {
-      const res: any = await getContent('Privacy Policy');
+    const getPolicyCustomer = async () => {
+
+      console.log(userType.userType === 'CUSTOMER' ? 'Customer Terms' : 'SPTerms');
+      
+      const res: any = await getContent(
+        userType.userType === 'CUSTOMER' ? 'Customer Terms' : 'SPTerms',
+      );
+      // const res: any = await getContent( 'Customer Terms');
       console.log(res?.data);
 
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addPrivacyPolicy(res?.data?.data));
       }
     };
-    initGetUsers();
+    const getPolicyProvider = async () => {
+      const res: any = await getContent(
+        userType.userType === 'CUSTOMER' ? 'Customer Terms' : 'SPTerms',
+      );
+      console.log(res?.data);
+
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addPrivacyPolicy(res?.data?.data));
+      }
+    };
+    getPolicyCustomer();
   }, []);
 
   return (
@@ -240,7 +256,7 @@ To send you important updates, notifications, and promotional messages related t
                     </View>
                     <View style={tw`mt-1`}>
                       <Textcomp
-                        text={item?.text}
+                        text={item?.body}
                         size={12}
                         lineHeight={14.5}
                         color={'#000000'}

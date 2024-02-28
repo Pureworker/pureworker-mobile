@@ -25,6 +25,7 @@ import Cross from '../assets/svg/Cross';
 import Snackbar from 'react-native-snackbar';
 import OrdersDeclineReason from './OrdersDeclineReason';
 import FastImage from 'react-native-fast-image';
+import {ToastLong} from '../utils/utils';
 
 const Orderscomponent3 = ({
   item,
@@ -37,11 +38,7 @@ const Orderscomponent3 = ({
   const [saved, setsaved] = useState(false);
   const [InfoModal, setInfoModal] = useState(false);
   const [isLoading, setisLoading] = useState(false);
-
   const [modalSection, setmodalSection] = useState('All');
-
-  // console.log('OrderDetails', item);
-
   const dispatch = useDispatch();
   const initGetOrders = async () => {
     setisLoading(true);
@@ -50,7 +47,6 @@ const Orderscomponent3 = ({
     if (res?.status === 201 || res?.status === 200) {
       dispatch(addcustomerOrders(res?.data?.data));
     }
-    // setloading(false);
     setisLoading(false);
   };
   const handleCancel = async () => {
@@ -58,20 +54,28 @@ const Orderscomponent3 = ({
     if (item?._id) {
       const res = await cancelOrder(item?._id, {reason: 'Incorrect Request'});
       if (res?.status === 200 || res?.status === 201) {
-        // navigation.navigate('PaymentConfirmed');
         await initGetOrders();
         Alert.alert('successful');
       } else {
-        Snackbar.show({
-          text: res?.error?.message
-            ? res?.error?.message
-            : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured',
-          duration: Snackbar.LENGTH_LONG,
-          textColor: '#fff',
-          backgroundColor: '#88087B',
-        });
+        ToastLong(
+          `${
+            res?.error?.message
+              ? res?.error?.message
+              : res?.error?.data?.message
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured'
+          }`,
+        );
+        // Snackbar.show({
+        //   text: res?.error?.message
+        //     ? res?.error?.message
+        //     : res?.error?.data?.message
+        //     ? res?.error?.data?.message
+        //     : 'Oops!, an error occured',
+        //   duration: Snackbar.LENGTH_LONG,
+        //   textColor: '#fff',
+        //   backgroundColor: '#88087B',
+        // });
       }
       setisLoading(false);
       setInfoModal(false);
@@ -79,7 +83,7 @@ const Orderscomponent3 = ({
     } else {
       Snackbar.show({
         text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });

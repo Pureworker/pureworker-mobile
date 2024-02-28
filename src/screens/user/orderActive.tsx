@@ -42,7 +42,11 @@ import {
 } from '../../store/reducer/mainSlice';
 import Orderscomponent3 from '../../components/Orderscomponent3';
 import Checked from '../../assets/svg/checked';
-import {formatDate3, formatDateToCustomFormat} from '../../utils/utils';
+import {
+  ToastLong,
+  formatDate3,
+  formatDateToCustomFormat,
+} from '../../utils/utils';
 import ContactSupportIcon from '../../assets/svg/contactSupport';
 import Cross from '../../assets/svg/Cross';
 import socket from '../../utils/socket';
@@ -80,14 +84,7 @@ const OrderActive = ({route}: any) => {
   // console.log('data:', userData);
 
   const [isLoading, setisLoading] = useState(false);
-  // const initGetOrders = async () => {
-  //   setisLoading(true);
-  //   const res: any = await getProviderOrders(userData?._id);
-  //   if (res?.status === 201 || res?.status === 200) {
-  //     dispatch(addproviderOrders(res?.data?.data));
-  //   }
-  //   setisLoading(false);
-  // };
+
   const initGetOrders2 = async () => {
     setisLoading(true);
     const res: any = await getUserOrders('');
@@ -330,12 +327,13 @@ const OrderActive = ({route}: any) => {
         setmodalSection('All');
       }
     } catch (error) {
-      Snackbar.show({
-        text: `${error?.data?.message ?? 'An error occured!.'}`,
-        duration: Snackbar.LENGTH_LONG,
-        textColor: '#fff',
-        backgroundColor: '#88087B',
-      });
+      ToastLong(`${error?.data?.message ?? 'Oops!, an error occured'}`);
+      // Snackbar.show({
+      //   text: `${error?.data?.message ?? 'An error occured!.'}`,
+      //   duration: Snackbar.LENGTH_LONG,
+      //   textColor: '#fff',
+      //   backgroundColor: '#88087B',
+      // });
       setisLoading(false);
       setInfoModal(false);
       setmodalSection('All');
@@ -345,7 +343,6 @@ const OrderActive = ({route}: any) => {
       setmodalSection('All');
     }
   };
-
   const handleSelectedReasons = reason => {
     setSelectedReason(reason);
   };
@@ -558,23 +555,26 @@ const OrderActive = ({route}: any) => {
                     {width: perWidth(355)},
                   ]}>
                   <ScrollView contentContainerStyle={tw`flex-1`}>
-                    {true && (
-                      <TouchableOpacity
-                        onPress={() => {
-                          setscheduledDeliveryDate(true);
-                        }}
-                        style={tw`flex flex-row items-center ml-auto `}>
-                        <CalendarIcon style={tw`mr-2`} />
-                        <Textcomp
-                          text={'Modify Delivery Date'}
-                          size={11}
-                          lineHeight={17}
-                          color={'#FFF'}
-                          fontFamily={'Inter-Semibold'}
-                          style={tw`underline `}
-                        />
-                      </TouchableOpacity>
-                    )}
+                    {isCurrentTimeGreaterThanScheduledTime(
+                      passedData?.scheduledDeliveryDate,
+                    ) &&
+                      passedData?.status === 'ACCEPTED' && (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setscheduledDeliveryDate(true);
+                          }}
+                          style={tw`flex flex-row items-center ml-auto `}>
+                          <CalendarIcon style={tw`mr-2`} />
+                          <Textcomp
+                            text={'Modify Delivery Date'}
+                            size={11}
+                            lineHeight={17}
+                            color={'#FFF'}
+                            fontFamily={'Inter-Semibold'}
+                            style={tw`underline `}
+                          />
+                        </TouchableOpacity>
+                      )}
                     {links?.map((item, index) => {
                       if (item?.title === 'Service Provider Review') {
                         if (userData?.accountType === 'customer') {
@@ -1119,7 +1119,8 @@ const OrderActive = ({route}: any) => {
                           passedData?.status === 'ACCEPTED' ||
                           passedData?.status === 'TRACK' ||
                           passedData?.status === 'INPROGRESS' ||
-                          passedData?.status === 'COMPLETED'
+                          passedData?.status === 'COMPLETED' ||
+                          passedData?.status === 'CANCELLED'
                         ) {
                           return (
                             <>

@@ -55,16 +55,9 @@ const Orders = () => {
   const [orderInProgress, setorderInProgress] = useState(false);
   const [orderPlacing, setorderPlacing] = useState(false);
   const [scheduledDeliveryDate, setscheduledDeliveryDate] = useState(false);
-
-  useEffect(() => {
-    // setorderDelivered(true);
-  }, []);
-
   const [filteredOrders, setFilteredOrders] = useState(customerOrders);
-
   useEffect(() => {
     setactiveSection('Active');
-
     // Cleanup function to be called when the component unmounts
     return () => {
       // Set activeSection to 'Active' when the component unmounts
@@ -83,6 +76,19 @@ const Orders = () => {
       console.log('oooooooopage', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addcustomerOrders(res?.data?.data));
+      }
+      setisLoading(false);
+    };
+    initGetOrders();
+  }, [navigation]);
+
+  useEffect(() => {
+    const initGetOrders = async () => {
+      setisLoading(true);
+      const res: any = await getUserOrders(searchInput);
+      console.log('oooooooopage', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addcustomerOrders(res?.data?.data));
         // Filter orders based on search input
         // const filtered = res?.data?.data.filter(order =>
         //   order?.service?.toLowerCase().includes(searchInput.toLowerCase()),
@@ -92,6 +98,7 @@ const Orders = () => {
     };
     initGetOrders();
   }, []);
+
   const handleSearch = (query: string) => {
     try {
       // Filter the data based on the search input
@@ -99,7 +106,6 @@ const Orders = () => {
       //   _providersByCateegory?.filter((provider: {fullName: string}) =>
       //     provider.fullName.toLowerCase().includes(query.toLowerCase()),
       //   ) || [];
-
       console.log('qqqq::::::::', query);
       const filtered =
         customerOrders.filter(
@@ -124,8 +130,8 @@ const Orders = () => {
       // setLoading(false);
     }
   };
-  const debounce = (func, delay) => {
-    let timeoutId;
+  const debounce = (func:any, delay:any) => {
+    let timeoutId: string | number | NodeJS.Timeout | undefined;
     return function (...args) {
       if (timeoutId) {
         clearTimeout(timeoutId);
@@ -136,22 +142,7 @@ const Orders = () => {
     };
   };
   const debouncedHandleSearch = debounce(handleSearch, 500);
-
-  // useEffect(() => {
-  //   const initGetOrders = async () => {
-  //     setisLoading(true);
-  //     const res: any = await getUserOrders('');
-  //     console.log('oooooooo', res?.data);
-  //     if (res?.status === 201 || res?.status === 200) {
-  //       dispatch(addcustomerOrders(res?.data?.data));
-  //     }
-  //     // setloading(false);
-  //     setisLoading(false);
-  //   };
-  //   initGetOrders();
-  // }, []);
   const [refreshing, setRefreshing] = useState(false);
-
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     const initGetOrders = async () => {

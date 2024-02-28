@@ -11,7 +11,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {Route, useNavigation, useRoute} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -60,6 +60,12 @@ const TipServiceProvider = () => {
       title: '₦5000',
     },
   ];
+
+  const userData = useSelector((state: any) => state.user.userData);
+
+  // text={`₦ ${formatAmount2(
+  //   userData?.wallet?.availableBalance,
+  // )}`}
   const item = route.params?.item;
   const handleTip = async () => {
     try {
@@ -69,18 +75,27 @@ const TipServiceProvider = () => {
         providerID: item?.serviceProvider?._id,
         orderID: item?._id,
       };
+      if (Number(userData?.wallet?.availableBalance) < Number(amount)) {
+        Snackbar.show({
+          text: 'Insufficient Balance',
+          duration: Snackbar.LENGTH_LONG,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+        return 
+      }
       const res: any = await tipProvider(_data);
       console.log('tippppp', res);
       if (res?.status === 201 || res?.status === 200) {
         navigation.navigate('Orders');
         ToastLong('This provider has been tipped!.');
-      };
-      if (
-        res?.status === 400 ||
-        res?.status === 401 ||
-        res?.status === 404 ||
-        res?.status === 500
-      ) {
+      } else {
+        // if (
+        //   res?.status === 400 ||
+        //   res?.status === 401 ||
+        //   res?.status === 404 ||
+        //   res?.status === 500
+        // ) {
         console.log('kkhmm--', res?.error?.message);
         Snackbar.show({
           text: `${res?.error?.message}`,

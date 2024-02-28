@@ -2,6 +2,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {store} from '../../store/store';
 import {
+  addProviderInTrackOrder,
   addUserData,
   addbanks,
   addchatList,
@@ -1707,6 +1708,33 @@ export const getContent = async (param: any) => {
       console.log('getContent', response?.status);
     }
     console.log('getContent:', response?.status);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const InTrackOrders = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('InTrackOrders func started', param);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/ordern/provider-orders/?status=TRACK`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('InTrackOrders', response?.status, response?.data?.data);
+      if (response?.data?.data) {
+        store.dispatch(addProviderInTrackOrder(response?.data?.data));
+      }
+    }
+    console.log('InTrackOrders:', response?.status);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);

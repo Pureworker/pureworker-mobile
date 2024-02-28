@@ -24,7 +24,7 @@ import Location from '../assets/svg/Location';
 import DisputeIcon from '../assets/svg/Dispute';
 import Cross from '../assets/svg/Cross';
 import Snackbar from 'react-native-snackbar';
-import {ToastShort} from '../utils/utils';
+import {ToastLong, ToastShort} from '../utils/utils';
 import OrdersDeclineReason from './OrdersDeclineReason';
 import FastImage from 'react-native-fast-image';
 import OrderDispute from './modals/orderDispute';
@@ -84,16 +84,25 @@ const Orderscomponent = ({
         await initGetOrders();
         Alert.alert('successful');
       } else {
-        Snackbar.show({
-          text: res?.error?.message
-            ? res?.error?.message
-            : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured',
-          duration: Snackbar.LENGTH_LONG,
-          textColor: '#fff',
-          backgroundColor: '#88087B',
-        });
+        ToastLong(
+          `${
+            res?.error?.message
+              ? res?.error?.message
+              : res?.error?.data?.message
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured'
+          }`,
+        );
+        // Snackbar.show({
+        //   text: res?.error?.message
+        //     ? res?.error?.message
+        //     : res?.error?.data?.message
+        //     ? res?.error?.data?.message
+        //     : 'Oops!, an error occured',
+        //   duration: Snackbar.LENGTH_LONG,
+        //   textColor: '#fff',
+        //   backgroundColor: '#88087B',
+        // });
       }
       setisLoading(false);
       setInfoModal(false);
