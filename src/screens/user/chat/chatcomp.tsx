@@ -31,9 +31,11 @@ export default function Index({
 
   console.log(isUrl, time);
 
-  console.log(text);
+  console.log('chatty--',text, isRead, id);
+
 
   useEffect(() => {
+
     if (!isRead) {
       markAsRead(id);
     }

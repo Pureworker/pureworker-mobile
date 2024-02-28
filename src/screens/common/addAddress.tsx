@@ -319,7 +319,6 @@ const AddAddress = ({navigation}: any) => {
     };
     requestLocation();
   }, []);
-
   return (
     <View style={{flex: 1}}>
       <View style={[tw`h-[40%]`]}>

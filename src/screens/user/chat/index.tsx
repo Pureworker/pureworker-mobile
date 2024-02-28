@@ -8,6 +8,7 @@ import {
   StatusBar,
   ScrollView,
   RefreshControl,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -98,12 +99,13 @@ const Index = () => {
   }, []);
 
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
         style={{
           marginTop:
             Platform.OS === 'ios'
-              ? getStatusBarHeight(true)
+              ? 10
+              // getStatusBarHeight(true)
               : StatusBar.currentHeight &&
                 StatusBar.currentHeight + getStatusBarHeight(true),
         }}
@@ -270,7 +272,7 @@ const Index = () => {
         </View>
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
-    </View>
+    </SafeAreaView>
   );
 };
 

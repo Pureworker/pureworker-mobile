@@ -21,7 +21,6 @@ import React, {
   useState,
 } from 'react';
 import tw from 'twrnc';
-// import {, FONTS, icons, images, } from '../../constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {SIZES, perHeight, perWidth} from '../../../utils/position/sizes';
 import Chatcomp from './chatcomp';
@@ -31,11 +30,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
 import {ImageZoom} from '@likashefqet/react-native-image-zoom';
 
-import {
-  addProfileData,
-  addchatData,
-  addchatList,
-} from '../../../store/reducer/mainSlice';
+import {addchatData, addchatList} from '../../../store/reducer/mainSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   getChatsbyuser,
@@ -50,7 +45,11 @@ import Textcomp from '../../../components/Textcomp';
 import {ToastLong, ToastShort, timeAgo} from '../../../utils/utils';
 import useChat from '../../../hooks/useChat';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {_getUnreadMessages} from '../../../utils/api/chat';
+import {
+  _getUnreadMessages,
+  markAsReaArray,
+  markAsRead,
+} from '../../../utils/api/chat';
 
 export default function Inbox({navigation, route}: any) {
   const scrollRef = useRef<ScrollView | null>(null);
@@ -67,6 +66,8 @@ export default function Inbox({navigation, route}: any) {
   const agentData = useSelector((state: any) => state.user.userData);
   const chatData = useSelector((store: any) => store.user.chatData);
 
+  console.log('chatData', chatData);
+
   const toggleImageModal = (link: string = '') => {
     const newObj = {
       ...imageModal,
@@ -78,8 +79,6 @@ export default function Inbox({navigation, route}: any) {
   };
 
   useEffect(() => {
-    // console.log('userID', userId);
-    // console.log('passed:', route.params);
     socket.connect();
     console.log('-idid', socket.id);
     socket.emit('authentication', agentData);
@@ -141,7 +140,6 @@ export default function Inbox({navigation, route}: any) {
       console.log(error);
     }
   };
-
   const [boxFocuss, setboxFocuss] = useState(false);
   function groupMessagesByDate(messages) {
     const groupedMessages = {};
@@ -242,7 +240,6 @@ export default function Inbox({navigation, route}: any) {
       keyboardDidHideListener.remove();
     };
   }, []);
-
   const _handleFetch = async () => {
     const res: any = await getChatsbyuser('');
     if (res?.status === 201 || res?.status === 200) {
@@ -260,7 +257,6 @@ export default function Inbox({navigation, route}: any) {
       _handleFetch();
       getUnreadMessages();
       getChatList();
-      // dispatch(addchatData([]));
     };
   }, []);
 
@@ -279,6 +275,26 @@ export default function Inbox({navigation, route}: any) {
   }, []);
 
   console.log('PROVIDER:', providerData);
+
+  useEffect(() => {
+    let arr = chatData
+      ?.filter(chat => {
+        if (chat?.to?._id === agentData?._id) {
+          return chat?._id;
+        }
+      })
+      .map((chat: {_id: any}) => chat?._id);
+    const handleMarkeRead = async () => {
+      console.log(arr);
+      try {
+        await markAsReaArray(arr);
+        ToastShort('Marked as Read successfully');
+      } catch (error) {
+        ToastShort('Mark as read!.');
+      }
+    };
+    handleMarkeRead();
+  }, []);
 
   return (
     <SafeAreaView style={[tw`h-full bg-[#EBEBEB]  w-full`, styles.container]}>
@@ -397,6 +413,7 @@ export default function Inbox({navigation, route}: any) {
 
                   {groupedMessages[date].map((message, index) => {
                     let item = message;
+
                     if (item?.from?._id === agentData?._id) {
                       return (
                         <Chatcomp

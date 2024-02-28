@@ -60,3 +60,21 @@ export const markAsRead = async (messageId: string) => {
   //   return response?.data?.chats?.[0]?.chatsWithUnreadMessages;
   //   {"chats": [{"chatsWithUnreadMessages": 3}], "status": "success"}
 };
+
+export const markAsReaArray = async (messageId: string) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  // unread-chats
+  const response = await axios.patch(
+    `${API_BASE_URL}/mark-messages-as-read`,
+    {messageIDs: messageId},
+    {
+      headers: {
+        Authorization: `Bearer ${AuthToken}`,
+      },
+    },
+  );
+
+  console.log(response.data, ' ...............................,Array unread');
+  //   return response?.data?.chats?.[0]?.chatsWithUnreadMessages;
+  //   {"chats": [{"chatsWithUnreadMessages": 3}], "status": "success"}
+};

@@ -26,14 +26,27 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import FastImage from 'react-native-fast-image';
 import socket from '../utils/socket';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import LocationIcon2 from '../assets/svg/Location2';
 
 const DrawerContent = () => {
   const navigation = useNavigation<StackNavigation>();
   const navLinks = [
-    {label: 'Wallet', route: 'Wallet', icon: images.wallet},
-    {label: 'Support', route: 'Support', icon: images.support},
-    {label: 'Account Info', route: 'Account', icon: images.accountinfo},
-    {label: 'Referrals', route: 'Referrals', icon: images.info},
+    {label: 'Wallet', route: 'Wallet', icon: images.wallet, notint: false},
+    {label: 'Support', route: 'Support', icon: images.support, notint: false},
+    {
+      label: 'Account Info',
+      route: 'Account',
+      icon: images.accountinfo,
+      notint: false,
+    },
+    {
+      label: 'Change Address',
+      route: 'AddAddress',
+      icon: images.location1,
+      icon2: <LocationIcon2 />,
+      notint: true,
+    },
+    {label: 'Referrals', route: 'Referrals', icon: images.info, notint: false},
   ];
   const navLinks2 = [
     {label: 'Log out', route: 'Logout', icon: images.logout},
@@ -344,7 +357,7 @@ const DrawerContent = () => {
 
           <View
             style={[
-              tw` px-2 w-[90%] pb-3 pt-3 mx-auto rounded-lg`,
+              tw` px-2 w-[90%] pb-0 pt-3 mx-auto rounded-lg`,
               {marginTop: perHeight(40)},
             ]}>
             {navLinks.map((link, index) => (
@@ -359,15 +372,26 @@ const DrawerContent = () => {
                 }}
                 style={[
                   tw` w-full  border-[#F2F2F2]  flex flex-row items-center`,
-                  {marginTop: index === 0 ? 0 : perHeight(19)},
+                  {marginTop: index === 0 ? 0 : perHeight(18)},
                 ]}>
-                {
+                {link?.icon2 ? (
+                  link?.icon2
+                ) : (
                   <Image
                     resizeMode="contain"
-                    style={{width: 20, height: 20, tintColor: '#000000'}}
+                    style={[
+                      {
+                        width: 20,
+                        height: 20,
+                        // tintColor: link?.notint === true ? null : '#000000',
+                      },
+                      link?.notint === false && {
+                        tintColor: '#000000',
+                      },
+                    ]}
                     source={link.icon}
                   />
-                }
+                )}
                 <Textcomp
                   text={link.label}
                   size={14}
@@ -423,7 +447,7 @@ const DrawerContent = () => {
               }}
               style={[
                 tw`bg-[#2D303C] px-2 py-4 w-[90%] mx-auto `,
-                {marginTop: perHeight(30), borderRadius: 5},
+                {marginTop: perHeight(25), borderRadius: 5},
               ]}>
               <Textcomp
                 text={'Become a Service Provider'}
@@ -435,7 +459,7 @@ const DrawerContent = () => {
           )}
           <View style={[tw`mt-4 ml-3`, {}]}>
             <Textcomp
-              text={`Version: ${Platform.OS === 'ios' ? '1.0.5.1' : '1.0.5.1'}`}
+              text={`Version: ${Platform.OS === 'ios' ? '1.0.5.2' : '1.0.5.2'}`}
               size={14}
               color={'#000000'}
               style={[

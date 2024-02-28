@@ -123,7 +123,6 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
     }
     setisLoading(false);
   };
-
   const handleComplete = async (val: any) => {
     try {
       setisLoading(true);
@@ -172,7 +171,6 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
       setrateYourExperience(false);
     }
   };
-
   const handleAccept = async () => {
     setisLoading(true);
     if (item?._id) {
@@ -209,7 +207,6 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
     setisLoading(false);
     setready(false);
   };
-
   const handleOnMyWay = async () => {
     setisLoading(true);
     if (item?._id) {
