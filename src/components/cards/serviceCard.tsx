@@ -4,13 +4,31 @@ import React from 'react';
 import tw from 'twrnc';
 import Textcomp from '../Textcomp';
 import colors from '../../constants/colors';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProviderByService } from '../../utils/api/func';
+import { addprovidersByCateegory } from '../../store/reducer/mainSlice';
 
 const ServiceCard = ({item, index, navigation}: any) => {
+  const dispatch = useDispatch();
+  const userType = useSelector((state: any) => state.user.isLoggedIn);
+  const initFecth = async (id: any) => {
+    const res: any = await getProviderByService(id);
+    console.log('service-dddddddd', res?.data);
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addprovidersByCateegory(res?.data?.data));
+    }
+    if (userType.userType === 'CUSTOMER') {
+      navigation.navigate('_Services', {service: item});
+    } else {
+      navigation.navigate('_VServices', {service: item});
+    }
+  };
   return (
     <TouchableOpacity
       // onPress={() => navigation.navigate('ServiceProviderProfile', {service: item})}
       onPress={() => {
-        navigation.navigate('_Services', {service: item});
+        initFecth(item?._id || item?.id)
+        // navigation.navigate('_Services', {service: item});
       }}
       style={[
         tw` mt-4 border-[#FFC727]`,

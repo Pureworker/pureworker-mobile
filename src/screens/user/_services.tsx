@@ -71,6 +71,12 @@ const _Services = ({route}: any) => {
     setsavedProviders(query);
   }, [id, userData?.bookmarks]);
 
+  const [searchResults, setSearchResults] = useState(_providersByCateegory);
+
+  useEffect(() => {
+    setSearchResults(_providersByCateegory);
+  }, [_providersByCateegory]);
+
   useEffect(() => {
     setisLoading(true);
     const initGetUsers = async () => {
@@ -79,6 +85,7 @@ const _Services = ({route}: any) => {
       console.log('dddddddd', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addprovidersByCateegory(res?.data?.data));
+        setSearchResults(_providersByCateegory);
       }
       // setisLoading(false);
     };
@@ -90,13 +97,11 @@ const _Services = ({route}: any) => {
         dispatch(setbookMarkedProviders(res?.data?.data));
         // dispatch(addprovidersByCateegory(res?.data?.data));
       }
-      // setisLoading(false);
     };
     initGetUsers();
     initBookmarked();
     setisLoading(false);
   }, [dispatch, id]);
-  const [searchResults, setSearchResults] = useState(_providersByCateegory);
   const [loading, setLoading] = useState(false);
   const debounce = (func, delay) => {
     let timeoutId;
@@ -156,14 +161,15 @@ const _Services = ({route}: any) => {
   const debouncedHandleSearch = debounce(handleSearch, 500);
 
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView>
         <View
           style={{
             marginTop:
               Platform.OS === 'ios'
-                ? getStatusBarHeight(true)
-                : StatusBar.currentHeight &&
+                ? 10
+                : // getStatusBarHeight(true)
+                  StatusBar.currentHeight &&
                   StatusBar.currentHeight + getStatusBarHeight(true) + 20,
           }}
         />
@@ -338,8 +344,8 @@ const _Services = ({route}: any) => {
                             <ScrollView scrollEnabled={false} horizontal>
                               <FlatList
                                 style={{flex: 1}}
-                                // data={_providersByCateegory}
-                                data={searchResults}
+                                data={_providersByCateegory}
+                                // data={searchResults}
                                 scrollEnabled={false}
                                 horizontal={false}
                                 renderItem={(item: any, index: any) => {
@@ -529,7 +535,7 @@ const _Services = ({route}: any) => {
         <View style={tw`h-20`} />
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
-    </View>
+    </SafeAreaView>
   );
 };
 

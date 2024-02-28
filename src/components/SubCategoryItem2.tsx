@@ -36,7 +36,6 @@ const SubCategoryItem = ({style, itemDetail, index}: any) => {
     if (res?.status === 201 || res?.status === 200) {
       dispatch(addprovidersByCateegory(res?.data?.data));
     }
-
     //if customer navigate to _service , if provide navigate to _VService
     if (userType.userType === 'CUSTOMER') {
       navigation.navigate('_Services', {service: itemDetail});
