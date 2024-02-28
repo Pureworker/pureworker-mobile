@@ -27,6 +27,7 @@ export default function SubPortComp({
   portfolioData,
   handlePortfolioItemChange,
   remove,
+  onLoad,
 }: any) {
   //   const [service_, setservice_] = useState(null);
   //   const [dropdownOpen, setdropdownOpen] = useState(false);
@@ -102,6 +103,7 @@ export default function SubPortComp({
           const localUri = item.uri;
           // Make post-call to upload image
           try {
+            onLoad(true);
             // const processedLink = await uploadImage(localUri);
             const processedLink = await uploadImgorDoc(item);
             console.log('returned:', processedLink);
@@ -109,9 +111,11 @@ export default function SubPortComp({
             // Update the state or save the processed link instead of local URI
             setPictures(prevPictures => [...prevPictures, processedLink]);
             UpdateValue('images', [...pictures, processedLink]);
+            onLoad(false);
           } catch (error) {
             console.error('Error uploading image:', error);
             setisLoading(false);
+            onLoad(false);
             // Handle error as needed
           }
         }

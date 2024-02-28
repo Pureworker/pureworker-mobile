@@ -57,7 +57,12 @@ export default function PortComp({
   const [selectedVerification, setSelectedVerification] = useState('');
   const [description, setDescription] = useState('');
   const dispatch = useDispatch();
-  const handleProfileSetup = async (passedData: { serviceDescription: any; servicePriceMin: any; servicePriceMax: any; portfolios: any; }) => {
+  const handleProfileSetup = async (passedData: {
+    serviceDescription: any;
+    servicePriceMin: any;
+    servicePriceMax: any;
+    portfolios: any;
+  }) => {
     console.log(passedData);
 
     const minPrice = Number(passedData?.servicePriceMin);
@@ -209,6 +214,8 @@ export default function PortComp({
       console.error('Some SubPortComp are incomplete');
     }
   };
+
+  const [loading, setloading] = useState(false);
 
   return (
     <View style={[tw` `, {marginTop: 30}]}>
@@ -380,7 +387,6 @@ export default function PortComp({
               <Text style={{color: 'red'}}>{errors.servicePriceMax}</Text>
             )}
             <View style={[tw`border-b`, {borderWidth: 2}]} />
-
             <View style={[tw`mt-4`, {}]}>
               <View style={[tw``, {}]}>
                 <Textcomp
@@ -403,7 +409,6 @@ export default function PortComp({
                 />
               </View>
             </View>
-
             {/* {portfolioCount?.map((item, index) => {
               return (
                 <SubPortComp
@@ -436,6 +441,9 @@ export default function PortComp({
                       handlePortfolioItemChange={(i, data) => {
                         setFieldValue(`portfolios[${index}]`, data);
                       }}
+                      onLoad={value => {
+                        setloading(value);
+                      }}
                     />
                   ))}
                   <TouchableOpacity
@@ -465,6 +473,7 @@ export default function PortComp({
               )}
             </FieldArray>
             <TouchableOpacity
+              disabled={loading}
               onPress={() => {
                 handleSubmit();
               }}

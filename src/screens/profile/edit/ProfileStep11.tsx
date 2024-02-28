@@ -77,7 +77,7 @@ const PRofileStep11 = () => {
       set_getSubCategory(res?.data?.data?.[0]?.services);
     }
     setsubLoading(false);
-  };
+  }; 
   const {currentState, setCurrentState} = useContext(RouteContext);
   console.log(currentState);
   const [isLoading, setisLoading] = useState(false);

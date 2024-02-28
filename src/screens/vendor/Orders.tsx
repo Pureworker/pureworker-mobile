@@ -9,6 +9,7 @@ import {
   ScrollView,
   FlatList,
   RefreshControl,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Header from '../../components/Header';
@@ -48,10 +49,8 @@ const Orders = () => {
     };
     initGetOrders();
   }, []);
-
   useEffect(() => {
     setactiveSection('Active');
-
     // Cleanup function to be called when the component unmounts
     return () => {
       // Set activeSection to 'Active' when the component unmounts
@@ -127,12 +126,13 @@ const Orders = () => {
   }, []);
 
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
         style={{
           marginTop:
             Platform.OS === 'ios'
-              ? getStatusBarHeight(true)
+              ? 10
+              // getStatusBarHeight(true)
               : StatusBar.currentHeight &&
                 StatusBar.currentHeight + getStatusBarHeight(true),
         }}
@@ -403,7 +403,6 @@ const Orders = () => {
                             item={item.item}
                             index={item.index}
                             status={item.item?.status}
-                 
                           />
                         );
                       } else {
@@ -420,7 +419,7 @@ const Orders = () => {
         )}
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
-    </View>
+    </SafeAreaView>
   );
 };
 

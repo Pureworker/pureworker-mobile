@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -160,7 +161,7 @@ const ProfileStep5 = () => {
     setisLoading(false);
   };
   return (
-    <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: colors.greyLight}]}>
       <Header
         style={{backgroundColor: colors.greyLight}}
         imageStyle={{tintColor: colors.black}}
@@ -266,7 +267,7 @@ const ProfileStep5 = () => {
           )}
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, ActivityIndicator, ScrollView, Text} from 'react-native';
+import {View, ActivityIndicator, ScrollView, Text, SafeAreaView} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
 import Header from '../../components/Header';
@@ -342,7 +342,7 @@ const ProfileStep3 = () => {
   };
 
   return (
-    <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: colors.greyLight}]}>
       <Header
         style={{backgroundColor: colors.greyLight}}
         imageStyle={{tintColor: colors.black}}
@@ -643,7 +643,7 @@ const ProfileStep3 = () => {
         </View>
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
-    </View>
+    </SafeAreaView>
   );
 };
 export default ProfileStep3;

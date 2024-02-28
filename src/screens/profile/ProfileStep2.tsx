@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   PermissionsAndroid,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
@@ -544,9 +545,8 @@ const PRofileStep2 = () => {
     }
     setisLoading(false);
   };
-
   return (
-    <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: colors.greyLight}]}>
       <Header
         style={{backgroundColor: colors.greyLight}}
         imageStyle={{tintColor: colors.black}}
@@ -852,7 +852,7 @@ const PRofileStep2 = () => {
         <View style={tw`h-60`} />
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -63,7 +63,6 @@ export default function ScheduledDeliveryDate({
 
     return formattedDate;
   }
-
   const [change, setchange] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [schdeuleIsoDate, setschdeuleIsoDate] = useState('');
@@ -106,6 +105,7 @@ export default function ScheduledDeliveryDate({
           Alert.alert('Order Date Rescheduled');
           setDatePickerVisibility(false);
           func(false);
+          setschdeuleIsoDate('');
           navigation.goBack();
         } else {
           Snackbar.show({

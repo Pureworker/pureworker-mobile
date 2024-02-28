@@ -155,6 +155,7 @@ const Home = () => {
     }
   };
   // Sentry.nativeCrash();
+
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);

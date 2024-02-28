@@ -10,7 +10,7 @@ import {useCreateServiceMutation} from '../../store/slice/api';
 import {useDispatch, useSelector} from 'react-redux';
 import tw from 'twrnc';
 import {addUserData} from '../../store/reducer/mainSlice';
-import {getUser} from '../../utils/api/func';
+import {getUser, triggerComplete} from '../../utils/api/func';
 
 type Route = {
   key: string;
@@ -24,7 +24,6 @@ const Congratulations = () => {
   const route: Route = useRoute();
   const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigation>();
-  const [createService, {isLoading}] = useCreateServiceMutation();
   const completeProfileData = useSelector(
     (state: any) => state.user.completeProfileData,
   );
@@ -38,13 +37,13 @@ const Congratulations = () => {
         dispatch(addUserData(res?.data?.user));
       }
     };
-    const triggerComplete = async () => {
+    const _triggerComplete = async () => {
       const res: any = await triggerComplete();
-      console.log('dd', res?.data);
+      console.log('ddkk', res?.data);
       if (res?.status === 201 || res?.status === 200) {
       }
     };
-    triggerComplete();
+    _triggerComplete();
     initGetUsers();
   }, []);
 
@@ -65,10 +64,10 @@ const Congratulations = () => {
           />
           <Button
             onClick={() => {
-              navigation.navigate('Homes');
+              // navigation.navigate('Homes');
+              navigation.navigate('Index');
               // navigation.navigate('Index');
-              // navigation.navigate('Index');
-              navigation.navigate('Homes');
+              // navigation.navigate('Homes');
             }}
             style={{
               marginHorizontal: 40,

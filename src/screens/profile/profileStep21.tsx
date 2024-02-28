@@ -10,6 +10,7 @@ import {
   StyleSheet,
   Platform,
   PermissionsAndroid,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
@@ -376,7 +377,7 @@ const ProfileStep21 = () => {
   // };
 
   return (
-    <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: colors.greyLight}]}>
       <Header
         style={{backgroundColor: colors.greyLight}}
         imageStyle={{tintColor: colors.black}}
@@ -405,7 +406,7 @@ const ProfileStep21 = () => {
               style={{fontSize: 20, marginTop: 30, color: colors.black}}
             />
             <View>
-              <TouchableOpacity
+              <TouchableOpacity 
                 onPress={() => {
                   opencamerafordp4();
                 }}
@@ -606,8 +607,8 @@ const ProfileStep21 = () => {
             </View>
             <View
               style={{flexDirection: 'row', flexWrap: 'wrap', marginTop: 20}}>
-              {category?.length > 0
-                ? category?.map((item: any, index: any) => {
+              {ProviderData?.services?.length > 0
+                ? ProviderData?.services?.map((item: any, index: any) => {
                     const d = ProviderData?.portfolios?.filter(
                       s => s.service === item?._id,
                     );
@@ -941,7 +942,7 @@ const ProfileStep21 = () => {
           </TouchableOpacity>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({

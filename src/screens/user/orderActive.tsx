@@ -189,6 +189,11 @@ const OrderActive = ({route}: any) => {
       func: () => {},
       check: ['DECLINED'],
     },
+    {
+      title: 'Order Cancelled',
+      func: () => {},
+      check: ['CANCELLED'],
+    },
     // {
     //   title: 'Thank you for the tip',
     //   func: () => {},
@@ -338,6 +343,7 @@ const OrderActive = ({route}: any) => {
       setInfoModal(false);
       setmodalSection('All');
     } finally {
+      await initGetOrders();
       setisLoading(false);
       setInfoModal(false);
       setmodalSection('All');
@@ -919,6 +925,70 @@ const OrderActive = ({route}: any) => {
                                       passedData?.serviceProvider?.fullName ??
                                       `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
                                     } has declined your order.`}
+                                    size={12}
+                                    lineHeight={16.5}
+                                    color={'#BABABA'}
+                                    fontFamily={'Inter-Regular'}
+                                    style={{
+                                      textAlign: 'left',
+                                      marginLeft: 20,
+                                    }}
+                                  />
+                                </View>
+                              )}
+                            </>
+                          );
+                        }
+                      } else if (item.title === 'Order Cancelled') {
+                        if (passedData?.status === 'CANCELLED') {
+                          return (
+                            <>
+                              <TouchableOpacity
+                                key={index}
+                                style={[tw`flex flex-row items-center `, {}]}
+                                onPress={() => {
+                                  item.func();
+                                }}>
+                                <Checked style={{marginRight: 10}} />
+                                <View
+                                  style={[
+                                    tw`flex flex-row  justify-between `,
+                                    {width: perWidth(290)},
+                                  ]}>
+                                  <View>
+                                    <Textcomp
+                                      text={item?.title}
+                                      size={14.5}
+                                      lineHeight={16.5}
+                                      color={'#FFFFFF'}
+                                      fontFamily={'Inter-Bold'}
+                                      style={{textAlign: 'center'}}
+                                    />
+                                  </View>
+                                  <View>
+                                    <Textcomp
+                                      text={''}
+                                      size={10}
+                                      lineHeight={16.5}
+                                      color={'#BABABA'}
+                                      fontFamily={'Inter-Regular'}
+                                      style={{
+                                        textAlign: 'center',
+                                      }}
+                                    />
+                                  </View>
+                                </View>
+                              </TouchableOpacity>
+                              {index < links.length - 1 && (
+                                <View style={tw`flex flex-row `}>
+                                  <View
+                                    style={[
+                                      tw`border-l-2  ml-2 border-[${colors.primary}] `,
+                                      {height: 50},
+                                    ]}
+                                  />
+                                  <Textcomp
+                                    text={"You cancelled the order."}
                                     size={12}
                                     lineHeight={16.5}
                                     color={'#BABABA'}

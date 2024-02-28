@@ -5,6 +5,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
@@ -220,7 +221,7 @@ const ProfileStep4 = () => {
   }
 
   return (
-    <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: colors.greyLight}]}>
       <Header
         style={{backgroundColor: colors.greyLight}}
         imageStyle={{tintColor: colors.black}}
@@ -478,7 +479,7 @@ const ProfileStep4 = () => {
         </View>
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
-    </View>
+    </SafeAreaView>
   );
 };
 

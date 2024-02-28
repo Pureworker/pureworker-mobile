@@ -40,7 +40,8 @@ const Header = ({
         {
           marginTop:
             Platform.OS === 'ios'
-              ? getStatusBarHeight(true)
+              ? 0
+              // getStatusBarHeight(true)
               : StatusBar.currentHeight &&
                 StatusBar.currentHeight + getStatusBarHeight(true),
           flexDirection: 'row',
@@ -51,12 +52,11 @@ const Header = ({
         },
         style,
       ]}>
-      <StatusBar
+      {/* <StatusBar
         translucent
         barStyle={'light-content'}
         backgroundColor={'#000'}
-      />
-
+      /> */}
       <TouchableOpacity
         style={{position: 'absolute', left: 20}}
         onPress={() => {

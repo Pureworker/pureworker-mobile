@@ -5,6 +5,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
@@ -71,7 +72,6 @@ const PRofileStep1 = () => {
   const [selectCategory, setselectCategory] = useState('');
   const [subCategory, setsubCategory] = useState([]);
   const [subLoading, setsubLoading] = useState(false);
-  // const [getSubCategories] = useGetSubCategoriesQuery()
   const HandleGetSubCategory = async param => {
     console.log('started');
     try {
@@ -207,7 +207,7 @@ const PRofileStep1 = () => {
   console.log('PROFILE:', ProviderData?.services);
 
   return (
-    <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: colors.greyLight}]}>
       <Header
         style={{backgroundColor: colors.greyLight}}
         imageStyle={{tintColor: colors.black}}
@@ -464,7 +464,7 @@ const PRofileStep1 = () => {
                                       'add',
                                       item,
                                     );
-                                  }
+                                  } 
                                   setCollapseState2(false);
                                   // console.log(category);
                                 }}
@@ -538,8 +538,8 @@ const PRofileStep1 = () => {
         </View>
 
         <View style={{flexDirection: 'row', flexWrap: 'wrap', marginTop: 10}}>
-          {category?.length > 0
-            ? category?.map((item: any, index: any) => {
+          {ProviderData?.services?.length > 0
+            ? ProviderData?.services?.map((item: any, index: any) => {
                 return (
                   <View
                     key={index}
@@ -610,7 +610,7 @@ const PRofileStep1 = () => {
         <View style={tw`h-40`} />
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
-    </View>
+    </SafeAreaView>
   );
 };
 
