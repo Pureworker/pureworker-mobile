@@ -14,7 +14,7 @@ export const getUnreadMessages = async (): Promise<number> => {
     },
   });
 
-  console.log(response?.data?.chats?.[0]?.chatsWithUnreadMessages);
+  // console.log(response?.data?.chats?.[0]?.chatsWithUnreadMessages);
 
   store.dispatch(
     // updateUnreadChat(response?.data?.chats?.[0]?.chatsWithUnreadMessages),
@@ -34,7 +34,7 @@ export const _getUnreadMessages = async (): Promise<number> => {
     },
   });
   console.log('ehn:', response?.data);
-  console.log(response?.data?.chats?.[0]?.chatsWithUnreadMessages);
+  // console.log(response?.data?.chats?.[0]?.chatsWithUnreadMessages);
   store.dispatch(
     // updateUnreadChat(response?.data?.chats?.[0]?.chatsWithUnreadMessages),
     updateUnreadChat(response?.data?.number),

@@ -385,7 +385,7 @@ const Account = () => {
                         source={{
                           uri: profileData?.profilePic || imageUrl,
                           headers: {Authorization: 'someAuthToken'},
-                          priority: FastImage.priority.normal,
+                          priority: FastImage.priority.high,
                         }}
                         resizeMode={FastImage.resizeMode.cover}
                       />

@@ -65,7 +65,7 @@ export default function Index({
             source={{
               uri: text,
               headers: {Authorization: 'someAuthToken'},
-              priority: FastImage.priority.normal,
+              priority: FastImage.priority.high,
             }}
             resizeMode={FastImage.resizeMode.contain}
           />

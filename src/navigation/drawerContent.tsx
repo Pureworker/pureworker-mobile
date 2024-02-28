@@ -27,6 +27,7 @@ import FastImage from 'react-native-fast-image';
 import socket from '../utils/socket';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import LocationIcon2 from '../assets/svg/Location2';
+import LocationIcon3 from '../assets/svg/LocationIcon3';
 
 const DrawerContent = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -43,7 +44,7 @@ const DrawerContent = () => {
       label: 'Change Address',
       route: 'AddAddress',
       icon: images.location1,
-      icon2: <LocationIcon2 />,
+      icon2: <LocationIcon3 />,
       notint: true,
     },
     {label: 'Referrals', route: 'Referrals', icon: images.info, notint: false},
@@ -296,7 +297,12 @@ const DrawerContent = () => {
                 // }
               }}>
               <FastImage
-                style={{width: 50, height: 50, borderRadius: 25}}
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: 25,
+                }}
+                
                 source={{
                   uri:
                     userData?.profilePic ||

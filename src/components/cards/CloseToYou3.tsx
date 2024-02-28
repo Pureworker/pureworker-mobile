@@ -55,7 +55,7 @@ const ClosetoYou3 = ({item, index, navigation}: any) => {
                 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
               // 'https://res.cloudinary.com/dr0pef3mn/image/upload/v1694275934/Assets/1694275933654-Ellipse%2014.png.png',
               headers: {Authorization: 'someAuthToken'},
-              priority: FastImage.priority.normal,
+              priority: FastImage.priority.high,
             }}
             resizeMode={FastImage.resizeMode.cover}
           />

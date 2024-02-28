@@ -7,6 +7,7 @@ import {
   StatusBar,
   FlatList,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -56,14 +57,15 @@ const _Services = ({route}: any) => {
   }, [dispatch, id]);
 
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView>
         <View
           style={{
             marginTop:
               Platform.OS === 'ios'
-                ? getStatusBarHeight(true)
-                : StatusBar.currentHeight &&
+                ? 10
+                : // getStatusBarHeight(true)
+                  StatusBar.currentHeight &&
                   StatusBar.currentHeight + getStatusBarHeight(true),
           }}
         />
@@ -305,7 +307,7 @@ const _Services = ({route}: any) => {
         <View style={tw`h-20`} />
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
-    </View>
+    </SafeAreaView>
   );
 };
 

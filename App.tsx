@@ -32,7 +32,13 @@ import toastConfig from './src/utils/toastConfig';
 import SettingsService from './src/tracking/SettingsService';
 import {registerTransistorAuthorizationListener} from './src/tracking/authorization';
 import ENV from './src/tracking/ENV';
-import {PERMISSIONS, check, request, RESULTS} from 'react-native-permissions';
+import {
+  PERMISSIONS,
+  check,
+  request,
+  RESULTS,
+  requestNotifications,
+} from 'react-native-permissions';
 import {ToastShort} from './src/utils/utils';
 import Geolocation from '@react-native-community/geolocation';
 import TrackRiderLocation from './src/tracking/trkLocation';
@@ -219,7 +225,7 @@ const App = () => {
       };
     }
   };
- const get = async () => {
+  const get = async () => {
     let _fcmtoken = await AsyncStorage.getItem('fcmtoken');
   };
   useEffect(() => {
@@ -268,7 +274,29 @@ const App = () => {
         // Handle error, if any
       }
     };
+    const requestNotificationPermissions2 = async () => {
+      try {
+        const {status, settings} = await requestNotifications([
+          'alert',
+          'badge',
+          'sound',
+        ]);
+        console.log('Notification permissions status:', status);
+        console.log('Notification settings:', settings);
 
+        if (status === 'granted') {
+          // Permissions granted, you can proceed with your notification logic
+        } else {
+          // Permissions denied, handle accordingly (show a message, etc.)
+          Alert.alert(
+            'Permission Denied',
+            'You need to enable notifications for this app.',
+          );
+        }
+      } catch (error) {
+        console.error('Error requesting notification permissions:', error);
+      }
+    };
     const handleRequestNotificationPermission = async () => {
       const status = await checkNotificationPermission();
       if (status === RESULTS.DENIED) {
@@ -276,6 +304,7 @@ const App = () => {
       }
     };
     handleRequestNotificationPermission();
+    requestNotificationPermissions2();
   }, []);
   function HomeStack() {
     const userType = useSelector((state: any) => state.user.isLoggedIn);

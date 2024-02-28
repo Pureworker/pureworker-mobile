@@ -209,7 +209,7 @@ const ViewLocation = ({route}: any) => {
                         //   source={{
                         //     uri: item?.serviceProvider?.profilePic,
                         //     headers: {Authorization: 'someAuthToken'},
-                        //     priority: FastImage.priority.normal,
+                        //     priority: FastImage.priority.high,
                         //   }}
                         //   resizeMode={FastImage.resizeMode.cover}
                         // />

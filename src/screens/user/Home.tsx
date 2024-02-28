@@ -43,6 +43,7 @@ import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {ToastLong} from '../../utils/utils';
 import WelcomeModal from '../../components/SignupModal';
 import axios from 'axios';
+import {getUnreadMessages} from '../../utils/api/chat';
 
 const Home = () => {
   useEffect(() => {
@@ -131,6 +132,7 @@ const Home = () => {
     initGetPopularServices();
     initGetProviderByProximity();
     getSupportUser('');
+    getUnreadMessages();
   }, [dispatch]);
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
@@ -156,7 +158,63 @@ const Home = () => {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    // Call your refresh function here
+    const initGetUsers = async () => {
+      const res: any = await getUser('');
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addUserData(res?.data?.user));
+      }
+      console.error('GEOLOCATION::', res?.data?.user?.geoLocation);
+      const userData = res?.data?.user;
+      if (
+        !userData?.geoLocation ||
+        !userData.geoLocation.coordinates ||
+        (userData.geoLocation.coordinates[0] === 0 &&
+          userData.geoLocation.coordinates[1] === 0) ||
+        !userData.geoLocation.coordinates.length
+      ) {
+        navigation.navigate('AddAddress');
+        ToastLong('Address is required');
+      } else {
+      }
+    };
+    const initGetCategory = async () => {
+      setisLoading(true);
+      const res: any = await getCategory('');
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addSCategory(res?.data?.data));
+      }
+      setisLoading(false);
+    };
+    const initGetPopularServices = async () => {
+      setisLoading(true);
+      const res: any = await getPopularService('');
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addPopularServices(res?.data?.data));
+      }
+      setisLoading(false);
+    };
+    const initGetProviderByProximity = async () => {
+      setisLoading(true);
+      const res: any = await getProviderByProximity(userData?._id);
+      if (res?.status === 201 || res?.status === 200) {
+        if (res?.data?.data) {
+          dispatch(addcloseProvider(res?.data?.data));
+        }
+        if (res?.data === undefined) {
+          dispatch(addcloseProvider([]));
+        }
+        if (res?.data?.data && res?.data?.data?.length === 0) {
+          dispatch(addcloseProvider([]));
+        }
+      }
+      setisLoading(false);
+    };
+    initGetUsers();
+    initGetCategory();
+    initGetPopularServices();
+    initGetProviderByProximity();
+    getSupportUser('');
+    getUnreadMessages();
     setTimeout(() => {
       setRefreshing(false);
     }, 2000); // Simulating a delay, replace with your actual refresh logic
@@ -190,20 +248,26 @@ const Home = () => {
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
               {userData?.profilePic ? (
                 <FastImage
-                  style={{width: 50, height: 50, borderRadius: 25}}
+                  style={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: 25,
+                    borderWidth: 1,
+                    borderColor: colors.parpal,
+                  }}
                   // source={
                   //   userData?.profilePic
                   //     ? {
                   //         uri: userData?.profilePic,
                   //         headers: {Authorization: 'someAuthToken'},
-                  //         priority: FastImage.priority.normal,
+                  //         priority: FastImage.priority.high,
                   //       }
                   //     : images.profile
                   // }
                   source={{
                     uri: userData?.profilePic,
                     headers: {Authorization: 'someAuthToken'},
-                    priority: FastImage.priority.normal,
+                    priority: FastImage.priority.high,
                   }}
                   resizeMode={FastImage.resizeMode.cover}
                 />
@@ -443,7 +507,9 @@ const Home = () => {
                         categoryName={item?.name}
                         catId={item?._id || item?.id}
                         isOpen={item?._id === openDropdownId}
-                        onDropdownClick={(catId:any) => handleDropdownClick(catId)}
+                        onDropdownClick={(catId: any) =>
+                          handleDropdownClick(catId)
+                        }
                       />
                     );
                   })}

@@ -52,7 +52,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
                   item?.profilePic ||
                   'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                 headers: {Authorization: 'someAuthToken'},
-                priority: FastImage.priority.normal,
+                priority: FastImage.priority.high,
               }}
               resizeMode={FastImage.resizeMode.cover}
             />

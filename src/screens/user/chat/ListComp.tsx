@@ -93,7 +93,7 @@ export default function ListComp({navigation, item}: any) {
               // item?.profilePicture ||
               // 'https://res.cloudinary.com/dpdytuqlf/image/upload/v1707651780/category/k17kfdlowt9qnflorody.jpg',
               headers: {Authorization: 'someAuthToken'},
-              priority: FastImage.priority.normal,
+              priority: FastImage.priority.high,
             }}
             resizeMode={FastImage.resizeMode.cover}
           />

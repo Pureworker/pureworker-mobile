@@ -620,7 +620,7 @@ const PRofileStep2 = () => {
                       source={{
                         uri: completeProfileData?.profilePic || imageUrl,
                         headers: {Authorization: 'someAuthToken'},
-                        priority: FastImage.priority.normal,
+                        priority: FastImage.priority.high,
                       }}
                       resizeMode={FastImage.resizeMode.cover}
                     />

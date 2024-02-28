@@ -306,7 +306,7 @@ const ServiceProviderProfile = () => {
               'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
             // 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
             headers: {Authorization: 'someAuthToken'},
-            priority: FastImage.priority.normal,
+            priority: FastImage.priority.high,
           }}
           resizeMode={FastImage.resizeMode.cover}>
           <View
@@ -851,7 +851,7 @@ const ServiceProviderProfile = () => {
                                   source={{
                                     uri: item.item,
                                     headers: {Authorization: 'someAuthToken'},
-                                    priority: FastImage.priority.normal,
+                                    priority: FastImage.priority.high,
                                   }}
                                   resizeMode={FastImage.resizeMode.cover}
                                 />
@@ -915,7 +915,7 @@ const ServiceProviderProfile = () => {
                                 source={{
                                   uri: item,
                                   headers: {Authorization: 'someAuthToken'},
-                                  priority: FastImage.priority.normal,
+                                  priority: FastImage.priority.high,
                                 }}
                                 resizeMode={FastImage.resizeMode.cover}
                               />
@@ -956,7 +956,7 @@ const ServiceProviderProfile = () => {
                                 source={{
                                   uri: item,
                                   headers: {Authorization: 'someAuthToken'},
-                                  priority: FastImage.priority.normal,
+                                  priority: FastImage.priority.high,
                                 }}
                                 resizeMode={FastImage.resizeMode.cover}
                               />
@@ -1037,7 +1037,7 @@ const ServiceProviderProfile = () => {
                                       item?.item?.user?.profilePic ??
                                       'https://res.cloudinary.com/dr0pef3mn/image/upload/v1691626246/Assets/1691626245707-Frame%2071.png.png',
                                     headers: {Authorization: 'someAuthToken'},
-                                    priority: FastImage.priority.normal,
+                                    priority: FastImage.priority.high,
                                   }}
                                   resizeMode={FastImage.resizeMode.cover}
                                 />
@@ -1293,7 +1293,7 @@ const ServiceProviderProfile = () => {
                                   item?.item?.user?.profilePic ??
                                   'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                                 headers: {Authorization: 'someAuthToken'},
-                                priority: FastImage.priority.normal,
+                                priority: FastImage.priority.high,
                               }}
                               resizeMode={FastImage.resizeMode.cover}
                             />
@@ -1451,7 +1451,7 @@ const ServiceProviderProfile = () => {
             source={{
               uri: selectedImage,
               headers: {Authorization: 'someAuthToken'},
-              priority: FastImage.priority.normal,
+              priority: FastImage.priority.high,
             }}
             resizeMode={FastImage.resizeMode.contain}
           />

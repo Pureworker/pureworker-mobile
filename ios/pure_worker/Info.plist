@@ -56,6 +56,8 @@
 	<string>Pureworker requires access to the photo library to upload pictures.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Pureworker requires access to the photo library to upload pictures.</string>
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>PUREWORKER: Allow Notification to receive alert about important news!</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Inter-Bold.ttf</string>

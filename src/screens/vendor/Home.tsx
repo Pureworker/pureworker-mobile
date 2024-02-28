@@ -273,13 +273,19 @@ const Home = ({navigation}: any) => {
             ]}>
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
               <FastImage
-                style={{width: 50, height: 50, borderRadius: 25}}
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: 25,
+                  borderWidth: 1,
+                  borderColor: colors.parpal,
+                }}
                 source={
                   userData?.profilePic
                     ? {
                         uri: userData?.profilePic,
                         headers: {Authorization: 'someAuthToken'},
-                        priority: FastImage.priority.normal,
+                        priority: FastImage.priority.high,
                       }
                     : images.profile
                 }
