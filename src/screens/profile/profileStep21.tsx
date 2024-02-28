@@ -220,7 +220,6 @@ const ProfileStep21 = () => {
     // initGetProfile();
     initGetProviderNew();
   }, []);
-  // Function to handle changes in a portfolio item
   const handlePortfolioItemChange = (index: any, updatedData: any) => {
     // Create a copy of the current portfolio data
     const updatedPortfolioData = [...portfolioToServiceCount];
@@ -252,6 +251,7 @@ const ProfileStep21 = () => {
       selectionLimit: 1,
       cameraType: 'front',
       rotation: 360,
+      
     };
     try {
       if (Platform.OS === 'ios') {
@@ -346,6 +346,35 @@ const ProfileStep21 = () => {
   const [editModal, seteditModal] = useState(false);
   const profileData = useSelector((state: any) => state.user.profileData);
 
+  // const PickImage2 = () => {
+  //   ImagePicker.openCamera({
+  //     width: 300,
+  //     height: 400,
+  //     borderRadius: 200,
+  //     cropping: true,
+  //     freeStyleCropEnabled: true,
+  //     compressImageQuality: 0.1,
+  //   })
+  //     .then(response => {
+  //       const uri = response.path;
+  //       const type = response.mime;
+  //       const name = response.modificationDate
+  //         ? response.modificationDate
+  //         : response.mime;
+
+  //       const source = {
+  //         uri,
+  //         type,
+  //         name,
+  //       };
+  //       //
+  //       uploadAvatar(source);
+  //       // uploadQr2(image.data);
+  //       //
+  //     })
+  //     .catch(e => {});
+  // };
+
   return (
     <View style={[{flex: 1, backgroundColor: colors.greyLight}]}>
       <Header
@@ -423,6 +452,18 @@ const ProfileStep21 = () => {
                         }}
                         resizeMode={FastImage.resizeMode.cover}
                       />
+                      // <Image
+                      //   style={[
+                      //     tw``,
+                      //     {
+                      //       width: 145,
+                      //       height: 145,
+                      //       borderRadius: 145,
+                      //     },
+                      //   ]}
+                      //   source={{uri: completeProfileData?.profilePic || imageUrl}}
+                      //   resizeMode="cover"
+                      // />
                     )}
                   </TouchableOpacity>
                 ) : (

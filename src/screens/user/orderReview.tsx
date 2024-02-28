@@ -453,7 +453,7 @@ const OrderReview = ({route}: any) => {
             onPress={() => setready(false)}
             style={tw`flex-1`}
           />
-          <View style={[tw`p-4 mt-auto bg-[#D9D9D9]`, {minHeight: '55%'}]}>
+          <View style={[tw`p-4 mt-auto bg-[#D9D9D9]`, {minHeight: '65%'}]}>
             <TouchableOpacity
               onPress={() => {
                 setready(false);
