@@ -99,7 +99,11 @@ const ProfileStep4 = () => {
         backgroundColor: '#88087B',
       });
       setTimeout(() => {
-        navigation.navigate('FaceDetection', {page: 'Profile'});
+        if (userData?.liveTest === false) {
+          navigation.navigate('FaceDetection', {page: 'Profile'});
+        } else {
+          navigation.navigate('Congratulations');
+        }
       }, 5000);
       // navigation.navigate('Congratulations');
       dispatch(addformStage(6));
@@ -148,7 +152,14 @@ const ProfileStep4 = () => {
     console.log('result', res?.data);
     if (res?.status === 200 || res?.status === 201) {
       // navigation.navigate('Congratulations');
-      navigation.navigate('FaceDetection', {page: 'Profile'});
+      // navigation.navigate('FaceDetection', {page: 'Profile'});
+      setTimeout(() => {
+        if (userData?.liveTest === false) {
+          navigation.navigate('FaceDetection', {page: 'Profile'});
+        } else {
+          navigation.navigate('Congratulations');
+        }
+      }, 5000);
       dispatch(addformStage(6));
       setisLoading(false);
     } else {

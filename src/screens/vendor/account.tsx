@@ -9,6 +9,7 @@ import {
   ScrollView,
   ActivityIndicator,
   PermissionsAndroid,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -24,7 +25,6 @@ import TextInputs from '../../components/TextInputs';
 import TextWrapper from '../../components/TextWrapper';
 import {generalStyles} from '../../constants/generalStyles';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import storage from 'redux-persist/es/storage';
 import {
   addProfileData,
   addUserData,
@@ -302,13 +302,13 @@ const Account = () => {
 
   return (
     <>
-      <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+      <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
         <ScrollView>
           <View
             style={{
               marginTop:
                 Platform.OS === 'ios'
-                  ? getStatusBarHeight(true)
+                  ? 12
                   : StatusBar.currentHeight &&
                     StatusBar.currentHeight + getStatusBarHeight(true),
             }}
@@ -691,7 +691,7 @@ const Account = () => {
               />
             </TouchableOpacity>
 
-            {userData?.liveTest === false && (
+            {/* {userData?.liveTest === false && (
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('FaceDetection', {page: 'Account'});
@@ -705,12 +705,12 @@ const Account = () => {
                   fontFamily={'Inter-SemiBold'}
                 />
               </TouchableOpacity>
-            )}
+            )} */}
           </View>
           <View style={tw`h-30`} />
         </ScrollView>
         <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
-      </View>
+      </SafeAreaView>
       <Modal
         isVisible={addModal}
         onModalHide={() => {

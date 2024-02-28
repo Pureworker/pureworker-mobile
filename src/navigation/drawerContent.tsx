@@ -5,6 +5,7 @@ import {
   Image,
   Platform,
   PermissionsAndroid,
+  Linking,
 } from 'react-native';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import tw from 'twrnc';
@@ -51,7 +52,11 @@ const DrawerContent = () => {
       label: 'Rate Our App',
       route: 'PrivacyPolicy',
       icon: images.rate,
+      linkPlay:
+        'https://play.google.com/store/apps/details?id=com.pure_worker_app',
+      linkApple: 'https://apps.apple.com/us/app/pureworker/id6462559964',
     },
+
     // {
     //   label: 'FaceDetection',
     //   route: 'FaceDetection',
@@ -63,6 +68,21 @@ const DrawerContent = () => {
     //   icon: images.rate,
     // },
   ];
+
+  const handleRateApp = (linkPlay, linkApple) => {
+    // Check the platform
+    if (Platform.OS === 'android') {
+      // If Android, open the Play Store link
+      Linking.openURL(linkPlay).catch(err =>
+        console.error('An error occurred: ', err),
+      );
+    } else if (Platform.OS === 'ios') {
+      // If iOS, open the App Store link
+      Linking.openURL(linkApple).catch(err =>
+        console.error('An error occurred: ', err),
+      );
+    }
+  };
   const dispatch = useDispatch();
   const [InfoModal, setInfoModal] = useState(false);
   const [ContactAgent, setContactAgent] = useState(false);
@@ -369,7 +389,11 @@ const DrawerContent = () => {
               <TouchableOpacity
                 key={index}
                 onPress={() => {
-                  handleNavigation(link.route);
+                  if (link.label === 'Rate Our App') {
+                    handleRateApp(link.linkPlay, link.linkApple);
+                  } else {
+                    handleNavigation(link.route);
+                  }
                 }}
                 style={[
                   tw` w-full  border-[#F2F2F2]  flex flex-row items-center`,

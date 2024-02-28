@@ -277,6 +277,7 @@ export default function FaceDetection({navigation, route}: any) {
             <TouchableOpacity
               onPress={() => {
                 // navigation.goBack()
+                navigation.navigate('Congratulations');
               }}>
               <Text
                 style={[
