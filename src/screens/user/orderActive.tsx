@@ -114,7 +114,7 @@ const OrderActive = ({route}: any) => {
               : res?.error?.data?.message
               ? res?.error?.data?.message
               : 'Oops!, an error occured',
-            duration: Snackbar.LENGTH_SHORT,
+            duration: Snackbar.LENGTH_LONG,
             textColor: '#fff',
             backgroundColor: '#88087B',
           });
@@ -124,7 +124,7 @@ const OrderActive = ({route}: any) => {
       } else {
         Snackbar.show({
           text: 'Please fill all fields',
-          duration: Snackbar.LENGTH_SHORT,
+          duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
@@ -133,7 +133,7 @@ const OrderActive = ({route}: any) => {
     } catch (error) {
       Snackbar.show({
         text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
@@ -306,16 +306,15 @@ const OrderActive = ({route}: any) => {
           await initGetOrders();
           Alert.alert('successful');
         } else {
-          Snackbar.show({
-            text: res?.error?.message
-              ? res?.error?.message
-              : res?.error?.data?.message
-              ? res?.error?.data?.message
-              : 'Oops!, an error occured',
-            duration: Snackbar.LENGTH_LONG,
-            textColor: '#fff',
-            backgroundColor: '#88087B',
-          });
+          ToastLong(
+            `${
+              res?.error?.message
+                ? res?.error?.message
+                : res?.error?.data?.message
+                ? res?.error?.data?.message
+                : 'Oops!, an error occured'
+            }`,
+          );
         }
         setisLoading(false);
         setInfoModal(false);

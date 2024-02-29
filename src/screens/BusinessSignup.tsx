@@ -215,7 +215,7 @@ export default function BusinessSignup() {
     if (userType === FREELANCER && dateErrorMessage.length > 0) {
       Snackbar.show({
         text: dateErrorMessage,
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
@@ -228,7 +228,7 @@ export default function BusinessSignup() {
     if (!email) {
       Snackbar.show({
         text: 'Please enter your email address',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
@@ -237,7 +237,7 @@ export default function BusinessSignup() {
     if (userType === FREELANCER && !firstName) {
       Snackbar.show({
         text: 'Please enter your firstName',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
@@ -246,7 +246,7 @@ export default function BusinessSignup() {
     if (userType !== FREELANCER && !cacNo) {
       Snackbar.show({
         text: 'Please enter your cac No',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
@@ -255,7 +255,7 @@ export default function BusinessSignup() {
     if (userType !== FREELANCER && !name) {
       Snackbar.show({
         text: 'Please enter your Business Name',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
@@ -264,7 +264,7 @@ export default function BusinessSignup() {
     if (userType === FREELANCER && !lastName) {
       Snackbar.show({
         text: 'Please enter your lastName',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
@@ -275,14 +275,14 @@ export default function BusinessSignup() {
       if (!validateEmail(email)) {
         Snackbar.show({
           text: 'Please enter a valid email',
-          duration: Snackbar.LENGTH_SHORT,
+          duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
       } else if (!isValidPhoneNumber(phoneName)) {
         Snackbar.show({
           text: 'Please enter a valid phone number',
-          duration: Snackbar.LENGTH_SHORT,
+          duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
@@ -373,7 +373,7 @@ export default function BusinessSignup() {
     } else {
       Snackbar.show({
         text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });

@@ -210,7 +210,7 @@ export default function RateyourExperience({
     // if (!isValid()) {
     //   Snackbar.show({
     //     text: 'Please provide a comment.',
-    //     duration: Snackbar.LENGTH_SHORT,
+    //     duration: Snackbar.LENGTH_LONG,
     //     backgroundColor: 'red',
     //   });
     //   return;

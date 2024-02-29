@@ -232,7 +232,7 @@ const PaymentMethod2 = ({route}: any) => {
                   if (Number(text) < 100) {
                     Snackbar.show({
                       text: 'Minimum amount is  ₦100',
-                      duration: Snackbar.LENGTH_SHORT,
+                      duration: Snackbar.LENGTH_LONG,
                       textColor: '#fff',
                       backgroundColor: '#88087B',
                     });

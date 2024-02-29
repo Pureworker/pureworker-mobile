@@ -54,7 +54,7 @@ const DeactivateAccount = () => {
     if (res?.status === 201 || res?.status === 200) {
       Snackbar.show({
         text: 'Deactivate Request Successful.',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
@@ -70,7 +70,7 @@ const DeactivateAccount = () => {
     if (res?.status === 201 || res?.status === 200 || res?.status === 204) {
       Snackbar.show({
         text: 'Delete Request Successful.',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });

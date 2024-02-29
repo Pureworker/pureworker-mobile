@@ -153,7 +153,7 @@ const EditServices = ({route}: any) => {
           console.log('err', error);
           Snackbar.show({
             text: JSON.stringify(error),
-            duration: Snackbar.LENGTH_SHORT,
+            duration: Snackbar.LENGTH_LONG,
             textColor: '#fff',
             backgroundColor: '#88087B',
           });
@@ -161,7 +161,7 @@ const EditServices = ({route}: any) => {
     } else {
       Snackbar.show({
         text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
@@ -640,7 +640,7 @@ const EditServices = ({route}: any) => {
                         if (!shortDescription) {
                           Snackbar.show({
                             text: 'Please enter potfolio description',
-                            duration: Snackbar.LENGTH_SHORT,
+                            duration: Snackbar.LENGTH_LONG,
                             textColor: '#fff',
                             backgroundColor: '#88087B',
                           });

@@ -144,7 +144,7 @@ const ProfileStep5 = () => {
             : res?.error?.data?.message
             ? res?.error?.data?.message
             : 'Oops!, an error occured',
-          duration: Snackbar.LENGTH_SHORT,
+          duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
@@ -152,7 +152,7 @@ const ProfileStep5 = () => {
     } else {
       Snackbar.show({
         text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });

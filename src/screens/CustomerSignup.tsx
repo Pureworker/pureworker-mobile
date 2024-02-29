@@ -185,7 +185,7 @@ export default function CustomerSignup() {
     if (dateErrorMessage.length > 0) {
       Snackbar.show({
         text: dateErrorMessage,
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
@@ -198,7 +198,7 @@ export default function CustomerSignup() {
     if (!email) {
       Snackbar.show({
         text: 'Please enter your email address',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
@@ -218,7 +218,7 @@ export default function CustomerSignup() {
       if (!validateEmail(email)) {
         Snackbar.show({
           text: 'Please enter a valid email',
-          duration: Snackbar.LENGTH_SHORT,
+          duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
@@ -227,7 +227,7 @@ export default function CustomerSignup() {
       } else if (!isValidPhoneNumber(phoneName)) {
         Snackbar.show({
           text: 'Please enter a valid phone number',
-          duration: Snackbar.LENGTH_SHORT,
+          duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
@@ -277,7 +277,7 @@ export default function CustomerSignup() {
             //   : res?.error?.data?.message
             //   ? res?.error?.data?.message
             //   : 'Oops!, an error occured',
-            duration: Snackbar.LENGTH_SHORT,
+            duration: Snackbar.LENGTH_LONG,
             textColor: '#fff',
             backgroundColor: '#88087B',
           });
@@ -294,7 +294,7 @@ export default function CustomerSignup() {
         //     console.log('err', error);
         //     Snackbar.show({
         //       text: error.data.message,
-        //       duration: Snackbar.LENGTH_SHORT,
+        //       duration: Snackbar.LENGTH_LONG,
         //       textColor: '#fff',
         //       backgroundColor: '#88087B',
         //     });
@@ -303,7 +303,7 @@ export default function CustomerSignup() {
     } else {
       Snackbar.show({
         text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });

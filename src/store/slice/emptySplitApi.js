@@ -21,7 +21,7 @@ export const emptySplitApi = createApi({
         } else {
           store.dispatch(logout())
           Snackbar.show({
-            text: 'Token has expried please login again', duration: Snackbar.LENGTH_SHORT, backgroundColor: '#88087B',
+            text: 'Token has expried please login again', duration: Snackbar.LENGTH_LONG, backgroundColor: '#88087B',
           });
           headers.set('authorization', '')
         }

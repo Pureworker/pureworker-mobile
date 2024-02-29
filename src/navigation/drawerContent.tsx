@@ -22,13 +22,10 @@ import colors from '../constants/colors';
 import {getUser, updateUserData, uploadAssetsDOCorIMG} from '../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
-// import Toast from 'react-native-toast-message';
 import FastImage from 'react-native-fast-image';
 import socket from '../utils/socket';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
-import LocationIcon2 from '../assets/svg/Location2';
 import LocationIcon3 from '../assets/svg/LocationIcon3';
-
 const DrawerContent = () => {
   const navigation = useNavigation<StackNavigation>();
   const navLinks = [
@@ -82,7 +79,6 @@ const DrawerContent = () => {
     //   icon: images.rate,
     // },
   ];
-
   const handleRateApp = (linkPlay, linkApple) => {
     // Check the platform
     if (Platform.OS === 'android') {
@@ -101,7 +97,6 @@ const DrawerContent = () => {
   const [InfoModal, setInfoModal] = useState(false);
   const [ContactAgent, setContactAgent] = useState(false);
   const [loading, setloading] = useState(false);
-
   const handleNavigation = (route: string) => {
     if (route === 'Logout') {
       dispatch(logout());
@@ -110,10 +105,8 @@ const DrawerContent = () => {
     }
   };
   const userType = useSelector((state: any) => state.user.isLoggedIn);
-  //
   const userData = useSelector((state: any) => state.user.userData);
   const supportUser = useSelector((store: any) => store.user.supportUser);
-
   const [PhotoUri, setPhotoUri] = useState('');
   const options = {mediaType: 'photo', selectionLimit: 1};
   const openLibraryfordp = () => {
@@ -263,7 +256,7 @@ const DrawerContent = () => {
           : res?.error?.data?.message
           ? res?.error?.data?.message
           : 'Oops!, an error occured',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });

@@ -243,7 +243,7 @@ const PRofileStep2 = () => {
           console.log('err', error);
           Snackbar.show({
             text: JSON.stringify(error),
-            duration: Snackbar.LENGTH_SHORT,
+            duration: Snackbar.LENGTH_LONG,
             textColor: '#fff',
             backgroundColor: '#88087B',
           });
@@ -251,7 +251,7 @@ const PRofileStep2 = () => {
     } else {
       Snackbar.show({
         text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
@@ -416,7 +416,7 @@ const PRofileStep2 = () => {
             : res?.error?.data?.message
             ? res?.error?.data?.message
             : 'Oops!, an error occured',
-          duration: Snackbar.LENGTH_SHORT,
+          duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
@@ -424,7 +424,7 @@ const PRofileStep2 = () => {
     } else {
       Snackbar.show({
         text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });

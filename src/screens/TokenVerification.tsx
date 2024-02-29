@@ -68,7 +68,7 @@ const TokenVerification = () => {
         console.log('err', error);
         Snackbar.show({
           text: error.data.message,
-          duration: Snackbar.LENGTH_SHORT,
+          duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
@@ -139,7 +139,7 @@ const TokenVerification = () => {
             : res?.error?.data?.message
             ? res?.error?.data?.message
             : 'Oops!, an error occured',
-          duration: Snackbar.LENGTH_SHORT,
+          duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
@@ -165,7 +165,7 @@ const TokenVerification = () => {
           text: res?.error?.message
             ? res?.error?.message
             : 'Oops!, an error occured',
-          duration: Snackbar.LENGTH_SHORT,
+          duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });

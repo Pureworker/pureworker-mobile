@@ -89,7 +89,7 @@ const OrderDetails = () => {
       if (!address) {
         Snackbar.show({
           text: 'Address is required for Offline or Hybrid Jobs',
-          duration: Snackbar.LENGTH_SHORT,
+          duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
@@ -128,7 +128,7 @@ const OrderDetails = () => {
     } else {
       Snackbar.show({
         text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });

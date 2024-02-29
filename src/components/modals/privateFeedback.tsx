@@ -41,7 +41,7 @@ export default function PrivateFeedback({
     if (res?.status === 201 || res?.status === 200) {
       Snackbar.show({
         text: 'Your feedback has been received.',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
@@ -53,7 +53,7 @@ export default function PrivateFeedback({
           : res?.error?.data?.message
           ? res?.error?.data?.message
           : 'Oops!, an error occured',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });

@@ -205,7 +205,7 @@ export default function Portfoliocomp({servicePrice}: any) {
           } else {
             Snackbar.show({
               text: 'Max of 3 portfolios for each service',
-              duration: Snackbar.LENGTH_SHORT,
+              duration: Snackbar.LENGTH_LONG,
               textColor: '#fff',
               backgroundColor: '#88087B',
             });
@@ -214,7 +214,7 @@ export default function Portfoliocomp({servicePrice}: any) {
           //   if (!shortDescription) {
           //     Snackbar.show({
           //       text: 'Please enter potfolio description',
-          //       duration: Snackbar.LENGTH_SHORT,
+          //       duration: Snackbar.LENGTH_LONG,
           //       textColor: '#fff',
           //       backgroundColor: '#88087B',
           //     });

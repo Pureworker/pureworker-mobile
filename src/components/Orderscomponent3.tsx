@@ -595,7 +595,7 @@ const Orderscomponent3 = ({
                     setmodalSection('All');
                     Snackbar.show({
                       text: 'You can’t cancel this order. Only Pending and Accepted Orders can be canceled.',
-                      duration: Snackbar.LENGTH_SHORT,
+                      duration: Snackbar.LENGTH_LONG,
                       textColor: '#fff',
                       backgroundColor: '#88087B',
                     });

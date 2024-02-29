@@ -248,7 +248,7 @@ export default function FaceDetection({navigation, route}: any) {
     } catch (error) {
       Snackbar.show({
         text: error?.message || 'Oops!, an error occured',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });

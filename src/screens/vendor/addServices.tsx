@@ -154,7 +154,7 @@ const AddServices = () => {
           console.log('err', error);
           Snackbar.show({
             text: JSON.stringify(error),
-            duration: Snackbar.LENGTH_SHORT,
+            duration: Snackbar.LENGTH_LONG,
             textColor: '#fff',
             backgroundColor: '#88087B',
           });
@@ -162,7 +162,7 @@ const AddServices = () => {
     } else {
       Snackbar.show({
         text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
@@ -192,7 +192,7 @@ const AddServices = () => {
       console.log('err', error);
       Snackbar.show({
         text: error?.data?.message,
-        duration: Snackbar.LENGTH_SHORT,
+        duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
