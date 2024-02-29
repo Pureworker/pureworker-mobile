@@ -159,8 +159,10 @@ const Orderscomponent3 = ({
                   />
                 </View>
                 <View style={tw`ml-auto`}>
-                  {status === 'INPROGRESS' &&
-                    item?.isCompletedByProvider === false && (
+                  {status === 'INPROGRESS' 
+                  // &&
+                  //   item?.isCompletedByProvider === false 
+                    && (
                       <View style={[tw``, {}]}>
                         <Textcomp
                           text={'IN PROGRESS'}

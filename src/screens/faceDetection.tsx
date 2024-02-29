@@ -40,13 +40,11 @@ LogBox.ignoreLogs(['new NativeEventEmitter']);
 const eventManager = new NativeEventEmitter(RNFaceApi);
 var image1 = new MatchFacesImage();
 var image2 = new MatchFacesImage();
-
 export default function FaceDetection({navigation, route}: any) {
   const [img1, setImg1] = useState(require('../assets/images/us_flag.png'));
   const [img2, setImg2] = useState(require('../assets/images/welcome.png'));
   const [similarity, setSimilarity] = useState('nil');
   const [liveness, setLiveness] = useState('nil');
-
   const {page} = route.params;
   useEffect(() => {
     eventManager.addListener('videoEncoderCompletionEvent', json => {
@@ -275,6 +273,10 @@ export default function FaceDetection({navigation, route}: any) {
             <TouchableOpacity
               onPress={() => {
                 // navigation.goBack()
+                FaceSDK.stopLivenessProcessing(
+                  () => {},
+                  () => {},
+                );
                 navigation.navigate('Congratulations');
               }}>
               <Text
