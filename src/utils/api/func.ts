@@ -804,7 +804,7 @@ export const addPushToken = async (param: any) => {
     if (response.status === 200) {
       console.log('response data:', response?.data);
     }
-    console.log('response', response);
+    // console.log('response', response);
     return response;
   } catch (error) {
     // console.log('addPushToken', error, error?.response?.data);
@@ -1248,7 +1248,7 @@ export const getSupportUser = async (param: any) => {
       },
     });
     if (response?.status === 201 || response?.status === 200) {
-      console.log('getSupportUser:', response?.data);
+      console.log('getSupportUser:', response?.status);
       store.dispatch(addsupportUser(response?.data?.data));
     }
     //   console.log("res", response);

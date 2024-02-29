@@ -7,6 +7,7 @@ import {
   Platform,
   StatusBar,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -51,7 +52,7 @@ const Wallet = () => {
   }, [dispatch, navigation]);
   return (
     <>
-      <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+      <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
         <ScrollView
           style={tw`flex-1 h-full `}
           contentContainerStyle={{flex: 1}}>
@@ -59,7 +60,8 @@ const Wallet = () => {
             style={{
               marginTop:
                 Platform.OS === 'ios'
-                  ? getStatusBarHeight(true)
+                  ? 10
+                  // getStatusBarHeight(true)
                   : StatusBar.currentHeight &&
                     StatusBar.currentHeight + getStatusBarHeight(true),
             }}
@@ -373,7 +375,7 @@ const Wallet = () => {
             </View> */}
           </View>
         </ScrollView>
-      </View>
+      </SafeAreaView>
       <Modal
         isVisible={InfoModal}
         onModalHide={() => {

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import Toast from 'react-native-toast-message';
-import {Alert, PermissionsAndroid, Platform} from 'react-native';
+import { PermissionsAndroid} from 'react-native';
 import {addPushToken, getChatsbyuser, getChatsbyuser2} from './api/func';
 import {ToastLong} from './utils';
 import {useDispatch} from 'react-redux';
@@ -58,17 +58,8 @@ const GetFCMToken = async (userData: any) => {
         await AsyncStorage.setItem('fcmtoken', fcmtoken);
         const initToken = async (param: any) => {
           const res = await addPushToken(param);
-          // console.log('res', res, res?.data);
           if (res.status && (res.status === 200 || res.status === 201)) {
-            // Toast.show({
-            //   type: 'success',
-            //   text1: 'Token Added successfully',
-            // });
           } else {
-            // Toast.show({
-            //   type: 'error',
-            //   text1: res.error.data,
-            // });
           }
         };
         await initToken({fcmToken: fcmtoken});

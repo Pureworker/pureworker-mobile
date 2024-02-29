@@ -221,6 +221,13 @@ const Home = () => {
     }, 2000); // Simulating a delay, replace with your actual refresh logic
   };
 
+  useEffect(() => {
+    socket.connect();
+    console.log('-idid', socket.id);
+    socket.emit('authentication', userData);
+    // console.log('got here');
+  }, []);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />

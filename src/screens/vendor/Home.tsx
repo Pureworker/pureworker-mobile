@@ -250,6 +250,13 @@ const Home = ({navigation}: any) => {
     }, 2000);
   };
 
+  useEffect(() => {
+    socket.connect();
+    socket.connect();
+    console.log('-idid', socket.id);
+    socket.emit('authentication', userData);
+  }, []);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
@@ -263,7 +270,7 @@ const Home = ({navigation}: any) => {
               tw`items-center justify-center`,
               {
                 flexDirection: 'row',
-                alignItems: 'center',
+                alignItems: 'center', 
                 justifyContent: 'space-between',
                 marginHorizontal: 20,
                 paddingTop: Platform.OS === 'ios' ? 10 : 27.5,
