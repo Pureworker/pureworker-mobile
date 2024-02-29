@@ -130,7 +130,7 @@ const Orders = () => {
       // setLoading(false);
     }
   };
-  const debounce = (func:any, delay:any) => {
+  const debounce = (func: any, delay: any) => {
     let timeoutId: string | number | NodeJS.Timeout | undefined;
     return function (...args) {
       if (timeoutId) {
@@ -172,8 +172,8 @@ const Orders = () => {
           marginTop:
             Platform.OS === 'ios'
               ? 10
-              // getStatusBarHeight(true)
-              : StatusBar.currentHeight &&
+              : // getStatusBarHeight(true)
+                StatusBar.currentHeight &&
                 StatusBar.currentHeight + getStatusBarHeight(true),
         }}
       />
@@ -263,46 +263,42 @@ const Orders = () => {
           </TouchableOpacity>
         </View>
       )}
+      <View style={tw`flex flex-row mt-4`}>
+        <TouchableOpacity
+          onPress={() => {
+            setactiveSection('Active');
+          }}
+          style={tw`w-1/2 border-b-2  items-center ${
+            activeSection === 'Active' ? 'border-[#88087B]' : 'border-[#000000]'
+          }`}>
+          <Textcomp
+            text={'Active'}
+            size={14}
+            lineHeight={16}
+            color={activeSection === 'Active' ? '#88087B' : '#000413'}
+            fontFamily={'Inter-SemiBold'}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setactiveSection('Closed');
+          }}
+          style={tw`w-1/2 border-b-2 items-center ${
+            activeSection === 'Closed' ? 'border-[#88087B]' : 'border-[#000000]'
+          }`}>
+          <Textcomp
+            text={'Closed'}
+            size={14}
+            lineHeight={16}
+            color={activeSection === 'Closed' ? '#88087B' : '#000413'}
+            fontFamily={'Inter-SemiBold'}
+          />
+        </TouchableOpacity>
+      </View>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
-        <View style={tw`flex flex-row mt-4`}>
-          <TouchableOpacity
-            onPress={() => {
-              setactiveSection('Active');
-            }}
-            style={tw`w-1/2 border-b-2  items-center ${
-              activeSection === 'Active'
-                ? 'border-[#88087B]'
-                : 'border-[#000000]'
-            }`}>
-            <Textcomp
-              text={'Active'}
-              size={14}
-              lineHeight={16}
-              color={activeSection === 'Active' ? '#88087B' : '#000413'}
-              fontFamily={'Inter-SemiBold'}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setactiveSection('Closed');
-            }}
-            style={tw`w-1/2 border-b-2 items-center ${
-              activeSection === 'Closed'
-                ? 'border-[#88087B]'
-                : 'border-[#000000]'
-            }`}>
-            <Textcomp
-              text={'Closed'}
-              size={14}
-              lineHeight={16}
-              color={activeSection === 'Closed' ? '#88087B' : '#000413'}
-              fontFamily={'Inter-SemiBold'}
-            />
-          </TouchableOpacity>
-        </View>
         {customerOrders.length < 1 ? (
           <View style={[tw`flex-1 items-center`, {}]}>
             <View style={[tw``, {marginTop: perHeight(90)}]}>

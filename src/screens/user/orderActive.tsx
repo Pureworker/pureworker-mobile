@@ -346,6 +346,7 @@ const OrderActive = ({route}: any) => {
       setisLoading(false);
       setInfoModal(false);
       setmodalSection('All');
+      navigation.goBack();
     }
   };
   const handleSelectedReasons = reason => {
