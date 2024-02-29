@@ -55,6 +55,7 @@ const initialState = {
   anyratings: [],
   spratings: [],
   providerintrackOrders: [],
+  viewOrder: {},
 
   //provider-profileID
   provider_id: null,
@@ -284,6 +285,9 @@ export const mainSlice = createSlice({
     addProviderInTrackOrder: (state, action) => {
       state.providerintrackOrders = action.payload;
     },
+    addViewOrder: (state, action) => {
+      state.viewOrder = action.payload;
+    },
   },
 });
 
@@ -329,6 +333,7 @@ export const {
   addContentRating,
   addSPRating,
   addProviderInTrackOrder,
+  addViewOrder,
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);

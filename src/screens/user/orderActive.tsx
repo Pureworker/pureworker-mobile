@@ -34,9 +34,15 @@ import OrderInProgress from '../../components/modals/OrderinProgress';
 import OrderPlaced from '../../components/modals/orderPlaced';
 import ScheduledDeliveryDate from '../../components/modals/scheduledDeliveryDate';
 import colors from '../../constants/colors';
-import {cancelOrder, completedOrder, getUserOrders} from '../../utils/api/func';
+import {
+  cancelOrder,
+  completedOrder,
+  getOrderDetailbyID,
+  getUserOrders,
+} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import {
+  addViewOrder,
   addcustomerOrders,
   addproviderOrders,
 } from '../../store/reducer/mainSlice';
@@ -64,9 +70,21 @@ const OrderActive = ({route}: any) => {
   const [searchInput, setsearchInput] = useState('');
   const [activeSection, setactiveSection] = useState('Active');
 
+  const viewOrder = useSelector((state: any) => state.user.viewOrder);
+
   const orders = [0, 1, 2, 3];
-  const passedData = route.params.data;
+  const item = route.params.data;
+  const passedData = viewOrder ?? route.params.data;
   // console.log(route.params.data);
+  const fetchOrderByID = async () => {
+    // setisLoading(true);
+    const res: any = await getOrderDetailbyID(passedData?._id ?? item?._id);
+    console.log('oooooooo', res?.data);
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addViewOrder(res?.data?.data?.order));
+    }
+    setisLoading(false);
+  };
 
   //modals
   const [serviceProviderModal, setserviceProviderModal] = useState(false);
@@ -105,6 +123,7 @@ const OrderActive = ({route}: any) => {
           // navigation.navigate('PaymentConfirmed');
           // await initGetOrders();
           await initGetOrders2();
+          await fetchOrderByID();
           setrateYourExperience(false);
           Alert.alert('successful');
         } else {
@@ -138,6 +157,7 @@ const OrderActive = ({route}: any) => {
         backgroundColor: '#88087B',
       });
     } finally {
+      await fetchOrderByID();
       await initGetOrders();
       setisLoading(false);
     }
@@ -146,8 +166,6 @@ const OrderActive = ({route}: any) => {
   useEffect(() => {
     // setorderDelivered(true);
   }, []);
-
-  const item = route.params.data;
 
   const links = [
     {
@@ -303,7 +321,8 @@ const OrderActive = ({route}: any) => {
               : selectedReason,
         });
         if (res?.status === 200 || res?.status === 201) {
-          await initGetOrders();
+          // await initGetOrders();
+          await fetchOrderByID();
           Alert.alert('successful');
         } else {
           ToastLong(
@@ -342,6 +361,7 @@ const OrderActive = ({route}: any) => {
       setInfoModal(false);
       setmodalSection('All');
     } finally {
+      await fetchOrderByID();
       await initGetOrders();
       setisLoading(false);
       setInfoModal(false);
@@ -1805,6 +1825,7 @@ const OrderActive = ({route}: any) => {
         }}
         visible={scheduledDeliveryDate}
         item={item}
+        fetch ={async ()=> await fetchOrderByID()}
       />
 
       <Modal

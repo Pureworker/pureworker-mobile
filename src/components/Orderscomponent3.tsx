@@ -193,8 +193,10 @@ const Orderscomponent3 = ({
                       />
                     </View>
                   )}
-                  {(status === 'COMPLETED' ||
-                    item?.isCompletedByProvider === true) && (
+                  {(status === 'COMPLETED' 
+                  // ||
+                  //   item?.isCompletedByProvider === true
+                    ) && (
                     <View style={[tw``, {}]}>
                       <Textcomp
                         text={'COMPLETED'}

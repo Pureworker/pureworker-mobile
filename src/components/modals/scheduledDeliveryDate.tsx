@@ -1,9 +1,4 @@
-import {
-  View,
-  TouchableOpacity,
-  Platform,
-  Alert,
-} from 'react-native';
+import {View, TouchableOpacity, Platform, Alert} from 'react-native';
 import React, {useState} from 'react';
 import tw from 'twrnc';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
@@ -26,6 +21,7 @@ export default function ScheduledDeliveryDate({
   visible,
   func,
   item,
+  fetch,
 }: any) {
   const [InfoModal, setInfoModal] = useState(visible);
 
@@ -102,11 +98,12 @@ export default function ScheduledDeliveryDate({
         if (res?.status === 200 || res?.status === 201) {
           // navigation.navigate('PaymentConfirmed');
           setschdeuleIsoDate('');
+          await fetch();
           await initGetOrders();
           Alert.alert('Order Date Rescheduled');
           setDatePickerVisibility(false);
           func(false);
-          navigation.goBack();
+          // navigation.goBack();
         } else {
           Snackbar.show({
             text: res?.error?.message

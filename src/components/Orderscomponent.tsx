@@ -11,10 +11,12 @@ import {HEIGHT_WINDOW, WIDTH_WINDOW} from '../constants/generalStyles';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   cancelOrder,
+  getOrderDetailbyID,
   getProviderLocation,
   getUserOrders,
 } from '../utils/api/func';
 import {
+  addViewOrder,
   addcustomerOrders,
   setProviderLocation,
 } from '../store/reducer/mainSlice';
@@ -32,7 +34,7 @@ import LocationIcon2 from '../assets/svg/Location2';
 import ContactSupportIcon from '../assets/svg/contactSupport';
 import CancelIcon from '../assets/svg/cancel3';
 
-const Orderscomponent = ({
+const Orderscomponent =  ({
   item,
   index,
   status,
@@ -46,12 +48,10 @@ const Orderscomponent = ({
   const [modalSection, setmodalSection] = useState('All');
   const [otherReason, setOtherReason] = useState('');
   const [selectedReason, setSelectedReason] = useState<string>('');
-
   const handleSelectedReasons = reason => {
     setSelectedReason(reason);
   };
-  console.log('OrderDetails', item);
-
+  // console.log('OrderDetails', item);
   function formatDateToCustomFormat(dateString) {
     const options = {year: 'numeric', month: 'short', day: 'numeric'};
     const formattedDate = new Date(dateString).toLocaleDateString(
@@ -122,7 +122,6 @@ const Orderscomponent = ({
     setInfoModal(false);
     setmodalSection('All');
   };
-
   const handleToLocation = async (data: any) => {
     try {
       setisLoading(true);
@@ -142,12 +141,25 @@ const Orderscomponent = ({
     }
   };
   const supportUser = useSelector((store: any) => store.user.supportUser);
+  const fetchOrderByID = async (item: any) => {
+    setisLoading(true);
+    const res: any = await getOrderDetailbyID(item?._id ?? item?.id);
+    console.log('oooooooo', res?.data); 
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addViewOrder(res?.data?.data?.order));
+      navigation.navigate('OrderActive', {data: item});
+    }
+    setisLoading(false);
+  };
   return (
     <>
       <>
         <TouchableOpacity
           disabled={editable ? editable : false}
-          onPress={() => navigation.navigate('OrderActive', {data: item})}
+          onPress={async () => {
+            await fetchOrderByID(item);
+            // navigation.navigate('OrderActive', {data: item});
+          }}
           style={[
             tw` mt-4 mx-auto bg-[${colors.darkPurple}]`,
             {
@@ -270,8 +282,9 @@ const Orderscomponent = ({
                   </View>
                 )}
 
-                {(status === 'COMPLETED' ||
-                  item?.isCompletedByProvider === true) && (
+                {status === 'COMPLETED' && (
+                  // ||
+                  //   item?.isCompletedByProvider === true
                   <View style={[tw``, {}]}>
                     <Textcomp
                       text={'COMPLETED'}
@@ -791,4 +804,5 @@ const Orderscomponent = ({
     </>
   );
 };
+
 export default Orderscomponent;
