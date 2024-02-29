@@ -18,7 +18,6 @@ import Review2 from '../Review2';
 // import {sendRatings} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import KeyboardAvoidingScrollView from 'react-native-keyboard-avoiding-scroll-view';
-import {ScrollView} from 'react-native-gesture-handler';
 
 export default function RateyourCustommer({
   navigation,

@@ -5,14 +5,13 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Platform,
+  Platform,FlatList
 } from 'react-native';
 import TextWrapper from '../../../components/TextWrapper';
 import tw from 'twrnc';
 import colors from '../../../constants/colors';
 import {HEIGHT_SCREEN} from '../../../constants/generalStyles';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {FlatList} from 'react-native-gesture-handler';
 import CancelCircle2 from '../../../assets/svg/CancelCircle2';
 import {uploadAssetsDOCorIMG} from '../../../utils/api/func';
 import {ActivityIndicator} from 'react-native-paper';
@@ -49,6 +48,8 @@ export default function SubPortComp2({
         console.log(resp?.assets);
         console.log('====================================');
         // Iterate through selected images
+
+        let img:any = []
         for (const item of resp.assets) {
           const localUri = item.uri;
           try {
@@ -56,13 +57,14 @@ export default function SubPortComp2({
             console.log('returned:', processedLink);
             // Update the state or save the processed link instead of local URI
             setPictures(prevPictures => [...prevPictures, processedLink]);
-            UpdateValue('images', [...pictures, processedLink]);
+            img.push(processedLink);
           } catch (error) {
             console.error('Error uploading image:', error);
             setisLoading(false);
             // Handle error as needed
           }
         }
+        UpdateValue('images', [...img]);
       }
     });
   };

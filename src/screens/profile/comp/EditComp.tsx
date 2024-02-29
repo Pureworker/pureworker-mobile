@@ -389,6 +389,11 @@ export default function EditComp({
                       lindex={index}
                       portfolioData={portfolio}
                       handlePortfolioItemChange={(i, data) => {
+                        console.log(
+                          '======PROVVV==============================',
+                        );
+                        console.log(data);
+                        console.log('====================================');
                         setFieldValue(`portfolios[${index}]`, data);
                       }}
                     />

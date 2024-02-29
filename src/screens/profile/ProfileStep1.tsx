@@ -183,7 +183,8 @@ const PRofileStep1 = () => {
     setisLoading(false);
   };
   const handleNext = async () => {
-    if (category?.length < 1) {
+    if (ProviderData?.services?.length < 1) {
+      // if (category?.length < 1) {
       ToastShort('Atleast 1 service is required!.');
       return;
     }
@@ -464,7 +465,7 @@ const PRofileStep1 = () => {
                                       'add',
                                       item,
                                     );
-                                  } 
+                                  }
                                   setCollapseState2(false);
                                   // console.log(category);
                                 }}

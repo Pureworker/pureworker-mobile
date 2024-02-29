@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   Platform,
+  FlatList,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigation} from '../../../constants/navigation';
@@ -15,7 +16,6 @@ import tw from 'twrnc';
 import colors from '../../../constants/colors';
 import {HEIGHT_SCREEN} from '../../../constants/generalStyles';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {FlatList} from 'react-native-gesture-handler';
 import {ToastShort} from '../../../utils/utils';
 import images from '../../../constants/images';
 import CancelCircle2 from '../../../assets/svg/CancelCircle2';
@@ -99,6 +99,7 @@ export default function SubPortComp({
         console.log(resp?.assets);
         console.log('====================================');
         // Iterate through selected images
+        let img: any = [];
         for (const item of resp.assets) {
           const localUri = item.uri;
           // Make post-call to upload image
@@ -107,10 +108,10 @@ export default function SubPortComp({
             // const processedLink = await uploadImage(localUri);
             const processedLink = await uploadImgorDoc(item);
             console.log('returned:', processedLink);
-
             // Update the state or save the processed link instead of local URI
             setPictures(prevPictures => [...prevPictures, processedLink]);
-            UpdateValue('images', [...pictures, processedLink]);
+            // UpdateValue('images', [...pictures, processedLink]);
+            img.push(processedLink);
             onLoad(false);
           } catch (error) {
             console.error('Error uploading image:', error);
@@ -119,6 +120,7 @@ export default function SubPortComp({
             // Handle error as needed
           }
         }
+        UpdateValue('images', [...img]);
       }
     });
   };
@@ -139,7 +141,6 @@ export default function SubPortComp({
     }
     setisLoading(false);
   };
-
   // Assuming you have an uploadImage function that makes a post-call
   // const uploadImage = async (localUri: string) => {
   //   // Logic for making post-call and getting processed link

@@ -4,7 +4,7 @@ import {
   Image,
   TextInput,
   ScrollView,
-  TouchableOpacity,
+  TouchableOpacity,FlatList
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigation} from '../../../constants/navigation';
@@ -18,7 +18,6 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Snackbar from 'react-native-snackbar';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {addcompleteProfile} from '../../../store/reducer/mainSlice';
-import {FlatList} from 'react-native-gesture-handler';
 import {ToastShort} from '../../../utils/utils';
 export default function PortComp({
   dlist,

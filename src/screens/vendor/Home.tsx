@@ -252,12 +252,12 @@ const Home = ({navigation}: any) => {
 
   useEffect(() => {
     socket.connect();
-    const res = socket.emit('authentication', userData);
-    console.log('-idid', socket.id, res);
+    socket.emit('authentication', userData);
+    console.log('-idid', socket.id);
     return () => {
       // socket.disconnect();
     };
-  }, []);
+  }, [userData]);
 
 
   return (
