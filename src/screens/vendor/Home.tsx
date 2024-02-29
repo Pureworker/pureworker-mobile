@@ -192,7 +192,7 @@ const Home = ({navigation}: any) => {
     };
     // Initial emit
     emitProviderOnlineStatus();
-    console.error('Emitted online');
+    // console.error('Emitted online');
     // Set up the interval to emit every 30 seconds
     const intervalId = setInterval(emitProviderOnlineStatus, 120000);
     return () => {
@@ -252,10 +252,13 @@ const Home = ({navigation}: any) => {
 
   useEffect(() => {
     socket.connect();
-    socket.connect();
-    console.log('-idid', socket.id);
-    socket.emit('authentication', userData);
+    const res = socket.emit('authentication', userData);
+    console.log('-idid', socket.id, res);
+    return () => {
+      // socket.disconnect();
+    };
   }, []);
+
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
