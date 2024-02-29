@@ -1,8 +1,6 @@
 import {
   View,
   TouchableOpacity,
-  Image,
-  TextInput,
   Platform,
   Alert,
 } from 'react-native';
@@ -10,7 +8,7 @@ import React, {useState} from 'react';
 import tw from 'twrnc';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import Textcomp from '../Textcomp';
-import images from '../../constants/images';
+// import images from '../../constants/images';
 import colors from '../../constants/colors';
 import {WIDTH_WINDOW} from '../../constants/generalStyles';
 import Modal from 'react-native-modal/dist/modal';
@@ -20,6 +18,8 @@ import {getUserOrders, rescheduleOrder} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import {useDispatch} from 'react-redux';
 import {addcustomerOrders} from '../../store/reducer/mainSlice';
+import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../customLoading';
 
 export default function ScheduledDeliveryDate({
   navigation,
@@ -101,11 +101,11 @@ export default function ScheduledDeliveryDate({
         });
         if (res?.status === 200 || res?.status === 201) {
           // navigation.navigate('PaymentConfirmed');
+          setschdeuleIsoDate('');
           await initGetOrders();
           Alert.alert('Order Date Rescheduled');
           setDatePickerVisibility(false);
           func(false);
-          setschdeuleIsoDate('');
           navigation.goBack();
         } else {
           Snackbar.show({
@@ -346,6 +346,7 @@ export default function ScheduledDeliveryDate({
           />
         </View>
       </View>
+      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </Modal>
   );
 }

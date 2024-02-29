@@ -64,8 +64,8 @@ const Congratulations = () => {
           />
           <Button
             onClick={() => {
-              // navigation.navigate('Homes');
-              navigation.navigate('Index');
+              navigation.navigate('Homes');
+              // navigation.navigate('Index');
               // navigation.navigate('Index');
               // navigation.navigate('Homes');
             }}

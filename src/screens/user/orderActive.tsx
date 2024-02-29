@@ -366,9 +366,11 @@ const OrderActive = ({route}: any) => {
     currentTimePlusTwoHours.setHours(currentTimePlusTwoHours.getHours() + 2);
 
     // Compare the current time with the scheduled time plus 2 hours
-    return currentTimePlusTwoHours > scheduledDateTime;
+    return scheduledDateTime > currentTimePlusTwoHours;
   }
-
+  // console.log(
+  //   isCurrentTimeGreaterThanScheduledTime(passedData?.scheduledDeliveryDate),passedData?.scheduledDeliveryDate
+  // );
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
@@ -458,7 +460,7 @@ const OrderActive = ({route}: any) => {
         </View>
       )}
       <View style={tw`flex-1`}>
-        <View style={tw`flex flex-row mt-4 opacity-20`}>
+        {/* <View style={tw`flex flex-row mt-4 opacity-20`}>
           <View
             style={tw`w-1/2 border-b-2  items-center ${
               activeSection === 'Active'
@@ -487,7 +489,7 @@ const OrderActive = ({route}: any) => {
               fontFamily={'Inter-SemiBold'}
             />
           </View>
-        </View>
+        </View> */}
         {orders.length < 1 ? (
           <View style={[tw`flex-1 items-center`, {}]}>
             <View style={[tw``, {marginTop: perHeight(90)}]}>
@@ -557,7 +559,7 @@ const OrderActive = ({route}: any) => {
                 />
                 <View
                   style={[
-                    tw`bg-[#2D303C] flex-1 mb-4 rounded p-4 mt-1`,
+                    tw`bg-[#2D303C] flex-1 mb-2 rounded p-4 mt-1`,
                     {width: perWidth(355)},
                   ]}>
                   <ScrollView contentContainerStyle={tw`flex-1`}>
@@ -565,6 +567,7 @@ const OrderActive = ({route}: any) => {
                       passedData?.scheduledDeliveryDate,
                     ) &&
                       passedData?.status === 'ACCEPTED' && (
+                        //
                         <TouchableOpacity
                           onPress={() => {
                             setscheduledDeliveryDate(true);
@@ -988,7 +991,7 @@ const OrderActive = ({route}: any) => {
                                     ]}
                                   />
                                   <Textcomp
-                                    text={"You cancelled the order."}
+                                    text={'You cancelled the order.'}
                                     size={12}
                                     lineHeight={16.5}
                                     color={'#BABABA'}
@@ -1259,10 +1262,11 @@ const OrderActive = ({route}: any) => {
                         }
                       } else if (item.title === 'Service Provider in Transit') {
                         if (
-                          passedData?.status === 'TRACK' ||
-                          passedData?.status === 'INPROGRESS' ||
-                          passedData?.status === 'COMPLETED' ||
-                          passedData?.status === 'COMPLETED'
+                          (passedData?.status === 'TRACK' ||
+                            passedData?.status === 'INPROGRESS' ||
+                            passedData?.status === 'COMPLETED' ||
+                            passedData?.status === 'COMPLETED') &&
+                          passedData?.location !== 'online'
                         ) {
                           return (
                             <>
@@ -1597,7 +1601,7 @@ const OrderActive = ({route}: any) => {
                 </View>
                 <View
                   style={[
-                    tw`bg-[#2D303C]  rounded p-4 pb-1 mt-1`,
+                    tw`bg-[#2D303C]  rounded p-4 pb-1 mt-0`,
                     {width: perWidth(355)},
                   ]}>
                   <View style={tw`flex flex-row`}>
@@ -1682,7 +1686,7 @@ const OrderActive = ({route}: any) => {
                         justifyContent: 'center',
                         alignItems: 'center',
                         backgroundColor: colors.primary,
-                        marginTop: 20,
+                        marginTop: 12,
                       },
                       tw`flex flex-row px-3 mx-4 py-2 ml-auto`,
                     ]}>

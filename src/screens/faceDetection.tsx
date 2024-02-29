@@ -233,19 +233,17 @@ export default function FaceDetection({navigation, route}: any) {
       startLiveness();
     }, 10000);
   }, []);
-
-  const updateLive = async () => {
-    try {
       // const res: any = await updateUserData({
       //   liveTest: true,
       // });
+  const updateLive = async () => {
+    try {
       const res: any = await completeProfile({
         liveTest: true,
       });
       console.log('result', res?.data);
       if (res?.status === 200 || res?.status === 201) {
         ToastLong('Live Test Passed');
-        // navigation.navigate('Home');
       }
     } catch (error) {
       Snackbar.show({

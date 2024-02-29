@@ -128,10 +128,17 @@ const ClosetoYou3 = ({item, index, navigation}: any) => {
             style={[tw`ml-1`, {width: perWidth(70), marginTop: perWidth(1)}]}>
             <Textcomp
               text={item?.location === 'online' ? 'ONLINE' : item?.address}
-              size={12}
+              size={
+                item?.location === 'online'
+                  ? 12
+                  : item?.address?.split(' ')?.length > 2
+                  ? 10
+                  : 12
+              }
               lineHeight={14}
               color={colors.white}
               fontFamily={'Inter-SemiBold'}
+              numberOfLines={2}
             />
           </View>
         </View>

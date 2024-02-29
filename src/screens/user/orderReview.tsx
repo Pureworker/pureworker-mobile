@@ -21,7 +21,7 @@ import {createOrder} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
-import {ToastShort} from '../../utils/utils';
+import {ToastLong, ToastShort} from '../../utils/utils';
 import Modal from 'react-native-modal/dist/modal';
 // import CheckBox from '@react-native-community/checkbox';
 import CheckBox from 'react-native-check-box';
@@ -74,12 +74,13 @@ const OrderReview = ({route}: any) => {
     console.log(Data);
     try {
       if (Number(userData?.wallet?.availableBalance) < Number(tp)) {
-        Snackbar.show({
-          text: 'Insufficient Balance.',
-          duration: Snackbar.LENGTH_LONG,
-          textColor: '#fff',
-          backgroundColor: '#88087B',
-        });
+        ToastLong('Insufficient Balance.');
+        // Snackbar.show({
+        //   text: 'Insufficient Balance.',
+        //   duration: Snackbar.LENGTH_LONG,
+        //   textColor: '#fff',
+        //   backgroundColor: '#88087B',
+        // });
         return;
       }
       if (Data?.serviceProvider) {
