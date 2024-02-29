@@ -441,7 +441,7 @@ const AddAddress = ({navigation}: any) => {
               setdescription(data.description);
               //   initbookride(data.description);
             }}
-            debounce={400}
+            debounce={200}
             nearbyPlacesAPI="GooglePlacesSearch"
             enablePoweredByContainer={false}
           />
