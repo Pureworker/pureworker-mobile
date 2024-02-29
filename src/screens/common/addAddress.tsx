@@ -467,7 +467,7 @@ const AddAddress = ({navigation}: any) => {
           </View>
         )}
 
-        {currentLocation !== null && (
+        {/* {currentLocation !== null && (
           <TouchableOpacity
             onPress={async () => {
               const isLocationEnabled = await new Promise((resolve, reject) => {
@@ -566,7 +566,7 @@ const AddAddress = ({navigation}: any) => {
               style={[tw`font-600 `]}
             />
           </TouchableOpacity>
-        )}
+        )} */}
         {/* <View style={[tw`mx-auto mt-4`, {width: perWidth(364)}]}>
           <TextInput
             style={[

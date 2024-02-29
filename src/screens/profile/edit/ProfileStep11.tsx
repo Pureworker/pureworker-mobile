@@ -176,7 +176,6 @@ const PRofileStep11 = () => {
     initGetProviderNew();
   }, []);
   console.log('PROFILE:', ProviderData?.services);
-
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: colors.greyLight}]}>
       <Header
