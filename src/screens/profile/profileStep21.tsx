@@ -146,14 +146,14 @@ const ProfileStep21 = () => {
       ToastShort('Description is required!. ');
       return;
     }
-    if (
-      !imageUrl ||
-      imageUrl ===
-        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-    ) {
-      ToastShort('Please upload a Profile Picture.');
-      return;
-    }
+    // if (
+    //   !imageUrl ||
+    //   imageUrl ===
+    //     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+    // ) {
+    //   ToastShort('Please upload a Profile Picture.');
+    //   return;
+    // }
 
     // const d = ProviderData?.portfolios?.filter(s => s.service === item?._id);
     const ProviderDataLength = ProviderData?.portfolios?.length;

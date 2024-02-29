@@ -25,6 +25,7 @@ import ProfileStep4 from '../screens/profile/ProfileStep4';
 import ProfileStep5 from '../screens/profile/ProfileStep5';
 import PRofileStep11 from '../screens/profile/edit/ProfileStep11';
 import ProfileStep211 from '../screens/profile/edit/ProfileStep211';
+import ProfileStep21 from '../screens/profile/profileStep21';
 
 const Stack = createNativeStackNavigator();
 
@@ -130,6 +131,11 @@ export default function VendorNavigation() {
       <Stack.Screen
         name="ProfileStep5"
         component={ProfileStep5}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="ProfileStep21"
+        component={ProfileStep21}
         options={{headerShown: false, animationEnabled: false}}
       />
 

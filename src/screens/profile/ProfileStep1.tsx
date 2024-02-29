@@ -113,10 +113,6 @@ const PRofileStep1 = () => {
       // {services: arr, action: 'add'}
       setisLoading(true);
       const res = await completeProfile({services: arr, action: action});
-
-      if (action === "remove") {
-        
-      }
       if (res?.status === 200 || res?.status === 201) {
         ToastShort('Service added');
       } else {

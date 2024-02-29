@@ -68,6 +68,8 @@ const Home = ({navigation}: any) => {
   const [OinPending, setOinPending] = useState([]);
   const [isLoading, setisLoading] = useState(false);
   const userData = useSelector((state: any) => state.user.userData);
+  // navigation.navigate('FaceDetection', {page: 'Profile'});
+  // navigation.navigate('Congratulations');
   useEffect(() => {
     const initGetUsers = async () => {
       const res: any = await getUser('');
@@ -188,18 +190,14 @@ const Home = ({navigation}: any) => {
         customerId: userData?.id || userData?._id,
       });
     };
-
     // Initial emit
     emitProviderOnlineStatus();
     console.error('Emitted online');
-
     // Set up the interval to emit every 30 seconds
     const intervalId = setInterval(emitProviderOnlineStatus, 120000);
-
     return () => {
       // Clean up the interval when the component is unmounted
       clearInterval(intervalId);
-
       // Disconnect the socket when the component is unmounted
       socket.disconnect();
     };
@@ -703,8 +701,9 @@ const Home = ({navigation}: any) => {
           ) : null}
           {userData?.isVerified === 'review' && (
             <TouchableOpacity
-              disabled={true}
+              // disabled={true}
               onPress={() => {
+                navigation.navigate('ProfileStep11');
                 // navigation.navigate('ProfileStep3');
               }}
               style={[

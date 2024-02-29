@@ -952,7 +952,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
             onPress={() => setready(false)}
             style={tw`flex-1`}
           />
-          <View style={[tw`p-4 mt-auto bg-[#D9D9D9]`]}>
+          <View style={[tw`p-4 mt-auto bg-[#D9D9D9]`,{minHeight: SIZES.height * 0.7}]}>
             <TouchableOpacity
               onPress={() => {
                 setready(false);

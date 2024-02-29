@@ -56,7 +56,6 @@ const Congratulations = () => {
             fontType={'semiBold'}
             style={{fontSize: 20, marginTop: 30, color: colors.black}}
           />
-
           <TextWrapper
             children="You have completed your registration. Please check your email for next steps."
             fontType={'semiBold'}
@@ -64,9 +63,9 @@ const Congratulations = () => {
           />
           <Button
             onClick={() => {
-              navigation.navigate('Homes');
-              // navigation.navigate('Index');
-              // navigation.navigate('Index');
+              // navigation.navigate('Homes');
+              // navigation.navigate('Account');
+              navigation.navigate('Homes', {screen: 'Home'});
               // navigation.navigate('Homes');
             }}
             style={{
