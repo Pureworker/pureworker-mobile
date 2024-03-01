@@ -152,7 +152,7 @@ export default function ScheduledDeliveryDate({
         <TouchableOpacity onPress={() => func(false)} style={tw`flex-1`} />
         <View
           style={tw` h-[${
-            Platform.OS === 'ios' ? '37.5%' : '40.5%'
+            Platform.OS === 'ios' ? '49.5%' : '45%'
           }] mt-auto bg-[#D9D9D9]`}>
           <TouchableOpacity
             onPress={() => {

@@ -173,7 +173,13 @@
 // }
 
 import React, {useEffect, useState} from 'react';
-import {View, TouchableOpacity, TextInput, Keyboard} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  TextInput,
+  Keyboard,
+  Platform,
+} from 'react-native';
 import tw from 'twrnc';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import Textcomp from '../Textcomp';
@@ -183,6 +189,7 @@ import Modal from 'react-native-modal/dist/modal';
 import Review2 from '../Review2';
 // import {sendRatings} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
+import {PLATFORMS} from 'twrnc/dist/esm/types';
 
 export default function RateyourExperience({
   navigation,
@@ -232,7 +239,9 @@ export default function RateyourExperience({
     });
   };
 
-  const [modalHeight, setModalHeight] = useState('70%'); // Initial modal height
+  const [modalHeight, setModalHeight] = useState(
+    Platform.OS === 'ios' ? '70%' : '75%',
+  ); // Initial modal height
 
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 

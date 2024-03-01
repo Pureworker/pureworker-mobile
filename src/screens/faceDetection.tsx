@@ -35,6 +35,7 @@ import {ToastLong} from '../utils/utils';
 import {addUserData} from '../store/reducer/mainSlice';
 import {useDispatch} from 'react-redux';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
+import Button from '../components/Button';
 
 LogBox.ignoreLogs(['new NativeEventEmitter']);
 const eventManager = new NativeEventEmitter(RNFaceApi);
@@ -231,9 +232,9 @@ export default function FaceDetection({navigation, route}: any) {
       startLiveness();
     }, 10000);
   }, []);
-      // const res: any = await updateUserData({
-      //   liveTest: true,
-      // });
+  // const res: any = await updateUserData({
+  //   liveTest: true,
+  // });
   const updateLive = async () => {
     try {
       const res: any = await completeProfile({
@@ -277,7 +278,13 @@ export default function FaceDetection({navigation, route}: any) {
                   () => {},
                   () => {},
                 );
-                navigation.navigate('Congratulations');
+                FaceSDK.stopLivenessProcessing(
+                  () => {},
+                  () => {},
+                );
+                setTimeout(() => {
+                  navigation.navigate('Congratulations');
+                }, 3000); // 3000 milliseconds = 3 seconds
               }}>
               <Text
                 style={[
@@ -327,12 +334,49 @@ export default function FaceDetection({navigation, route}: any) {
             </Text>
           </View>
 
+          <View style={tw`mx-auto mt-[10%]`}>
+            <View style={{marginHorizontal: 25, marginTop: 15}}>
+              <Button
+                onClick={() => {
+                  setloader(false);
+                  startLiveness();
+                }}
+                style={{
+                  marginBottom: 20,
+                  marginTop: 20,
+                  marginHorizontal: 40,
+                  backgroundColor: colors.lightBlack,
+                }}
+                textStyle={{color: colors.primary}}
+                text={'Start Verification'}
+              />
+            </View>
+            <View style={{marginHorizontal: 25, marginTop: 15}}>
+              <Button
+                onClick={() => {
+                  FaceSDK.stopLivenessProcessing(
+                    () => {},
+                    () => {},
+                  );
+                  navigation.navigate('Congratulations');
+                }}
+                style={{
+                  marginBottom: 20,
+                  marginTop: 20,
+                  marginHorizontal: 40,
+                  backgroundColor: colors.lightBlack,
+                }}
+                textStyle={{color: colors.primary}}
+                text={'Skip Verificatioon'}
+              />
+            </View>
+          </View>
+
           {loader && (
             <View style={tw`my-auto`}>
               <ActivityIndicator size={'large'} color={'white'} />
             </View>
           )}
-
           {/* <View style={{f}}>
             <Text style={{marginLeft: -20}}>Similarity: {similarity}</Text>
             <Text style={{marginLeft: 20}}>Liveness: {liveness}</Text>

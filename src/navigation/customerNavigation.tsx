@@ -29,11 +29,13 @@ import OrderActive from '../screens/user/orderActive';
 import Inbox from '../screens/user/chat/inbox';
 import Withdraw from '../screens/user/withdraw';
 import FaceDetection from '../screens/faceDetection';
+import { useInitialData } from './initialData';
 // import HelloWorldView from '../tracking/TrackView';
 
 const Stack = createNativeStackNavigator();
 
 export default function CustomerNavigation() {
+  useInitialData();
   return (
     <Stack.Navigator>
       <Stack.Screen

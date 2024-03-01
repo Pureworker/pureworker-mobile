@@ -466,7 +466,7 @@ const OrderReview = ({route}: any) => {
                 <Textcomp
                   text={'!!! IMPORTANT !!!'}
                   size={16}
-                  lineHeight={14.5}
+                  lineHeight={18.5}
                   color={'black'}
                   fontFamily={'Inter-Bold'}
                 />

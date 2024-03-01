@@ -53,22 +53,15 @@ import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 const Account = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
-
   const [isLoading, setisLoading] = useState(false);
   const profileData = useSelector((state: any) => state.user.profileData);
-  //
-
-  //
   const [profileImageLoading, setProfileImageLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(profileData?.profilePic || '');
   let profilePicture = useRef('');
   const [description, setDescription] = useState(profileData?.description);
-
   const category = useSelector((state: any) => state.user.pickedServices);
   const userData = useSelector((state: any) => state.user.userData);
-
   console.log('protfolio:', profileData);
-
   useEffect(() => {
     const initGetProfile = async () => {
       const res: any = await getProfile(userData?._id);
@@ -80,7 +73,6 @@ const Account = () => {
     };
     initGetProfile();
   }, [dispatch]);
-
   //image upload
   const options = {mediaType: 'photo', selectionLimit: 1};
   const openLibraryfordp2 = () => {
@@ -98,7 +90,6 @@ const Account = () => {
     });
     // launchCamera
   };
-
   const openLibraryfordp = () => {
     launchCamera(options, async (resp: unknown) => {
       if (resp?.assets?.length > 0) {
@@ -118,43 +109,56 @@ const Account = () => {
       }
     });
   };
-
   const opencamerafordp4 = async () => {
     const options = {
       mediaType: 'photo',
       selectionLimit: 1,
       cameraType: 'front',
+      rotation: 360,
     };
     try {
       if (Platform.OS === 'ios') {
         const openCamera = async () => {
           const cameraStatus = await check(PERMISSIONS.IOS.CAMERA);
-
-          if (cameraStatus === RESULTS.GRANTED) {
-            // Camera permission is granted, open camera here
-            await launchCamera(options, async (resp: unknown) => {
-              if (resp?.assets?.length > 0) {
-                console.log('resp', resp?.assets[0]);
-                setImageUrl(resp?.assets[0].uri);
-                await uploadImgorDoc(resp?.assets[0]);
-              }
-            });
-          } else {
-            // Camera permission is not granted, request it
-            const newCameraStatus = await request(PERMISSIONS.IOS.CAMERA);
-            if (newCameraStatus === RESULTS.GRANTED) {
-              // Camera permission granted after request, open camera
+          try {
+            if (cameraStatus === RESULTS.GRANTED) {
               await launchCamera(options, async (resp: unknown) => {
                 if (resp?.assets?.length > 0) {
+                  setisLoading(true);
                   console.log('resp', resp?.assets[0]);
                   setImageUrl(resp?.assets[0].uri);
-                  await uploadImgorDoc(resp?.assets[0]);
+                  const data = await uploadImgorDoc(resp?.assets[0]);
+                  console.warn('processed pic', data);
+                  dispatch(addcompleteProfile({profilePic: data}));
+                  const res: any = await completeProfile({profilePic: data});
+                  setisLoading(false);
                 }
               });
             } else {
-              // Camera permission denied
-              console.log('Camera permission denied');
+              const newCameraStatus = await request(PERMISSIONS.IOS.CAMERA);
+              if (newCameraStatus === RESULTS.GRANTED) {
+                // Camera permission granted after request, open camera
+                await launchCamera(options, async (resp: unknown) => {
+                  if (resp?.assets?.length > 0) {
+                    setisLoading(true);
+                    console.log('resp', resp?.assets[0]);
+                    setImageUrl(resp?.assets[0].uri);
+                    const data = await uploadImgorDoc(resp?.assets[0]);
+                    console.warn('processed pic', data);
+                    dispatch(addcompleteProfile({profilePic: data}));
+                    const res: any = await completeProfile({profilePic: data});
+                    setisLoading(false);
+                  }
+                });
+              } else {
+                console.log('Camera permission denied');
+              }
             }
+          } catch (error) {
+            setisLoading(false);
+          } finally {
+            setisLoading(false);
+            setisLoading(false);
           }
         };
         openCamera();
@@ -175,17 +179,91 @@ const Account = () => {
             if (resp?.assets?.length > 0) {
               console.log('resp', resp?.assets[0]);
               setImageUrl(resp?.assets[0].uri);
-              await uploadImgorDoc(resp?.assets[0]);
+              const data = await uploadImgorDoc(resp?.assets[0]);
+              console.warn('processed pic', data);
+              dispatch(addcompleteProfile({profilePic: data}));
+              const res: any = await completeProfile({profilePic: data});
             }
           });
         } else {
           console.log('Camera permission denied2');
+          ToastShort('Camera permission denied2');
         }
       }
     } catch (error) {}
-    // launchCamera
   };
+  // const opencamerafordp4 = async () => {
+  //   const options = {
+  //     mediaType: 'photo',
+  //     selectionLimit: 1,
+  //     cameraType: 'front',
+  //   };
+  //   try {
+  //     if (Platform.OS === 'ios') {
+  //       const openCamera = async () => {
+  //         const cameraStatus = await check(PERMISSIONS.IOS.CAMERA);
 
+  //         if (cameraStatus === RESULTS.GRANTED) {
+  //           // Camera permission is granted, open camera here
+  //           await launchCamera(options, async (resp: unknown) => {
+  //             if (resp?.assets?.length > 0) {
+  //               console.log('resp', resp?.assets[0]);
+  //               setImageUrl(resp?.assets[0].uri);
+  //               await uploadImgorDoc(resp?.assets[0]);
+  //               console.warn('processed pic', data);
+  //               dispatch(addcompleteProfile({profilePic: data}));
+  //               const res: any = await completeProfile({profilePic: data});
+  //             }
+  //           });
+  //         } else {
+  //           // Camera permission is not granted, request it
+  //           const newCameraStatus = await request(PERMISSIONS.IOS.CAMERA);
+  //           if (newCameraStatus === RESULTS.GRANTED) {
+  //             // Camera permission granted after request, open camera
+  //             await launchCamera(options, async (resp: unknown) => {
+  //               if (resp?.assets?.length > 0) {
+  //                 console.log('resp', resp?.assets[0]);
+  //                 setImageUrl(resp?.assets[0].uri);
+  //                 await uploadImgorDoc(resp?.assets[0]);
+  //                 console.warn('processed pic', data);
+  //                 dispatch(addcompleteProfile({profilePic: data}));
+  //                 const res: any = await completeProfile({profilePic: data});
+  //               }
+  //             });
+  //           } else {
+  //             // Camera permission denied
+  //             console.log('Camera permission denied');
+  //           }
+  //         }
+  //       };
+  //       openCamera();
+  //     } else {
+  //       const granted = await PermissionsAndroid.request(
+  //         PermissionsAndroid.PERMISSIONS.CAMERA,
+  //         {
+  //           title: 'App Camera Permission',
+  //           message: 'Pureworker needs access to your camera to takee picture',
+  //           buttonNeutral: 'Ask Me Later',
+  //           buttonNegative: 'Cancel',
+  //           buttonPositive: 'OK',
+  //         },
+  //       );
+  //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //         console.log('Camera permission given');
+  //         await launchCamera(options, async (resp: unknown) => {
+  //           if (resp?.assets?.length > 0) {
+  //             console.log('resp', resp?.assets[0]);
+  //             setImageUrl(resp?.assets[0].uri);
+  //             await uploadImgorDoc(resp?.assets[0]);
+  //           }
+  //         });
+  //       } else {
+  //         console.log('Camera permission denied2');
+  //       }
+  //     }
+  //   } catch (error) {}
+  //   // launchCamera
+  // };
   const upload = async (param: string) => {
     const res: any = await completeProfile({profilePic: param});
     console.log('result', res?.data);
@@ -221,7 +299,6 @@ const Account = () => {
     }
     setisLoading(false);
   };
-
   const updateProfile = async (param: any) => {
     const res: any = await completeProfile(param);
     console.log('Update result:', res?.data);
@@ -286,7 +363,6 @@ const Account = () => {
   const [addModal, setaddModal] = useState(false);
   const [editModal, seteditModal] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
-
   useEffect(() => {
     const initGetProviderNew = async () => {
       const res: any = await getProviderNew(userData?._id);
@@ -297,9 +373,7 @@ const Account = () => {
     };
     initGetProviderNew();
   }, []);
-
   const [deleteModal, setdeleteModal] = useState(false);
-
   return (
     <>
       <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
@@ -343,13 +417,15 @@ const Account = () => {
               fontType={'semiBold'}
               style={{fontSize: 20, marginTop: 30, color: colors.black}}
             />
-
             <TouchableOpacity
               onPress={async () => {
                 // openLibraryfordp();
                 opencamerafordp4();
               }}>
-              <View
+              <TouchableOpacity
+                onPress={async () => {
+                  opencamerafordp4();
+                }}
                 style={[
                   generalStyles.contentCenter,
                   {
@@ -398,7 +474,7 @@ const Account = () => {
                     color={colors.parpal}
                   />
                 )}
-              </View>
+              </TouchableOpacity>
               <View
                 style={{
                   position: 'absolute',
@@ -409,6 +485,7 @@ const Account = () => {
                 <TouchableOpacity
                   onPress={async () => {
                     // openLibraryfordp();
+                    opencamerafordp4();
                   }}>
                   <Image
                     source={images.edit}
@@ -453,6 +530,7 @@ const Account = () => {
                   color: colors.black,
                   paddingHorizontal: 18,
                   fontSize: 12,
+                  height: 130,
                 }}
                 style={{backgroundColor: colors.greyLight1}}
                 labelText={
