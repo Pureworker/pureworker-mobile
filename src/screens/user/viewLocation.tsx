@@ -62,8 +62,8 @@ const ViewLocation = ({route}: any) => {
   const longitude = 3.3792;
   const mapRef = useRef<MapView>(null);
   const [region, setregion] = useState({
-    latitude: latitude,
-    longitude: longitude,
+    latitude: providerLocation.lat,
+    longitude: providerLocation.long,
     latitudeDelta: 0.26,
     longitudeDelta: 0.26,
   });

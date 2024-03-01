@@ -103,6 +103,7 @@ export default function ScheduledDeliveryDate({
           Alert.alert('Order Date Rescheduled');
           setDatePickerVisibility(false);
           func(false);
+          func(false);
           // navigation.goBack();
         } else {
           Snackbar.show({
@@ -128,11 +129,12 @@ export default function ScheduledDeliveryDate({
         setisLoading(false);
       }
     } catch (error) {
+      
     } finally {
+      func(false);
       setschdeuleIsoDate('');
       setisLoading(false);
     }
-
     setisLoading(false);
   };
   return (

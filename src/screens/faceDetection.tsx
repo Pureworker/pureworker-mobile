@@ -226,12 +226,12 @@ export default function FaceDetection({navigation, route}: any) {
 
   const [loader, setloader] = useState(true);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setloader(false);
-      startLiveness();
-    }, 10000);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setloader(false);
+  //     startLiveness();
+  //   }, 10000);
+  // }, []);
   // const res: any = await updateUserData({
   //   liveTest: true,
   // });
