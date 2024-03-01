@@ -80,6 +80,9 @@ export function useInitialData() {
       //notification, chats, orders,
       getSupportUser('');
       getUnreadMessages();
+
+      console.error('DONEE');
+      
     };
     fetchData();
   }, [dispatch]);
