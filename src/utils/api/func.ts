@@ -6,6 +6,7 @@ import {
   addUserData,
   addbanks,
   addchatList,
+  addcustomerOrders,
   addprovidersByCateegory,
   addsupportUser,
 } from '../../store/reducer/mainSlice';
@@ -723,6 +724,7 @@ export const getUserOrders = async (param: any) => {
     });
     if (response?.status === 201 || response?.status === 200) {
       console.log('getUserOrders:', response?.status, response?.data?.length);
+      store.dispatch(addcustomerOrders(response?.data?.data));
     }
 
     console.log('getUserOrders:', response?.status);

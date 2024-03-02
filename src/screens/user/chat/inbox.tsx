@@ -288,9 +288,9 @@ export default function Inbox({navigation, route}: any) {
       console.log(arr);
       try {
         await markAsReaArray(arr);
-        ToastShort('Marked as Read successfully');
+        // ToastShort('Marked as Read successfully');
       } catch (error) {
-        ToastShort('Mark as read!.');
+        // ToastShort('Mark as read!.');
       }
     };
     handleMarkeRead();

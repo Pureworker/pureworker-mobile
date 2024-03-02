@@ -1,8 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import Toast from 'react-native-toast-message';
-import { PermissionsAndroid} from 'react-native';
-import {addPushToken, getChatsbyuser, getChatsbyuser2} from './api/func';
+import {PermissionsAndroid} from 'react-native';
+import {
+  addPushToken,
+  getChatsbyuser,
+  getChatsbyuser2,
+  getUserOrders,
+} from './api/func';
 import {ToastLong} from './utils';
 import {useDispatch} from 'react-redux';
 import {getUnreadMessages} from './api/chat';
@@ -121,6 +126,7 @@ const NotificationListner = () => {
     // Alert.alert('Push gotten here', remoteMessage?.data?.service);
     // ToastLong('Notification Received!, Please check!.');
     console.log('app opened');
+    await getUserOrders('');
   });
   /*
    * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
