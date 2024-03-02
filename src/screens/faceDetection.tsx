@@ -3,12 +3,10 @@ import {
   StyleSheet,
   View,
   Text,
-  Image,
   Alert,
   LogBox,
   NativeEventEmitter,
   SafeAreaView,
-  TouchableOpacity,
   ActivityIndicator,
   Platform,
 } from 'react-native';
@@ -26,7 +24,7 @@ import FaceSDK, {
 // import FaceSDK from '@regulaforensics/react-native-face-api';
 // import FaceSDK from '@regulaforensics/react-native-face-core';
 import tw from 'twrnc';
-import {perHeight, perWidth} from '../utils/position/sizes';
+import {SIZES, perHeight, perWidth} from '../utils/position/sizes';
 import colors from '../constants/colors';
 import images from '../constants/images';
 import {completeProfile, getUser, updateUserData} from '../utils/api/func';
@@ -224,7 +222,7 @@ export default function FaceDetection({navigation, route}: any) {
     );
   };
 
-  const [loader, setloader] = useState(true);
+  const [loader, setloader] = useState(false);
 
   // useEffect(() => {
   //   setTimeout(() => {
@@ -271,9 +269,8 @@ export default function FaceDetection({navigation, route}: any) {
               },
             ]}>
             {/* <Backicon /> */}
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
-                // navigation.goBack()
                 FaceSDK.stopLivenessProcessing(
                   () => {},
                   () => {},
@@ -298,11 +295,11 @@ export default function FaceDetection({navigation, route}: any) {
                 ]}>
                 Skip
               </Text>
-              {/* <Image
+              <Image
                 style={{width: 25, height: 25, tintColor: 'white'}}
                 source={images.back}
-              /> */}
-            </TouchableOpacity>
+              />
+            </TouchableOpacity> */}
             <View style={tw`mx-auto`}>
               <Text
                 style={[
@@ -332,6 +329,23 @@ export default function FaceDetection({navigation, route}: any) {
               ]}>
               Follow The Instructions Below
             </Text>
+
+            <View>
+              <Text
+                style={[
+                  tw`text-center text-[${colors.white}]`,
+                  {
+                    fontSize: 14,
+                    lineHeight: 19,
+                    marginLeft: perWidth(15),
+                    fontFamily: 'Inter-Regular',
+                  },
+                ]}>
+                Please ensure you're in a well-lit area. if adequate lighting
+                isn't available now, you can skip this verification, but
+                remember, it is required to approve your profile.
+              </Text>
+            </View>
           </View>
 
           <View style={tw`mx-auto mt-[10%]`}>
@@ -345,9 +359,10 @@ export default function FaceDetection({navigation, route}: any) {
                   marginBottom: 20,
                   marginTop: 20,
                   marginHorizontal: 40,
-                  backgroundColor: colors.lightBlack,
+                  backgroundColor: colors.primary,
+                  width: SIZES.width * 0.8,
                 }}
-                textStyle={{color: colors.primary}}
+                textStyle={{color: colors.black}}
                 text={'Start Verification'}
               />
             </View>
@@ -364,10 +379,11 @@ export default function FaceDetection({navigation, route}: any) {
                   marginBottom: 20,
                   marginTop: 20,
                   marginHorizontal: 40,
-                  backgroundColor: colors.lightBlack,
+                  backgroundColor: colors.parpal,
+                  width: SIZES.width * 0.8,
                 }}
-                textStyle={{color: colors.primary}}
-                text={'Skip Verificatioon'}
+                textStyle={{color: colors.white}}
+                text={'Skip Verification'}
               />
             </View>
           </View>

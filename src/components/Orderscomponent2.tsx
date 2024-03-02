@@ -780,29 +780,37 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           </View>
         )}
         {status === 'COMPLETED' && (
-          <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
-            <TouchableOpacity
-              onPress={() => {
-                setrateYourExperience(true);
-              }}
-              style={[
-                tw`bg-[${colors.primary}] items-center justify-center`,
-                {
-                  width: perWidth(190),
-                  height:
-                    Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
-                  borderRadius: 7,
-                },
-              ]}>
-              <Textcomp
-                text={'Review Customer '}
-                size={12}
-                lineHeight={14}
-                color={colors.black}
-                fontFamily={'Inter-SemiBold'}
-              />
-            </TouchableOpacity>
-          </View>
+          <>
+            {item?.isCustomerRated ? (
+              <></>
+            ) : (
+              <View style={tw`mx-auto flex flex-row justify-between mt-4`}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setrateYourExperience(true);
+                  }}
+                  style={[
+                    tw`bg-[${colors.primary}] items-center justify-center`,
+                    {
+                      width: perWidth(190),
+                      height:
+                        Platform.OS === 'ios'
+                          ? perHeight(22.5)
+                          : perHeight(27.5),
+                      borderRadius: 7,
+                    },
+                  ]}>
+                  <Textcomp
+                    text={'Review Customer '}
+                    size={12}
+                    lineHeight={14}
+                    color={colors.black}
+                    fontFamily={'Inter-SemiBold'}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
+          </>
         )}
         {status === 'DECLINED' && (
           <></>
@@ -952,7 +960,11 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
             onPress={() => setready(false)}
             style={tw`flex-1`}
           />
-          <View style={[tw`p-4 mt-auto bg-[#D9D9D9]`,{minHeight: SIZES.height * 0.7}]}>
+          <View
+            style={[
+              tw`p-4 mt-auto bg-[#D9D9D9]`,
+              {minHeight: SIZES.height * 0.7},
+            ]}>
             <TouchableOpacity
               onPress={() => {
                 setready(false);
