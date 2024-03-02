@@ -39,6 +39,7 @@ import {
   cancelOrder,
   completedOrder,
   getOrderDetailbyID,
+  getProviderLocation,
   getUserOrders,
 } from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
@@ -46,11 +47,13 @@ import {
   addViewOrder,
   addcustomerOrders,
   addproviderOrders,
+  setProviderLocation,
 } from '../../store/reducer/mainSlice';
 import Orderscomponent3 from '../../components/Orderscomponent3';
 import Checked from '../../assets/svg/checked';
 import {
   ToastLong,
+  ToastShort,
   formatDate3,
   formatDateToCustomFormat,
 } from '../../utils/utils';
@@ -402,6 +405,29 @@ const OrderActive = ({route}: any) => {
       setRefreshing(false);
     }
   }, []);
+
+  const handleToLocation = async () => {
+    try {
+      setisLoading(true);
+      // const res: any = await getProviderLocation('65cb95af993d69fb83faf837');
+      const res: any = await getProviderLocation(passedData?._id);
+      console.log('location.........', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        if (res?.data?.data !== null) {
+          dispatch(setProviderLocation(res?.data?.data));
+          // navigation.navigate('ViewLocation', {...data});
+          navigation.navigate('ViewLocation', {
+            id: item?.serviceProvider._id || item?.serviceProvider?.id,
+            item: item,
+          });
+        } else {
+          ToastShort('Providers Location not available at the moment');
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching location:', error);
+    }
+  };
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <View
@@ -1518,12 +1544,13 @@ const OrderActive = ({route}: any) => {
                           item?.location !== 'online' && (
                             <TouchableOpacity
                               onPress={() => {
-                                navigation.navigate('ViewLocation', {
-                                  id:
-                                    item?.serviceProvider._id ||
-                                    item?.serviceProvider?.id,
-                                  item: item,
-                                });
+                                // navigation.navigate('ViewLocation', {
+                                //   id:
+                                //     item?.serviceProvider._id ||
+                                //     item?.serviceProvider?.id,
+                                //   item: item,
+                                // });
+                                handleToLocation();
                               }}
                               style={[
                                 {
