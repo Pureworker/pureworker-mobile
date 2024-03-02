@@ -20,6 +20,7 @@ import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
 import {getContent, getUser} from '../../utils/api/func';
 import {addPrivacyPolicy, addUserData} from '../../store/reducer/mainSlice';
+import RenderHtml from 'react-native-render-html';
 
 const PrivacyPolicy = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -136,9 +137,10 @@ To send you important updates, notifications, and promotional messages related t
 
   useEffect(() => {
     const getPolicyCustomer = async () => {
+      console.log(
+        userType.userType === 'CUSTOMER' ? 'Customer Terms' : 'SPTerms',
+      );
 
-      console.log(userType.userType === 'CUSTOMER' ? 'Customer Terms' : 'SPTerms');
-      
       const res: any = await getContent(
         userType.userType === 'CUSTOMER' ? 'Customer Terms' : 'SPTerms',
       );
@@ -255,12 +257,25 @@ To send you important updates, notifications, and promotional messages related t
                       />
                     </View>
                     <View style={tw`mt-1`}>
-                      <Textcomp
-                        text={item?.body}
-                        size={12}
-                        lineHeight={14.5}
-                        color={'#000000'}
-                        fontFamily={'Inter'}
+                      <RenderHtml
+                        baseStyle={{
+                          fontSize: 12,
+                          lineHeight: 14.5,
+                          color: '#000000',
+                          fontFamily: 'Inter',
+                        }}
+                        tagsStyles={{
+                          p: {
+                            margin: 0,
+                          },
+                        }}
+                        contentWidth={perWidth(332)}
+                        source={{
+                          html: item?.body,
+                        }}
+                        enableExperimentalMarginCollapsing
+                        enableExperimentalBRCollapsing
+                        enableExperimentalGhostLinesPrevention
                       />
                     </View>
                   </View>
