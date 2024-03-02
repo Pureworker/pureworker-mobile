@@ -119,7 +119,7 @@ export default function Inbox({navigation, route}: any) {
     dispatch(addchatData(_data));
     socket.emit('message', data, async () => {
       console.log('message sent', data);
-      ToastShort('Message sent');
+      // ToastShort('Message sent');
       // const _data = [...chatData, data];
       // dispatch(addchatData(_data));
     });
@@ -209,7 +209,7 @@ export default function Inbox({navigation, route}: any) {
         dispatch(addchatData(_data));
         socket.emit('message', data, async () => {
           console.log('message sent', data);
-          ToastShort('Message sent');
+          // ToastShort('Message sent');
         });
       } catch (err) {
         ToastLong('Unable to send image');
