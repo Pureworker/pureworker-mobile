@@ -88,8 +88,12 @@ const Home = () => {
           userData.geoLocation.coordinates[1] === 0) ||
         !userData.geoLocation.coordinates.length
       ) {
-        navigation.navigate('AddAddress');
-        ToastLong('Address is required');
+        if (isNetwork) {
+          navigation.navigate('AddAddress');
+          ToastLong('Address is required');
+        } else {
+          ToastLong('Internet Disconnected');
+        }
       } else {
         // Continue with your logic if geoLocation is valid
       }
@@ -142,6 +146,7 @@ const Home = () => {
   );
   const supportUser = useSelector((store: any) => store.user.supportUser);
   const closeProvider = useSelector((state: any) => state.user.closeProvider);
+  const isNetwork = useSelector((state: any) => state.user.isNetwork);
   // console.log('daaaaattttttaaaa', 'here:', closeProvider);
   const welcomeModal = useSelector((state: any) => state.user.welcomeModal);
   const [ContactAgent, setContactAgent] = useState(false);

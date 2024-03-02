@@ -6,7 +6,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {PersistGate} from 'redux-persist/integration/react';
 import {store, persistor} from './src/store/store';
 import SplashScreen from 'react-native-splash-screen';
-import {Provider, useSelector} from 'react-redux';
+import {Provider, useDispatch, useSelector} from 'react-redux';
 import {navigationRef} from './RootNavigation';
 import CustomerNavigation from './src/navigation/customerNavigation';
 import VendorNavigation from './src/navigation/vendorNavigation';
@@ -42,6 +42,8 @@ import {
 import {ToastShort} from './src/utils/utils';
 import Geolocation from '@react-native-community/geolocation';
 import TrackRiderLocation from './src/tracking/trkLocation';
+import NetInfo from '@react-native-community/netinfo';
+import {addIsNetwork} from './src/store/reducer/mainSlice';
 // import {DefaultTrack} from './src/tracking/default';
 // import ReactNativeForegroundService from '@supersami/rn-foreground-service';
 // import RNLocation from 'react-native-location';
@@ -326,6 +328,33 @@ const App = () => {
       get();
     }, [userData]);
 
+    const dispatch = useDispatch();
+    const [isConnected, setIsConnected] = useState(true); // Initial state assuming network is connected
+    const isNetwork = useSelector((state: any) => state.user.isNetwork);
+    useEffect(() => {
+      const unsubscribe = NetInfo.addEventListener(state => {
+        // setIsConnected(state.isConnected);
+        dispatch(addIsNetwork(state.isConnected));
+      });
+      return () => {
+        unsubscribe(); // Clean up the event listener
+      };
+    }, []);
+
+    useEffect(() => {
+      // Show toast message when network connection is lost
+      if (!isNetwork) {
+        Toast.show({
+          type: 'error',
+          text1: 'Network Error',
+          text2: 'Please check your internet connection',
+          position: 'bottom',
+          visibilityTime: 3000, // 3 seconds
+          autoHide: true,
+        });
+      }
+    }, [isNetwork]);
+
     if (loggedIn && loggedIn.token) {
       return <HomeStack />;
     } else {
@@ -365,7 +394,7 @@ const App = () => {
     authorizationLevel: 'always', // Request "always" location permission
     skipPermissionRequests: false, // Prompt for permission if not granted
   });
-  // Watch for position updates
+
   return (
     <>
       <RouteContext.Provider

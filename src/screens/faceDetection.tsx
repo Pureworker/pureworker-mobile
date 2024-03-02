@@ -341,7 +341,7 @@ export default function FaceDetection({navigation, route}: any) {
                     fontFamily: 'Inter-Regular',
                   },
                 ]}>
-                Please ensure you're in a well-lit area. if adequate lighting
+                Please ensure you're in a well-lit area. If adequate lighting
                 isn't available now, you can skip this verification, but
                 remember, it is required to approve your profile.
               </Text>

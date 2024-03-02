@@ -114,7 +114,7 @@ const PRofileStep1 = () => {
       setisLoading(true);
       const res = await completeProfile({services: arr, action: action});
       if (res?.status === 200 || res?.status === 201) {
-        ToastShort(action === 'add' ? 'Service added' : 'Service removed');
+        // ToastShort(action === 'add' ? 'Service added' : 'Service removed');
       } else {
         Snackbar.show({
           text: res?.error?.message

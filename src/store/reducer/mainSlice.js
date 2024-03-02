@@ -118,6 +118,7 @@ export const mainSlice = createSlice({
       state.privacyPolicy = [];
       state.anyratings = [];
       state.providerintrackOrders = [];
+      state.isNetwork = true;
     },
 
     addCategory: (state, action) => {
@@ -288,6 +289,9 @@ export const mainSlice = createSlice({
     addViewOrder: (state, action) => {
       state.viewOrder = action.payload;
     },
+    addIsNetwork: (state, action) => {
+      state.isNetwork = action.payload;
+    },
   },
 });
 
@@ -334,6 +338,7 @@ export const {
   addSPRating,
   addProviderInTrackOrder,
   addViewOrder,
+  addIsNetwork
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);
