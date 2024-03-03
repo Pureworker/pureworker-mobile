@@ -395,13 +395,26 @@ const App = () => {
     skipPermissionRequests: false, // Prompt for permission if not granted
   });
 
+  const linking = {
+    prefixes: ['pureworker://', 'https://pureworker.page.link'],
+    config: {
+      screens: {
+        Homes: {
+          screens: {
+            Referrals: 'referrals',
+          },
+        },
+      },
+    },
+  };
+
   return (
     <>
       <RouteContext.Provider
         value={{currentState, setCurrentState: updateState}}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-            <NavigationContainer ref={navigationRef}>
+            <NavigationContainer ref={navigationRef} linking={linking}>
               <MainStack />
             </NavigationContainer>
           </PersistGate>

@@ -31,9 +31,15 @@
             <action android:name="android.intent.action.VIEW"/>
             <category android:name="android.intent.category.DEFAULT"/>
             <category android:name="android.intent.category.BROWSABLE"/>
-            <data android:host="pureworker.page.link" android:scheme="http"/>
-            <data android:host="pureworker.page.link" android:scheme="https"/>
             <data android:scheme="pureworker"/>
+        </intent-filter>
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="http" />
+            <data android:scheme="https" />
+            <data android:host="pureworker.page.link" />
         </intent-filter>
       </activity>
 
