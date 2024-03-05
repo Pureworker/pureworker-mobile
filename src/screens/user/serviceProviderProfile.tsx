@@ -138,7 +138,6 @@ const ServiceProviderProfile = () => {
     const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
     return daysAgo;
   }
-
   const initBookmarked = async () => {
     const res: any = await getBookMarkedProviders(id);
     console.log('bbbbbmmm', res?.data?.data);
@@ -147,7 +146,6 @@ const ServiceProviderProfile = () => {
       // dispatch(addprovidersByCateegory(res?.data?.data));
     }
   };
-
   useEffect(() => {
     const _initBookmarked = async () => {
       const res: any = await getBookMarkedProviders(id);
@@ -256,7 +254,7 @@ const ServiceProviderProfile = () => {
     );
   }, [profileData?._id, savedProviders]);
 
-  console.log('Reviews:', serviceProviderData?.reviews);
+  // console.log('Reviews:', serviceProviderData);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -814,10 +812,10 @@ const ServiceProviderProfile = () => {
                     </View>
 
                     {(
-                      profileData?.portfolio?.portfolio ||
+                      closeToData.portfolio ||
                       serviceProviderData?.portfolio?.portfolio
                     )?.map((item, index) => {
-                      console.log('PORRRRRRRRRTTTTT:', item, item?.images);
+                      // console.log('PORRRRRRRRRTTTTT:', item, item?.images);
                       return (
                         <View style={tw`w-full mt-3`} key={index}>
                           <View style={tw` `}>

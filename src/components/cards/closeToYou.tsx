@@ -187,8 +187,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
                       <TouchableOpacity
                       key={index}
                         onPress={() => {
-                          // console.log(item.portfolios?.[index]);
-                          
+                          console.log('hmm',item.portfolios?.[index]);
                           navigation.navigate('ServiceProviderProfile', {
                             item: item,
                             serviceName: service?.name,

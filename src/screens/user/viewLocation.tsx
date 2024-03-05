@@ -122,7 +122,6 @@ const ViewLocation = ({route}: any) => {
       longitudeDelta,
     };
   };
-
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <ScrollView>
