@@ -80,7 +80,6 @@ const Home = () => {
       }
       console.error('GEOLOCATION::', res?.data?.user?.geoLocation);
       const userData = res?.data?.user;
-      // navigation.navigate('AddAddress');
       if (
         !userData?.geoLocation ||
         !userData.geoLocation.coordinates ||

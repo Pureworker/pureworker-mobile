@@ -57,6 +57,8 @@ import FastImage from 'react-native-fast-image';
 import TickIcon from '../../assets/svg/Tick';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import EditComp from './comp/EditComp';
+import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
 const ProfileStep21 = () => {
   const navigation = useNavigation<StackNavigation>();
   const route: Route = useRoute();
@@ -204,6 +206,8 @@ const ProfileStep21 = () => {
   const userData = useSelector((state: any) => state.user.userData);
   const categoryId = useSelector((state: any) => state.user.pickedServicesId);
 
+  const [profileLoading, setprofileLoading] = useState(false);
+
   const [storedPortfolios, setstoredPortfolios] = useState([]);
   useEffect(() => {
     const initGetProfile = async () => {
@@ -262,6 +266,7 @@ const ProfileStep21 = () => {
               // Camera permission is granted, open camera here
               await launchCamera(options, async (resp: unknown) => {
                 if (resp?.assets?.length > 0) {
+                  setprofileLoading(true)
                   setisLoading(true);
                   console.log('resp', resp?.assets[0]);
                   setImageUrl(resp?.assets[0].uri);
@@ -281,6 +286,7 @@ const ProfileStep21 = () => {
                 await launchCamera(options, async (resp: unknown) => {
                   if (resp?.assets?.length > 0) {
                     setisLoading(true);
+                    setprofileLoading(true)
                     console.log('resp', resp?.assets[0]);
                     setImageUrl(resp?.assets[0].uri);
                     const data = await uploadImgorDoc(resp?.assets[0]);
@@ -296,8 +302,10 @@ const ProfileStep21 = () => {
               }
             }
           } catch (error) {
+            setprofileLoading(false);
             setisLoading(false);
           } finally {
+            setprofileLoading(false);
             setisLoading(false);
             setisLoading(false);
           }
@@ -952,6 +960,7 @@ const ProfileStep21 = () => {
           </TouchableOpacity>
         </View>
       </Modal>
+      <Spinner visible={profileLoading} customIndicator={<CustomLoading />} />
     </SafeAreaView>
   );
 };
