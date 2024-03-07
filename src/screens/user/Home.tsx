@@ -44,6 +44,7 @@ import {ToastLong} from '../../utils/utils';
 import WelcomeModal from '../../components/SignupModal';
 import axios from 'axios';
 import {getUnreadMessages} from '../../utils/api/chat';
+import NetInfo from '@react-native-community/netinfo';
 
 const Home = () => {
   useEffect(() => {
@@ -80,19 +81,22 @@ const Home = () => {
       }
       console.error('GEOLOCATION::', res?.data?.user?.geoLocation);
       const userData = res?.data?.user;
+      const netInfo = await NetInfo.fetch();
+      const isInternetConnected = netInfo.isConnected;
       if (
+        !isInternetConnected ||
         !userData?.geoLocation ||
         !userData.geoLocation.coordinates ||
         (userData.geoLocation.coordinates[0] === 0 &&
           userData.geoLocation.coordinates[1] === 0) ||
         !userData.geoLocation.coordinates.length
       ) {
-        if (isNetwork) {
-          navigation.navigate('AddAddress');
-          ToastLong('Address is required');
-        } else {
-          ToastLong('Internet Disconnected');
-        }
+        // if (isNetwork) {
+        navigation.navigate('AddAddress');
+        ToastLong('Address is required');
+        // } else {
+        //   ToastLong('Internet Disconnected');
+        // }
       } else {
         // Continue with your logic if geoLocation is valid
       }
@@ -170,7 +174,10 @@ const Home = () => {
       }
       console.error('GEOLOCATION::', res?.data?.user?.geoLocation);
       const userData = res?.data?.user;
+      const netInfo = await NetInfo.fetch();
+      const isInternetConnected = netInfo.isConnected;
       if (
+        !isInternetConnected ||
         !userData?.geoLocation ||
         !userData.geoLocation.coordinates ||
         (userData.geoLocation.coordinates[0] === 0 &&

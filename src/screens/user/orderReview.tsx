@@ -528,8 +528,18 @@ const OrderReview = ({route}: any) => {
                 />
               </View>
 
-              <View style={tw`flex flex-row items-center mt-auto mb-4 ml-4`}>
-                {/* <CheckBox
+              <View style={tw`mt-auto`}>
+                <View style={tw`ml-4`}>
+                  <Textcomp
+                    text={'Note: Pureworker charges a 15% fee on all orders.'}
+                    size={12}
+                    lineHeight={14.5}
+                    color={'#000000'}
+                    fontFamily={'Inter-Regular'}
+                  />
+                </View>
+                <View style={tw`flex flex-row items-center mb-4 ml-4`}>
+                  {/* <CheckBox
                   disabled={false}
                   value={toggleCheckBox}
                   style={{backgroundColor: 'white'}}
@@ -538,24 +548,26 @@ const OrderReview = ({route}: any) => {
                   onCheckColor={colors.parpal}
                   onValueChange={newValue => setToggleCheckBox(newValue)}
                 /> */}
-                <CheckBox
-                  style={{width: 30, padding: 10}}
-                  onClick={() => {
-                    setToggleCheckBox(!toggleCheckBox);
-                  }}
-                  isChecked={toggleCheckBox}
-                  // leftText={'CheckBox'}
-                />
-                <View style={tw`ml-4`}>
-                  <Textcomp
-                    text={'I agree to the above terms.'}
-                    size={12}
-                    lineHeight={14.5}
-                    color={'#000000'}
-                    fontFamily={'Inter-Regular'}
+                  <CheckBox
+                    style={{width: 30, padding: 10}}
+                    onClick={() => {
+                      setToggleCheckBox(!toggleCheckBox);
+                    }}
+                    isChecked={toggleCheckBox}
+                    // leftText={'CheckBox'}
                   />
+                  <View style={tw`ml-4`}>
+                    <Textcomp
+                      text={'I agree to the above terms.'}
+                      size={12}
+                      lineHeight={14.5}
+                      color={'#000000'}
+                      fontFamily={'Inter-Regular'}
+                    />
+                  </View>
                 </View>
               </View>
+
               <TouchableOpacity
                 // disabled={!toggleCheckBox}
                 style={tw`bg-[${colors.parpal}] w-[85%] py-4 mb-4 items-center  mx-auto rounded`}

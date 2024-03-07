@@ -39,7 +39,7 @@ import {
   RESULTS,
   requestNotifications,
 } from 'react-native-permissions';
-import {ToastShort} from './src/utils/utils';
+import {ToastLong, ToastShort} from './src/utils/utils';
 import Geolocation from '@react-native-community/geolocation';
 import TrackRiderLocation from './src/tracking/trkLocation';
 import NetInfo from '@react-native-community/netinfo';
@@ -334,7 +334,10 @@ const App = () => {
     useEffect(() => {
       const unsubscribe = NetInfo.addEventListener(state => {
         // setIsConnected(state.isConnected);
-        dispatch(addIsNetwork(state.isConnected));
+        if (!state.isConnected) {
+          ToastLong('Network  disconnected. Please check!');
+        }
+        dispatch(addIsNetwork(!!state.isConnected));
       });
       return () => {
         unsubscribe(); // Clean up the event listener
