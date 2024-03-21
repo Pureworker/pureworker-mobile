@@ -5,9 +5,16 @@ import {addprovidersByCateegory} from '../../store/reducer/mainSlice';
 //<<<<<<<<<<<<<<<--------------Staging------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
 //<<<<<<<<<<<<<<<--------------Production------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const API_BASE_URL = 'https://api.pureworker.com/api';
+// const API_BASE_URL = 'https://api.pureworker.com/api';
+const API_BASE_URL = 'https://pureworker-backend.onrender.com/api';
+// import {REACT_APP_DEV_MODE, REACT_APP_PROD_MODE} from '@env';
+// const API_BASE_URL =
+//   process.env.NODE_ENV === 'development'
+//     ? REACT_APP_DEV_MODE
+//     : REACT_APP_PROD_MODE;
 // 'https://pureworker.onrender.com';
 // const API_BASE_URL = 'http://167.86.66.12/api';
+
 export const verifyLogin = async (param: any) => {
   console.log('verifyLogin func started', param);
   try {

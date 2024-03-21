@@ -3,7 +3,8 @@ import axios from 'axios';
 import { store } from '../../store/store';
 import { updateUnreadChat } from '../../store/reducer/mainSlice';
 
-const API_BASE_URL = 'https://api.pureworker.com/api';
+// const API_BASE_URL = 'https://api.pureworker.com/api';
+const API_BASE_URL = 'https://pureworker-backend.onrender.com/api';
 
 export const getUnreadMessages = async (): Promise<number> => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');

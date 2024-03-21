@@ -711,9 +711,9 @@ const Home = ({navigation}: any) => {
           ) : null}
           {userData?.isVerified === 'review' && (
             <TouchableOpacity
-              // disabled={true}
+              disabled={true}
               onPress={() => {
-                navigation.navigate('ProfileStep11');
+                // navigation.navigate('ProfileStep11');
                 // navigation.navigate('ProfileStep3');
               }}
               style={[

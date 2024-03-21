@@ -26,12 +26,11 @@ import codePush from 'react-native-code-push';
 //   Subscription,
 // } from 'react-native-background-geolocation';
 // import BackgroundFetch from 'react-native-background-fetch';
-import axios from 'axios';
 import Toast from 'react-native-toast-message';
 import toastConfig from './src/utils/toastConfig';
 import SettingsService from './src/tracking/SettingsService';
 import {registerTransistorAuthorizationListener} from './src/tracking/authorization';
-import ENV from './src/tracking/ENV';
+// import ENV from './src/tracking/ENV';
 import {
   PERMISSIONS,
   check,
@@ -44,6 +43,7 @@ import Geolocation from '@react-native-community/geolocation';
 import TrackRiderLocation from './src/tracking/trkLocation';
 import NetInfo from '@react-native-community/netinfo';
 import {addIsNetwork} from './src/store/reducer/mainSlice';
+import {REACT_APP_DEV_MODE, REACT_APP_PROD_MODE} from '@env';
 // import {DefaultTrack} from './src/tracking/default';
 // import ReactNativeForegroundService from '@supersami/rn-foreground-service';
 // import RNLocation from 'react-native-location';
