@@ -2,11 +2,11 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {store} from '../../store/store';
 import {addprovidersByCateegory} from '../../store/reducer/mainSlice';
+import { GLOBAL_DEV_API_BASE_URL } from '../../constants/api';
 //<<<<<<<<<<<<<<<--------------Staging------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
 //<<<<<<<<<<<<<<<--------------Production------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// const API_BASE_URL = 'https://api.pureworker.com/api';
-const API_BASE_URL = 'https://pureworker-backend.onrender.com/api';
+const API_BASE_URL = GLOBAL_DEV_API_BASE_URL;
 // import {REACT_APP_DEV_MODE, REACT_APP_PROD_MODE} from '@env';
 // const API_BASE_URL =
 //   process.env.NODE_ENV === 'development'
@@ -180,34 +180,23 @@ export const resendOtp = async (param: any) => {
 //   }
 // };
 export const signIn = async (param: any) => {
-  console.log('signIn func started');
+  console.log('signIn func started', param, `${API_BASE_URL}/auth/log-in`);
   try {
     const response = await axios({
       method: 'post',
       url: `${API_BASE_URL}/auth/log-in`,
+      // url: 'https://pureworker-backend.onrender.com/api/auth/log-in'
       data: {
         email: param.email,
       },
     });
-    // const storeTokenData = async (res: any) => {
-    //   console.log('responsetoken here lets destructure:', res?.data.token);
-    //   try {
-    //     await AsyncStorage.setItem('AuthToken', res?.data?.token);
-    //     await AsyncStorage.setItem('Role', res?.data?.user.accountType);
-    //   } catch (e) {
-    //     // saving error
-    //     console.log('Error Saving Token data.');
-    //   }
-    // };
-    // await storeTokenData(response);
-
     if (response.status === 201) {
       console.log('response data:', response?.data);
     }
     console.log(response?.data);
     return response;
   } catch (error) {
-    console.log(error);
+    console.log(error, error?.response?.data);
     return {
       status: 400,
       err: error,

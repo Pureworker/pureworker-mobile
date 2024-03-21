@@ -10,11 +10,11 @@ import {
   addprovidersByCateegory,
   addsupportUser,
 } from '../../store/reducer/mainSlice';
+import { GLOBAL_DEV_API_BASE_URL } from '../../constants/api';
 // const API_BASE_URL = 'https://pureworker.onrender.com';
 // const API_BASE_URL = 'http://167.86.66.12/api';
 // const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
-const API_BASE_URL = 'https://pureworker-backend.onrender.com/api';
-// const API_BASE_URL = 'https://api.pureworker.com/api';
+const API_BASE_URL = GLOBAL_DEV_API_BASE_URL;
 //
 export const getUser = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');

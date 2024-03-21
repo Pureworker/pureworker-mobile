@@ -5,15 +5,16 @@ import React from 'react';
 import {useDispatch} from 'react-redux';
 import {addchatList, updateUnreadChat} from '../store/reducer/mainSlice';
 import {getChatsbyuser} from '../utils/api/func';
+import {GLOBAL_DEV_API_BASE_URL} from '../constants/api';
 
-const API_BASE_URL = 'https://api.pureworker.com/api';
+const API_BASE_URL = GLOBAL_DEV_API_BASE_URL;
 
 const useChat = () => {
   const dispatch = useDispatch();
 
   const getUnreadMessages = async (): Promise<number> => {
     console.log('---qewrt');
-    
+
     const AuthToken = await AsyncStorage.getItem('AuthToken');
     // unread-chats
     const response = await axios.get(`${API_BASE_URL}/unread-chats`, {

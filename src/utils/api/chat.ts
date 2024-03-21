@@ -2,9 +2,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { store } from '../../store/store';
 import { updateUnreadChat } from '../../store/reducer/mainSlice';
+import { GLOBAL_API_BASE_URL, GLOBAL_DEV_API_BASE_URL } from '../../constants/api';
 
-// const API_BASE_URL = 'https://api.pureworker.com/api';
-const API_BASE_URL = 'https://pureworker-backend.onrender.com/api';
+// const API_BASE_URL = GLOBAL_API_BASE_URL;
+const API_BASE_URL = GLOBAL_DEV_API_BASE_URL;
 
 export const getUnreadMessages = async (): Promise<number> => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
@@ -14,9 +15,6 @@ export const getUnreadMessages = async (): Promise<number> => {
       Authorization: `Bearer ${AuthToken}`,
     },
   });
-
-  // console.log(response?.data?.chats?.[0]?.chatsWithUnreadMessages);
-
   store.dispatch(
     // updateUnreadChat(response?.data?.chats?.[0]?.chatsWithUnreadMessages),
     updateUnreadChat(response?.data?.number),
@@ -35,13 +33,11 @@ export const _getUnreadMessages = async (): Promise<number> => {
     },
   });
   console.log('ehn:', response?.data);
-  // console.log(response?.data?.chats?.[0]?.chatsWithUnreadMessages);
   store.dispatch(
     // updateUnreadChat(response?.data?.chats?.[0]?.chatsWithUnreadMessages),
     updateUnreadChat(response?.data?.number),
   );
   return response?.data?.chats?.[0]?.chatsWithUnreadMessages;
-  //   {"chats": [{"chatsWithUnreadMessages": 3}], "status": "success"}
 };
 
 export const markAsRead = async (messageId: string) => {
