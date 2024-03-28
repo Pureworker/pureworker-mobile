@@ -364,9 +364,6 @@ const App = () => {
       return <OnboardingStack />;
     }
   };
-  // const [currentState, setCurrentState] = React.useState(
-  //   useContext(RouteContext).initState,
-  // );
   const [currentState, setCurrentState] = React.useState('1');
   const updateState = async (newState: any) => {
     // Update the state and save it to AsyncStorage
@@ -428,21 +425,10 @@ const App = () => {
     </>
   );
 };
-const codePushOptions = {
-  checkFrequency:
-    codePush.CheckFrequency.ON_APP_RESUME |
-    codePush.CheckFrequency.ON_APP_START,
-  installMode: codePush.InstallMode.IMMEDIATE,
-};
-// export default App;
-export default codePush(codePushOptions)(App);
-
-// Installed Packages
-/*****
- *
- *
- *
- *
- * - react-native-notifications
- * - react-native-push-notification
- * */
+// const codePushOptions = {
+//   checkFrequency:
+//     codePush.CheckFrequency.ON_APP_RESUME |
+//     codePush.CheckFrequency.ON_APP_START,
+//   installMode: codePush.InstallMode.IMMEDIATE,
+// };
+export default App;
