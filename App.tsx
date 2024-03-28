@@ -363,7 +363,7 @@ const App = () => {
     } else {
       return <OnboardingStack />;
     }
-  };
+  }; 
   const [currentState, setCurrentState] = React.useState('1');
   const updateState = async (newState: any) => {
     // Update the state and save it to AsyncStorage
