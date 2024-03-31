@@ -1675,7 +1675,7 @@ export const addToWait = async (param: any) => {
   try {
     const response = await axios({
       method: 'post',
-      url: `${API_BASE_URL}/join-mailing-list`,
+      url: `${API_BASE_URL}/join-waiting-list`,
       data: param,
       headers: {
         Authorization: `Bearer ${AuthToken}`,
