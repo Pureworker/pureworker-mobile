@@ -388,7 +388,7 @@ const App = () => {
       }
     };
     loadState();
-  }, []); // Empty dependency array to run this effect once on component mount
+  }, []); 
   useEffect(() => {}, []); // Empty dependency array to run this effect once on component mount
   Geolocation.setRNConfiguration({
     authorizationLevel: 'always', // Request "always" location permission
