@@ -49,8 +49,8 @@ export default function WaitingList({navigation}: any) {
       });
 
       if (res?.status === 200 || res?.status === 201) {
-        ToastLong('Congrats, You have been Added');
-        navigation.navigate('CustomerSignup');
+        ToastLong('Congrats, You have been Added to the waiting list.');
+        // navigation.navigate('CustomerSignup');
       }
     } catch (error) {}
   };
@@ -61,9 +61,7 @@ export default function WaitingList({navigation}: any) {
       validationSchema={validationSchema}
       onSubmit={async values => {
         console.log('heyy2');
-        // Handle form submission here
         await handleWait(values);
-        // actions.setSubmitting(false);
       }}>
       {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
         <SafeAreaView style={{flex: 1, backgroundColor: 'black'}}>
