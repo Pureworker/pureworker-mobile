@@ -16,26 +16,29 @@ export default function WaitingList({navigation}: any) {
   const [name, setName] = useState('');
   const validationSchema = Yup.object().shape({
     name: Yup.string()
-      .required('Email/Phone is required')
-      .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-        'Must be a valid email or phone number',
-      )
-      .test(
-        'is-email-or-phone',
-        'Must be a valid email or phone number',
-        value => {
-          // Check if the input is a valid email address
-          if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)) {
-            return true;
-          }
-          // Check if the input is a valid phone number
-          if (/^\d{10}$/.test(value)) {
-            return true;
-          }
-          return false;
-        },
-      ),
+      .email('Invalid email address')
+      .required('Email is required'),
+    // Yup.string()
+    //   .required('Email/Phone is required')
+    //   .matches(
+    //     /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+    //     'Must be a valid email or phone number',
+    //   )
+    //   .test(
+    //     'is-email-or-phone',
+    //     'Must be a valid email or phone number',
+    //     value => {
+    //       // Check if the input is a valid email address
+    //       if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)) {
+    //         return true;
+    //       }
+    //       // Check if the input is a valid phone number
+    //       if (/^\d{10}$/.test(value)) {
+    //         return true;
+    //       }
+    //       return false;
+    //     },
+    //   ),
   });
 
   const handleWait = async (value: {name: any}) => {
@@ -95,7 +98,7 @@ export default function WaitingList({navigation}: any) {
                     color: '#fff',
                     marginTop: 20,
                   }}>
-                  Your Email or Phone Number
+                  Your Email
                 </Text>
                 <TextInputs
                   style={{marginTop: 15}}
