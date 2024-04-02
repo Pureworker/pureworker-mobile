@@ -5,7 +5,7 @@ import TermAndCondition from '../screens/TermAndCondition';
 import FAQ from '../screens/FAQ';
 import DrawerMenu from './drawerMenu2';
 import EditServices from '../screens/vendor/editService';
-import TransactionHistory from '../screens/user/transactionHistory';
+// import TransactionHistory from '../screens/user/transactionHistory';
 import AddServices from '../screens/vendor/addServices';
 import Congratulations from '../screens/profile/congratulations';
 // import Withdraw from '../screens/vendor/withdraw';
@@ -26,6 +26,7 @@ import ProfileStep5 from '../screens/profile/ProfileStep5';
 import PRofileStep11 from '../screens/profile/edit/ProfileStep11';
 import ProfileStep211 from '../screens/profile/edit/ProfileStep211';
 import ProfileStep21 from '../screens/profile/profileStep21';
+import TransactionHistory from '../screens/vendor/transactionHistory';
 
 const Stack = createNativeStackNavigator();
 

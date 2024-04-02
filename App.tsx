@@ -363,10 +363,7 @@ const App = () => {
     } else {
       return <OnboardingStack />;
     }
-  };
-  // const [currentState, setCurrentState] = React.useState(
-  //   useContext(RouteContext).initState,
-  // );
+  }; 
   const [currentState, setCurrentState] = React.useState('1');
   const updateState = async (newState: any) => {
     // Update the state and save it to AsyncStorage
@@ -391,7 +388,7 @@ const App = () => {
       }
     };
     loadState();
-  }, []); // Empty dependency array to run this effect once on component mount
+  }, []); 
   useEffect(() => {}, []); // Empty dependency array to run this effect once on component mount
   Geolocation.setRNConfiguration({
     authorizationLevel: 'always', // Request "always" location permission
@@ -428,21 +425,10 @@ const App = () => {
     </>
   );
 };
-const codePushOptions = {
-  checkFrequency:
-    codePush.CheckFrequency.ON_APP_RESUME |
-    codePush.CheckFrequency.ON_APP_START,
-  installMode: codePush.InstallMode.IMMEDIATE,
-};
-// export default App;
-export default codePush(codePushOptions)(App);
-
-// Installed Packages
-/*****
- *
- *
- *
- *
- * - react-native-notifications
- * - react-native-push-notification
- * */
+// const codePushOptions = {
+//   checkFrequency:
+//     codePush.CheckFrequency.ON_APP_RESUME |
+//     codePush.CheckFrequency.ON_APP_START,
+//   installMode: codePush.InstallMode.IMMEDIATE,
+// };
+export default App;
