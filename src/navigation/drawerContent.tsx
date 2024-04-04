@@ -218,17 +218,7 @@ const DrawerContent = () => {
     if ([200, 201].includes(res?.status)) {
       // await initGetData();
       await initGetUsers();
-      // Toast.show({
-      //   type: 'success',
-      //   text1: 'Picture uploaded successfully 🚀. ',
-      // });
     } else {
-      // Toast.show({
-      //   type: 'error',
-      //   text1: `${
-      //     res?.error?.message ? res?.error?.message : 'Oops! An error occured!'
-      //   } 🚀. `,
-      // });
     }
     setloading(false);
   };

@@ -67,7 +67,10 @@ export default function Register({navigation}: any) {
           </View>
           <Button
             text={'Customer'}
-            onClick={() => navigation.navigate('waitingList')}
+            onClick={() => {
+              // navigation.navigate('waitingList')
+              navigation.navigate('CustomerSignup');
+            }}
             textStyle={{color: '#000', fontSize: 20}}
             style={{
               width: SIZES.width * 0.85,

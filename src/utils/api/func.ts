@@ -9,8 +9,9 @@ import {
   addcustomerOrders,
   addprovidersByCateegory,
   addsupportUser,
+  logout,
 } from '../../store/reducer/mainSlice';
-import { GLOBAL_DEV_API_BASE_URL } from '../../constants/api';
+import {GLOBAL_DEV_API_BASE_URL} from '../../constants/api';
 // const API_BASE_URL = 'https://pureworker.onrender.com';
 // const API_BASE_URL = 'http://167.86.66.12/api';
 // const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
@@ -27,6 +28,9 @@ export const getUser = async (param: any) => {
     });
     if (response?.status === 201 || response?.status === 200) {
       console.log('GET_USER', response?.status);
+    }
+    if (response?.status === 401) {
+      store.dispatch(logout());
     }
     console.log('GET_USER:', response?.status);
     return response;
@@ -857,9 +861,11 @@ export const updateUserData = async (param: any) => {
       data: param,
       // {uri: `${param}`},
     });
-
     if (response?.status === 201 || response?.status === 200) {
       console.log('updateUserData res data:', response?.data);
+    }
+    if (response?.status === 401) {
+      store.dispatch(logout());
     }
     return response;
   } catch (error) {
@@ -871,7 +877,6 @@ export const updateUserData = async (param: any) => {
     };
   }
 };
-//chats
 export const getChatsbyuser = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   console.log('getChatsbyuser func started', param);
