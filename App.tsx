@@ -20,17 +20,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RouteContext} from './src/utils/context/route_context';
 import * as Sentry from '@sentry/react-native';
 import codePush from 'react-native-code-push';
-// import BackgroundGeolocation from 'react-native-background-geolocation';
-// import BackgroundGeolocation, {
-//   Location,
-//   Subscription,
-// } from 'react-native-background-geolocation';
-// import BackgroundFetch from 'react-native-background-fetch';
 import Toast from 'react-native-toast-message';
 import toastConfig from './src/utils/toastConfig';
 import SettingsService from './src/tracking/SettingsService';
 import {registerTransistorAuthorizationListener} from './src/tracking/authorization';
-// import ENV from './src/tracking/ENV';
 import {
   PERMISSIONS,
   check,
@@ -44,9 +37,6 @@ import TrackRiderLocation from './src/tracking/trkLocation';
 import NetInfo from '@react-native-community/netinfo';
 import {addIsNetwork} from './src/store/reducer/mainSlice';
 import {REACT_APP_DEV_MODE, REACT_APP_PROD_MODE} from '@env';
-// import {DefaultTrack} from './src/tracking/default';
-// import ReactNativeForegroundService from '@supersami/rn-foreground-service';
-// import RNLocation from 'react-native-location';
 Sentry.init({
   dsn: 'https://aaf6ecb52ce579d3e2a85f314f1773ad@o4506399508725760.ingest.sentry.io/4506410437509120',
 });
@@ -130,15 +120,8 @@ const App = () => {
   const [events, setEvents] = React.useState<any[]>([]);
   const [enabled, setEnabled] = React.useState(false);
   const bgGeoEventSubscriptions: Subscription[] = [];
-
   React.useEffect(() => {
-    // initBackgroundFetch(); // <-- optional
-    // initBackgroundGeolocation();
-    // registerTransistorAuthorizationListener(navigation);
     return () => {
-      // Remove BackgroundGeolocation event-subscribers when the View is removed or refreshed
-      // during development live-reload.  Without this, event-listeners will accumulate with
-      // each refresh during live-reload.
       unsubscribe();
     };
   }, []);
@@ -155,7 +138,6 @@ const App = () => {
       subscription.remove(),
     );
   };
-  /// Adds events to List
   const addEvent = (name: string, params: any) => {
     let timestamp = new Date();
     const event = {
@@ -166,40 +148,6 @@ const App = () => {
     };
     setEvents(previous => [...previous, event]);
   };
-  // const initBackgroundFetch = async () => {
-  //   await BackgroundFetch.configure(
-  //     {
-  //       minimumFetchInterval: 15,
-  //       stopOnTerminate: true,
-  //     },
-  //     async taskId => {
-  //       console.log('[BackgroundFetch] ', taskId);
-  //       try {
-  //         const userLocation = await fetchUserLocation();
-  //         const response = await axios.post(
-  //           'https://api.pureworker.com/api/location2',
-  //           {
-  //             long: userLocation.longitude,
-  //             lat: userLocation.latitude,
-  //           },
-  //         );
-
-  //         console.log('Location sent successfully:', response.data);
-  //       } catch (error) {
-  //         console.error('Error sending location7:', error);
-  //       }
-
-  //       // Finish the background fetch task
-  //       BackgroundFetch.finish(taskId);
-  //     },
-  //     taskId => {
-  //       console.log('[BackgroundFetch] TIMEOUT: ', taskId);
-  //       BackgroundFetch.finish(taskId);
-  //     },
-  //   );
-  // };
-  // For example, when the app starts
-  // initBackgroundFetch();
   const fetchUserLocation = async () => {
     const permissionStatus = await request(
       Platform.OS === 'android'
@@ -236,7 +184,6 @@ const App = () => {
     NotificationListner();
     // get();
   }, []);
-
   useEffect(() => {
     const checkNotificationPermission = async () => {
       try {
@@ -317,7 +264,6 @@ const App = () => {
       return <VendorNavigation />;
     }
   }
-  // eslint-disable-next-line react/no-unstable-nested-components
   const MainStack = () => {
     const loggedIn = useSelector((state: any) => state.user.isLoggedIn);
     const userData = useSelector((state: any) => state.user.userData);
@@ -363,10 +309,9 @@ const App = () => {
     } else {
       return <OnboardingStack />;
     }
-  }; 
+  };
   const [currentState, setCurrentState] = React.useState('1');
   const updateState = async (newState: any) => {
-    // Update the state and save it to AsyncStorage
     try {
       await AsyncStorage.setItem('routeState', newState);
       setCurrentState(newState);
@@ -374,7 +319,6 @@ const App = () => {
       console.error('Error saving state to AsyncStorage:', error);
     }
   };
-  // const {currentState, setCurrentState} = useContext(RouteContext);
   useEffect(() => {
     // Load the state from AsyncStorage during component mount
     const loadState = async () => {
@@ -388,7 +332,7 @@ const App = () => {
       }
     };
     loadState();
-  }, []); 
+  }, []);
   useEffect(() => {}, []); // Empty dependency array to run this effect once on component mount
   Geolocation.setRNConfiguration({
     authorizationLevel: 'always', // Request "always" location permission
@@ -407,7 +351,6 @@ const App = () => {
       },
     },
   };
-
   return (
     <>
       <RouteContext.Provider
@@ -420,15 +363,14 @@ const App = () => {
           </PersistGate>
         </Provider>
       </RouteContext.Provider>
-      {/* <TrackRiderLocation /> */}
       <Toast config={toastConfig} visibilityTime={5000} autoHide={true} />
     </>
   );
 };
-// const codePushOptions = {
-//   checkFrequency:
-//     codePush.CheckFrequency.ON_APP_RESUME |
-//     codePush.CheckFrequency.ON_APP_START,
-//   installMode: codePush.InstallMode.IMMEDIATE,
-// };
-export default App;
+const codePushOptions = {
+  checkFrequency:
+    codePush.CheckFrequency.ON_APP_RESUME |
+    codePush.CheckFrequency.ON_APP_START,
+  installMode: codePush.InstallMode.IMMEDIATE,
+};
+export default codePush(codePushOptions)(App);
