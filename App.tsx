@@ -1,8 +1,7 @@
 import 'react-native-gesture-handler';
-import React, {useState, useRef, useEffect, useContext} from 'react';
-import {Alert, Dimensions, PermissionStatus, Platform} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Alert, Platform} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
 import {PersistGate} from 'redux-persist/integration/react';
 import {store, persistor} from './src/store/store';
 import SplashScreen from 'react-native-splash-screen';
@@ -23,7 +22,6 @@ import codePush from 'react-native-code-push';
 import Toast from 'react-native-toast-message';
 import toastConfig from './src/utils/toastConfig';
 import SettingsService from './src/tracking/SettingsService';
-import {registerTransistorAuthorizationListener} from './src/tracking/authorization';
 import {
   PERMISSIONS,
   check,
@@ -33,10 +31,8 @@ import {
 } from 'react-native-permissions';
 import {ToastLong, ToastShort} from './src/utils/utils';
 import Geolocation from '@react-native-community/geolocation';
-import TrackRiderLocation from './src/tracking/trkLocation';
 import NetInfo from '@react-native-community/netinfo';
 import {addIsNetwork} from './src/store/reducer/mainSlice';
-import {REACT_APP_DEV_MODE, REACT_APP_PROD_MODE} from '@env';
 Sentry.init({
   dsn: 'https://aaf6ecb52ce579d3e2a85f314f1773ad@o4506399508725760.ingest.sentry.io/4506410437509120',
 });
@@ -69,8 +65,6 @@ const App = () => {
   };
   const onClickNavigate = async (route: string) => {
     if (!validate(route) || !validate(org) || !validate(username)) {
-      // Re-direct to registration screen
-      // onClickRegister();
       return;
     }
 
@@ -264,6 +258,7 @@ const App = () => {
       return <VendorNavigation />;
     }
   }
+  // eslint-disable-next-line react/no-unstable-nested-components
   const MainStack = () => {
     const loggedIn = useSelector((state: any) => state.user.isLoggedIn);
     const userData = useSelector((state: any) => state.user.userData);
@@ -290,19 +285,19 @@ const App = () => {
       };
     }, []);
 
-    useEffect(() => {
-      // Show toast message when network connection is lost
-      if (!isNetwork) {
-        Toast.show({
-          type: 'error',
-          text1: 'Network Error',
-          text2: 'Please check your internet connection',
-          position: 'bottom',
-          visibilityTime: 3000, // 3 seconds
-          autoHide: true,
-        });
-      }
-    }, [isNetwork]);
+    // useEffect(() => {
+    //   Show toast message when network connection is lost
+    //   if (!isNetwork) {
+    //     Toast.show({
+    //       type: 'error',
+    //       text1: 'Network Error',
+    //       text2: 'Please check your internet connection',
+    //       position: 'bottom',
+    //       visibilityTime: 3000, // 3 seconds
+    //       autoHide: true,
+    //     });
+    //   }
+    // }, [isNetwork]);
 
     if (loggedIn && loggedIn.token) {
       return <HomeStack />;
@@ -374,3 +369,4 @@ const codePushOptions = {
   installMode: codePush.InstallMode.IMMEDIATE,
 };
 export default codePush(codePushOptions)(App);
+
