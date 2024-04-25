@@ -63,7 +63,7 @@ const Services = () => {
     }
   }, [searchInput, getServiceProviderPotfolio]);
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView>
         <View
           style={{
@@ -228,7 +228,7 @@ const Services = () => {
       <SafeAreaView>
         <View style={[tw` mt-auto bg-[${colors.darkPurple}]`, {height: 3}]} />
       </SafeAreaView>
-    </View>
+    </SafeAreaView>
   );
 };
 

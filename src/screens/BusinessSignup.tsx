@@ -433,7 +433,10 @@ export default function BusinessSignup() {
             width: 20,
             marginLeft: 25,
             marginBottom: 10,
-            marginTop: StatusBar.currentHeight && StatusBar.currentHeight + 45,
+            marginTop:
+            Platform.OS === 'ios'
+              ? 20
+              : StatusBar.currentHeight && StatusBar.currentHeight + 40,
           }}
           resizeMode="contain"
         />

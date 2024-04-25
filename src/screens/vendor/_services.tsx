@@ -202,7 +202,7 @@ const _Services = ({route}: any) => {
                     ]}>
                     <View style={tw`my-auto pl-8`}>
                       <Textcomp
-                        text={'Service Provider Not Found...'}
+                        text={'No service provider available'}
                         size={17}
                         lineHeight={17}
                         color={'black'}
