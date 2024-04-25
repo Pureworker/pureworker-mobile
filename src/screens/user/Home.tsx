@@ -53,14 +53,18 @@ const Home = () => {
       .then(result => {
         if (result === RESULTS.GRANTED) {
           // Permission granted, get user's location
-          Geolocation.getCurrentPosition(
-            (position: any) => {
-              const {latitude, longitude} = position.coords;
-              console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-            },
-            (error: any) => console.error(error),
-            {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-          );
+          try {
+            Geolocation.getCurrentPosition(
+              (position: any) => {
+                const {latitude, longitude} = position.coords;
+                console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+              },
+              (error: any) => console.error(error),
+              {enableHighAccuracy: true, timeout: 15000, maximumAge: 60000},
+            );
+          } catch (error) {
+            console.error(error);
+          }
         }
       })
       .catch(error => {
