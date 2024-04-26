@@ -333,7 +333,6 @@ const App = () => {
     authorizationLevel: 'always', // Request "always" location permission
     skipPermissionRequests: false, // Prompt for permission if not granted
   });
-
   const linking = {
     prefixes: ['pureworker://', 'https://pureworker.page.link'],
     config: {
@@ -370,4 +369,3 @@ const codePushOptions = {
 };
 export default codePush(codePushOptions)(App);
 // export default App;
-

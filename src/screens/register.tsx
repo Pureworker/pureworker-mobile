@@ -68,7 +68,6 @@ export default function Register({navigation}: any) {
           <Button
             text={'Customer'}
             onClick={() => {
-              // navigation.navigate('waitingList')
               navigation.navigate('CustomerSignup');
             }}
             textStyle={{color: '#000', fontSize: 20}}

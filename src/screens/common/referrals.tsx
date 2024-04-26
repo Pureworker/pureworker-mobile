@@ -72,13 +72,13 @@ const Referrals = () => {
     try {
       await Share.share({
         message:
-          'I use Pureworker when I need any and all artisans and service providers. Download the app at https://www.pureworker.com/, then use my referral code: "qKAmeHPx" to sign up.',
+          `I use Pureworker when I need any and all artisans and service providers. Download the app at https://www.pureworker.com/, then use my referral code: "${contentToShare}" to sign up.`,
       });
     } catch (error) {
       console.error('Error sharing content:', error.message);
     }
   };
-
+  
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(() => {
