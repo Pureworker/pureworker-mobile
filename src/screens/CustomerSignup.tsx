@@ -246,6 +246,8 @@ export default function CustomerSignup() {
           // nationality: nationalityValue,
           accountType: 'customer',
           state: stateValue,
+          learnAboutUs:
+            learnAboutUs === 'Other' ? learnAboutUsOthers : learnAboutUs,
         };
         if (referralCode && referralCode?.length > 2) {
           loginData.referralCode = referralCode;
@@ -311,6 +313,9 @@ export default function CustomerSignup() {
     }
   };
   const [isFocus, setIsFocus] = useState(false);
+  const [learnAboutUs, setlearnAboutUs] = useState('');
+  const [learnAboutUsOthers, setlearnAboutUsOthers] = useState('');
+  const [learnFocus, setlearnFocus] = useState(false);
   return (
     <View
       style={{
@@ -853,6 +858,7 @@ export default function CustomerSignup() {
                 setState={setEmail}
                 keyBoardType={'email-address'}
               />
+
               <Text
                 style={{
                   fontSize: 16,
@@ -870,6 +876,83 @@ export default function CustomerSignup() {
               />
               {/* <Text style={{ fontSize: 16, fontFamily: commonStyle.fontFamily.medium, color: '#fff', marginTop: 15 }}>Password</Text>
               <TextInputs style={{ marginTop: 10 }} secure={true} labelText={'Enter Password'} state={password} setState={setPassword} /> */}
+            </View>
+            <View
+              style={{
+                zIndex: genderOpen ? 0 : 2,
+                minHeight: 500,
+                marginBottom: -400,
+              }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: commonStyle.fontFamily.medium,
+                  color: '#fff',
+                  marginTop: 15,
+                  marginBottom: 15,
+                }}>
+                How did you learn about us?
+              </Text>
+              <Dropdown
+                style={[
+                  tw``,
+                  {
+                    zIndex: 10,
+                    width: SIZES.width * 0.875,
+                    backgroundColor: '#F7F5F5',
+                    borderColor: '#9E9E9E14',
+                    height: 50,
+                    borderRadius: 10,
+                    paddingHorizontal: 10,
+                    color: '#757575',
+                  },
+                ]}
+                placeholderStyle={{
+                  color: '#757575',
+                }}
+                selectedTextStyle={{
+                  color: '#000',
+                }}
+                data={[
+                  {label: 'SMS/Call', value: 'SMS/Call'},
+                  {label: '⁠Social Media Ads', value: '⁠Social Media Ads'},
+                  {label: '⁠A friend', value: '⁠A friend'},
+                  {label: 'Email', value: 'Email'},
+                  {label: 'Other', value: 'Other'},
+                ]}
+                search
+                maxHeight={300}
+                labelField="label"
+                valueField="value"
+                placeholder={!learnFocus ? 'Select' : '...'}
+                searchPlaceholder="Search..."
+                inputSearchStyle={{
+                  color: '#757575',
+                }}
+                value={learnAboutUs}
+                onFocus={() => setIsFocus(true)}
+                onBlur={() => setIsFocus(false)}
+                itemTextStyle={{
+                  color: 'black',
+                }}
+                onChange={item => {
+                  console.log(item.value);
+                  setlearnAboutUs(item.value);
+                  setlearnFocus(false);
+                }}
+              />
+            </View>
+            <View style={{zIndex: 3}}>
+              {learnAboutUs === 'Other' && (
+                <View style={{marginTop: 15}}>
+                  <TextInputs
+                    style={{marginTop: 17}}
+                    labelText={'Enter Others'}
+                    state={learnAboutUsOthers}
+                    setState={setlearnAboutUsOthers}
+                  />
+                </View>
+              )}
             </View>
           </View>
 

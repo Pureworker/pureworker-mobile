@@ -13,6 +13,9 @@ import Modal from 'react-native-modal/dist/modal';
 
 const CloseToYouCard4 = ({item, index, navigation}: any) => {
   const [showModal, setshowModal] = useState(false);
+
+  console.log(item);
+  
   return (
     <>
       <TouchableOpacity
@@ -124,7 +127,7 @@ const CloseToYouCard4 = ({item, index, navigation}: any) => {
               tw`ml-auto  items-end`,
               {width: perWidth(80), marginTop: perWidth(1)},
             ]}>
-            <Review value={1} editable={false} />
+            <Review value={item?.averageRating} editable={false} />
           </View>
         </View>
       </TouchableOpacity>

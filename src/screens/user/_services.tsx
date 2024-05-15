@@ -63,7 +63,7 @@ const _Services = ({route}: any) => {
     const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
     return `${roundedKilometers} km`;
   }
-  console.log('BOOKMARK', userData?.bookmarks);
+  // console.log('BOOKMARK', userData?.bookmarks);
   useEffect(() => {
     const query = userData?.bookmarks?.filter(
       (item: {service: any}) => item?.service === id,
@@ -82,7 +82,7 @@ const _Services = ({route}: any) => {
     const initGetUsers = async () => {
       // setisLoading(true);
       const res: any = await getProviderByService(id);
-      console.log('dddddddd', res?.data);
+      console.log('1dddddddd', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addprovidersByCateegory(res?.data?.data));
         setSearchResults(_providersByCateegory);
@@ -92,7 +92,7 @@ const _Services = ({route}: any) => {
     const initBookmarked = async () => {
       // setisLoading(true);
       const res: any = await getBookMarkedProviders(id);
-      console.log('bbbbbmmm', res?.data?.data);
+      // console.log('bbbbbmmm', res?.data?.data);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(setbookMarkedProviders(res?.data?.data));
         // dispatch(addprovidersByCateegory(res?.data?.data));
@@ -318,7 +318,7 @@ const _Services = ({route}: any) => {
           <>
             {!isLoading && (
               <>
-                {_providersByCateegory.length < 1 ||
+                {_providersByCateegory.length < 1 &&
                 searchResults?.length < 1 ? (
                   <View
                     style={[

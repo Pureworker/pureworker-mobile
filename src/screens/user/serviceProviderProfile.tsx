@@ -814,7 +814,7 @@ const ServiceProviderProfile = () => {
                     </View>
 
                     {(
-                      closeToData.portfolio ||
+                      closeToData?.portfolio ||
                       serviceProviderData?.portfolio?.portfolio
                     )?.map((item, index) => {
                       // console.log('PORRRRRRRRRTTTTT:', item, item?.images);

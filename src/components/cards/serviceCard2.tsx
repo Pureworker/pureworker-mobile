@@ -313,6 +313,7 @@ const ServiceCard2 = ({
             }
             size={12}
             lineHeight={14}
+            numberOfLines={2}
             color={colors.white}
             fontFamily={'Inter-SemiBold'}
           />

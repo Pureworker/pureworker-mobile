@@ -65,7 +65,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
             />
           </View>
           <View style={[tw``, {marginLeft: perWidth(12)}]}>
-            <View style={[tw``, {}]}>
+            <View style={[tw``, {width: perWidth(105)}]}>
               <Textcomp
                 text={
                   item?.businessName
@@ -207,12 +207,12 @@ const ClosetoYou = ({item, index, navigation}: any) => {
                         <TouchableOpacity
                           key={index}
                           onPress={() => {
-                            console.log('hmm', item.portfolios?.[index]);
+                            console.log('hmm', item?.portfolios?.[index]);
                             navigation.navigate('ServiceProviderProfile', {
                               item: item,
                               serviceName: service?.name,
                               id: service?._id,
-                              portfolio: item.portfolios?.[index],
+                              portfolio: item?.portfolios?.[index],
                             });
                             setshowModal(false);
                           }}
