@@ -52,7 +52,7 @@ const Home = ({navigation}: any) => {
               console.error(`Latitude: ${latitude}, Longitude: ${longitude}`);
             },
             (error: any) => console.error(error),
-            {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+            {enableHighAccuracy: true, timeout: 15000, maximumAge: 60000},
           );
         }
       })

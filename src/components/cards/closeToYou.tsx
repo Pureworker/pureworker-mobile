@@ -65,7 +65,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
             />
           </View>
           <View style={[tw``, {marginLeft: perWidth(12)}]}>
-            <View style={[tw``, {}]}>
+            <View style={[tw``, {width: perWidth(105)}]}>
               <Textcomp
                 text={
                   item?.businessName
@@ -156,20 +156,39 @@ const ClosetoYou = ({item, index, navigation}: any) => {
         deviceWidth={SIZES.width}
         onBackdropPress={() => setshowModal(false)}
         swipeThreshold={200}
-        swipeDirection={['down']}
-        onSwipeComplete={() => setshowModal(false)}
+        // swipeDirection={['down']}
+        // onSwipeComplete={() => setshowModal(false)}
         onBackButtonPress={() => setshowModal(false)}>
         <View style={tw` h-full w-full bg-black bg-opacity-5`}>
           <TouchableOpacity
             onPress={() => setshowModal(false)}
             style={tw`flex-1`}
           />
-          <View style={[tw` mt-auto bg-[#D9D9D9]`, {minHeight: '40%'}]}>
+          <View
+            style={[
+              tw` mt-auto bg-[#D9D9D9]`,
+              {
+                minHeight:
+                  item?.services?.length <= 5
+                    ? SIZES.height * 0.5
+                    : item?.services?.length <= 6
+                    ? SIZES.height * 0.55
+                    : item?.services?.length <= 7
+                    ? SIZES.height * 0.6
+                    : item?.services?.length <= 8
+                    ? SIZES.height * 0.65
+                    : item?.services?.length <= 10
+                    ? SIZES.height * 0.8
+                    : item?.services?.length > 10
+                    ? SIZES.height * 0.85
+                    : SIZES.height * 0.4,
+              },
+            ]}>
             <TouchableOpacity
               onPress={() => {}}
               style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
             />
-            <ScrollView contentContainerStyle={tw` flex-1`}>
+            <View style={tw` flex-1`}>
               <View>
                 <View style={[tw` py-4 mt-4`, {marginLeft: perWidth(30)}]}>
                   <Textcomp
@@ -181,41 +200,43 @@ const ClosetoYou = ({item, index, navigation}: any) => {
                   />
                 </View>
 
-                <View style={tw`px-[7.5%]`}>
-                  {item?.services?.map((service: {name: any; _id: any}, index) => {
-                    return (
-                      <TouchableOpacity
-                      key={index}
-                        onPress={() => {
-                          console.log('hmm',item.portfolios?.[index]);
-                          navigation.navigate('ServiceProviderProfile', {
-                            item: item,
-                            serviceName: service?.name,
-                            id: service?._id,
-                            portfolio: item.portfolios?.[index],
-                          });
-                          setshowModal(false);
-                        }}
-                        style={[
-                          tw` mt-2.5 py-1.5 flex flex-row items-center justify-between px-3 border-2 border-[${colors.primary}] bg-[${colors.darkPurple}] `,
-                          {},
-                        ]}>
-                        <Textcomp
-                          text={`${service?.name}`}
-                          size={14}
-                          lineHeight={14}
-                          color={'white'}
-                          fontFamily={'Inter-Regular'}
-                        />
-                        <Image
-                          resizeMode="contain"
-                          style={{width: 12}}
-                          source={images.polygonForward}
-                        />
-                      </TouchableOpacity>
-                    );
-                  })}
-                </View>
+                <ScrollView style={tw`px-[7.5%]`}>
+                  {item?.services?.map(
+                    (service: {name: any; _id: any}, index) => {
+                      return (
+                        <TouchableOpacity
+                          key={index}
+                          onPress={() => {
+                            console.log('hmm', item?.portfolios?.[index]);
+                            navigation.navigate('ServiceProviderProfile', {
+                              item: item,
+                              serviceName: service?.name,
+                              id: service?._id,
+                              portfolio: item?.portfolios?.[index],
+                            });
+                            setshowModal(false);
+                          }}
+                          style={[
+                            tw` mt-2.5 py-1.5 flex flex-row items-center justify-between px-3 border-2 border-[${colors.primary}] bg-[${colors.darkPurple}] `,
+                            {},
+                          ]}>
+                          <Textcomp
+                            text={`${service?.name}`}
+                            size={14}
+                            lineHeight={14}
+                            color={'white'}
+                            fontFamily={'Inter-Regular'}
+                          />
+                          <Image
+                            resizeMode="contain"
+                            style={{width: 12}}
+                            source={images.polygonForward}
+                          />
+                        </TouchableOpacity>
+                      );
+                    },
+                  )}
+                </ScrollView>
               </View>
               <View
                 style={[
@@ -223,7 +244,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
                   {height: 2, width: SIZES.width * 0.95},
                 ]}
               />
-            </ScrollView>
+            </View>
           </View>
         </View>
       </Modal>

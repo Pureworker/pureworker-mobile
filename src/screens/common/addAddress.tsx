@@ -97,7 +97,7 @@ const AddAddress = ({navigation}: any) => {
             );
           },
           error => console.log('Error getting location:', error),
-          {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+          {enableHighAccuracy: true, timeout: 15000, maximumAge: 60000},
         );
       } else {
         console.warn('Location permission denied');
@@ -302,7 +302,7 @@ const AddAddress = ({navigation}: any) => {
           );
         },
         error => console.log('Error getting location:', error),
-        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 60000},
       );
     } else {
       console.warn('Location permission denied');
@@ -518,7 +518,7 @@ const AddAddress = ({navigation}: any) => {
                     {
                       enableHighAccuracy: true,
                       timeout: 15000,
-                      maximumAge: 10000,
+                      maximumAge: 60000,
                     },
                   );
                 } else {
@@ -547,7 +547,7 @@ const AddAddress = ({navigation}: any) => {
                       'Failed to get current location. Please try again.',
                     );
                   },
-                  {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+                  {enableHighAccuracy: true, timeout: 15000, maximumAge: 60000},
                 );
               }
             }}

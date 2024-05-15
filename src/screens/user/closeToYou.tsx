@@ -28,6 +28,7 @@ import {
   useGetAllServiceProviderProfileQuery,
   useGetFavoriteProductQuery,
 } from '../../store/slice/api';
+import CloseToYouCard4 from '../../components/cards/closeToYou4';
 
 const CloseToYou = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -105,9 +106,8 @@ const CloseToYou = () => {
   }, [searchInput, getServiceProviderProfile]);
 
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
-      <>
-        <View
+    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+      {/* <View
           style={{
             marginTop:
               Platform.OS === 'ios'
@@ -115,7 +115,16 @@ const CloseToYou = () => {
                 : StatusBar.currentHeight &&
                   StatusBar.currentHeight + getStatusBarHeight(true),
           }}
-        />
+        /> */}
+
+      <View
+        style={{
+          marginTop:
+            Platform.OS === 'ios'
+              ? getStatusBarHeight(true)
+              : StatusBar.currentHeight &&
+                StatusBar.currentHeight + getStatusBarHeight(true),
+        }}>
         {!searchModal ? (
           <View
             style={{
@@ -140,16 +149,6 @@ const CloseToYou = () => {
                 fontFamily={'Inter-SemiBold'}
               />
             </View>
-            {/* <TouchableOpacity
-              onPress={() => {
-                setsearchModal(true);
-              }}>
-              <Image
-                source={images.search}
-                style={{height: 25, width: 25}}
-                resizeMode="contain"
-              />
-            </TouchableOpacity> */}
           </View>
         ) : (
           <View
@@ -191,10 +190,10 @@ const CloseToYou = () => {
             </TouchableOpacity>
           </View>
         )}
-      </>
-      <ScrollView>
-        <View style={tw`mt-4 mb-3`}>
-          {/* <View style={tw`flex flex-row`}>
+
+        <ScrollView>
+          <View style={tw`mt-4 mb-3`}>
+            {/* <View style={tw`flex flex-row`}>
             <TouchableOpacity
               onPress={() => {
                 setActiveSection('All');
@@ -231,73 +230,74 @@ const CloseToYou = () => {
             </TouchableOpacity>
           </View> */}
 
-          {closeProvider.length < 1 ? (
-            <View
-              style={[
-                tw`bg-[#D9D9D9] flex flex-col rounded  mt-3 mx-2`,
-                {height: perHeight(80), alignItems: 'center'},
-              ]}>
-              <View style={tw`my-auto pl-8`}>
-                <Textcomp
-                  text={'Service Provider Not Found...'}
-                  size={17}
-                  lineHeight={17}
-                  color={'black'}
-                  fontFamily={'Inter-SemiBold'}
-                />
+            {closeProvider.length < 1 ? (
+              <View
+                style={[
+                  tw`bg-[#D9D9D9] flex flex-col rounded  mt-3 mx-2`,
+                  {height: perHeight(80), alignItems: 'center'},
+                ]}>
+                <View style={tw`my-auto pl-8`}>
+                  <Textcomp
+                    text={'Service Provider Not Found...'}
+                    size={17}
+                    lineHeight={17}
+                    color={'black'}
+                    fontFamily={'Inter-SemiBold'}
+                  />
+                </View>
               </View>
-            </View>
-          ) : (
-            <>
-              {activeSection === 'All' && (
-                <View style={[tw`items-center`, {flex: 1}]}>
-                  <ScrollView horizontal>
-                    <FlatList
-                      data={closeProvider}
-                      horizontal={false}
-                      scrollEnabled={false}
-                      renderItem={(item: any, index: any) => {
-                        return (
-                          <CloseToYouCard2
-                            navigation={navigation}
-                            item={item?.item}
-                            index={index}
-                          />
-                        );
-                      }}
-                      keyExtractor={item => item?.id}
-                      ListFooterComponent={() => <View style={tw`h-20`} />}
-                    />
-                  </ScrollView>
-                </View>
-              )}
-              {activeSection === 'Saved' && (
-                <View style={[tw`items-center`, {flex: 1}]}>
-                  <ScrollView horizontal>
-                    <FlatList
-                      scrollEnabled={false}
-                      data={filterServiceProviderFavorite}
-                      horizontal={false}
-                      renderItem={(item: any) => {
-                        return (
-                          <CloseToYouCard2
-                            item={item.item}
-                            index={item.index}
-                          />
-                        );
-                      }}
-                      keyExtractor={item => item?.id}
-                      ListFooterComponent={() => <View style={tw`h-20`} />}
-                    />
-                  </ScrollView>
-                </View>
-              )}
-            </>
-          )}
-        </View>
-        <View style={tw`h-20`} />
-      </ScrollView>
-    </View>
+            ) : (
+              <>
+                {activeSection === 'All' && (
+                  <View style={[tw`items-center`, {flex: 1}]}>
+                    <ScrollView horizontal>
+                      <FlatList
+                        data={closeProvider}
+                        horizontal={false}
+                        scrollEnabled={false}
+                        renderItem={(item: any, index: any) => {
+                          return (
+                            <CloseToYouCard4
+                              navigation={navigation}
+                              item={item?.item}
+                              index={index}
+                            />
+                          );
+                        }}
+                        keyExtractor={item => item?.id}
+                        ListFooterComponent={() => <View style={tw`h-20`} />}
+                      />
+                    </ScrollView>
+                  </View>
+                )}
+                {activeSection === 'Saved' && (
+                  <View style={[tw`items-center`, {flex: 1}]}>
+                    <ScrollView horizontal>
+                      <FlatList
+                        scrollEnabled={false}
+                        data={filterServiceProviderFavorite}
+                        horizontal={false}
+                        renderItem={(item: any) => {
+                          return (
+                            <CloseToYouCard4
+                              item={item.item}
+                              index={item.index}
+                            />
+                          );
+                        }}
+                        keyExtractor={item => item?.id}
+                        ListFooterComponent={() => <View style={tw`h-20`} />}
+                      />
+                    </ScrollView>
+                  </View>
+                )}
+              </>
+            )}
+          </View>
+          <View style={tw`h-20`} />
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   View,
@@ -318,6 +318,8 @@ export default function BusinessSignup() {
           // userType: userType.toLowerCase(),
           accountType: userType?.toLowerCase(),
           state: stateValue,
+          learnAboutUs:
+            learnAboutUs === 'Other' ? learnAboutUsOthers : learnAboutUs,
         };
         const b_data = {
           businessName: name,
@@ -329,6 +331,8 @@ export default function BusinessSignup() {
           accountType: userType?.toLowerCase(),
           // gender: genderValue?.toLowerCase().trim(),
           state: stateValue,
+          learnAboutUs:
+            learnAboutUs === 'Other' ? learnAboutUsOthers : learnAboutUs,
           // nationality: nationalityValue,
         };
 
@@ -418,6 +422,11 @@ export default function BusinessSignup() {
     });
   }
 
+  const [isFocus, setIsFocus] = useState(false);
+  const [learnAboutUs, setlearnAboutUs] = useState('');
+  const [learnAboutUsOthers, setlearnAboutUsOthers] = useState('');
+  const [learnFocus, setlearnFocus] = useState(false);
+
   return (
     <View
       style={{
@@ -433,7 +442,10 @@ export default function BusinessSignup() {
             width: 20,
             marginLeft: 25,
             marginBottom: 10,
-            marginTop: StatusBar.currentHeight && StatusBar.currentHeight + 45,
+            marginTop:
+              Platform.OS === 'ios'
+                ? 20
+                : StatusBar.currentHeight && StatusBar.currentHeight + 40,
           }}
           resizeMode="contain"
         />
@@ -736,7 +748,6 @@ export default function BusinessSignup() {
                   }}
                 />
               </View>
-
               <View style={{zIndex: locationOpen ? 0 : 2}}>
                 <Text
                   style={{
@@ -786,6 +797,83 @@ export default function BusinessSignup() {
                   state={referralCode}
                   setState={setReferralCode}
                 />
+              </View>
+              <View
+                style={{
+                  zIndex: genderOpen ? 0 : 2,
+                  minHeight: 500,
+                  marginBottom: -400,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: commonStyle.fontFamily.medium,
+                    color: '#fff',
+                    marginTop: 15,
+                    marginBottom: 15,
+                  }}>
+                  How did you learn about us?
+                </Text>
+                <Dropdown
+                  style={[
+                    tw``,
+                    {
+                      zIndex: 10,
+                      width: SIZES.width * 0.875,
+                      backgroundColor: '#F7F5F5',
+                      borderColor: '#9E9E9E14',
+                      height: 50,
+                      borderRadius: 10,
+                      paddingHorizontal: 10,
+                      color: '#757575',
+                    },
+                  ]}
+                  placeholderStyle={{
+                    color: '#757575',
+                  }}
+                  selectedTextStyle={{
+                    color: '#000',
+                  }}
+                  data={[
+                    {label: 'SMS/Call', value: 'SMS/Call'},
+                    {label: '⁠Social Media Ads', value: '⁠Social Media Ads'},
+                    {label: '⁠A friend', value: '⁠A friend'},
+                    {label: 'Email', value: 'Email'},
+                    {label: 'Other', value: 'Other'},
+                  ]}
+                  search
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={!learnFocus ? 'Select' : '...'}
+                  searchPlaceholder="Search..."
+                  inputSearchStyle={{
+                    color: '#757575',
+                  }}
+                  value={learnAboutUs}
+                  onFocus={() => setIsFocus(true)}
+                  onBlur={() => setIsFocus(false)}
+                  itemTextStyle={{
+                    color: 'black',
+                  }}
+                  onChange={item => {
+                    console.log(item.value);
+                    setlearnAboutUs(item.value);
+                    setlearnFocus(false);
+                  }}
+                />
+              </View>
+              <View style={{zIndex: 3}}>
+                {learnAboutUs === 'Other' && (
+                  <View style={{marginTop: 15}}>
+                    <TextInputs
+                      style={{marginTop: 17}}
+                      labelText={'Enter Others'}
+                      state={learnAboutUsOthers}
+                      setState={setlearnAboutUsOthers}
+                    />
+                  </View>
+                )}
               </View>
             </View>
           ) : (
@@ -1158,6 +1246,84 @@ export default function BusinessSignup() {
                   setState={setReferralCode}
                 />
               </View>
+
+              <View
+                style={{
+                  zIndex: genderOpen ? 0 : 2,
+                  minHeight: 500,
+                  marginBottom: -400,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: commonStyle.fontFamily.medium,
+                    color: '#fff',
+                    marginTop: 15,
+                    marginBottom: 15,
+                  }}>
+                  How did you learn about us?
+                </Text>
+                <Dropdown
+                  style={[
+                    tw``,
+                    {
+                      zIndex: 10,
+                      width: SIZES.width * 0.875,
+                      backgroundColor: '#F7F5F5',
+                      borderColor: '#9E9E9E14',
+                      height: 50,
+                      borderRadius: 10,
+                      paddingHorizontal: 10,
+                      color: '#757575',
+                    },
+                  ]}
+                  placeholderStyle={{
+                    color: '#757575',
+                  }}
+                  selectedTextStyle={{
+                    color: '#000',
+                  }}
+                  data={[
+                    {label: 'SMS/Call', value: 'SMS/Call'},
+                    {label: '⁠Social Media Ads', value: '⁠Social Media Ads'},
+                    {label: '⁠A friend', value: '⁠A friend'},
+                    {label: 'Email', value: 'Email'},
+                    {label: 'Other', value: 'Other'},
+                  ]}
+                  search
+                  maxHeight={300}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={!learnFocus ? 'Select' : '...'}
+                  searchPlaceholder="Search..."
+                  inputSearchStyle={{
+                    color: '#757575',
+                  }}
+                  value={learnAboutUs}
+                  onFocus={() => setIsFocus(true)}
+                  onBlur={() => setIsFocus(false)}
+                  itemTextStyle={{
+                    color: 'black',
+                  }}
+                  onChange={item => {
+                    console.log(item.value);
+                    setlearnAboutUs(item.value);
+                    setlearnFocus(false);
+                  }}
+                />
+              </View>
+              <View style={{zIndex: 3}}>
+                {learnAboutUs === 'Other' && (
+                  <View style={{marginTop: 15}}>
+                    <TextInputs
+                      style={{marginTop: 17}}
+                      labelText={'Enter Others'}
+                      state={learnAboutUsOthers}
+                      setState={setlearnAboutUsOthers}
+                    />
+                  </View>
+                )}
+              </View>
             </View>
           )}
 
@@ -1199,6 +1365,7 @@ export default function BusinessSignup() {
             Login
           </Text>
         </Text>
+        <View style={{height: 100}} />
       </KeyboardAwareScrollView>
     </View>
   );

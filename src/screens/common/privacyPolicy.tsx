@@ -360,6 +360,28 @@ To send you important updates, notifications, and promotional messages related t
             <>
               {privacyPolicy?.map((item, index) => {
                 return (
+                  // <View
+                  //   key={index}
+                  //   style={[tw` mt-[5%] mx-auto`, {width: perWidth(332)}]}>
+                  //   <View style={tw``}>
+                  //     <Textcomp
+                  //       text={item?.title}
+                  //       size={16}
+                  //       lineHeight={17}
+                  //       color={'#000000'}
+                  //       fontFamily={'Inter-SemiBold'}
+                  //     />
+                  //   </View>
+                  //   <View style={tw`mt-1`}>
+                  //     <Textcomp
+                  //       text={item?.body}
+                  //       size={12}
+                  //       lineHeight={14.5}
+                  //       color={'#000000'}
+                  //       fontFamily={'Inter'}
+                  //     />
+                  //   </View>
+                  // </View>
                   <View
                     key={index}
                     style={[tw` mt-[5%] mx-auto`, {width: perWidth(332)}]}>
@@ -373,12 +395,25 @@ To send you important updates, notifications, and promotional messages related t
                       />
                     </View>
                     <View style={tw`mt-1`}>
-                      <Textcomp
-                        text={item?.body}
-                        size={12}
-                        lineHeight={14.5}
-                        color={'#000000'}
-                        fontFamily={'Inter'}
+                      <RenderHtml
+                        baseStyle={{
+                          fontSize: 12,
+                          lineHeight: 14.5,
+                          color: '#000000',
+                          fontFamily: 'Inter',
+                        }}
+                        tagsStyles={{
+                          p: {
+                            margin: 0,
+                          },
+                        }}
+                        contentWidth={perWidth(332)}
+                        source={{
+                          html: item?.body,
+                        }}
+                        enableExperimentalMarginCollapsing
+                        enableExperimentalBRCollapsing
+                        enableExperimentalGhostLinesPrevention
                       />
                     </View>
                   </View>

@@ -754,6 +754,7 @@ const ServiceProviderProfile = () => {
                   </View>
 
                   <View style={tw`w-full`}>
+                    <ScrollView showsHorizontalScrollIndicator={false} horizontal contentContainerStyle={{paddingBottom:10}}>
                     <FlatList
                       scrollEnabled={false}
                       data={serviceProviderData?.services}
@@ -779,6 +780,7 @@ const ServiceProviderProfile = () => {
                       numColumns={3}
                       contentContainerStyle={{}}
                     />
+                    </ScrollView>
                   </View>
                 </View>
               </View>
@@ -812,7 +814,7 @@ const ServiceProviderProfile = () => {
                     </View>
 
                     {(
-                      closeToData.portfolio ||
+                      closeToData?.portfolio ||
                       serviceProviderData?.portfolio?.portfolio
                     )?.map((item, index) => {
                       // console.log('PORRRRRRRRRTTTTT:', item, item?.images);

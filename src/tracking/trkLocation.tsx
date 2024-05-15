@@ -100,11 +100,15 @@ const TrackRiderLocation = () => {
                 console.error('Error sending location3:', error);
               });
           },
-          error => Alert.alert('WatchPosition Error', JSON.stringify(error)),
+          error =>{}
+            // console.log('WatchPosition Error', error)
+
+            // Alert.alert('WatchPosition Error', JSON.stringify(error)),
+
         );
         setSubscriptionId(watchID);
       } catch (error) {
-        Alert.alert('WatchPosition Error', JSON.stringify(error));
+        // Alert.alert('WatchPosition Error', JSON.stringify(error));
       }
     };
     const clearWatch = () => {

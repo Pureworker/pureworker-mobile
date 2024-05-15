@@ -73,12 +73,11 @@ const OrderActive = ({route}: any) => {
   const [searchModal, setsearchModal] = useState(false);
   const [searchInput, setsearchInput] = useState('');
   const [activeSection, setactiveSection] = useState('Active');
-
   const viewOrder = useSelector((state: any) => state.user.viewOrder);
-
   const orders = [0, 1, 2, 3];
   const item = route.params.data;
   const passedData = viewOrder ?? route.params.data;
+  console.log(passedData?.serviceProvider);
   // console.log(route.params.data);
   const fetchOrderByID = async () => {
     // setisLoading(true);
@@ -89,7 +88,6 @@ const OrderActive = ({route}: any) => {
     }
     setisLoading(false);
   };
-
   //modals
   const [serviceProviderModal, setserviceProviderModal] = useState(false);
   const [privateFeedback, setprivateFeedback] = useState(false);
@@ -100,13 +98,9 @@ const OrderActive = ({route}: any) => {
   const [orderInProgress, setorderInProgress] = useState(false);
   const [orderPlacing, setorderPlacing] = useState(false);
   const [scheduledDeliveryDate, setscheduledDeliveryDate] = useState(false);
-
   const userData = useSelector((state: any) => state.user.userData);
-
   // console.log('data:', userData);
-
   const [isLoading, setisLoading] = useState(false);
-
   const initGetOrders2 = async () => {
     setisLoading(true);
     const res: any = await getUserOrders('');
@@ -117,7 +111,6 @@ const OrderActive = ({route}: any) => {
     // setloading(false);
     setisLoading(false);
   };
-
   const handleComplete = async (val: any) => {
     setisLoading(true);
     try {
@@ -166,11 +159,9 @@ const OrderActive = ({route}: any) => {
       setisLoading(false);
     }
   };
-
   useEffect(() => {
     // setorderDelivered(true);
   }, []);
-
   const links = [
     {
       title: 'Order Placed',
@@ -295,9 +286,7 @@ const OrderActive = ({route}: any) => {
     'CANCELLED',
     'TRACK',
   ];
-
   const supportUser = useSelector((store: any) => store.user.supportUser);
-
   const initGetOrders = async () => {
     setisLoading(true);
     const res: any = await getUserOrders('');
@@ -307,7 +296,6 @@ const OrderActive = ({route}: any) => {
     }
     setisLoading(false);
   };
-
   const [modalSection, setmodalSection] = useState('All');
   const [InfoModal, setInfoModal] = useState(false);
 
@@ -1232,8 +1220,10 @@ const OrderActive = ({route}: any) => {
                                     />
                                     <Textcomp
                                       text={`Waiting for ${
-                                        passedData?.serviceProvider?.fullName ??
-                                        `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
+                                        passedData?.serviceProvider
+                                          ?.businessName
+                                          ? `${passedData?.serviceProvider?.businessName}`
+                                          : `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
                                       } to accept your order.`}
                                       size={12}
                                       lineHeight={16.5}
@@ -1305,8 +1295,10 @@ const OrderActive = ({route}: any) => {
                                     />
                                     <Textcomp
                                       text={`${
-                                        passedData?.serviceProvider?.fullName ??
-                                        `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
+                                        passedData?.serviceProvider
+                                          ?.businessName
+                                          ? `${passedData?.serviceProvider?.businessName}`
+                                          : `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
                                       } has accepted your order.`}
                                       size={12}
                                       lineHeight={16.5}
@@ -1380,11 +1372,15 @@ const OrderActive = ({route}: any) => {
                                     />
                                     <Textcomp
                                       text={`${
-                                        passedData?.serviceProvider?.fullName ??
-                                        `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
+                                        passedData?.serviceProvider
+                                          ?.businessName
+                                          ? `${passedData?.serviceProvider?.businessName}`
+                                          : `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
                                       } is on the way. Click View Location to see ${
-                                        passedData?.serviceProvider?.fullName ??
-                                        `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
+                                        passedData?.serviceProvider
+                                          ?.businessName
+                                          ? `${passedData?.serviceProvider?.businessName}`
+                                          : `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
                                       }  movements.`}
                                       size={12}
                                       lineHeight={16.5}
@@ -1450,8 +1446,10 @@ const OrderActive = ({route}: any) => {
                                     />
                                     <Textcomp
                                       text={` you tipped ${
-                                        passedData?.serviceProvider?.fullName ??
-                                        `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
+                                        passedData?.serviceProvider
+                                          ?.businessName
+                                          ? `${passedData?.serviceProvider?.businessName}`
+                                          : `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
                                       }  N500.`}
                                       size={12}
                                       lineHeight={16.5}
@@ -1742,8 +1740,8 @@ const OrderActive = ({route}: any) => {
                           id:
                             passedData?.serviceProvider._id ||
                             passedData?.serviceProvider?.id,
-                          name: passedData?.serviceProvider?.fullName
-                            ? `${passedData?.serviceProvider?.fullName}`
+                          name: passedData?.serviceProvider?.businessName
+                            ? `${passedData?.serviceProvider?.businessName}`
                             : `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`,
                         });
                       }}

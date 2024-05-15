@@ -444,9 +444,7 @@ const PRofileStep2 = () => {
           // You may want to display an error message or handle this case accordingly
           return;
         }
-
         console.log('resp', resp?.assets[0]);
-        // setPhotoUri(resp?.assets[0].uri);
         setImageUrl(resp?.assets[0].uri);
         const data = await uploadImgorDoc(resp?.assets[0]);
         console.warn('processed pic', data);
@@ -454,8 +452,9 @@ const PRofileStep2 = () => {
         const res: any = await completeProfile({profilePic: data});
       }
     });
-    // launchCamera
   };
+    // setPhotoUri(resp?.assets[0].uri);
+    // launchCamera
   const opencamerafordp = async () => {
     const options = {
       mediaType: 'photo',

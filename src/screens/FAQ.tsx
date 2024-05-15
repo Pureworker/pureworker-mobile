@@ -10,6 +10,7 @@ import {addfaq} from '../store/reducer/mainSlice';
 import {getFAQ} from '../utils/api/func';
 import {StackNavigation} from '../constants/navigation';
 import FAQcomp from '../components/FAQcomp';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function FAQ() {
   const navigation = useNavigation<StackNavigation>();
@@ -29,7 +30,7 @@ export default function FAQ() {
   }, [dispatch]);
   const userType = useSelector((state: any) => state.user.isLoggedIn);
   return (
-    <View style={{flex: 1, backgroundColor: '#fff'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <Header
         image={images.back}
         title={'FAQs'}
@@ -99,7 +100,7 @@ export default function FAQ() {
         )}
         <View style={tw`h-20`} />
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
