@@ -2,11 +2,11 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {store} from '../../store/store';
 import {addprovidersByCateegory} from '../../store/reducer/mainSlice';
-import { GLOBAL_API_BASE_URL } from '../../constants/api';
+import { GLOBAL_DEV_API_BASE_URL} from '../../constants/api';
 //<<<<<<<<<<<<<<<--------------Staging------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
 //<<<<<<<<<<<<<<<--------------Production------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>
-const API_BASE_URL = GLOBAL_API_BASE_URL;
+const API_BASE_URL = GLOBAL_DEV_API_BASE_URL;
 // import {REACT_APP_DEV_MODE, REACT_APP_PROD_MODE} from '@env';
 // const API_BASE_URL =
 //   process.env.NODE_ENV === 'development'

@@ -5,9 +5,9 @@ import React from 'react';
 import {useDispatch} from 'react-redux';
 import {addchatList, updateUnreadChat} from '../store/reducer/mainSlice';
 import {getChatsbyuser} from '../utils/api/func';
-import {GLOBAL_API_BASE_URL} from '../constants/api';
+import {GLOBAL_DEV_API_BASE_URL} from '../constants/api';
 
-const API_BASE_URL = GLOBAL_API_BASE_URL;
+const API_BASE_URL = GLOBAL_DEV_API_BASE_URL;
 
 const useChat = () => {
   const dispatch = useDispatch();
