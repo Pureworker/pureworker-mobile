@@ -8,6 +8,7 @@ import {
   Share,
   Clipboard,
   RefreshControl,
+  Platform,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -71,14 +72,13 @@ const Referrals = () => {
   const handleShare = async (contentToShare: any) => {
     try {
       await Share.share({
-        message:
-          `I use Pureworker when I need any and all artisans and service providers. Download the app at https://www.pureworker.com/, then use my referral code: "${contentToShare}" to sign up.`,
+        message: `I use Pureworker when I need any and all artisans and service providers. Download the app at https://www.pureworker.com/, then use my referral code: "${contentToShare}" to sign up.`,
       });
     } catch (error) {
       console.error('Error sharing content:', error.message);
     }
   };
-  
+
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(() => {
@@ -196,7 +196,7 @@ const Referrals = () => {
                 fontFamily={'Inter-SemiBold'}
               />
               <Textcomp
-                text={'₦500 '}
+                text={'100 '}
                 size={17}
                 lineHeight={17}
                 color={'white'}
@@ -274,7 +274,10 @@ const Referrals = () => {
             onPress={() => setisVisible(false)}
             style={tw`flex-1`}
           />
-          <View style={tw`h-[40.5%] mt-auto bg-[#D9D9D9]`}>
+          <View
+            style={tw`h-[${
+              Platform.OS === 'android' ? '45%' : '42%'
+            }] mt-auto bg-[#D9D9D9]`}>
             <TouchableOpacity
               onPress={() => {
                 setisVisible(false);
