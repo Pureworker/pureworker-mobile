@@ -27,6 +27,7 @@ import {
   addSCategory,
   addUserData,
   addcloseProvider,
+  logout,
   setwelcomeModal,
 } from '../../store/reducer/mainSlice';
 import {
@@ -175,6 +176,14 @@ const Home = () => {
       const res: any = await getUser('');
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addUserData(res?.data?.user));
+      }
+      if (res?.status === 401 || res?.status === 400) {
+        if (
+          res?.error?.message === `Invalid token or user doesn't exist` ||
+          res?.error?.data?.message === `Invalid token or user doesn't exist`
+        ) {
+          dispatch(logout());
+        }
       }
       console.error('GEOLOCATION::', res?.data?.user?.geoLocation);
       const userData = res?.data?.user;

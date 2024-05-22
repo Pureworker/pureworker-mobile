@@ -32,7 +32,7 @@ import Snackbar from 'react-native-snackbar';
 import Button from '../../components/Button';
 import {ToastLong, ToastShort} from '../../utils/utils';
 import {useDispatch} from 'react-redux';
-import {addUserData} from '../../store/reducer/mainSlice';
+import {addUserData, logout} from '../../store/reducer/mainSlice';
 import {REACT_APP_DEV_MODE, REACT_APP_PROD_MODE} from '@env';
 
 const AddAddress = ({navigation}: any) => {
@@ -199,16 +199,29 @@ const AddAddress = ({navigation}: any) => {
         ToastLong('Address Updated!.');
         navigation.goBack();
       } else {
-        Snackbar.show({
-          text: res?.error?.message
-            ? res?.error?.message
-            : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured',
-          duration: Snackbar.LENGTH_LONG,
-          textColor: '#fff',
-          backgroundColor: '#88087B',
-        });
+        if (
+          res?.error?.message === `Invalid token or user doesn't exist` ||
+          res?.error?.data?.message === `Invalid token or user doesn't exist`
+        ) {
+          Snackbar.show({
+            text: 'Session Expired!. Please log in.',
+            duration: Snackbar.LENGTH_LONG,
+            textColor: '#fff',
+            backgroundColor: '#88087B',
+          });
+          dispatch(logout());
+        } else {
+          Snackbar.show({
+            text: res?.error?.message
+              ? res?.error?.message
+              : res?.error?.data?.message
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured',
+            duration: Snackbar.LENGTH_LONG,
+            textColor: '#fff',
+            backgroundColor: '#88087B',
+          });
+        }
         setisLoading(false);
       }
     } catch (error) {
@@ -309,7 +322,7 @@ const AddAddress = ({navigation}: any) => {
       // ToastShort('Location permission denied');
     }
   };
-  useEffect(() => { 
+  useEffect(() => {
     const requestLocation = async () => {
       const permissionStatus = await request(
         Platform.OS === 'android'
@@ -324,7 +337,7 @@ const AddAddress = ({navigation}: any) => {
   console.log(process.env, REACT_APP_PROD_MODE);
   console.log('====================================');
   return (
-    <View style={{flex: 1}}> 
+    <View style={{flex: 1}}>
       <View style={[tw`h-[40%]`]}>
         <MapView
           // provider={PROVIDER_GOOGLE} // remove if not using Google Maps

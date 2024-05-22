@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {useState, useEffect} from 'react';
-import {Alert, Platform} from 'react-native';
+import {Alert, Linking, Platform} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {PersistGate} from 'redux-persist/integration/react';
 import {store, persistor} from './src/store/store';
@@ -33,6 +33,7 @@ import {ToastLong, ToastShort} from './src/utils/utils';
 import Geolocation from '@react-native-community/geolocation';
 import NetInfo from '@react-native-community/netinfo';
 import {addIsNetwork} from './src/store/reducer/mainSlice';
+import VersionCheck from 'react-native-version-check';
 Sentry.init({
   dsn: 'https://aaf6ecb52ce579d3e2a85f314f1773ad@o4506399508725760.ingest.sentry.io/4506410437509120',
 });
@@ -345,6 +346,79 @@ const App = () => {
       },
     },
   };
+
+  useEffect(() => {
+    const checkAppVersion = async () => {
+      try {
+        const latestVersion =
+          // Platform.OS === 'ios'
+          //   ? await fetch(
+          //       `https://itunes.apple.com/in/lookup?bundleId=com.grandida.pureworker`,
+          //     )
+          //       .then(r => r.json())
+          //       .then(res => {
+          //         console.error('HEREEEE:::',res);
+          //         return res?.results[0]?.version;
+          //       })
+          //   :
+          await VersionCheck.getLatestVersion({
+            provider: 'playStore',
+            packageName: 'com.pure_worker_app',
+            ignoreErrors: true,
+          });
+
+        const currentVersion = VersionCheck.getCurrentVersion();
+        VersionCheck.getAppStoreUrl({
+          appID: 'com.grandida.pureworker',
+        });
+        VersionCheck.getPlayStoreUrl({
+          packageName: 'com.pure_worker_app',
+        });
+        console.error(
+          'HEREEEE:::',
+          latestVersion,
+          currentVersion,
+          await VersionCheck.getAppStoreUrl({
+            appID: 'com.grandida.pureworker',
+          }),
+          await VersionCheck.getPlayStoreUrl({
+            packageName: 'com.pure_worker_app',
+          }),
+        );
+
+        if (latestVersion > currentVersion) {
+          Alert.alert(
+            'Update Required',
+            'A new version of the app is available. Please update to continue using the app.',
+            [
+              {
+                text: 'Update Now',
+                onPress: async () => {
+                  Linking.openURL(
+                    Platform.OS === 'ios'
+                      ? await VersionCheck.getAppStoreUrl({
+                          appID: 'com.grandida.pureworker',
+                        })
+                      : await VersionCheck.getPlayStoreUrl({
+                          packageName: 'com.pure_worker_app',
+                        }),
+                  );
+                },
+              },
+            ],
+            {cancelable: false},
+          );
+        } else {
+          // App is up-to-date; proceed with the app
+        }
+      } catch (error) {
+        // Handle error while checking app version
+        console.error('Error checking app version:', error);
+      }
+    };
+
+    checkAppVersion();
+  }, []);
   return (
     <>
       <RouteContext.Provider
@@ -367,5 +441,5 @@ const codePushOptions = {
     codePush.CheckFrequency.ON_APP_START,
   installMode: codePush.InstallMode.IMMEDIATE,
 };
-// export default codePush(codePushOptions)(App);
-export default App;
+export default codePush(codePushOptions)(App);
+// export default App;
