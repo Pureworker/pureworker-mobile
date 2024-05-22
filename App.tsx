@@ -435,11 +435,5 @@ const App = () => {
     </>
   );
 };
-const codePushOptions = {
-  checkFrequency:
-    codePush.CheckFrequency.ON_APP_RESUME |
-    codePush.CheckFrequency.ON_APP_START,
-  installMode: codePush.InstallMode.IMMEDIATE,
-};
-export default codePush(codePushOptions)(App);
-// export default App;
+export default App;
+
