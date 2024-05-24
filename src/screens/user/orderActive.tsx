@@ -89,7 +89,7 @@ const OrderActive = ({route}: any) => {
       }
       setisLoading(false);
     } catch (error) {
-      ToastShort('Error Fetching Order Data.')
+      ToastShort('Error Fetching Order Data.');
     } finally {
       setisLoading(false);
     }
@@ -154,7 +154,7 @@ const OrderActive = ({route}: any) => {
       }
     } catch (error) {
       Snackbar.show({
-        text: 'Please fill all fields',
+        text: `${error?.message ?? 'AN error occured'}`,
         duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
@@ -1552,8 +1552,8 @@ const OrderActive = ({route}: any) => {
                           />
                         </TouchableOpacity>
 
-                        {item.status === 'TRACK' &&
-                          item?.location !== 'online' && (
+                        {passedData?.status === 'TRACK' &&
+                          passedData?.location !== 'online' && (
                             <TouchableOpacity
                               onPress={() => {
                                 // navigation.navigate('ViewLocation', {
@@ -1586,7 +1586,7 @@ const OrderActive = ({route}: any) => {
                             </TouchableOpacity>
                           )}
 
-                        {item.status === 'COMPLETED' && (
+                        {(passedData?.status === 'COMPLETED') && (
                           <TouchableOpacity
                             onPress={() => {
                               navigation.navigate('TipServiceProvider', {
@@ -1615,7 +1615,7 @@ const OrderActive = ({route}: any) => {
                           </TouchableOpacity>
                         )}
 
-                        {item.status === 'INPROGRESS' && (
+                        {passedData?.status === 'INPROGRESS' && (
                           <TouchableOpacity
                             onPress={() => {
                               setrateYourExperience(true);
@@ -1642,11 +1642,11 @@ const OrderActive = ({route}: any) => {
                           </TouchableOpacity>
                         )}
 
-                        {item.status !== 'DECLINED' &&
-                          item.status !== 'INPROGRESS' &&
-                          item.status !== 'COMPLETED' &&
-                          item.status !== 'CANCELLED' &&
-                          item.status !== 'TRACK' && (
+                        {passedData?.status !== 'DECLINED' &&
+                          passedData?.status !== 'INPROGRESS' &&
+                          passedData?.status !== 'COMPLETED' &&
+                          passedData?.status !== 'CANCELLED' &&
+                          passedData?.status !== 'TRACK' && (
                             <TouchableOpacity
                               onPress={() => {
                                 setInfoModal(true);

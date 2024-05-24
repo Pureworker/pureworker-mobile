@@ -11,7 +11,7 @@ import Modal from 'react-native-modal/dist/modal';
 export default function OrderCompleted({navigation, visible, func, item}: any) {
   const [InfoModal, setInfoModal] = useState(visible);
 
-  console.log('---CoMPLETED:', item);
+  // console.log('---CoMPLETED:', item);
   return (
     <Modal
       isVisible={visible}
