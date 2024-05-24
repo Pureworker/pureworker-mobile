@@ -196,14 +196,14 @@ const Referrals = () => {
                 fontFamily={'Inter-SemiBold'}
               />
               <Textcomp
-                text={'100 '}
+                text={'₦100. '}
                 size={17}
                 lineHeight={17}
                 color={'white'}
                 fontFamily={'Inter-Bold'}
               />
               <Textcomp
-                text={'on their first transaction.'}
+                text={'You and the friend will also get N250 each on their first transaction.'}
                 size={13}
                 lineHeight={17}
                 color={'white'}

@@ -1082,6 +1082,16 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
                 />
               </View>
 
+              <View style={tw`ml-4`}>
+                <Textcomp
+                  text={'Note: Pureworker charges a 15% fee on all orders.'}
+                  size={12}
+                  lineHeight={14.5}
+                  color={'#000000'}
+                  fontFamily={'Inter-Regular'}
+                />
+              </View>
+
               <View style={tw`flex flex-row items-center  mb-4 ml-4`}>
                 <CheckBox
                   style={{width: 30, padding: 10}}
