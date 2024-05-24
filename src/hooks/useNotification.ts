@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
-import {GLOBAL_DEV_API_BASE_URL} from '../constants/api';
+import {GLOBAL_API_BASE_URL} from '../constants/api';
 import axios from 'axios';
 import {updateUnreadNotification} from '../store/reducer/mainSlice';
 import {useDispatch} from 'react-redux';
@@ -11,7 +11,7 @@ function useNotification() {
   const getUnreadNotification = async (): Promise<number> => {
     const AuthToken = await AsyncStorage.getItem('AuthToken');
     // unread-chats
-    const response = await axios.patch(`${GLOBAL_DEV_API_BASE_URL}/`, {
+    const response = await axios.patch(`${GLOBAL_API_BASE_URL}/`, {
       headers: {
         Authorization: `Bearer ${AuthToken}`,
       },
@@ -37,7 +37,7 @@ function useNotification() {
     const AuthToken = await AsyncStorage.getItem('AuthToken');
     // unread-chats
     const response = await axios.patch(
-      `${GLOBAL_DEV_API_BASE_URL}/mark-notification-as-read/${notificationId}`,
+      `${GLOBAL_API_BASE_URL}/mark-notification-as-read/${notificationId}`,
       {
         headers: {
           Authorization: `Bearer ${AuthToken}`,

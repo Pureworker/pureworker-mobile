@@ -11,8 +11,8 @@ import {
   addsupportUser,
   logout,
 } from '../../store/reducer/mainSlice';
-import { GLOBAL_DEV_API_BASE_URL } from '../../constants/api';
-const API_BASE_URL = GLOBAL_DEV_API_BASE_URL;
+import { GLOBAL_API_BASE_URL } from '../../constants/api';
+const API_BASE_URL = GLOBAL_API_BASE_URL;
 export const getUser = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   console.log('verifyUser func started', param);

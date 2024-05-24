@@ -2,9 +2,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { store } from '../../store/store';
 import { updateUnreadChat } from '../../store/reducer/mainSlice';
-import { GLOBAL_DEV_API_BASE_URL } from '../../constants/api';
+import { GLOBAL_API_BASE_URL } from '../../constants/api';
 
-const API_BASE_URL = GLOBAL_DEV_API_BASE_URL;
+const API_BASE_URL = GLOBAL_API_BASE_URL;
 
 export const getUnreadMessages = async (): Promise<number> => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');

@@ -1,13 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
-import {useDispatch} from 'react-redux';
-import {addchatList, updateUnreadChat} from '../store/reducer/mainSlice';
-import {getChatsbyuser} from '../utils/api/func';
-import {GLOBAL_DEV_API_BASE_URL} from '../constants/api';
+import { useDispatch } from 'react-redux';
+import { addchatList, updateUnreadChat } from '../store/reducer/mainSlice';
+import { getChatsbyuser } from '../utils/api/func';
+import { GLOBAL_API_BASE_URL } from '../constants/api';
 
-const API_BASE_URL = GLOBAL_DEV_API_BASE_URL;
+const API_BASE_URL = GLOBAL_API_BASE_URL;
 
 const useChat = () => {
   const dispatch = useDispatch();

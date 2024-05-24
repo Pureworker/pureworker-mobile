@@ -81,12 +81,18 @@ const OrderActive = ({route}: any) => {
   // console.log(route.params.data);
   const fetchOrderByID = async () => {
     // setisLoading(true);
-    const res: any = await getOrderDetailbyID(passedData?._id ?? item?._id);
-    console.log('oooooooo', res?.data);
-    if (res?.status === 201 || res?.status === 200) {
-      dispatch(addViewOrder(res?.data?.data?.order));
+    try {
+      const res: any = await getOrderDetailbyID(passedData?._id ?? item?._id);
+      console.log('oooooooo', res?.data);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addViewOrder(res?.data?.data?.order));
+      }
+      setisLoading(false);
+    } catch (error) {
+      ToastShort('Error Fetching Order Data.')
+    } finally {
+      setisLoading(false);
     }
-    setisLoading(false);
   };
   //modals
   const [serviceProviderModal, setserviceProviderModal] = useState(false);
@@ -727,9 +733,13 @@ const OrderActive = ({route}: any) => {
                                     />
                                     <Textcomp
                                       text={`${
+                                        passedData?.serviceProvider
+                                          ?.businessName ??
                                         passedData?.serviceProvider?.fullName ??
                                         `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
-                                      } has completed the job.Click Job Complete and review ${
+                                      } has completed the job. Click Job Complete and review ${
+                                        passedData?.serviceProvider
+                                          ?.businessName ??
                                         passedData?.serviceProvider?.fullName ??
                                         `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
                                       } so they get paid.`}
@@ -843,9 +853,11 @@ const OrderActive = ({route}: any) => {
                                     />
                                     <Textcomp
                                       text={`${
+                                        passedData?.serviceProvider
+                                          ?.businessName ??
                                         passedData?.serviceProvider?.fullName ??
                                         `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
-                                      } has started the job. pay attention.`}
+                                      } has started the job. Pay attention.`}
                                       size={12}
                                       lineHeight={16.5}
                                       color={'#BABABA'}
@@ -975,6 +987,8 @@ const OrderActive = ({route}: any) => {
                                     />
                                     <Textcomp
                                       text={`${
+                                        passedData?.serviceProvider
+                                          ?.businessName ??
                                         passedData?.serviceProvider?.fullName ??
                                         `${passedData?.serviceProvider?.firstName} ${passedData?.serviceProvider?.lastName}`
                                       } has declined your order.`}
@@ -1756,7 +1770,10 @@ const OrderActive = ({route}: any) => {
                         tw`flex flex-row px-3 mx-4 py-2 ml-auto`,
                       ]}>
                       <Textcomp
-                        text={`Contact ${passedData?.serviceProvider?.firstName}`}
+                        text={`Contact ${
+                          passedData?.serviceProvider?.businessName ??
+                          passedData?.serviceProvider?.firstName
+                        }`}
                         size={11}
                         lineHeight={17}
                         color={'#000000'}
