@@ -187,26 +187,31 @@ const Referrals = () => {
               </TouchableOpacity>
             </View>
 
-            <View style={tw`flex flex-row mt-5 items-center mx-auto `}>
+            <View>
+              <View style={tw`flex flex-row mt-5 items-center mx-auto `}>
+                <Textcomp
+                  text={' Invite a friend and get  '}
+                  size={13}
+                  lineHeight={17}
+                  color={'white'}
+                  fontFamily={'Inter-SemiBold'}
+                />
+                <Textcomp
+                  text={'₦100. '}
+                  size={17}
+                  lineHeight={17}
+                  color={'white'}
+                  fontFamily={'Inter-Bold'}
+                />
+              </View>
               <Textcomp
-                text={' Invite a friend and get  '}
+                text={
+                  'You and the friend will also get N250 each on their first transaction.'
+                }
                 size={13}
                 lineHeight={17}
                 color={'white'}
-                fontFamily={'Inter-SemiBold'}
-              />
-              <Textcomp
-                text={'₦100. '}
-                size={17}
-                lineHeight={17}
-                color={'white'}
-                fontFamily={'Inter-Bold'}
-              />
-              <Textcomp
-                text={'You and the friend will also get N250 each on their first transaction.'}
-                size={13}
-                lineHeight={17}
-                color={'white'}
+                style={tw`text-center`}
                 fontFamily={'Inter-SemiBold'}
               />
             </View>
