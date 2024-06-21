@@ -9,7 +9,7 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
@@ -25,11 +25,13 @@ import {getUser} from '../../utils/api/func';
 import {formatAmount, formatAmount2} from '../../utils/validations';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
+import WalletModal from '../../components/modals/WalletModal';
 
 const Wallet = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [InfoModal, setInfoModal] = useState(false);
+  const [setWalletPin, setSetWalletPin] = useState(false);
   const [ContactAgent, setContactAgent] = useState(false);
   const supportUser = useSelector((store: any) => store.user.supportUser);
 
@@ -44,9 +46,15 @@ const Wallet = () => {
     setisLoading(false);
     // setloading(false);
   };
-  useEffect(() => {
-    initGetUsers();
-  }, []);
+  // useEffect(() => {
+  //   initGetUsers();
+  // }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      initGetUsers();
+    }, []),
+  );
   useEffect(() => {
     initGetUsers();
   }, [dispatch, navigation]);
@@ -61,8 +69,8 @@ const Wallet = () => {
               marginTop:
                 Platform.OS === 'ios'
                   ? 10
-                  // getStatusBarHeight(true)
-                  : StatusBar.currentHeight &&
+                  : // getStatusBarHeight(true)
+                    StatusBar.currentHeight &&
                     StatusBar.currentHeight + getStatusBarHeight(true),
             }}
           />
@@ -202,7 +210,11 @@ const Wallet = () => {
                   </View>
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.navigate('Withdraw');
+                      if (!userData?.hasPinCreated) {
+                        setSetWalletPin(true);
+                      } else {
+                        navigation.navigate('Withdraw');
+                      }
                     }}
                     style={[
                       tw`bg-black items-center justify-center rounded-full mr-auto`,
@@ -324,7 +336,11 @@ const Wallet = () => {
                 </TouchableOpacity> */}
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate('TransactionHistory');
+                    if (!userData?.hasPinCreated) {
+                      setSetWalletPin(true);
+                    } else {
+                      navigation.navigate('TransactionHistory');
+                    }
                   }}
                   style={[
                     tw`flex flex-row items-center bg-[#2D303C] px-3 rounded-full `,
@@ -376,91 +392,108 @@ const Wallet = () => {
           </View>
         </ScrollView>
       </SafeAreaView>
-      <Modal
-        isVisible={InfoModal}
-        onModalHide={() => {
-          setInfoModal(false);
-          setContactAgent(false);
-        }}
-        style={{width: SIZES.width, marginHorizontal: 0}}
-        deviceWidth={SIZES.width}>
-        <View style={tw` h-full w-full bg-black bg-opacity-5`}>
-          <TouchableOpacity
-            onPress={() => setInfoModal(false)}
-            style={tw`flex-1`}
-          />
-          {!ContactAgent && (
-            <View style={tw`h-[20%]  items-center mt-auto bg-[#D9D9D9]`}>
-              <TouchableOpacity
-                onPress={() => {
-                  setInfoModal(false);
-                  setContactAgent(false);
-                }}
-                style={tw`w-15 h-1 rounded-full  bg-[${colors.darkPurple}]`}
-              />
-              <TouchableOpacity
-                onPress={() => {
-                  setInfoModal(false);
-                  navigation.navigate('FAQ');
-                }}
-                style={{
-                  width: perWidth(316),
-                  height: perHeight(40),
-                  borderRadius: 13,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: colors.darkPurple,
-                  marginTop: 18,
-                }}>
-                <Textcomp
-                  text={'FAQs'}
-                  size={14}
-                  lineHeight={17}
-                  color={'#FFC727'}
-                  fontFamily={'Inter-SemiBold'}
+      {!InfoModal && (
+        <WalletModal
+          visible={setWalletPin}
+          navigation={navigation}
+          onClose={() => setSetWalletPin(false)}
+          onClose2={() => navigation.goBack()}
+        />
+      )}
+      {!setWalletPin && (
+        <Modal
+          isVisible={InfoModal}
+          onModalHide={() => {
+            setInfoModal(false);
+            setContactAgent(false);
+          }}
+          style={{width: SIZES.width, marginHorizontal: 0}}
+          deviceWidth={SIZES.width}>
+          <View style={tw` h-full w-full bg-black bg-opacity-5`}>
+            <TouchableOpacity
+              onPress={() => setInfoModal(false)}
+              style={tw`flex-1`}
+            />
+            {!ContactAgent && (
+              <View
+                style={[
+                  tw`h-[25%]  items-center mt-auto bg-[#D9D9D9]`,
+                  {
+                    marginBottom: -20,
+                  },
+                ]}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setInfoModal(false);
+                    setContactAgent(false);
+                  }}
+                  style={tw`w-15 h-1 rounded-full  bg-[${colors.darkPurple}]`}
                 />
-              </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setInfoModal(false);
+                    navigation.navigate('FAQ');
+                  }}
+                  style={{
+                    width: perWidth(316),
+                    height: perHeight(40),
+                    borderRadius: 13,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: colors.darkPurple,
+                    marginTop: 18,
+                  }}>
+                  <Textcomp
+                    text={'FAQs'}
+                    size={14}
+                    lineHeight={17}
+                    color={'#FFC727'}
+                    fontFamily={'Inter-SemiBold'}
+                  />
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => {
-                  setContactAgent(true);
-                }}
-                style={{
-                  width: perWidth(316),
-                  height: perHeight(40),
-                  borderRadius: 13,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: colors.darkPurple,
-                  marginTop: 10,
-                }}>
-                <Textcomp
-                  text={'Connect to an Agent'}
-                  size={14}
-                  lineHeight={17}
-                  color={'#FFC727'}
-                  fontFamily={'Inter-SemiBold'}
-                />
-              </TouchableOpacity>
-            </View>
-          )}
-
-          {ContactAgent && (
-            <View
-              style={tw`h-[10%] justify-center items-center mt-auto bg-[#D9D9D9]`}>
-              <View>
-                <Textcomp
-                  text={'An Agent will contact you as soon as possible'}
-                  size={14}
-                  lineHeight={17}
-                  color={'#000000'}
-                  fontFamily={'Inter-SemiBold'}
-                />
+                <TouchableOpacity
+                  onPress={() => {
+                    setContactAgent(true);
+                  }}
+                  style={{
+                    width: perWidth(316),
+                    height: perHeight(40),
+                    borderRadius: 13,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: colors.darkPurple,
+                    marginTop: 10,
+                  }}>
+                  <Textcomp
+                    text={'Connect to an Agent'}
+                    size={14}
+                    lineHeight={17}
+                    color={'#FFC727'}
+                    fontFamily={'Inter-SemiBold'}
+                  />
+                </TouchableOpacity>
               </View>
-            </View>
-          )}
-        </View>
-      </Modal>
+            )}
+
+            {ContactAgent && (
+              <View
+                style={tw`h-[10%] justify-center items-center mt-auto bg-[#D9D9D9]`}>
+                <View>
+                  <Textcomp
+                    text={'An Agent will contact you as soon as possible'}
+                    size={14}
+                    lineHeight={17}
+                    color={'#000000'}
+                    fontFamily={'Inter-SemiBold'}
+                  />
+                </View>
+              </View>
+            )}
+          </View>
+        </Modal>
+      )}
+
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </>
   );

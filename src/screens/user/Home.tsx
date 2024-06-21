@@ -469,6 +469,8 @@ const Home = () => {
                   showsHorizontalScrollIndicator={false}
                   renderItem={(item: any, index: any) => {
                     if (item.index === closeProvider?.length - 1) {
+                      // console.log('Close to you',item?.item);
+                      
                       return (
                         <>
                           <ClosetoYou
@@ -480,6 +482,7 @@ const Home = () => {
                         </>
                       );
                     } else {
+                      // console.log('Close to you',item?.item);
                       return (
                         <ClosetoYou
                           navigation={navigation}
@@ -612,7 +615,13 @@ const Home = () => {
             style={tw`flex-1`}
           />
           {!ContactAgent && (
-            <View style={tw`h-[20%]  items-center mt-auto bg-[#D9D9D9]`}>
+            <View
+              style={[
+                tw`h-[25%]  items-center mt-auto bg-[#D9D9D9]`,
+                {
+                  marginBottom: -20,
+                },
+              ]}>
               <TouchableOpacity
                 onPress={() => {
                   setInfoModal(false);

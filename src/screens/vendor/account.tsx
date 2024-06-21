@@ -1019,7 +1019,7 @@ const Account = () => {
                       portfolio.service === selectedService?._id,
                   );
                   const payload = {
-                    portfolioID: portfolio?.[0]._id,
+                    portfolioID: portfolio?.[0]?._id,
                     serviceID: selectedService?._id,
                   };
                   _deletePortfolio(payload);

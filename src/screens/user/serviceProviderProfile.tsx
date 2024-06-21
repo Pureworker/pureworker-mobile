@@ -49,6 +49,7 @@ import {
   timeAgo,
 } from '../../utils/utils';
 import socket from '../../utils/socket';
+import Negotiate from '../../assets/svg/Negotiate';
 
 const ServiceProviderProfile = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -359,7 +360,7 @@ const ServiceProviderProfile = () => {
               />
             </TouchableOpacity>
           </View>
-          <View style={tw`mt-auto pb-4 ml-auto mr-4`}>
+          {/* <View style={tw`mt-auto pb-4 ml-auto mr-4`}>
             <TouchableOpacity
               onPress={() => {
                 socket.connect();
@@ -392,7 +393,7 @@ const ServiceProviderProfile = () => {
                 fontFamily={'Inter-SemiBold'}
               />
             </TouchableOpacity>
-          </View>
+          </View> */}
         </FastImage>
 
         <View style={tw``}>
@@ -754,32 +755,35 @@ const ServiceProviderProfile = () => {
                   </View>
 
                   <View style={tw`w-full`}>
-                    <ScrollView showsHorizontalScrollIndicator={false} horizontal contentContainerStyle={{paddingBottom:10}}>
-                    <FlatList
-                      scrollEnabled={false}
-                      data={serviceProviderData?.services}
-                      renderItem={({item, index}) => {
-                        return (
-                          <View
-                            key={index}
-                            style={[
-                              tw`bg-white rounded-lg w-auto p-3 mr-2 py-1 items-center`,
-                              {marginTop: perHeight(5)},
-                            ]}>
-                            <Textcomp
-                              text={item?.name}
-                              size={9}
-                              lineHeight={12}
-                              color={'#000000'}
-                              fontFamily={'Inter-Bold'}
-                            />
-                          </View>
-                        );
-                      }}
-                      //   keyExtractor={item => item.id}
-                      numColumns={3}
-                      contentContainerStyle={{}}
-                    />
+                    <ScrollView
+                      showsHorizontalScrollIndicator={false}
+                      horizontal
+                      contentContainerStyle={{paddingBottom: 10}}>
+                      <FlatList
+                        scrollEnabled={false}
+                        data={serviceProviderData?.services}
+                        renderItem={({item, index}) => {
+                          return (
+                            <View
+                              key={index}
+                              style={[
+                                tw`bg-white rounded-lg w-auto p-3 mr-2 py-1 items-center`,
+                                {marginTop: perHeight(5)},
+                              ]}>
+                              <Textcomp
+                                text={item?.name}
+                                size={9}
+                                lineHeight={12}
+                                color={'#000000'}
+                                fontFamily={'Inter-Bold'}
+                              />
+                            </View>
+                          );
+                        }}
+                        //   keyExtractor={item => item.id}
+                        numColumns={3}
+                        contentContainerStyle={{}}
+                      />
                     </ScrollView>
                   </View>
                 </View>
@@ -1387,32 +1391,51 @@ const ServiceProviderProfile = () => {
         {userData?.accountType === 'freelancer' ||
         userData?.accountType === 'business' ? null : (
           <TouchableOpacity
+            // onPress={() => {
+            //   if (
+            //     // userData?._id === serviceProviderData?._id ||
+            //     userData?._id === profileData?._id
+            //   ) {
+            //     console.log(
+            //       userData?._id,
+            //       profileData?._id,
+            //       serviceProviderData?._id,
+            //     );
+
+            //     ToastShort('Service Providers cannot hire thermselves!.');
+            //   } else {
+            //     navigation.navigate('OrderDetails', {
+            //       data: profileData,
+            //       service: id,
+            //     });
+            //   }
+            // }}
+
             onPress={() => {
+              socket.connect();
+
               if (
                 // userData?._id === serviceProviderData?._id ||
                 userData?._id === profileData?._id
               ) {
-                console.log(
-                  userData?._id,
-                  profileData?._id,
-                  serviceProviderData?._id,
-                );
-
-                ToastShort('Service Providers cannot hire thermselves!.');
+                ToastShort('Service providers cannot chat with themselves!.');
               } else {
-                navigation.navigate('OrderDetails', {
-                  data: profileData,
-                  service: id,
+                navigation.navigate('Inbox', {
+                  id: profileData?._id || profileData?._id,
+                  name: profileData?.businessName
+                    ? profileData?.businessName
+                    : `${profileData.firstName} ${profileData?.lastName}`,
                 });
               }
             }}
             style={[
               tw`bg-[#FFF] absolute bottom-[11%] right-[5%] rounded-full items-center justify-center`,
-              {width: perWidth(52), aspectRatio: 1},
+              {width: perWidth(60), aspectRatio: 1},
             ]}>
+            <Negotiate />
             <Textcomp
-              text={'HIRE'}
-              size={14}
+              text={'Negotiate..'}
+              size={10}
               lineHeight={16.5}
               color={'#000413'}
               fontFamily={'Inter-SemiBold'}

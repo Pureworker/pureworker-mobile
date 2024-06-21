@@ -36,7 +36,14 @@ import Textcomp from '../components/Textcomp';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {DateTime} from 'luxon';
 import {number} from 'yup';
-import {validateDate} from '../utils/auth';
+import {isLeapYear, validateDate} from '../utils/auth';
+import {
+  getBrand,
+  getDeviceId,
+  getDeviceMac,
+  getModel,
+  getUniqueId,
+} from '../utils/deviceInfo';
 export default function CustomerSignup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -80,7 +87,7 @@ export default function CustomerSignup() {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
-  };
+  }; 
   const handleConfirm = (date: any) => {
     const f = `${date}`;
     const jsDate = new Date(f);
@@ -167,6 +174,26 @@ export default function CustomerSignup() {
   useEffect(() => {
     setNationalityItems([...allCountry]);
   }, []);
+  const [uniqueId, setUniqueId] = useState('');
+  const [model, setModel] = useState('');
+  const [brand, setBrand] = useState('');
+  const [, setDeviceId] = useState('');
+  const [deviceMac, setDeviceMac] = useState('');
+  useEffect(() => {
+    const fetchDeviceInfo = async () => {
+      const _uniqueId: any = await getUniqueId();
+      const _model: any = await getModel();
+      const _brand: any = await getBrand();
+      const _deviceId: any = await getDeviceId();
+      const _deviceMac: any = await getDeviceMac();
+      setUniqueId(_uniqueId);
+      setModel(_model);
+      setBrand(_brand);
+      setDeviceId(_deviceId);
+      setDeviceMac(_deviceMac);
+    };
+    fetchDeviceInfo();
+  }, []);
   const handleSignup = async () => {
     let dateErrorMessage = '';
 
@@ -229,7 +256,7 @@ export default function CustomerSignup() {
           text: 'Please enter a valid phone number',
           duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
-          backgroundColor: '#88087B',
+          backgroundColor: '#00000080',
         });
         setisLoading(false);
         return;
@@ -248,6 +275,12 @@ export default function CustomerSignup() {
           state: stateValue,
           learnAboutUs:
             learnAboutUs === 'Other' ? learnAboutUsOthers : learnAboutUs,
+          device: {
+            model: model,
+            brand: brand,
+            deviceId: uniqueId,
+            deviceMac: deviceMac,
+          },
         };
         if (referralCode && referralCode?.length > 2) {
           loginData.referralCode = referralCode;
@@ -285,22 +318,6 @@ export default function CustomerSignup() {
           });
         }
         setisLoading(false);
-        // signup(loginData)
-        //   .unwrap()
-        //   .then((data: any) => {
-        //     if (data) {
-        //       navigation.navigate('TokenVerification', {email: email, type: 'signup'});
-        //     }
-        //   })
-        //   .catch((error: any) => {
-        //     console.log('err', error);
-        //     Snackbar.show({
-        //       text: error.data.message,
-        //       duration: Snackbar.LENGTH_LONG,
-        //       textColor: '#fff',
-        //       backgroundColor: '#88087B',
-        //     });
-        //   });
       }
     } else {
       Snackbar.show({
@@ -628,95 +645,6 @@ export default function CustomerSignup() {
                 onChangeText={e => handleBirthDate('day', Number(e))}
               />
             </View>
-            {/* <DateTimePickerModal
-              isVisible={isDatePickerVisible}
-              mode="date"
-              onConfirm={handleConfirm}
-              onCancel={hideDatePicker}
-            />
-
-            <TouchableOpacity
-              onPress={() => {
-                setDatePickerVisibility(!isDatePickerVisible);
-              }}
-              style={[
-                tw`w-full px-4 justify-center rounded-lg mt-3`,
-                {backgroundColor: colors.greyLight1, height: perHeight(40)},
-              ]}>
-              <Textcomp
-                text={`${displayDate ? formatToCustomString(displayDate) : ''}`}
-                size={14}
-                lineHeight={14}
-                color={'#000413'}
-                fontFamily={'Inter-Regular'}
-                style={{fontWeight: 300}}
-              />
-            </TouchableOpacity> */}
-            {/* <View
-              style={{
-                zIndex: 1,
-                // marginTop: 15,
-                minHeight: 500,
-                marginBottom: -400,
-              }}>
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontFamily: commonStyle.fontFamily.medium,
-                  color: '#fff',
-                  marginTop: 15,
-                  marginBottom: 15,
-                }}>
-                Gender
-              </Text>
-
-              <DropDownPicker
-                open={genderOpen}
-                value={genderValue}
-                items={genderItems}
-                setOpen={setGenderOpen}
-                setValue={setGenderValue}
-                setItems={setGenderItems}
-                showArrowIcon={false}
-                zIndex={10}
-                dropDownContainerStyle={{
-                  borderWidth: 0,
-                }}
-                labelStyle={{
-                  fontFamily: commonStyle.fontFamily.regular,
-                  fontSize: 14,
-                  color: '#000',
-                }}
-                // arrowIconStyle={{
-
-                // }}
-                placeholderStyle={{
-                  fontFamily: commonStyle.fontFamily.regular,
-                  fontSize: 14,
-                  color: '#9E9E9E',
-                }}
-                style={{
-                  backgroundColor: '#F7F5F5',
-                  borderColor: '#9E9E9E14',
-                }}
-                listMode="FLATLIST"
-                showTickIcon={false}
-                textStyle={{
-                  color: '#9E9E9E',
-                }}
-                listParentLabelStyle={{
-                  color: '#000',
-                  fontSize: 16,
-                  fontFamily: commonStyle.fontFamily.regular,
-                }}
-                listItemContainerStyle={{
-                  backgroundColor: '#F1F1F1',
-                  borderColor: 'red',
-                  opacity: 1,
-                  borderWidth: 0,
-                }}
-              />
-            </View> */}
             <View
               style={{
                 zIndex: genderOpen ? 0 : 2,
@@ -776,56 +704,7 @@ export default function CustomerSignup() {
                 }}
               />
             </View>
-            {/* </ScrollView> */}
-            {/* <View
-              style={{
-                zIndex: genderOpen ? 0 : 2,
-                minHeight: 500,
-                marginBottom: -400,
-              }}>
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontFamily: commonStyle.fontFamily.medium,
-                  color: '#fff',
-                  marginTop: 15,
-                  marginBottom: 15,
-                }}>
-                Nationality
-              </Text>
-              <Dropdown
-                style={[
-                  tw``,
-                  {
-                    zIndex: 10,
-                    width: SIZES.width * 0.875,
-                    backgroundColor: '#F7F5F5',
-                    borderColor: '#9E9E9E14',
-                    height: 50,
-                    borderRadius: 10,
-                    paddingHorizontal: 10,
-                  },
-                ]}
-                data={nationalityItems}
-                search
-                maxHeight={300}
-                labelField="label"
-                valueField="value"
-                placeholder={!isFocus ? 'Select nationality' : '...'}
-                searchPlaceholder="Search..."
-                value={stateValue}
-                onFocus={() => setIsFocus(true)}
-                onBlur={() => setIsFocus(false)}
-                itemTextStyle={{
-                  color: 'black',
-                }}
-                onChange={item => {
-                  console.log(item.value);
-                  setNationalityValue(item.value);
-                  setIsFocus(false);
-                }}
-              />
-            </View> */}
+  
             <View style={{zIndex: nationalityOpen ? 0 : 2}}>
               {/* <Text
                 style={{

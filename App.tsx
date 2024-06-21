@@ -34,9 +34,19 @@ import Geolocation from '@react-native-community/geolocation';
 import NetInfo from '@react-native-community/netinfo';
 import {addIsNetwork} from './src/store/reducer/mainSlice';
 import VersionCheck from 'react-native-version-check';
+import SpInAppUpdates, {
+  NeedsUpdateResponse,
+  IAUUpdateKind,
+  StartUpdateOptions,
+} from 'sp-react-native-in-app-updates';
+import {checkForUpdate} from './src/utils/update';
+import DeviceInfo from 'react-native-device-info';
 Sentry.init({
   dsn: 'https://aaf6ecb52ce579d3e2a85f314f1773ad@o4506399508725760.ingest.sentry.io/4506410437509120',
 });
+const inAppUpdates = new SpInAppUpdates(
+  false, // isDebug
+);
 const App = () => {
   const [user, setUser] = useState(null);
   const [accessToken, setToken]: any = useState(null);
@@ -259,7 +269,6 @@ const App = () => {
       return <VendorNavigation />;
     }
   }
-  // eslint-disable-next-line react/no-unstable-nested-components
   const MainStack = () => {
     const loggedIn = useSelector((state: any) => state.user.isLoggedIn);
     const userData = useSelector((state: any) => state.user.userData);
@@ -378,6 +387,9 @@ const App = () => {
           'HEREEEE:::',
           latestVersion,
           currentVersion,
+          'device version',
+          await DeviceInfo.getVersion(),
+          await DeviceInfo.getBuildNumber(),
           await VersionCheck.getAppStoreUrl({
             appID: 'com.grandida.pureworker',
           }),
@@ -419,6 +431,8 @@ const App = () => {
 
     checkAppVersion();
   }, []);
+
+  // checkForUpdate();
   return (
     <>
       <RouteContext.Provider

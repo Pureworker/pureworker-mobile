@@ -26,6 +26,7 @@ import { loggedIn, setwelcomeModal } from '../store/reducer/mainSlice';
 import { resendOtp, verifyLogin, verifyUser } from '../utils/api/auth';
 import Toast from 'react-native-toast-message';
 import { ToastShort } from '../utils/utils';
+import DeviceInfo from 'react-native-device-info';
 type Route = {
   key: string;
   name: string;
@@ -33,6 +34,7 @@ type Route = {
     email: string;
   };
 };
+const DeviceId = DeviceInfo.getDeviceId();
 const TokenVerification = () => {
   const route: Route = useRoute();
   const [code, setCode] = useState('');
@@ -121,6 +123,7 @@ const TokenVerification = () => {
     const loginData = {
       email: route.params?.email?.toLowerCase(),
       token: code,
+      deviceId: DeviceId,
     };
 
     if (route.params?.type === 'login') {

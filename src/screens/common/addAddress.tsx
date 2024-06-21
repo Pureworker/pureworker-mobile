@@ -201,7 +201,9 @@ const AddAddress = ({navigation}: any) => {
       } else {
         if (
           res?.error?.message === `Invalid token or user doesn't exist` ||
-          res?.error?.data?.message === `Invalid token or user doesn't exist`
+          res?.error?.message === `User with that token no longer exists` ||
+          res?.error?.data?.message === `Invalid token or user doesn't exist` ||
+          res?.error?.data?.message === `User with that token no longer exists`
         ) {
           Snackbar.show({
             text: 'Session Expired!. Please log in.',

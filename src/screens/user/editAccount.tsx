@@ -79,12 +79,12 @@ const EditAccount = () => {
     setloading(true);
     try {
       const res = await updateUserData(param);
-      console.log(res);
+      console.log('CHECK:', res?.data);
 
       if ([200, 201].includes(res?.status)) {
         Toast.show({
           type: 'success',
-          text1: 'Picture uploaded successfully 🚀. ',
+          text1: 'Account updated 🚀. ',
         });
       } else {
         Toast.show({
@@ -297,6 +297,7 @@ const EditAccount = () => {
                 onChangeText={text => {
                   setemail(text);
                 }}
+                editable={false}
                 value={email}
               />
             </View>
@@ -321,6 +322,7 @@ const EditAccount = () => {
                 onChangeText={text => {
                   setphoneNumber(text);
                 }}
+                editable={false}
                 value={phoneNumber}
               />
             </View>

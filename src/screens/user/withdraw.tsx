@@ -9,6 +9,7 @@ import {
   Text,
   StatusBar,
   Alert,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -34,6 +35,7 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {Dropdown} from 'react-native-element-dropdown';
 import {SIZES} from '../../utils/position/sizes';
 import Textcomp from '../../components/Textcomp';
+import TransPin from '../../components/modals/transPin';
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
   bank: Yup.string().required('Please select a bank.'),
@@ -89,6 +91,7 @@ const Withdraw = () => {
       account_bank: values.bank,
       amount: values.amount,
       narration: 'Withdrawal',
+      transactionPin: transactionPin,
     };
     try {
       const res: any = await withdraw(param);
@@ -141,293 +144,321 @@ const Withdraw = () => {
     }
   };
 
+  const [showTransPin, setshowTransPin] = useState(false);
+  const [transactionPin, settransactionPin] = useState('');
+
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
-      <ScrollView>
-        <View
-          style={{
-            marginTop:
-              Platform.OS === 'ios'
-                ? getStatusBarHeight(true)
-                : StatusBar.currentHeight &&
-                  StatusBar.currentHeight + getStatusBarHeight(true),
-          }}
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginHorizontal: 20,
-          }}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              source={images.back}
-              style={{height: 25, width: 25}}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-          <View style={tw`mx-auto`}>
-            <Textcomp
-              text={'Withdraw'}
-              size={17}
-              lineHeight={17}
-              color={'#000413'}
-              fontFamily={'Inter-SemiBold'}
-            />
+    <>
+      <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+        <ScrollView style={tw`flex-1 h-full `}>
+          <View
+            style={{
+              marginTop:
+                Platform.OS === 'ios'
+                  ? 10
+                  : StatusBar.currentHeight &&
+                    StatusBar.currentHeight + getStatusBarHeight(true),
+            }}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginHorizontal: 20,
+            }}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image
+                source={images.back}
+                style={{height: 25, width: 25}}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+            <View style={tw`mx-auto`}>
+              <Textcomp
+                text={'Withdraw'}
+                size={17}
+                lineHeight={17}
+                color={'#000413'}
+                fontFamily={'Inter-SemiBold'}
+              />
+            </View>
           </View>
-        </View>
-        <View style={tw`flex-1`}>
-          <ScrollView scrollEnabled={false}>
-            <Formik
-              initialValues={{
-                bank: '',
-                accountNumber: '',
-                accountName: '',
-                amount: 0,
-              }}
-              validationSchema={validationSchema}
-              onSubmit={values => {
-                console.log('values');
-                handleWithdraw(values);
-              }}>
-              {({handleSubmit, errors, touched}) => (
-                <View style={{marginHorizontal: 20, marginTop: 50}}>
-                  <Field name="bank">
-                    {({form}) => (
-                      <View style={[tw`mb-4`, {}]}>
-                        <TextWrapper
-                          children="Bank"
-                          isRequired={true}
-                          fontType={'semiBold'}
-                          style={{
-                            fontSize: 13,
-                            marginTop: 20,
-                            color: colors.black,
-                          }}
-                        />
-                        <Dropdown
-                          style={[
-                            tw``,
-                            {
-                              zIndex: 10,
-                              width: SIZES.width * 0.875,
-                              backgroundColor: '#F7F5F5',
-                              borderColor: 'black',
-                              borderWidth: 1,
-                              height: 50,
-                              borderRadius: 10,
-                              paddingHorizontal: 10,
-                              marginTop: 15,
-                              color: '#000000',
-                            },
-                          ]}
-                          // placeholderStyle={{
-                          //   color: '#00000080',
-                          //   fontWeight: 400,
-                          // }}
-                          placeholderStyle={{
-                            color: '#757575',
-                          }}
-                          inputSearchStyle={{
-                            color: '#757575',
-                          }}
-                          
-                          data={bankList}
-                          search
-                          maxHeight={300}
-                          labelField="label"
-                          valueField="value"
-                          placeholder={'Select Bank'}
-                          searchPlaceholder="Search..."
-                          itemTextStyle={{
-                            color: 'black',
-                          }}
-                          value={selectedBank?.value}
-                          onChange={item => {
-                            const d = `${item.value}`;
-                            const fil = banks?.filter(item => item.code === d);
-                            setselectedBank(fil);
-                            form.setFieldValue('bank', fil?.[0]?.code);
-                            //                     console.log(fil);
-                            //                     setselectedBank(fil);
-                          }}
-                        />
-                        {errors.bank && touched.bank && (
-                          <Text style={{color: 'red', marginTop: 5}}>
-                            {errors.bank}
-                          </Text>
-                        )}
-                      </View>
-                    )}
-                  </Field>
-                  <Field name="accountNumber">
-                    {({field, form}: any) => (
-                      <>
-                        <TextWrapper
-                          children="Account Number"
-                          isRequired={true}
-                          fontType={'semiBold'}
-                          style={{
-                            fontSize: 13,
-                            marginTop: 20,
-                            color: colors.black,
-                          }}
-                        />
-                        <TextInputs
-                          style={{
-                            marginTop: 10,
-                            backgroundColor: colors.greyLight1,
-                            borderRadius: 2,
-                            padding: 5,
-                            width: '100%',
-                          }}
-                          labelText={'Enter account number'}
-                          state={field.value}
-                          // setState={(value) => debouncedQueryName(value)}
-                          setState={async value => {
-                            if (!selectedBank) {
-                              ToastShort('Select a bank');
-                              return;
-                            }
-                            form.setFieldValue('accountNumber', value);
-                            setaccountNumber(value);
-                            if (value?.length > 9) {
-                              await queryName(value);
-                            } else {
-                              setaccountName('');
-                            }
-                          }}
-                          disable={true}
-                          maxLength={11}
-                          keyBoardType="numeric"
-                          placeHolderColor={'#00000080'}
-                        />
-                        {field.touched?.accountNumber &&
-                          field.errors.accountNumber && (
-                            <Text style={{color: 'red'}}>
-                              {field.errors.accountNumber}
+
+          <View style={tw`flex-1`}>
+            <ScrollView scrollEnabled={false}>
+              <Formik
+                initialValues={{
+                  bank: '',
+                  accountNumber: '',
+                  accountName: '',
+                  amount: 0,
+                }}
+                validationSchema={validationSchema}
+                onSubmit={values => {
+                  console.log('values');
+                  handleWithdraw(values);
+                }}>
+                {({handleSubmit, errors, touched}) => (
+                  <View style={{marginHorizontal: 20, marginTop: 50}}>
+                    <Field name="bank">
+                      {({form}) => (
+                        <View style={[tw`mb-4`, {}]}>
+                          <TextWrapper
+                            children="Bank"
+                            isRequired={true}
+                            fontType={'semiBold'}
+                            style={{
+                              fontSize: 13,
+                              marginTop: 20,
+                              color: colors.black,
+                            }}
+                          />
+                          <Dropdown
+                            style={[
+                              tw``,
+                              {
+                                zIndex: 10,
+                                width: SIZES.width * 0.875,
+                                backgroundColor: '#F7F5F5',
+                                borderColor: 'black',
+                                borderWidth: 1,
+                                height: 50,
+                                borderRadius: 10,
+                                paddingHorizontal: 10,
+                                marginTop: 15,
+                                color: '#000000',
+                              },
+                            ]}
+                            // placeholderStyle={{
+                            //   color: '#00000080',
+                            //   fontWeight: 400,
+                            // }}
+                            placeholderStyle={{
+                              color: '#757575',
+                            }}
+                            inputSearchStyle={{
+                              color: '#757575',
+                            }}
+                            data={bankList}
+                            search
+                            maxHeight={300}
+                            labelField="label"
+                            valueField="value"
+                            placeholder={'Select Bank'}
+                            searchPlaceholder="Search..."
+                            itemTextStyle={{
+                              color: 'black',
+                            }}
+                            value={selectedBank?.value}
+                            onChange={item => {
+                              const d = `${item.value}`;
+                              const fil = banks?.filter(
+                                item => item.code === d,
+                              );
+                              setselectedBank(fil);
+                              form.setFieldValue('bank', fil?.[0]?.code);
+                              //                     console.log(fil);
+                              //                     setselectedBank(fil);
+                            }}
+                          />
+                          {errors.bank && touched.bank && (
+                            <Text style={{color: 'red', marginTop: 5}}>
+                              {errors.bank}
                             </Text>
                           )}
+                        </View>
+                      )}
+                    </Field>
+                    <Field name="accountNumber">
+                      {({field, form}: any) => (
+                        <>
+                          <TextWrapper
+                            children="Account Number"
+                            isRequired={true}
+                            fontType={'semiBold'}
+                            style={{
+                              fontSize: 13,
+                              marginTop: 20,
+                              color: colors.black,
+                            }}
+                          />
+                          <TextInputs
+                            style={{
+                              marginTop: 10,
+                              backgroundColor: colors.greyLight1,
+                              borderRadius: 2,
+                              padding: 5,
+                              width: '100%',
+                            }}
+                            labelText={'Enter account number'}
+                            state={field.value}
+                            // setState={(value) => debouncedQueryName(value)}
+                            setState={async value => {
+                              if (!selectedBank) {
+                                ToastShort('Select a bank');
+                                return;
+                              }
+                              form.setFieldValue('accountNumber', value);
+                              setaccountNumber(value);
+                              if (value?.length > 9) {
+                                await queryName(value);
+                              } else {
+                                setaccountName('');
+                              }
+                            }}
+                            disable={true}
+                            maxLength={11}
+                            keyBoardType="numeric"
+                            placeHolderColor={'#00000080'}
+                          />
+                          {field.touched?.accountNumber &&
+                            field.errors.accountNumber && (
+                              <Text style={{color: 'red'}}>
+                                {field.errors.accountNumber}
+                              </Text>
+                            )}
 
-                        {processing && (
-                          <View style={tw`mr-auto mt-4`}>
-                            <ActivityIndicator size={'small'} color={'green'} />
-                          </View>
-                        )}
-                        {errors.accountNumber && touched.accountNumber && (
-                          <Text style={{color: 'red', marginTop: 5}}>
-                            {errors.accountNumber}
-                          </Text>
-                        )}
-                      </>
-                    )}
-                  </Field>
-                  <Field name="accountName">
-                    {({field, form}: any) => (
-                      <>
-                        <TextWrapper
-                          children="Account Name"
-                          isRequired={true}
-                          fontType={'semiBold'}
-                          style={{
-                            fontSize: 13,
-                            marginTop: 20,
-                            color: colors.black,
-                          }}
-                        />
-                        <TextInputs
-                          style={{
-                            marginTop: 10,
-                            backgroundColor: colors.greyLight1,
-                            borderRadius: 2,
-                            padding: 5,
-                            width: '100%',
-                          }}
-                          labelText={'Name here'}
-                          state={`${
-                            accountName?.account_name === undefined ||
-                            accountName?.account_name === null
-                              ? ''
-                              : accountName?.account_name
-                          }`}
-                          setState={form.setFieldValue}
-                          disable={false}
-                          placeHolderColor={'#00000080'}
-                        />
-                      </>
-                    )}
-                  </Field>
-                  <Field name="amount">
-                    {({field, form}: any) => (
-                      <>
-                        <TextWrapper
-                          children="Amount"
-                          isRequired={true}
-                          fontType={'semiBold'}
-                          style={{
-                            fontSize: 13,
-                            marginTop: 20,
-                            color: colors.black,
-                          }}
-                        />
-                        <TextInputs
-                          style={{
-                            marginTop: 10,
-                            backgroundColor: colors.greyLight1,
-                            borderRadius: 2,
-                            padding: 5,
-                            width: '100%',
-                          }}
-                          labelText={'Enter Amount'}
-                          state={field.value}
-                          // setState={form.setFieldValue}
-                          setState={value => {
-                            form.setFieldValue('amount', value);
-                          }}
-                          disable={true}
-                          keyBoardType="numeric"
-                          placeHolderColor={'#00000080'}
-                        />
-                        {errors.amount && touched.amount && (
-                          <Text style={{color: 'red', marginTop: 5}}>
-                            {errors.amount}
-                          </Text>
-                        )}
-                      </>
-                    )}
-                  </Field>
+                          {processing && (
+                            <View style={tw`mr-auto mt-4`}>
+                              <ActivityIndicator
+                                size={'small'}
+                                color={'green'}
+                              />
+                            </View>
+                          )}
+                          {errors.accountNumber && touched.accountNumber && (
+                            <Text style={{color: 'red', marginTop: 5}}>
+                              {errors.accountNumber}
+                            </Text>
+                          )}
+                        </>
+                      )}
+                    </Field>
+                    <Field name="accountName">
+                      {({field, form}: any) => (
+                        <>
+                          <TextWrapper
+                            children="Account Name"
+                            isRequired={true}
+                            fontType={'semiBold'}
+                            style={{
+                              fontSize: 13,
+                              marginTop: 20,
+                              color: colors.black,
+                            }}
+                          />
+                          <TextInputs
+                            style={{
+                              marginTop: 10,
+                              backgroundColor: colors.greyLight1,
+                              borderRadius: 2,
+                              padding: 5,
+                              width: '100%',
+                            }}
+                            labelText={'Name here'}
+                            state={`${
+                              accountName?.account_name === undefined ||
+                              accountName?.account_name === null
+                                ? ''
+                                : accountName?.account_name
+                            }`}
+                            setState={form.setFieldValue}
+                            disable={false}
+                            placeHolderColor={'#00000080'}
+                          />
+                        </>
+                      )}
+                    </Field>
+                    <Field name="amount">
+                      {({field, form}: any) => (
+                        <>
+                          <TextWrapper
+                            children="Amount"
+                            isRequired={true}
+                            fontType={'semiBold'}
+                            style={{
+                              fontSize: 13,
+                              marginTop: 20,
+                              color: colors.black,
+                            }}
+                          />
+                          <TextInputs
+                            style={{
+                              marginTop: 10,
+                              backgroundColor: colors.greyLight1,
+                              borderRadius: 2,
+                              padding: 5,
+                              width: '100%',
+                            }}
+                            labelText={'Enter Amount'}
+                            state={field.value}
+                            // setState={form.setFieldValue}
+                            setState={value => {
+                              form.setFieldValue('amount', value);
+                            }}
+                            disable={true}
+                            keyBoardType="numeric"
+                            placeHolderColor={'#00000080'}
+                          />
+                          {errors.amount && touched.amount && (
+                            <Text style={{color: 'red', marginTop: 5}}>
+                              {errors.amount}
+                            </Text>
+                          )}
+                        </>
+                      )}
+                    </Field>
 
-                  {!isLoading ? (
-                    <Button
-                      onClick={() => {
-                        // console.log(errors);
-                        handleSubmit();
-                      }}
-                      style={{
-                        marginHorizontal: 40,
-                        marginTop: 120,
-                        backgroundColor: colors.lightBlack,
-                      }}
-                      textStyle={{color: colors.primary}}
-                      text={'Proceed'}
-                    />
-                  ) : (
-                    <ActivityIndicator
-                      style={{marginTop: 150}}
-                      size={'large'}
-                      color={colors.parpal}
-                    />
-                  )}
-                </View>
-              )}
-            </Formik>
-          </ScrollView>
-        </View>
-        <View style={tw`h-30`} />
-      </ScrollView>
-      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
-    </View>
+                    {!isLoading ? (
+                      <Button
+                        onClick={() => {
+                          // console.log(errors);
+                          // handleSubmit();
+
+                          if (transactionPin?.length < 1) {
+                            setshowTransPin(true);
+                          } else {
+                            handleSubmit();
+                          }
+                        }}
+                        style={{
+                          marginHorizontal: 40,
+                          marginTop: 120,
+                          backgroundColor: colors.lightBlack,
+                        }}
+                        textStyle={{color: colors.primary}}
+                        text={'Proceed'}
+                      />
+                    ) : (
+                      <ActivityIndicator
+                        style={{marginTop: 150}}
+                        size={'large'}
+                        color={colors.parpal}
+                      />
+                    )}
+                  </View>
+                )}
+              </Formik>
+            </ScrollView>
+          </View>
+          <View style={tw`h-30`} />
+        </ScrollView>
+        <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
+      </SafeAreaView>
+      {showTransPin && (
+        <TransPin
+          onSubmit={code => {
+            settransactionPin(code);
+            setshowTransPin(false);
+          }}
+          onClose={() => {
+            setshowTransPin(false);
+          }}
+          navigation={navigation}
+        />
+      )}
+    </>
   );
 };
 

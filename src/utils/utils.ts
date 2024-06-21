@@ -14,9 +14,17 @@ export const isValidPhoneNumber = (phoneNumber: any) => {
   // const phoneRegex = /^\d{10}$/; // Example: 10-digit phone number
   const phoneRegex =
     /^(?:(?:(?:\+?234(?:\h1)?|01)\h*)?(?:\(\d{3}\)|\d{3})|\d{4})(?:\W*\d{3})?\W*\d{4}$/;
+  const regex =
+    /((^\+234)[0-9]{10})|((^234)[0-9]{10})|((^0)(7|8|9)(0|1)[0-9]{8})/;
 
-  return phoneRegex.test(phoneNumber);
+  return regex.test(phoneNumber);
 };
+
+function validateNigerianPhoneNumber(phoneNumber) {
+  const regex =
+    /((^\+234)[0-9]{10})|((^234)[0-9]{10})|((^0)(7|8|9)(0|1)[0-9]{8})/;
+  return regex.test(phoneNumber);
+}
 
 export function roundToSingleDigit(number: number) {
   return Math.round(number);

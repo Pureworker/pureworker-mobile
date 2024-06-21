@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {store} from '../../store/store';
 import {
   addProviderInTrackOrder,
+  addReferralDetails,
   addUserData,
   addbanks,
   addchatList,
@@ -11,11 +12,11 @@ import {
   addsupportUser,
   logout,
 } from '../../store/reducer/mainSlice';
-import { GLOBAL_API_BASE_URL } from '../../constants/api';
+import {GLOBAL_API_BASE_URL} from '../../constants/api';
 const API_BASE_URL = GLOBAL_API_BASE_URL;
 export const getUser = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
-  console.log('verifyUser func started', param);
+  console.log('getUser func started', param);
   try {
     const response = await axios({
       method: 'get',
@@ -28,7 +29,7 @@ export const getUser = async (param: any) => {
     if (response?.status === 401) {
       store.dispatch(logout());
     }
-    console.log('GET_USER:', response?.status);
+    console.log('GET_USER:', response?.data);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);
@@ -90,7 +91,7 @@ export const getCategory = async (param: any) => {
 };
 export const getSubCategory = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
-  console.log('getSubCategory func started', param);
+  // console.log('getSubCategory func started', param);
   try {
     const response = await axios({
       method: 'get',
@@ -1170,6 +1171,7 @@ export const getReferralDetails = async (param: any) => {
     });
     if (response?.status === 201 || response?.status === 200) {
       console.log('response data:', response?.data);
+      store.dispatch(addReferralDetails(response?.data?.data));
     }
     console.log(response?.data);
     return response;
@@ -1787,6 +1789,80 @@ export const getOrderDetailbyID = async id => {
       console.log('getOrderDetailbyID:', response?.status);
     }
     console.log('getOrderDetailbyID:', response?.status);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const triggerPhoneVerification = async id => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('triggerPhoneVerification func started');
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/user/init-phone-verification`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('triggerPhoneVerification:', response?.status);
+    }
+    console.log('triggerPhoneVerification:', response?.status);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const verifyPhoneNumber = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('verifyPhoneNumber func started');
+  try {
+    const response = await axios({
+      method: 'post',
+      url: `${API_BASE_URL}/user/verify-phone`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+      data: param,
+    });
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('verifyPhoneNumber:', response?.status);
+    }
+    console.log('verifyPhoneNumber:', response?.status);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
+export const CreatePin = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('CreatePin func started');
+  try {
+    const response = await axios({
+      method: 'post',
+      url: `${API_BASE_URL}/user/create-pin`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+      data: param,
+    });
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('CreatePin:', response?.status);
+    }
+    console.log('CreatePin:', response?.status);
     return response;
   } catch (error) {
     console.log(error, error?.response?.data);

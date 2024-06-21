@@ -11,7 +11,7 @@ import {metersToKilometers} from '../../utils/utils';
 import Modal from 'react-native-modal/dist/modal';
 
 const ClosetoYou = ({item, index, navigation}: any) => {
-  console.log('close-order', item);
+  // console.log('close-order', item);
   const [showModal, setshowModal] = useState(false);
   return (
     <>
@@ -27,7 +27,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
         style={[
           tw` mt-4 border-[#FFC727] justify-between bg-[${colors.darkPurple}]`,
           {
-            height: perWidth(130),
+            height: perWidth(140),
             width: perWidth(200),
             borderWidth: 3,
             borderRadius: 20,
@@ -76,6 +76,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
                 }
                 size={12}
                 lineHeight={14}
+                numberOfLines={2}
                 color={colors.primary}
                 fontFamily={'Inter-SemiBold'}
               />
@@ -89,6 +90,17 @@ const ClosetoYou = ({item, index, navigation}: any) => {
                 color={colors.white}
                 fontFamily={'Inter-SemiBold'}
                 numberOfLines={2}
+              />
+            </View>
+            <View
+              style={[tw``, {width: perWidth(105), marginTop: perHeight(4)}]}>
+              <Textcomp
+                text={item?.services?.[0]?.name ?? ''}
+                size={10}
+                lineHeight={12}
+                color={colors.primary}
+                fontFamily={'Inter-SemiBold'}
+                numberOfLines={1}
               />
             </View>
             <View
@@ -199,8 +211,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
                     fontFamily={'Inter-Bold'}
                   />
                 </View>
-
-                <ScrollView style={tw`px-[7.5%]`}>
+                <ScrollView style={tw`px-[7.5%] `}>
                   {item?.services?.map(
                     (service: {name: any; _id: any}, index) => {
                       return (
@@ -236,6 +247,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
                       );
                     },
                   )}
+                  <View style={[tw` w-full`, {height: 50}]} />
                 </ScrollView>
               </View>
               <View

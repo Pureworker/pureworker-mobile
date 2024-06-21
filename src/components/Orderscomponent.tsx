@@ -126,12 +126,17 @@ const Orderscomponent =  ({
     try {
       setisLoading(true);
       // const res: any = await getProviderLocation('65cb95af993d69fb83faf837');
-      const res: any = await getProviderLocation(data.id);
+      const res: any = await getProviderLocation(item?.serviceProvider._id || item?.serviceProvider?.id);
       console.log('location.........', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         if (res?.data?.data !== null) {
           dispatch(setProviderLocation(res?.data?.data));
-          navigation.navigate('ViewLocation', {...data});
+          // navigation.navigate('ViewLocation', {...data});
+
+          navigation.navigate('ViewLocation', {
+            id: item?.serviceProvider._id || item?.serviceProvider?.id,
+            item: item,
+          });
         } else {
           ToastShort('Providers Location not available at the moment');
         }
@@ -151,6 +156,33 @@ const Orderscomponent =  ({
     }
     setisLoading(false);
   };
+
+
+  // const handleToLocation = async () => {
+  //   try {
+  //     setisLoading(true);
+  //     // const res: any = await getProviderLocation('65cb95af993d69fb83faf837');
+  //     const res: any = await getProviderLocation(item?.serviceProvider._id || item?.serviceProvider?.id);
+  //     console.log('location.........', res?.data);
+  //     if (res?.status === 201 || res?.status === 200) {
+  //       if (res?.data?.data !== null) {
+  //         dispatch(setProviderLocation(res?.data?.data));
+  //         // navigation.navigate('ViewLocation', {...data});
+  //         navigation.navigate('ViewLocation', {
+  //           id: item?.serviceProvider._id || item?.serviceProvider?.id,
+  //           item: item,
+  //         });
+  //       } else {
+  //         ToastShort('Providers Location not available at the moment');
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching location:', error);
+  //   }
+  // };
+
+  console.log('item:---',item);
+  
   return (
     <>
       <>
@@ -513,11 +545,12 @@ const Orderscomponent =  ({
                 <TouchableOpacity
                   onPress={() => {
                     setInfoModal(false);
-                    navigation.navigate('ViewLocation', {
-                      id:
-                        item?.serviceProvider._id || item?.serviceProvider?.id,
-                      item: item,
-                    });
+                    handleToLocation();
+                    // navigation.navigate('ViewLocation', {
+                    //   id:
+                    //     item?.serviceProvider._id || item?.serviceProvider?.id,
+                    //   item: item,
+                    // });
                   }}
                   style={[
                     tw`flex mt-10 flex-row`,

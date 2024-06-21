@@ -28,7 +28,7 @@ export default function OrderDelivered({navigation, visible, func, item}: any) {
           onPress={() => func(false)}
           style={tw`flex-1`}
         />
-        <View style={tw`h-[40.5%] mt-auto bg-[#D9D9D9]`}>
+        <View style={[tw`h-[42.5%] mt-auto bg-[#D9D9D9]`, {marginBottom: -20}]}>
           <TouchableOpacity
             onPress={() => {
               func(false);

@@ -602,6 +602,8 @@ PODS:
     - React-Core
   - RNDateTimePicker (7.5.0):
     - React-Core
+  - RNDeviceInfo (11.1.0):
+    - React-Core
   - RNFaceApi (5.2.4):
     - FaceSDK (= 5.2.1624)
     - React
@@ -770,6 +772,7 @@ DEPENDENCIES:
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFaceApi (from `../node_modules/@regulaforensics/react-native-face-api`)"
   - "RNFaceCore (from `../node_modules/@regulaforensics/react-native-face-core`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
@@ -943,6 +946,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-picker/picker"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNFaceApi:
     :path: "../node_modules/@regulaforensics/react-native-face-api"
   RNFaceCore:
@@ -1068,6 +1073,7 @@ SPEC CHECKSUMS:
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 32ca102146bc7d34a8b93a998d9938d9f9ec7898
   RNDateTimePicker: b722c23030b744763cf51d80fc22f354653f65e0
+  RNDeviceInfo: b899ce37a403a4dea52b7cb85e16e49c04a5b88e
   RNFaceApi: 5947e29d422ebb1acfdbd3863004206555746b0c
   RNFaceCore: eec95bbf03ae7fe2f25fafe3fe61432c4b416738
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8

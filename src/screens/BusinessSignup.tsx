@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -31,6 +31,13 @@ import {Dropdown} from 'react-native-element-dropdown';
 import * as Yup from 'yup';
 import {DateTime} from 'luxon';
 import {isLeapYear, validateDate} from '../utils/auth';
+import {
+  getBrand,
+  getDeviceId,
+  getDeviceMac,
+  getModel,
+  getUniqueId,
+} from '../utils/deviceInfo';
 export default function BusinessSignup() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -177,6 +184,26 @@ export default function BusinessSignup() {
     }),
     location: Yup.string().oneOf(['online', 'offline', 'hybrid']).optional(),
   });
+  const [uniqueId, setUniqueId] = useState('');
+  const [model, setModel] = useState('');
+  const [brand, setBrand] = useState('');
+  const [, setDeviceId] = useState('');
+  const [deviceMac, setDeviceMac] = useState('');
+  useEffect(() => {
+    const fetchDeviceInfo = async () => {
+      const _uniqueId: any = await getUniqueId();
+      const _model: any = await getModel();
+      const _brand: any = await getBrand();
+      const _deviceId: any = await getDeviceId();
+      const _deviceMac: any = await getDeviceMac();
+      setUniqueId(_uniqueId);
+      setModel(_model);
+      setBrand(_brand);
+      setDeviceId(_deviceId);
+      setDeviceMac(_deviceMac);
+    };
+    fetchDeviceInfo();
+  }, []);
   const handleSignup = async () => {
     let dateErrorMessage = '';
     // Validate input data
@@ -305,6 +332,12 @@ export default function BusinessSignup() {
           // gender: genderValue?.toLowerCase().trim(),
           accountType: userType?.toLowerCase(),
           state: stateValue,
+          device: {
+            model: model,
+            brand: brand,
+            deviceId: uniqueId,
+            deviceMac: deviceMac,
+          },
         };
         const fl_data: any = {
           email: email.toLowerCase().trim(),
@@ -320,6 +353,12 @@ export default function BusinessSignup() {
           state: stateValue,
           learnAboutUs:
             learnAboutUs === 'Other' ? learnAboutUsOthers : learnAboutUs,
+          device: {
+            model: model,
+            brand: brand,
+            deviceId: uniqueId,
+            deviceMac: deviceMac,
+          },
         };
         const b_data = {
           businessName: name,
@@ -340,7 +379,6 @@ export default function BusinessSignup() {
           loginData.referralCode = referralCode;
           fl_data.referralCode = referralCode;
         }
-
         const res: any = await Signup(
           userType === CUSTOMER
             ? fl_data
@@ -706,7 +744,7 @@ export default function BusinessSignup() {
                     marginTop: 15,
                     marginBottom: 15,
                   }}>
-                  State
+                  State of Residence
                 </Text>
                 <Dropdown
                   style={[

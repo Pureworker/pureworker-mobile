@@ -27,7 +27,7 @@ export default function OrderCompleted({navigation, visible, func, item}: any) {
       onBackButtonPress={() => func(false)}>
       <View style={tw` h-full w-full bg-black bg-opacity-5`}>
         <TouchableOpacity onPress={() => func(false)} style={tw`flex-1`} />
-        <View style={tw`h-[35.5%] mt-auto bg-[#D9D9D9]`}>
+        <View style={[tw`h-[37.5%] mt-auto bg-[#D9D9D9]`, {marginBottom: -20}]}>
           <TouchableOpacity
             onPress={() => {
               func(false);

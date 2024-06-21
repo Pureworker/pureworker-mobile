@@ -9,6 +9,7 @@ import {
   ScrollView,
   TextInput,
   Alert,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -93,14 +94,15 @@ const PaymentMethod2 = ({route}: any) => {
     setWebviewVisible(false);
   };
   return (
-    <View style={[{flex: 1, backgroundColor: colors.darkPurple}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: colors.darkPurple}]}>
       <ScrollView>
         <View
           style={{
             marginTop:
               Platform.OS === 'ios'
-                ? getStatusBarHeight(true)
-                : StatusBar.currentHeight &&
+                ? 10
+                : // getStatusBarHeight(true)
+                  StatusBar.currentHeight &&
                   StatusBar.currentHeight + getStatusBarHeight(true),
           }}
         />
@@ -266,7 +268,7 @@ const PaymentMethod2 = ({route}: any) => {
               />
             </View>
           )}
-          {/* {amount >= 100 && (
+          {amount >= 100 && (
             <View>
               <TouchableOpacity
                 style={[
@@ -286,7 +288,7 @@ const PaymentMethod2 = ({route}: any) => {
                 </Text>
               </TouchableOpacity>
             </View>
-          )} */}
+          )}
         </View>
       </ScrollView>
       <Paystack
@@ -333,7 +335,7 @@ const PaymentMethod2 = ({route}: any) => {
         userID={userData?._id}
       />
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
-    </View>
+    </SafeAreaView>
   );
 };
 

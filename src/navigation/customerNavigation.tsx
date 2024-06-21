@@ -1,14 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-// import Home from '../screens/Home';
-import Home from '../screens/user/Home';
 import TermAndCondition from '../screens/TermAndCondition';
 import FAQ from '../screens/FAQ';
-// import ProfileStep1 from '../screens/profile/ProfileStep1';
-// import PRofileStep2 from '../screens/profile/ProfileStep2';
-// import ProfileStep3 from '../screens/profile/ProfileStep3';
-// import ProfileStep4 from '../screens/profile/ProfileStep4';
-// import ProfileStep5 from '../screens/profile/ProfileStep5';
 import DrawerMenu from './drawerMenu';
 import Services from '../screens/user/services';
 import _Services from '../screens/user/_services';
@@ -29,7 +22,10 @@ import OrderActive from '../screens/user/orderActive';
 import Inbox from '../screens/user/chat/inbox';
 import Withdraw from '../screens/user/withdraw';
 import FaceDetection from '../screens/faceDetection';
-import { useInitialData } from './initialData';
+import {useInitialData} from './initialData';
+import CreatePin from '../screens/user/createPin';
+import CreatePinPage from '../screens/user/createPin/create';
+import CreatePinSuccess from '../screens/user/createPin/success';
 // import HelloWorldView from '../tracking/TrackView';
 
 const Stack = createNativeStackNavigator();
@@ -144,10 +140,26 @@ export default function CustomerNavigation() {
         options={{headerShown: false, animationEnabled: false}}
       />
       <Stack.Screen
+        name="CreatePin"
+        component={CreatePin}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="CreatePinPage"
+        component={CreatePinPage}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="CreatePinSuccess"
+        component={CreatePinSuccess}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
         name="FaceDetection"
         component={FaceDetection}
         options={{headerShown: false, animationEnabled: false}}
       />
+
       {/* <Stack.Screen
         name="Tracking"
         component={HelloWorldView}

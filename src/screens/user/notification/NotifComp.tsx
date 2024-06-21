@@ -126,11 +126,11 @@ export default function NotificationComp({item, seen, seen_}: any) {
                 />
               </TouchableOpacity>
 
-              <View style={tw``}>
+              <View style={tw`mt-2`}>
                 <Textcomp
                   text={`${item?.title}`}
                   size={17}
-                  lineHeight={17}
+                  lineHeight={20}
                   color={'#000413'}
                   fontFamily={'Inter'}
                 />

@@ -14,8 +14,8 @@ import Modal from 'react-native-modal/dist/modal';
 const CloseToYouCard4 = ({item, index, navigation}: any) => {
   const [showModal, setshowModal] = useState(false);
 
-  console.log(item);
-  
+  // console.log('closetoyouitem:', item?.profilePic);
+
   return (
     <>
       <TouchableOpacity
@@ -25,7 +25,7 @@ const CloseToYouCard4 = ({item, index, navigation}: any) => {
         style={[
           tw` mt-4 mx-auto bg-[${colors.darkPurple}]`,
           {
-            height: perWidth(130),
+            height: perWidth(135),
             width: SIZES.width * 0.95,
             borderWidth: 0,
             borderRadius: 5,
@@ -46,7 +46,7 @@ const CloseToYouCard4 = ({item, index, navigation}: any) => {
               ]}
               source={{
                 uri:
-                  item?.user?.profilePic ||
+                  item?.profilePic ||
                   'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                 headers: {Authorization: 'someAuthToken'},
                 priority: FastImage.priority.high,
@@ -88,15 +88,21 @@ const CloseToYouCard4 = ({item, index, navigation}: any) => {
                 numberOfLines={2}
               />
             </View>
+            <View
+              style={[tw``, {width: perWidth(252), marginTop: perHeight(4)}]}>
+              <Textcomp
+                text={`${item?.services?.[0]?.name}`}
+                size={10}
+                lineHeight={14}
+                color={colors.primary}
+                fontFamily={'Inter-SemiBold'}
+                numberOfLines={2}
+              />
+            </View>
           </View>
         </View>
-        <View>
-        </View>
-        <View
-          style={[
-            tw`flex flex-row justify-between items-center mt-auto `,
-        
-          ]}>
+        <View></View>
+        <View style={[tw`flex flex-row justify-between items-center mt-auto `]}>
           <View style={tw`flex flex-row justify-between items-center`}>
             <View style={[tw``, {}]}>
               <Image

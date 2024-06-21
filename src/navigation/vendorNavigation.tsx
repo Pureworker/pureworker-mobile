@@ -28,6 +28,10 @@ import ProfileStep211 from '../screens/profile/edit/ProfileStep211';
 import ProfileStep21 from '../screens/profile/profileStep21';
 import TransactionHistory from '../screens/vendor/transactionHistory';
 
+import CreatePin from '../screens/user/createPin';
+import CreatePinPage from '../screens/user/createPin/create';
+import CreatePinSuccess from '../screens/user/createPin/success';
+
 const Stack = createNativeStackNavigator();
 
 export default function VendorNavigation() {
@@ -36,119 +40,136 @@ export default function VendorNavigation() {
       <Stack.Screen
         name="Homes"
         component={DrawerMenu}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="TermAndCondition"
         component={TermAndCondition}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="FAQ"
         component={FAQ}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="Congratulations"
         component={Congratulations}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="TransactionHistory"
         component={TransactionHistory}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="EditService"
         component={EditServices}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="AddServices"
         component={AddServices}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="Withdraw"
         component={Withdraw}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="Inbox"
         component={Inbox}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="_VServices"
         component={_Services}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="ServiceProviderProfile"
         component={ServiceProviderProfile}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="OrderDetails"
         component={OrderDetails}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="OrderReview"
         component={OrderReview}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="PaymentConfirmed"
         component={PaymentConfirmed}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="FaceDetection"
         component={FaceDetection}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
 
       <Stack.Screen
         name="ProfileStep1"
         component={ProfileStep1}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="ProfileStep2"
         component={PRofileStep2}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="ProfileStep3"
         component={ProfileStep3}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="ProfileStep4"
         component={ProfileStep4}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="ProfileStep5"
         component={ProfileStep5}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="ProfileStep21"
         component={ProfileStep21}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
 
       <Stack.Screen
         name="ProfileStep11"
         component={PRofileStep11}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="ProfileStep211"
         component={ProfileStep211}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
+      />
+
+      {/* transactionPin */}
+      <Stack.Screen
+        name="CreatePin"
+        component={CreatePin}
+        options={{headerShown: false, animation: 'none'}}
+      />
+      <Stack.Screen
+        name="CreatePinPage"
+        component={CreatePinPage}
+        options={{headerShown: false, animation: 'none'}}
+      />
+      <Stack.Screen
+        name="CreatePinSuccess"
+        component={CreatePinSuccess}
+        options={{headerShown: false, animation: 'none'}}
       />
     </Stack.Navigator>
   );

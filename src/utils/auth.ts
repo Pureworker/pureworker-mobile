@@ -1,7 +1,7 @@
 import {number} from 'yup';
 
 // inspired by ChatGPT
-export const isLeapYear = year => {
+export const isLeapYear = (year: any ) => {
   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 };
 

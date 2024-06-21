@@ -25,7 +25,11 @@ export default function OrderPlaced({navigation, visible, func, item}: any) {
       onBackButtonPress={() => func(false)}>
       <View style={tw` h-full w-full bg-black bg-opacity-5`}>
         <TouchableOpacity onPress={() => func(false)} style={tw`flex-1`} />
-        <View style={[tw` mt-auto bg-[#D9D9D9]`, {minHeight: '35%'}]}>
+        <View
+          style={[
+            tw` mt-auto bg-[#D9D9D9]`,
+            {minHeight: '35%', marginBottom: -20},
+          ]}>
           <TouchableOpacity
             onPress={() => {
               func(false);

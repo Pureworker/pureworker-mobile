@@ -77,7 +77,7 @@ const OrderActive = ({route}: any) => {
   const orders = [0, 1, 2, 3];
   const item = route.params.data;
   const passedData = viewOrder ?? route.params.data;
-  console.log(passedData?.serviceProvider);
+  console.log('iDESAASAAA', passedData?.serviceProvider);
   // console.log(route.params.data);
   const fetchOrderByID = async () => {
     // setisLoading(true);
@@ -163,6 +163,7 @@ const OrderActive = ({route}: any) => {
       await fetchOrderByID();
       await initGetOrders();
       setisLoading(false);
+      setrateYourExperience(false);
     }
   };
   useEffect(() => {
@@ -404,7 +405,11 @@ const OrderActive = ({route}: any) => {
     try {
       setisLoading(true);
       // const res: any = await getProviderLocation('65cb95af993d69fb83faf837');
-      const res: any = await getProviderLocation(passedData?._id);
+      const res: any = await getProviderLocation(
+        passedData?.serviceProvider?._id ??
+          item?.serviceProvider?._id ??
+          item?.serviceProvider?.id,
+      );
       console.log('location.........', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         if (res?.data?.data !== null) {
@@ -1586,7 +1591,7 @@ const OrderActive = ({route}: any) => {
                             </TouchableOpacity>
                           )}
 
-                        {(passedData?.status === 'COMPLETED') && (
+                        {passedData?.status === 'COMPLETED' && (
                           <TouchableOpacity
                             onPress={() => {
                               navigation.navigate('TipServiceProvider', {

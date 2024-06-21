@@ -1,11 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import Toast from 'react-native-toast-message';
-import {PermissionsAndroid} from 'react-native';
+import {PermissionsAndroid, Platform} from 'react-native';
 import {
   addPushToken,
   getChatsbyuser,
   getChatsbyuser2,
+  getReferralDetails,
   getUserOrders,
 } from './api/func';
 import {ToastLong} from './utils';
@@ -35,6 +36,10 @@ async function requestUserPermission() {
 }
 const GetFCMToken = async (userData: any) => {
   let _fcmtoken = await AsyncStorage.getItem('fcmtoken');
+  if (Platform.OS === 'ios') {
+    let r = await messaging().getAPNSToken();
+    console.log('APNTOKEN:', r);
+  }
   // await messaging().setAPNSToken('74657374696E67746F6B656E', 'unknown');
   //   await messaging().registerDeviceForRemoteMessages();
   const token = await messaging().getToken();
@@ -108,6 +113,7 @@ const NotificationListner = () => {
     const handleFetch = async () => {
       await getChatsbyuser2('');
       await getUnreadMessages();
+      await getReferralDetails('');
     };
     handleFetch();
     Toast.show({

@@ -32,6 +32,7 @@ import FastImage from 'react-native-fast-image';
 import Modal from 'react-native-modal/dist/modal';
 import socket from '../utils/socket';
 import CheckBox from 'react-native-check-box';
+import {toastAlertSuccess} from '../utils/alert';
 const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
   const [saved, setsaved] = useState(false);
   const [isLoading, setisLoading] = useState(false);
@@ -131,7 +132,8 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
         // const res = await addRatingOrder(item?._id, {...val});
         if (res?.status === 200 || res?.status === 201) {
           await initGetOrders();
-          Alert.alert('Rating successful!.');
+          // Alert.alert('Rating successful!.');
+          toastAlertSuccess('Rating successful!.');
           setrateYourExperience(false);
           setrateYourExperience(false);
         }
@@ -178,7 +180,8 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
       if (res?.status === 200 || res?.status === 201) {
         // navigation.navigate('PaymentConfirmed');
         await initGetOrders();
-        Alert.alert('Order Accepted');
+        // Alert.alert('Order Accepted');
+        ToastShort('Order Accepted');
         setready(false);
       } else {
         Snackbar.show({
@@ -213,7 +216,8 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
       const res = await onMYOrder(item?._id);
       if (res?.status === 200 || res?.status === 201) {
         await initGetOrders();
-        Alert.alert('Order Now in Transit.');
+        // Alert.alert('Order Now in Transit.');
+        toastAlertSuccess('Order Now in Transit.');
       } else {
         Snackbar.show({
           text: res?.error?.message
@@ -244,7 +248,8 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
       const res = await startOrder(item?._id);
       if (res?.status === 200 || res?.status === 201) {
         await initGetOrders();
-        Alert.alert('Order Now in progress!.');
+        // Alert.alert('Order Now in progress!.');
+        toastAlertSuccess('Order Now in progress!.');
       } else {
         Snackbar.show({
           text: res?.error?.message

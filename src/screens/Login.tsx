@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   View,
@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   StatusBar,
   ScrollView,
-  Platform
+  Platform,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import images from '../constants/images';
 import TextInputs from '../components/TextInputs';
 import commonStyle from '../constants/commonStyle';
@@ -17,16 +17,22 @@ import Button from '../components/Button';
 import Snackbar from 'react-native-snackbar';
 import MyStatusBar from '../components/MyStatusBar';
 import colors from '../constants/colors';
-import { validateEmail } from '../constants/utils';
-import { StackNavigation } from '../constants/navigation';
-import { signIn } from '../utils/api/auth';
+import {validateEmail} from '../constants/utils';
+import {StackNavigation} from '../constants/navigation';
+import {signIn} from '../utils/api/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import DeviceInfo from 'react-native-device-info';
+import {useDispatch} from 'react-redux';
+import {loggedIn} from '../store/reducer/mainSlice';
+const DeviceId = DeviceInfo.getDeviceId();
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [seconds, setSeconds] = useState(30);
   const navigation = useNavigation<StackNavigation>();
   const [isLoading, setisLoading] = useState(false);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -50,14 +56,24 @@ export default function Login() {
       } else {
         const loginData = {
           email: email.toLowerCase().trim(),
+          deviceId: DeviceId,
         };
-        const res:any = await signIn(loginData);
+        const res: any = await signIn(loginData);
 
         if (res?.status === 200 || res?.status === 201) {
-          navigation.navigate('TokenVerification', {
-            email: email,
-            type: 'login',
-          });
+          if (res?.message === 'Signin Successful') {
+            dispatch(
+              loggedIn({
+                token: res?.data?.token,
+                type: res?.data?.user.accountType?.toUpperCase(),
+              }),
+            );
+          } else {
+            navigation.navigate('TokenVerification', {
+              email: email,
+              type: 'login',
+            });
+          }
         } else {
           if (
             res?.error?.message === 'Account has not been verified' ||

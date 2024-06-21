@@ -9,6 +9,7 @@ import {
   ScrollView,
   Platform,
   RefreshControl,
+  Linking,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import images from '../../constants/images';
@@ -259,7 +260,6 @@ const Home = ({navigation}: any) => {
     };
   }, [userData]);
 
-
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
@@ -273,7 +273,7 @@ const Home = ({navigation}: any) => {
               tw`items-center justify-center`,
               {
                 flexDirection: 'row',
-                alignItems: 'center', 
+                alignItems: 'center',
                 justifyContent: 'space-between',
                 marginHorizontal: 20,
                 paddingTop: Platform.OS === 'ios' ? 10 : 27.5,
@@ -674,40 +674,69 @@ const Home = ({navigation}: any) => {
             )}
           </View>
           {userData?.isVerified === 'incomplete' && formStage !== 6 ? (
-            <TouchableOpacity
-              onPress={() => {
-                // navigation.navigate('ProfileStep21');
-                if (formStage === 1) {
-                  navigation.navigate('ProfileStep1');
-                } else if (formStage === 2) {
-                  navigation.navigate('ProfileStep2');
-                } else if (formStage === 3) {
-                  navigation.navigate('ProfileStep3');
-                } else if (formStage === 4) {
-                  navigation.navigate('ProfileStep4');
-                } else if (formStage === 5) {
-                  navigation.navigate('ProfileStep5');
-                } else if (formStage === 21) {
-                  navigation.navigate('ProfileStep21');
-                }
-              }}
-              style={[
-                tw`bg-[#2D303C] mx-auto items-center justify-center`,
-                {
-                  width: Platform.OS === 'ios' ? perWidth(309) : perWidth(315),
-                  height: Platform.OS === 'ios' ? perHeight(30) : perHeight(35),
-                  borderRadius: 7,
-                  marginTop: perHeight(43),
-                },
-              ]}>
-              <Textcomp
-                text={'Complete your registration to accept orders'}
-                size={Platform.OS === 'ios' ? 14 : 13}
-                lineHeight={16}
-                color={colors.primary}
-                fontFamily={'Inter-Medium'}
-              />
-            </TouchableOpacity>
+            <>
+              <TouchableOpacity
+                onPress={() => {
+                  // navigation.navigate('ProfileStep21');
+                  if (formStage === 1) {
+                    navigation.navigate('ProfileStep1');
+                  } else if (formStage === 2) {
+                    navigation.navigate('ProfileStep2');
+                  } else if (formStage === 3) {
+                    navigation.navigate('ProfileStep3');
+                  } else if (formStage === 4) {
+                    navigation.navigate('ProfileStep4');
+                  } else if (formStage === 5) {
+                    navigation.navigate('ProfileStep5');
+                  } else if (formStage === 21) {
+                    navigation.navigate('ProfileStep21');
+                  }
+                }}
+                style={[
+                  tw`bg-[#2D303C] mx-auto items-center justify-center`,
+                  {
+                    width:
+                      Platform.OS === 'ios' ? perWidth(309) : perWidth(315),
+                    height:
+                      Platform.OS === 'ios' ? perHeight(30) : perHeight(35),
+                    borderRadius: 7,
+                    marginTop: perHeight(43),
+                  },
+                ]}>
+                <Textcomp
+                  text={'Complete your registration to accept orders'}
+                  size={Platform.OS === 'ios' ? 14 : 13}
+                  lineHeight={16}
+                  color={colors.primary}
+                  fontFamily={'Inter-Medium'}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => {
+                  Linking.openURL(
+                    'https://youtu.be/4sOGNUYIIjU?si=usMWyV9xFkGUzmqU',
+                  );
+                }}
+                style={[
+                  tw` mx-auto flex flex-row items-center justify-center`,
+                  {
+                    width: perWidth(335),
+                    height: perHeight(30),
+                    borderRadius: 7,
+                    marginTop: perHeight(10),
+                  },
+                ]}>
+                <Textcomp
+                  text={'Click here to watch how to complete your registration'}
+                  size={14}
+                  lineHeight={18}
+                  color={colors.parpal}
+                  fontFamily={'Inter-Bold'}
+                  style={tw`text-center underline`}
+                />
+              </TouchableOpacity>
+            </>
           ) : null}
           {userData?.isVerified === 'review' && (
             <TouchableOpacity
@@ -796,6 +825,7 @@ const Home = ({navigation}: any) => {
               />
             </TouchableOpacity>
           )}
+
           <View style={tw`h-20`} />
         </ScrollView>
       </View>

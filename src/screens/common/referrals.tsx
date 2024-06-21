@@ -30,16 +30,13 @@ const Referrals = () => {
   const dispatch = useDispatch();
   const [isLoading, setisLoading] = useState(false);
   const faq = useSelector((state: any) => state.user.faq);
-
   const [isVisible, setisVisible] = useState(false);
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
   const referralDetails = useSelector(
     (state: any) => state.user.referralDetails,
   );
-
-  console.log(userData);
-
+  console.log(referralDetails);
   useEffect(() => {
     const initGetOrders = async () => {
       setisLoading(true);
@@ -50,14 +47,13 @@ const Referrals = () => {
       }
       setisLoading(false);
     };
-
     const initReferralDetails = async () => {
       setisLoading(true);
       const res: any = await getReferralDetails('');
-      console.log('rrrDetails', res?.data);
-      if (res?.status === 201 || res?.status === 200) {
-        dispatch(addReferralDetails(res?.data?.data));
-      }
+      // console.log('rrrDetails', res?.data);
+      // if (res?.status === 201 || res?.status === 200) {
+      //   dispatch(addReferralDetails(res?.data?.data));
+      // }
       setisLoading(false);
     };
     initGetOrders();
@@ -190,23 +186,23 @@ const Referrals = () => {
             <View>
               <View style={tw`flex flex-row mt-5 items-center mx-auto `}>
                 <Textcomp
-                  text={' Invite a friend and get  '}
+                  text={' Invite a friend'}
                   size={13}
                   lineHeight={17}
                   color={'white'}
                   fontFamily={'Inter-SemiBold'}
                 />
-                <Textcomp
+                {/* <Textcomp
                   text={'₦100. '}
                   size={17}
                   lineHeight={17}
                   color={'white'}
                   fontFamily={'Inter-Bold'}
-                />
+                /> */}
               </View>
               <Textcomp
                 text={
-                  'You and the friend will also get N250 each on their first transaction.'
+                  'You and the friend will also get ₦250 each on their first transaction.'
                 }
                 size={13}
                 lineHeight={17}
@@ -313,9 +309,7 @@ const Referrals = () => {
 
                   <View style={tw`mt-4`}>
                     <Textcomp
-                      text={`₦ ${
-                        Number(referralDetails?.completedNumber) * 500
-                      }`}
+                      text={`₦ ${referralDetails?.totalAmount}`}
                       size={14}
                       lineHeight={17}
                       color={'#000000'}
@@ -365,9 +359,10 @@ const Referrals = () => {
 
               <View style={tw`mt-6 px-6`}>
                 <Textcomp
-                  text={
-                    'Get 100 naira when a friend signs up with your referral code. You and the friend will get 250 Naira each on their first transaction.'
-                  }
+                  // text={
+                  //   'Get 100 naira when a friend signs up with your referral code. You and the friend will get 250 Naira each on their first transaction.'
+                  // }
+                  text={''}
                   size={14}
                   lineHeight={17}
                   color={'#000000'}
