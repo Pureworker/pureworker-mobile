@@ -17,6 +17,7 @@ const {width, height} = Dimensions.get('screen');
 
 const OnboardingView = ({item, index, navigation}: any) => {
   return (
+    <ScrollView>
     <View key={index} style={{width: width, height: height}}>
       <View style={{alignItems: 'center'}}>
         <Image
@@ -101,6 +102,7 @@ const OnboardingView = ({item, index, navigation}: any) => {
         />
       </View>
     </View>
+    </ScrollView>
   );
 };
 

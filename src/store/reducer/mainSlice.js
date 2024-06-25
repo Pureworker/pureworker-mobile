@@ -62,6 +62,8 @@ const initialState = {
 
   formStage: 1,
   referralDetails: null,
+  language: null,
+  country: null,
 };
 
 export const mainSlice = createSlice({
@@ -119,6 +121,8 @@ export const mainSlice = createSlice({
       state.anyratings = [];
       state.providerintrackOrders = [];
       state.isNetwork = true;
+      state.language = null;
+      state.country =  null;
     },
 
     addCategory: (state, action) => {
@@ -292,6 +296,13 @@ export const mainSlice = createSlice({
     addIsNetwork: (state, action) => {
       state.isNetwork = action.payload;
     },
+
+    addlanguage: (state, action) => {
+      state.language = action.payload;
+    },
+    addCountry: (state, action) => {
+      state.country = action.payload;
+    },
   },
 });
 
@@ -338,7 +349,9 @@ export const {
   addSPRating,
   addProviderInTrackOrder,
   addViewOrder,
-  addIsNetwork
+  addIsNetwork,
+  addlanguage,
+  addCountry,
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);
