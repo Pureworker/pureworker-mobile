@@ -21,14 +21,9 @@ export default function OnboardingStack() {
   const language = useSelector((state: any) => state.user.language);
   if (language === undefined) {
     console.log('====Language undefined====');
+
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: 'black',
-        }}>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'black'}}>
         <ActivityIndicator size="large" color={colors.parpal} />
       </View>
     );
@@ -36,8 +31,8 @@ export default function OnboardingStack() {
   if (language === null) {
     return (
       <Stack.Navigator
-        // initialRouteName={'SelectCountry'}
-        initialRouteName="OnBoarding1"
+        initialRouteName={'SelectCountry'}
+        // initialRouteName="OnBoarding1"
       >
         <Stack.Screen
           name="Signup"
