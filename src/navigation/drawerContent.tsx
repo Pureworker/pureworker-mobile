@@ -448,7 +448,7 @@ const DrawerContent = () => {
           <View style={[tw`mt-4 ml-3`, {}]}>
             <Textcomp
               text={`Version: ${
-                Platform.OS === 'ios' ? '1.0.0.39' : '1.0.0.39'
+                Platform.OS === 'ios' ? '1.0.0.40' : '1.0.0.40'
               }`}
               size={14}
               color={'#000000'}

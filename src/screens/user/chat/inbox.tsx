@@ -307,7 +307,7 @@ export default function Inbox({navigation, route}: any) {
           <View
             style={[
               tw`px-[3%]   border-b justify-center border-[#262C550F]`,
-              {height: perHeight(40)},
+              {height: perHeight(45)},
               Platform.OS === 'ios' && styles.shadowProp,
             ]}>
             <View
@@ -330,20 +330,40 @@ export default function Inbox({navigation, route}: any) {
                   />
                 </TouchableOpacity>
               </View>
-              <Text
-                onPress={() => {}}
-                style={[
-                  tw`text-center font-bold text-[${colors.black}]`,
-                  {
-                    fontSize: 14,
-                    fontFamily: 'Inter-SemiBold',
-                    lineHeight: 14,
-                  },
-                ]}>
-                {userName === 'Support Support' || userName === 'Support'
-                  ? 'Support'
-                  : userName}
-              </Text>
+              <View>
+                <Text
+                  onPress={() => {}}
+                  style={[
+                    tw`text-center font-bold text-[${colors.black}]`,
+                    {
+                      fontSize: 14,
+                      fontFamily: 'Inter-SemiBold',
+                      lineHeight: 14,
+                    },
+                  ]}>
+                  {userName === 'Support Support' || userName === 'Support'
+                    ? 'Support'
+                    : userName}
+                </Text>
+                {userName === 'Support Support' ||
+                userName === 'Support' ? null : (
+                  <View style={tw`w-9/10 mx-auto mt-1 `}>
+                    <Text
+                      onPress={() => {}}
+                      style={[
+                        tw`text-center  text-[${colors.black}]`,
+                        {
+                          fontSize: 10,
+                          fontFamily: 'Inter-Regular',
+                          lineHeight: 10,
+                        },
+                      ]}>
+                      Pureworker charges a 10 -15% service fee from all payments
+                      received.
+                    </Text>
+                  </View>
+                )}
+              </View>
               <View style={tw`flex flex-row`}>
                 <Text
                   onPress={() => {}}
@@ -360,6 +380,7 @@ export default function Inbox({navigation, route}: any) {
                     : lastOnline
                     ? `${timeAgo(lastOnline)}`
                     : ''}
+           
                 </Text>
               </View>
             </View>

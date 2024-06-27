@@ -36,8 +36,8 @@ export default function OnboardingStack() {
   if (language === null) {
     return (
       <Stack.Navigator
-        initialRouteName={'SelectCountry'}
-        // initialRouteName="OnBoarding1"
+        // initialRouteName={'SelectCountry'}
+        initialRouteName="OnBoarding1"
       >
         <Stack.Screen
           name="Signup"
