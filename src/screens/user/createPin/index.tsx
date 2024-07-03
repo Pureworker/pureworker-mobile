@@ -13,7 +13,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {useRoute} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Snackbar from 'react-native-snackbar';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import tw from 'twrnc';
@@ -25,6 +25,7 @@ import images from '../../../constants/images';
 import {verifyLogin} from '../../../utils/api/auth';
 import {getUser, verifyPhoneNumber} from '../../../utils/api/func';
 import {addUserData} from '../../../store/reducer/mainSlice';
+import socket from '../../../utils/socket';
 type Route = {
   key: string;
   name: string;
@@ -134,6 +135,7 @@ const CreatePin = ({navigation}: any) => {
   const secondss = seconds % 60;
   const condition: number = 10;
   const valueOfMint = secondss < condition ? `0${secondss}` : secondss;
+  const supportUser = useSelector((store: any) => store.user.supportUser);
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <KeyboardAvoidingView
@@ -254,6 +256,31 @@ const CreatePin = ({navigation}: any) => {
               />
             </View>
           ) : null}
+
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 24,
+            }}>
+            <Text style={{color: '#3A3A3A80', alignSelf: 'center'}}>
+              Need the code sent to a different number ?
+            </Text>
+            <TouchableOpacity
+              style={{}}
+              onPress={() => {
+                socket.connect();
+                navigation.navigate('Inbox', {
+                  id: supportUser?._id || supportUser?.id,
+                  name: 'Support',
+                });
+              }}>
+              <Text style={{color: colors.parpal, fontWeight: '700'}}>
+                Contact Support
+              </Text>
+            </TouchableOpacity>
+          </View>
           {isLoading && <ActivityIndicator color={'white'} size={'small'} />}
         </ScrollView>
       </KeyboardAvoidingView>

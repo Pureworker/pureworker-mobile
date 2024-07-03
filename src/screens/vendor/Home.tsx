@@ -677,6 +677,32 @@ const Home = ({navigation}: any) => {
             <>
               <TouchableOpacity
                 onPress={() => {
+                  Linking.openURL(
+                    'https://youtu.be/4sOGNUYIIjU?si=usMWyV9xFkGUzmqU',
+                  );
+                }}
+                style={[
+                  tw` mx-auto flex flex-row items-center justify-center`,
+                  {
+                    width: perWidth(335),
+                    height: perHeight(30),
+                    borderRadius: 7,
+          
+                    marginTop: perHeight(43),
+                  },
+                ]}>
+                <Textcomp
+                  text={'Watch How'}
+                  size={14}
+                  lineHeight={18}
+                  color={colors.parpal}
+                  fontFamily={'Inter-Bold'}
+                  style={tw`text-center underline`}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => {
                   // navigation.navigate('ProfileStep21');
                   if (formStage === 1) {
                     navigation.navigate('ProfileStep1');
@@ -700,7 +726,7 @@ const Home = ({navigation}: any) => {
                     height:
                       Platform.OS === 'ios' ? perHeight(30) : perHeight(35),
                     borderRadius: 7,
-                    marginTop: perHeight(43),
+                    marginTop: perHeight(10),
                   },
                 ]}>
                 <Textcomp
@@ -709,31 +735,6 @@ const Home = ({navigation}: any) => {
                   lineHeight={16}
                   color={colors.primary}
                   fontFamily={'Inter-Medium'}
-                />
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => {
-                  Linking.openURL(
-                    'https://youtu.be/4sOGNUYIIjU?si=usMWyV9xFkGUzmqU',
-                  );
-                }}
-                style={[
-                  tw` mx-auto flex flex-row items-center justify-center`,
-                  {
-                    width: perWidth(335),
-                    height: perHeight(30),
-                    borderRadius: 7,
-                    marginTop: perHeight(10),
-                  },
-                ]}>
-                <Textcomp
-                  text={'Click here to watch how to complete your registration'}
-                  size={14}
-                  lineHeight={18}
-                  color={colors.parpal}
-                  fontFamily={'Inter-Bold'}
-                  style={tw`text-center underline`}
                 />
               </TouchableOpacity>
             </>

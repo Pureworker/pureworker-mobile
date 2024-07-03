@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
+  Linking,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
@@ -44,7 +45,7 @@ import {RouteContext} from '../../utils/context/route_context';
 import CustomLoading from '../../components/customLoading';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {ToastShort} from '../../utils/utils';
-import {SIZES} from '../../utils/position/sizes';
+import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import Textcomp from '../../components/Textcomp';
 
 const PRofileStep1 = () => {
@@ -609,6 +610,30 @@ const PRofileStep1 = () => {
           />
         </View>
         <View style={tw`h-40`} />
+
+        <TouchableOpacity
+          onPress={() => {
+            Linking.openURL('https://youtu.be/4sOGNUYIIjU?si=usMWyV9xFkGUzmqU');
+          }}
+          style={[
+            tw` mx-auto flex flex-row items-center justify-center`,
+            {
+              width: perWidth(335),
+              height: perHeight(30),
+              borderRadius: 7,
+
+              marginTop: 'auto',
+            },
+          ]}>
+          <Textcomp
+            text={'Click to watch how to complete your registration'}
+            size={13}
+            lineHeight={18}
+            color={colors.parpal}
+            fontFamily={'Inter-Bold'}
+            style={tw`text-center underline`}
+          />
+        </TouchableOpacity>
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </SafeAreaView>
