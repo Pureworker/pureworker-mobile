@@ -143,7 +143,7 @@ export const uploadAssetsDOCorIMG = async (
   const formData = new FormData();
   formData.append(formDataKey, {
     uri: param.uri,
-    type: param.type, // Adjust the MIME type based on your image type
+    type: param.type,
     name: param?.name ? param?.name : 'profile-picture',
     fieldname: formDataKey,
   });
@@ -151,7 +151,7 @@ export const uploadAssetsDOCorIMG = async (
   if (param.section && param.section === 'chat') {
     formData.append('chat', true);
   }
-  console.log('uploadAssetsDOCorIMG started', param, formData);
+
   try {
     const response = await axios.post(`${API_BASE_URL}/upload`, formData, {
       headers: {
@@ -164,8 +164,7 @@ export const uploadAssetsDOCorIMG = async (
     }
     return response;
   } catch (error) {
-    console.log(error, error?.response, error?.response?.data);
-    console.log(error?.message);
+    console.error('Upload error:', error);
     return {
       status: 400,
       err: error,
@@ -173,6 +172,44 @@ export const uploadAssetsDOCorIMG = async (
     };
   }
 };
+// export const uploadAssetsDOCorIMG = async (
+//   param: any,
+//   formDataKey = 'profile-picture',
+// ) => {
+//   const AuthToken = await AsyncStorage.getItem('AuthToken');
+//   const formData = new FormData();
+//   formData.append(formDataKey, {
+//     uri: param.uri,
+//     type: param.type, // Adjust the MIME type based on your image type
+//     name: param?.name ? param?.name : 'profile-picture',
+//     fieldname: formDataKey,
+//   });
+//   formData.append('folder', 'profile');
+//   if (param.section && param.section === 'chat') {
+//     formData.append('chat', true);
+//   }
+//   console.log('uploadAssetsDOCorIMG started', param, formData);
+//   try {
+//     const response = await axios.post(`${API_BASE_URL}/upload`, formData, {
+//       headers: {
+//         Authorization: `Bearer ${AuthToken}`,
+//         'Content-Type': 'multipart/form-data',
+//       },
+//     });
+//     if (response?.status === 201 || response?.status === 200) {
+//       console.log('uploadAssetsDOCorIMG', response?.data);
+//     }
+//     return response;
+//   } catch (error) {
+//     console.log(error, error?.response, error?.response?.data);
+//     console.log(error?.message);
+//     return {
+//       status: 400,
+//       err: error,
+//       error: error?.response?.data,
+//     };
+//   }
+// };
 
 export const completeProfile = async (param: any) => {
   console.log('completeProfile func started', param);

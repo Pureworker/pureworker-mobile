@@ -65,7 +65,11 @@ export default function ListComp({navigation, item}: any) {
           getUnreadMessages();
         }}
         style={tw`flex flex-row mt-2 py-2 mx-1 rounded justify-between bg-[#2D303C]`}>
-        <View style={[tw`flex flex-row items-center px-2`, {}]}>
+        <View
+          style={[
+            tw`flex flex-row items-center px-2  `,
+            {},
+          ]}>
           {/* <Image
             source={images.profile}
             style={{height: 50, width: 50}}
@@ -98,7 +102,7 @@ export default function ListComp({navigation, item}: any) {
             resizeMode={FastImage.resizeMode.cover}
           />
           <View style={[tw`flex flex-col  ml-2`, {}]}>
-            <View style={[tw``, {}]}>
+            <View style={[tw` `]}>
               <Textcomp
                 text={
                   // item?.userA?._id === userData?._id ?
@@ -120,11 +124,15 @@ export default function ListComp({navigation, item}: any) {
                 }
                 size={17}
                 lineHeight={17}
+                numberOfLines={1}
                 color={'#FFFFFF'}
                 fontFamily={'Inter-SemiBold'}
+                style={{
+                  width: SIZES.width * 0.565,
+                }}
               />
             </View>
-            <View style={[tw`mt-1`, {}]}>
+            <View style={[tw`mt-1 `, {}]}>
               <Textcomp
                 text={
                   item?.userB?.lastOnline
@@ -140,7 +148,7 @@ export default function ListComp({navigation, item}: any) {
           </View>
         </View>
         <View style={[tw`flex flex-col `, {}]}>
-          <View style={[tw`mr-3 `, {}]}>
+          <View style={[tw`mr-3  `, {}]}>
             <Textcomp
               text={formatDate(item?.updatedAt)}
               size={13}

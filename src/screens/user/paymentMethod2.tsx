@@ -307,7 +307,7 @@ const PaymentMethod2 = ({route}: any) => {
         visible={webviewVisible}
         onClose={handleCloseWebview}
         onSuccess={(data: any) => {
-          Alert.alert('Payment Successfull');
+          Alert.alert('Payment Successful');
           console.log('paymentback', data);
           setisLoading(true);
           setTimeout(() => {
@@ -327,7 +327,8 @@ const PaymentMethod2 = ({route}: any) => {
         paymentLink={''}
         billingEmail={userData?.email}
         amount={`${amount}00.00`}
-        paystackKey="pk_test_2e04c346edd25e14d0d073957628ee55afdc78d1"
+        // paystackKey="pk_test_2e04c346edd25e14d0d073957628ee55afdc78d1"
+        paystackKey="pk_live_a5b0c5c17f51aa6163cec43c740a3a2299b312f6"
         firstName={userData?.firstName || ''}
         lastName={userData?.lastName || ''}
         phone={userData?.phoneNumber || ''}

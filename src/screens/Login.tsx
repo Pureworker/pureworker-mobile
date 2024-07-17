@@ -164,7 +164,7 @@ export default function Login() {
         <TouchableOpacity
           style={tw`flex flex-row items-center`}
           onPress={() => {
-            setlanguageModal(!languageModal);
+            // setlanguageModal(!languageModal);
           }}>
           <USA1 />
           <Text
@@ -319,7 +319,7 @@ export default function Login() {
                 Register
               </Text>
             </Text>
-            <View style={tw`mt-auto`}>
+            {/* <View style={tw`mt-auto`}>
               <Text
                 style={{
                   fontSize: 13,
@@ -341,7 +341,7 @@ export default function Login() {
                   NIGERIA
                 </Text>
               </Text>
-            </View>
+            </View> */}
           </View>
 
           {/* <View style={{height: 30}} /> */}

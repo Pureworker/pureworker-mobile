@@ -91,7 +91,7 @@ const OnboardingView = ({item, index, navigation}: any) => {
         />
         <Button
           text={'Register'}
-          onClick={() => navigation.navigate(item.signup)}
+          onClick={() => navigation.navigate('Register')}
           textStyle={{color: '#000', fontSize: 20}}
           style={{
             flex: 1,
@@ -119,14 +119,16 @@ export default function OnBoarding() {
     {
       image: images.heroPix1,
       text: 'Your one-stop solution for reliable service delivery',
-      signup: 'CustomerSignup',
+      // signup: 'CustomerSignup',
+      signup: 'Register',
       login: 'Login',
       key: 'second',
     },
     {
       image: images.heroPix2,
       text: 'Empowering service providers to grow, one job at a time',
-      signup: 'CustomerSignup',
+      // signup: 'CustomerSignup',
+      signup: 'Register',
       login: 'Login',
       key: 'third',
     },

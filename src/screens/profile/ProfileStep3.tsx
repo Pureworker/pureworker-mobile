@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, ActivityIndicator, ScrollView, Text, SafeAreaView} from 'react-native';
+import {
+  View,
+  ActivityIndicator,
+  ScrollView,
+  Text,
+  SafeAreaView,
+} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
 import Header from '../../components/Header';
@@ -313,10 +319,27 @@ const ProfileStep3 = () => {
       const res: any = await completeProfile({contact: contact, action: 'add'});
       console.log('result', res?.data);
       if (res?.status === 200 || res?.status === 201) {
-        navigation.navigate('ProfileStep4', {
-          serviceId: route?.params?.serviceId,
+        // navigation.navigate('ProfileStep4', {
+        //   serviceId: route?.params?.serviceId,
+        // });
+        // dispatch(addformStage(4));
+
+        // navigation.navigate('FaceDetection', {page: 'Profile'});
+
+        Snackbar.show({
+          text: 'Contacts Submitted Successfully!.  Proceeding to Virtual Interview',
+          duration: Snackbar.LENGTH_LONG,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
         });
-        dispatch(addformStage(4));
+        setTimeout(() => {
+          if (userData?.liveTest === false) {
+            navigation.navigate('FaceDetection', {page: 'Profile'});
+          } else {
+            navigation.navigate('Congratulations');
+          }
+        }, 5000);
+        dispatch(addformStage(6));
       } else {
         Snackbar.show({
           text: res?.error?.message
@@ -393,7 +416,9 @@ const ProfileStep3 = () => {
             error={formik.errors.name1}
           />
           {formik.touched.name1 && formik.errors.name1 && (
-            <Text style={{color: 'red'}}>{formik.errors.name1}</Text>
+            <Text style={{color: 'red', fontSize: 10}}>
+              {formik.errors.name1}
+            </Text>
           )}
           <TextWrapper
             children="Relationship to you"
@@ -410,7 +435,9 @@ const ProfileStep3 = () => {
             error={formik.errors.relation1}
           />
           {formik.touched.relation1 && formik.errors.relation1 && (
-            <Text style={{color: 'red'}}>{formik.errors.relation1}</Text>
+            <Text style={{color: 'red', fontSize: 10}}>
+              {formik.errors.relation1}
+            </Text>
           )}
           <TextWrapper
             children="Phone Number"
@@ -429,7 +456,9 @@ const ProfileStep3 = () => {
             error={formik.errors.phoneNumber1}
           />
           {formik.touched.phoneNumber1 && formik.errors.phoneNumber1 && (
-            <Text style={{color: 'red'}}>{formik.errors.phoneNumber1}</Text>
+            <Text style={{color: 'red', fontSize: 10}}>
+              {formik.errors.phoneNumber1}
+            </Text>
           )}
           <TextWrapper
             children="Email Address"
@@ -447,8 +476,10 @@ const ProfileStep3 = () => {
             setState={formik.handleChange('email1')}
             error={formik.errors.email1}
           />
-          {formik.touched.name1 && formik.errors.name1 && (
-            <Text style={{color: 'red'}}>{formik.errors.name1}</Text>
+          {formik.touched.email1 && formik.errors.email1 && (
+            <Text style={{color: 'red', fontSize: 10}}>
+              {formik.errors.email1}
+            </Text>
           )}
 
           <TextWrapper
@@ -480,7 +511,9 @@ const ProfileStep3 = () => {
               error={formik.errors.address1}
             />
             {formik.touched.address1 && formik.errors.address1 && (
-              <Text style={{color: 'red'}}>{formik.errors.address1}</Text>
+              <Text style={{color: 'red', fontSize: 10}}>
+                {formik.errors.address1}
+              </Text>
             )}
           </View>
           <TextWrapper
@@ -515,7 +548,9 @@ const ProfileStep3 = () => {
             setState={formik.handleChange('name2')}
           />
           {formik.touched.name2 && formik.errors.name2 && (
-            <Text style={{color: 'red'}}>{formik.errors.name2}</Text>
+            <Text style={{color: 'red', fontSize: 10}}>
+              {formik.errors.name2}
+            </Text>
           )}
 
           <TextWrapper
@@ -534,7 +569,9 @@ const ProfileStep3 = () => {
             error={formik.errors.relation2}
           />
           {formik.touched.relation2 && formik.errors.relation2 && (
-            <Text style={{color: 'red'}}>{formik.errors.relation2}</Text>
+            <Text style={{color: 'red', fontSize: 10}}>
+              {formik.errors.relation2}
+            </Text>
           )}
           <TextWrapper
             children="Phone Number"
@@ -554,7 +591,9 @@ const ProfileStep3 = () => {
             error={formik.errors.phoneNumber2}
           />
           {formik.touched.phoneNumber2 && formik.errors.phoneNumber2 && (
-            <Text style={{color: 'red'}}>{formik.errors.phoneNumber2}</Text>
+            <Text style={{color: 'red', fontSize: 10}}>
+              {formik.errors.phoneNumber2}
+            </Text>
           )}
           <TextWrapper
             children="Email Address"
@@ -573,7 +612,9 @@ const ProfileStep3 = () => {
             error={formik.errors.email2}
           />
           {formik.touched.email2 && formik.errors.email2 && (
-            <Text style={{color: 'red'}}>{formik.errors.email2}</Text>
+            <Text style={{color: 'red', fontSize: 10}}>
+              {formik.errors.email2}
+            </Text>
           )}
 
           <TextWrapper
@@ -607,7 +648,9 @@ const ProfileStep3 = () => {
             />
           </View>
           {formik.touched.address2 && formik.errors.address2 && (
-            <Text style={{color: 'red'}}>{formik.errors.address2}</Text>
+            <Text style={{color: 'red', fontSize: 10}}>
+              {formik.errors.address2}
+            </Text>
           )}
 
           <View
@@ -623,7 +666,9 @@ const ProfileStep3 = () => {
                 //   // });
                 //   handleProfileSetup();
                 // }}
-                onClick={formik.handleSubmit}
+                onClick={() => {
+                  formik.handleSubmit();
+                }}
                 style={[
                   tw`ml-auto`,
                   {width: 90, backgroundColor: colors.lightBlack},
@@ -638,6 +683,13 @@ const ProfileStep3 = () => {
                 color={colors.parpal}
               />
             )}
+          </View>
+          <View>
+            {Object.entries(formik.errors).map(([key, value]) => (
+              <Text key={key} style={{color: 'red'}}>
+                * {value}
+              </Text>
+            ))}
           </View>
           <View style={{height: 120}} />
         </View>

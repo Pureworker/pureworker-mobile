@@ -13,19 +13,31 @@ import {SIZES, perHeight, perWidth} from '../utils/position/sizes';
 import images from '../constants/images';
 import Textcomp from '../components/Textcomp';
 import {useDispatch, useSelector} from 'react-redux';
-import {addUserData, logout} from '../store/reducer/mainSlice';
+import {
+  addUserData,
+  addcompleteProfile,
+  logout,
+} from '../store/reducer/mainSlice';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigation} from '../constants/navigation';
 import Modal from 'react-native-modal/dist/modal';
 import colors from '../constants/colors';
-import {getUser, updateUserData, uploadAssetsDOCorIMG} from '../utils/api/func';
+import {
+  completeProfile,
+  getUser,
+  updateUserData,
+  uploadAssetsDOCorIMG,
+} from '../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import FastImage from 'react-native-fast-image';
 import socket from '../utils/socket';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import LocationIcon3 from '../assets/svg/LocationIcon3';
+import UploadModal from './components/UploadModal';
+import {ToastShort} from '../utils/utils';
+import CustomLoading from '../components/customLoading';
 const DrawerContent = () => {
   const navigation = useNavigation<StackNavigation>();
   const navLinks = [
@@ -199,9 +211,72 @@ const DrawerContent = () => {
           console.log('Camera permission denied2');
         }
       }
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setisUploadModal(false);
+    }
     // launchCamera
   };
+  //
+  const openLibraryfordp_ = () => {
+    try {
+      launchImageLibrary(options, async (resp: unknown) => {
+        if (resp?.assets?.length > 0) {
+          const fileSize = resp.assets[0].fileSize; // File size in bytes
+          const fileSizeInMB = fileSize / (1024 * 1024); // Convert to megabytes
+          if (fileSizeInMB > 5) {
+            ToastShort(
+              'Image size exceeds 5MB. Please choose a smaller image.',
+            );
+            return;
+          }
+          console.log('resp', resp?.assets[0]);
+          setPhotoUri(resp?.assets[0].uri);
+          const data = await uploadImgorDoc(resp?.assets[0]);
+          console.warn('processed pic', data);
+          dispatch(addcompleteProfile({profilePic: data}));
+          const res: any = await completeProfile({profilePic: data});
+        }
+        setloading(false);
+      });
+    } catch (error) {
+    } finally {
+      setisUploadModal(false);
+    }
+  };
+
+  //
+  const pickImageFromGallery = async () => {
+    const options = {
+      mediaType: 'photo',
+      selectionLimit: 1,
+    };
+    try {
+      const galleryResponse = await launchImageLibrary(
+        options,
+        async (resp: unknown) => {
+          if (resp?.assets?.length > 0) {
+            console.log('resp', resp?.assets[0]);
+            setPhotoUri(resp?.assets[0].uri);
+            await uploadImgorDoc(resp?.assets[0]);
+          }
+        },
+      );
+
+      if (galleryResponse.errorCode) {
+        console.log(
+          'Error picking image from gallery:',
+          galleryResponse.errorMessage,
+        );
+      }
+    } catch (error) {
+      console.error('Error picking image from gallery:', error);
+    } finally {
+      setloading(false);
+    }
+  };
+  //
+
   const initGetUsers = async () => {
     const res: any = await getUser('');
     console.log('drawerdata', res?.data?.user);
@@ -231,28 +306,28 @@ const DrawerContent = () => {
     size: number | null;
   }) => {
     setloading(true);
+
     const res: any = await uploadAssetsDOCorIMG(param);
+
+    setloading(false);
 
     if (res?.status === 201 || res?.status === 200) {
       console.log('image:', res);
-
-      setloading(false);
       await initUpdate({profilePic: res?.data.url});
-      // return res?.data.url;
     } else {
       Snackbar.show({
-        text: res?.error?.message
-          ? res?.error?.message
-          : res?.error?.data?.message
-          ? res?.error?.data?.message
-          : 'Oops!, an error occured',
+        text:
+          res?.error?.message ??
+          res?.error?.data?.message ??
+          'Oops!, an error occurred',
         duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
       });
     }
-    setloading(false);
   };
+
+  const [isUploadModal, setisUploadModal] = useState(false);
   return (
     <>
       <DrawerContentScrollView
@@ -271,7 +346,8 @@ const DrawerContent = () => {
             <TouchableOpacity
               style={[tw`rounded-full`, {width: 50, height: 50}]}
               onPress={() => {
-                opencamerafordp4();
+                // opencamerafordp4();
+                setisUploadModal(true);
                 // if (
                 //   userType.userType === BUSINESS ||
                 //   userType.userType === FREELANCER
@@ -448,7 +524,7 @@ const DrawerContent = () => {
           <View style={[tw`mt-4 ml-3`, {}]}>
             <Textcomp
               text={`Version: ${
-                Platform.OS === 'ios' ? '1.0.0.41' : '1.0.0.41'
+                Platform.OS === 'ios' ? '1.0.0.46' : '1.0.0.46'
               }`}
               size={14}
               color={'#000000'}
@@ -552,7 +628,35 @@ const DrawerContent = () => {
           )}
         </View>
       </Modal>
-      <Spinner visible={loading} />
+
+      <UploadModal
+        visible={isUploadModal}
+        OnClose={() => {
+          setisUploadModal(false);
+        }}
+        takePhoto={() => {
+          setloading(true);
+          navigation.navigate('Home');
+          setisUploadModal(false);
+
+          setTimeout(() => {
+            opencamerafordp4();
+          }, 2000);
+        }}
+        pickGallery={() => {
+          setloading(true);
+          navigation.navigate('Home');
+          setisUploadModal(false);
+
+          setTimeout(() => {
+            openLibraryfordp_();
+          }, 2000);
+          // openLibraryfordp_();
+          // pickImageFromGallery();
+        }}
+      />
+      {/* <Spinner visible={loading} /> */}
+      <Spinner visible={loading} customIndicator={<CustomLoading />} />
     </>
   );
 };

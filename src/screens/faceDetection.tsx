@@ -333,7 +333,7 @@ export default function FaceDetection({navigation, route}: any) {
             <View>
               <Text
                 style={[
-                  tw`text-center text-[${colors.white}]`,
+                  tw`text-center text-[${colors.white}] mt-4 mx-4`,
                   {
                     fontSize: 14,
                     lineHeight: 19,
@@ -348,8 +348,8 @@ export default function FaceDetection({navigation, route}: any) {
             </View>
           </View>
 
-          <View style={tw`mx-auto mt-[10%]`}>
-            <View style={{marginHorizontal: 25, marginTop: 15}}>
+          <View style={tw`mx-auto  items-center mt-[10%]`}>
+            <View style={{ marginTop: 15, marginHorizontal: 'auto'}}>
               <Button
                 onClick={() => {
                   setloader(false);
@@ -358,7 +358,6 @@ export default function FaceDetection({navigation, route}: any) {
                 style={{
                   marginBottom: 20,
                   marginTop: 20,
-                  marginHorizontal: 40,
                   backgroundColor: colors.primary,
                   width: SIZES.width * 0.8,
                 }}
@@ -366,7 +365,7 @@ export default function FaceDetection({navigation, route}: any) {
                 text={'Start Verification'}
               />
             </View>
-            <View style={{marginHorizontal: 25, marginTop: 15}}>
+            <View style={{ marginTop: 15}}>
               <Button
                 onClick={() => {
                   FaceSDK.stopLivenessProcessing(

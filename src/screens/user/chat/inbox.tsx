@@ -50,6 +50,7 @@ import {
   markAsReaArray,
   markAsRead,
 } from '../../../utils/api/chat';
+import InfoIcon from '../../../assets/svg/Info';
 
 export default function Inbox({navigation, route}: any) {
   const scrollRef = useRef<ScrollView | null>(null);
@@ -306,8 +307,8 @@ export default function Inbox({navigation, route}: any) {
         <View style={tw`w-full h-full `}>
           <View
             style={[
-              tw`px-[3%]   border-b justify-center border-[#262C550F]`,
-              {height: perHeight(45)},
+              tw`px-[2.5%]   border-b justify-center border-[#262C550F]`,
+              {height: perHeight(55)},
               Platform.OS === 'ios' && styles.shadowProp,
             ]}>
             <View
@@ -330,11 +331,10 @@ export default function Inbox({navigation, route}: any) {
                   />
                 </TouchableOpacity>
               </View>
-              <View>
+              <View style={[tw` `, {maxWidth: '85%'}]}>
                 <Text
-                  onPress={() => {}}
                   style={[
-                    tw`text-center font-bold text-[${colors.black}]`,
+                    tw`text-center  font-bold text-[${colors.black}]`,
                     {
                       fontSize: 14,
                       fontFamily: 'Inter-SemiBold',
@@ -345,28 +345,28 @@ export default function Inbox({navigation, route}: any) {
                     ? 'Support'
                     : userName}
                 </Text>
-                {userName === 'Support Support' ||
-                userName === 'Support' ? null : (
-                  <View style={tw`w-9/10 mx-auto mt-1 `}>
-                    <Text
-                      onPress={() => {}}
-                      style={[
-                        tw`text-center  text-[${colors.black}]`,
-                        {
-                          fontSize: 10,
-                          fontFamily: 'Inter-Regular',
-                          lineHeight: 10,
-                        },
-                      ]}>
-                      Pureworker charges a 10 -15% service fee from all payments
-                      received.
-                    </Text>
-                  </View>
-                )}
+                {/* {userName === 'Support Support' ||
+                userName === 'Support' ? null : ( */}
+                <View style={tw`w-9/10 mx-auto mt-1 `}>
+                  <Text
+                    style={[
+                      tw`text-center  text-[${colors.black}]`,
+                      {
+                        fontSize: 10,
+                        fontFamily: 'Inter-Regular',
+                        lineHeight: 10,
+                      },
+                    ]}>
+                    Pureworker charges a 10 -15% service fee from all payments
+                    received.
+                  </Text>
+                </View>
+                {/* )} */}
               </View>
-              <View style={tw`flex flex-row`}>
+              <View style={[tw`flex flex-row  w-1.5/8`]}>
                 <Text
                   onPress={() => {}}
+                  numberOfLines={1}
                   style={[
                     tw`text-center font-bold text-[${colors.black}]`,
                     {
@@ -380,11 +380,51 @@ export default function Inbox({navigation, route}: any) {
                     : lastOnline
                     ? `${timeAgo(lastOnline)}`
                     : ''}
-           
+                  2 hrs ago
                 </Text>
               </View>
             </View>
           </View>
+          {agentData?.accountType?.toLowerCase() === 'customer' ? (
+            <View
+              style={tw`bg-[#FF0000] flex flex-row items-center rounded-lg mx-4 py-2 px-2`}>
+              <InfoIcon />
+              <Text
+                onPress={() => {}}
+                style={[
+                  tw` w-[95%] ml-1  text-[#FFFFFF]`,
+                  {
+                    fontSize: 10,
+                    fontFamily: 'Inter-Medium',
+                    lineHeight: 12.1,
+                    fontWeight: '600',
+                  },
+                ]}>
+                FOR YOUR SAFETY, DO NOT PAY DIRECTLY TO SERVICE PROVIDERS. All
+                payment and communication should be done on the platform.
+              </Text>
+            </View>
+          ) : (
+            <View
+              style={tw`bg-[#FF0000] flex flex-row items-center rounded-lg mx-4 py-2 px-2`}>
+              <InfoIcon />
+              <Text
+                onPress={() => {}}
+                style={[
+                  tw` w-[95%] ml-1  text-[#FFFFFF]`,
+                  {
+                    fontSize: 10,
+                    fontFamily: 'Inter-Medium',
+                    lineHeight: 12.1,
+                    fontWeight: '600',
+                  },
+                ]}>
+                DO NOT GIVE CUSTOMERS YOUR ACCOUNT DETAILS. All payment and
+                communication should be done on the platform. There are
+                penalties for exchanging phone numbers or emails.
+              </Text>
+            </View>
+          )}
 
           <View
             style={[
@@ -409,85 +449,106 @@ export default function Inbox({navigation, route}: any) {
               })}
               <View style={tw`h-20`} />
             </ScrollView> */}
-            <ScrollView
-              ref={scrollRef}
-              showsVerticalScrollIndicator={false}
-              onContentSizeChange={() => scrollRef!?.current!?.scrollToEnd()}>
-              {Object.keys(groupedMessages).map((date, i) => (
-                <View key={date} style={tw`${i === 0 ? 'pt-5' : 'pt-2.5'}`}>
-                  <View style={tw`flex flex-row items-center`}>
-                    <View style={[tw`bg-black flex-1`, {height: 1}]} />
-                    <Text
-                      onPress={() => {}}
-                      style={[
-                        tw`text-center px-4 font-bold text-[${colors.black}]`,
-                        {
-                          fontSize: 14,
-                          fontFamily: 'Inter-SemiBold',
-                          lineHeight: 14,
-                        },
-                      ]}>
-                      {date}
-                    </Text>
-                    <View style={[tw`bg-black flex-1`, {height: 1}]} />
+
+            <View
+              style={{
+                height: SIZES.height * 0.64,
+              }}>
+              <ScrollView
+                ref={scrollRef}
+                showsVerticalScrollIndicator={false}
+                onContentSizeChange={() => scrollRef!?.current!?.scrollToEnd()}>
+                {Object.keys(groupedMessages).map((date, i) => (
+                  <View key={date} style={tw`${i === 0 ? 'pt-5' : 'pt-2.5'}`}>
+                    <View style={tw`flex flex-row items-center`}>
+                      <View style={[tw`bg-black flex-1`, {height: 1}]} />
+                      <Text
+                        onPress={() => {}}
+                        style={[
+                          tw`text-center px-4 font-bold text-[${colors.black}]`,
+                          {
+                            fontSize: 14,
+                            fontFamily: 'Inter-SemiBold',
+                            lineHeight: 14,
+                          },
+                        ]}>
+                        {date}
+                      </Text>
+                      <View style={[tw`bg-black flex-1`, {height: 1}]} />
+                    </View>
+
+                    {groupedMessages[date].map((message, index) => {
+                      let item = message;
+
+                      if (item?.from?._id === agentData?._id) {
+                        return (
+                          <Chatcomp
+                            key={index}
+                            text={item?.body}
+                            type={'other'}
+                            time={item?.updatedAt}
+                            isRead={item?.isRead}
+                            id={item?.id}
+                            toggleImageModal={toggleImageModal}
+                          />
+                        );
+                      } else if (item?.to?._id === agentData?._id) {
+                        return (
+                          <Chatcomp
+                            key={index}
+                            text={item?.body}
+                            type={'me'}
+                            time={item?.updatedAt}
+                            isRead={item?.isRead}
+                            id={item?.id}
+                            toggleImageModal={toggleImageModal}
+                          />
+                        );
+                      } else if (item?.from === agentData?._id) {
+                        return (
+                          <Chatcomp
+                            key={index}
+                            text={item?.body}
+                            type={'other'}
+                            time={item?.updatedAt}
+                            isRead={item?.isRead}
+                            id={item?.id}
+                            toggleImageModal={toggleImageModal}
+                          />
+                        );
+                      } else if (item?.to === agentData?._id) {
+                        return (
+                          <Chatcomp
+                            key={index}
+                            text={item?.body}
+                            type={'me'}
+                            time={item?.updatedAt}
+                            isRead={item?.isRead}
+                            id={item?.id}
+                            toggleImageModal={toggleImageModal}
+                          />
+                        );
+                      }
+                    })}
                   </View>
-
-                  {groupedMessages[date].map((message, index) => {
-                    let item = message;
-
-                    if (item?.from?._id === agentData?._id) {
-                      return (
-                        <Chatcomp
-                          key={index}
-                          text={item?.body}
-                          type={'other'}
-                          time={item?.updatedAt}
-                          isRead={item?.isRead}
-                          id={item?.id}
-                          toggleImageModal={toggleImageModal}
-                        />
-                      );
-                    } else if (item?.to?._id === agentData?._id) {
-                      return (
-                        <Chatcomp
-                          key={index}
-                          text={item?.body}
-                          type={'me'}
-                          time={item?.updatedAt}
-                          isRead={item?.isRead}
-                          id={item?.id}
-                          toggleImageModal={toggleImageModal}
-                        />
-                      );
-                    } else if (item?.from === agentData?._id) {
-                      return (
-                        <Chatcomp
-                          key={index}
-                          text={item?.body}
-                          type={'other'}
-                          time={item?.updatedAt}
-                          isRead={item?.isRead}
-                          id={item?.id}
-                          toggleImageModal={toggleImageModal}
-                        />
-                      );
-                    } else if (item?.to === agentData?._id) {
-                      return (
-                        <Chatcomp
-                          key={index}
-                          text={item?.body}
-                          type={'me'}
-                          time={item?.updatedAt}
-                          isRead={item?.isRead}
-                          id={item?.id}
-                          toggleImageModal={toggleImageModal}
-                        />
-                      );
-                    }
-                  })}
-                </View>
-              ))}
-            </ScrollView>
+                ))}
+              </ScrollView>
+            </View>
+            <View style={tw``}>
+              <Text
+                onPress={() => {}}
+                style={[
+                  tw`  text-[#000000]`,
+                  {
+                    fontSize: 10,
+                    fontFamily: 'Inter-Medium',
+                    lineHeight: 12.1,
+                  },
+                ]}>
+                Pureworker charges a 10 -15% service fee from all payments
+                received
+              </Text>
+            </View>
           </View>
 
           {userName === 'Support Support' || userName === 'Support' ? null : (
@@ -535,7 +596,8 @@ export default function Inbox({navigation, route}: any) {
                 borderTopColor: 'black',
               },
             ]}>
-            <View style={tw`flex flex-row mt-3 py-2 px-2 bg-[#D9D9D9]`}>
+            <View
+              style={tw`flex flex-row mt-3 py-2 px-4 bg-[#D9D9D9] rounded-full`}>
               <TextInput
                 style={[
                   tw`${

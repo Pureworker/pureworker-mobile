@@ -33,10 +33,14 @@ import {
   // launchImageLibrary,
 } from '../../constants/utils';
 import Snackbar from 'react-native-snackbar';
-import {completeProfile, uploadAssetsDOCorIMG} from '../../utils/api/func';
+import {
+  completeProfile,
+  getUser,
+  uploadAssetsDOCorIMG,
+} from '../../utils/api/func';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {addcompleteProfile, addformStage} from '../../store/reducer/mainSlice';
+import {addUserData, addcompleteProfile, addformStage} from '../../store/reducer/mainSlice';
 import FastImage from 'react-native-fast-image';
 import ServiceIntroComp from '../../components/serviceIntro';
 import ServicePriceComp from '../../components/servicePrice';
@@ -50,39 +54,28 @@ const PRofileStep2 = () => {
   const navigation = useNavigation<StackNavigation>();
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
-  const [potfolioImageUrl, setPotfolioImageUrl] = useState<any>([]);
-  const [potfolioEnable, setPotfolioEnable] = useState(false);
   const [allPotfolio, setAllPotfolio] = useState<any>([]);
-  const [key, setKey] = useState<any>(1);
-  const [editkey, setEditKey] = useState<any>(null);
   const [isLoading, setisLoading] = useState(false);
-
   const category = useSelector((state: any) => state.user.pickedServices);
   const categoryId = useSelector((state: any) => state.user.pickedServicesId);
   const [servicesDescription, setServicesDescription] = useState<any>([]); // State to store input values
   const [servicePrice, setServicePrice] = useState<any>([]); // State to store input values
   const [createService] = useCreateServiceMutation();
-  const [potfolioImageLoading, setPotfolioImageLoading] = useState(false);
   const [profileImageLoading, setProfileImageLoading] = useState(false);
-
   const [nationalityOpen, setNationalityOpen] = useState(false);
   const [nationalityValue, setNationalityValue] = useState(null);
   const [nationalityItems, setNationalityItems] = useState<any>([]);
-  // console.log('nationalityItems', nationalityItems);
+
   console.log('--ggggggg', servicesDescription);
-  const [portfolioToServiceCount, setportfolioToServiceCount] = useState([]);
   const completeProfileData = useSelector(
     (state: any) => state.user.completeProfileData,
   );
-  // console.error('yeap', completeProfileData);
   useEffect(() => {
     setNationalityItems([...allCountry]);
   }, []);
   const currentServiceIntro = useSelector(
     (state: any) => state.user.completeProfileData?.serviceIntro,
   );
-  // console.log(category);
-
   // useEffect(() => {
   //   if (category?.length) {
   //     const updatedInputValues = category.map((service: string) => ({
@@ -103,7 +96,6 @@ const PRofileStep2 = () => {
   //     dispatch(addcompleteProfile({serviceIntro: updatedServiceIntro}));
   //   }
   // }, [category]);
-
   console.log('===========Cats=========================');
   console.log(category);
   console.log('====================================');
@@ -128,9 +120,6 @@ const PRofileStep2 = () => {
   console.log('====================================');
   useEffect(() => {
     if (category?.length) {
-      // Filter out items with 'service' property
-      // const categoryWithNames = category.filter(service => service.name);
-
       const updatedInputValues = categoryWithNames.map(service => ({
         service: service.name,
         description: '',
@@ -144,7 +133,6 @@ const PRofileStep2 = () => {
             ),
         ),
       ];
-
       // Update the Redux store with the updated array
       setServicesDescription([...updatedServiceIntro]);
       dispatch(addcompleteProfile({serviceIntro: updatedServiceIntro}));
@@ -263,14 +251,6 @@ const PRofileStep2 = () => {
     setisLoading(true);
     if (completeProfileData) {
       const dup = completeProfileData;
-      // const duplicate = dup;
-      // duplicate.serviceIntro = duplicate.serviceIntro.filter(
-      //   item => item.service !== undefined,
-      // );
-      // duplicate.serviceIntro = duplicate.serviceIntro.filter(item => !isMongoObjectId(item.service));
-      // console.log('dup',duplicate);
-      // setisLoading(false);
-      // return;
       let duplicate = dup;
       duplicate?.priceRange?.map(
         (
@@ -296,16 +276,9 @@ const PRofileStep2 = () => {
       duplicate.serviceIntro = duplicate.serviceIntro.filter(
         item => item.service !== undefined,
       );
-      duplicate.serviceIntro = duplicate.serviceIntro.filter(item => !isMongoObjectId(item.service));
-      // const profileData = {
-      //   profilePicture: imageUrl,
-      //   description: description,
-      //   servicesDescription: JSON.stringify(servicesDescription),
-      //   servicePrice: JSON.stringify(servicePrice),
-      //   city: nationalityValue,
-      //   potfolios: allPotfolio,
-      //   serviceId: '',
-      // };
+      duplicate.serviceIntro = duplicate.serviceIntro.filter(
+        item => !isMongoObjectId(item.service),
+      );
       const profileData = {
         profilePic: completeProfileData?.profilePic || imageUrl,
         description: description
@@ -323,77 +296,6 @@ const PRofileStep2 = () => {
         // portfolio: null,
       };
       console.log('All Item Here', profileData);
-      // const d = {
-      //   geoLocation: {
-      //     type: 'Point',
-      //     coordinates: [3.9368, 7.843],
-      //   },
-      //   profilePic:
-      //     'https://res.cloudinary.com/dr0pef3mn/image/upload/v1693319953/pure/1693319950720-pure%20worker%20logo.png.png',
-      //   description: 'I know my craft very well',
-      //   serviceIntro: [
-      //     {
-      //       service: '64eb9594d0ea85df8ffa4e97',
-      //       description: 'I know my craft very well',
-      //     },
-      //     {
-      //       service: '64eb9594d0ea85df8ffa4e9a',
-      //       description: 'I know my craft very well',
-      //     },
-      //   ],
-      //   priceRange: [
-      //     {
-      //       service: '64eb9594d0ea85df8ffa4e97',
-      //       maxPrice: 12000,
-      //       minPrice: 1000,
-      //     },
-      //     {
-      //       service: '64eb9594d0ea85df8ffa4e9a',
-      //       maxPrice: 12000,
-      //       minPrice: 1000,
-      //     },
-      //   ],
-      // portfolio: [
-      //   {
-      //     service: '64eb9594d0ea85df8ffa4e97',
-      //     description: 'I know my craft very well',
-      //     images: [
-      //       'https://res.cloudinary.com/dr0pef3mn/image/upload/v1693319953/pure/1693319950720-pure%20worker%20logo.png.png',
-      //     ],
-      //   },
-      //   {
-      //     service: '64eb9594d0ea85df8ffa4e9a',
-      //     description: 'I know my craft very well',
-      //     images: [
-      //       'https://res.cloudinary.com/dr0pef3mn/image/upload/v1693319953/pure/1693319950720-pure%20worker%20logo.png.png',
-      //     ],
-      //   },
-      // ],
-      //   contact: [
-      //     {
-      //       fullName: 'Shehu Shehu',
-      //       relationship: 'brother',
-      //       phoneNumber: '08012121212',
-      //       email: 'test@email.com',
-      //       address: 'oojo',
-      //     },
-      //     {
-      //       fullName: 'Shehu Shehu',
-      //       relationship: 'brother',
-      //       phoneNumber: '08012121212',
-      //       email: 'test@email.com',
-      //       address: 'oojo',
-      //     },
-      //   ],
-      // identity: {
-      //   means: 'vNIN',
-      //   number: '12345678987',
-      // },
-      // meetingSchedule: {
-      //   date: 'Fri Sep 01 2023 01:00:00 GMT+0100 (West Africa Standard Time)',
-      //   time: '10:00 am',
-      // },
-      // };
       console.log('res-data', profileData);
       const res = await completeProfile(profileData);
       console.log('result', res?.data);
@@ -432,29 +334,72 @@ const PRofileStep2 = () => {
     setisLoading(false);
   };
   //image upload
-  const options = {mediaType: 'photo', selectionLimit: 1};
+  const options: any = {mediaType: 'photo', selectionLimit: 1, quality: 1};
+
   const openLibraryfordp = () => {
-    launchImageLibrary(options, async (resp: unknown) => {
-      if (resp?.assets?.length > 0) {
-        const fileSize = resp.assets[0].fileSize; // File size in bytes
-        const fileSizeInMB = fileSize / (1024 * 1024); // Convert to megabytes
-        if (fileSizeInMB > 1) {
-          // console.warn('Image size exceeds 1MB. Please choose a smaller image.');
-          ToastShort('Image size exceeds 1MB. Please choose a smaller image.');
-          // You may want to display an error message or handle this case accordingly
-          return;
+    launchImageLibrary(options, async (response: unknown) => {
+      try {
+        if (response?.assets?.length > 0) {
+          const {fileSize, uri} = response.assets[0];
+          const fileSizeInMB = fileSize / (1024 * 1024); // Convert to megabytes
+
+          // if (fileSizeInMB > 1) {
+          //   ToastShort(
+          //     'Image size exceeds 1MB. Please choose a smaller image.',
+          //   );
+          //   return;
+          // }
+
+          console.log('Selected image:', response.assets[0]);
+          setImageUrl(uri);
+
+          const data = await uploadImgorDoc(response.assets[0]);
+          console.log('Uploaded image data:', data);
+
+          dispatch(addcompleteProfile({profilePic: data}));
+
+          const result = await completeProfile({profilePic: data});
+          console.log('Profile update result:', result);
+        } else {
+          console.warn('No image selected');
+          ToastShort('No image selected. Please try again.');
         }
-        console.log('resp', resp?.assets[0]);
-        setImageUrl(resp?.assets[0].uri);
-        const data = await uploadImgorDoc(resp?.assets[0]);
-        console.warn('processed pic', data);
-        dispatch(addcompleteProfile({profilePic: data}));
-        const res: any = await completeProfile({profilePic: data});
+      } catch (error) {
+        console.error('Error processing image:', error);
+        ToastShort(
+          'An error occurred while processing the image. Please try again.',
+        );
+      } finally {
+        const initGetUsers = async () => {
+          const res: any = await getUser('');
+          if (res?.status === 201 || res?.status === 200) {
+            dispatch(addUserData(res?.data?.user));
+          }
+        };
+        initGetUsers();
       }
     });
   };
-    // setPhotoUri(resp?.assets[0].uri);
-    // launchCamera
+  // const openLibraryfordp = () => {
+  //   launchImageLibrary(options, async (resp: unknown) => {
+  //     if (resp?.assets?.length > 0) {
+  //       const fileSize = resp.assets[0].fileSize; // File size in bytes
+  //       const fileSizeInMB = fileSize / (1024 * 1024); // Convert to megabytes
+  //       if (fileSizeInMB > 1) {
+  //         // console.warn('Image size exceeds 1MB. Please choose a smaller image.');
+  //         ToastShort('Image size exceeds 1MB. Please choose a smaller image.');
+  //         // You may want to display an error message or handle this case accordingly
+  //         return;
+  //       }
+  //       console.log('resp', resp?.assets[0]);
+  //       setImageUrl(resp?.assets[0].uri);
+  //       const data = await uploadImgorDoc(resp?.assets[0]);
+  //       console.warn('processed pic', data);
+  //       dispatch(addcompleteProfile({profilePic: data}));
+  //       const res: any = await completeProfile({profilePic: data});
+  //     }
+  //   });
+  // };
   const opencamerafordp = async () => {
     const options = {
       mediaType: 'photo',
@@ -591,7 +536,6 @@ const PRofileStep2 = () => {
               ]}>
               {!profileImageLoading ? (
                 <TouchableOpacity>
-                  {/* {!imageUrl ? ( */}
                   {!completeProfileData?.profilePic && imageUrl?.length < 1 ? (
                     <TextWrapper
                       children="Upload Profile Photo"
@@ -828,7 +772,6 @@ const PRofileStep2 = () => {
                   // _handleFuncUpload();
                   navigation.navigate('ProfileStep21');
                   dispatch(addformStage(21));
-
                 }}
                 style={{
                   marginBottom: 20,

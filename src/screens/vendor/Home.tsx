@@ -682,12 +682,11 @@ const Home = ({navigation}: any) => {
                   );
                 }}
                 style={[
-                  tw` mx-auto flex flex-row items-center justify-center`,
+                  tw` mr-auto ml-[30%] flex flex-row items-center justify-center`,
                   {
                     width: perWidth(335),
                     height: perHeight(30),
                     borderRadius: 7,
-          
                     marginTop: perHeight(43),
                   },
                 ]}>

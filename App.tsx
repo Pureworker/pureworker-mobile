@@ -376,6 +376,10 @@ const App = () => {
             ignoreErrors: true,
           });
 
+        const latestVersionIos = await VersionCheck.getLatestVersion({
+          provider: 'appStore', // for iOS
+        });
+
         const currentVersion = VersionCheck.getCurrentVersion();
         VersionCheck.getAppStoreUrl({
           appID: 'com.grandida.pureworker',
@@ -398,30 +402,56 @@ const App = () => {
           }),
         );
 
-        if (latestVersion > currentVersion) {
-          Alert.alert(
-            'Update Required',
-            'A new version of the app is available. Please update to continue using the app.',
-            [
-              {
-                text: 'Update Now',
-                onPress: async () => {
-                  Linking.openURL(
-                    Platform.OS === 'ios'
-                      ? await VersionCheck.getAppStoreUrl({
-                          appID: 'com.grandida.pureworker',
-                        })
-                      : await VersionCheck.getPlayStoreUrl({
-                          packageName: 'com.pure_worker_app',
-                        }),
-                  );
+        if (Platform.OS === 'ios') {
+          if (latestVersionIos > currentVersion) {
+            Alert.alert(
+              'Update Required',
+              'A new version of the app is available on Appstore. Please update to continue using the app.',
+              [
+                {
+                  text: 'Update Now',
+                  onPress: async () => {
+                    Linking.openURL(
+                      Platform.OS === 'ios'
+                        ? await VersionCheck.getAppStoreUrl({
+                            appID: 'com.grandida.pureworker',
+                          })
+                        : await VersionCheck.getPlayStoreUrl({
+                            packageName: 'com.pure_worker_app',
+                          }),
+                    );
+                  },
                 },
-              },
-            ],
-            {cancelable: false},
-          );
+              ],
+              {cancelable: false},
+            );
+          }
         } else {
-          // App is up-to-date; proceed with the app
+          if (latestVersion > currentVersion) {
+            Alert.alert(
+              'Update Required',
+              'A new version of the app is available. Please update to continue using the app.',
+              [
+                {
+                  text: 'Update Now',
+                  onPress: async () => {
+                    Linking.openURL(
+                      Platform.OS === 'ios'
+                        ? await VersionCheck.getAppStoreUrl({
+                            appID: 'com.grandida.pureworker',
+                          })
+                        : await VersionCheck.getPlayStoreUrl({
+                            packageName: 'com.pure_worker_app',
+                          }),
+                    );
+                  },
+                },
+              ],
+              {cancelable: false},
+            );
+          } else {
+            // App is up-to-date; proceed with the app
+          }
         }
       } catch (error) {
         // Handle error while checking app version

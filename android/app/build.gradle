@@ -106,8 +106,8 @@ android {
         applicationId "com.pure_worker_app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10
-        versionName "1.28"
+        versionCode 13
+        versionName "1.29"
         multiDexEnabled true
     }
     splits {

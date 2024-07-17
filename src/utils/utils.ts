@@ -137,11 +137,11 @@ export function timeAgo(lastOnline) {
 
     if (hours < 24) {
       // If difference is less than a day, show hours
-      return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+      return `${hours} hr${hours !== 1 ? 's' : ''} ago`;
     } else {
       // Convert the time difference to days
       const days = Math.floor(hours / 24);
-      return `${days} day${days !== 1 ? 's' : ''} ago`;
+      return `${days} d${days !== 1 ? 's' : ''} ago`;
     }
   }
 }
