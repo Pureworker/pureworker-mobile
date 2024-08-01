@@ -342,14 +342,12 @@ const PRofileStep2 = () => {
         if (response?.assets?.length > 0) {
           const {fileSize, uri} = response.assets[0];
           const fileSizeInMB = fileSize / (1024 * 1024); // Convert to megabytes
-
           // if (fileSizeInMB > 1) {
           //   ToastShort(
           //     'Image size exceeds 1MB. Please choose a smaller image.',
           //   );
           //   return;
           // }
-
           console.log('Selected image:', response.assets[0]);
           setImageUrl(uri);
 

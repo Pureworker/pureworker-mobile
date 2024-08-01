@@ -1,21 +1,18 @@
-import React, {useEffect, useState} from 'react';
-import {View, Image, ActivityIndicator} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Image, ActivityIndicator } from 'react-native';
 
 import {
   Collapse,
   CollapseHeader,
   CollapseBody,
 } from 'accordion-collapse-react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import SubCategoryItem from './SubCategoryItem2';
 import TextWrapper from './TextWrapper';
 import images from '../constants/images';
-import {useGetSubCategoriesQuery} from '../store/slice/api';
 import colors from '../constants/colors';
-import {generalStyles} from '../constants/generalStyles';
 // import {getSubCategory} from '../utils/api/func';
-import {addSubcategory} from '../store/reducer/mainSlice';
-import {getSubCategory} from '../utils/api/func';
+import { getSubCategory } from '../utils/api/func';
 
 type SubCategoryListPRops = {
   categoryName: string;

@@ -84,7 +84,14 @@ const Withdraw = () => {
   const [accountNumber, setaccountNumber] = useState('');
   const [accountName, setaccountName]: any = useState('');
 
-  const handleWithdraw = async values => {
+  const handleWithdraw = async (values: {
+    bank: any;
+    accountNumber: any;
+    accountName?: string;
+    amount: any;
+  }) => {
+    ToastShort('Withdrawal is under maintenance!');
+    return;
     setisLoading(true);
     const param = {
       account_number: values.accountNumber,
@@ -176,7 +183,7 @@ const Withdraw = () => {
             </TouchableOpacity>
             <View style={tw`mx-auto`}>
               <Textcomp
-                text={'Withdraw'}
+                text={'Request Withdrawal'}
                 size={17}
                 lineHeight={17}
                 color={'#000413'}

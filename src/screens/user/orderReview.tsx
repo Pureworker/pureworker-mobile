@@ -371,7 +371,7 @@ const OrderReview = ({route}: any) => {
                 </View>
                 <View style={tw`mt-2`}>
                   <Textcomp
-                    text={`N ${_data?.totalPrice * 0.075}`}
+                    text={`₦${_data?.totalPrice * 0.075}`}
                     size={14}
                     lineHeight={15}
                     color={'#000413'}
@@ -408,8 +408,6 @@ const OrderReview = ({route}: any) => {
             <TouchableOpacity
               onPress={() => {
                 setready(true);
-                // handleCreate();
-                // navigation.navigate('PaymentMethod2', {amount: 4000});
               }}
               style={[
                 tw`bg-[${colors.darkPurple}] items-center rounded-lg justify-center mx-auto py-3`,

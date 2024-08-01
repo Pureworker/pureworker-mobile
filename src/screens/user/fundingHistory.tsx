@@ -262,7 +262,7 @@ const FundingHistory = () => {
                                     text={
                                       item?.channel === 'admin'
                                         ? 'Admin'
-                                        : 'Flutterwave'
+                                        : item?.gateway
                                     }
                                     size={15}
                                     lineHeight={17}

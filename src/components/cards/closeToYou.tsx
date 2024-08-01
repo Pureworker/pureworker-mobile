@@ -76,7 +76,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
                 }
                 size={12}
                 lineHeight={14}
-                numberOfLines={2}
+                numberOfLines={1}
                 color={colors.primary}
                 fontFamily={'Inter-SemiBold'}
               />
@@ -182,18 +182,19 @@ const ClosetoYou = ({item, index, navigation}: any) => {
               {
                 minHeight:
                   item?.services?.length <= 5
-                    ? SIZES.height * 0.5
+                    ? SIZES.height * 0.52
                     : item?.services?.length <= 6
-                    ? SIZES.height * 0.55
+                    ? SIZES.height * 0.57
                     : item?.services?.length <= 7
-                    ? SIZES.height * 0.6
+                    ? SIZES.height * 0.62
                     : item?.services?.length <= 8
-                    ? SIZES.height * 0.65
+                    ? SIZES.height * 0.67
                     : item?.services?.length <= 10
-                    ? SIZES.height * 0.8
+                    ? SIZES.height * 0.82
                     : item?.services?.length > 10
-                    ? SIZES.height * 0.85
-                    : SIZES.height * 0.4,
+                    ? SIZES.height * 0.87
+                    : SIZES.height * 0.42,
+                    marginBottom: -20,
               },
             ]}>
             <TouchableOpacity

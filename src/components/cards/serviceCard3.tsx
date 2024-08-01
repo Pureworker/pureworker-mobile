@@ -83,7 +83,7 @@ const ServiceCard3 = ({
       const __id = ch?.[0]?._id;
       const res: any = await deletebookMarkServiceProvide(__id);
       if (res?.status === 200 || res?.status === 201 || res?.status === 204) {
-        ToastShort('Unboomarked!.');
+        ToastShort('Unboomarked!');
         setsaved(!saved);
       } else {
         console.log(res?.status);
