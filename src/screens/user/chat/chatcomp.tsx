@@ -220,6 +220,7 @@ export default function Index({
               uri: text,
               headers: { Authorization: 'someAuthToken' },
               priority: FastImage.priority.high,
+              cache: FastImage.cacheControl.cacheOnly
             }}
             resizeMode={FastImage.resizeMode.contain}
           />

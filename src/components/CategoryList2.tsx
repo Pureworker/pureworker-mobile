@@ -41,17 +41,13 @@ const CategoryList = ({
   //   isError,
   // } = useGetSubCategoriesQuery({categoryId: catId});
   // const getSubCategory = getSubCategoryData ?? [];
-
-  // console.log(categoryName, catId);
   const dispatch = useDispatch();
   useEffect(() => {
     const initGetCategory = async () => {
       setisLoading(true);
-      // console.log('IDDDD--', catId);
       const res: any = await getSubCategory(catId);
-      // console.log('ssssssss', res?.data?.data?.[0]?.services);
       if (res?.status === 201 || res?.status === 200) {
-        // dispatch(addSubcategory(res?.data?.data?.services));
+
         set_getSubCategory(res?.data?.data?.[0]?.services);
       }
       setisLoading(false);

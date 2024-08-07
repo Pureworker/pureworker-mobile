@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Image,
@@ -12,24 +12,14 @@ import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
-import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
-import {getContent, getFAQ} from '../../utils/api/func';
-import {
-  addContentRating,
-  addPrivacyPolicy,
-  addSPRating,
-  addfaq,
-} from '../../store/reducer/mainSlice';
+import {SIZES, perWidth} from '../../utils/position/sizes';
+import {getContent} from '../../utils/api/func';
+import {addContentRating, addSPRating} from '../../store/reducer/mainSlice';
 import RenderHtml from 'react-native-render-html';
 
 const Ratings = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
-
-  const [deactivateAccount, setdeactivateAccount] = useState(false);
-  const [deleteAccount, setdeleteAccount] = useState(false);
-  const [isLoading, setisLoading] = useState(false);
-  const faq = useSelector((state: any) => state.user.faq);
   const userType = useSelector((state: any) => state.user.isLoggedIn);
 
   const customerratings = useSelector((state: any) => state.user.anyratings);
@@ -58,15 +48,6 @@ const Ratings = () => {
 
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
-      {/* <View
-        style={{
-          marginTop:
-            Platform.OS === 'ios'
-              ? getStatusBarHeight(true)
-              : StatusBar.currentHeight &&
-                StatusBar.currentHeight + getStatusBarHeight(true),
-        }}
-      /> */}
       <View
         style={{
           flexDirection: 'row',

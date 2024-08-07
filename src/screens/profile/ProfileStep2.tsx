@@ -40,7 +40,11 @@ import {
 } from '../../utils/api/func';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {addUserData, addcompleteProfile, addformStage} from '../../store/reducer/mainSlice';
+import {
+  addUserData,
+  addcompleteProfile,
+  addformStage,
+} from '../../store/reducer/mainSlice';
 import FastImage from 'react-native-fast-image';
 import ServiceIntroComp from '../../components/serviceIntro';
 import ServicePriceComp from '../../components/servicePrice';
@@ -562,6 +566,7 @@ const PRofileStep2 = () => {
                         uri: completeProfileData?.profilePic || imageUrl,
                         headers: {Authorization: 'someAuthToken'},
                         priority: FastImage.priority.high,
+                        cache: FastImage.cacheControl.cacheOnly,
                       }}
                       resizeMode={FastImage.resizeMode.cover}
                     />

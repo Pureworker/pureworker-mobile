@@ -26,6 +26,8 @@ import {useInitialData} from './initialData';
 import CreatePin from '../screens/user/createPin';
 import CreatePinPage from '../screens/user/createPin/create';
 import CreatePinSuccess from '../screens/user/createPin/success';
+import IdVerification from '../screens/common/IdVerification';
+import PhotoUploadScreen from '../screens/common/Picture';
 // import HelloWorldView from '../tracking/TrackView';
 
 const Stack = createNativeStackNavigator();
@@ -159,6 +161,8 @@ export default function CustomerNavigation() {
         component={FaceDetection}
         options={{headerShown: false, animationEnabled: false}}
       />
+
+
 
       {/* <Stack.Screen
         name="Tracking"

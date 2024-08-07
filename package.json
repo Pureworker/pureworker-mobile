@@ -87,6 +87,7 @@
     "react-native-paper": "^5.9.1",
     "react-native-paystack-webview": "^4.0.3",
     "react-native-permissions": "^3.8.4",
+    "react-native-picker-select": "^9.2.0",
     "react-native-popup-menu": "^0.16.1",
     "react-native-prompt-android": "^1.1.0",
     "react-native-push-notification": "^8.1.1",

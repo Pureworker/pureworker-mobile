@@ -300,6 +300,7 @@ const Home = () => {
                     uri: userData?.profilePic,
                     headers: {Authorization: 'someAuthToken'},
                     priority: FastImage.priority.high,
+                    cache: FastImage.cacheControl.cacheOnly,
                   }}
                   resizeMode={FastImage.resizeMode.cover}
                 />
@@ -470,7 +471,7 @@ const Home = () => {
                   renderItem={(item: any, index: any) => {
                     if (item.index === closeProvider?.length - 1) {
                       // console.log('Close to you',item?.item);
-                      
+
                       return (
                         <>
                           <ClosetoYou

@@ -462,6 +462,7 @@ const Account = () => {
                           uri: profileData?.profilePic || imageUrl,
                           headers: {Authorization: 'someAuthToken'},
                           priority: FastImage.priority.high,
+                          cache: FastImage.cacheControl.cacheOnly
                         }}
                         resizeMode={FastImage.resizeMode.cover}
                       />

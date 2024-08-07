@@ -31,6 +31,8 @@ import TransactionHistory from '../screens/vendor/transactionHistory';
 import CreatePin from '../screens/user/createPin';
 import CreatePinPage from '../screens/user/createPin/create';
 import CreatePinSuccess from '../screens/user/createPin/success';
+import IdVerification from '../screens/common/IdVerification';
+import PhotoUploadScreen from '../screens/common/Picture';
 
 const Stack = createNativeStackNavigator();
 
@@ -170,6 +172,16 @@ export default function VendorNavigation() {
         name="CreatePinSuccess"
         component={CreatePinSuccess}
         options={{headerShown: false, animation: 'none'}}
+      />
+            <Stack.Screen
+        name="IdVerification"
+        component={IdVerification}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+      <Stack.Screen
+        name="PhotoUploadScreen"
+        component={PhotoUploadScreen}
+        options={{headerShown: false, animationEnabled: false}}
       />
     </Stack.Navigator>
   );

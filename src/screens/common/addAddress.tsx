@@ -437,7 +437,8 @@ const AddAddress = ({navigation}: any) => {
             }}
             query={{
               // key: 'AIzaSyBh4G4L8MGiDDxJcSDRPj9jI-BzdiaQo2U',
-              key: 'AIzaSyBGv53NEoMm3uPyA9U45ibSl3pOlqkHWN8',
+              // key: 'AIzaSyBGv53NEoMm3uPyA9U45ibSl3pOlqkHWN8',
+              key: 'AIzaSyD_dkWWAJNgffKQ5INpZsvMmXkPhenWMyQ',
               language: 'en',
               components: 'country:NG',
               // components: 'country:ng',
@@ -453,6 +454,10 @@ const AddAddress = ({navigation}: any) => {
               //   description: data.description,
               // });
               // console.log('hgfd',details?.geometry);
+
+              console.log('====================================');
+              console.log(data, 'details:', details);
+              console.log('====================================');
               setSelectedLocation({
                 latitude: details?.geometry.location.lat,
                 longitude: details?.geometry.location.lng,

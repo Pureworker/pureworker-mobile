@@ -1,34 +1,27 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback, useMemo} from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
   Platform,
   StatusBar,
   FlatList,
-  Modal,
   SafeAreaView,
   ScrollView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import Header from '../../components/Header';
 import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {SIZES, perHeight} from '../../utils/position/sizes';
+import {perHeight} from '../../utils/position/sizes';
 import ServiceCard2 from '../../components/cards/serviceCard2';
 import TextInputs from '../../components/TextInput2';
 import {
   getBookMarkedProviders,
-  getProviderByCategory,
   getProviderByService,
-  getSearchProvider,
-  getSearchQuery,
-  getUser,
 } from '../../utils/api/func';
 import {
   addprovidersByCateegory,
@@ -36,14 +29,12 @@ import {
 } from '../../store/reducer/mainSlice';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
-import colors from '../../constants/colors';
 
 const _Services = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const passedService = route.params?.service?.name;
   const id = route.params?.service?._id;
-  console.log('--kk-passed', route.params.service?._id);
 
   const _providersByCateegory = useSelector(
     (state: any) => state.user.providersByCateegory,
@@ -52,22 +43,16 @@ const _Services = ({route}: any) => {
     (state: any) => state.user.bookMarkedProviders,
   );
   const userData = useSelector((state: any) => state.user.userData);
-  const dummyData = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
   const [activeSection, setactiveSection] = useState('All');
   const [searchModal, setsearchModal] = useState(false);
-  const [isLoading, setisLoading] = useState(false);
   const [searchInput, setsearchInput] = useState('');
   const [savedProviders, setsavedProviders] = useState([]);
-  function metersToKilometers(meters) {
-    const kilometers = meters / 1000; // Convert meters to kilometers
-    const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
-    return `${roundedKilometers} km`;
-  }
-  // console.log('BOOKMARK', userData?.bookmarks);
+  const [isLoading, setisLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    const query = userData?.bookmarks?.filter(
-      (item: {service: any}) => item?.service === id,
-    );
+    const query = userData?.bookmarks?.filter(item => item?.service === id);
     setsavedProviders(query);
   }, [id, userData?.bookmarks]);
 
@@ -77,35 +62,33 @@ const _Services = ({route}: any) => {
     setSearchResults(_providersByCateegory);
   }, [_providersByCateegory]);
 
-  useEffect(() => {
+  const fetchProviders = useCallback(async () => {
     setisLoading(true);
-    const initGetUsers = async () => {
-      // setisLoading(true);
-      const res: any = await getProviderByService(id);
-      console.log('1dddddddd', res?.data);
-      if (res?.status === 201 || res?.status === 200) {
-        dispatch(addprovidersByCateegory(res?.data?.data));
-        setSearchResults(_providersByCateegory);
-      }
-      // setisLoading(false);
-    };
-    const initBookmarked = async () => {
-      // setisLoading(true);
-      const res: any = await getBookMarkedProviders(id);
-      // console.log('bbbbbmmm', res?.data?.data);
-      if (res?.status === 201 || res?.status === 200) {
-        dispatch(setbookMarkedProviders(res?.data?.data));
-        // dispatch(addprovidersByCateegory(res?.data?.data));
-      }
-    };
-    initGetUsers();
-    initBookmarked();
+    const res = await getProviderByService(id);
+    if (res?.status === 200 || res?.status === 201) {
+      dispatch(addprovidersByCateegory(res?.data?.data));
+      setSearchResults(res?.data?.data);
+    }
     setisLoading(false);
   }, [dispatch, id]);
-  const [loading, setLoading] = useState(false);
+
+  const fetchBookmarkedProviders = useCallback(async () => {
+    setisLoading(true);
+    const res = await getBookMarkedProviders(id);
+    if (res?.status === 200 || res?.status === 201) {
+      dispatch(setbookMarkedProviders(res?.data?.data));
+    }
+    setisLoading(false);
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    fetchProviders();
+    fetchBookmarkedProviders();
+  }, [fetchProviders, fetchBookmarkedProviders]);
+
   const debounce = (func, delay) => {
-    let timeoutId;
-    return function (...args) {
+    let timeoutId: string | number | NodeJS.Timeout | undefined;
+    return (...args) => {
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
@@ -114,63 +97,34 @@ const _Services = ({route}: any) => {
       }, delay);
     };
   };
-  // const handleSearch = async query => {
-  //   try {
-  //     // Optional: You can add loading state here if needed
-  //     setLoading(true);
 
-  //     // Use the useGetAllServicesQuery hook to fetch data based on the search input
-  //     const {data, error} = await getSearchProvider(query || searchInput);
-  //     console.log('resulk:', data);
-  //     if (error) {
-  //       console.error('Error fetching search results:', error);
-  //       // Handle error, show an error message, or take appropriate action
-  //     } else {
-  //       // Update the search results state with the fetched data
-
-  //       setSearchResults(data?.providers ?? []);
-  //     }
-  //   } catch (error) {
-  //     console.error('An unexpected error occurred during search:', error);
-  //     // Handle unexpected error, show an error message, or take appropriate action
-  //   } finally {
-  //     // Optional: You can update the loading state here if needed
-  //     setLoading(false);
-  //   }
-  // };
-  const handleSearch = query => {
-    try {
+  const handleSearch = useCallback(
+    (query: string) => {
       setLoading(true);
-      // Filter the data based on the search input
       const filteredData =
         _providersByCateegory?.filter((provider: {fullName: string}) =>
           provider.fullName.toLowerCase().includes(query.toLowerCase()),
         ) || [];
-
-      console.log('RESSSSS:', filteredData);
       setSearchResults(filteredData);
-    } catch (error) {
-      console.error('An unexpected error occurred during search:', error);
-      // Handle unexpected error, show an error message, or take appropriate action
-    } finally {
-      // Optional: You can update the loading state here if needed
       setLoading(false);
-    }
-  };
+    },
+    [_providersByCateegory],
+  );
 
-  const debouncedHandleSearch = debounce(handleSearch, 500);
+  const debouncedHandleSearch = useMemo(
+    () => debounce(handleSearch, 500),
+    [handleSearch],
+  );
 
   return (
-    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <ScrollView>
         <View
           style={{
             marginTop:
               Platform.OS === 'ios'
                 ? 10
-                : // getStatusBarHeight(true)
-                  StatusBar.currentHeight &&
-                  StatusBar.currentHeight + getStatusBarHeight(true) + 20,
+                : StatusBar?.currentHeight + getStatusBarHeight(true) + 20,
           }}
         />
         {!searchModal ? (
@@ -205,10 +159,7 @@ const _Services = ({route}: any) => {
                 style={{textAlign: 'center'}}
               />
             </View>
-            <TouchableOpacity
-              onPress={() => {
-                setsearchModal(true);
-              }}>
+            <TouchableOpacity onPress={() => setsearchModal(true)}>
               <Image
                 source={images.search}
                 style={{height: 25, width: 25}}
@@ -263,10 +214,8 @@ const _Services = ({route}: any) => {
           {_providersByCateegory.length > 0 && (
             <View style={tw`flex flex-row`}>
               <TouchableOpacity
-                onPress={() => {
-                  setactiveSection('All');
-                }}
-                style={tw`w-1/2 border-b-2  items-center ${
+                onPress={() => setactiveSection('All')}
+                style={tw`w-1/2 border-b-2 items-center ${
                   activeSection === 'All'
                     ? 'border-[#88087B]'
                     : 'border-[#000000]'
@@ -280,9 +229,7 @@ const _Services = ({route}: any) => {
                 />
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => {
-                  setactiveSection('Saved');
-                }}
+                onPress={() => setactiveSection('Saved')}
                 style={tw`w-1/2 border-b-2 items-center ${
                   activeSection === 'Saved'
                     ? 'border-[#88087B]'
@@ -298,245 +245,105 @@ const _Services = ({route}: any) => {
               </TouchableOpacity>
             </View>
           )}
-          {/* {searchResults?.length < 1 && (
-            <View
-              style={[
-                tw`bg-[#D9D9D9] flex flex-col rounded  mt-3 mx-2`,
-                {height: perHeight(80), alignItems: 'center'},
-              ]}>
-              <View style={tw`my-auto pl-8`}>
-                <Textcomp
-                  text={'Service Provider Not Found...'}
-                  size={17}
-                  lineHeight={17}
-                  color={'black'}
-                  fontFamily={'Inter-SemiBold'}
-                />
-              </View>
-            </View>
-          )} */}
-          <>
-            {!isLoading && (
-              <>
-                {_providersByCateegory.length < 1 &&
-                searchResults?.length < 1 ? (
-                  <View
-                    style={[
-                      tw`bg-[#D9D9D9] flex flex-col rounded  mt-3 mx-2`,
-                      {height: perHeight(80), alignItems: 'center'},
-                    ]}>
-                    <View style={tw`my-auto pl-8`}>
-                      <Textcomp
-                        text={'No service provider available'}
-                        size={17}
-                        lineHeight={17}
-                        color={'black'}
-                        fontFamily={'Inter-SemiBold'}
-                      />
-                    </View>
-                  </View>
-                ) : (
-                  <>
-                    {activeSection === 'All' && (
-                      <>
-                        <View style={[tw`items-center`, {flex: 1}]}>
-                          {searchResults.length < 1 && (
-                            <ScrollView scrollEnabled={false} horizontal>
-                              <FlatList
-                                style={{flex: 1}}
-                                data={_providersByCateegory}
-                                // data={searchResults}
-                                scrollEnabled={false}
-                                horizontal={false}
-                                renderItem={(item: any, index: any) => {
-                                  console.log(':id', item?.item?._id);
-                                  const ch = savedProviders?.filter(
-                                    (d: {service: any}) =>
-                                      d?.serviceProvider === item?.item?._id,
-                                  );
-                                  return (
-                                    <ServiceCard2
-                                      key={index}
-                                      navigation={navigation}
-                                      item={item.item}
-                                      index={item.index}
-                                      id={id}
-                                      serviceName={passedService}
-                                      save={ch?.length > 0 ? true : false}
-                                    />
-                                  );
-                                }}
-                                keyExtractor={item => item?.id}
-                                ListFooterComponent={() => (
-                                  <View style={tw`h-20`} />
-                                )}
-                                contentContainerStyle={{paddingBottom: 20}}
-                              />
-                            </ScrollView>
-                          )}
-                          {searchResults.length > 0 && (
-                            <ScrollView scrollEnabled={false} horizontal>
-                              <FlatList
-                                style={{flex: 1}}
-                                // data={_providersByCateegory}
-                                data={
-                                  searchResults.length > 0
-                                    ? searchResults
-                                    : _providersByCateegory
-                                }
-                                scrollEnabled={false}
-                                horizontal={false}
-                                renderItem={(item: any, index: any) => {
-                                  console.log(':id', item?.item?._id);
-                                  const ch = savedProviders?.filter(
-                                    (d: {service: any}) =>
-                                      d?.serviceProvider === item?.item?._id,
-                                  );
-                                  return (
-                                    <ServiceCard2
-                                      key={index}
-                                      navigation={navigation}
-                                      item={item.item}
-                                      index={item.index}
-                                      id={id}
-                                      serviceName={passedService}
-                                      save={ch?.length > 0 ? true : false}
-                                      savedProviders={savedProviders}
-                                    />
-                                  );
-                                }}
-                                keyExtractor={item => item?.id}
-                                ListFooterComponent={() => (
-                                  <View style={tw`h-20`} />
-                                )}
-                                contentContainerStyle={{paddingBottom: 20}}
-                              />
-                            </ScrollView>
-                          )}
-                        </View>
-                      </>
-                    )}
-                    {activeSection === 'Saved' && (
-                      <>
-                        {bookMarkedProviders?.length < 1 && (
-                          <View
-                            style={[
-                              tw`bg-[#D9D9D9] flex-1 w-full flex-col rounded  mt-4 mx-2`,
-                              {height: perHeight(80), alignItems: 'center'},
-                            ]}>
-                            <View style={tw`my-auto pl-8`}>
-                              <Textcomp
-                                text={'No Bookmarked Provider Found...'}
-                                size={17}
-                                lineHeight={17}
-                                color={'black'}
-                                fontFamily={'Inter-SemiBold'}
-                              />
-                            </View>
-                          </View>
-                        )}
-                        <View style={[tw`items-center`, {flex: 1}]}>
-                          <ScrollView scrollEnabled={false} horizontal>
-                            <FlatList
-                              data={bookMarkedProviders}
-                              horizontal={false}
-                              scrollEnabled={false}
-                              renderItem={(item: any, index: any) => {
-                                // console.log('SAVEDSSS--', item.item);
-                                return (
-                                  <TouchableOpacity>
-                                    <ServiceCard2
-                                      key={index}
-                                      navigation={navigation}
-                                      item={item.item?.serviceProvider}
-                                      index={item.index}
-                                      id={id}
-                                      serviceName={passedService}
-                                      save={true}
-                                      savedProviders={savedProviders}
-                                    />
-                                  </TouchableOpacity>
-                                );
-                              }}
-                              keyExtractor={item => item?._id}
-                              ListFooterComponent={() => (
-                                <View style={tw`h-20`} />
-                              )}
-                              contentContainerStyle={{paddingBottom: 20}}
-                            />
-                          </ScrollView>
-                        </View>
-                      </>
-                    )}
-                  </>
-                )}
-              </>
-            )}
-          </>
-          {/* )} */}
-          {/* {searchResults.length > 0 && searchInput && ( */}
-          {false && (
+          {!isLoading && (
             <>
-              <>
-                <View style={tw`mt-4 mx-[5%]`}>
-                  <Textcomp
-                    text={'Search Results'}
-                    size={18}
-                    lineHeight={25}
-                    color={'#000413'}
-                    fontFamily={'Inter'}
-                  />
+              {_providersByCateegory.length < 1 && searchResults.length < 1 ? (
+                <View
+                  style={[
+                    tw`bg-[#D9D9D9] flex flex-col rounded mt-3 mx-2`,
+                    {height: perHeight(80), alignItems: 'center'},
+                  ]}>
+                  <View style={tw`my-auto pl-8`}>
+                    <Textcomp
+                      text={'No service provider available'}
+                      size={17}
+                      lineHeight={17}
+                      color={'black'}
+                      fontFamily={'Inter-SemiBold'}
+                    />
+                  </View>
                 </View>
-                <ScrollView
-                  horizontal
-                  contentContainerStyle={{width: SIZES.width}}>
-                  <FlatList
-                    data={searchResults}
-                    keyExtractor={item => item.id?.toString()}
-                    renderItem={({item}) => (
-                      <TouchableOpacity
-                        style={tw`border-[${colors.darkPurple}] border-b justify-between items-center flex flex-row w-9/10 mx-auto mt-4 py-2 pb-4 px-3`}
-                        onPress={() => {
-                          // initFecthProviders(item?.id, item);
-                        }}>
-                        <View style={tw`flex flex-row`}>
-                          <Image
-                            source={
-                              item?.profilePic
-                                ? {uri: item?.profilePic}
-                                : images.profile
-                            }
-                            style={[tw`bg-red-400`, {width: 32}]}
+              ) : (
+                <>
+                  {activeSection === 'All' && (
+                    <FlatList
+                      data={
+                        searchResults.length > 0
+                          ? searchResults
+                          : _providersByCateegory
+                      }
+                      keyExtractor={item => item?._id}
+                      renderItem={({item, index}) => {
+                        const isSaved = savedProviders.some(
+                          d => d?.serviceProvider === item?._id,
+                        );
+                        return (
+                          <ServiceCard2
+                            key={index}
+                            navigation={navigation}
+                            item={item}
+                            index={index}
+                            id={id}
+                            serviceName={passedService}
+                            save={isSaved}
                           />
-                          <Text
-                            style={tw`text-[${colors.darkPurple}] ml-3 font-600`}>
-                            {item?.fullName || item?.businessName}
-                          </Text>
-                        </View>
-                        <View style={tw`flex flex-row items-center`}>
-                          <Image
-                            resizeMode="contain"
-                            source={images.location}
-                            style={[tw``, {width: 20}]}
-                          />
-                          <Text
-                            style={tw`text-[${colors.darkPurple}] ml-3 font-600`}>
-                            {item?.distance}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    )}
-                  />
-                </ScrollView>
-              </>
+                        );
+                      }}
+                      contentContainerStyle={{paddingBottom: 20}}
+                      ListFooterComponent={() => <View style={tw`h-20`} />}
+                    />
+                  )}
+                  {activeSection === 'Saved' &&
+                    (bookMarkedProviders.length < 1 ? (
+                      <View style={tw`my-4`}>
+                        <Textcomp
+                          text={'No saved provider available'}
+                          size={17}
+                          lineHeight={17}
+                          color={'black'}
+                          fontFamily={'Inter-SemiBold'}
+                          style={{textAlign: 'center'}}
+                        />
+                      </View>
+                    ) : (
+                      <FlatList
+                        data={bookMarkedProviders}
+                        keyExtractor={item => item?._id}
+                        renderItem={({item, index}) => {
+                          const isSaved = savedProviders.some(
+                            d => d?.serviceProvider === item?._id,
+                          );
+                          return (
+                            <ServiceCard2
+                              key={index}
+                              navigation={navigation}
+                              item={item}
+                              index={index}
+                              id={id}
+                              serviceName={passedService}
+                              save={isSaved}
+                            />
+                          );
+                        }}
+                        contentContainerStyle={{paddingBottom: 20}}
+                        ListFooterComponent={() => <View style={tw`h-20`} />}
+                      />
+                    ))}
+                </>
+              )}
             </>
           )}
         </View>
-        <View style={tw`h-20`} />
+        <Spinner
+          visible={isLoading}
+          cancelable={false}
+          size={'small'}
+          animation={'fade'}
+          customIndicator={<CustomLoading />}
+        />
       </ScrollView>
-      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </SafeAreaView>
   );
 };
 
-export default _Services;
+export default React.memo(_Services);

@@ -1,14 +1,13 @@
-import {Image, View, TouchableOpacity} from 'react-native';
-import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
-import React, {useEffect, useState} from 'react';
-
-import images from '../../constants/images';
+import React, {useEffect, useState, useCallback} from 'react';
+import {View, Image, TouchableOpacity} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import FastImage from 'react-native-fast-image';
 import tw from 'twrnc';
+import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
+import images from '../../constants/images';
 import Textcomp from '../Textcomp';
 import colors from '../../constants/colors';
-
 import Review from '../Review';
-import FastImage from 'react-native-fast-image';
 import {
   bookMarkServiceProvide,
   deletebookMarkServiceProvide,
@@ -16,7 +15,6 @@ import {
   getUser,
 } from '../../utils/api/func';
 import {ToastShort} from '../../utils/utils';
-import {useDispatch, useSelector} from 'react-redux';
 import {
   addUserData,
   setbookMarkedProviders,
@@ -26,307 +24,179 @@ interface Data {
   item: any;
   navigation: any;
   id: any;
-  serviceName: any;
-  save: any;
-  savedProviders: any;
-  noBookmark?: any;
+  serviceName: string;
+  save: boolean;
+  savedProviders: any[];
+  noBookmark?: boolean;
 }
-const ServiceCard2 = ({
-  item,
-  // index,
-  navigation,
-  id,
-  serviceName,
-  save,
-  savedProviders,
-  noBookmark,
-}: Data) => {
-  const [saved, setsaved] = useState(save);
-  // const portfolio = item?.portfolio?.filter(_item => _item?.service === id);
-  const price = item?.priceRange?.filter(
-    (_item: {service: any}) => _item?.service === id,
-  );
-  console.log('pased', price, item?.description, item?.distance, 'item:', item);
-  // console.log('lllll---');
-  function metersToKilometers(meters: any) {
-    const kilometers = Number(meters) / 1000; // Convert meters to kilometers
-    const roundedKilometers = Math.round(kilometers); // Round to the nearest whole number
-    return `${roundedKilometers}km`;
-  }
-  const bookMarkedProviders = useSelector(
-    (state: any) => state.user.bookMarkedProviders,
-  );
-  // const handleBookmark = async () => {
-  //   const res: any = await bookMarkServiceProvide({
-  //     service: id,
-  //     serviceProvider: item?._id,
-  //   });
-  //   if (res?.status === 200 || res?.status === 201) {
-  //     ToastShort('Service Provider bookmarked!.');
-  //     setsaved(!saved);
-  //   } else {
-  //     ToastShort(
-  //       `${
-  //         res?.error?.message
-  //           ? res?.error?.message
-  //           : res?.error?.data?.message
-  //           ? res?.error?.data?.message
-  //           : 'Oops!, an error occured'
-  //       }`,
-  //     );
-  //   }
-  // };
 
-  const handleBookmark = async () => {
-    try {
-      const res: any = await bookMarkServiceProvide({
-        service: id,
-        serviceProvider: item?._id,
-      });
-      // const res: any = await bookMarkServiceProvide(data);
-      if (res?.status === 200 || res?.status === 201) {
-        ToastShort('Service Provider bookmarked!.');
-        setsaved(!saved);
-      } else {
-        ToastShort(
-          `${
-            res?.error?.message
-              ? res?.error?.message
-              : res?.error?.data?.message
-              ? res?.error?.data?.message
-              : 'Oops!, an error occured'
-          }`,
-        );
-      }
-    } catch (error) {
-    } finally {
-      const initGetUsers = async () => {
-        const res: any = await getUser('');
+const metersToKilometers = (meters: number): string => {
+  const kilometers = meters / 1000;
+  return `${Math.round(kilometers)}km`;
+};
+
+const ServiceCard2: React.FC<Data> = React.memo(
+  ({item, navigation, id, serviceName, save, savedProviders, noBookmark}) => {
+    const [saved, setSaved] = useState<boolean>(save);
+    const dispatch = useDispatch();
+    const bookMarkedProviders = useSelector(
+      (state: any) => state.user.bookMarkedProviders,
+    );
+
+    const handleBookmark = useCallback(async () => {
+      try {
+        const res = await bookMarkServiceProvide({
+          service: id,
+          serviceProvider: item?._id,
+        });
+
+        if (res?.status === 200 || res?.status === 201) {
+          ToastShort('Service Provider bookmarked!.');
+          setSaved(!saved);
+        } else {
+          ToastShort(
+            res?.error?.message ||
+              res?.error?.data?.message ||
+              'Oops!, an error occured',
+          );
+        }
+      } finally {
+        const res = await getUser('');
         if (res?.status === 201 || res?.status === 200) {
           dispatch(addUserData(res?.data?.user));
-
-          const query = res?.data?.user?.bookmarks?.filter(
-            (item: {service: any}) => item?.service === id,
-          );
-          // setsavedProviders(query);
         }
-      };
-      initBookmarked();
-      initGetUsers();
-    }
-  };
-  const dispatch = useDispatch();
-  const ch = savedProviders?.filter(
-    (d: {service: any}) => d?.serviceProvider === item?._id,
-  );
-  const initBookmarked = async () => {
-    const res: any = await getBookMarkedProviders(id);
-    console.log('bbbbbmmm', res?.data?.data);
-    if (res?.status === 201 || res?.status === 200) {
-      dispatch(setbookMarkedProviders(res?.data?.data));
-      // dispatch(addprovidersByCateegory(res?.data?.data));
-    }
-  };
+        initBookmarked();
+      }
+    }, [saved, item, id, dispatch]);
 
-  useEffect(() => {
-    const _initBookmarked = async () => {
-      const res: any = await getBookMarkedProviders(id);
-      console.log('bbbbbmmm', res?.data?.data);
+    const handleRemoveBookmark = useCallback(async () => {
+      try {
+        const ch = savedProviders?.filter(
+          provider => provider?.serviceProvider === item?._id,
+        );
+        const __id = ch?.[0]?._id;
+        const res = await deletebookMarkServiceProvide(__id);
+
+        if (res?.status === 200 || res?.status === 201 || res?.status === 204) {
+          ToastShort('Unbookmarked!');
+          setSaved(!saved);
+        } else {
+          ToastShort(
+            res?.error?.message ||
+              res?.error?.data?.message ||
+              'Oops!, an error occured',
+          );
+        }
+      } finally {
+        const res = await getUser('');
+        if (res?.status === 201 || res?.status === 200) {
+          dispatch(addUserData(res?.data?.user));
+        }
+        initBookmarked();
+      }
+    }, [saved, item, id, savedProviders, dispatch]);
+
+    const initBookmarked = useCallback(async () => {
+      const res = await getBookMarkedProviders(id);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(setbookMarkedProviders(res?.data?.data));
-        // dispatch(addprovidersByCateegory(res?.data?.data));
       }
-    };
-    _initBookmarked();
-  }, []);
+    }, [id, dispatch]);
 
-  console.log('====================================');
-  console.log(bookMarkedProviders);
-  console.log('====================================');
-  const handleRemoveBookmark = async () => {
-    try {
-      const ch = savedProviders?.filter(
-        (d: {service: any}) => d?.serviceProvider === item?._id,
-      );
-      const __id = ch?.[0]?._id;
-      const res: any = await deletebookMarkServiceProvide(__id);
-      if (res?.status === 200 || res?.status === 201 || res?.status === 204) {
-        ToastShort('Unboomarked!');
-        setsaved(!saved);
-      } else {
-        console.log(res?.status);
-
-        ToastShort(
-          `${
-            res?.error?.message
-              ? res?.error?.message
-              : res?.error?.data?.message
-              ? res?.error?.data?.message
-              : 'Oops!, an error occured'
-          }`,
-        );
-      }
-    } catch (error) {
-    } finally {
-      const initGetUsers = async () => {
-        const res: any = await getUser('');
-        if (res?.status === 201 || res?.status === 200) {
-          dispatch(addUserData(res?.data?.user));
-          // setsavedProviders(query);
-        }
-      };
-      initGetUsers();
+    useEffect(() => {
       initBookmarked();
-    }
-  };
+    }, [initBookmarked]);
 
-  const [noBook, setnoBook] = useState(false);
+    useEffect(() => {
+      if (noBookmark) {
+        setNoBook(true);
+      }
+    }, [noBookmark]);
 
-  useEffect(() => {
-    if (noBookmark && noBookmark === true) {
-      setnoBook(true);
-    }
-  }, []);
-
-  return (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate('ServiceProviderProfile', {
-          item: item,
-          serviceName: serviceName,
-          id: id,
-        });
-      }}
-      style={[
-        tw` mt-4 mx-auto bg-[${colors.darkPurple}]`,
-        {
-          height: perWidth(130),
-          width: SIZES.width * 0.95,
-          borderWidth: 0,
-          borderRadius: 5,
-          // marginLeft: index === 0 ? 10 : 3,
-          paddingHorizontal: perWidth(16),
-          paddingVertical: perWidth(14),
-        },
-      ]}>
-      <View style={tw`flex flex-row `}>
-        <View style={[tw``, {width: perWidth(50), height: perWidth(50)}]}>
-          {/*  */}
-
-          <>
-            <FastImage
-              style={{
-                width: perWidth(50),
-                height: perWidth(50),
-                borderRadius: perWidth(50) / 2,
-              }}
-              source={{
-                uri: item?.profilePic
-                  ? item.profilePic
-                  : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                headers: {Authorization: 'someAuthToken'},
-                priority: FastImage.priority.high,
-              }}
-              resizeMode={FastImage.resizeMode.cover}
-            />
-            <View
-              style={[
-                tw`absolute bottom-0 border-2 right-1 rounded-full`,
-                {width: 8, height: 8, backgroundColor: colors.green},
-              ]}
-            />
-          </>
-
-          {/* {item?.profilePic ? (
-<></>
-          ) : (
-            <Image
-              resizeMode="cover"
-              style={{
-                width: perWidth(50),
-                height: perWidth(50),
-                borderRadius: perWidth(50) / 2,
-              }}
-              source={images.welcome}
-            />
-          )} */}
-        </View>
-        <View style={[tw`flex-1`, {marginLeft: perWidth(12)}]}>
-          <View style={[tw`flex flex-row justify-between`, {}]}>
-            <View style={[tw``, {}]}>
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('ServiceProviderProfile', {
+            item,
+            serviceName,
+            id,
+          });
+        }}
+        style={[
+          tw`mt-4 mx-auto bg-[${colors.darkPurple}]`,
+          {
+            height: perWidth(130),
+            width: SIZES.width * 0.95,
+            borderRadius: 5,
+            paddingHorizontal: perWidth(16),
+            paddingVertical: perWidth(14),
+          },
+        ]}>
+        <View style={tw`flex flex-row`}>
+          <FastImage
+            style={{
+              width: perWidth(50),
+              height: perWidth(50),
+              borderRadius: perWidth(50) / 2,
+            }}
+            source={{
+              uri:
+                item?.profilePic ||
+                'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+              headers: {Authorization: 'someAuthToken'},
+              priority: FastImage.priority.high,
+              cache: FastImage.cacheControl.cacheOnly,
+            }}
+            resizeMode={FastImage.resizeMode.cover}
+          />
+          <View
+            style={tw`absolute bottom-0 border-2 right-1 rounded-full bg-green-500`}
+          />
+          <View style={[tw`flex-1 ml-3`]}>
+            <View style={tw`flex flex-row justify-between`}>
               <Textcomp
                 text={`₦ ${item?.portfolio?.minPrice}`}
                 size={12}
                 lineHeight={14}
                 color={colors.white}
-                fontFamily={'Inter-SemiBold'}
+                fontFamily="Inter-SemiBold"
               />
+              {noBookmark === false && (
+                <TouchableOpacity
+                  onPress={() =>
+                    saved ? handleRemoveBookmark() : handleBookmark()
+                  }>
+                  <Image
+                    resizeMode="contain"
+                    style={{width: perWidth(20), height: perWidth(20)}}
+                    source={saved ? images.saved : images.save}
+                  />
+                </TouchableOpacity>
+              )}
             </View>
-            {noBookmark && noBookmark === false && (
-              <TouchableOpacity
-                onPress={() => {
-                  if (ch?.length > 0) {
-                    handleRemoveBookmark();
-                  } else {
-                    handleBookmark();
-                  }
-                }}>
-                <Image
-                  resizeMode="contain"
-                  style={{
-                    width: perWidth(20),
-                    height: perWidth(20),
-                  }}
-                  source={saved ? images.saved : images.save}
-                />
-              </TouchableOpacity>
-            )}
-          </View>
-          <View style={[tw``, {width: perWidth(252), marginTop: perHeight(4)}]}>
             <Textcomp
               text={`${item?.portfolio?.description}`}
               size={12}
               lineHeight={14}
               color={colors.white}
-              fontFamily={'Inter-SemiBold'}
+              fontFamily="Inter-SemiBold"
               numberOfLines={2}
+              style={{width: perWidth(252), marginTop: perHeight(4)}}
             />
           </View>
-          {/* <View style={[tw``, {width: perWidth(105), marginTop: perWidth(4)}]}>
+        </View>
+        <View style={{width: perWidth(105), marginTop: perWidth(4)}}>
           <Textcomp
-            text={'$20/hr'}
+            text={item?.businessName || `${item?.firstName} ${item?.lastName}`}
             size={12}
             lineHeight={14}
+            numberOfLines={1}
             color={colors.white}
-            fontFamily={'Inter-SemiBold'}
-          />
-        </View> */}
-        </View>
-      </View>
-      <View>
-        <View style={[tw``, {width: perWidth(105), marginTop: perWidth(4)}]}>
-          <Textcomp
-            text={
-              item?.businessName
-                ? `${item?.businessName}`
-                : `${item?.firstName} ${item?.lastName}`
-            }
-            size={12}
-            lineHeight={14}
-            numberOfLines={2}
-            color={colors.white}
-            fontFamily={'Inter-SemiBold'}
+            fontFamily="Inter-SemiBold"
           />
         </View>
-      </View>
-
-      <View
-        style={[
-          tw`flex flex-row justify-between items-center `,
-          {marginTop: perHeight(3)},
-        ]}>
-        <View style={tw`flex flex-row justify-between items-center`}>
-          <View style={[tw``, {}]}>
+        <View style={tw`flex flex-row justify-between items-center mt-3`}>
+          <View style={tw`flex flex-row items-center`}>
             <Image
               resizeMode="cover"
               style={{
@@ -336,10 +206,6 @@ const ServiceCard2 = ({
               }}
               source={images.location}
             />
-          </View>
-
-          <View
-            style={[tw`ml-1`, {width: perWidth(80), marginTop: perWidth(1)}]}>
             <Textcomp
               text={`${
                 item?.distance ? metersToKilometers(item?.distance) : '0Km'
@@ -347,33 +213,23 @@ const ServiceCard2 = ({
               size={12}
               lineHeight={14}
               color={colors.primary}
-              fontFamily={'Inter-SemiBold'}
+              fontFamily="Inter-SemiBold"
+              style={{
+                marginLeft: perWidth(1),
+                width: perWidth(80),
+                marginTop: perWidth(1),
+              }}
             />
           </View>
+          <Review
+            value={item?.averageRating}
+            editable={false}
+            style={{width: perWidth(80), marginTop: perWidth(1)}}
+          />
         </View>
+      </TouchableOpacity>
+    );
+  },
+);
 
-        <View
-          style={[
-            tw`ml-auto  items-end`,
-            {width: perWidth(80), marginTop: perWidth(1)},
-          ]}>
-          {/* <Rating
-            type="custom"
-            ratingImage={images.star2}
-            ratingColor="white"
-            ratingBackgroundColor="transparent"
-            ratingCount={5}
-            imageSize={10}
-            onFinishRating={() => {}}
-            style={{paddingVertical: 10}}
-            showRating={false}
-            readonly={true}
-            startingValue={2}
-          /> */}
-          <Review value={item?.averageRating} editable={false} />
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
 export default ServiceCard2;

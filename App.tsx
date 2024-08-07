@@ -486,5 +486,5 @@ const codePushOptions = {
     codePush.CheckFrequency.ON_APP_START,
   installMode: codePush.InstallMode.IMMEDIATE,
 };
-export default codePush(codePushOptions)(App);
-// export default App;
+// export default codePush(codePushOptions)(App);
+export default App;

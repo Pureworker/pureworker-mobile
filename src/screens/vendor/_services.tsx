@@ -172,23 +172,6 @@ const _Services = ({route}: any) => {
                 fontFamily={'Inter-SemiBold'}
               />
             </TouchableOpacity>
-            {/* <TouchableOpacity
-              onPress={() => {
-                setactiveSection('Saved');
-              }}
-              style={tw`w-1/2 border-b-2 items-center ${
-                activeSection === 'Saved'
-                  ? 'border-[#88087B]'
-                  : 'border-[#000000]'
-              }`}>
-              <Textcomp
-                text={'Saved'}
-                size={14}
-                lineHeight={16}
-                color={activeSection === 'Saved' ? '#88087B' : '#000413'}
-                fontFamily={'Inter-SemiBold'}
-              />
-            </TouchableOpacity> */}
           </View>
 
           <>

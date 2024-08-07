@@ -311,6 +311,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
                   'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                 headers: {Authorization: 'someAuthToken'},
                 priority: FastImage.priority.high,
+                cache: FastImage.cacheControl.cacheOnly,
               }}
               resizeMode={FastImage.resizeMode.cover}
             />
@@ -536,7 +537,15 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
               onPress={() => {
                 // handleUpdateStatus('ACCEPTED');
                 // handleAccept();
-                setready(true);
+                const isIdentityOrCacPresent =
+                  userData?.identity?.number || userData?.cacNo;
+
+                if (isIdentityOrCacPresent) {
+                  setready(true);
+                } else {
+                  ToastShort('Please provide identity information');
+                  navigation.navigate('PhotoUploadScreen');
+                }
               }}
               style={[
                 tw`bg-[${colors.primary}] items-center justify-center`,
@@ -715,7 +724,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
                 },
               ]}>
               <Textcomp
-                text={'Completed '}
+                text={'Completed'}
                 size={12}
                 lineHeight={14}
                 color={colors.black}
@@ -734,7 +743,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
               style={[
                 tw`bg-[${colors.primary}] items-center justify-center`,
                 {
-                  width: perWidth(100),
+                  width: perWidth(110),
                   height:
                     Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
                   borderRadius: 7,
@@ -744,7 +753,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
               <Textcomp
                 // text={'Dispute '}
                 text={'Contact Support'}
-                size={12}
+                size={11.5}
                 lineHeight={14}
                 color={colors.black}
                 fontFamily={'Inter-SemiBold'}
@@ -766,7 +775,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
               style={[
                 tw`bg-[${colors.primary}] items-center justify-center`,
                 {
-                  width: perWidth(150),
+                  width: perWidth(155),
                   height:
                     Platform.OS === 'ios' ? perHeight(22.5) : perHeight(27.5),
                   borderRadius: 7,
@@ -776,7 +785,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
               <Textcomp
                 // text={'Dispute '}
                 text={'Contact Support'}
-                size={12}
+                size={11.5}
                 lineHeight={14}
                 color={colors.black}
                 fontFamily={'Inter-SemiBold'}

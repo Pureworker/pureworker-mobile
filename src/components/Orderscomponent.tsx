@@ -34,7 +34,7 @@ import LocationIcon2 from '../assets/svg/Location2';
 import ContactSupportIcon from '../assets/svg/contactSupport';
 import CancelIcon from '../assets/svg/cancel3';
 
-const Orderscomponent =  ({
+const Orderscomponent = ({
   item,
   index,
   status,
@@ -126,7 +126,9 @@ const Orderscomponent =  ({
     try {
       setisLoading(true);
       // const res: any = await getProviderLocation('65cb95af993d69fb83faf837');
-      const res: any = await getProviderLocation(item?.serviceProvider._id || item?.serviceProvider?.id);
+      const res: any = await getProviderLocation(
+        item?.serviceProvider._id || item?.serviceProvider?.id,
+      );
       console.log('location.........', res?.data);
       if (res?.status === 201 || res?.status === 200) {
         if (res?.data?.data !== null) {
@@ -149,14 +151,13 @@ const Orderscomponent =  ({
   const fetchOrderByID = async (item: any) => {
     setisLoading(true);
     const res: any = await getOrderDetailbyID(item?._id ?? item?.id);
-    console.log('oooooooo', res?.data); 
+    console.log('oooooooo', res?.data);
     if (res?.status === 201 || res?.status === 200) {
       dispatch(addViewOrder(res?.data?.data?.order));
       navigation.navigate('OrderActive', {data: item});
     }
     setisLoading(false);
   };
-
 
   // const handleToLocation = async () => {
   //   try {
@@ -181,8 +182,8 @@ const Orderscomponent =  ({
   //   }
   // };
 
-  console.log('item:---',item);
-  
+  console.log('item:---', item);
+
   return (
     <>
       <>
@@ -243,6 +244,7 @@ const Orderscomponent =  ({
                   // 'https://res.cloudinary.com/dr0pef3mn/image/upload/v1694275934/Assets/1694275933654-Ellipse%2014.png.png',
                   headers: {Authorization: 'someAuthToken'},
                   priority: FastImage.priority.high,
+                  cache: FastImage.cacheControl.cacheOnly,
                 }}
                 resizeMode={FastImage.resizeMode.cover}
               />
@@ -279,20 +281,19 @@ const Orderscomponent =  ({
                 />
               </View>
               <View style={tw`ml-auto`}>
-                {status === 'INPROGRESS' 
-                // &&
-                //   item?.isCompletedByProvider === false 
-                  && (
-                    <View style={[tw``, {}]}>
-                      <Textcomp
-                        text={'IN PROGRESS'}
-                        size={14}
-                        lineHeight={16}
-                        color={colors.primary}
-                        fontFamily={'Inter-Bold'}
-                      />
-                    </View>
-                  )}
+                {status === 'INPROGRESS' && (
+                  // &&
+                  //   item?.isCompletedByProvider === false
+                  <View style={[tw``, {}]}>
+                    <Textcomp
+                      text={'IN PROGRESS'}
+                      size={14}
+                      lineHeight={16}
+                      color={colors.primary}
+                      fontFamily={'Inter-Bold'}
+                    />
+                  </View>
+                )}
                 {status === 'PENDING' && (
                   <View style={[tw``, {}]}>
                     <Textcomp

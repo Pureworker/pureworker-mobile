@@ -38,8 +38,10 @@ import LocationIcon3 from '../assets/svg/LocationIcon3';
 import UploadModal from './components/UploadModal';
 import {ToastShort} from '../utils/utils';
 import CustomLoading from '../components/customLoading';
+import IdCheckIcon from '../assets/svg/IdCheckIcon';
 const DrawerContent = () => {
   const navigation = useNavigation<StackNavigation>();
+  const userData = useSelector((state: any) => state.user.userData);
   const navLinks = [
     {label: 'Wallet', route: 'Wallet', icon: images.wallet, notint: false},
     {label: 'Support', route: 'Support', icon: images.support, notint: false},
@@ -58,6 +60,20 @@ const DrawerContent = () => {
     },
     {label: 'Referrals', route: 'Referrals', icon: images.info, notint: false},
   ];
+  // Conditionally include 'ID Check' if user is a freelancer
+  if (
+    userData?.accountType?.toUpperCase() === 'FREELANCER' ||
+    userData?.accountType?.toUpperCase() === 'BUSINESS' ||
+    userData?.accountType?.toUpperCase() === 'PROVIDER'
+  ) {
+    navLinks.splice(4, 0, {
+      label: 'ID Check',
+      route: 'PhotoUploadScreen',
+      icon: images.location1,
+      icon2: <IdCheckIcon />,
+      notint: true,
+    });
+  }
   const navLinks2 = [
     {label: 'Log out', route: 'Logout', icon: images.logout},
     {
@@ -117,7 +133,6 @@ const DrawerContent = () => {
     }
   };
   const userType = useSelector((state: any) => state.user.isLoggedIn);
-  const userData = useSelector((state: any) => state.user.userData);
   const supportUser = useSelector((store: any) => store.user.supportUser);
   const [PhotoUri, setPhotoUri] = useState('');
   const options = {mediaType: 'photo', selectionLimit: 1};
@@ -341,7 +356,7 @@ const DrawerContent = () => {
           <View
             style={[
               tw`bg-[#2D303C] flex flex-row px-2 w-[90%] mx-auto rounded-lg items-center`,
-              {marginTop: perHeight(10), height: perHeight(88)},
+              {marginTop: perHeight(10), height: perHeight(80)},
             ]}>
             <TouchableOpacity
               style={[tw`rounded-full`, {width: 50, height: 50}]}
@@ -368,6 +383,7 @@ const DrawerContent = () => {
                     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                   headers: {Authorization: 'someAuthToken'},
                   priority: FastImage.priority.high,
+                  cache: FastImage.cacheControl.cacheOnly,
                 }}
                 resizeMode={FastImage.resizeMode.cover}
               />
@@ -422,7 +438,7 @@ const DrawerContent = () => {
           <View
             style={[
               tw` px-2 w-[90%] pb-0 pt-3 mx-auto rounded-lg`,
-              {marginTop: perHeight(40)},
+              {marginTop: perHeight(20)},
             ]}>
             {navLinks.map((link, index) => (
               <TouchableOpacity
@@ -524,7 +540,7 @@ const DrawerContent = () => {
           <View style={[tw`mt-4 ml-3`, {}]}>
             <Textcomp
               text={`Version: ${
-                Platform.OS === 'ios' ? '1.0.0.47' : '1.0.0.47'
+                Platform.OS === 'ios' ? '1.0.0.48' : '1.0.0.48'
               }`}
               size={14}
               color={'#000000'}

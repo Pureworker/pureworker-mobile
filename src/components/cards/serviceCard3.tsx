@@ -148,6 +148,7 @@ const ServiceCard3 = ({
                   uri: item?.profilePic || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                   headers: {Authorization: 'someAuthToken'},
                   priority: FastImage.priority.high,
+                  cache: FastImage.cacheControl.cacheOnly
                 }}
                 resizeMode={FastImage.resizeMode.cover}
               />

@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
   Platform,
@@ -18,11 +17,7 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
 import Snackbar from 'react-native-snackbar';
-import {
-  deleteAccount,
-  f_deactivateAccount,
-  _deactivateAccount,
-} from '../../utils/api/func';
+import {deleteAccount, _deactivateAccount} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import {ToastLong} from '../../utils/utils';
@@ -33,14 +28,9 @@ const DeactivateAccount = () => {
   const dispatch = useDispatch();
 
   const [deactivateAccount, setdeactivateAccount] = useState('');
-  // const [deleteAccount, setdeleteAccount] = useState(false);
-
   //store
   const userData = useSelector((state: any) => state.user.userData);
-
   const userType = useSelector((state: any) => state.user.isLoggedIn);
-  // console.log('user_', userType);
-
   const [isLoading, setisLoading] = useState(false);
   const handleDeactivate = async () => {
     console.log('started');

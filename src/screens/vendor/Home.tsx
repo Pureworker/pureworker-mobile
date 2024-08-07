@@ -294,30 +294,13 @@ const Home = ({navigation}: any) => {
                         uri: userData?.profilePic,
                         headers: {Authorization: 'someAuthToken'},
                         priority: FastImage.priority.high,
+                        cache: FastImage.cacheControl.cacheOnly,
                       }
                     : images.profile
                 }
                 resizeMode={FastImage.resizeMode.cover}
               />
             </TouchableOpacity>
-            {/* <TextInputs
-              style={{marginTop: 10, width: '70%'}}
-              labelText={'Search'}
-              state={search}
-              setState={setSearch}
-              icon={
-                <Image
-                  resizeMode="contain"
-                  source={images.search}
-                  style={{
-                    width: 20,
-                    height: 20,
-                    tintColor: '#000413',
-                    marginLeft: 5,
-                  }}
-                />
-              }
-            /> */}
             <TouchableOpacity
               onPress={() => {
                 setInfoModal(true);

@@ -49,23 +49,9 @@ const SubCategoryItem = ({style, itemDetail, index}: any) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        console.log(
-          '====================================',
-          providersByCateegory,
-        );
-        console.log(itemDetail);
-        console.log('====================================');
+        // console.log(providersByCateegory);
+        // console.log(itemDetail);
         initFecthProviders(itemDetail?._id);
-
-        // if (
-        //   Array.isArray(category) &&
-        //   category.length &&
-        //   category.includes(title)
-        // ) {
-        //   dispatch(removeCategory(title));
-        // } else {
-        //   dispatch(addCategory(title));
-        // }
       }}
       style={[
         tw`rounded-full items-center justify-center `,
@@ -81,7 +67,7 @@ const SubCategoryItem = ({style, itemDetail, index}: any) => {
         fontType={'semiBold'}
         style={{
           color: colors.white,
-          marginLeft:0,
+          marginLeft: 0,
           paddingVertical: 4,
           paddingHorizontal: 10,
         }}>
