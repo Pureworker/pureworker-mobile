@@ -18,7 +18,7 @@ const OtpInputComponent: React.FC<{
       onTextChange={onTextChange}
       onFilled={onFilled}
       hideStick
-    //   secureTextEntry
+      secureTextEntry
       theme={{
         containerStyle: styles.container,
         inputsContainerStyle: styles.inputsContainer,

@@ -26,6 +26,7 @@ import CustomLoading from '../../components/customLoading';
 import socket from '../../utils/socket';
 import {formatAmount2} from '../../utils/validations';
 import WalletModal from '../../components/modals/WalletModal';
+import TransPin from '../../components/modals/transPin';
 
 const Wallet = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -553,6 +554,7 @@ const Wallet = () => {
           </View>
         </Modal>
       )}
+
     </>
   );
 };

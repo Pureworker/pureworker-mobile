@@ -74,5 +74,9 @@ const images = {
   rate: require('../assets/images/rate.png'),
   Naira2: require('../assets/images/Naira2.png'),
   chatImageIcon: require('../assets/images/chatImage.png'),
+
+  close: require('../assets/images/close.png'),
+  success: require('../assets/images/success.png'),
+  process: require('../assets/images/process.png'),
 };
 export default images;

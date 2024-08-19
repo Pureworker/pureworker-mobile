@@ -537,10 +537,10 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
               onPress={() => {
                 // handleUpdateStatus('ACCEPTED');
                 // handleAccept();
+                console.log(userData?.identity);
                 const isIdentityOrCacPresent =
                   userData?.identity?.number || userData?.cacNo;
-
-                if (isIdentityOrCacPresent) {
+                if (userData?.isIdentitySubmitted) {
                   setready(true);
                 } else {
                   ToastShort('Please provide identity information');
@@ -977,7 +977,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           <View
             style={[
               tw`p-4 mt-auto bg-[#D9D9D9]`,
-              {minHeight: SIZES.height * 0.7},
+              {minHeight: SIZES.height * 0.7, marginBottom: -20},
             ]}>
             <TouchableOpacity
               onPress={() => {

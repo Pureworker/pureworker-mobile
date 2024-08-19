@@ -33,6 +33,7 @@ import CreatePinPage from '../screens/user/createPin/create';
 import CreatePinSuccess from '../screens/user/createPin/success';
 import IdVerification from '../screens/common/IdVerification';
 import PhotoUploadScreen from '../screens/common/Picture';
+import Processing from '../screens/common/Processing';
 
 const Stack = createNativeStackNavigator();
 
@@ -181,6 +182,11 @@ export default function VendorNavigation() {
       <Stack.Screen
         name="PhotoUploadScreen"
         component={PhotoUploadScreen}
+        options={{headerShown: false, animationEnabled: false}}
+      />
+            <Stack.Screen
+        name="IdProcessing"
+        component={Processing}
         options={{headerShown: false, animationEnabled: false}}
       />
     </Stack.Navigator>

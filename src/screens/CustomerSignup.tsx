@@ -394,16 +394,6 @@ export default function CustomerSignup() {
               generalStyles.rowBetween,
               {marginHorizontal: 25, marginTop: 45},
             ]}>
-            {/* <Tooltip
-              isVisible={toolTipLeftVisible}
-              content={<Text>Check this out!</Text>}
-              placement="top"
-              onClose={() => setToolTipLeftVisible(false)}
-              >
-              <TouchableOpacity onPress={() => {}}>
-                <Text style={{color: 'white'}}>Press me</Text>
-              </TouchableOpacity>
-            </Tooltip> */}
             <Tooltip
               isVisible={toolTipLeftVisible}
               content={
@@ -444,7 +434,7 @@ export default function CustomerSignup() {
               content={
                 <View style={{}}>
                   <Text style={{color: '#000'}}>
-                    Companies or organization providing services
+                    Individuals or businesses providing services
                   </Text>
                 </View>
               }

@@ -1,41 +1,23 @@
-import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Image,
-  TouchableOpacity,
-  Platform,
-  StatusBar,
-  ScrollView,
-  RefreshControl,
-  SafeAreaView,
-  StyleSheet,
-} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
-import {StackNavigation} from '../../constants/navigation';
-import images from '../../constants/images';
+import React, {useState} from 'react';
+import {View, TouchableOpacity, Platform, StyleSheet} from 'react-native';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
+import {SIZES} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
 import Modal from 'react-native-modal/dist/modal';
-import {addUserData} from '../../store/reducer/mainSlice';
-import {getUser} from '../../utils/api/func';
-import Spinner from 'react-native-loading-spinner-overlay';
-import CustomLoading from '../../components/customLoading';
-import socket from '../../utils/socket';
-import {formatAmount2} from '../../utils/validations';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
+import OtpInputComponent from '../OtpInputs';
 
-export default function TransPin({onClose, navigation, onSubmit}: any) {
+export default function TransPin({onClose, onSubmit}: any) {
   const [_code, setCode] = useState('');
+
   return (
     <Modal
       isVisible={true}
       onModalHide={() => {
         onClose();
       }}
+      avoidKeyboard={true}
       style={{width: SIZES.width, marginHorizontal: 0}}
       deviceWidth={SIZES.width}>
       <View style={tw` h-full w-full bg-black bg-opacity-5`}>
@@ -44,8 +26,8 @@ export default function TransPin({onClose, navigation, onSubmit}: any) {
           style={[
             tw`  items-center mt-auto bg-[#D9D9D9] `,
             {
-              marginBottom: Platform.OS === 'ios' ? -20 : 0,
-              height: Platform.OS === 'ios' ? '70.5%' : '40%',
+              marginBottom: Platform.OS === 'ios' ? -20 : -20,
+              height: Platform.OS === 'ios' ? '80.5%' : '80%',
             },
           ]}>
           <TouchableOpacity
@@ -64,30 +46,30 @@ export default function TransPin({onClose, navigation, onSubmit}: any) {
             />
           </View>
 
-          <View style={tw`mx-auto  items-center `}>
+          {/* <View style={tw`mx-auto  items-center `}>
             <OTPInputView
               style={{width: '67.5%', height: 200}}
               pinCount={4}
-              autoFocusOnLoad={false}
+              autoFocusOnLoad={true}
               codeInputFieldStyle={styles.underlineStyleBase}
               codeInputHighlightStyle={styles.underlineStyleHighLighted}
               onCodeFilled={(code: any) => {
                 setCode(code);
                 onSubmit(code);
-
               }}
               // onCodeFilled={setCode}
             />
-          </View>
-          {/* <TouchableOpacity onPress={() => {}} style={tw`ml-auto mr-8`}>
-            <Textcomp
-              text={'Forgot Pin?'}
-              size={14}
-              lineHeight={17}
-              color={colors.parpal}
-              fontFamily={'Inter-SemiBold'}
+          </View> */}
+
+          <View style={tw`mx-auto mt-8 items-center w-4/5`}>
+            <OtpInputComponent
+              numberOfDigits={4}
+              onTextChange={v => setCode(v)}
+              onFilled={() => {
+                onSubmit(_code);
+              }}
             />
-          </TouchableOpacity> */}
+          </View>
 
           {/* <View style={tw` w-9/10 mt-4`}>
             <Textcomp

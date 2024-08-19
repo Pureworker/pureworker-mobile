@@ -83,61 +83,69 @@ const Withdraw = () => {
   }, []);
 
   // const categorizedData: any = {};
-  const sort = (data: any[]) => {
-    // Create an object to store categorized data
-    // Iterate through the data and categorize it by month
-    const _categorizedData: any = {};
-    data.forEach(item => {
-      const createdAt = new Date(item.createdAt);
-      const monthYear = `${createdAt.getFullYear()}-${(createdAt.getMonth() + 1)
-        .toString()
-        .padStart(2, '0')}`; // Format: YYYY-MM
-
-      // Create an array for the month if it doesn't exist
-      if (!_categorizedData[monthYear]) {
-        _categorizedData[monthYear] = [];
-      }
-
-      // Push the item into the corresponding month
-      _categorizedData[monthYear].push(item);
-    });
-    // setcategorizedData(categorizedData);
-    console.log('here', _categorizedData);
-    dispatch(addcategorizedTransdata(_categorizedData));
-  };
-  function formatDate(inputDate) {
-    // Split the input date by '-'
-    const dateParts = inputDate.split('-');
-
-    // Map the month number to its abbreviation
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-
-    // Get the month abbreviation
-    const monthAbbr = months[parseInt(dateParts[1]) - 1];
-
-    // Create the formatted date string
-    const formattedDate = `${monthAbbr} ${dateParts[0]}`;
-
-    return formattedDate;
-  }
   const [collapseState, setCollapseState] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [accountNumber, setaccountNumber] = useState('');
   const [accountName, setaccountName] = useState('');
   const [bank, setbank] = useState('');
+
+  //
+  const [showTransPin, setshowTransPin] = useState(false);
+  const [transactionPin, settransactionPin] = useState('');
+
+  const handleWithdraw = async (values: {
+    bank: any;
+    accountNumber: any;
+    accountName?: string;
+    amount: any;
+    bank_name: string;
+  }) => {
+    // ToastShort('Withdrawal is under maintenance!');
+    // return;
+
+    setisLoading(true);
+    const param = {
+      account_number: values.accountNumber,
+      account_bank: values.bank,
+      amount: values.amount,
+      narration: 'Withdrawal',
+      transactionPin: transactionPin,
+    };
+    const d = {
+      bank_code: values.bank,
+      bank_name: values.bank_name,
+      account_name: accountName?.account_name,
+      account_number: values.accountNumber,
+      amount: values.amount,
+      narration: 'Withdrawal',
+      transactionPin: transactionPin,
+    };
+    // console.log(d);
+    try {
+      const res: any = await withdraw(d);
+      console.log('WITHDRAW:', res);
+      if ([200, 201].includes(res?.status)) {
+        Alert.alert('Your withdrawal request is being processed!!! 🚀.');
+        ToastShort(
+          res?.data?.data ||
+            'Your withdrawal request is being processed!!! 🚀.',
+        );
+        navigation.navigate('Home');
+      } else {
+        ToastShort(
+          res?.error?.message
+            ? res?.error?.message
+            : 'Oops! An error occurred! 🚀.',
+        );
+      }
+    } catch (error) {
+      console.error('Error with Withdraw Request:', error);
+      ToastShort('An unexpected error occurred!.');
+    } finally {
+      await initGetUsers();
+      setisLoading(false);
+    }
+  };
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView>
@@ -401,7 +409,13 @@ const Withdraw = () => {
                     // navigation.navigate('ProfileStep5', {
                     //   serviceId: route?.params?.serviceId,
                     // });
-                    ToastShort('Withdrawal is coming!.');
+                    // ToastShort('Withdrawal is coming!.');
+
+                    if (transactionPin?.length < 1) {
+                      setshowTransPin(true);
+                    } else {
+                      handleSubmit();
+                    }
                   }}
                   style={{
                     marginHorizontal: 40,

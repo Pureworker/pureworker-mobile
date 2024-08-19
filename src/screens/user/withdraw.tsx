@@ -47,6 +47,7 @@ const validationSchema = Yup.object().shape({
   amount: Yup.number()
     .required('Please enter the amount.')
     .min(500, 'min Amount is NGN 500.'),
+  bank_name: Yup.string().required('Bank name is required.'),
 });
 const Withdraw = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -89,9 +90,11 @@ const Withdraw = () => {
     accountNumber: any;
     accountName?: string;
     amount: any;
+    bank_name: string;
   }) => {
-    ToastShort('Withdrawal is under maintenance!');
-    return;
+    // ToastShort('Withdrawal is under maintenance!');
+    // return;
+
     setisLoading(true);
     const param = {
       account_number: values.accountNumber,
@@ -100,8 +103,18 @@ const Withdraw = () => {
       narration: 'Withdrawal',
       transactionPin: transactionPin,
     };
+    const d = {
+      bank_code: values.bank,
+      bank_name: values.bank_name,
+      account_name: accountName?.account_name,
+      account_number: values.accountNumber,
+      amount: values.amount,
+      narration: 'Withdrawal',
+      transactionPin: transactionPin,
+    };
+    // console.log(d);
     try {
-      const res: any = await withdraw(param);
+      const res: any = await withdraw(d);
       console.log('WITHDRAW:', res);
       if ([200, 201].includes(res?.status)) {
         Alert.alert('Your withdrawal request is being processed!!! 🚀.');
@@ -200,6 +213,7 @@ const Withdraw = () => {
                   accountNumber: '',
                   accountName: '',
                   amount: 0,
+                  bank_name: '',
                 }}
                 validationSchema={validationSchema}
                 onSubmit={values => {
@@ -223,7 +237,7 @@ const Withdraw = () => {
                           />
                           <Dropdown
                             style={[
-                              tw``,
+                              tw`text-black`,
                               {
                                 zIndex: 10,
                                 width: SIZES.width * 0.875,
@@ -243,9 +257,13 @@ const Withdraw = () => {
                             // }}
                             placeholderStyle={{
                               color: '#757575',
+                              fontWeight: '300',
                             }}
                             inputSearchStyle={{
                               color: '#757575',
+                            }}
+                            selectedTextStyle={{
+                              color: '#000',
                             }}
                             data={bankList}
                             search
@@ -265,8 +283,11 @@ const Withdraw = () => {
                               );
                               setselectedBank(fil);
                               form.setFieldValue('bank', fil?.[0]?.code);
-                              //                     console.log(fil);
-                              //                     setselectedBank(fil);
+                              form.setFieldValue(
+                                'bank_name',
+                                fil?.name ?? item?.label,
+                              );
+                              // setselectedBank(fil);
                             }}
                           />
                           {errors.bank && touched.bank && (

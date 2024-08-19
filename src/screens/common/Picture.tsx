@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -17,9 +17,20 @@ import Textcomp from '../../components/Textcomp';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import {ToastShort} from '../../utils/utils';
+import {useSelector} from 'react-redux';
+import {
+  getUser,
+  updateUserData,
+  uploadAssetsDOCorIMG,
+} from '../../utils/api/func';
+import Snackbar from 'react-native-snackbar';
+import Spinner from 'react-native-loading-spinner-overlay';
+import CustomLoading from '../../components/customLoading';
+import { toastAlertSuccess } from '../../utils/alert';
 
 const PhotoUploadScreen = () => {
   const navigation = useNavigation();
+  const userData = useSelector((state: any) => state.user.userData);
   const handleContinue = async () => {
     const permission = await check(PERMISSIONS.ANDROID.CAMERA);
 
@@ -34,6 +45,7 @@ const PhotoUploadScreen = () => {
         ToastShort('Camera permission denied');
       }
     }
+    // navigation.navigate('IdVerification', {url: ''});
   };
 
   const launchCameraFunction = () => {
@@ -42,7 +54,7 @@ const PhotoUploadScreen = () => {
       saveToPhotos: true,
     };
 
-    launchCamera(options, response => {
+    launchCamera(options, async (response: any) => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
         ToastShort('User cancelled image picker');
@@ -51,10 +63,69 @@ const PhotoUploadScreen = () => {
         ToastShort(`'ImagePicker Error: ', ${response.errorMessage}`);
       } else {
         const imageObject = response.assets[0];
-        navigation.navigate('IdVerification', {imageObject});
+
+        if (response?.assets?.length > 0) {
+          console.log('resp', response?.assets[0]);
+          // setPhotoUri(response?.assets[0].uri);
+
+          await uploadImgorDoc(response?.assets[0]);
+        }
+
+        // navigation.navigate('IdVerification', {imageObject});
       }
     });
   };
+  const [loading, setloading] = useState(false);
+  const uploadImgorDoc = async (param: {
+    uri: string;
+    name: string | null;
+    copyError: string | undefined;
+    fileCopyUri: string | null;
+    type: string | null;
+    size: number | null;
+  }) => {
+    setloading(true);
+    const res: any = await uploadAssetsDOCorIMG(param);
+    setloading(false);
+    if (res?.status === 201 || res?.status === 200) {
+      console.log('image:', res);
+      await initUpdate({verificationImage: res?.data.url});
+      // navigation.navigate('IdVerification', {url: res?.data.url ?? ''});
+    } else {
+      Snackbar.show({
+        text:
+          res?.error?.message ??
+          res?.error?.data?.message ??
+          'Oops!, an error occurred',
+        duration: Snackbar.LENGTH_LONG,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+    }
+  };
+  const initUpdate = async (param: any) => {
+    setloading(true);
+    const res: any = await updateUserData(param);
+    if ([200, 201].includes(res?.status)) {
+      toastAlertSuccess('Picture Upload Successful.');
+      navigation.navigate('IdVerification', {url: res?.data.url ?? ''});
+      await initGetUsers();
+    } else {
+    }
+    setloading(false);
+  };
+  console.log('====================================');
+  console.log(userData?.identity);
+  console.log('====================================');
+  const initGetUsers = async () => {
+    const res: any = await getUser('');
+    if (res?.status === 201 || res?.status === 200) {
+      console.log('====================================');
+      console.log(res?.data?.user?.identity);
+      console.log('====================================');
+    }
+  };
+  initGetUsers();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -112,6 +183,7 @@ const PhotoUploadScreen = () => {
         textStyle={styles.buttonText}
         style={styles.button}
       />
+      <Spinner visible={loading} customIndicator={<CustomLoading />} />
     </SafeAreaView>
   );
 };

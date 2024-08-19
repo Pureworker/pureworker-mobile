@@ -26,6 +26,7 @@ import {formatAmount, formatAmount2} from '../../utils/validations';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import WalletModal from '../../components/modals/WalletModal';
+import TransPin from '../../components/modals/transPin';
 
 const Wallet = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -493,6 +494,19 @@ const Wallet = () => {
           </View>
         </Modal>
       )}
+
+{/* {true && (
+        <TransPin
+          onSubmit={code => {
+            // settransactionPin(code);
+            // setshowTransPin(false);
+          }}
+          onClose={() => {
+            // setshowTransPin(false);
+          }}
+          navigation={navigation}
+        />
+      )} */}
 
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
     </>

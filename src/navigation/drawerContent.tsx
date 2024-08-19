@@ -42,6 +42,9 @@ import IdCheckIcon from '../assets/svg/IdCheckIcon';
 const DrawerContent = () => {
   const navigation = useNavigation<StackNavigation>();
   const userData = useSelector((state: any) => state.user.userData);
+
+  console.log(userData?.verificationImage);
+
   const navLinks = [
     {label: 'Wallet', route: 'Wallet', icon: images.wallet, notint: false},
     {label: 'Support', route: 'Support', icon: images.support, notint: false},
@@ -68,7 +71,7 @@ const DrawerContent = () => {
   ) {
     navLinks.splice(4, 0, {
       label: 'ID Check',
-      route: 'PhotoUploadScreen',
+      route: userData?.verificationImage ? 'IdProcessing' : 'PhotoUploadScreen',
       icon: images.location1,
       icon2: <IdCheckIcon />,
       notint: true,
@@ -447,7 +450,16 @@ const DrawerContent = () => {
                   if (link.route === 'Support') {
                     setInfoModal(true);
                   } else {
-                    handleNavigation(link.route);
+
+                    if ((link.route = 'IdProcessing')) {
+                      navigation.navigate(link.route, {
+                        status: userData?.isIdentityVerified
+                          ? 'Done'
+                          : 'Processing',
+                      });
+                    } else {
+                      handleNavigation(link.route);
+                    }
                   }
                 }}
                 style={[
