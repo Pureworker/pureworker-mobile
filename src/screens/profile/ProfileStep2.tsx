@@ -566,7 +566,7 @@ const PRofileStep2 = () => {
                         uri: completeProfileData?.profilePic || imageUrl,
                         headers: {Authorization: 'someAuthToken'},
                         priority: FastImage.priority.high,
-                        cache: FastImage.cacheControl.cacheOnly,
+                        // cache: FastImage.cacheControl.cacheOnly,
                       }}
                       resizeMode={FastImage.resizeMode.cover}
                     />

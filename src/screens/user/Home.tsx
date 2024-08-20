@@ -262,56 +262,52 @@ const Home = () => {
             backgroundColor: '#EBEBEB',
           },
         ]}>
-        <ScrollView
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }>
-          <View
-            style={[
-              tw`items-center justify-center`,
-              {
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginHorizontal: 20,
-                paddingTop: Platform.OS === 'ios' ? 10 : 27.5,
-              },
-            ]}>
-            <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              {userData?.profilePic ? (
-                <FastImage
-                  style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 25,
-                    borderWidth: 1,
-                    borderColor: colors.parpal,
-                  }}
-                  // source={
-                  //   userData?.profilePic
-                  //     ? {
-                  //         uri: userData?.profilePic,
-                  //         headers: {Authorization: 'someAuthToken'},
-                  //         priority: FastImage.priority.high,
-                  //       }
-                  //     : images.profile
-                  // }
-                  source={{
-                    uri: userData?.profilePic,
-                    headers: {Authorization: 'someAuthToken'},
-                    priority: FastImage.priority.high,
-                    cache: FastImage.cacheControl.cacheOnly,
-                  }}
-                  resizeMode={FastImage.resizeMode.cover}
-                />
-              ) : (
-                <Image
-                  source={images.profile}
-                  style={{width: 50, height: 50, borderRadius: 25}}
-                />
-              )}
-            </TouchableOpacity>
-            {/* <TextInputs
+        <View
+          style={[
+            tw`items-center justify-center`,
+            {
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginHorizontal: 20,
+              paddingTop: Platform.OS === 'ios' ? 10 : 27.5,
+            },
+          ]}>
+          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            {userData?.profilePic ? (
+              <FastImage
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: 25,
+                  borderWidth: 1,
+                  borderColor: colors.parpal,
+                }}
+                // source={
+                //   userData?.profilePic
+                //     ? {
+                //         uri: userData?.profilePic,
+                //         headers: {Authorization: 'someAuthToken'},
+                //         priority: FastImage.priority.high,
+                //       }
+                //     : images.profile
+                // }
+                source={{
+                  uri: userData?.profilePic,
+                  headers: {Authorization: 'someAuthToken'},
+                  priority: FastImage.priority.high,
+                  // cache: FastImage.cacheControl.cacheOnly,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+              />
+            ) : (
+              <Image
+                source={images.profile}
+                style={{width: 50, height: 50, borderRadius: 25}}
+              />
+            )}
+          </TouchableOpacity>
+          {/* <TextInputs
               style={{marginTop: 0, width: '70%'}}
               labelText={'Search'}
               state={search}
@@ -329,45 +325,46 @@ const Home = () => {
                 />
               }
             /> */}
-            <TouchableOpacity
-              onPress={() => {
-                setInfoModal(true);
-              }}
-              style={{
-                backgroundColor: '#000',
-                width: 40,
-                height: 40,
-                borderRadius: 40,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Image
-                source={images.question}
-                style={{height: 20, width: 20}}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-          </View>
-          <View
-            style={[
-              tw``,
-              {marginLeft: perWidth(18), marginTop: perHeight(28)},
-            ]}>
-            <Textcomp
-              // text={`Welcome ${
-              //   userData?.firstName !== undefined ? userData?.firstName : ''
-              // },`}
-              text={`Welcome ${
-                userData?.firstName !== undefined
-                  ? userData?.firstName?.trimEnd()
-                  : ''
-              },`}
-              size={17}
-              lineHeight={17}
-              color={'#000413'}
-              fontFamily={'Inter-SemiBold'}
+          <TouchableOpacity
+            onPress={() => {
+              setInfoModal(true);
+            }}
+            style={{
+              backgroundColor: '#000',
+              width: 40,
+              height: 40,
+              borderRadius: 40,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={images.question}
+              style={{height: 20, width: 20}}
+              resizeMode="contain"
             />
-          </View>
+          </TouchableOpacity>
+        </View>
+        <View
+          style={[tw``, {marginLeft: perWidth(18), marginTop: perHeight(28)}]}>
+          <Textcomp
+            // text={`Welcome ${
+            //   userData?.firstName !== undefined ? userData?.firstName : ''
+            // },`}
+            text={`Welcome ${
+              userData?.firstName !== undefined
+                ? userData?.firstName?.trimEnd()
+                : ''
+            },`}
+            size={17}
+            lineHeight={17}
+            color={'#000413'}
+            fontFamily={'Inter-SemiBold'}
+          />
+        </View>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           {/* Popular Section */}
           <View
             style={[

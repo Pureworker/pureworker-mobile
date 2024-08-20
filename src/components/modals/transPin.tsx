@@ -65,8 +65,10 @@ export default function TransPin({onClose, onSubmit}: any) {
             <OtpInputComponent
               numberOfDigits={4}
               onTextChange={v => setCode(v)}
-              onFilled={() => {
-                onSubmit(_code);
+              onFilled={(text) => {
+                console.log(text);
+                
+                onSubmit(text);
               }}
             />
           </View>

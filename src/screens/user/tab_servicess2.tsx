@@ -6,6 +6,7 @@ import {
   Platform,
   StatusBar,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -42,7 +43,7 @@ const TabServices2 = () => {
   };
 
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <>
         <View
           style={{
@@ -162,7 +163,7 @@ const TabServices2 = () => {
         </View>
         <View style={tw`h-20`} />
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

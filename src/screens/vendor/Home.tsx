@@ -264,92 +264,89 @@ const Home = ({navigation}: any) => {
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
       <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+        <View
+          style={[
+            tw`items-center justify-center`,
+            {
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginHorizontal: 20,
+              paddingTop: Platform.OS === 'ios' ? 10 : 27.5,
+            },
+          ]}>
+          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            <FastImage
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 25,
+                borderWidth: 1,
+                borderColor: colors.parpal,
+              }}
+              source={
+                userData?.profilePic
+                  ? {
+                      uri: userData?.profilePic,
+                      headers: {Authorization: 'someAuthToken'},
+                      priority: FastImage.priority.high,
+                      // cache: FastImage.cacheControl.cacheOnly,
+                    }
+                  : images.profile
+              }
+              resizeMode={FastImage.resizeMode.cover}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setInfoModal(true);
+            }}
+            style={{
+              backgroundColor: '#000',
+              width: 40,
+              height: 40,
+              borderRadius: 40,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={images.question}
+              style={{height: 20, width: 20}}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>
+
+        <View
+          style={[tw`pb-3`, {marginLeft: perWidth(18), marginTop: perHeight(28)}]}>
+          <Textcomp
+            // text={`Welcome ${userData?.firstName || userData?.businessName},`}
+            // text={`Welcome ${
+            //   userData?.firstName
+            //     ? userData?.firstName !== undefined
+            //       ? userData?.firstName
+            //       : userData?.businessName === undefined
+            //       ? ''
+            //       : userData?.businessName
+            //     : ''
+            // },`}
+            text={`Welcome ${
+              userData?.firstName?.trimEnd() ||
+              (userData?.businessName !== undefined
+                ? userData?.businessName?.trimEnd()
+                : '')
+            },`}
+            size={17}
+            lineHeight={17}
+            color={'#000413'}
+            fontFamily={'Inter-SemiBold'}
+          />
+        </View>
         <ScrollView
+        showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
-          <View
-            style={[
-              tw`items-center justify-center`,
-              {
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginHorizontal: 20,
-                paddingTop: Platform.OS === 'ios' ? 10 : 27.5,
-              },
-            ]}>
-            <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <FastImage
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 25,
-                  borderWidth: 1,
-                  borderColor: colors.parpal,
-                }}
-                source={
-                  userData?.profilePic
-                    ? {
-                        uri: userData?.profilePic,
-                        headers: {Authorization: 'someAuthToken'},
-                        priority: FastImage.priority.high,
-                        cache: FastImage.cacheControl.cacheOnly,
-                      }
-                    : images.profile
-                }
-                resizeMode={FastImage.resizeMode.cover}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setInfoModal(true);
-              }}
-              style={{
-                backgroundColor: '#000',
-                width: 40,
-                height: 40,
-                borderRadius: 40,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Image
-                source={images.question}
-                style={{height: 20, width: 20}}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-          </View>
-
-          <View
-            style={[
-              tw``,
-              {marginLeft: perWidth(18), marginTop: perHeight(28)},
-            ]}>
-            <Textcomp
-              // text={`Welcome ${userData?.firstName || userData?.businessName},`}
-              // text={`Welcome ${
-              //   userData?.firstName
-              //     ? userData?.firstName !== undefined
-              //       ? userData?.firstName
-              //       : userData?.businessName === undefined
-              //       ? ''
-              //       : userData?.businessName
-              //     : ''
-              // },`}
-              text={`Welcome ${
-                userData?.firstName?.trimEnd() ||
-                (userData?.businessName !== undefined
-                  ? userData?.businessName?.trimEnd()
-                  : '')
-              },`}
-              size={17}
-              lineHeight={17}
-              color={'#000413'}
-              fontFamily={'Inter-SemiBold'}
-            />
-          </View>
-
           <View
             style={[
               tw`flex flex-row`,

@@ -33,6 +33,7 @@ const OtpInputComponent: React.FC<{
 
 const styles = StyleSheet.create({
   container: {
+    color: 'black',
     // backgroundColor: colors.white,
   },
   inputsContainer: {},
@@ -44,6 +45,7 @@ const styles = StyleSheet.create({
   },
   pinCodeText: {
     borderColor: colors.black,
+    color: 'black',
   },
   focusStick: {
     color: colors.primary,

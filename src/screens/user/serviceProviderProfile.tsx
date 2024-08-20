@@ -9,6 +9,7 @@ import {
   ScrollView,
   FlatList,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -84,6 +85,8 @@ const ServiceProviderProfile = () => {
   );
   console.log('passedDATA-------', profileData);
 
+  const [profileLoading, setprofileLoading] = useState(false);
+
   const {data: getSingleProviderServiceData, isLoading: isLoadingUser} =
     useGetSingleProviderServiceQuery(route.params?.id);
   const getSingleProviderService = getSingleProviderServiceData ?? [];
@@ -105,6 +108,7 @@ const ServiceProviderProfile = () => {
   useEffect(() => {
     const initProvider = async () => {
       setisLoading(true);
+      setprofileLoading(true);
       const providerId = profileData?.portfolio?.provider ?? profileData?._id;
       const serviceId =
         profileData?.portfolio?.service || profileData?.services?.[0]?._id;
@@ -128,6 +132,7 @@ const ServiceProviderProfile = () => {
         dispatch(setserviceProviderData(res?.data?.['0']));
       }
       setisLoading(false);
+      setprofileLoading(false);
       // setloading(false);
     };
     initProvider();
@@ -306,7 +311,7 @@ const ServiceProviderProfile = () => {
             // 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
             headers: {Authorization: 'someAuthToken'},
             priority: FastImage.priority.high,
-            cache: FastImage.cacheControl.cacheOnly
+            cache: FastImage.cacheControl.cacheOnly,
           }}
           resizeMode={FastImage.resizeMode.cover}>
           <View
@@ -475,513 +480,523 @@ const ServiceProviderProfile = () => {
             </TouchableOpacity>
           </View>
           {activeSection === 'About' && (
-            <ScrollView
-              contentContainerStyle={[
-                tw`mx-2  bg-[${colors.darkPurple}]`,
-                {
-                  flex: 0,
-                  borderRadius: 5,
-                  marginTop: perHeight(12),
-                  minHeight: SIZES.height * 1.4,
-                },
-              ]}>
-              <View
-                style={[
-                  tw`border-b border-[#FFFFFF80]  pt-4 mx-2`,
-                  {paddingBottom: perHeight(11)},
-                ]}>
-                <View style={tw` pt-2`}>
-                  <Textcomp
-                    text={'User Information'}
-                    size={16}
-                    lineHeight={17}
-                    color={'#FFFFFF'}
-                    fontFamily={'Inter-Bold'}
-                  />
-                </View>
-              </View>
-              <View style={tw`border-b border-[#FFFFFF80]  pb-4 mx-2`}>
-                <View style={tw`pt-2 `}>
-                  <Textcomp
-                    text={'User Description'}
-                    size={12}
-                    lineHeight={15}
-                    color={'#FFFFFF80'}
-                    fontFamily={'Inter-Bold'}
-                  />
-                </View>
-                <View style={tw` pt-2 `}>
-                  <Textcomp
-                    text={removeUnnecessaryNewLines(
-                      serviceProviderData?.description,
-                    )}
-                    // text={
-                    //   'heguide heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew  wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiewheguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiewu'
-                    // }
-                    size={13}
-                    lineHeight={14}
-                    color={'#FFFFFF'}
-                    fontFamily={'Inter-SemiBold'}
-                    numberOfLines={6}
-                  />
-                  {serviceProviderData?.description?.split(' ')?.length >
-                    20 && (
-                    <TouchableOpacity
-                      style={tw`ml-auto `}
-                      onPress={() => {
-                        setDisplay(serviceProviderData?.description);
-                        setShowModal(true);
-                      }}>
-                      <Textcomp
-                        text={'...see more'}
-                        size={12}
-                        lineHeight={15}
-                        color={'green'}
-                        fontFamily={'Inter-Bold'}
-                      />
-                    </TouchableOpacity>
-                  )}
-                </View>
-
-                {(closeToData?.description ||
-                  profileData?.portfolio?.description) && (
-                  <View style={tw` pt-3 border-t mt-2 border-[#FFFFFF80]`}>
-                    <View style={tw`mb-2 `}>
-                      <Textcomp
-                        text={'Service Description'}
-                        size={12}
-                        lineHeight={15}
-                        color={'#FFFFFF80'}
-                        fontFamily={'Inter-Bold'}
-                      />
-                    </View>
-                    <Textcomp
-                      text={removeUnnecessaryNewLines(
-                        closeToData?.description ??
-                          profileData?.portfolio?.description ??
-                          '',
-                      )}
-                      size={13}
-                      lineHeight={14}
-                      color={'#FFFFFF'}
-                      fontFamily={'Inter-SemiBold'}
-                      numberOfLines={6}
-                    />
-                    {(
-                      profileData?.portfolio?.description ||
-                      serviceProviderData?.description
-                    )?.split(' ')?.length > 20 && (
-                      <TouchableOpacity
-                        style={tw`ml-auto`}
-                        onPress={() => {
-                          setShowModal(true);
-                          setDisplay(
-                            closeToData?.description ??
-                              profileData?.portfolio?.description,
-                          );
-                        }}>
-                        <Textcomp
-                          text={'...see more'}
-                          size={12}
-                          lineHeight={15}
-                          color={'green'}
-                          fontFamily={'Inter-Bold'}
-                        />
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                )}
-              </View>
-              <View
-                style={[
-                  tw`border-b border-[#FFFFFF80]  flex flex-row items-center pt-4 mx-2`,
-                  {paddingVertical: perHeight(11)},
-                ]}>
-                <View style={tw`ml-1`}>
-                  <Image
-                    source={images.location}
-                    resizeMode="contain"
-                    style={{width: 25, height: 25}}
-                  />
-                </View>
-                <View style={tw`ml-3 `}>
-                  <View style={tw` `}>
-                    <Textcomp
-                      text={'From'}
-                      size={12}
-                      lineHeight={15}
-                      color={'#FFFFFF80'}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </View>
-                  <View style={[tw` `, {marginTop: perHeight(5)}]}>
-                    <Textcomp
-                      text={`${
-                        serviceProviderData?.address ||
-                        serviceProviderData?.state
-                      }`}
-                      size={12}
-                      lineHeight={15}
-                      color={'#FFFFFF'}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </View>
-                </View>
-              </View>
-              <View
-                style={[
-                  tw`border-b border-[#FFFFFF80]  flex flex-row items-center pt-4 mx-2`,
-                  {paddingVertical: perHeight(11)},
-                ]}>
-                <View style={tw`ml-1`}>
-                  <Image
-                    // source={images.dollar}
-                    source={images.Naira2}
-                    resizeMode="contain"
-                    style={{width: 25, height: 25, tintColor: 'white'}}
-                  />
-                </View>
-                <View style={tw`ml-3 `}>
-                  <View style={tw` `}>
-                    <Textcomp
-                      text={'Price range / Hour'}
-                      size={12}
-                      lineHeight={15}
-                      color={'#FFFFFF80'}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </View>
-                  <View style={[tw` `, {marginTop: perHeight(5)}]}>
-                    <Textcomp
-                      text={`₦${
-                        profileData?.portfolio?.minPrice ||
-                        serviceProviderData?.portfolio?.minPrice
-                      } - ₦${
-                        profileData?.portfolio?.maxPrice ||
-                        serviceProviderData?.portfolio?.maxPrice
-                      }`}
-                      size={12}
-                      lineHeight={15}
-                      color={'#FFFFFF'}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </View>
-                </View>
-              </View>
-              {/* <View
-                style={[
-                  tw`border-b border-[#FFF] flex flex-row items-center pt-4 mx-2`,
-                  {paddingVertical: perHeight(11)},
-                ]}>
-                <View style={tw`ml-1`}>
-                  <Image
-                    source={images.send}
-                    resizeMode="contain"
-                    style={{width: 25, height: 25}}
-                  />
-                </View>
-                <View style={tw`ml-3 `}>
-                  <View style={tw` `}>
-                    <Textcomp
-                      text={'Recent Delivery'}
-                      size={12}
-                      lineHeight={15}
-                      color={'#FFFFFF80'}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </View>
-                  <View style={[tw` `, {marginTop: perHeight(5)}]}>
-                    <Textcomp
-                      text={'- -'}
-                      size={12}
-                      lineHeight={15}
-                      color={'#FFFFFF'}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </View>
-                </View>
-              </View> */}
-              <View
-                style={[
-                  tw`border-b border-[#FFFFFF80] flex flex-row items-center pt-4 mx-2`,
-                  {paddingVertical: perHeight(11)},
-                ]}>
-                <View style={tw`ml-1`}>
-                  <Image
-                    source={images.eye}
-                    resizeMode="contain"
-                    style={{width: 25, height: 25, tintColor: 'white'}}
-                  />
-                </View>
-                <View style={tw`ml-3 `}>
-                  <View style={tw` `}>
-                    <Textcomp
-                      text={'Last active'}
-                      size={12}
-                      lineHeight={15}
-                      color={'#FFFFFF80'}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </View>
-                  <View style={[tw` `, {marginTop: perHeight(5)}]}>
-                    <Textcomp
-                      // text={'Abuja, Nigeria'}
-                      text={
-                        serviceProviderData?.lastOnline
-                          ? timeAgo(serviceProviderData?.lastOnline)
-                          : profileData?.user?.lastOnline
-                      }
-                      size={12}
-                      lineHeight={15}
-                      color={'#FFFFFF'}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </View>
-                </View>
-              </View>
-              <View
-                style={[
-                  tw`border-b border-[#FFFFFF80]  flex flex-row items-center pt-4 mx-2`,
-                  {paddingVertical: perHeight(11)},
-                ]}>
-                <View style={[tw` `, {marginLeft: perWidth(30)}]}>
-                  <View style={tw` `}>
-                    <Textcomp
-                      text={'Other Services'}
-                      size={12}
-                      lineHeight={15}
-                      color={'#FFFFFF80'}
-                      fontFamily={'Inter-Bold'}
-                    />
-                  </View>
-
-                  <View style={tw`w-full`}>
-                    <ScrollView
-                      showsHorizontalScrollIndicator={false}
-                      horizontal
-                      contentContainerStyle={{paddingBottom: 10}}>
-                      <FlatList
-                        scrollEnabled={false}
-                        data={serviceProviderData?.services}
-                        renderItem={({item, index}) => {
-                          return (
-                            <View
-                              key={index}
-                              style={[
-                                tw`bg-white rounded-lg w-auto p-3 mr-2 py-1 items-center`,
-                                {marginTop: perHeight(5)},
-                              ]}>
-                              <Textcomp
-                                text={item?.name}
-                                size={9}
-                                lineHeight={12}
-                                color={'#000000'}
-                                fontFamily={'Inter-Bold'}
-                              />
-                            </View>
-                          );
-                        }}
-                        //   keyExtractor={item => item.id}
-                        numColumns={3}
-                        contentContainerStyle={{}}
-                      />
-                    </ScrollView>
-                  </View>
-                </View>
-              </View>
-
-              {profileData?.portfolio?.portfolio?.length < 1 ||
-              serviceProviderData?.portfolio?.portfolio?.length < 1 ? (
-                <View style={tw`mt-[25%] mx-auto`}>
-                  <Textcomp
-                    text={'No portfolio Available!.'}
-                    size={18}
-                    lineHeight={18}
-                    color={'#FFFFFF80'}
-                    fontFamily={'Inter-Bold'}
-                  />
+            <>
+              {profileLoading ? (
+                <View style={tw`m-auto h-[50%]  items-center justify-center`}>
+                  <ActivityIndicator size={'large'} color={colors.parpal} />
                 </View>
               ) : (
-                <>
+                <ScrollView
+                  contentContainerStyle={[
+                    tw`mx-2  bg-[${colors.darkPurple}]`,
+                    {
+                      flex: 0,
+                      borderRadius: 5,
+                      marginTop: perHeight(12),
+                      minHeight: SIZES.height * 1.4,
+                    },
+                  ]}>
                   <View
                     style={[
-                      tw`border-b border-[#FFFFFF80] w-9/10 mx-auto  items-center pt-4 `,
-                      {paddingVertical: perHeight(11)},
+                      tw`border-b border-[#FFFFFF80]  pt-4 mx-2`,
+                      {paddingBottom: perHeight(11)},
                     ]}>
-                    <View style={tw`mr-auto `}>
+                    <View style={tw` pt-2`}>
                       <Textcomp
-                        text={'PortFolio'}
-                        size={14}
+                        text={'User Information'}
+                        size={16}
+                        lineHeight={17}
+                        color={'#FFFFFF'}
+                        fontFamily={'Inter-Bold'}
+                      />
+                    </View>
+                  </View>
+                  <View style={tw`border-b border-[#FFFFFF80]  pb-4 mx-2`}>
+                    <View style={tw`pt-2 `}>
+                      <Textcomp
+                        text={'User Description'}
+                        size={12}
                         lineHeight={15}
                         color={'#FFFFFF80'}
                         fontFamily={'Inter-Bold'}
                       />
                     </View>
+                    <View style={tw` pt-2 `}>
+                      <Textcomp
+                        text={removeUnnecessaryNewLines(
+                          serviceProviderData?.description,
+                        )}
+                        // text={
+                        //   'heguide heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew  wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiewheguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiew heguide weughio wgiwe wdiugwe wuegfyuew wygiuew weuiewh wygfiewu'
+                        // }
+                        size={13}
+                        lineHeight={14}
+                        color={'#FFFFFF'}
+                        fontFamily={'Inter-SemiBold'}
+                        numberOfLines={6}
+                      />
+                      {serviceProviderData?.description?.split(' ')?.length >
+                        20 && (
+                        <TouchableOpacity
+                          style={tw`ml-auto `}
+                          onPress={() => {
+                            setDisplay(serviceProviderData?.description);
+                            setShowModal(true);
+                          }}>
+                          <Textcomp
+                            text={'...see more'}
+                            size={12}
+                            lineHeight={15}
+                            color={'green'}
+                            fontFamily={'Inter-Bold'}
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
 
-                    {(
-                      closeToData?.portfolio ||
-                      serviceProviderData?.portfolio?.portfolio
-                    )?.map((item, index) => {
-                      // console.log('PORRRRRRRRRTTTTT:', item, item?.images);
-                      return (
-                        <View style={tw`w-full mt-3`} key={index}>
-                          <View style={tw` `}>
+                    {(closeToData?.description ||
+                      profileData?.portfolio?.description) && (
+                      <View style={tw` pt-3 border-t mt-2 border-[#FFFFFF80]`}>
+                        <View style={tw`mb-2 `}>
+                          <Textcomp
+                            text={'Service Description'}
+                            size={12}
+                            lineHeight={15}
+                            color={'#FFFFFF80'}
+                            fontFamily={'Inter-Bold'}
+                          />
+                        </View>
+                        <Textcomp
+                          text={removeUnnecessaryNewLines(
+                            closeToData?.description ??
+                              profileData?.portfolio?.description ??
+                              '',
+                          )}
+                          size={13}
+                          lineHeight={14}
+                          color={'#FFFFFF'}
+                          fontFamily={'Inter-SemiBold'}
+                          numberOfLines={6}
+                        />
+                        {(
+                          profileData?.portfolio?.description ||
+                          serviceProviderData?.description
+                        )?.split(' ')?.length > 20 && (
+                          <TouchableOpacity
+                            style={tw`ml-auto`}
+                            onPress={() => {
+                              setShowModal(true);
+                              setDisplay(
+                                closeToData?.description ??
+                                  profileData?.portfolio?.description,
+                              );
+                            }}>
                             <Textcomp
-                              text={`${item?.description}`}
+                              text={'...see more'}
                               size={12}
                               lineHeight={15}
-                              color={'#FFFFFF'}
+                              color={'green'}
                               fontFamily={'Inter-Bold'}
                             />
-                          </View>
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                    )}
+                  </View>
+                  <View
+                    style={[
+                      tw`border-b border-[#FFFFFF80]  flex flex-row items-center pt-4 mx-2`,
+                      {paddingVertical: perHeight(11)},
+                    ]}>
+                    <View style={tw`ml-1`}>
+                      <Image
+                        source={images.location}
+                        resizeMode="contain"
+                        style={{width: 25, height: 25}}
+                      />
+                    </View>
+                    <View style={tw`ml-3 `}>
+                      <View style={tw` `}>
+                        <Textcomp
+                          text={'From'}
+                          size={12}
+                          lineHeight={15}
+                          color={'#FFFFFF80'}
+                          fontFamily={'Inter-Bold'}
+                        />
+                      </View>
+                      <View style={[tw` `, {marginTop: perHeight(5)}]}>
+                        <Textcomp
+                          text={`${
+                            serviceProviderData?.address ||
+                            serviceProviderData?.state
+                          }`}
+                          size={12}
+                          lineHeight={15}
+                          color={'#FFFFFF'}
+                          fontFamily={'Inter-Bold'}
+                        />
+                      </View>
+                    </View>
+                  </View>
+                  <View
+                    style={[
+                      tw`border-b border-[#FFFFFF80]  flex flex-row items-center pt-4 mx-2`,
+                      {paddingVertical: perHeight(11)},
+                    ]}>
+                    <View style={tw`ml-1`}>
+                      <Image
+                        // source={images.dollar}
+                        source={images.Naira2}
+                        resizeMode="contain"
+                        style={{width: 25, height: 25, tintColor: 'white'}}
+                      />
+                    </View>
+                    <View style={tw`ml-3 `}>
+                      <View style={tw` `}>
+                        <Textcomp
+                          text={'Price range / Hour'}
+                          size={12}
+                          lineHeight={15}
+                          color={'#FFFFFF80'}
+                          fontFamily={'Inter-Bold'}
+                        />
+                      </View>
+                      <View style={[tw` `, {marginTop: perHeight(5)}]}>
+                        <Textcomp
+                          text={`₦${
+                            profileData?.portfolio?.minPrice ||
+                            serviceProviderData?.portfolio?.minPrice
+                          } - ₦${
+                            profileData?.portfolio?.maxPrice ||
+                            serviceProviderData?.portfolio?.maxPrice
+                          }`}
+                          size={12}
+                          lineHeight={15}
+                          color={'#FFFFFF'}
+                          fontFamily={'Inter-Bold'}
+                        />
+                      </View>
+                    </View>
+                  </View>
+                  {/* <View
+    style={[
+      tw`border-b border-[#FFF] flex flex-row items-center pt-4 mx-2`,
+      {paddingVertical: perHeight(11)},
+    ]}>
+    <View style={tw`ml-1`}>
+      <Image
+        source={images.send}
+        resizeMode="contain"
+        style={{width: 25, height: 25}}
+      />
+    </View>
+    <View style={tw`ml-3 `}>
+      <View style={tw` `}>
+        <Textcomp
+          text={'Recent Delivery'}
+          size={12}
+          lineHeight={15}
+          color={'#FFFFFF80'}
+          fontFamily={'Inter-Bold'}
+        />
+      </View>
+      <View style={[tw` `, {marginTop: perHeight(5)}]}>
+        <Textcomp
+          text={'- -'}
+          size={12}
+          lineHeight={15}
+          color={'#FFFFFF'}
+          fontFamily={'Inter-Bold'}
+        />
+      </View>
+    </View>
+  </View> */}
+                  <View
+                    style={[
+                      tw`border-b border-[#FFFFFF80] flex flex-row items-center pt-4 mx-2`,
+                      {paddingVertical: perHeight(11)},
+                    ]}>
+                    <View style={tw`ml-1`}>
+                      <Image
+                        source={images.eye}
+                        resizeMode="contain"
+                        style={{width: 25, height: 25, tintColor: 'white'}}
+                      />
+                    </View>
+                    <View style={tw`ml-3 `}>
+                      <View style={tw` `}>
+                        <Textcomp
+                          text={'Last active'}
+                          size={12}
+                          lineHeight={15}
+                          color={'#FFFFFF80'}
+                          fontFamily={'Inter-Bold'}
+                        />
+                      </View>
+                      <View style={[tw` `, {marginTop: perHeight(5)}]}>
+                        <Textcomp
+                          // text={'Abuja, Nigeria'}
+                          text={
+                            serviceProviderData?.lastOnline
+                              ? timeAgo(serviceProviderData?.lastOnline)
+                              : profileData?.user?.lastOnline
+                          }
+                          size={12}
+                          lineHeight={15}
+                          color={'#FFFFFF'}
+                          fontFamily={'Inter-Bold'}
+                        />
+                      </View>
+                    </View>
+                  </View>
+                  <View
+                    style={[
+                      tw`border-b border-[#FFFFFF80]  flex flex-row items-center pt-4 mx-2`,
+                      {paddingVertical: perHeight(11)},
+                    ]}>
+                    <View style={[tw` `, {marginLeft: perWidth(30)}]}>
+                      <View style={tw` `}>
+                        <Textcomp
+                          text={'Other Services'}
+                          size={12}
+                          lineHeight={15}
+                          color={'#FFFFFF80'}
+                          fontFamily={'Inter-Bold'}
+                        />
+                      </View>
+
+                      <View style={tw`w-full`}>
+                        <ScrollView
+                          showsHorizontalScrollIndicator={false}
+                          horizontal
+                          contentContainerStyle={{paddingBottom: 10}}>
                           <FlatList
                             scrollEnabled={false}
-                            data={item?.images}
-                            renderItem={item => {
+                            data={serviceProviderData?.services}
+                            renderItem={({item, index}) => {
                               return (
-                                <FastImage
+                                <View
                                   key={index}
-                                  onTouchStart={() => {
-                                    setimageModal(true);
-                                    setselectedImage(item.item);
-                                  }}
                                   style={[
-                                    tw`mr-2`,
-                                    {
-                                      width: perWidth(95),
-                                      aspectRatio: 1,
-                                      borderRadius: 10,
-                                    },
-                                  ]}
-                                  source={{
-                                    uri: item.item,
-                                    headers: {Authorization: 'someAuthToken'},
-                                    priority: FastImage.priority.high,
-                                    cache: FastImage.cacheControl.cacheOnly
-                                  }}
-                                  resizeMode={FastImage.resizeMode.cover}
-                                />
+                                    tw`bg-white rounded-lg w-auto p-3 mr-2 py-1 items-center`,
+                                    {marginTop: perHeight(5)},
+                                  ]}>
+                                  <Textcomp
+                                    text={item?.name}
+                                    size={9}
+                                    lineHeight={12}
+                                    color={'#000000'}
+                                    fontFamily={'Inter-Bold'}
+                                  />
+                                </View>
                               );
                             }}
                             //   keyExtractor={item => item.id}
                             numColumns={3}
-                            contentContainerStyle={{marginTop: 10}}
+                            contentContainerStyle={{}}
                           />
-                        </View>
-                      );
-                    })}
+                        </ScrollView>
+                      </View>
+                    </View>
                   </View>
-                  <View style={tw`h-20`} />
-                </>
-              )}
 
-              {firstPotfolio?.length || secondPotfolio?.length ? (
-                <View
-                  style={[
-                    tw`border-b border-[#FFFFFF80]  flex flex-row items-center pt-4 mx-2`,
-                    {paddingVertical: perHeight(11)},
-                  ]}>
-                  <View style={[tw` `, {marginLeft: perWidth(25)}]}>
-                    <View style={tw` `}>
+                  {profileData?.portfolio?.portfolio?.length < 1 ||
+                  serviceProviderData?.portfolio?.portfolio?.length < 1 ? (
+                    <View style={tw`mt-[25%] mx-auto`}>
                       <Textcomp
-                        text={'PortFolio'}
-                        size={14}
-                        lineHeight={15}
+                        text={'No portfolio Available!.'}
+                        size={18}
+                        lineHeight={18}
                         color={'#FFFFFF80'}
                         fontFamily={'Inter-Bold'}
                       />
                     </View>
-
-                    {firstPotfolio?.length ? (
-                      <View style={tw`w-full mt-3`}>
-                        <View style={tw` `}>
+                  ) : (
+                    <>
+                      <View
+                        style={[
+                          tw`border-b border-[#FFFFFF80] w-9/10 mx-auto  items-center pt-4 `,
+                          {paddingVertical: perHeight(11)},
+                        ]}>
+                        <View style={tw`mr-auto `}>
                           <Textcomp
-                            text={'Project1'}
-                            size={12}
+                            text={'PortFolio'}
+                            size={14}
                             lineHeight={15}
-                            color={'#FFFFFF'}
+                            color={'#FFFFFF80'}
                             fontFamily={'Inter-Bold'}
                           />
                         </View>
-                        <FlatList
-                          scrollEnabled={false}
-                          data={firstPotfolio}
-                          renderItem={({item, index}) => {
-                            return (
-                              <FastImage
-                                onTouchStart={() => setimageModal(true)}
-                                style={[
-                                  tw`mr-2`,
-                                  {
-                                    width: perWidth(95),
-                                    aspectRatio: 1,
-                                    borderRadius: 10,
-                                  },
-                                ]}
-                                source={{
-                                  uri: item,
-                                  headers: {Authorization: 'someAuthToken'},
-                                  priority: FastImage.priority.high,
-                                  cache: FastImage.cacheControl.cacheOnly
+
+                        {(
+                          closeToData?.portfolio ||
+                          serviceProviderData?.portfolio?.portfolio
+                        )?.map((item, index) => {
+                          // console.log('PORRRRRRRRRTTTTT:', item, item?.images);
+                          return (
+                            <View style={tw`w-full mt-3`} key={index}>
+                              <View style={tw` `}>
+                                <Textcomp
+                                  text={`${item?.description}`}
+                                  size={12}
+                                  lineHeight={15}
+                                  color={'#FFFFFF'}
+                                  fontFamily={'Inter-Bold'}
+                                />
+                              </View>
+                              <FlatList
+                                scrollEnabled={false}
+                                data={item?.images}
+                                renderItem={item => {
+                                  return (
+                                    <FastImage
+                                      key={index}
+                                      onTouchStart={() => {
+                                        setimageModal(true);
+                                        setselectedImage(item.item);
+                                      }}
+                                      style={[
+                                        tw`mr-2`,
+                                        {
+                                          width: perWidth(95),
+                                          aspectRatio: 1,
+                                          borderRadius: 10,
+                                        },
+                                      ]}
+                                      source={{
+                                        uri: item.item,
+                                        headers: {
+                                          Authorization: 'someAuthToken',
+                                        },
+                                        priority: FastImage.priority.high,
+                                        cache: FastImage.cacheControl.cacheOnly,
+                                      }}
+                                      resizeMode={FastImage.resizeMode.cover}
+                                    />
+                                  );
                                 }}
-                                resizeMode={FastImage.resizeMode.cover}
+                                //   keyExtractor={item => item.id}
+                                numColumns={3}
+                                contentContainerStyle={{marginTop: 10}}
                               />
-                            );
-                          }}
-                          //   keyExtractor={item => item.id}
-                          numColumns={3}
-                          contentContainerStyle={{marginTop: 10}}
-                        />
+                            </View>
+                          );
+                        })}
                       </View>
-                    ) : null}
-                    {secondPotfolio?.length ? (
-                      <View style={tw`w-full mt-3`}>
+                      <View style={tw`h-20`} />
+                    </>
+                  )}
+
+                  {firstPotfolio?.length || secondPotfolio?.length ? (
+                    <View
+                      style={[
+                        tw`border-b border-[#FFFFFF80]  flex flex-row items-center pt-4 mx-2`,
+                        {paddingVertical: perHeight(11)},
+                      ]}>
+                      <View style={[tw` `, {marginLeft: perWidth(25)}]}>
                         <View style={tw` `}>
                           <Textcomp
-                            text={'Project2'}
-                            size={12}
+                            text={'PortFolio'}
+                            size={14}
                             lineHeight={15}
-                            color={'#FFFFFF'}
+                            color={'#FFFFFF80'}
                             fontFamily={'Inter-Bold'}
                           />
                         </View>
-                        <FlatList
-                          scrollEnabled={false}
-                          data={secondPotfolio}
-                          renderItem={({item, index}) => {
-                            return (
-                              <FastImage
-                                onTouchStart={() => setimageModal(true)}
-                                style={[
-                                  tw`mr-2`,
-                                  {
-                                    width: perWidth(95),
-                                    aspectRatio: 1,
-                                    borderRadius: 10,
-                                  },
-                                ]}
-                                source={{
-                                  uri: item,
-                                  headers: {Authorization: 'someAuthToken'},
-                                  priority: FastImage.priority.high,
-                                  cache: FastImage.cacheControl.cacheOnly
-                                }}
-                                resizeMode={FastImage.resizeMode.cover}
-                              />
-                            );
-                          }}
-                          //   keyExtractor={item => item.id}
-                          numColumns={3}
-                          contentContainerStyle={{marginTop: 10}}
-                        />
-                      </View>
-                    ) : null}
-                  </View>
-                </View>
-              ) : null}
 
-              <View style={tw`h-150`} />
-            </ScrollView>
+                        {firstPotfolio?.length ? (
+                          <View style={tw`w-full mt-3`}>
+                            <View style={tw` `}>
+                              <Textcomp
+                                text={'Project1'}
+                                size={12}
+                                lineHeight={15}
+                                color={'#FFFFFF'}
+                                fontFamily={'Inter-Bold'}
+                              />
+                            </View>
+                            <FlatList
+                              scrollEnabled={false}
+                              data={firstPotfolio}
+                              renderItem={({item, index}) => {
+                                return (
+                                  <FastImage
+                                    onTouchStart={() => setimageModal(true)}
+                                    style={[
+                                      tw`mr-2`,
+                                      {
+                                        width: perWidth(95),
+                                        aspectRatio: 1,
+                                        borderRadius: 10,
+                                      },
+                                    ]}
+                                    source={{
+                                      uri: item,
+                                      headers: {Authorization: 'someAuthToken'},
+                                      priority: FastImage.priority.high,
+                                      cache: FastImage.cacheControl.cacheOnly,
+                                    }}
+                                    resizeMode={FastImage.resizeMode.cover}
+                                  />
+                                );
+                              }}
+                              //   keyExtractor={item => item.id}
+                              numColumns={3}
+                              contentContainerStyle={{marginTop: 10}}
+                            />
+                          </View>
+                        ) : null}
+                        {secondPotfolio?.length ? (
+                          <View style={tw`w-full mt-3`}>
+                            <View style={tw` `}>
+                              <Textcomp
+                                text={'Project2'}
+                                size={12}
+                                lineHeight={15}
+                                color={'#FFFFFF'}
+                                fontFamily={'Inter-Bold'}
+                              />
+                            </View>
+                            <FlatList
+                              scrollEnabled={false}
+                              data={secondPotfolio}
+                              renderItem={({item, index}) => {
+                                return (
+                                  <FastImage
+                                    onTouchStart={() => setimageModal(true)}
+                                    style={[
+                                      tw`mr-2`,
+                                      {
+                                        width: perWidth(95),
+                                        aspectRatio: 1,
+                                        borderRadius: 10,
+                                      },
+                                    ]}
+                                    source={{
+                                      uri: item,
+                                      headers: {Authorization: 'someAuthToken'},
+                                      priority: FastImage.priority.high,
+                                      cache: FastImage.cacheControl.cacheOnly,
+                                    }}
+                                    resizeMode={FastImage.resizeMode.cover}
+                                  />
+                                );
+                              }}
+                              //   keyExtractor={item => item.id}
+                              numColumns={3}
+                              contentContainerStyle={{marginTop: 10}}
+                            />
+                          </View>
+                        ) : null}
+                      </View>
+                    </View>
+                  ) : null}
+
+                  <View style={tw`h-150`} />
+                </ScrollView>
+              )}
+            </>
           )}
           {activeSection === 'Jobs' && (
             <>
@@ -1046,7 +1061,7 @@ const ServiceProviderProfile = () => {
                                       'https://res.cloudinary.com/dr0pef3mn/image/upload/v1691626246/Assets/1691626245707-Frame%2071.png.png',
                                     headers: {Authorization: 'someAuthToken'},
                                     priority: FastImage.priority.high,
-                                    cache: FastImage.cacheControl.cacheOnly
+                                    cache: FastImage.cacheControl.cacheOnly,
                                   }}
                                   resizeMode={FastImage.resizeMode.cover}
                                 />
@@ -1303,7 +1318,7 @@ const ServiceProviderProfile = () => {
                                   'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                                 headers: {Authorization: 'someAuthToken'},
                                 priority: FastImage.priority.high,
-                                cache: FastImage.cacheControl.cacheOnly
+                                cache: FastImage.cacheControl.cacheOnly,
                               }}
                               resizeMode={FastImage.resizeMode.cover}
                             />
@@ -1481,7 +1496,7 @@ const ServiceProviderProfile = () => {
               uri: selectedImage,
               headers: {Authorization: 'someAuthToken'},
               priority: FastImage.priority.high,
-              cache: FastImage.cacheControl.cacheOnly
+              cache: FastImage.cacheControl.cacheOnly,
             }}
             resizeMode={FastImage.resizeMode.contain}
           />

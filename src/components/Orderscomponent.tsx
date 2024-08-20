@@ -244,7 +244,7 @@ const Orderscomponent = ({
                   // 'https://res.cloudinary.com/dr0pef3mn/image/upload/v1694275934/Assets/1694275933654-Ellipse%2014.png.png',
                   headers: {Authorization: 'someAuthToken'},
                   priority: FastImage.priority.high,
-                  cache: FastImage.cacheControl.cacheOnly,
+                  // cache: FastImage.cacheControl.cacheOnly,
                 }}
                 resizeMode={FastImage.resizeMode.cover}
               />

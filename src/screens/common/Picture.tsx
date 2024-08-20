@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,29 +9,41 @@ import {
 import {launchCamera} from 'react-native-image-picker';
 import {useNavigation} from '@react-navigation/native';
 import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import Snackbar from 'react-native-snackbar';
+import Spinner from 'react-native-loading-spinner-overlay';
+import tw from 'twrnc';
+
 import colors from '../../constants/colors';
 import commonStyle from '../../constants/commonStyle';
+import images from '../../constants/images';
 import CustomButton from '../../components/Button';
 import CameraIcon from '../../assets/svg/CameraIcon';
 import Textcomp from '../../components/Textcomp';
-import images from '../../constants/images';
-import tw from 'twrnc';
+import CustomLoading from '../../components/customLoading';
 import {ToastShort} from '../../utils/utils';
-import {useSelector} from 'react-redux';
 import {
   getUser,
   updateUserData,
   uploadAssetsDOCorIMG,
 } from '../../utils/api/func';
-import Snackbar from 'react-native-snackbar';
-import Spinner from 'react-native-loading-spinner-overlay';
-import CustomLoading from '../../components/customLoading';
-import { toastAlertSuccess } from '../../utils/alert';
+import {toastAlertSuccess} from '../../utils/alert';
 
-const PhotoUploadScreen = () => {
+const PhotoUploadScreen: React.FC = () => {
   const navigation = useNavigation();
-  const userData = useSelector((state: any) => state.user.userData);
-  const handleContinue = async () => {
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    initGetUsers();
+  }, []);
+
+  const initGetUsers = useCallback(async () => {
+    const res: any = await getUser('');
+    if (res?.status === 201 || res?.status === 200) {
+      console.log('User identity:', res?.data?.user?.identity);
+    }
+  }, []);
+
+  const handleContinue = useCallback(async () => {
     const permission = await check(PERMISSIONS.ANDROID.CAMERA);
 
     if (permission === RESULTS.GRANTED) {
@@ -45,112 +57,109 @@ const PhotoUploadScreen = () => {
         ToastShort('Camera permission denied');
       }
     }
-    // navigation.navigate('IdVerification', {url: ''});
-  };
+  }, []);
 
-  const launchCameraFunction = () => {
-    const options = {
+  const launchCameraFunction = useCallback(() => {
+    const options: any = {
       mediaType: 'photo',
       saveToPhotos: true,
     };
 
-    launchCamera(options, async (response: any) => {
+    launchCamera(options, async response => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
         ToastShort('User cancelled image picker');
       } else if (response.errorCode) {
-        console.log('ImagePicker Error: ', response.errorMessage);
-        ToastShort(`'ImagePicker Error: ', ${response.errorMessage}`);
-      } else {
-        const imageObject = response.assets[0];
-
-        if (response?.assets?.length > 0) {
-          console.log('resp', response?.assets[0]);
-          // setPhotoUri(response?.assets[0].uri);
-
-          await uploadImgorDoc(response?.assets[0]);
-        }
-
-        // navigation.navigate('IdVerification', {imageObject});
+        console.log('ImagePicker Error:', response.errorMessage);
+        ToastShort(`ImagePicker Error: ${response.errorMessage}`);
+      } else if (response.assets && response.assets.length > 0) {
+        await uploadImgorDoc(response.assets[0]);
       }
     });
-  };
-  const [loading, setloading] = useState(false);
-  const uploadImgorDoc = async (param: {
-    uri: string;
-    name: string | null;
-    copyError: string | undefined;
-    fileCopyUri: string | null;
-    type: string | null;
-    size: number | null;
-  }) => {
-    setloading(true);
-    const res: any = await uploadAssetsDOCorIMG(param);
-    setloading(false);
-    if (res?.status === 201 || res?.status === 200) {
-      console.log('image:', res);
-      await initUpdate({verificationImage: res?.data.url});
-      // navigation.navigate('IdVerification', {url: res?.data.url ?? ''});
-    } else {
-      Snackbar.show({
-        text:
-          res?.error?.message ??
-          res?.error?.data?.message ??
-          'Oops!, an error occurred',
-        duration: Snackbar.LENGTH_LONG,
-        textColor: '#fff',
-        backgroundColor: '#88087B',
-      });
-    }
-  };
-  const initUpdate = async (param: any) => {
-    setloading(true);
-    const res: any = await updateUserData(param);
-    if ([200, 201].includes(res?.status)) {
-      toastAlertSuccess('Picture Upload Successful.');
-      navigation.navigate('IdVerification', {url: res?.data.url ?? ''});
-      await initGetUsers();
-    } else {
-    }
-    setloading(false);
-  };
-  console.log('====================================');
-  console.log(userData?.identity);
-  console.log('====================================');
-  const initGetUsers = async () => {
-    const res: any = await getUser('');
-    if (res?.status === 201 || res?.status === 200) {
-      console.log('====================================');
-      console.log(res?.data?.user?.identity);
-      console.log('====================================');
-    }
-  };
-  initGetUsers();
+  }, []);
+
+  const uploadImgorDoc = useCallback(
+    async (param: {
+      uri: string;
+      name: string | null;
+      copyError: string | undefined;
+      fileCopyUri: string | null;
+      type: string | null;
+      size: number | null;
+    }) => {
+      setLoading(true);
+      try {
+        const res: any = await uploadAssetsDOCorIMG(param);
+        if (res?.status === 201 || res?.status === 200) {
+          await initUpdate({verificationImage: res?.data.url});
+        } else {
+          Snackbar.show({
+            text:
+              res?.error?.message ??
+              res?.error?.data?.message ??
+              'Oops! An error occurred',
+            duration: Snackbar.LENGTH_LONG,
+            textColor: '#fff',
+            backgroundColor: '#88087B',
+          });
+        }
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        Snackbar.show({
+          text: 'An error occurred while uploading the image',
+          duration: Snackbar.LENGTH_LONG,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      } finally {
+        setLoading(false);
+      }
+    },
+    [],
+  );
+
+  const initUpdate = useCallback(
+    async (param: any) => {
+      setLoading(true);
+      try {
+        const res = await updateUserData(param);
+        if ([200, 201].includes(res?.status)) {
+          toastAlertSuccess('Picture Upload Successful.');
+          navigation.navigate('IdVerification', {url: res?.data.url ?? ''});
+          await initGetUsers();
+        }
+      } catch (error) {
+        console.error('Error updating user data:', error);
+        Snackbar.show({
+          text: 'An error occurred while updating user data',
+          duration: Snackbar.LENGTH_LONG,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      } finally {
+        setLoading(false);
+      }
+    },
+    [navigation, initGetUsers],
+  );
 
   return (
     <SafeAreaView style={styles.container}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginHorizontal: 20,
-          paddingBottom: 10,
-        }}>
+      <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             source={images.back}
-            style={{height: 25, width: 25}}
+            style={styles.backIcon}
             resizeMode="contain"
           />
         </TouchableOpacity>
         <TouchableOpacity style={tw`mx-auto`}>
           <Textcomp
-            text={'ID Check'}
+            text="ID Check"
             size={17}
             lineHeight={17}
-            color={'#000413'}
-            fontFamily={'Inter-SemiBold'}
+            color="#000413"
+            fontFamily="Inter-SemiBold"
           />
         </TouchableOpacity>
       </View>
@@ -160,25 +169,21 @@ const PhotoUploadScreen = () => {
           <CameraIcon />
         </TouchableOpacity>
         <Textcomp
-          text={
-            'Please take a clear picture of yourself. This will help our customers recognize you for on-site jobs.'
-          }
+          text="Please take a clear picture of yourself. This will help our customers recognize you for on-site jobs."
           color={colors.black}
           size={16}
-          style={{textAlign: 'center'}}
+          style={styles.instructionsText}
         />
         <Textcomp
-          text={
-            'Your picture will only be shared with customers if the job is on-site.'
-          }
+          text="Your picture will only be shared with customers if the job is on-site."
           color={colors.black}
           size={16}
-          style={{textAlign: 'center', marginTop: 10}}
+          style={styles.noteText}
           fontFamily="Inter-Bold"
         />
       </View>
       <CustomButton
-        text={'Continue'}
+        text="Continue"
         onClick={handleContinue}
         textStyle={styles.buttonText}
         style={styles.button}
@@ -195,6 +200,17 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: colors.greyLight1,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: 20,
+    paddingBottom: 10,
+  },
+  backIcon: {
+    height: 25,
+    width: 25,
+  },
   contentContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -208,18 +224,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   instructionsText: {
-    fontSize: 16,
-    fontFamily: commonStyle.fontFamily.regular,
-    color: colors.black,
     textAlign: 'center',
-    marginVertical: 10,
+    marginBottom: 10,
   },
   noteText: {
-    fontSize: 14,
-    fontFamily: commonStyle.fontFamily.bold,
-    color: colors.black,
     textAlign: 'center',
-    marginVertical: 10,
+    marginTop: 10,
   },
   button: {
     backgroundColor: colors.parpal,

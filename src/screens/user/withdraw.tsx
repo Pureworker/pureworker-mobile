@@ -112,7 +112,7 @@ const Withdraw = () => {
       narration: 'Withdrawal',
       transactionPin: transactionPin,
     };
-    // console.log(d);
+    console.log(d);
     try {
       const res: any = await withdraw(d);
       console.log('WITHDRAW:', res);
@@ -124,6 +124,7 @@ const Withdraw = () => {
         );
         navigation.navigate('Home');
       } else {
+        settransactionPin('');
         ToastShort(
           res?.error?.message
             ? res?.error?.message
@@ -131,6 +132,7 @@ const Withdraw = () => {
         );
       }
     } catch (error) {
+      settransactionPin('');
       console.error('Error with Withdraw Request:', error);
       ToastShort('An unexpected error occurred!.');
     } finally {

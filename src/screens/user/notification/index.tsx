@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {
   View,
-  Text,
   Image,
-  TouchableOpacity,
   Platform,
   StatusBar,
   ScrollView,
   RefreshControl,
+  SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -17,11 +16,8 @@ import tw from 'twrnc';
 import Textcomp from '../../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import colors from '../../../constants/colors';
-import {SIZES, perHeight, perWidth} from '../../../utils/position/sizes';
-import {
-  getProviderByService,
-  getUserNotification,
-} from '../../../utils/api/func';
+import {perHeight, perWidth} from '../../../utils/position/sizes';
+import {getUserNotification} from '../../../utils/api/func';
 import {
   addnotifications,
   addviewedNotifications,
@@ -75,49 +71,46 @@ const Index = () => {
     }, 2000);
   }, []);
 
-
-
-
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
-      <ScrollView
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-      >
-        <View
-          style={{
-            marginTop:
-              Platform.OS === 'ios'
-                ? getStatusBarHeight(true)
-                : StatusBar.currentHeight &&
-                  StatusBar.currentHeight + getStatusBarHeight(true),
-          }}
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginHorizontal: 20,
-          }}>
-          {/* <TouchableOpacity onPress={() => navigation.goBack()}>
+    <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+      <View
+        style={{
+          marginTop:
+            Platform.OS === 'ios'
+              ? getStatusBarHeight(true)
+              : StatusBar.currentHeight &&
+                StatusBar.currentHeight + getStatusBarHeight(true),
+        }}
+      />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginHorizontal: 20,
+          paddingBottom: 10,
+        }}>
+        {/* <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image
               source={images.back}
               style={{height: 25, width: 25}}
               resizeMode="contain"
             />
           </TouchableOpacity> */}
-          <View style={tw`mx-auto mt-3`}>
-            <Textcomp
-              text={'Notifications'}
-              size={17}
-              lineHeight={17}
-              color={'#000413'}
-              fontFamily={'Inter-SemiBold'}
-            />
-          </View>
+        <View style={tw`mx-auto mt-3`}>
+          <Textcomp
+            text={'Notifications'}
+            size={17}
+            lineHeight={17}
+            color={'#000413'}
+            fontFamily={'Inter-SemiBold'}
+          />
         </View>
+      </View>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View style={tw`flex-1`}>
           <View
             style={[
@@ -282,7 +275,7 @@ const Index = () => {
         </View>
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
-    </View>
+    </SafeAreaView>
   );
 };
 

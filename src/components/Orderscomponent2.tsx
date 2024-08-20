@@ -311,7 +311,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
                   'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                 headers: {Authorization: 'someAuthToken'},
                 priority: FastImage.priority.high,
-                cache: FastImage.cacheControl.cacheOnly,
+                // cache: FastImage.cacheControl.cacheOnly,
               }}
               resizeMode={FastImage.resizeMode.cover}
             />
@@ -540,7 +540,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
                 console.log(userData?.identity);
                 const isIdentityOrCacPresent =
                   userData?.identity?.number || userData?.cacNo;
-                if (userData?.isIdentitySubmitted) {
+                if (userData?.isIdentitySubmitted || isIdentityOrCacPresent) {
                   setready(true);
                 } else {
                   ToastShort('Please provide identity information');
