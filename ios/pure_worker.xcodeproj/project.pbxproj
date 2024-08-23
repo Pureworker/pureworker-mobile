@@ -47,6 +47,7 @@
 		5B7EB9410499542E8C5724F5 /* Pods-pure_worker-pure_workerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pure_worker-pure_workerTests.debug.xcconfig"; path = "Target Support Files/Pods-pure_worker-pure_workerTests/Pods-pure_worker-pure_workerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = pure_worker/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8402B4752A8EF34400C21A37 /* pure_worker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = pure_worker.entitlements; path = pure_worker/pure_worker.entitlements; sourceTree = "<group>"; };
+		8428A4292C779F2300E95424 /* hermes.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = hermes.xcframework; path = "Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework"; sourceTree = "<group>"; };
 		84657B852AAD1FFE0089E168 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-pure_worker-pure_workerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pure_worker-pure_workerTests.release.xcconfig"; path = "Target Support Files/Pods-pure_worker-pure_workerTests/Pods-pure_worker-pure_workerTests.release.xcconfig"; sourceTree = "<group>"; };
 		9B5B134C73A0E50039A6187F /* Pods_pure_worker_pure_workerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_pure_worker_pure_workerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,6 +113,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8428A4292C779F2300E95424 /* hermes.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				AC0F7E0D9EC4308E22734CAC /* Pods_pure_worker.framework */,
 				9B5B134C73A0E50039A6187F /* Pods_pure_worker_pure_workerTests.framework */,

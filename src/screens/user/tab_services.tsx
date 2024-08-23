@@ -1,11 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
   Image,
   TouchableOpacity,
   Platform,
-  StatusBar,
   ScrollView,
   FlatList,
   ActivityIndicator,
@@ -19,19 +18,13 @@ import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import CategoryList2 from '../../components/CategoryList2';
-import commonStyle from '../../constants/commonStyle';
 import {
   useGetCategoryQuery,
   useGetUserDetailQuery,
-  useGetAllServicesQuery,
 } from '../../store/slice/api';
 import colors from '../../constants/colors';
 import TextInputs from '../../components/TextInputs';
-import {
-  getFAQ,
-  getProviderByService,
-  getSearchQuery,
-} from '../../utils/api/func';
+import {getProviderByService, getSearchQuery} from '../../utils/api/func';
 import {addprovidersByCateegory} from '../../store/reducer/mainSlice';
 import CustomLoading from '../../components/customLoading';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -55,12 +48,6 @@ const TabServices = () => {
   //     name: searchInput,
   //   });
 
-  // useEffect(() => {
-  //   if (allServicesData) {
-  //     setSearchResults(allServicesData);
-  //   }
-  // }, [allServicesData]);
-
   const handleDropdownClick = (catId: React.SetStateAction<null>) => {
     // Existing code...
   };
@@ -77,7 +64,6 @@ const TabServices = () => {
         // Handle error, show an error message, or take appropriate action
       } else {
         // Update the search results state with the fetched data
-
         setSearchResults(data?.data ?? []);
       }
     } catch (error) {
@@ -89,8 +75,8 @@ const TabServices = () => {
     }
   };
   // Debounce function to delay search requests
-  const debounce = (func, delay) => {
-    let timeoutId;
+  const debounce = (func: any, delay: any) => {
+    let timeoutId: any;
     return function (...args) {
       if (timeoutId) {
         clearTimeout(timeoutId);
@@ -100,7 +86,7 @@ const TabServices = () => {
       }, delay);
     };
   };
-  const debouncedHandleSearch = debounce(handleSearch, 500);
+  const debouncedHandleSearch = debounce(handleSearch, 300);
   const userType = useSelector((state: any) => state.user.isLoggedIn);
   const initFecthProviders = async (id: any, itemDetail) => {
     setisLoading(true);
@@ -316,6 +302,10 @@ const TabServices = () => {
         <View style={tw`h-20`} />
       </ScrollView>
       <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
+
+      {searchResults && (
+        <Spinner visible={_isLoading} customIndicator={<CustomLoading />} />
+      )}
     </SafeAreaView>
   );
 };

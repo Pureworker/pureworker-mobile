@@ -45,6 +45,9 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 target 'pure_worker' do
+  pod 'AppCenter/Analytics', '5.0.4'
+  pod 'AppCenter/Core', '5.0.4'
+  pod 'AppCenter/Crashes', '5.0.4'
   pod 'Firebase', :modular_headers => true
   pod 'FirebaseCoreInternal', :modular_headers => true
   # pod 'FirebaseCore', :modular_headers => true

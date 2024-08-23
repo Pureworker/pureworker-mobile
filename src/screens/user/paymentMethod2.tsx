@@ -38,7 +38,11 @@ const PaymentMethod2 = ({route}: any) => {
 
   // const [amount, setamount] = useState(route?.params?.amount || null);
   const [amount, setamount] = useState(
-    route?.params === undefined ? 0 : route?.params?.amount,
+    route?.params === undefined
+      ? 0
+      : route?.params?.amount === undefined
+      ? 0
+      : route?.params?.amount,
   );
   const [isLoading, setisLoading] = useState(false);
   console.log(route.params);
@@ -62,7 +66,12 @@ const PaymentMethod2 = ({route}: any) => {
     console.log(data);
     await initGetUsers();
     ToastLong('Funding Successful!');
-    navigation.navigate('Home');
+
+    if (route?.params?.from && route?.params?.from === 'OrderReview') {
+      navigation.navigate('OrderReview', {from: 'Funding'});
+    } else {
+      navigation.navigate('Home');
+    }
   };
   const generateTransactionRef = (length: number) => {
     var result = '';

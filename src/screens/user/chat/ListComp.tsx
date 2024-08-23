@@ -98,7 +98,7 @@ export default function ListComp({navigation, item}: any) {
               // 'https://res.cloudinary.com/dpdytuqlf/image/upload/v1707651780/category/k17kfdlowt9qnflorody.jpg',
               headers: {Authorization: 'someAuthToken'},
               priority: FastImage.priority.high,
-              cache: FastImage.cacheControl.cacheOnly
+              // cache: FastImage.cacheControl.cacheOnly
             }}
             resizeMode={FastImage.resizeMode.cover}
           />

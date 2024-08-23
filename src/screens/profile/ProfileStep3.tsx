@@ -33,6 +33,7 @@ import CustomLoading from '../../components/customLoading';
 import * as yup from 'yup';
 import {useFormik} from 'formik';
 import {ToastShort} from '../../utils/utils';
+import {toastAlertError} from '../../utils/alert';
 type Route = {
   key: string;
   name: string;
@@ -213,7 +214,7 @@ const ProfileStep3 = () => {
     },
   });
 
-  const handleProfileSetup = async (values: {
+  const _handleProfileSetup = async (values: {
     name1: any;
     relation1: any;
     phoneNumber1: any;
@@ -278,22 +279,6 @@ const ProfileStep3 = () => {
         ToastShort('Phone Number2 must be 11 numbers');
         return;
       }
-      // const contact = [
-      //   {
-      //     fullName: name1,
-      //     relationship: relation1,
-      //     phoneNumber: phoneNumber1,
-      //     email: email1,
-      //     address: address1,
-      //   },
-      //   {
-      //     fullName: name2,
-      //     relationship: relation2,
-      //     phoneNumber: phoneNumber2,
-      //     email: email2,
-      //     address: address2,
-      //   },
-      // ];
       const contact = [
         {
           fullName: values.name1,
@@ -316,6 +301,7 @@ const ProfileStep3 = () => {
         }),
       );
       setisLoading(true);
+
       const res: any = await completeProfile({contact: contact, action: 'add'});
       console.log('result', res?.data);
       if (res?.status === 200 || res?.status === 201) {
@@ -364,6 +350,128 @@ const ProfileStep3 = () => {
     setisLoading(false);
   };
 
+  const handleProfileSetup = async (values: {
+    name1: any;
+    relation1: any;
+    phoneNumber1: any;
+    email1: any;
+    address1: any;
+    name2: any;
+    relation2: any;
+    phoneNumber2: any;
+    email2: any;
+    address2: any;
+  }) => {
+    try {
+      setisLoading(true);
+      // Check for validation manually if needed before submitting
+      if (!validateEmail(values.email1)) {
+        Snackbar.show({
+          text: 'Please enter a valid email for Contact 1',
+          duration: Snackbar.LENGTH_LONG,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+        return;
+      }
+      if (!validateEmail(values.email2)) {
+        Snackbar.show({
+          text: 'Please enter a valid email for Contact 2',
+          duration: Snackbar.LENGTH_LONG,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+        return;
+      }
+      if (values.email1 === values.email2) {
+        toastAlertError('Cannot have the same Email for both contacts');
+        return;
+      }
+      if (values.phoneNumber1 === values.phoneNumber2) {
+        toastAlertError('Cannot have the same PhoneNumber for both contacts');
+        return;
+      }
+      if (values.name1 === values.name2) {
+        toastAlertError('Cannot have the same Name for both contacts');
+        return;
+      }
+      if (values.phoneNumber1?.length !== 11) {
+        toastAlertError('Phone Number 1 must be 11 digits');
+        return;
+      }
+      if (values.phoneNumber2?.length !== 11) {
+        toastAlertError('Phone Number 2 must be 11 digits');
+        return;
+      }
+      const contact = [
+        {
+          fullName: values.name1,
+          relationship: values.relation1,
+          phoneNumber: values.phoneNumber1,
+          email: values.email1,
+          address: values.address1,
+        },
+        {
+          fullName: values.name2,
+          relationship: values.relation2,
+          phoneNumber: values.phoneNumber2,
+          email: values.email2,
+          address: values.address2,
+        },
+      ];
+      dispatch(
+        addcompleteProfile({
+          contact: contact,
+        }),
+      );
+      const res = await completeProfile({contact: contact, action: 'add'});
+      // Check if the submission was successful
+      if (res?.status === 200 || res?.status === 201) {
+        Snackbar.show({
+          text: 'Contacts Submitted Successfully! Proceeding to Virtual Interview',
+          duration: Snackbar.LENGTH_LONG,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+        // Delay the navigation to allow the user to see the Snackbar message
+        setTimeout(() => {
+          if (userData?.liveTest === false) {
+            navigation.navigate('FaceDetection', {page: 'Profile'});
+          } else {
+            navigation.navigate('Congratulations');
+          }
+        }, 2000); // 5-second delay
+
+        dispatch(addformStage(6));
+      } else {
+        toastAlertError('Error');
+
+        // ToastShort(
+        //   `${error.message ?? res?.error?.data?.message}` ??
+        //     'An unexpected error occurred',
+        // );
+        console.log('here:', res?.error?.message);
+        // Handle any error response from the backend
+        throw new Error(
+          res?.error?.message ||
+            res?.error?.data?.message ||
+            'Oops! An error occurred.',
+        );
+      }
+    } catch (error) {
+      // Catch any backend or other errors here
+      // Snackbar.show({
+      //   text: error.message || 'An unexpected error occurred',
+      //   duration: Snackbar.LENGTH_LONG,
+      //   textColor: '#fff',
+      //   backgroundColor: '#88087B',
+      // });
+      toastAlertError(`${error.message}` ?? 'An unexpected error occurred');
+    } finally {
+      setisLoading(false); // Ensure loading spinner is stopped
+    }
+  };
+
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: colors.greyLight}]}>
       <Header
@@ -406,11 +514,6 @@ const ProfileStep3 = () => {
           <TextInputs
             style={{marginTop: 10, backgroundColor: colors.greyLight1}}
             labelText={''}
-            // state={name1}
-            // setState={text => {
-            //   setName1(text);
-            //   // console.log(text);
-            // }}
             state={formik.values.name1}
             setState={formik.handleChange('name1')}
             error={formik.errors.name1}

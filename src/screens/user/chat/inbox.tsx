@@ -30,7 +30,11 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
 import {ImageZoom} from '@likashefqet/react-native-image-zoom';
 
-import {addchatData, addchatList} from '../../../store/reducer/mainSlice';
+import {
+  addchatData,
+  addchatList,
+  addchatPageUser,
+} from '../../../store/reducer/mainSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   getChatsbyuser,
@@ -51,6 +55,7 @@ import {
   markAsRead,
 } from '../../../utils/api/chat';
 import InfoIcon from '../../../assets/svg/Info';
+import DocumentPicker from 'react-native-document-picker';
 
 export default function Inbox({navigation, route}: any) {
   const scrollRef = useRef<ScrollView | null>(null);
@@ -88,13 +93,12 @@ export default function Inbox({navigation, route}: any) {
   const dispatch = useDispatch();
   useEffect(() => {
     const handleFetch = async () => {
-      // setloading(true);
       // console.log(agentData?._id);
       const res: any = await getMessagesbyuser(`${userId}`);
       // const res: any = await getMessagesbyuser();
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addchatData(res?.data.messages));
-        // console.log('here_', res?.data.messages);
+        dispatch(addchatPageUser(`${userId}`));
       }
       // setloading(false);
     };
@@ -218,7 +222,50 @@ export default function Inbox({navigation, route}: any) {
     }
   };
 
-  // pureworkerapp@gmail.com
+  const selectFile = async () => {
+    try {
+      const file = await DocumentPicker.pick({
+        type: [DocumentPicker.types.allFiles],
+      });
+
+      if (file) {
+        let d_file = {
+          uri: file[0].uri,
+          name: `${userId}:: chatFile - ${new Date()}`,
+          type: file[0].type,
+          section: 'chat',
+        };
+        console.log('====================================');
+        console.log(d_file);
+        console.log('====================================');
+        const uploadResponse = await uploadAssetsDOCorIMG(d_file);
+
+        if (uploadResponse?.data?.url) {
+          const data = {
+            from: agentData?._id,
+            to: `${userId}`,
+            body: uploadResponse.data.url,
+            updatedAt: new Date().toISOString(),
+          };
+
+          const currentDate = new Date();
+          const createdAt = currentDate.toISOString();
+          const _data = [...chatData, {...data, createdAt}];
+          dispatch(addchatData(_data));
+
+          socket.emit('message', data, async () => {
+            console.log('message sent', data);
+          });
+        }
+      }
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        ToastShort('Document selection canceled');
+      } else {
+        ToastLong('Error in sending document');
+      }
+    }
+  };
 
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
@@ -273,7 +320,7 @@ export default function Inbox({navigation, route}: any) {
       }
     };
     initGetProviderNew();
-  }, []);
+  }, [navigation]);
 
   console.log('PROVIDER:', providerData);
 
@@ -297,6 +344,8 @@ export default function Inbox({navigation, route}: any) {
     handleMarkeRead();
   }, []);
 
+  console.log(providerData?.services);
+
   return (
     <SafeAreaView style={[tw`h-full bg-[#EBEBEB]  w-full`, styles.container]}>
       <KeyboardAvoidingView
@@ -317,6 +366,7 @@ export default function Inbox({navigation, route}: any) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.goBack();
+                    dispatch(addchatPageUser(null));
                   }}>
                   <Image
                     resizeMode="cover"
@@ -648,6 +698,25 @@ export default function Inbox({navigation, route}: any) {
                   />
                 )}
               </TouchableOpacity>
+              {message?.length === 0 && (
+                <TouchableOpacity
+                  style={tw`bg-[${colors.parpal}2E] p-1.5 rounded-full ml-2`}
+                  onPress={() => {
+                    selectFile();
+                  }}>
+                  <Image
+                    resizeMode="contain"
+                    source={images.attachment}
+                    style={[
+                      tw`w-full my-auto`,
+                      {
+                        height: 17.5,
+                        width: 17.5,
+                      },
+                    ]}
+                  />
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>
@@ -692,12 +761,16 @@ export default function Inbox({navigation, route}: any) {
         // swipeDirection={['down']}
         // onSwipeComplete={() => setshowModal(false)}
         onBackButtonPress={() => setshowModal(false)}>
-        <View style={tw` h-full w-full bg-black bg-opacity-5`}>
+        <View style={[tw` h-full w-full bg-black bg-opacity-5 `, {}]}>
           <TouchableOpacity
             onPress={() => setshowModal(false)}
             style={tw`flex-1`}
           />
-          <View style={[tw` mt-auto bg-[#D9D9D9]`, {maxHeight: '80%'}]}>
+          <View
+            style={[
+              tw` mt-auto bg-[#D9D9D9]`,
+              {maxHeight: '84%', marginBottom: -20},
+            ]}>
             <TouchableOpacity
               onPress={() => {}}
               style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}

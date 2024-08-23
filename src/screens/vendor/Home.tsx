@@ -318,7 +318,10 @@ const Home = ({navigation}: any) => {
         </View>
 
         <View
-          style={[tw`pb-3`, {marginLeft: perWidth(18), marginTop: perHeight(28)}]}>
+          style={[
+            tw`pb-3`,
+            {marginLeft: perWidth(18), marginTop: perHeight(28)},
+          ]}>
           <Textcomp
             // text={`Welcome ${userData?.firstName || userData?.businessName},`}
             // text={`Welcome ${
@@ -343,10 +346,163 @@ const Home = ({navigation}: any) => {
           />
         </View>
         <ScrollView
-        showsVerticalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
+          {userData?.isVerified === 'incomplete' && formStage !== 6 ? (
+            <>
+              <TouchableOpacity
+                onPress={() => {
+                  // navigation.navigate('ProfileStep21');
+                  if (formStage === 1) {
+                    navigation.navigate('ProfileStep1');
+                  } else if (formStage === 2) {
+                    navigation.navigate('ProfileStep2');
+                  } else if (formStage === 3) {
+                    navigation.navigate('ProfileStep3');
+                  } else if (formStage === 4) {
+                    navigation.navigate('ProfileStep4');
+                  } else if (formStage === 5) {
+                    navigation.navigate('ProfileStep5');
+                  } else if (formStage === 21) {
+                    navigation.navigate('ProfileStep21');
+                  }
+                }}
+                style={[
+                  tw`bg-[#2D303C] mx-auto items-center justify-center`,
+                  {
+                    width:
+                      Platform.OS === 'ios' ? perWidth(309) : perWidth(315),
+                    height:
+                      Platform.OS === 'ios' ? perHeight(30) : perHeight(35),
+                    borderRadius: 7,
+                    marginTop: perHeight(10),
+                  },
+                ]}>
+                <Textcomp
+                  text={'Complete your registration to accept orders'}
+                  size={Platform.OS === 'ios' ? 14 : 13}
+                  lineHeight={16}
+                  color={colors.primary}
+                  fontFamily={'Inter-Medium'}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  Linking.openURL(
+                    'https://youtu.be/4sOGNUYIIjU?si=usMWyV9xFkGUzmqU',
+                  );
+                }}
+                style={[
+                  tw` mr-auto ml-[30%] flex flex-row items-center justify-center`,
+                  {
+                    width: perWidth(335),
+                    height: perHeight(30),
+                    borderRadius: 7,
+                    // marginTop: perHeight(43),
+                  },
+                ]}>
+                <Textcomp
+                  text={'Watch How'}
+                  size={14}
+                  lineHeight={18}
+                  color={colors.parpal}
+                  fontFamily={'Inter-Bold'}
+                  style={tw`text-center underline`}
+                />
+              </TouchableOpacity>
+            </>
+          ) : null}
+          {userData?.isVerified === 'review' && (
+            <TouchableOpacity
+              disabled={true}
+              onPress={() => {
+                // navigation.navigate('ProfileStep11');
+                // navigation.navigate('ProfileStep3');
+              }}
+              style={[
+                tw`bg-[#2D303C] mx-auto items-center justify-center`,
+                {
+                  width: perWidth(309),
+                  height: perHeight(30),
+                  borderRadius: 7,
+                  marginTop: perHeight(43),
+                },
+              ]}>
+              <Textcomp
+                text={'Your profile is under review...'}
+                size={14}
+                lineHeight={16}
+                color={colors.primary}
+                fontFamily={'Inter-Medium'}
+              />
+            </TouchableOpacity>
+          )}
+          {userData?.isVerified === 'rejected' && (
+            <TouchableOpacity
+              // disabled={true}
+              onPress={() => {
+                navigation.navigate('ProfileStep11');
+              }}
+              style={[
+                tw`bg-[#2D303C] mx-auto flex flex-row items-center justify-center`,
+                {
+                  width: perWidth(309),
+                  height: perHeight(30),
+                  borderRadius: 7,
+                  marginTop: perHeight(43),
+                },
+              ]}>
+              <Textcomp
+                text={'Profile verification failed '}
+                size={14}
+                lineHeight={16}
+                color={'#D20713'}
+                fontFamily={'Inter-Bold'}
+              />
+              <Textcomp
+                text={' (Check your email)'}
+                size={14}
+                lineHeight={16}
+                color={colors.primary}
+                fontFamily={'Inter-Medium'}
+              />
+            </TouchableOpacity>
+          )}
+          {userData?.isVerified === 'approved' && (
+            <></>
+            // <TouchableOpacity
+            //   disabled={true}
+            //   onPress={() => {
+            //     // navigation.navigate('ProfileStep1');
+            //   }}
+            //   style={[
+            //     tw`bg-[#2D303C] mx-auto flex flex-row items-center justify-center`,
+            //     {
+            //       width: perWidth(309),
+            //       height: perHeight(30),
+            //       borderRadius: 7,
+            //       marginTop: perHeight(43),
+            //     },
+            //   ]}>
+            //   <Textcomp
+            //     text={'Profile approved'}
+            //     size={14}
+            //     lineHeight={16}
+            //     color={'#45FF27'}
+            //     fontFamily={'Inter-Bold'}
+            //   />
+            //   <Textcomp
+            //     text={' (You will start receiving orders)'}
+            //     size={12}
+            //     lineHeight={16}
+            //     color={colors.primary}
+            //     fontFamily={'Inter-Medium'}
+            //   />
+            // </TouchableOpacity>
+          )}
+
           <View
             style={[
               tw`flex flex-row`,
@@ -653,160 +809,8 @@ const Home = ({navigation}: any) => {
               </View>
             )}
           </View>
-          {userData?.isVerified === 'incomplete' && formStage !== 6 ? (
-            <>
-              <TouchableOpacity
-                onPress={() => {
-                  Linking.openURL(
-                    'https://youtu.be/4sOGNUYIIjU?si=usMWyV9xFkGUzmqU',
-                  );
-                }}
-                style={[
-                  tw` mr-auto ml-[30%] flex flex-row items-center justify-center`,
-                  {
-                    width: perWidth(335),
-                    height: perHeight(30),
-                    borderRadius: 7,
-                    marginTop: perHeight(43),
-                  },
-                ]}>
-                <Textcomp
-                  text={'Watch How'}
-                  size={14}
-                  lineHeight={18}
-                  color={colors.parpal}
-                  fontFamily={'Inter-Bold'}
-                  style={tw`text-center underline`}
-                />
-              </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => {
-                  // navigation.navigate('ProfileStep21');
-                  if (formStage === 1) {
-                    navigation.navigate('ProfileStep1');
-                  } else if (formStage === 2) {
-                    navigation.navigate('ProfileStep2');
-                  } else if (formStage === 3) {
-                    navigation.navigate('ProfileStep3');
-                  } else if (formStage === 4) {
-                    navigation.navigate('ProfileStep4');
-                  } else if (formStage === 5) {
-                    navigation.navigate('ProfileStep5');
-                  } else if (formStage === 21) {
-                    navigation.navigate('ProfileStep21');
-                  }
-                }}
-                style={[
-                  tw`bg-[#2D303C] mx-auto items-center justify-center`,
-                  {
-                    width:
-                      Platform.OS === 'ios' ? perWidth(309) : perWidth(315),
-                    height:
-                      Platform.OS === 'ios' ? perHeight(30) : perHeight(35),
-                    borderRadius: 7,
-                    marginTop: perHeight(10),
-                  },
-                ]}>
-                <Textcomp
-                  text={'Complete your registration to accept orders'}
-                  size={Platform.OS === 'ios' ? 14 : 13}
-                  lineHeight={16}
-                  color={colors.primary}
-                  fontFamily={'Inter-Medium'}
-                />
-              </TouchableOpacity>
-            </>
-          ) : null}
-          {userData?.isVerified === 'review' && (
-            <TouchableOpacity
-              disabled={true}
-              onPress={() => {
-                // navigation.navigate('ProfileStep11');
-                // navigation.navigate('ProfileStep3');
-              }}
-              style={[
-                tw`bg-[#2D303C] mx-auto items-center justify-center`,
-                {
-                  width: perWidth(309),
-                  height: perHeight(30),
-                  borderRadius: 7,
-                  marginTop: perHeight(43),
-                },
-              ]}>
-              <Textcomp
-                text={'Your profile is under review...'}
-                size={14}
-                lineHeight={16}
-                color={colors.primary}
-                fontFamily={'Inter-Medium'}
-              />
-            </TouchableOpacity>
-          )}
-          {userData?.isVerified === 'rejected' && (
-            <TouchableOpacity
-              // disabled={true}
-              onPress={() => {
-                navigation.navigate('ProfileStep11');
-              }}
-              style={[
-                tw`bg-[#2D303C] mx-auto flex flex-row items-center justify-center`,
-                {
-                  width: perWidth(309),
-                  height: perHeight(30),
-                  borderRadius: 7,
-                  marginTop: perHeight(43),
-                },
-              ]}>
-              <Textcomp
-                text={'Profile verification failed '}
-                size={14}
-                lineHeight={16}
-                color={'#D20713'}
-                fontFamily={'Inter-Bold'}
-              />
-              <Textcomp
-                text={' (Check your email)'}
-                size={14}
-                lineHeight={16}
-                color={colors.primary}
-                fontFamily={'Inter-Medium'}
-              />
-            </TouchableOpacity>
-          )}
-          {userData?.isVerified === 'approved' && (
-            <TouchableOpacity
-              disabled={true}
-              onPress={() => {
-                // navigation.navigate('ProfileStep1');
-              }}
-              style={[
-                tw`bg-[#2D303C] mx-auto flex flex-row items-center justify-center`,
-                {
-                  width: perWidth(309),
-                  height: perHeight(30),
-                  borderRadius: 7,
-                  marginTop: perHeight(43),
-                },
-              ]}>
-              <Textcomp
-                text={'Profile approved'}
-                size={14}
-                lineHeight={16}
-                color={'#45FF27'}
-                fontFamily={'Inter-Bold'}
-              />
-              <Textcomp
-                text={' (You will start receiving orders)'}
-                size={12}
-                lineHeight={16}
-                color={colors.primary}
-                fontFamily={'Inter-Medium'}
-              />
-            </TouchableOpacity>
-          )}
-
-          <View style={tw`h-20`} />
+          <View style={tw`h-50`} />
         </ScrollView>
       </View>
       <Modal

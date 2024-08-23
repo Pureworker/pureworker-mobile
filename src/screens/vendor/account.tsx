@@ -1,54 +1,48 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-  View,
-  Text,
-  Image,
+  View, Image,
   TouchableOpacity,
   Platform,
   StatusBar,
   ScrollView,
   ActivityIndicator,
   PermissionsAndroid,
-  SafeAreaView,
+  SafeAreaView
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
-import {StackNavigation} from '../../constants/navigation';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { StackNavigation } from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 import Button from '../../components/Button';
 import colors from '../../constants/colors';
-import {SIZES} from '../../utils/position/sizes';
+import { SIZES } from '../../utils/position/sizes';
 import TextInputs from '../../components/TextInputs';
 import TextWrapper from '../../components/TextWrapper';
-import {generalStyles} from '../../constants/generalStyles';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { generalStyles } from '../../constants/generalStyles';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import {
-  addProfileData,
-  addUserData,
-  addcompleteProfile,
+  addProfileData, addcompleteProfile
 } from '../../store/reducer/mainSlice';
 import {
   completeProfile,
   deletePortfolio,
   getProfile,
-  getProviderNew,
-  getUser,
-  uploadAssetsDOCorIMG,
+  getProviderNew, uploadAssetsDOCorIMG
 } from '../../utils/api/func';
 import FastImage from 'react-native-fast-image';
 import CustomLoading from '../../components/customLoading';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Snackbar from 'react-native-snackbar';
-import {ToastLong, ToastShort} from '../../utils/utils';
+import { ToastLong, ToastShort } from '../../utils/utils';
 import TickIcon from '../../assets/svg/Tick';
 import Modal from 'react-native-modal/dist/modal';
 import PortComp from '../profile/comp/portComp4';
 import AddCircle from '../../assets/svg/AddCircle';
 import EditComp from '../profile/comp/EditComp';
-import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 const Account = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -192,78 +186,7 @@ const Account = () => {
       }
     } catch (error) {}
   };
-  // const opencamerafordp4 = async () => {
-  //   const options = {
-  //     mediaType: 'photo',
-  //     selectionLimit: 1,
-  //     cameraType: 'front',
-  //   };
-  //   try {
-  //     if (Platform.OS === 'ios') {
-  //       const openCamera = async () => {
-  //         const cameraStatus = await check(PERMISSIONS.IOS.CAMERA);
 
-  //         if (cameraStatus === RESULTS.GRANTED) {
-  //           // Camera permission is granted, open camera here
-  //           await launchCamera(options, async (resp: unknown) => {
-  //             if (resp?.assets?.length > 0) {
-  //               console.log('resp', resp?.assets[0]);
-  //               setImageUrl(resp?.assets[0].uri);
-  //               await uploadImgorDoc(resp?.assets[0]);
-  //               console.warn('processed pic', data);
-  //               dispatch(addcompleteProfile({profilePic: data}));
-  //               const res: any = await completeProfile({profilePic: data});
-  //             }
-  //           });
-  //         } else {
-  //           // Camera permission is not granted, request it
-  //           const newCameraStatus = await request(PERMISSIONS.IOS.CAMERA);
-  //           if (newCameraStatus === RESULTS.GRANTED) {
-  //             // Camera permission granted after request, open camera
-  //             await launchCamera(options, async (resp: unknown) => {
-  //               if (resp?.assets?.length > 0) {
-  //                 console.log('resp', resp?.assets[0]);
-  //                 setImageUrl(resp?.assets[0].uri);
-  //                 await uploadImgorDoc(resp?.assets[0]);
-  //                 console.warn('processed pic', data);
-  //                 dispatch(addcompleteProfile({profilePic: data}));
-  //                 const res: any = await completeProfile({profilePic: data});
-  //               }
-  //             });
-  //           } else {
-  //             // Camera permission denied
-  //             console.log('Camera permission denied');
-  //           }
-  //         }
-  //       };
-  //       openCamera();
-  //     } else {
-  //       const granted = await PermissionsAndroid.request(
-  //         PermissionsAndroid.PERMISSIONS.CAMERA,
-  //         {
-  //           title: 'App Camera Permission',
-  //           message: 'Pureworker needs access to your camera to takee picture',
-  //           buttonNeutral: 'Ask Me Later',
-  //           buttonNegative: 'Cancel',
-  //           buttonPositive: 'OK',
-  //         },
-  //       );
-  //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-  //         console.log('Camera permission given');
-  //         await launchCamera(options, async (resp: unknown) => {
-  //           if (resp?.assets?.length > 0) {
-  //             console.log('resp', resp?.assets[0]);
-  //             setImageUrl(resp?.assets[0].uri);
-  //             await uploadImgorDoc(resp?.assets[0]);
-  //           }
-  //         });
-  //       } else {
-  //         console.log('Camera permission denied2');
-  //       }
-  //     }
-  //   } catch (error) {}
-  //   // launchCamera
-  // };
   const upload = async (param: string) => {
     const res: any = await completeProfile({profilePic: param});
     console.log('result', res?.data);
@@ -462,7 +385,7 @@ const Account = () => {
                           uri: profileData?.profilePic || imageUrl,
                           headers: {Authorization: 'someAuthToken'},
                           priority: FastImage.priority.high,
-                          cache: FastImage.cacheControl.cacheOnly
+                          // cache: FastImage.cacheControl.cacheOnly
                         }}
                         resizeMode={FastImage.resizeMode.cover}
                       />

@@ -1,5 +1,4 @@
 const images = {
-
   refferalImg: require('./../assets/images/referralImg.png'),
   send2: require('./../assets/images/send2.png'),
   camera: require('./../assets/images/camera.png'),
@@ -78,5 +77,6 @@ const images = {
   close: require('../assets/images/close.png'),
   success: require('../assets/images/success.png'),
   process: require('../assets/images/process.png'),
+  attachment: require('../assets/images/attachment.png'),
 };
 export default images;

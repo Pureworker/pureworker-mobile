@@ -64,6 +64,8 @@ const initialState = {
   referralDetails: null,
   language: null,
   country: null,
+  interOrder: null,
+  chatPageUser: null
 };
 
 export const mainSlice = createSlice({
@@ -95,6 +97,7 @@ export const mainSlice = createSlice({
       state.serviceView = null;
       state.banks = [];
       state.providerintrackOrders = [];
+      state.interOrder = null;
     },
 
     logout: state => {
@@ -122,7 +125,8 @@ export const mainSlice = createSlice({
       state.providerintrackOrders = [];
       state.isNetwork = true;
       state.language = null;
-      state.country =  null;
+      state.country = null;
+      state.interOrder = null;
     },
 
     addCategory: (state, action) => {
@@ -303,6 +307,13 @@ export const mainSlice = createSlice({
     addCountry: (state, action) => {
       state.country = action.payload;
     },
+
+    addIntermediateOrder: (state, action) => {
+      state.interOrder = action.payload;
+    },
+    addchatPageUser: (state, action) => {
+      state.chatPageUser = action.payload;
+    },
   },
 });
 
@@ -352,6 +363,8 @@ export const {
   addIsNetwork,
   addlanguage,
   addCountry,
+  addIntermediateOrder,
+  addchatPageUser,
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);

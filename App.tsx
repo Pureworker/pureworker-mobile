@@ -41,6 +41,7 @@ import SpInAppUpdates, {
 } from 'sp-react-native-in-app-updates';
 import {checkForUpdate} from './src/utils/update';
 import DeviceInfo from 'react-native-device-info';
+import {AlertNotificationRoot} from 'react-native-alert-notification';
 Sentry.init({
   dsn: 'https://aaf6ecb52ce579d3e2a85f314f1773ad@o4506399508725760.ingest.sentry.io/4506410437509120',
 });
@@ -470,7 +471,9 @@ const App = () => {
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <NavigationContainer ref={navigationRef} linking={linking}>
-              <MainStack />
+              <AlertNotificationRoot>
+                <MainStack />
+              </AlertNotificationRoot>
             </NavigationContainer>
           </PersistGate>
         </Provider>

@@ -12,7 +12,6 @@ import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import tw from 'twrnc';
-
 import colors from '../../constants/colors';
 import commonStyle from '../../constants/commonStyle';
 import images from '../../constants/images';
@@ -42,7 +41,6 @@ const PhotoUploadScreen: React.FC = () => {
       console.log('User identity:', res?.data?.user?.identity);
     }
   }, []);
-
   const handleContinue = useCallback(async () => {
     const permission = await check(PERMISSIONS.ANDROID.CAMERA);
 
@@ -58,13 +56,11 @@ const PhotoUploadScreen: React.FC = () => {
       }
     }
   }, []);
-
   const launchCameraFunction = useCallback(() => {
     const options: any = {
       mediaType: 'photo',
       saveToPhotos: true,
     };
-
     launchCamera(options, async response => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -77,7 +73,6 @@ const PhotoUploadScreen: React.FC = () => {
       }
     });
   }, []);
-
   const uploadImgorDoc = useCallback(
     async (param: {
       uri: string;
@@ -117,7 +112,6 @@ const PhotoUploadScreen: React.FC = () => {
     },
     [],
   );
-
   const initUpdate = useCallback(
     async (param: any) => {
       setLoading(true);

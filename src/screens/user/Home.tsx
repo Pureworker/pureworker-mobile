@@ -249,7 +249,6 @@ const Home = () => {
     socket.connect();
     console.log('-idid', socket.id);
     socket.emit('authentication', userData);
-    // console.log('got here');
   }, []);
 
   return (

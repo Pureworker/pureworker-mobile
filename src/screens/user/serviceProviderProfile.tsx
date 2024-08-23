@@ -311,7 +311,7 @@ const ServiceProviderProfile = () => {
             // 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
             headers: {Authorization: 'someAuthToken'},
             priority: FastImage.priority.high,
-            cache: FastImage.cacheControl.cacheOnly,
+            // cache: FastImage.cacheControl.cacheOnly,
           }}
           resizeMode={FastImage.resizeMode.cover}>
           <View
@@ -870,7 +870,7 @@ const ServiceProviderProfile = () => {
                                           Authorization: 'someAuthToken',
                                         },
                                         priority: FastImage.priority.high,
-                                        cache: FastImage.cacheControl.cacheOnly,
+                                        // cache: FastImage.cacheControl.cacheOnly,
                                       }}
                                       resizeMode={FastImage.resizeMode.cover}
                                     />
@@ -935,7 +935,7 @@ const ServiceProviderProfile = () => {
                                       uri: item,
                                       headers: {Authorization: 'someAuthToken'},
                                       priority: FastImage.priority.high,
-                                      cache: FastImage.cacheControl.cacheOnly,
+                                      // cache: FastImage.cacheControl.cacheOnly,
                                     }}
                                     resizeMode={FastImage.resizeMode.cover}
                                   />
@@ -977,7 +977,7 @@ const ServiceProviderProfile = () => {
                                       uri: item,
                                       headers: {Authorization: 'someAuthToken'},
                                       priority: FastImage.priority.high,
-                                      cache: FastImage.cacheControl.cacheOnly,
+                                      // cache: FastImage.cacheControl.cacheOnly,
                                     }}
                                     resizeMode={FastImage.resizeMode.cover}
                                   />
@@ -1061,7 +1061,7 @@ const ServiceProviderProfile = () => {
                                       'https://res.cloudinary.com/dr0pef3mn/image/upload/v1691626246/Assets/1691626245707-Frame%2071.png.png',
                                     headers: {Authorization: 'someAuthToken'},
                                     priority: FastImage.priority.high,
-                                    cache: FastImage.cacheControl.cacheOnly,
+                                    // cache: FastImage.cacheControl.cacheOnly,
                                   }}
                                   resizeMode={FastImage.resizeMode.cover}
                                 />
@@ -1318,7 +1318,7 @@ const ServiceProviderProfile = () => {
                                   'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
                                 headers: {Authorization: 'someAuthToken'},
                                 priority: FastImage.priority.high,
-                                cache: FastImage.cacheControl.cacheOnly,
+                                // cache: FastImage.cacheControl.cacheOnly,
                               }}
                               resizeMode={FastImage.resizeMode.cover}
                             />
@@ -1496,7 +1496,7 @@ const ServiceProviderProfile = () => {
               uri: selectedImage,
               headers: {Authorization: 'someAuthToken'},
               priority: FastImage.priority.high,
-              cache: FastImage.cacheControl.cacheOnly,
+              // cache: FastImage.cacheControl.cacheOnly,
             }}
             resizeMode={FastImage.resizeMode.contain}
           />
