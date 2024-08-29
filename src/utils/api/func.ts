@@ -1910,3 +1910,29 @@ export const CreatePin = async (param: any) => {
     };
   }
 };
+
+export const getPromoCode = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getPromoCode func started', param);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/ordern/promo/${param}`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response?.status === 201 || response?.status === 200) {
+      console.log('getPromoCode', response?.status);
+      store.dispatch(addprovidersByCateegory(response?.data?.data));
+    }
+
+    console.log('getPromoCode:', response?.status);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};

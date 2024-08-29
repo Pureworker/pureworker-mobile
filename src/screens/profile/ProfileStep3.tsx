@@ -440,7 +440,8 @@ const ProfileStep3 = () => {
           } else {
             navigation.navigate('Congratulations');
           }
-        }, 2000); // 5-second delay
+          setisLoading(false);
+        }, 1000); // 5-second delay
 
         dispatch(addformStage(6));
       } else {
@@ -466,9 +467,12 @@ const ProfileStep3 = () => {
       //   textColor: '#fff',
       //   backgroundColor: '#88087B',
       // });
-      toastAlertError(`${error.message}` ?? 'An unexpected error occurred');
+      toastAlertError(`${error?.message}` ?? 'An unexpected error occurred');
+      setisLoading(false);
     } finally {
-      setisLoading(false); // Ensure loading spinner is stopped
+      setisLoading(false);
+      setisLoading(false);
+    // Ensure loading spinner is stopped
     }
   };
 

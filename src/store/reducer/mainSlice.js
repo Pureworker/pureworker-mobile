@@ -65,7 +65,8 @@ const initialState = {
   language: null,
   country: null,
   interOrder: null,
-  chatPageUser: null
+  chatPageUser: null,
+  idcheckModal: false,
 };
 
 export const mainSlice = createSlice({
@@ -314,6 +315,9 @@ export const mainSlice = createSlice({
     addchatPageUser: (state, action) => {
       state.chatPageUser = action.payload;
     },
+    setidCheckModal: (state, action) => {
+      state.idcheckModal = action.payload;
+    },
   },
 });
 
@@ -365,6 +369,7 @@ export const {
   addCountry,
   addIntermediateOrder,
   addchatPageUser,
+  setidCheckModal,
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);

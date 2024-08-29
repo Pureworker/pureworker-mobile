@@ -18,7 +18,7 @@ import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
-import {createOrder} from '../../utils/api/func';
+import {createOrder, getPromoCode} from '../../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
@@ -78,6 +78,7 @@ const OrderReview = ({route}: any) => {
       address: _data.address,
       // paymentStatus: 'PAID',
       service: _data?.service,
+      
     };
     let Data;
 
@@ -99,6 +100,10 @@ const OrderReview = ({route}: any) => {
       };
     }
 
+    if (promoCode && isPromoValid) {
+      Data.promoCode = promoCode;
+    }
+
     console.log(Data);
     try {
       if (Number(userData?.wallet?.availableBalance) < Number(tp)) {
@@ -109,7 +114,6 @@ const OrderReview = ({route}: any) => {
         setTimeout(() => {
           setinsufficientModal(true);
         }, 1000);
-
         // ToastLong('Insufficient Balance.');
         // Snackbar.show({
         //   text: 'Insufficient Balance.',
@@ -177,21 +181,48 @@ const OrderReview = ({route}: any) => {
 
   const [invallidPromo, setinvallidPromo] = useState(false);
 
-  const validatePromoCode = () => {
-    const validPromoCodes = {
-      DISCOUNT10: 10, // 10% discount
-      DISCOUNT15: 15, // 15% discount
-    };
-
-    if (validPromoCodes[promoCode]) {
-      setDiscount((validPromoCodes[promoCode] / 100) * _data.totalPrice);
+  const validatePromoCode = async () => {
+    try {
+      const res = await getPromoCode(promoCode);
+      const promo = res?.data?.data;
+      if (!promo) {
+        setDiscount(0);
+        setIsPromoValid(false);
+        setinvallidPromo(true);
+        ToastShort('Promo code not found.');
+        return;
+      }
+      // Check if the promo code is active
+      if (!promo.active) {
+        setDiscount(0);
+        setIsPromoValid(false);
+        setinvallidPromo(true);
+        ToastShort('Promo code is not active.');
+        return;
+      }
+      // Check if the promo code applies to the service
+      const appliesToService =
+        promo.applyToAllServices || promo.services.includes(_data?.service);
+      if (!appliesToService) {
+        setDiscount(0);
+        setIsPromoValid(false);
+        setinvallidPromo(true);
+        ToastShort('Promo code does not apply to this service.');
+        return;
+      }
+      // Calculate the discount
+      const discountAmount =
+        (promo.percentageDiscount / 100) * _data.totalPrice;
+      setDiscount(discountAmount);
       setIsPromoValid(true);
+      setShowPromoInput(true);
       ToastShort('Promo code applied successfully!');
-    } else {
+    } catch (error) {
       setDiscount(0);
       setIsPromoValid(false);
       setinvallidPromo(true);
-      // ToastShort('Invalid promo code.');
+      ToastShort('An error occurred while validating the promo code.');
+      console.error('Error validating promo code:', error);
     }
   };
 
@@ -481,13 +512,17 @@ const OrderReview = ({route}: any) => {
                 </View>
               </View>
 
-              {showPromoInput && (
+              {showPromoInput && !isPromoValid && (
                 <View
                   style={tw`mx-auto w-8.75/10 border rounded-lg mt-4 mr-4 `}>
                   <View style={[tw` flex flex-row  `]}>
                     <TextInput
-                      style={[tw` p-2 flex-1  text-black `, {height: 50}]}
+                      style={[
+                        tw` p-2 flex-1`,
+                        {height: 50, color: 'black'},
+                      ]}
                       placeholder="Promo code"
+                      placeholderTextColor="gray"
                       value={promoCode}
                       onChangeText={setPromoCode}
                     />
@@ -507,7 +542,7 @@ const OrderReview = ({route}: any) => {
                 </View>
               )}
 
-              {isPromoValid && (
+              {isPromoValid  && (
                 <View
                   style={[
                     tw`flex flex-row justify-between mr-3`,
@@ -550,7 +585,7 @@ const OrderReview = ({route}: any) => {
                 <Textcomp
                   text={`₦${
                     Number(_data?.totalPrice) +
-                    Number(_data?.totalPrice * 0.075)
+                    Number(_data?.totalPrice * 0.075) - discount
                   }`}
                   size={14}
                   lineHeight={15}
@@ -731,9 +766,7 @@ const OrderReview = ({route}: any) => {
                   if (toggleCheckBox) {
                     handleCreate();
                   } else {
-                    ToastShort(
-                      'Terms and conditions required!. Please check the radio button',
-                    );
+                    ToastShort('Click the radio button to proceed');
                   }
                 }}>
                 <Textcomp

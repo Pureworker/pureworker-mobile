@@ -33,7 +33,6 @@
 
 //   console.log('chatty--',text, isRead, id);
 
-
 //   useEffect(() => {
 
 //     if (!isRead) {
@@ -115,17 +114,20 @@
 //   );
 // }
 
-
-import { Image, Linking, Pressable, View } from 'react-native';
-import React, { useEffect } from 'react';
+import {Image, Linking, Platform, Pressable, View} from 'react-native';
+import React, {useEffect} from 'react';
 import tw from 'twrnc';
 import Textcomp from '../../../components/Textcomp';
-import { perHeight, perWidth } from '../../../utils/position/sizes';
+import {perHeight, perWidth} from '../../../utils/position/sizes';
 import colors from '../../../constants/colors';
-import { messageTimeStamp } from '../../../utils/utils';
-import { urlValidator } from '../../../utils/chat';
-import { markAsRead } from '../../../utils/api/chat';
+import {messageTimeStamp, ToastShort} from '../../../utils/utils';
+import {urlValidator} from '../../../utils/chat';
+import {markAsRead} from '../../../utils/api/chat';
 import FastImage from 'react-native-fast-image';
+import RNFS from 'react-native-fs';
+import {toastAlertSuccess} from '../../../utils/alert';
+import images from '../../../constants/images';
+import RNFetchBlob from 'rn-fetch-blob';
 
 interface params {
   text: string;
@@ -134,6 +136,7 @@ interface params {
   isRead: boolean;
   id: string;
   toggleImageModal: (link?: string) => void;
+  msgType: string;
 }
 
 export default function Index({
@@ -143,6 +146,7 @@ export default function Index({
   isRead,
   id,
   toggleImageModal,
+  msgType,
 }: params) {
   const isUrl = urlValidator(text);
 
@@ -156,7 +160,7 @@ export default function Index({
     }
   }, []);
 
-  const renderTextWithLinks = (text) => {
+  const renderTextWithLinks = text => {
     const urlPattern = /(https?:\/\/[^\s]+)/g;
     const parts = text.split(urlPattern);
 
@@ -166,14 +170,13 @@ export default function Index({
           <Pressable
             key={index}
             onPress={() => Linking.openURL(part)}
-            style={{ paddingHorizontal: 2 }}
-          >
+            style={{paddingHorizontal: 2}}>
             <Textcomp
               size={14}
               lineHeight={21}
               text={part}
               color={'#1E90FF'}
-              style={{ fontWeight: '500' }}
+              style={{fontWeight: '500'}}
               fontFamily={'Inter'}
             />
           </Pressable>
@@ -186,12 +189,113 @@ export default function Index({
             lineHeight={21}
             text={part}
             color={'#FFFFFF'}
-            style={{ fontWeight: '500' }}
+            style={{fontWeight: '500'}}
             fontFamily={'Inter'}
           />
         );
       }
     });
+  };
+
+  const _handleFileDownload = async () => {
+    try {
+      const downloadDest = `${RNFS.DocumentDirectoryPath}/${text
+        .split('/')
+        .pop()}`;
+      const result = await RNFS.downloadFile({
+        fromUrl: text,
+        toFile: downloadDest,
+      }).promise;
+
+      if (result.statusCode === 200) {
+        console.log('File Downloaded Successfully:', downloadDest);
+        ToastShort('File Downloaded Successfully.');
+        // Optionally, you can open the file or give feedback to the user
+      } else {
+        console.log('File Download Failed');
+        ToastShort('File Download Failed');
+      }
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      ToastShort(`Error downloading file ${error}`);
+    }
+  };
+
+  const __handleFileDownload = async () => {
+    try {
+      // Get the file name from the URL
+      const fileName = text.split('/').pop();
+
+      // Use the appropriate path for Android and iOS
+      const downloadDest =
+        Platform.OS === 'android'
+          ? `${RNFS.DownloadDirectoryPath}/${fileName}`
+          : `${RNFS.DocumentDirectoryPath}/${fileName}`;
+
+      const result = await RNFS.downloadFile({
+        fromUrl: text,
+        toFile: downloadDest,
+      }).promise;
+
+      if (result.statusCode === 200) {
+        console.log('File Downloaded Successfully:', downloadDest);
+        ToastShort('File Downloaded Successfully.');
+
+        // On Android, open the file in a file viewer
+        if (Platform.OS === 'android') {
+          RNFS.scanFile({path: downloadDest}).then(() => {
+            console.log('Scanned file successfully:', downloadDest);
+          });
+        }
+      } else {
+        console.log('File Download Failed');
+        ToastShort('File Download Failed');
+      }
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      ToastShort(`Error downloading file ${error}`);
+    }
+  };
+
+  const handleFileDownload = async () => {
+    try {
+      const {config, fs} = RNFetchBlob;
+      let downloadDest = '';
+
+      // Set the download destination based on platform
+      if (Platform.OS === 'android') {
+        downloadDest = `${fs.dirs.DownloadDir}/${text.split('/').pop()}`;
+      } else {
+        downloadDest = `${fs.dirs.DocumentDir}/${text.split('/').pop()}`;
+      }
+
+      const res = await config({
+        fileCache: true,
+        addAndroidDownloads: {
+          useDownloadManager: true,
+          notification: true,
+          path: downloadDest,
+          description: 'Downloading file...',
+        },
+      }).fetch('GET', text);
+
+      if (res.info().status === 200) {
+        console.log('File Downloaded Successfully:', downloadDest);
+        ToastShort('File Downloaded Successfully.');
+
+        if (Platform.OS === 'ios') {
+          RNFetchBlob.ios.previewDocument(downloadDest); // Preview file on iOS
+        } else {
+          ToastShort(`File saved to: ${downloadDest}`); // Notify Android users of the file path
+        }
+      } else {
+        console.log('File Download Failed');
+        ToastShort('File Download Failed');
+      }
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      ToastShort(`Error downloading file: ${error}`);
+    }
   };
 
   return (
@@ -205,26 +309,71 @@ export default function Index({
             }`,
             {
               borderRadius: 6,
-              minWidth: perWidth(60),
-              maxWidth: perWidth(270),
-              paddingVertical: perHeight(10),
-              paddingHorizontal: perWidth(10),
+              // minWidth: perWidth(60),
+              // maxWidth: perWidth(270),
+              paddingVertical: perHeight(5),
+              // paddingHorizontal: perWidth(5),
               minHeight: perHeight(36),
               marginTop: perHeight(12),
             },
-          ]}
-        >
+          ]}>
           <FastImage
-            style={{ width: 100, height: 100 }}
+            style={{width: 100, height: 100}}
             source={{
               uri: text,
-              headers: { Authorization: 'someAuthToken' },
+              headers: {Authorization: 'someAuthToken'},
               priority: FastImage.priority.high,
               // cache: FastImage.cacheControl.cacheOnly
             }}
             resizeMode={FastImage.resizeMode.contain}
           />
         </Pressable>
+      ) : msgType === 'file' ? (
+        <>
+          <Pressable
+            onPress={handleFileDownload}
+            style={[
+              tw`bg-[${type === 'me' ? colors.parpal : '#011B33'}] ${
+                type === 'me' ? 'mr-auto' : 'ml-auto'
+              }`,
+              {
+                borderRadius: 6,
+                minWidth: perWidth(60),
+                maxWidth: perWidth(270),
+                paddingVertical: perHeight(10),
+                paddingHorizontal: perWidth(10),
+                minHeight: perHeight(36),
+                marginTop: perHeight(12),
+                flexDirection: 'row',
+                alignItems: 'center',
+              },
+            ]}>
+            <Image
+              resizeMode="contain"
+              source={images.attachment}
+              style={[
+                tw`w-full my-auto mr-3`,
+                {
+                  height: 17.5,
+                  width: 17.5,
+                  tintColor: 'white',
+                },
+              ]}
+            />
+            {/* <Image
+              source={{uri: 'https://via.placeholder.com/50'}} // Replace with your file icon
+              style={{width: 20, height: 20, marginRight: 10}}
+            /> */}
+            <Textcomp
+              size={14}
+              lineHeight={21}
+              text={'File Attachment'}
+              color={'#1E90FF'}
+              style={{fontWeight: '500'}}
+              fontFamily={'Inter'}
+            />
+          </Pressable>
+        </>
       ) : (
         <View
           style={[
@@ -240,8 +389,7 @@ export default function Index({
               minHeight: perHeight(36),
               marginTop: perHeight(12),
             },
-          ]}
-        >
+          ]}>
           {renderTextWithLinks(text)}
         </View>
       )}
@@ -251,7 +399,7 @@ export default function Index({
           lineHeight={21}
           text={`${messageTimeStamp(time)}`}
           color={'#000000'}
-          style={{ fontWeight: '500' }}
+          style={{fontWeight: '500'}}
           fontFamily={'Inter'}
         />
       </View>

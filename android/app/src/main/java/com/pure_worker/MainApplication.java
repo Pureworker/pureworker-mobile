@@ -11,6 +11,7 @@ import com.facebook.soloader.SoLoader;
 import java.util.List;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.microsoft.codepush.react.CodePush;
+import com.rnfs.RNFSPackage;
 // import com.transistorsoft.rnbackgroundfetch.RNBackgroundFetchPackage;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -33,6 +34,7 @@ public class MainApplication extends Application implements ReactApplication {
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
           new SplashScreenReactPackage();
+          new RNFSPackage();
           // new RNBackgroundFetchPackage();
           return packages;
         }

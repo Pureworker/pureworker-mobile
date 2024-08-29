@@ -4,6 +4,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: "com.google.gms.google-services"
 apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
 
+
 // Project background_geolocation = project(':react-native-background-geolocation')
 // apply from: "${background_geolocation.projectDir}/app.gradle"
 //<meta-data android:name="com.transistorsoft.locationmanager.license" android:value="7e0b1d065499a4f1578f25400ed9f8e0c320b93a8a08491950ecbcfae19cbfd7" />
@@ -106,6 +107,8 @@ android {
         applicationId "com.pure_worker_app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        // versionCode 15
+        // versionName "1.30"
         versionCode 14
         versionName "1.29"
         multiDexEnabled true
@@ -172,6 +175,7 @@ dependencies {
     implementation project(':react-native-splash-screen')
     implementation 'com.google.android.gms:play-services-location:21.0.1'
     // implementation project(':react-native-background-fetch')
+    implementation project(':react-native-fs')
     //
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.8.20")
     implementation("androidx.activity:activity-ktx:1.7.2")

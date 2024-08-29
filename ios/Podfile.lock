@@ -603,6 +603,8 @@ PODS:
     - React-logger (= 0.71.7)
     - React-perflogger (= 0.71.7)
   - RegulaCommon (6.9.344)
+  - rn-fetch-blob (0.12.0):
+    - React-Core
   - RNCAsyncStorage (1.19.3):
     - React-Core
   - RNCCheckbox (0.5.17):
@@ -649,6 +651,8 @@ PODS:
     - Firebase/Storage (= 10.7.0)
     - React-Core
     - RNFBApp
+  - RNFS (2.20.0):
+    - React-Core
   - RNGestureHandler (2.12.1):
     - React-Core
   - RNImageCropPicker (0.40.2):
@@ -784,6 +788,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
@@ -799,6 +804,7 @@ DEPENDENCIES:
   - "RNFBDynamicLinks (from `../node_modules/@react-native-firebase/dynamic-links`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - "RNFBStorage (from `../node_modules/@react-native-firebase/storage`)"
+  - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
@@ -954,6 +960,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  rn-fetch-blob:
+    :path: "../node_modules/rn-fetch-blob"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCCheckbox:
@@ -984,6 +992,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/messaging"
   RNFBStorage:
     :path: "../node_modules/@react-native-firebase/storage"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNImageCropPicker:
@@ -1088,6 +1098,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: c5c89f8f543842dd864b63ded1b0bbb9c9445328
   ReactCommon: 5307873a227ee34ddd3e7f2ec1086ebbfccc7618
   RegulaCommon: 3421ad9a79af499cf3a0210ce15408f31032874f
+  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCAsyncStorage: c913ede1fa163a71cea118ed4670bbaaa4b511bb
   RNCCheckbox: a3ca9978cb0846b981d28da4e9914bd437403d77
   RNCClipboard: 60fed4b71560d7bfe40e9d35dea9762b024da86d
@@ -1103,6 +1114,7 @@ SPEC CHECKSUMS:
   RNFBDynamicLinks: 08789ea798da58784e5792d0dff710518b052179
   RNFBMessaging: 216693dd5ba4f18ba65fb39fc73a44a23c26190f
   RNFBStorage: b9daf1fcc51e6de5ed3781d36a2a795e90a9489d
+  RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: c0d04458598fcb26052494ae23dda8f8f5162b13
   RNImageCropPicker: d9616a0cb9b72e8551ff94a7a5021fbd29050aa5
   RNNotifee: 8e2d3df3f0e9ce8f5d1fe4c967431138190b6175

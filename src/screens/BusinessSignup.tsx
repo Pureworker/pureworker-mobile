@@ -1275,7 +1275,7 @@ export default function BusinessSignup() {
                     color: '#fff',
                     marginTop: 15,
                   }}>
-                  Referral(optional)
+                  Referral(Optional)
                 </Text>
                 <TextInputs
                   style={{marginTop: 17}}
@@ -1299,7 +1299,7 @@ export default function BusinessSignup() {
                     marginTop: 15,
                     marginBottom: 15,
                   }}>
-                  How did you learn about us?
+                  How did you learn about us? (Optional)
                 </Text>
                 <Dropdown
                   style={[

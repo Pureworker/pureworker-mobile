@@ -19,6 +19,8 @@ const Home = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [search, setSearch] = useState('');
+
+  
   return (
     <View style={[{ flex: 1, backgroundColor: '#fff' }, ]}>
       <ScrollView>

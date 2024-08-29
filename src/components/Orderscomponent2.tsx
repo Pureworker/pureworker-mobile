@@ -13,7 +13,6 @@ import Textcomp from './Textcomp';
 import colors from '../constants/colors';
 import {
   acceptOrder,
-  addRatingOrder,
   cancelOrder,
   completedOrder,
   declineOrder,
@@ -34,12 +33,10 @@ import socket from '../utils/socket';
 import CheckBox from 'react-native-check-box';
 import {toastAlertSuccess} from '../utils/alert';
 const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
-  const [saved, setsaved] = useState(false);
   const [isLoading, setisLoading] = useState(false);
   const [orderDispute, setorderDispute] = useState(false);
   const [scheduledDeliveryDate, setscheduledDeliveryDate] = useState(false);
   const [rateYourExperience, setrateYourExperience] = useState(false);
-  // console.log('ORDER:', item);
   useEffect(() => {
     const initGetOrders2 = async () => {
       setisLoading(true);
@@ -125,6 +122,11 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
     setisLoading(false);
   };
   const handleComplete = async (val: any) => {
+    if (!userData?.isIdentityVerified) {
+      setid_inprogress_modal(true);
+      setrateYourExperience(false);
+      return;
+    }
     try {
       setisLoading(true);
       if (item?._id) {
@@ -136,6 +138,11 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           toastAlertSuccess('Rating successful!.');
           setrateYourExperience(false);
           setrateYourExperience(false);
+
+          setTimeout(() => {
+            // set weldone modal here
+            setweldone_modal(true);
+          }, 500);
         }
         setisLoading(false);
       } else {
@@ -171,6 +178,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
       };
       initGetOrders2();
       setrateYourExperience(false);
+      setid_inprogress_modal(false);
     }
   };
   const handleAccept = async () => {
@@ -279,6 +287,10 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
 
   const [ready, setready] = useState(false);
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
+
+  const [id_inprogress_modal, setid_inprogress_modal] = useState(false);
+  const [declined_modal, setdeclined_modal] = useState(false);
+  const [weldone_modal, setweldone_modal] = useState(false);
   return (
     <>
       <View
@@ -537,10 +549,10 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
               onPress={() => {
                 // handleUpdateStatus('ACCEPTED');
                 // handleAccept();
-                console.log(userData?.identity);
+                console.log(userData?.isIdentitySubmitted);
                 const isIdentityOrCacPresent =
                   userData?.identity?.number || userData?.cacNo;
-                if (userData?.isIdentitySubmitted || isIdentityOrCacPresent) {
+                if (userData?.isIdentitySubmitted) {
                   setready(true);
                 } else {
                   ToastShort('Please provide identity information');
@@ -712,7 +724,13 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
               onPress={() => {
                 // handleComplete();
                 //bring up ratings Modal
-                setrateYourExperience(true);
+
+                if (!userData?.isIdentityVerified) {
+                  setid_inprogress_modal(true);
+                  setrateYourExperience(false);
+                } else {
+                  setrateYourExperience(true);
+                }
               }}
               style={[
                 tw`bg-[${colors.primary}] items-center justify-center`,
@@ -1096,14 +1114,35 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
                 />
               </View>
 
-              <View style={tw`ml-4`}>
+              {/* <View style={tw`ml-4`}>
                 <Textcomp
-                  text={'Note: Pureworker charges a 15% fee on all orders.'}
-                  size={12}
-                  lineHeight={14.5}
-                  color={'#000000'}
+                  text={`Note: Pureworker charges a 15% fee on all orders. You will be Paid ${(
+                    <Text style={{fontWeight: 'bold', color: '#FF0000'}}>
+                      #{item?.totalPrice}
+                    </Text>
+                  )} On completion of the Job.`}
+                  size={14}
+                  lineHeight={16.5}
+                  color={'#FF0000'}
                   fontFamily={'Inter-Regular'}
                 />
+              </View> */}
+
+              <View style={[tw`ml-4`]}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    lineHeight: 16.5,
+                    color: '#FF0000',
+                    fontFamily: 'Inter-Regular',
+                  }}>
+                  Note: Pureworker charges a 15% fee on all orders. You will be
+                  Paid{' '}
+                  <Text style={{fontWeight: 'bold', color: '#FF0000'}}>
+                    ₦{item?.agentAmount}
+                  </Text>{' '}
+                  On completion of the Job.
+                </Text>
               </View>
 
               <View style={tw`flex flex-row items-center  mb-4 ml-4`}>
@@ -1131,9 +1170,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
                   if (toggleCheckBox) {
                     handleAccept();
                   } else {
-                    ToastShort(
-                      'Terms and conditions required!. Please check the radio button',
-                    );
+                    ToastShort('Click the radio button to proceed');
                   }
                 }}>
                 <Textcomp
@@ -1148,6 +1185,191 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           </View>
         </View>
       </Modal>
+
+      {/* ID IN PROGRESS */}
+      {id_inprogress_modal && (
+        <Modal
+          isVisible={id_inprogress_modal}
+          onModalHide={() => {
+            setid_inprogress_modal(true);
+          }}
+          style={{width: SIZES.width, marginHorizontal: 0}}
+          deviceWidth={SIZES.width}
+          onBackdropPress={() => setid_inprogress_modal(false)}
+          swipeThreshold={200}
+          swipeDirection={['down']}
+          onSwipeComplete={() => setid_inprogress_modal(false)}
+          onBackButtonPress={() => setid_inprogress_modal(false)}>
+          <View style={tw` h-full w-full bg-black bg-opacity-5`}>
+            <TouchableOpacity
+              onPress={() => setid_inprogress_modal(false)}
+              style={tw`flex-1`}
+            />
+            <View
+              style={[
+                tw`p-4 px-6 mx-[5%] bg-[#D9D9D9] rounded-3xl`,
+                {minHeight: SIZES.height * 0.2},
+              ]}>
+              <View style={tw`flex-1 `}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setid_inprogress_modal(false);
+                  }}
+                  style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
+                />
+                <View style={tw`pt-3`}>
+                  <Textcomp
+                    text={'ID Check in Progress'}
+                    size={16}
+                    lineHeight={18.5}
+                    color={'#000000'}
+                    fontFamily={'Inter-Bold'}
+                  />
+                </View>
+                <View style={tw`mt-4`}>
+                  <Textcomp
+                    text={
+                      'Your ID Check is in progress. This usually takes less than 24 hours. Once your ID is approved, you will be able to complete this corder'
+                    }
+                    size={14}
+                    lineHeight={16.5}
+                    color={'black'}
+                    fontFamily={'Inter-Regular'}
+                  />
+                </View>
+                <View style={tw`mt-4`} />
+              </View>
+            </View>
+            <TouchableOpacity
+              onPress={() => setid_inprogress_modal(false)}
+              style={tw`flex-1`}
+            />
+          </View>
+        </Modal>
+      )}
+      {/* ID Declined */}
+      {declined_modal && (
+        <Modal
+          isVisible={declined_modal}
+          onModalHide={() => {
+            setdeclined_modal(true);
+          }}
+          style={{width: SIZES.width, marginHorizontal: 0}}
+          deviceWidth={SIZES.width}
+          onBackdropPress={() => setdeclined_modal(false)}
+          swipeThreshold={200}
+          swipeDirection={['down']}
+          onSwipeComplete={() => setdeclined_modal(false)}
+          onBackButtonPress={() => setdeclined_modal(false)}>
+          <View style={tw` h-full w-full bg-black bg-opacity-5`}>
+            <TouchableOpacity
+              onPress={() => setdeclined_modal(false)}
+              style={tw`flex-1`}
+            />
+            <View
+              style={[
+                tw`p-4 px-6 mx-[5%] bg-[#D9D9D9] rounded-3xl`,
+                {minHeight: SIZES.height * 0.2},
+              ]}>
+              <View style={tw`flex-1 `}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setdeclined_modal(false);
+                  }}
+                  style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
+                />
+                <View style={tw`pt-3`}>
+                  <Textcomp
+                    text={'ID Check Declined'}
+                    size={16}
+                    lineHeight={18.5}
+                    color={'#FF0000'}
+                    fontFamily={'Inter-Bold'}
+                  />
+                </View>
+                <View style={tw`mt-4`}>
+                  <Textcomp
+                    text={
+                      'Your ID Check is in progress. This usually takes less than 24 hours. Once your ID is approve, you will be able to complete this corder'
+                    }
+                    size={14}
+                    lineHeight={14.5}
+                    color={'#FF0000'}
+                    fontFamily={'Inter-Regular'}
+                  />
+                </View>
+                <View style={tw`mt-4`} />
+              </View>
+            </View>
+            <TouchableOpacity
+              onPress={() => setdeclined_modal(false)}
+              style={tw`flex-1`}
+            />
+          </View>
+        </Modal>
+      )}
+      {/* ID  DONE! */}
+
+      {weldone_modal && (
+        <Modal
+          isVisible={weldone_modal}
+          onModalHide={() => {
+            setweldone_modal(true);
+          }}
+          style={{width: SIZES.width, marginHorizontal: 0}}
+          deviceWidth={SIZES.width}
+          onBackdropPress={() => setweldone_modal(false)}
+          swipeThreshold={200}
+          swipeDirection={['down']}
+          onSwipeComplete={() => setweldone_modal(false)}
+          onBackButtonPress={() => setweldone_modal(false)}>
+          <View style={tw` h-full w-full bg-black bg-opacity-5`}>
+            <TouchableOpacity
+              onPress={() => setweldone_modal(false)}
+              style={tw`flex-1`}
+            />
+            <View
+              style={[
+                tw`p-4 px-6 mx-[5%] bg-[#D9D9D9] rounded-3xl`,
+                {minHeight: SIZES.height * 0.18},
+              ]}>
+              <View style={tw`flex-1 `}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setweldone_modal(false);
+                  }}
+                  style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
+                />
+                <View style={tw`pt-4`}>
+                  <Textcomp
+                    text={'Well done!'}
+                    size={16}
+                    lineHeight={18.5}
+                    color={'#000000'}
+                    fontFamily={'Inter-Bold'}
+                  />
+                </View>
+                <View style={tw`mt-4`}>
+                  <Textcomp
+                    text={
+                      'Your customer has been infromed that you have completed the job. You will get paid whe your customer marks the job as completed.'
+                    }
+                    size={14}
+                    lineHeight={16.5}
+                    color={'#000000'}
+                    fontFamily={'Inter-Regular'}
+                  />
+                </View>
+                <View style={tw`mt-4`} />
+              </View>
+            </View>
+            <TouchableOpacity
+              onPress={() => setweldone_modal(false)}
+              style={tw`flex-1`}
+            />
+          </View>
+        </Modal>
+      )}
     </>
   );
 };

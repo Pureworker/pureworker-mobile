@@ -9,6 +9,7 @@ import {
   ScrollView,
   Platform,
   RefreshControl,
+  Text,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import images from '../../constants/images';
@@ -364,6 +365,8 @@ const Home = () => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
+
+
           {/* Popular Section */}
           <View
             style={[

@@ -29,6 +29,7 @@ import {
   addSCategory,
   addUserData,
   addproviderOrders,
+  setidCheckModal,
   setwelcomeModal,
 } from '../../store/reducer/mainSlice';
 import ClosetoYou3 from '../../components/cards/CloseToYou3';
@@ -39,6 +40,7 @@ import Geolocation from 'react-native-geolocation-service';
 import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {ToastLong} from '../../utils/utils';
 import WelcomeModal from '../../components/SignupModal';
+import RequireIDChechkModal from '../../components/modals/RequireIDChechkModal';
 
 const Home = ({navigation}: any) => {
   useEffect(() => {
@@ -77,6 +79,9 @@ const Home = ({navigation}: any) => {
       console.log('dddddddd', res?.data?.user);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addUserData(res?.data?.user));
+      }
+      if (res?.data?.user?.isIdentitySubmitted !== false) {
+        dispatch(setidCheckModal(true));
       }
       const _userData = res?.data?.user;
       if (
@@ -204,6 +209,7 @@ const Home = ({navigation}: any) => {
     };
   }, []);
   const welcomeModal = useSelector((state: any) => state.user.welcomeModal);
+  const idcheckModal = useSelector((state: any) => state.user.idcheckModal);
   console.log(userData?.businessName);
 
   const [refreshing, setRefreshing] = useState(false);
@@ -427,7 +433,7 @@ const Home = ({navigation}: any) => {
                   width: perWidth(309),
                   height: perHeight(30),
                   borderRadius: 7,
-                  marginTop: perHeight(43),
+                  marginTop: perHeight(10),
                 },
               ]}>
               <Textcomp
@@ -451,7 +457,7 @@ const Home = ({navigation}: any) => {
                   width: perWidth(309),
                   height: perHeight(30),
                   borderRadius: 7,
-                  marginTop: perHeight(43),
+                  marginTop: perHeight(10),
                 },
               ]}>
               <Textcomp
@@ -909,6 +915,14 @@ const Home = ({navigation}: any) => {
         <WelcomeModal
           close={() => {
             dispatch(setwelcomeModal(false));
+          }}
+        />
+      )}
+      {idcheckModal && idcheckModal === true && (
+        <RequireIDChechkModal
+          navigation={navigation}
+          close={() => {
+            dispatch(setidCheckModal(false));
           }}
         />
       )}

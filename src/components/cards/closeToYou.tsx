@@ -9,6 +9,7 @@ import Review from '../Review';
 import FastImage from 'react-native-fast-image';
 import {metersToKilometers} from '../../utils/utils';
 import Modal from 'react-native-modal/dist/modal';
+import VerifiedTag from '../../assets/svg/verifiedtag';
 
 const ClosetoYou = ({item, index, navigation}: any) => {
   // console.log('close-order', item);
@@ -66,7 +67,8 @@ const ClosetoYou = ({item, index, navigation}: any) => {
             />
           </View>
           <View style={[tw``, {marginLeft: perWidth(12)}]}>
-            <View style={[tw``, {width: perWidth(105)}]}>
+            <View style={[tw`flex flex-row items-center`, {width: perWidth(105)}]}>
+              {/* <VerifiedTag/> */}
               <Textcomp
                 text={
                   item?.businessName

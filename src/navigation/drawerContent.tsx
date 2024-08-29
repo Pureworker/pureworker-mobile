@@ -64,6 +64,9 @@ const DrawerContent = () => {
     {label: 'Referrals', route: 'Referrals', icon: images.info, notint: false},
   ];
   // Conditionally include 'ID Check' if user is a freelancer
+
+  console.log('KKKKKKK', userData?.isIdentitySubmitted);
+
   if (
     userData?.accountType?.toUpperCase() === 'FREELANCER' ||
     userData?.accountType?.toUpperCase() === 'BUSINESS' ||
@@ -71,7 +74,7 @@ const DrawerContent = () => {
   ) {
     navLinks.splice(4, 0, {
       label: 'ID Check',
-      route: userData?.verificationImage ? 'IdProcessing' : 'PhotoUploadScreen',
+      route: 'PhotoUploadScreen',
       icon: images.location1,
       icon2: <IdCheckIcon />,
       notint: true,
@@ -450,15 +453,36 @@ const DrawerContent = () => {
                   if (link.route === 'Support') {
                     setInfoModal(true);
                   } else {
-                    if (link.label === 'ID Check' && (link.route = 'IdProcessing')) {
-                      navigation.navigate(link.route, {
-                        status: userData?.isIdentityVerified
-                          ? 'Done'
-                          : 'Processing',
+                    if (
+                      link.label === 'ID Check' &&
+                      userData?.isIdentitySubmitted &&
+                      !userData?.isIdentityVerified
+                    ) {
+                      navigation.navigate('IdProcessing', {
+                        status: 'Processing',
                       });
-                    } else {
-                      handleNavigation(link.route);
+                      return;
                     }
+                    if (
+                      link.label === 'ID Check' &&
+                      userData?.isIdentityVerified
+                    ) {
+                      navigation.navigate('IdProcessing', {
+                        status: 'Done',
+                      });
+                      return;
+                    }
+                    handleNavigation(link.route);
+                    // if (link.label === 'ID Check' && (link.route = 'IdProcessing')) {
+                    //   navigation.navigate(link.route, {
+                    //     status: userData?.isIdentityVerified
+                    //       ? 'Done'
+                    //       : 'Processing',
+                    //   });
+
+                    // } else {
+                    //   handleNavigation(link.route);
+                    // }
                   }
                 }}
                 style={[
@@ -551,7 +575,7 @@ const DrawerContent = () => {
           <View style={[tw`mt-4 ml-3`, {}]}>
             <Textcomp
               text={`Version: ${
-                Platform.OS === 'ios' ? '1.0.0.48' : '1.0.0.48'
+                Platform.OS === 'ios' ? '1.0.0.50' : '1.0.0.50'
               }`}
               size={14}
               color={'#000000'}

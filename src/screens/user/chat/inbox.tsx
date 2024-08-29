@@ -11,6 +11,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Pressable,
+  ActivityIndicator,
 } from 'react-native';
 import React, {
   Fragment,
@@ -56,6 +57,7 @@ import {
 } from '../../../utils/api/chat';
 import InfoIcon from '../../../assets/svg/Info';
 import DocumentPicker from 'react-native-document-picker';
+import CancelIcon from '../../../assets/svg/cancel3';
 
 export default function Inbox({navigation, route}: any) {
   const scrollRef = useRef<ScrollView | null>(null);
@@ -222,8 +224,10 @@ export default function Inbox({navigation, route}: any) {
     }
   };
 
+  const [docLoading, setdocLoading] = useState(false);
   const selectFile = async () => {
     try {
+
       const file = await DocumentPicker.pick({
         type: [DocumentPicker.types.allFiles],
       });
@@ -238,6 +242,7 @@ export default function Inbox({navigation, route}: any) {
         console.log('====================================');
         console.log(d_file);
         console.log('====================================');
+        setdocLoading(true);
         const uploadResponse = await uploadAssetsDOCorIMG(d_file);
 
         if (uploadResponse?.data?.url) {
@@ -246,6 +251,7 @@ export default function Inbox({navigation, route}: any) {
             to: `${userId}`,
             body: uploadResponse.data.url,
             updatedAt: new Date().toISOString(),
+            type: 'file',
           };
 
           const currentDate = new Date();
@@ -264,6 +270,8 @@ export default function Inbox({navigation, route}: any) {
       } else {
         ToastLong('Error in sending document');
       }
+    } finally {
+      setdocLoading(false);
     }
   };
 
@@ -540,6 +548,7 @@ export default function Inbox({navigation, route}: any) {
                             isRead={item?.isRead}
                             id={item?.id}
                             toggleImageModal={toggleImageModal}
+                            msgType={item.type}
                           />
                         );
                       } else if (item?.to?._id === agentData?._id) {
@@ -552,6 +561,7 @@ export default function Inbox({navigation, route}: any) {
                             isRead={item?.isRead}
                             id={item?.id}
                             toggleImageModal={toggleImageModal}
+                            msgType={item.type}
                           />
                         );
                       } else if (item?.from === agentData?._id) {
@@ -564,6 +574,7 @@ export default function Inbox({navigation, route}: any) {
                             isRead={item?.isRead}
                             id={item?.id}
                             toggleImageModal={toggleImageModal}
+                            msgType={item.type}
                           />
                         );
                       } else if (item?.to === agentData?._id) {
@@ -576,6 +587,7 @@ export default function Inbox({navigation, route}: any) {
                             isRead={item?.isRead}
                             id={item?.id}
                             toggleImageModal={toggleImageModal}
+                            msgType={item.type}
                           />
                         );
                       }
@@ -698,7 +710,7 @@ export default function Inbox({navigation, route}: any) {
                   />
                 )}
               </TouchableOpacity>
-              {message?.length === 0 && (
+              {/* {message?.length === 0 && (
                 <TouchableOpacity
                   style={tw`bg-[${colors.parpal}2E] p-1.5 rounded-full ml-2`}
                   onPress={() => {
@@ -716,7 +728,7 @@ export default function Inbox({navigation, route}: any) {
                     ]}
                   />
                 </TouchableOpacity>
-              )}
+              )} */}
             </View>
           </View>
         </View>
@@ -845,6 +857,60 @@ export default function Inbox({navigation, route}: any) {
           </View>
         </View>
       </Modal>
+
+      <>
+        <Modal
+          isVisible={docLoading}
+          onModalHide={() => {
+            setdocLoading(false);
+          }}
+          style={{width: SIZES.width, marginHorizontal: 0}}
+          deviceWidth={SIZES.width}
+          onBackdropPress={() => setdocLoading(false)}
+          swipeThreshold={200}
+          swipeDirection={['down']}
+          onSwipeComplete={() => setdocLoading(false)}
+          onBackButtonPress={() => setdocLoading(false)}>
+          <View style={tw` h-full w-full bg-black bg-opacity-5`}>
+            <TouchableOpacity
+              onPress={() => setdocLoading(false)}
+              style={tw`flex-1`}
+            />
+            <View
+              style={[
+                tw`p-4 px-6 mx-auto bg-[#D9D9D9] items-center  rounded-3xl`,
+                {height: 75, width: 75},
+              ]}>
+              <View style={tw`flex-1 items-center  justify-center`}>
+                <ActivityIndicator color={colors.parpal} size={'small'} />
+              </View>
+            </View>
+
+            <TouchableOpacity
+              onPress={() => {
+                setdocLoading(false);
+              }}
+              style={tw`flex flex-row items-center mx-auto  absolute bottom-20 left-40`}>
+              <Text
+                onPress={() => {}}
+                style={[
+                  tw`ml-2  text-[#FF0000]`,
+                  {
+                    fontSize: 18,
+                    fontFamily: 'Inter-Medium',
+                    lineHeight: 20,
+                  },
+                ]}>
+                Cancel
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setdocLoading(false)}
+              style={tw`flex-1`}
+            />
+          </View>
+        </Modal>
+      </>
 
       {/* <View
           style={[
