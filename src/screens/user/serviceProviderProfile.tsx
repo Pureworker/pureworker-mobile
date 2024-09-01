@@ -983,7 +983,6 @@ const ServiceProviderProfile = () => {
                                   />
                                 );
                               }}
-                              //   keyExtractor={item => item.id}
                               numColumns={3}
                               contentContainerStyle={{marginTop: 10}}
                             />
@@ -1021,7 +1020,7 @@ const ServiceProviderProfile = () => {
                   <FlatList
                     scrollEnabled={true}
                     data={serviceProviderData?.jobs || []}
-                    renderItem={(item, index) => {
+                    renderItem={(item: any, index: any) => {
                       console.log('JOOBSS', serviceProviderData?.jobs.length);
                       return (
                         <>
@@ -1035,7 +1034,7 @@ const ServiceProviderProfile = () => {
                                 width: SIZES.width * 0.95,
                                 borderWidth: 0,
                                 borderRadius: 5,
-                                // marginLeft: index === 0 ? 10 : 3,
+
                                 paddingHorizontal: perWidth(16),
                                 paddingVertical: perWidth(14),
                               },
@@ -1119,21 +1118,7 @@ const ServiceProviderProfile = () => {
                                 </View>
                               </View>
                             </View>
-                            {/* <View>
-                        <View
-                          style={[
-                            tw``,
-                            { width: perWidth(105), marginTop: perWidth(4) },
-                          ]}>
-                          <Textcomp
-                            text={'Steven W.s'}
-                            size={12}
-                            lineHeight={14}
-                            color={colors.white}
-                            fontFamily={'Inter-SemiBold'}
-                          />
-                        </View>
-                      </View> */}
+
                             <View
                               style={tw`mt-auto flex flex-row items-center justify-between`}>
                               <View
@@ -1173,7 +1158,6 @@ const ServiceProviderProfile = () => {
                         </>
                       );
                     }}
-                    //   keyExtractor={item => item.id}
                     numColumns={1}
                     contentContainerStyle={{marginTop: 10}}
                     ListFooterComponent={<View style={tw`h-150`} />}
@@ -1276,7 +1260,7 @@ const ServiceProviderProfile = () => {
               <FlatList
                 scrollEnabled={false}
                 data={serviceProviderData?.reviews || []}
-                renderItem={(item, index) => {
+                renderItem={(item: any, index: any) => {
                   console.log('Review-item', item);
 
                   return (
@@ -1312,7 +1296,6 @@ const ServiceProviderProfile = () => {
                                 },
                               ]}
                               source={{
-                                // 'https://res.cloudinary.com/dr0pef3mn/image/upload/v1691626246/Assets/1691626245707-Frame%2071.png.png'
                                 uri:
                                   item?.item?.user?.profilePic ??
                                   'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
@@ -1412,33 +1395,10 @@ const ServiceProviderProfile = () => {
         {userData?.accountType === 'freelancer' ||
         userData?.accountType === 'business' ? null : (
           <TouchableOpacity
-            // onPress={() => {
-            //   if (
-            //     // userData?._id === serviceProviderData?._id ||
-            //     userData?._id === profileData?._id
-            //   ) {
-            //     console.log(
-            //       userData?._id,
-            //       profileData?._id,
-            //       serviceProviderData?._id,
-            //     );
-
-            //     ToastShort('Service Providers cannot hire thermselves!.');
-            //   } else {
-            //     navigation.navigate('OrderDetails', {
-            //       data: profileData,
-            //       service: id,
-            //     });
-            //   }
-            // }}
-
             onPress={() => {
               socket.connect();
 
-              if (
-                // userData?._id === serviceProviderData?._id ||
-                userData?._id === profileData?._id
-              ) {
+              if (userData?._id === profileData?._id) {
                 ToastShort('Service providers cannot chat with themselves!.');
               } else {
                 navigation.navigate('Inbox', {
@@ -1496,7 +1456,7 @@ const ServiceProviderProfile = () => {
               uri: selectedImage,
               headers: {Authorization: 'someAuthToken'},
               priority: FastImage.priority.high,
-              // cache: FastImage.cacheControl.cacheOnly,
+              cache: FastImage.cacheControl.web,
             }}
             resizeMode={FastImage.resizeMode.contain}
           />
@@ -1522,11 +1482,7 @@ const ServiceProviderProfile = () => {
           />
           <View style={[tw`mx-auto w-4/5`, styles.modalContent]}>
             <Textcomp
-              text={`${
-                display
-                // profileData?.portfolio?.description ||
-                // serviceProviderData?.description
-              }`}
+              text={`${display}`}
               size={14}
               lineHeight={18}
               color={colors.black}
@@ -1549,7 +1505,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     backgroundColor: 'white',

@@ -2,7 +2,6 @@ import React, {useState, useMemo} from 'react';
 
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
   Platform,
@@ -11,7 +10,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -21,25 +20,14 @@ import {perHeight} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
 import TextInputs from '../../components/TextInput2';
 
-import {
-  useGetAllServiceProviderPotfolioQuery,
-  useGetFavoriteProductQuery,
-} from '../../store/slice/api';
-
 const Services = () => {
   const navigation = useNavigation<StackNavigation>();
-  const dispatch = useDispatch();
   const [searchModal, setsearchModal] = useState(false);
   const [searchInput, setsearchInput] = useState('');
-
-  const {
-    data: getServiceProviderPotfolioData,
-    isLoading: isLoadingServiceProviderPotfolio,
-    refetch,
-  } = useGetAllServiceProviderPotfolioQuery();
-  // const getServiceProviderPotfolio = getServiceProviderPotfolioData ?? [];
-  const _popularServices = useSelector((state: any) => state.user.popularServices);
-  const getServiceProviderPotfolio = _popularServices
+  const _popularServices = useSelector(
+    (state: any) => state.user.popularServices,
+  );
+  const getServiceProviderPotfolio = _popularServices;
 
   const filterServiceProviderPotfolio = useMemo(() => {
     var searchArray = [];
@@ -48,9 +36,7 @@ const Services = () => {
       getServiceProviderPotfolio.length
     ) {
       searchArray = getServiceProviderPotfolio.filter(txt => {
-        const text = txt?.name
-          ? txt?.name.toUpperCase()
-          : ''.toUpperCase();
+        const text = txt?.name ? txt?.name.toUpperCase() : ''.toUpperCase();
         const textSearch = searchInput.toUpperCase();
         return text.indexOf(textSearch) > -1;
       });
@@ -74,37 +60,6 @@ const Services = () => {
                   StatusBar.currentHeight + getStatusBarHeight(true),
           }}
         />
-        {/* <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginHorizontal: 20,
-          }}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              source={images.back}
-              style={{height: 25, width: 25}}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-          <View style={tw`mx-auto`}>
-            <Textcomp
-              text={'Services'}
-              size={17}
-              lineHeight={17}
-              color={'#000413'}
-              fontFamily={'Inter-SemiBold'}
-            />
-          </View>
-          <TouchableOpacity onPress={() => {}}>
-            <Image
-              source={images.search}
-              style={{height: 25, width: 25}}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-        </View> */}
 
         {!searchModal ? (
           <View
@@ -163,7 +118,7 @@ const Services = () => {
               />
             </TouchableOpacity>
             <TextInputs
-              style={[tw`rounded-full`,{marginTop: 0, width: '70%'}]}
+              style={[tw`rounded-full`, {marginTop: 0, width: '70%'}]}
               labelText={'Search for service'}
               state={searchInput}
               setState={setsearchInput}

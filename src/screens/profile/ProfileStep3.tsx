@@ -6,7 +6,7 @@ import {
   Text,
   SafeAreaView,
 } from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
 import Header from '../../components/Header';
 import images from '../../constants/images';
@@ -18,7 +18,6 @@ import {generalStyles} from '../../constants/generalStyles';
 import ProfileStepWrapper from '../../components/ProfileStepWrapper';
 import TextInputs from '../../components/TextInputs';
 import Snackbar from 'react-native-snackbar';
-import {useCreateServiceMutation} from '../../store/slice/api';
 import {validateEmail} from '../../constants/utils';
 import tw from 'twrnc';
 import {useDispatch, useSelector} from 'react-redux';
@@ -34,13 +33,6 @@ import * as yup from 'yup';
 import {useFormik} from 'formik';
 import {ToastShort} from '../../utils/utils';
 import {toastAlertError} from '../../utils/alert';
-type Route = {
-  key: string;
-  name: string;
-  params: {
-    serviceId: string;
-  };
-};
 
 const validationSchema = yup.object().shape({
   name1: yup.string().required('Full Name is required'),
@@ -66,15 +58,6 @@ const validationSchema = yup.object().shape({
         return value !== phoneNumber2;
       },
     ),
-  // phoneNumber1: yup
-  //   .string()
-  //   .required('Phone Number is required')
-  //   .min(10, 'Invalid Phone number')
-  //   .max(10, 'Invalid Phone number'),
-  // email1: yup
-  //   .string()
-  //   .email('Enter a valid email')
-  //   .required('Email is required'),
   address1: yup.string().required('Address is required'),
   name2: yup.string().required('Full Name is required'),
   relation2: yup.string().required('Relationship is required'),
@@ -106,60 +89,8 @@ const ProfileStep3 = () => {
   const completeProfileData = useSelector(
     (state: any) => state.user.completeProfileData,
   );
-  const [name1, setName1] = useState(
-    ProviderData?.contact?.[0]?.fullName ||
-      completeProfileData?.contact?.[0]?.fullName ||
-      '',
-  );
-  const [name2, setName2] = useState(
-    ProviderData?.contact?.[1]?.fullName ||
-      completeProfileData?.contact?.[1]?.fullName ||
-      '',
-  );
-  const [relation1, setRelation1] = useState(
-    ProviderData?.contact?.[0]?.relationship ||
-      completeProfileData?.contact?.[0]?.relationship ||
-      '',
-  );
-  const [relation2, setRelation2] = useState(
-    ProviderData?.contact?.[1]?.relationship ||
-      completeProfileData?.contact?.[1]?.relationship ||
-      '',
-  );
-  const [phoneNumber1, setPhoneNumber1] = useState(
-    ProviderData?.contact?.[0]?.phoneNumber ||
-      completeProfileData?.contact?.[0]?.phoneNumber ||
-      '',
-  );
-  const [phoneNumber2, setPhoneNumber2] = useState(
-    ProviderData?.contact?.[1]?.phoneNumber ||
-      completeProfileData?.contact?.[1]?.phoneNumber ||
-      '',
-  );
-  const [email1, setEmail1] = useState(
-    ProviderData?.contact?.[0]?.email ||
-      completeProfileData?.contact?.[0]?.email ||
-      '',
-  );
-  const [email2, setEmail2] = useState(
-    ProviderData?.contact?.[1]?.email ||
-      completeProfileData?.contact?.[1]?.email ||
-      '',
-  );
-  const [address1, setAddress1] = useState(
-    ProviderData?.contact?.[0]?.address ||
-      completeProfileData?.contact?.[0]?.address ||
-      '',
-  );
-  const [address2, setAddress2] = useState(
-    ProviderData?.contact?.[1]?.address ||
-      completeProfileData?.contact?.[1]?.address ||
-      '',
-  );
-  const route: Route = useRoute();
-  const [isLoading, setisLoading] = useState(false);
 
-  const [createService] = useCreateServiceMutation();
+  const [isLoading, setisLoading] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -214,142 +145,6 @@ const ProfileStep3 = () => {
     },
   });
 
-  const _handleProfileSetup = async (values: {
-    name1: any;
-    relation1: any;
-    phoneNumber1: any;
-    email1: any;
-    address1: any;
-    name2: any;
-    relation2: any;
-    phoneNumber2: any;
-    email2: any;
-    address2: any;
-  }) => {
-    console.log('Started');
-
-    if (
-      // route?.params?.serviceId &&
-      values.name1 &&
-      values.name2 &&
-      values.relation1 &&
-      values.relation2 &&
-      values.phoneNumber1 &&
-      values.phoneNumber2 &&
-      values.email1 &&
-      values.email2 &&
-      values.address1 &&
-      values.address2
-    ) {
-      if (!validateEmail(values.email1)) {
-        Snackbar.show({
-          text: 'Please enter a valid email',
-          duration: Snackbar.LENGTH_LONG,
-          textColor: '#fff',
-          backgroundColor: '#88087B',
-        });
-        return;
-      }
-      if (!validateEmail(values.email2)) {
-        Snackbar.show({
-          text: 'Please enter a valid email',
-          duration: Snackbar.LENGTH_LONG,
-          textColor: '#fff',
-          backgroundColor: '#88087B',
-        });
-        return;
-      }
-      if (values.email1 === values.email2) {
-        ToastShort('Cannot have Same Email for both contacts');
-        return;
-      }
-      if (values.phoneNumber1 === values.phoneNumber2) {
-        ToastShort('Cannot have Same PhoneNumber for both contacts');
-        return;
-      }
-      if (values.name1 === values.name2) {
-        ToastShort('Cannot have Same Name for both contacts');
-        return;
-      }
-      if (values.phoneNumber1?.length !== 11) {
-        ToastShort('Phone Number1 must be 11 numbers');
-        return;
-      }
-      if (values.phoneNumber2?.length !== 11) {
-        ToastShort('Phone Number2 must be 11 numbers');
-        return;
-      }
-      const contact = [
-        {
-          fullName: values.name1,
-          relationship: values.relation1,
-          phoneNumber: values.phoneNumber1,
-          email: values.email1,
-          address: values.address1,
-        },
-        {
-          fullName: values.name2,
-          relationship: values.relation2,
-          phoneNumber: values.phoneNumber2,
-          email: values.email2,
-          address: values.address2,
-        },
-      ];
-      dispatch(
-        addcompleteProfile({
-          contact: contact,
-        }),
-      );
-      setisLoading(true);
-
-      const res: any = await completeProfile({contact: contact, action: 'add'});
-      console.log('result', res?.data);
-      if (res?.status === 200 || res?.status === 201) {
-        // navigation.navigate('ProfileStep4', {
-        //   serviceId: route?.params?.serviceId,
-        // });
-        // dispatch(addformStage(4));
-
-        // navigation.navigate('FaceDetection', {page: 'Profile'});
-
-        Snackbar.show({
-          text: 'Contacts Submitted Successfully!.  Proceeding to Virtual Interview',
-          duration: Snackbar.LENGTH_LONG,
-          textColor: '#fff',
-          backgroundColor: '#88087B',
-        });
-        setTimeout(() => {
-          if (userData?.liveTest === false) {
-            navigation.navigate('FaceDetection', {page: 'Profile'});
-          } else {
-            navigation.navigate('Congratulations');
-          }
-        }, 5000);
-        dispatch(addformStage(6));
-      } else {
-        Snackbar.show({
-          text: res?.error?.message
-            ? res?.error?.message
-            : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured',
-          duration: Snackbar.LENGTH_LONG,
-          textColor: '#fff',
-          backgroundColor: '#88087B',
-        });
-      }
-      setisLoading(false);
-    } else {
-      Snackbar.show({
-        text: 'Please fill all fields',
-        duration: Snackbar.LENGTH_LONG,
-        textColor: '#fff',
-        backgroundColor: '#88087B',
-      });
-    }
-    setisLoading(false);
-  };
-
   const handleProfileSetup = async (values: {
     name1: any;
     relation1: any;
@@ -364,7 +159,6 @@ const ProfileStep3 = () => {
   }) => {
     try {
       setisLoading(true);
-      // Check for validation manually if needed before submitting
       if (!validateEmail(values.email1)) {
         Snackbar.show({
           text: 'Please enter a valid email for Contact 1',
@@ -425,15 +219,13 @@ const ProfileStep3 = () => {
         }),
       );
       const res = await completeProfile({contact: contact, action: 'add'});
-      // Check if the submission was successful
       if (res?.status === 200 || res?.status === 201) {
         Snackbar.show({
           text: 'Contacts Submitted Successfully! Proceeding to Virtual Interview',
-          duration: Snackbar.LENGTH_LONG,
+          duration: Snackbar.LENGTH_SHORT,
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
-        // Delay the navigation to allow the user to see the Snackbar message
         setTimeout(() => {
           if (userData?.liveTest === false) {
             navigation.navigate('FaceDetection', {page: 'Profile'});
@@ -441,8 +233,7 @@ const ProfileStep3 = () => {
             navigation.navigate('Congratulations');
           }
           setisLoading(false);
-        }, 1000); // 5-second delay
-
+        }, 250);
         dispatch(addformStage(6));
       } else {
         toastAlertError('Error');
@@ -459,20 +250,12 @@ const ProfileStep3 = () => {
             'Oops! An error occurred.',
         );
       }
-    } catch (error) {
-      // Catch any backend or other errors here
-      // Snackbar.show({
-      //   text: error.message || 'An unexpected error occurred',
-      //   duration: Snackbar.LENGTH_LONG,
-      //   textColor: '#fff',
-      //   backgroundColor: '#88087B',
-      // });
+    } catch (error: any) {
       toastAlertError(`${error?.message}` ?? 'An unexpected error occurred');
       setisLoading(false);
     } finally {
       setisLoading(false);
       setisLoading(false);
-    // Ensure loading spinner is stopped
     }
   };
 
@@ -537,7 +320,6 @@ const ProfileStep3 = () => {
             style={{marginTop: 10, backgroundColor: colors.greyLight1}}
             labelText={''}
             state={formik.values.relation1}
-            // setState={setRelation1}
             setState={formik.handleChange('relation1')}
             error={formik.errors.relation1}
           />
@@ -558,7 +340,6 @@ const ProfileStep3 = () => {
             labelText={''}
             state={formik.values.phoneNumber1}
             maxLength={11}
-            // setState={setPhoneNumber1}
             setState={formik.handleChange('phoneNumber1')}
             error={formik.errors.phoneNumber1}
           />
@@ -577,9 +358,7 @@ const ProfileStep3 = () => {
             style={{marginTop: 10, backgroundColor: colors.greyLight1}}
             labelText={''}
             keyBoardType={'email-address'}
-            // state={email1}
             state={formik.values.email1}
-            // setState={setEmail1}
             setState={formik.handleChange('email1')}
             error={formik.errors.email1}
           />
@@ -611,7 +390,6 @@ const ProfileStep3 = () => {
               style={{marginTop: 0, backgroundColor: colors.greyLight1}}
               labelText={'Enter address'}
               state={formik.values.address1}
-              // setState={setAddress1}
               setState={formik.handleChange('address1')}
               multiline={true}
               nbLines={5}
@@ -641,16 +419,12 @@ const ProfileStep3 = () => {
               display: 'none',
             }}
             labelText={''}
-            // state={name2}
-            // setState={setName2}
             state={formik.values.name2}
             setState={formik.handleChange('name2')}
           />
           <TextInputs
             style={{marginTop: 10, backgroundColor: colors.greyLight1}}
             labelText={''}
-            // state={name2}
-            // setState={setName2}
             state={formik.values.name2}
             setState={formik.handleChange('name2')}
           />
@@ -669,9 +443,7 @@ const ProfileStep3 = () => {
           <TextInputs
             style={{marginTop: 10, backgroundColor: colors.greyLight1}}
             labelText={''}
-            // state={relation2}
             state={formik.values.relation2}
-            // setState={setRelation2}
             setState={formik.handleChange('relation2')}
             error={formik.errors.relation2}
           />
@@ -690,10 +462,8 @@ const ProfileStep3 = () => {
             style={{marginTop: 10, backgroundColor: colors.greyLight1}}
             keyBoardType="number-pad"
             labelText={''}
-            // state={phoneNumber2}
             state={formik.values.phoneNumber2}
             maxLength={11}
-            // setState={setPhoneNumber2}
             setState={formik.handleChange('phoneNumber2')}
             error={formik.errors.phoneNumber2}
           />
@@ -712,9 +482,7 @@ const ProfileStep3 = () => {
             style={{marginTop: 10, backgroundColor: colors.greyLight1}}
             keyBoardType="email-address"
             labelText={''}
-            // state={email2}
             state={formik.values.email2}
-            // setState={setEmail2}
             setState={formik.handleChange('email2')}
             error={formik.errors.email2}
           />
@@ -745,9 +513,7 @@ const ProfileStep3 = () => {
               }}
               style={{marginTop: 0, backgroundColor: colors.greyLight1}}
               labelText={'Enter address'}
-              // state={address2}
               state={formik.values.address2}
-              // setState={setAddress2}
               setState={formik.handleChange('address2')}
               multiline={true}
               nbLines={5}
@@ -767,12 +533,6 @@ const ProfileStep3 = () => {
             ]}>
             {!isLoading ? (
               <Button
-                // onClick={() => {
-                //   // navigation.navigate('ProfileStep4', {
-                //   //   serviceId: route?.params?.serviceId,
-                //   // });
-                //   handleProfileSetup();
-                // }}
                 onClick={() => {
                   formik.handleSubmit();
                 }}

@@ -1,26 +1,23 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
   Platform,
   StatusBar,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
-import {StackNavigation} from '../../constants/navigation';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 const PrivacyPolicy = () => {
-  const navigation = useNavigation<StackNavigation>();
-  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
   return (
-    <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
+    <View style={{flex: 1, backgroundColor: '#EBEBEB'}}>
       <ScrollView>
         <View
           style={{
@@ -47,11 +44,11 @@ const PrivacyPolicy = () => {
           </TouchableOpacity>
           <View style={tw`mx-auto`}>
             <Textcomp
-              text={'Privacy Policy'}
+              text="Privacy Policy"
               size={17}
               lineHeight={17}
-              color={'#000413'}
-              fontFamily={'Inter-SemiBold'}
+              color="#000413"
+              fontFamily="Inter-SemiBold"
             />
           </View>
         </View>

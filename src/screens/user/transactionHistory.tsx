@@ -6,7 +6,6 @@ import {
   Platform,
   StatusBar,
   ScrollView,
-  Text,
   RefreshControl,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
@@ -32,68 +31,52 @@ import TipIcon from '../../assets/svg/TipIcon';
 import ReversalIcon from '../../assets/svg/ReversalIcon';
 import ReferralIcon from '../../assets/svg/referralIcon';
 
-const TransactionHistory = () => {
+const TransactionHistory: React.FC = () => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
-  const [isLoading, setisLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const transactions = useSelector((state: any) => state.user.transactions);
   const categorizedData = useSelector(
     (state: any) => state.user.categorizedTransdata,
   );
-  console.log(transactions);
+
   const initGetUsers = async () => {
-    setisLoading(true);
+    setIsLoading(true);
     try {
       const res: any = await getTransactions('');
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addTransactions(res?.data?.data));
-        sort(res?.data?.data);
+        sortTransactions(res?.data?.data);
       }
     } catch (error) {
       console.error('Error fetching transactions:', error);
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   };
+
   useEffect(() => {
     initGetUsers();
   }, []);
-  const sort = (data: any[]) => {
-    // Create an object to store categorized data
-    // Iterate through the data and categorize it by month
-    const _categorizedData: any = {};
+
+  const sortTransactions = (data: any[]) => {
+    const categorizedData: any = {};
     data.forEach(item => {
       const createdAt = new Date(item.createdAt);
       const monthYear = `${createdAt.getFullYear()}-${(createdAt.getMonth() + 1)
         .toString()
-        .padStart(2, '0')}`; // Format: YYYY-MM
-
-      // Create an array for the month if it doesn't exist
-      if (!_categorizedData[monthYear]) {
-        _categorizedData[monthYear] = [];
+        .padStart(2, '0')}`;
+      if (!categorizedData[monthYear]) {
+        categorizedData[monthYear] = [];
       }
-
-      // Push the item into the corresponding month
-      _categorizedData[monthYear].push(item);
+      categorizedData[monthYear].push(item);
     });
-    // setcategorizedData(categorizedData);
-    console.log('here', _categorizedData);
-    dispatch(addcategorizedTransdata(_categorizedData));
-    // Sort the data within each month (optional)
-    // Object.keys(categorizedData).forEach(monthYear => {
-    //   categorizedData[monthYear].sort((a, b) => {
-    //     const dateA = new Date(a.createdAt);
-    //     const dateB = new Date(b.createdAt);
-    //     return dateA - dateB;65a589095bb26a47b7dc9fb3 659e66e97d7b5336ca150c8d
-    //   });
-    // });
+    dispatch(addcategorizedTransdata(categorizedData));
   };
-  function formatDate(inputDate) {
-    // Split the input date by '-'
-    const dateParts = inputDate.split('-');
 
-    // Map the month number to its abbreviation
+  const formatDate = (inputDate: any) => {
+    const dateParts = inputDate.split('-');
     const months = [
       'Jan',
       'Feb',
@@ -108,15 +91,9 @@ const TransactionHistory = () => {
       'Nov',
       'Dec',
     ];
-
-    // Get the month abbreviation
     const monthAbbr = months[parseInt(dateParts[1]) - 1];
-
-    // Create the formatted date string
-    const formattedDate = `${monthAbbr} ${dateParts[0]}`;
-
-    return formattedDate;
-  }
+    return `${monthAbbr} ${dateParts[0]}`;
+  };
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -128,56 +105,55 @@ const TransactionHistory = () => {
 
   return (
     <View style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
-      <>
-        <View
-          style={{
-            marginTop:
-              Platform.OS === 'ios'
-                ? getStatusBarHeight(true)
-                : StatusBar.currentHeight &&
-                  StatusBar.currentHeight + getStatusBarHeight(true),
-          }}
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginHorizontal: 20,
-          }}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              source={images.back}
-              style={{height: 25, width: 25}}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-          <View style={tw`mx-auto`}>
-            <Textcomp
-              text={'Transaction  History'}
-              size={17}
-              lineHeight={17}
-              color={'#000413'}
-              fontFamily={'Inter-SemiBold'}
-            />
-          </View>
+      <View
+        style={{
+          marginTop:
+            Platform.OS === 'ios'
+              ? getStatusBarHeight(true)
+              : StatusBar.currentHeight &&
+                StatusBar.currentHeight + getStatusBarHeight(true),
+        }}
+      />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginHorizontal: 20,
+        }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            source={images.back}
+            style={{height: 25, width: 25}}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
+        <View style={tw`mx-auto`}>
+          <Textcomp
+            text="Transaction  History"
+            size={17}
+            lineHeight={17}
+            color="#000413"
+            fontFamily="Inter-SemiBold"
+          />
         </View>
-        <View
-          style={[
-            tw`mx-auto`,
-            {width: perWidth(335), paddingLeft: perWidth(10)},
-          ]}>
-          <View style={[tw``, {marginTop: perHeight(19)}]}>
-            <Textcomp
-              text={'Transactions'}
-              size={17}
-              lineHeight={17}
-              color={'#000413'}
-              fontFamily={'Inter-SemiBold'}
-            />
-          </View>
+      </View>
+      <View
+        style={[
+          tw`mx-auto`,
+          {width: perWidth(335), paddingLeft: perWidth(10)},
+        ]}>
+        <View style={[tw``, {marginTop: perHeight(19)}]}>
+          <Textcomp
+            text="Transactions"
+            size={17}
+            lineHeight={17}
+            color="#000413"
+            fontFamily="Inter-SemiBold"
+          />
         </View>
-      </>
+      </View>
+
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -190,98 +166,15 @@ const TransactionHistory = () => {
                 {marginTop: SIZES.height * 0.35},
               ]}>
               <Textcomp
-                text={'No Transactions Yet'}
+                text="No Transactions Yet"
                 size={16.5}
                 lineHeight={16.5}
-                color={'#000413'}
-                fontFamily={'Inter-Bold'}
+                color="#000413"
+                fontFamily="Inter-Bold"
               />
             </View>
           ) : (
             <>
-              {/* {months.map((item, index) => {
-                return (
-                  <View style={[tw``, {paddingLeft: perWidth(10)}]}>
-                    <View
-                      style={[
-                        tw``,
-                        {marginTop: perHeight(19), paddingLeft: perWidth(13)},
-                      ]}>
-                      <Textcomp
-                        text={`${item} 2023`}
-                        size={17}
-                        lineHeight={17}
-                        color={'#000413'}
-                        fontFamily={'Inter-SemiBold'}
-                      />
-                    </View>
-
-                    <FlatList
-                      scrollEnabled={false}
-                      data={transactions}
-                      renderItem={(item, index) => {
-                        return (
-                          <View
-                            style={tw`flex flex-row justify-between items-center px-4 border-b border-[#00000033] ${
-                              index === 0 ? 'pb-4' : 'py-4'
-                            }`}>
-                            <View
-                              style={[tw`flex flex-row items-center  `, {}]}>
-                              <Image
-                                source={images.vender}
-                                style={{width: perWidth(25), aspectRatio: 1}}
-                              />
-                              <View style={tw`flex flex-col ml-4`}>
-                                <View style={[tw``, {marginTop: perHeight(0)}]}>
-                                  <Textcomp
-                                    text={'Peter Pedro'}
-                                    size={15}
-                                    lineHeight={17}
-                                    color={'#000413'}
-                                    fontFamily={'Inter-SemiBold'}
-                                  />
-                                </View>
-                                <View style={[tw``, {marginTop: perHeight(4)}]}>
-                                  <Textcomp
-                                    text={'4 may, 13:45'}
-                                    size={13}
-                                    lineHeight={15}
-                                    color={'#00041380'}
-                                    fontFamily={'Inter'}
-                                  />
-                                </View>
-                              </View>
-                            </View>
-                            <View style={tw`flex flex-col`}>
-                              <View style={[tw``, {marginTop: perHeight(0)}]}>
-                                <Textcomp
-                                  text={'$2000'}
-                                  size={15}
-                                  lineHeight={17}
-                                  color={'#000413'}
-                                  fontFamily={'Inter-SemiBold'}
-                                />
-                              </View>
-                              <View style={[tw``, {marginTop: perHeight(4)}]}>
-                                <Textcomp
-                                  text={'Payment'}
-                                  size={13}
-                                  lineHeight={15}
-                                  color={'#00041380'}
-                                  fontFamily={'Inter-SemiBold'}
-                                />
-                              </View>
-                            </View>
-                          </View>
-                        );
-                      }}
-                      //   keyExtractor={item => item.id}
-                      contentContainerStyle={{marginTop: 10}}
-                    />
-                  </View>
-                );
-              })} */}
-
               {Object.keys(categorizedData).map(monthYear => (
                 <View key={monthYear}>
                   <View
@@ -290,108 +183,90 @@ const TransactionHistory = () => {
                       {marginTop: perHeight(19), paddingLeft: perWidth(13)},
                     ]}>
                     <Textcomp
-                      text={`${formatDate(monthYear)}`}
+                      text={formatDate(monthYear)}
                       size={17}
                       lineHeight={17}
-                      color={'#000413'}
-                      fontFamily={'Inter-SemiBold'}
+                      color="#000413"
+                      fontFamily="Inter-SemiBold"
                     />
                   </View>
-                  {categorizedData[monthYear].map(
-                    (item: {id: React.Key | null | undefined}, index) => {
-                      if (item?.type !== 'funding') {
-                        return (
-                          <View
-                            style={tw`flex flex-row justify-between items-center px-4 mx-2 border-b border-[#00000033] ${
-                              index === 0 ? 'pb-4' : 'py-4'
-                            }`}>
-                            <View
-                              style={[tw`flex flex-row items-center  `, {}]}>
-                              <View
-                                style={{
-                                  width: 50,
-                                  justifyContent: 'flex-start',
-                                }}>
-                                {item?.type === 'funding' ? (
-                                  <FundingIcon />
-                                ) : item?.type === 'payment' ? (
-                                  <PaymentIcon />
-                                ) : item?.type === 'withdrawal' ? (
-                                  <WithdrawalIcon />
-                                ) : item?.type === 'reversal' ? (
-                                  <ReversalIcon />
-                                ) : item?.type === 'tip' ? (
-                                  <TipIcon />
-                                ) : item?.type === 'referral' ? (
-                                  <ReferralIcon />
-                                )
-                                : (
-                                  <View>
-                                    <Image
-                                      resizeMode="contain"
-                                      source={images.logo2}
-                                      style={{
-                                        width: perWidth(20),
-                                        aspectRatio: 1,
-                                      }}
-                                    />
-                                  </View>
-                                )}
-                              </View>
-                              <View style={tw`flex flex-col ml-4`}>
-                                <View style={[tw``, {marginTop: perHeight(0)}]}>
-                                  <Textcomp
-                                    text={'Transaction'}
-                                    size={15}
-                                    lineHeight={17}
-                                    color={'#000413'}
-                                    fontFamily={'Inter-SemiBold'}
-                                  />
-                                </View>
-                                <View style={[tw``, {marginTop: perHeight(4)}]}>
-                                  <Textcomp
-                                    text={`${formatDateHistory(
-                                      item.createdAt,
-                                    )}`}
-                                    size={13}
-                                    lineHeight={15}
-                                    color={'#00041380'}
-                                    fontFamily={'Inter'}
-                                  />
-                                </View>
-                              </View>
-                            </View>
-                            <View style={tw`flex flex-col items-end`}>
-                              <View style={[tw``, {marginTop: perHeight(0)}]}>
-                                <Textcomp
-                                  text={`₦${item?.amount}`}
-                                  size={15}
-                                  lineHeight={17}
-                                  color={'#000413'}
-                                  fontFamily={'Inter-SemiBold'}
-                                />
-                              </View>
-                              <View style={[tw` `, {marginTop: perHeight(4)}]}>
-                                <Textcomp
-                                  text={`${
-                                    item?.status === undefined
-                                      ? ''
-                                      : item?.status === 'successfull'
-                                      ? 'SUCCESSFUL'
-                                      : item?.status
-                                  }`}
-                                  size={11}
-                                  lineHeight={15}
-                                  color={item?.status ? 'green' : '#00041380'}
-                                  fontFamily={'Inter-SemiBold'}
-                                />
-                              </View>
-                            </View>
+                  {categorizedData[monthYear].map((item: any, index: any) => (
+                    <View
+                      key={index}
+                      style={tw`flex flex-row justify-between items-center px-4 mx-2 border-b border-[#00000033] ${
+                        index === 0 ? 'pb-4' : 'py-4'
+                      }`}>
+                      <View style={tw`flex flex-row items-center`}>
+                        <View style={{width: 50, justifyContent: 'flex-start'}}>
+                          {item?.type === 'funding' ? (
+                            <FundingIcon />
+                          ) : item?.type === 'payment' ? (
+                            <PaymentIcon />
+                          ) : item?.type === 'withdrawal' ? (
+                            <WithdrawalIcon />
+                          ) : item?.type === 'reversal' ? (
+                            <ReversalIcon />
+                          ) : item?.type === 'tip' ? (
+                            <TipIcon />
+                          ) : item?.type === 'referral' ? (
+                            <ReferralIcon />
+                          ) : (
+                            <Image
+                              resizeMode="contain"
+                              source={images.logo2}
+                              style={{width: perWidth(20), aspectRatio: 1}}
+                            />
+                          )}
+                        </View>
+                        <View style={tw`flex flex-col ml-4`}>
+                          <View style={[tw``, {marginTop: perHeight(0)}]}>
+                            <Textcomp
+                              text="Transaction"
+                              size={15}
+                              lineHeight={17}
+                              color="#000413"
+                              fontFamily="Inter-SemiBold"
+                            />
                           </View>
-                        );
-                      }
-                    },
-                  )}
+                          <View style={[tw``, {marginTop: perHeight(4)}]}>
+                            <Textcomp
+                              text={formatDateHistory(item.createdAt)}
+                              size={13}
+                              lineHeight={15}
+                              color="#00041380"
+                              fontFamily="Inter"
+                            />
+                          </View>
+                        </View>
+                      </View>
+                      <View style={tw`flex flex-col items-end`}>
+                        <View style={[tw``, {marginTop: perHeight(0)}]}>
+                          <Textcomp
+                            text={`₦${item?.amount}`}
+                            size={15}
+                            lineHeight={17}
+                            color="#000413"
+                            fontFamily="Inter-SemiBold"
+                          />
+                        </View>
+                        <View style={[tw``, {marginTop: perHeight(4)}]}>
+                          <Textcomp
+                            text={`${
+                              item?.status === undefined
+                                ? ''
+                                : item?.status === 'successfull'
+                                ? 'SUCCESSFUL'
+                                : item?.status
+                            }`}
+                            size={11}
+                            lineHeight={15}
+                            color={item?.status ? 'green' : '#00041380'}
+                            fontFamily="Inter-SemiBold"
+                          />
+                        </View>
+                      </View>
+                    </View>
+                  ))}
                 </View>
               ))}
             </>

@@ -1,14 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Image,
   TouchableOpacity,
   Platform,
   StatusBar,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -18,7 +17,6 @@ import TextInputs from '../../components/TextInput2';
 
 const _Services = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
-  const dispatch = useDispatch();
   const passedService = route.params.service;
   const [searchModal, setsearchModal] = useState(false);
   const [searchInput, setsearchInput] = useState('');
@@ -110,10 +108,7 @@ const _Services = ({route}: any) => {
             </TouchableOpacity>
           </View>
         )}
-        <View style={tw`mt-3 mb-3`}>
-
-
-        </View>
+        <View style={tw`mt-3 mb-3`} />
         <View style={tw`h-20`} />
       </ScrollView>
     </View>

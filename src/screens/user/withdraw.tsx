@@ -12,7 +12,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -36,14 +36,12 @@ import {Dropdown} from 'react-native-element-dropdown';
 import {SIZES} from '../../utils/position/sizes';
 import Textcomp from '../../components/Textcomp';
 import TransPin from '../../components/modals/transPin';
-// Validation schema using Yup
 const validationSchema = Yup.object().shape({
   bank: Yup.string().required('Please select a bank.'),
   accountNumber: Yup.string()
     .required('Please enter account number.')
     .min(10)
     .max(10),
-  // accountName: Yup.string().required('Account name is required.'),
   amount: Yup.number()
     .required('Please enter the amount.')
     .min(500, 'min Amount is NGN 500.'),
@@ -54,7 +52,7 @@ const Withdraw = () => {
   const banks = useSelector((state: any) => state.user.banks);
   const [bankList, setBankList] = useState([]);
   const [isLoading, setisLoading] = useState(false);
-  const [selectedBank, setselectedBank] = useState(null);
+  const [selectedBank, setselectedBank]: any = useState(null);
 
   useEffect(() => {
     const initGetBanks = async () => {
@@ -92,9 +90,6 @@ const Withdraw = () => {
     amount: any;
     bank_name: string;
   }) => {
-    // ToastShort('Withdrawal is under maintenance!');
-    // return;
-
     setisLoading(true);
     const param = {
       account_number: values.accountNumber,
@@ -225,7 +220,7 @@ const Withdraw = () => {
                 {({handleSubmit, errors, touched}) => (
                   <View style={{marginHorizontal: 20, marginTop: 50}}>
                     <Field name="bank">
-                      {({form}) => (
+                      {({form}: any) => (
                         <View style={[tw`mb-4`, {}]}>
                           <TextWrapper
                             children="Bank"
@@ -281,7 +276,7 @@ const Withdraw = () => {
                             onChange={item => {
                               const d = `${item.value}`;
                               const fil = banks?.filter(
-                                item => item.code === d,
+                                (_item: any) => _item.code === d,
                               );
                               setselectedBank(fil);
                               form.setFieldValue('bank', fil?.[0]?.code);
@@ -289,7 +284,6 @@ const Withdraw = () => {
                                 'bank_name',
                                 fil?.name ?? item?.label,
                               );
-                              // setselectedBank(fil);
                             }}
                           />
                           {errors.bank && touched.bank && (
@@ -323,7 +317,6 @@ const Withdraw = () => {
                             }}
                             labelText={'Enter account number'}
                             state={field.value}
-                            // setState={(value) => debouncedQueryName(value)}
                             setState={async value => {
                               if (!selectedBank) {
                                 ToastShort('Select a bank');
@@ -366,7 +359,7 @@ const Withdraw = () => {
                       )}
                     </Field>
                     <Field name="accountName">
-                      {({field, form}: any) => (
+                      {({form}: any) => (
                         <>
                           <TextWrapper
                             children="Account Name"
@@ -443,9 +436,6 @@ const Withdraw = () => {
                     {!isLoading ? (
                       <Button
                         onClick={() => {
-                          // console.log(errors);
-                          // handleSubmit();
-
                           if (transactionPin?.length < 1) {
                             setshowTransPin(true);
                           } else {
@@ -478,7 +468,7 @@ const Withdraw = () => {
       </SafeAreaView>
       {showTransPin && (
         <TransPin
-          onSubmit={code => {
+          onSubmit={(code: React.SetStateAction<string>) => {
             settransactionPin(code);
             setshowTransPin(false);
           }}

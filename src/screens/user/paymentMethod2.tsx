@@ -55,14 +55,7 @@ const PaymentMethod2 = ({route}: any) => {
     }
     setisLoading(false);
   };
-
-  interface RedirectParams {
-    status: 'successful' | 'cancelled';
-    transaction_id?: string;
-    tx_ref: string;
-  }
-  /* An example function called when transaction is completed successfully or canceled */
-  const handleOnRedirect = async data => {
+  const handleOnRedirect = async (data: any) => {
     console.log(data);
     await initGetUsers();
     ToastLong('Funding Successful!');
@@ -88,18 +81,10 @@ const PaymentMethod2 = ({route}: any) => {
   //paystack
   const paystackWebViewRef = useRef<paystackProps.PayStackRef>();
   const [webviewVisible, setWebviewVisible] = useState(false);
-  const paystackPaymentLink = 'YOUR_PAYSTACK_PAYMENT_LINK_HERE'; // Replace with your actual Paystack payment link
   const handleOpenWebview = async () => {
     setWebviewVisible(true);
   };
   const handleCloseWebview = () => {
-    // if (!_storeuserData?._id) {
-    //   Toast.show({
-    //     type: 'error',
-    //     text1: 'userID does not exist 🚀.',
-    //   });
-    //   return;
-    // }
     setWebviewVisible(false);
   };
   return (
@@ -110,8 +95,7 @@ const PaymentMethod2 = ({route}: any) => {
             marginTop:
               Platform.OS === 'ios'
                 ? 10
-                : // getStatusBarHeight(true)
-                  StatusBar.currentHeight &&
+                : StatusBar.currentHeight &&
                   StatusBar.currentHeight + getStatusBarHeight(true),
           }}
         />

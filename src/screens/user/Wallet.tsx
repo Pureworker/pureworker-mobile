@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Image,
@@ -20,13 +20,12 @@ import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
 import colors from '../../constants/colors';
 import Modal from 'react-native-modal/dist/modal';
 import {addUserData} from '../../store/reducer/mainSlice';
-import {getUser, triggerPhoneVerification} from '../../utils/api/func';
+import {getUser} from '../../utils/api/func';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import socket from '../../utils/socket';
 import {formatAmount2} from '../../utils/validations';
 import WalletModal from '../../components/modals/WalletModal';
-import TransPin from '../../components/modals/transPin';
 
 const Wallet = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -37,16 +36,6 @@ const Wallet = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [setWalletPin, setSetWalletPin] = useState(false);
   const userData = useSelector((state: any) => state.user.userData);
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     console.log(`he--${setWalletPin}`, userData?.hasPinCreated);
-  // if (!userData?.hasPinCreated) {
-  //   setSetWalletPin(true);
-  // }
-  //   }, [userData?.hasPinCreated]),
-  // );
-
   console.log('bbb', userData?.hasPinCreated, 'setWallet', setWalletPin);
 
   const initGetUsers = async () => {
@@ -64,19 +53,6 @@ const Wallet = () => {
       initGetUsers();
     }, []),
   );
-
-  useEffect(() => {
-    const initGetUsers_ = async () => {
-      setisLoading(true);
-      const res: any = await getUser('');
-      if (res?.status === 201 || res?.status === 200) {
-        dispatch(addUserData(res?.data?.user));
-      }
-      setisLoading(false);
-      // setloading(false);
-    };
-    // initGetUsers_();
-  }, [dispatch, navigation]);
   const supportUser = useSelector((store: any) => store.user.supportUser);
 
   const onRefresh = React.useCallback(() => {
@@ -101,8 +77,7 @@ const Wallet = () => {
               marginTop:
                 Platform.OS === 'ios'
                   ? 10
-                  : // getStatusBarHeight(true)
-                    StatusBar.currentHeight &&
+                  : StatusBar.currentHeight &&
                     StatusBar.currentHeight + getStatusBarHeight(true),
             }}
           />
@@ -118,7 +93,6 @@ const Wallet = () => {
                 source={images.cross}
                 style={{height: 25, width: 25, tintColor: 'black'}}
                 resizeMode="contain"
-                // onMagicTap={() => navigation.goBack()}
               />
             </TouchableOpacity>
             <View style={tw`mx-auto`}>
@@ -178,7 +152,6 @@ const Wallet = () => {
                 </View>
                 <TouchableOpacity
                   onPress={() => {
-                    // setInfoModal(true);
                     socket.connect();
                     setInfoModal(false);
                     navigation.navigate('Inbox', {
@@ -218,13 +191,6 @@ const Wallet = () => {
                     paddingVertical: perHeight(9),
                   },
                 ]}>
-                {/* <View style={tw``}>
-                <Image
-                  source={images.info}
-                  style={{height: 17, width: 17, tintColor: 'black'}}
-                  resizeMode="contain"
-                />
-              </View> */}
                 <View style={tw`ml-3`}>
                   <View style={tw``}>
                     <Textcomp
@@ -299,64 +265,7 @@ const Wallet = () => {
                   </View>
                 </View>
               </View>
-              {/* <View
-                style={[
-                  tw`border-t  border-b`,
-                  {marginTop: perHeight(36), height: perHeight(95)},
-                ]}>
-                <View style={[tw``, {marginTop: perHeight(13)}]}>
-                  <Textcomp
-                    text={'Add a card'}
-                    size={16}
-                    lineHeight={18}
-                    color={'#000413'}
-                    fontFamily={'Inter-Bold'}
-                  />
-                </View>
-                <View style={[tw`flex flex-row items-center  mt-4`, {}]}>
-                  <View style={tw``}>
-                    <Image
-                      source={images.wallet2}
-                      style={{height: 25, width: 25, tintColor: 'black'}}
-                      resizeMode="contain"
-                    />
-                  </View>
-                  <View style={tw`ml-3`}>
-                    <View style={tw``}>
-                      <Textcomp
-                        text={'Add a debit/credit card'}
-                        size={14}
-                        lineHeight={15}
-                        color={'#000413'}
-                        fontFamily={'Inter-Bold'}
-                      />
-                    </View>
-                    <View
-                      style={[tw`flex flex-row`, {marginTop: perHeight(5)}]}>
-                      <View>
-                        <Image
-                          source={images.star}
-                          style={{
-                            height: 12,
-                            width: 12,
-                            tintColor: colors.primary,
-                          }}
-                          resizeMode="contain"
-                        />
-                      </View>
-                      <View style={tw`ml-2`}>
-                        <Textcomp
-                          text={'Recommended'}
-                          size={12}
-                          lineHeight={14}
-                          color={'#000000'}
-                          fontFamily={'Inter-Medium'}
-                        />
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              </View> */}
+
               <View
                 style={[
                   tw` `,
@@ -554,7 +463,6 @@ const Wallet = () => {
           </View>
         </Modal>
       )}
-
     </>
   );
 };

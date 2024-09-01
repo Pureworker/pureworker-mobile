@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Alert,
   ScrollView,
@@ -10,22 +10,19 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import { useRoute } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import {useRoute} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
 import Snackbar from 'react-native-snackbar';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import tw from 'twrnc';
 import Button from '../components/Button';
 import colors from '../constants/colors';
 import MyStatusBar from '../components/MyStatusBar';
-import {
-  useCreateOtpMutation,
-  useResetOtpMutation
-} from '../store/slice/api';
-import { loggedIn, setwelcomeModal } from '../store/reducer/mainSlice';
-import { resendOtp, verifyLogin, verifyUser } from '../utils/api/auth';
+import {useCreateOtpMutation, useResetOtpMutation} from '../store/slice/api';
+import {loggedIn, setwelcomeModal} from '../store/reducer/mainSlice';
+import {resendOtp, verifyLogin, verifyUser} from '../utils/api/auth';
 import Toast from 'react-native-toast-message';
-import { ToastShort } from '../utils/utils';
+import {ToastShort} from '../utils/utils';
 import DeviceInfo from 'react-native-device-info';
 type Route = {
   key: string;
@@ -251,30 +248,23 @@ const TokenVerification = () => {
         <Text style={{color: colors.primary, textAlign: 'center'}}>
           {'0' + minutes + ':' + valueOfMint}
         </Text>
-        {
-          !isLoading ? (
-            <View style={{}}>
-              <Button
-                onClick={() => {
-                  veriFyOTP();
-                }}
-                text={'Submit'}
-                textStyle={{color: '#fff'}}
-                style={{
-                  backgroundColor: colors.parpal,
-                  marginHorizontal: 25,
-                  marginTop: 152,
-                }}
-                disable={code.length < 6}
-              />
-            </View>
-          ) : null
-          // <ActivityIndicator
-          //   style={{marginTop: 332}}
-          //   size={'large'}
-          //   color={colors.parpal}
-          // />
-        }
+        {!isLoading ? (
+          <View style={{}}>
+            <Button
+              onClick={() => {
+                veriFyOTP();
+              }}
+              text={'Submit'}
+              textStyle={{color: '#fff'}}
+              style={{
+                backgroundColor: colors.parpal,
+                marginHorizontal: 25,
+                marginTop: 152,
+              }}
+              disable={code.length < 6}
+            />
+          </View>
+        ) : null}
         {isLoading && <ActivityIndicator color={'white'} size={'small'} />}
       </ScrollView>
     </KeyboardAvoidingView>

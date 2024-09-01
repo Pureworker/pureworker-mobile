@@ -55,7 +55,7 @@ const DeactivateAccount = () => {
           </View>
         </View>
       </ScrollView>
-      <Spinner visible={isLoading} customIndicator={<CustomLoading />} />
+      <Spinner visible={false} customIndicator={<CustomLoading />} />
     </View>
   );
 };

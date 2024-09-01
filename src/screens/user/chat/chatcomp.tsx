@@ -197,77 +197,115 @@ export default function Index({
     });
   };
 
-  const _handleFileDownload = async () => {
-    try {
-      const downloadDest = `${RNFS.DocumentDirectoryPath}/${text
-        .split('/')
-        .pop()}`;
-      const result = await RNFS.downloadFile({
-        fromUrl: text,
-        toFile: downloadDest,
-      }).promise;
+  // const _handleFileDownload = async () => {
+  //   try {
+  //     const downloadDest = `${RNFS.DocumentDirectoryPath}/${text
+  //       .split('/')
+  //       .pop()}`;
+  //     const result = await RNFS.downloadFile({
+  //       fromUrl: text,
+  //       toFile: downloadDest,
+  //     }).promise;
 
-      if (result.statusCode === 200) {
-        console.log('File Downloaded Successfully:', downloadDest);
-        ToastShort('File Downloaded Successfully.');
-        // Optionally, you can open the file or give feedback to the user
-      } else {
-        console.log('File Download Failed');
-        ToastShort('File Download Failed');
-      }
-    } catch (error) {
-      console.error('Error downloading file:', error);
-      ToastShort(`Error downloading file ${error}`);
-    }
-  };
+  //     if (result.statusCode === 200) {
+  //       console.log('File Downloaded Successfully:', downloadDest);
+  //       ToastShort('File Downloaded Successfully.');
+  //       // Optionally, you can open the file or give feedback to the user
+  //     } else {
+  //       console.log('File Download Failed');
+  //       ToastShort('File Download Failed');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error downloading file:', error);
+  //     ToastShort(`Error downloading file ${error}`);
+  //   }
+  // };
 
-  const __handleFileDownload = async () => {
-    try {
-      // Get the file name from the URL
-      const fileName = text.split('/').pop();
+  // const __handleFileDownload = async () => {
+  //   try {
+  //     // Get the file name from the URL
+  //     const fileName = text.split('/').pop();
 
-      // Use the appropriate path for Android and iOS
-      const downloadDest =
-        Platform.OS === 'android'
-          ? `${RNFS.DownloadDirectoryPath}/${fileName}`
-          : `${RNFS.DocumentDirectoryPath}/${fileName}`;
+  //     // Use the appropriate path for Android and iOS
+  //     const downloadDest =
+  //       Platform.OS === 'android'
+  //         ? `${RNFS.DownloadDirectoryPath}/${fileName}`
+  //         : `${RNFS.DocumentDirectoryPath}/${fileName}`;
 
-      const result = await RNFS.downloadFile({
-        fromUrl: text,
-        toFile: downloadDest,
-      }).promise;
+  //     const result = await RNFS.downloadFile({
+  //       fromUrl: text,
+  //       toFile: downloadDest,
+  //     }).promise;
 
-      if (result.statusCode === 200) {
-        console.log('File Downloaded Successfully:', downloadDest);
-        ToastShort('File Downloaded Successfully.');
+  //     if (result.statusCode === 200) {
+  //       console.log('File Downloaded Successfully:', downloadDest);
+  //       ToastShort('File Downloaded Successfully.');
 
-        // On Android, open the file in a file viewer
-        if (Platform.OS === 'android') {
-          RNFS.scanFile({path: downloadDest}).then(() => {
-            console.log('Scanned file successfully:', downloadDest);
-          });
-        }
-      } else {
-        console.log('File Download Failed');
-        ToastShort('File Download Failed');
-      }
-    } catch (error) {
-      console.error('Error downloading file:', error);
-      ToastShort(`Error downloading file ${error}`);
-    }
-  };
+  //       // On Android, open the file in a file viewer
+  //       if (Platform.OS === 'android') {
+  //         RNFS.scanFile({path: downloadDest}).then(() => {
+  //           console.log('Scanned file successfully:', downloadDest);
+  //         });
+  //       }
+  //     } else {
+  //       console.log('File Download Failed');
+  //       ToastShort('File Download Failed');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error downloading file:', error);
+  //     ToastShort(`Error downloading file ${error}`);
+  //   }
+  // };
+
+  // const ___handleFileDownload = async () => {
+  //   try {
+  //     const {config, fs} = RNFetchBlob;
+  //     let downloadDest = '';
+
+  //     // Set the download destination based on platform
+  //     if (Platform.OS === 'android') {
+  //       downloadDest = `${fs?.dirs?.DownloadDir}/${text.split('/').pop()}`;
+  //     } else {
+  //       downloadDest = `${fs?.dirs?.DocumentDir}/${text.split('/').pop()}`;
+  //     }
+
+  //     const res = await config({
+  //       fileCache: true,
+  //       addAndroidDownloads: {
+  //         useDownloadManager: true,
+  //         notification: true,
+  //         path: downloadDest,
+  //         description: 'Downloading file...',
+  //       },
+  //     }).fetch('GET', text);
+
+  //     if (res.info().status === 200) {
+  //       console.log('File Downloaded Successfully:', downloadDest);
+  //       ToastShort('File Downloaded Successfully.');
+
+  //       if (Platform.OS === 'ios') {
+  //         RNFetchBlob.ios.previewDocument(downloadDest); // Preview file on iOS
+  //       } else {
+  //         ToastShort(`File saved to: ${downloadDest}`); // Notify Android users of the file path
+  //       }
+  //     } else {
+  //       console.log('File Download Failed');
+  //       ToastShort('File Download Failed');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error downloading file:', error);
+  //     ToastShort(`Error downloading file: ${error}`);
+  //   }
+  // };
 
   const handleFileDownload = async () => {
     try {
       const {config, fs} = RNFetchBlob;
-      let downloadDest = '';
-
-      // Set the download destination based on platform
-      if (Platform.OS === 'android') {
-        downloadDest = `${fs.dirs.DownloadDir}/${text.split('/').pop()}`;
-      } else {
-        downloadDest = `${fs.dirs.DocumentDir}/${text.split('/').pop()}`;
-      }
+      const fileName = text.split('/').pop();
+      const downloadDest =
+        Platform.OS === 'android'
+          ? `${fs.dirs.DownloadDir}/${fileName}`
+          : `${fs.dirs.DocumentDir}/${fileName}`;
 
       const res = await config({
         fileCache: true,
@@ -284,9 +322,9 @@ export default function Index({
         ToastShort('File Downloaded Successfully.');
 
         if (Platform.OS === 'ios') {
-          RNFetchBlob.ios.previewDocument(downloadDest); // Preview file on iOS
+          RNFetchBlob.ios.previewDocument(downloadDest);
         } else {
-          ToastShort(`File saved to: ${downloadDest}`); // Notify Android users of the file path
+          ToastShort(`File saved to: ${downloadDest}`);
         }
       } else {
         console.log('File Download Failed');

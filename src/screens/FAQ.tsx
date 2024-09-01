@@ -1,22 +1,21 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View, Image, ScrollView} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import images from '../constants/images';
-import commonStyle from '../constants/commonStyle';
-import Header from '../components/Header';
-import tw from 'twrnc';
-import {useDispatch, useSelector} from 'react-redux';
-import {addfaq} from '../store/reducer/mainSlice';
-import {getFAQ} from '../utils/api/func';
-import {StackNavigation} from '../constants/navigation';
-import FAQcomp from '../components/FAQcomp';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, ScrollView } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import tw from 'twrnc';
+
+import images from '../constants/images';
+import Header from '../components/Header';
+import { addfaq } from '../store/reducer/mainSlice';
+import { getFAQ } from '../utils/api/func';
+import FAQcomp from '../components/FAQcomp';
 
 export default function FAQ() {
-  const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const [isLoading, setisLoading] = useState(false);
   const faq = useSelector((state: any) => state.user.faq);
+  const userType = useSelector((state: any) => state.user.isLoggedIn);
+
   useEffect(() => {
     const initFaq = async () => {
       setisLoading(true);
@@ -28,84 +27,47 @@ export default function FAQ() {
     };
     initFaq();
   }, [dispatch]);
-  const userType = useSelector((state: any) => state.user.isLoggedIn);
+
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+    <SafeAreaView style={styles.container}>
       <Header
         image={images.back}
         title={'FAQs'}
-        style={{backgroundColor: '#fff'}}
-        imageStyle={{tintColor: '#000'}}
-        textStyle={{color: '#000'}}
+        style={styles.header}
+        imageStyle={styles.headerImage}
+        textStyle={styles.headerText}
       />
       <ScrollView>
-        <View style={{backgroundColor: '#000', height: 2}} />
-
-        {userType.userType === 'CUSTOMER' && (
-          <>
-            {faq?.customer?.map((item: any, index: any) => {
-              return <FAQcomp index={index} item={item} />;
-            })}
-          </>
-        )}
-        {userType.userType !== 'CUSTOMER' && (
-          <>
-            {faq?.provider?.map((item: any, index: any) => {
-              return (
-                // <View
-                //   key={index}
-                //   style={{
-                //     backgroundColor: '#2D303C',
-                //     paddingHorizontal: 20,
-                //     marginTop: 20,
-                //   }}>
-                //   <View
-                //     style={{
-                //       flexDirection: 'row',
-                //       justifyContent: 'space-between',
-                //       alignItems: 'center',
-                //       marginTop: 10,
-                //     }}>
-                //     <Text
-                //       style={{
-                //         fontSize: 16,
-                //         fontFamily: commonStyle.fontFamily.medium,
-                //         color: '#FFCE1F',
-                //         fontWeight: '700',
-                //       }}>
-                //       {item?.question}
-                //     </Text>
-                //     <Image
-                //       source={images.polygon}
-                //       style={{width: 25, height: 25}}
-                //       resizeMode="contain"
-                //     />
-                //   </View>
-                //   <Text
-                //     style={{
-                //       fontSize: 16,
-                //       marginBottom: 12,
-                //       fontFamily: commonStyle.fontFamily.medium,
-                //       color: '#fff',
-                //       fontWeight: '700',
-                //       marginTop: 18,
-                //     }}>
-                //     {item?.answer}
-                //   </Text>
-                // </View>
-                <FAQcomp index={index} item={item} />
-              );
-            })}
-          </>
-        )}
+        <View style={styles.separator} />
+        {userType.userType === 'CUSTOMER'
+          ? faq?.customer?.map((item: any, index: any) => (
+              <FAQcomp key={index} index={index} item={item} />
+            ))
+          : faq?.provider?.map((item: any, index: any) => (
+              <FAQcomp key={index} index={index} item={item} />
+            ))}
         <View style={tw`h-20`} />
       </ScrollView>
     </SafeAreaView>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
+  },
+  header: {
+    backgroundColor: '#fff',
+  },
+  headerImage: {
+    tintColor: '#000',
+  },
+  headerText: {
+    color: '#000',
+  },
+  separator: {
     backgroundColor: '#000',
+    height: 2,
   },
 });

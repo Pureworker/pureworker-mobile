@@ -52,6 +52,7 @@
     "appcenter-analytics": "^5.0.0",
     "appcenter-crashes": "^5.0.0",
     "axios": "^1.4.0",
+    "deprecated-react-native-prop-types": "^5.0.0",
     "flutterwave-react-native": "^1.0.4",
     "formik": "^2.4.5",
     "jwt-check-expiration": "^1.0.5",

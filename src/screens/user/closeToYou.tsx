@@ -1,142 +1,73 @@
-import React, {useEffect, useState, useMemo} from 'react';
+import React, {useState, useMemo} from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
   Platform,
   StatusBar,
   FlatList,
-  Modal,
   SafeAreaView,
   ScrollView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import _ from 'lodash';
-import Header from '../../components/Header';
-import {useDispatch, useSelector} from 'react-redux';
-import {StackNavigation} from '../../constants/navigation';
-import images from '../../constants/images';
+import {useSelector} from 'react-redux';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {perHeight} from '../../utils/position/sizes';
-import ServiceCard2 from '../../components/cards/serviceCard2';
 import TextInputs from '../../components/TextInput2';
-import CloseToYouCard2 from '../../components/cards/closeToYou2';
+import CloseToYouCard4 from '../../components/cards/closeToYou4';
+import images from '../../constants/images';
 import {
   useGetAllServiceProviderProfileQuery,
   useGetFavoriteProductQuery,
 } from '../../store/slice/api';
-import CloseToYouCard4 from '../../components/cards/closeToYou4';
+import {StackNavigation} from '../../constants/navigation';
 
 const CloseToYou = () => {
   const navigation = useNavigation<StackNavigation>();
-  const dispatch = useDispatch();
-
   const [activeSection, setActiveSection] = useState('All');
-  const [searchModal, setsearchModal] = useState(false);
-  const [searchInput, setsearchInput] = useState('');
+  const [searchModal, setSearchModal] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
 
-  const {
-    data: getServiceProviderProfileData,
-    isLoading: isLoadingServiceProviderProfile,
-  } = useGetAllServiceProviderProfileQuery();
-  const getServiceProviderProfile = getServiceProviderProfileData ?? [];
-  const {data: getServiceProviderFavoriteData, isLoading: isLoadingFavorite} =
-    useGetFavoriteProductQuery();
-  const getServiceProviderFavorite = getServiceProviderFavoriteData ?? [];
+  const {data: serviceProviderProfileData = []} =
+    useGetAllServiceProviderProfileQuery();
+  const {data: serviceProviderFavoriteData = []} = useGetFavoriteProductQuery();
 
   const closeProvider = useSelector((state: any) => state.user.closeProvider);
 
-  const filteredData = !_.isEmpty(closeProvider)
-    ? closeProvider.filter(
-        (item: {fullNameFirst: any; fullNameSecond: any}) => {
-          const fullName =
-            `${item.fullNameFirst} ${item.fullNameSecond}`.toLowerCase();
-          const searchQuery = searchInput.toLowerCase();
-          return fullName.includes(searchQuery);
-        },
-      )
-    : [];
-
-  // const filterServiceProviderProfile = useMemo(() => {
-  //   var searchArray = [];
-  //   if (
-  //     Array.isArray(getServiceProviderProfile) &&
-  //     getServiceProviderProfile.length
-  //   ) {
-  //     searchArray = getServiceProviderProfile.filter(txt => {
-
-  //       const text = txt?.fullNameFirst
-  //       ? txt?.fullNameFirst.concat(txt?.fullNameSecond).toUpperCase()
-  //       : ''.toUpperCase();
-  //       const textSearch = searchInput.toUpperCase();
-  //       return text.indexOf(textSearch) > -1;
-  //     });
-  //   }
-
-  //   if (searchArray.length) {
-  //     return searchArray;
-  //   } else {
-  //     return [];
-  //   }
-  // }, [searchInput, getServiceProviderProfile]);
-
-  const filterServiceProviderFavorite = useMemo(() => {
-    var searchArray = [];
+  const filteredServiceProviderFavorites = useMemo(() => {
     if (
-      Array.isArray(getServiceProviderFavorite) &&
-      getServiceProviderFavorite.length
+      !Array.isArray(serviceProviderFavoriteData) ||
+      serviceProviderFavoriteData.length === 0
     ) {
-      searchArray = getServiceProviderFavorite.filter(txt => {
-        const text = txt?.fullNameFirst
-          ? txt?.fullNameFirst.concat(' ' + txt?.fullNameSecond).toUpperCase()
-          : ''.toUpperCase();
-        const textSearch = searchInput.toUpperCase();
-        return text.indexOf(textSearch) > -1;
-      });
-    }
-
-    if (searchArray.length) {
-      return searchArray;
-    } else {
       return [];
     }
-  }, [searchInput, getServiceProviderProfile]);
+
+    return serviceProviderFavoriteData.filter(txt => {
+      const fullName = txt?.fullNameFirst
+        ? `${txt.fullNameFirst} ${txt.fullNameSecond}`.toUpperCase()
+        : '';
+      const searchQuery = searchInput.toUpperCase();
+      return fullName.includes(searchQuery);
+    });
+  }, [searchInput, serviceProviderFavoriteData]);
 
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
-      {/* <View
-          style={{
-            marginTop:
-              Platform.OS === 'ios'
-                ? getStatusBarHeight(true)
-                : StatusBar.currentHeight &&
-                  StatusBar.currentHeight + getStatusBarHeight(true),
-          }}
-        /> */}
-
       <View
         style={{
           marginTop:
             Platform.OS === 'ios'
               ? getStatusBarHeight(true)
-              : StatusBar.currentHeight &&
-                StatusBar.currentHeight + getStatusBarHeight(true),
+              : StatusBar.currentHeight + getStatusBarHeight(true),
         }}>
         {!searchModal ? (
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginHorizontal: 20,
-            }}>
+          <View style={styles.header}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Image
                 source={images.back}
-                style={{height: 25, width: 25}}
+                style={styles.backIcon}
                 resizeMode="contain"
               />
             </TouchableOpacity>
@@ -151,40 +82,24 @@ const CloseToYou = () => {
             </View>
           </View>
         ) : (
-          <View
-            style={[
-              tw`items-center justify-center`,
-              {
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginHorizontal: 20,
-              },
-            ]}>
-            <TouchableOpacity onPress={() => setsearchModal(false)}>
+          <View style={styles.searchContainer}>
+            <TouchableOpacity onPress={() => setSearchModal(false)}>
               <Image
                 source={images.cross}
-                style={{height: 20, width: 20}}
+                style={styles.crossIcon}
                 resizeMode="contain"
               />
             </TouchableOpacity>
             <TextInputs
-              style={{marginTop: 10, width: '70%'}}
+              style={styles.searchInput}
               labelText={'Search for close to you'}
               state={searchInput}
-              setState={setsearchInput}
+              setState={setSearchInput}
             />
-            <TouchableOpacity
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: 40,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
+            <TouchableOpacity style={styles.searchIconContainer}>
               <Image
                 source={images.search}
-                style={{height: 20, width: 20}}
+                style={styles.searchIcon}
                 resizeMode="contain"
               />
             </TouchableOpacity>
@@ -193,49 +108,8 @@ const CloseToYou = () => {
 
         <ScrollView>
           <View style={tw`mt-4 mb-3`}>
-            {/* <View style={tw`flex flex-row`}>
-            <TouchableOpacity
-              onPress={() => {
-                setActiveSection('All');
-              }}
-              style={tw`w-1/2 border-b-2  items-center ${
-                activeSection === 'All'
-                  ? 'border-[#88087B]'
-                  : 'border-[#000000]'
-              }`}>
-              <Textcomp
-                text={'All'}
-                size={14}
-                lineHeight={16}
-                color={activeSection === 'All' ? '#88087B' : '#000413'}
-                fontFamily={'Inter-SemiBold'}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setActiveSection('Saved');
-              }}
-              style={tw`w-1/2 border-b-2 items-center ${
-                activeSection === 'Saved'
-                  ? 'border-[#88087B]'
-                  : 'border-[#000000]'
-              }`}>
-              <Textcomp
-                text={'Saved'}
-                size={14}
-                lineHeight={16}
-                color={activeSection === 'Saved' ? '#88087B' : '#000413'}
-                fontFamily={'Inter-SemiBold'}
-              />
-            </TouchableOpacity>
-          </View> */}
-
             {closeProvider.length < 1 ? (
-              <View
-                style={[
-                  tw`bg-[#D9D9D9] flex flex-col rounded  mt-3 mx-2`,
-                  {height: perHeight(80), alignItems: 'center'},
-                ]}>
+              <View style={styles.emptyProviderContainer}>
                 <View style={tw`my-auto pl-8`}>
                   <Textcomp
                     text={'Service Provider Not Found...'}
@@ -250,45 +124,32 @@ const CloseToYou = () => {
               <>
                 {activeSection === 'All' && (
                   <View style={[tw`items-center`, {flex: 1}]}>
-                    <ScrollView horizontal>
-                      <FlatList
-                        data={closeProvider}
-                        horizontal={false}
-                        scrollEnabled={false}
-                        renderItem={(item: any, index: any) => {
-                          return (
-                            <CloseToYouCard4
-                              navigation={navigation}
-                              item={item?.item}
-                              index={index}
-                            />
-                          );
-                        }}
-                        keyExtractor={item => item?.id}
-                        ListFooterComponent={() => <View style={tw`h-20`} />}
-                      />
-                    </ScrollView>
+                    <FlatList
+                      data={closeProvider}
+                      scrollEnabled={false}
+                      renderItem={({item, index}) => (
+                        <CloseToYouCard4
+                          navigation={navigation}
+                          item={item}
+                          index={index}
+                        />
+                      )}
+                      keyExtractor={item => item?.id}
+                      ListFooterComponent={() => <View style={tw`h-20`} />}
+                    />
                   </View>
                 )}
                 {activeSection === 'Saved' && (
                   <View style={[tw`items-center`, {flex: 1}]}>
-                    <ScrollView horizontal>
-                      <FlatList
-                        scrollEnabled={false}
-                        data={filterServiceProviderFavorite}
-                        horizontal={false}
-                        renderItem={(item: any) => {
-                          return (
-                            <CloseToYouCard4
-                              item={item.item}
-                              index={item.index}
-                            />
-                          );
-                        }}
-                        keyExtractor={item => item?.id}
-                        ListFooterComponent={() => <View style={tw`h-20`} />}
-                      />
-                    </ScrollView>
+                    <FlatList
+                      scrollEnabled={false}
+                      data={filteredServiceProviderFavorites}
+                      renderItem={({item, index}) => (
+                        <CloseToYouCard4 item={item} index={index} />
+                      )}
+                      keyExtractor={item => item?.id}
+                      ListFooterComponent={() => <View style={tw`h-20`} />}
+                    />
                   </View>
                 )}
               </>
@@ -299,6 +160,53 @@ const CloseToYou = () => {
       </View>
     </SafeAreaView>
   );
+};
+
+const styles = {
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: 20,
+  },
+  backIcon: {
+    height: 25,
+    width: 25,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: 20,
+  },
+  crossIcon: {
+    height: 20,
+    width: 20,
+  },
+  searchInput: {
+    marginTop: 10,
+    width: '70%',
+  },
+  searchIconContainer: {
+    width: 20,
+    height: 20,
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  searchIcon: {
+    height: 20,
+    width: 20,
+  },
+  emptyProviderContainer: {
+    backgroundColor: '#D9D9D9',
+    flexDirection: 'column',
+    borderRadius: 8,
+    marginTop: 12,
+    marginHorizontal: 12,
+    height: perHeight(80),
+    alignItems: 'center',
+  },
 };
 
 export default CloseToYou;

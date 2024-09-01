@@ -10,7 +10,7 @@ import {
   TextInput,
   SafeAreaView,
 } from 'react-native';
-import {Route, useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute, Route} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
@@ -35,38 +35,17 @@ const TipServiceProvider = () => {
   const dispatch = useDispatch();
   const [amount, setamount] = useState(0);
   const amountList = [
-    {
-      amount: 100,
-      title: '₦100',
-    },
-    {
-      amount: 200,
-      title: '₦200',
-    },
-    {
-      amount: 500,
-      title: '₦500',
-    },
-    {
-      amount: 1000,
-      title: '₦1000',
-    },
-    {
-      amount: 2000,
-      title: '₦2000',
-    },
-    {
-      amount: 5000,
-      title: '₦5000',
-    },
+    {amount: 100, title: '₦100'},
+    {amount: 200, title: '₦200'},
+    {amount: 500, title: '₦500'},
+    {amount: 1000, title: '₦1000'},
+    {amount: 2000, title: '₦2000'},
+    {amount: 5000, title: '₦5000'},
   ];
 
   const userData = useSelector((state: any) => state.user.userData);
-
-  // text={`₦ ${formatAmount2(
-  //   userData?.wallet?.availableBalance,
-  // )}`}
   const item = route.params?.item;
+
   const handleTip = async () => {
     try {
       setisLoading(true);
@@ -82,21 +61,13 @@ const TipServiceProvider = () => {
           textColor: '#fff',
           backgroundColor: '#88087B',
         });
-        return 
+        return;
       }
       const res: any = await tipProvider(_data);
-      console.log('tippppp', res);
       if (res?.status === 201 || res?.status === 200) {
         navigation.navigate('Orders');
         ToastLong('This provider has been tipped!.');
       } else {
-        // if (
-        //   res?.status === 400 ||
-        //   res?.status === 401 ||
-        //   res?.status === 404 ||
-        //   res?.status === 500
-        // ) {
-        console.log('kkhmm--', res?.error?.message);
         Snackbar.show({
           text: `${res?.error?.message}`,
           duration: Snackbar.LENGTH_LONG,
@@ -104,7 +75,7 @@ const TipServiceProvider = () => {
           backgroundColor: '#88087B',
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       ToastShort(error?.data?.message);
     } finally {
       const initTransaction = async () => {
@@ -121,6 +92,7 @@ const TipServiceProvider = () => {
       setisLoading(false);
     }
   };
+
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
       <ScrollView style={{height: '100%'}}>
@@ -161,7 +133,7 @@ const TipServiceProvider = () => {
         </View>
 
         <View style={{height: HEIGHT_WINDOW * 0.86}}>
-          <View style={tw`  `}>
+          <View style={tw``}>
             <View style={[tw` mx-auto mt-[10%]`, {}]}>
               <Image
                 style={{
@@ -197,49 +169,28 @@ const TipServiceProvider = () => {
               />
             </View>
 
-            {/* {amountList.map((item, index) => {
-              return (
-                <TouchableOpacity style={[tw`bg-[#D9D9D9]`, {}]}>
+            <FlatList
+              scrollEnabled={false}
+              data={amountList}
+              renderItem={({item, index}: any) => (
+                <TouchableOpacity
+                  onPress={() => setamount(item?.amount)}
+                  key={index}
+                  style={[
+                    tw` ${
+                      amount !== item?.amount ? 'bg-[#D9D9D9] ' : 'bg-black '
+                    } mt-4 py-2 items-center rounded-full`,
+                    {marginLeft: perWidth(30), width: perWidth(76)},
+                  ]}>
                   <Textcomp
                     text={item?.title}
                     size={17}
                     lineHeight={17}
-                    color={'#000000'}
+                    color={amount !== item?.amount ? '#000000' : colors.primary}
                     fontFamily={'Inter-Medium'}
                   />
                 </TouchableOpacity>
-              );
-            })} */}
-
-            <FlatList
-              scrollEnabled={false}
-              data={amountList}
-              renderItem={({item, index}) => {
-                return (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setamount(item?.amount);
-                    }}
-                    key={index}
-                    style={[
-                      tw` ${
-                        amount !== item?.amount ? 'bg-[#D9D9D9] ' : 'bg-black '
-                      } mt-4 py-2 items-center rounded-full`,
-                      {marginLeft: perWidth(30), width: perWidth(76)},
-                    ]}>
-                    <Textcomp
-                      text={item?.title}
-                      size={17}
-                      lineHeight={17}
-                      color={
-                        amount !== item?.amount ? '#000000' : colors.primary
-                      }
-                      fontFamily={'Inter-Medium'}
-                    />
-                  </TouchableOpacity>
-                );
-              }}
-              //   keyExtractor={item => item.id}
+              )}
               numColumns={3}
               contentContainerStyle={{marginTop: 10}}
             />
@@ -257,15 +208,9 @@ const TipServiceProvider = () => {
                   tw`border-b pb-2 text-black`,
                   {width: perWidth(311), color: 'black'},
                 ]}
-                // onChangeText={text => {
-                //   setamount(text);
-                // }}
                 onChangeText={text => {
-                  // Ensure the input is numeric
-                  const numericValue = parseFloat(text);
+                  const numericValue: any = parseFloat(text);
                   if (!isNaN(numericValue) && numericValue >= 0) {
-                    1;
-                    // Update the amount only if it's a valid positive number
                     setamount(numericValue.toString());
                   }
                 }}
@@ -277,10 +222,7 @@ const TipServiceProvider = () => {
               <View style={tw`flex mt-5 flex-row justify-between`}>
                 <TouchableOpacity
                   disabled={isLoading}
-                  onPress={() => {
-                    // func(false);
-                    handleTip();
-                  }}
+                  onPress={handleTip}
                   style={[
                     {
                       width: perWidth(165) * 2,

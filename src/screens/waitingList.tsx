@@ -1,5 +1,5 @@
 import {View, Text, Image, SafeAreaView, Platform} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import {SIZES, perHeight} from '../utils/position/sizes';
 import images from '../constants/images';
 import Button from '../components/Button';
@@ -9,36 +9,14 @@ import commonStyle from '../constants/commonStyle';
 import TextInputs from '../components/TextInputs';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import {addToWait, completeProfile} from '../utils/api/func';
+import {addToWait} from '../utils/api/func';
 import {ToastLong} from '../utils/utils';
 
-export default function WaitingList({navigation}: any) {
-  const [name, setName] = useState('');
+export default function WaitingList() {
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .email('Invalid email address')
       .required('Email is required'),
-    // Yup.string()
-    //   .required('Email/Phone is required')
-    //   .matches(
-    //     /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-    //     'Must be a valid email or phone number',
-    //   )
-    //   .test(
-    //     'is-email-or-phone',
-    //     'Must be a valid email or phone number',
-    //     value => {
-    //       // Check if the input is a valid email address
-    //       if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)) {
-    //         return true;
-    //       }
-    //       // Check if the input is a valid phone number
-    //       if (/^\d{10}$/.test(value)) {
-    //         return true;
-    //       }
-    //       return false;
-    //     },
-    //   ),
   });
 
   const handleWait = async (value: {name: any}) => {
@@ -50,7 +28,6 @@ export default function WaitingList({navigation}: any) {
 
       if (res?.status === 200 || res?.status === 201) {
         ToastLong('Congrats, You have been Added to the waiting list.');
-        // navigation.navigate('CustomerSignup');
       }
     } catch (error) {}
   };
@@ -63,7 +40,7 @@ export default function WaitingList({navigation}: any) {
         console.log('heyy2');
         await handleWait(values);
       }}>
-      {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
+      {({handleChange, handleBlur, handleSubmit, values, errors}) => (
         <SafeAreaView style={{flex: 1, backgroundColor: 'black'}}>
           <View style={{width: SIZES.width, height: SIZES.height}}>
             <View style={{alignItems: 'center'}}>

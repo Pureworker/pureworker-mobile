@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
   Platform,
@@ -9,7 +8,6 @@ import {
   ScrollView,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
 import {StackNavigation} from '../../constants/navigation';
 import images from '../../constants/images';
 import tw from 'twrnc';
@@ -20,7 +18,6 @@ import {perHeight, perWidth} from '../../utils/position/sizes';
 
 const PaymentMethod = () => {
   const navigation = useNavigation<StackNavigation>();
-  const dispatch = useDispatch();
   return (
     <View style={[{flex: 1, backgroundColor: colors.darkPurple}]}>
       <ScrollView>
@@ -112,7 +109,17 @@ const PaymentMethod = () => {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity onPress={()=>{}} style={[tw`flex flex-row bg-white items-center mx-auto mt-4`, {width: perWidth(335), height: perHeight(44), borderRadius: 5, paddingLeft: perWidth(35)}]}>
+          <TouchableOpacity
+            onPress={() => {}}
+            style={[
+              tw`flex flex-row bg-white items-center mx-auto mt-4`,
+              {
+                width: perWidth(335),
+                height: perHeight(44),
+                borderRadius: 5,
+                paddingLeft: perWidth(35),
+              },
+            ]}>
             <Image
               source={images.add2}
               style={{height: 40, width: 40}}
@@ -128,7 +135,17 @@ const PaymentMethod = () => {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{}} style={[tw`flex flex-row bg-white items-center mx-auto mt-4`, {width: perWidth(335), height: perHeight(44), borderRadius: 5, paddingLeft: perWidth(35)}]}>
+          <TouchableOpacity
+            onPress={() => {}}
+            style={[
+              tw`flex flex-row bg-white items-center mx-auto mt-4`,
+              {
+                width: perWidth(335),
+                height: perHeight(44),
+                borderRadius: 5,
+                paddingLeft: perWidth(35),
+              },
+            ]}>
             <View style={tw`mx-auto`}>
               <Textcomp
                 text={'USSD'}
@@ -139,7 +156,17 @@ const PaymentMethod = () => {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>{}} style={[tw`flex flex-row bg-white items-center mx-auto mt-4`, {width: perWidth(335), height: perHeight(44), borderRadius: 5, paddingLeft: perWidth(35)}]}>
+          <TouchableOpacity
+            onPress={() => {}}
+            style={[
+              tw`flex flex-row bg-white items-center mx-auto mt-4`,
+              {
+                width: perWidth(335),
+                height: perHeight(44),
+                borderRadius: 5,
+                paddingLeft: perWidth(35),
+              },
+            ]}>
             <View style={tw`mx-auto`}>
               <Textcomp
                 text={'Bank Transfer'}

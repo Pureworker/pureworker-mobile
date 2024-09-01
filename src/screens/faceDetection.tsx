@@ -24,10 +24,9 @@ import FaceSDK, {
 // import FaceSDK from '@regulaforensics/react-native-face-api';
 // import FaceSDK from '@regulaforensics/react-native-face-core';
 import tw from 'twrnc';
-import {SIZES, perHeight, perWidth} from '../utils/position/sizes';
+import {SIZES, perWidth} from '../utils/position/sizes';
 import colors from '../constants/colors';
-import images from '../constants/images';
-import {completeProfile, getUser, updateUserData} from '../utils/api/func';
+import {completeProfile, getUser} from '../utils/api/func';
 import Snackbar from 'react-native-snackbar';
 import {ToastLong} from '../utils/utils';
 import {addUserData} from '../store/reducer/mainSlice';
@@ -223,16 +222,6 @@ export default function FaceDetection({navigation, route}: any) {
   };
 
   const [loader, setloader] = useState(false);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setloader(false);
-  //     startLiveness();
-  //   }, 10000);
-  // }, []);
-  // const res: any = await updateUserData({
-  //   liveTest: true,
-  // });
   const updateLive = async () => {
     try {
       const res: any = await completeProfile({
@@ -268,38 +257,6 @@ export default function FaceDetection({navigation, route}: any) {
                     : getStatusBarHeight(true) + 20,
               },
             ]}>
-            {/* <Backicon /> */}
-            {/* <TouchableOpacity
-              onPress={() => {
-                FaceSDK.stopLivenessProcessing(
-                  () => {},
-                  () => {},
-                );
-                FaceSDK.stopLivenessProcessing(
-                  () => {},
-                  () => {},
-                );
-                setTimeout(() => {
-                  navigation.navigate('Congratulations');
-                }, 3000); // 3000 milliseconds = 3 seconds
-              }}>
-              <Text
-                style={[
-                  tw`text-center text-[${colors.white}]`,
-                  {
-                    fontSize: 14,
-                    lineHeight: 18,
-                    marginLeft: perWidth(3),
-                    fontFamily: 'Inter-Bold',
-                  },
-                ]}>
-                Skip
-              </Text>
-              <Image
-                style={{width: 25, height: 25, tintColor: 'white'}}
-                source={images.back}
-              />
-            </TouchableOpacity> */}
             <View style={tw`mx-auto`}>
               <Text
                 style={[
@@ -349,7 +306,7 @@ export default function FaceDetection({navigation, route}: any) {
           </View>
 
           <View style={tw`mx-auto  items-center mt-[10%]`}>
-            <View style={{ marginTop: 15, marginHorizontal: 'auto'}}>
+            <View style={{marginTop: 15, marginHorizontal: 'auto'}}>
               <Button
                 onClick={() => {
                   setloader(false);
@@ -365,7 +322,7 @@ export default function FaceDetection({navigation, route}: any) {
                 text={'Start Verification'}
               />
             </View>
-            <View style={{ marginTop: 15}}>
+            <View style={{marginTop: 15}}>
               <Button
                 onClick={() => {
                   FaceSDK.stopLivenessProcessing(
@@ -392,10 +349,6 @@ export default function FaceDetection({navigation, route}: any) {
               <ActivityIndicator size={'large'} color={'white'} />
             </View>
           )}
-          {/* <View style={{f}}>
-            <Text style={{marginLeft: -20}}>Similarity: {similarity}</Text>
-            <Text style={{marginLeft: 20}}>Liveness: {liveness}</Text>
-          </View> */}
         </SafeAreaView>
       </View>
     </View>

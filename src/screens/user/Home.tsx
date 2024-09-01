@@ -365,8 +365,6 @@ const Home = () => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
-
-
           {/* Popular Section */}
           <View
             style={[
@@ -470,7 +468,6 @@ const Home = () => {
                   renderItem={(item: any, index: any) => {
                     if (item.index === closeProvider?.length - 1) {
                       // console.log('Close to you',item?.item);
-
                       return (
                         <>
                           <ClosetoYou

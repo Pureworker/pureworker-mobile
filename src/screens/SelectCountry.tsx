@@ -44,7 +44,7 @@ const SelectCountry = () => {
     return () => clearInterval(timer);
   }, [seconds]);
 
-  const handleSubmit = values => {
+  const handleSubmit = (values: any) => {
     dispatch(addlanguage(values.language));
     dispatch(addCountry(values.country));
     navigation.navigate('Login');
