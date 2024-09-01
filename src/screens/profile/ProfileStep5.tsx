@@ -1,14 +1,12 @@
 import React, {useState} from 'react';
 import {
-  Image,
   View,
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
-
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
 import Header from '../../components/Header';
 import images from '../../constants/images';
@@ -19,25 +17,12 @@ import colors from '../../constants/colors';
 import ProfileStepWrapper from '../../components/ProfileStepWrapper';
 import DateTimesPicker from '../../components/DatePicker';
 import {generalStyles} from '../../constants/generalStyles';
-import {
-  useCreateServiceMutation,
-  useLoginMutation,
-} from '../../store/slice/api';
 import Snackbar from 'react-native-snackbar';
-import {addcompleteProfile, emptyCategory} from '../../store/reducer/mainSlice';
+import {addcompleteProfile} from '../../store/reducer/mainSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {completeProfile} from '../../utils/api/func';
 
-type Route = {
-  key: string;
-  name: string;
-  params: {
-    serviceId: string;
-  };
-};
-
 const ProfileStep5 = () => {
-  const route: Route = useRoute();
   const dispatch = useDispatch();
 
   const navigation = useNavigation<StackNavigation>();
@@ -51,7 +36,7 @@ const ProfileStep5 = () => {
   };
   const [isLoading, setisLoading] = useState(false);
 
-  function formatDateToTime(timestamp) {
+  function formatDateToTime(timestamp: any) {
     const _date = new Date(timestamp);
     const hours = _date.getHours();
     const minutes = _date.getMinutes();
@@ -61,7 +46,7 @@ const ProfileStep5 = () => {
 
     return `${formattedHours}:${formattedMinutes} ${ampm}`;
   }
-  function formatDateToCustomString(timestamp) {
+  function formatDateToCustomString(timestamp: any) {
     const _date = new Date(timestamp);
     const options = {
       weekday: 'short',
@@ -72,39 +57,11 @@ const ProfileStep5 = () => {
     return _date.toLocaleDateString('en-US', options);
   }
 
-  // console.log(date, time);
-
-  // const [createService, {isLoading}] = useCreateServiceMutation();
   const _completeProfileData = useSelector(
     (state: any) => state.user.completeProfileData,
   );
-  const category = useSelector((state: any) => state.user.pickedServices);
+  // const category = useSelector((state: any) => state.user.pickedServices);
   console.log(_completeProfileData?.serviceIntro, _completeProfileData);
-
-  function processProfileData(data: any, categoryData: any) {
-    // Process priceRange
-    const processedPriceRange = data.priceRange.map(item => ({
-      maxPrice: item.priceMax,
-      minPrice: item.priceMin,
-      service: item.service,
-      serviceName: item.serviceName,
-    }));
-
-    // Process serviceIntro
-    const processedServiceIntro = data.serviceIntro.map(item => ({
-      description: item.description,
-      service: categoryData.find(
-        (_category: {value: any}) => _category.value === item.service,
-      )?._id,
-    }));
-
-    // Return the processed data
-    return {
-      ...data,
-      priceRange: processedPriceRange,
-      serviceIntro: processedServiceIntro,
-    };
-  }
 
   const handleProfileSetup = async () => {
     setisLoading(true);
@@ -124,10 +81,7 @@ const ProfileStep5 = () => {
         },
       };
       console.log(_d);
-      // const processedData = processProfileData(_completeProfileData, category);
-      // console.log('processedData', processedData);
-      // const res = await completeProfile({...processedData});
-      // console.log('result', res);
+
       const res = await completeProfile({
         meetingSchedule: {
           date: formatDateToCustomString(date),
@@ -206,11 +160,6 @@ const ProfileStep5 = () => {
                 image={images.calendar}
               />
             </View>
-            {/* <Image
-              source={images.calendar}
-              resizeMode={'contain'}
-              style={{ width: 15, height: 15, marginRight: 20 }}
-            /> */}
           </TouchableOpacity>
           <TextWrapper
             children="Select appointment time"
@@ -238,11 +187,6 @@ const ProfileStep5 = () => {
                 image={images.time}
               />
             </View>
-            {/* <Image
-              source={images.time}
-              resizeMode={'contain'}
-              style={{ width: 15, height: 15, marginRight: 20 }}
-            /> */}
           </TouchableOpacity>
 
           {!isLoading ? (

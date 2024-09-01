@@ -24,7 +24,6 @@ import {
   addprovider_id,
   removeCategory,
 } from '../../store/reducer/mainSlice';
-import {generalStyles} from '../../constants/generalStyles';
 import ProfileStepWrapper from '../../components/ProfileStepWrapper';
 import TextInputs from '../../components/TextInputs';
 import tw from 'twrnc';
@@ -52,10 +51,6 @@ const PRofileStep1 = () => {
   const navigation = useNavigation<StackNavigation>();
   const [addService, setAddService] = useState('');
   const [isAddService, setIsAddService] = useState(false);
-
-  // const {data: getCategoryData, isLoading, isError} = useGetCategoryQuery();
-  // const getCategory = getCategoryData ?? [];
-
   const _getCategory = useSelector((state: any) => state.user.category);
   const getCategory = _getCategory;
   const category = useSelector((state: any) => state.user.pickedServices);
@@ -73,47 +68,24 @@ const PRofileStep1 = () => {
   const [selectCategory, setselectCategory] = useState('');
   const [subCategory, setsubCategory] = useState([]);
   const [subLoading, setsubLoading] = useState(false);
-  const HandleGetSubCategory = async param => {
-    console.log('started');
-    try {
-      const response = await axios({
-        method: 'get',
-        url: `https://pureworkers.com/api/users/category/${param}`,
-      });
-      // console.log(response?.data);
-      setsubCategory(response?.data);
-    } catch (error) {
-      console.log('err', error);
-      Snackbar.show({
-        text: error?.data?.message,
-        duration: Snackbar.LENGTH_LONG,
-        textColor: '#fff',
-        backgroundColor: '#88087B',
-      });
-    }
-  };
+
   const [_getSubCategory, set_getSubCategory] = useState([]);
   const initSubGetCategory = async param => {
-    // setisLoading(true);
-    // console.log(param);
     setsubLoading(true);
     const res: any = await getSubCategory(param);
     console.log('prssss', res?.data?.data);
     if (res?.status === 201 || res?.status === 200) {
-      // dispatch(addSubcategory(res?.data?.data?.services));
       set_getSubCategory(res?.data?.data?.[0]?.services);
     }
     setsubLoading(false);
-    // setisLoading(false);
   };
   const {currentState, setCurrentState} = useContext(RouteContext);
   console.log(currentState);
   const [isLoading, setisLoading] = useState(false);
   const handleAddRemove = async (arr: any[], action: string, item: any) => {
     try {
-      // {services: arr, action: 'add'}
       setisLoading(true);
-      const res = await completeProfile({services: arr, action: action});
+      const res: any = await completeProfile({services: arr, action: action});
       if (res?.status === 200 || res?.status === 201) {
         // ToastShort(action === 'add' ? 'Service added' : 'Service removed');
       } else {
@@ -151,14 +123,14 @@ const PRofileStep1 = () => {
     console.log(categoryId);
     setisLoading(true);
     if (categoryId) {
-      const res = await completeProfile({services: categoryId, action: 'add'});
+      const res: any = await completeProfile({
+        services: categoryId,
+        action: 'add',
+      });
       console.error('RESULT', res?.data);
       if (res?.status === 200 || res?.status === 201) {
         dispatch(addprovider_id(res?.data?.profile?.id));
-        // navigation.navigate('ProfileStep2');
-        // setCurrentState('2');
         navigation.navigate('ProfileStep21');
-        // setCurrentState('21');
         dispatch(addformStage(21));
       } else {
         Snackbar.show({
@@ -185,17 +157,11 @@ const PRofileStep1 = () => {
   };
   const handleNext = async () => {
     if (ProviderData?.services?.length < 1) {
-      // if (category?.length < 1) {
       ToastShort('Atleast 1 service is required!.');
       return;
     }
     console.log(categoryId);
     await handleProfileSetup();
-    // const data = completeProfileData;
-    // data?.services = category;
-    // console.log(data, category, categoryId);
-    // dispatch(addcompleteProfile({services: categoryId}));
-    // navigation.navigate('ProfileStep2');
   };
   useEffect(() => {
     const initGetProviderNew = async () => {
@@ -233,8 +199,6 @@ const PRofileStep1 = () => {
             width: perWidth(335),
             height: perHeight(30),
             borderRadius: 7,
-
-   
           },
         ]}>
         <Textcomp
@@ -277,9 +241,6 @@ const PRofileStep1 = () => {
           <Collapse
             isExpanded={collapseState}
             onToggle={() => {
-              // if (!dataLoaded) {
-              //   setDataLoaded(true);
-              // }
               setCollapseState(!collapseState);
             }}
             style={{
@@ -299,7 +260,6 @@ const PRofileStep1 = () => {
                 borderColor: colors.primary,
                 borderWidth: 2,
                 paddingHorizontal: 15,
-                // marginHorizontal: 20
               }}>
               <View style={{}}>
                 <TextWrapper
@@ -357,7 +317,7 @@ const PRofileStep1 = () => {
                         onPress={async () => {
                           setselectCategory(item?.name);
                           setCollapseState(false);
-                          // HandleGetSubCategory(item?.id);
+
                           await initSubGetCategory(item?._id || item?.id);
                         }}
                         style={{marginTop: 8}}>
@@ -387,9 +347,6 @@ const PRofileStep1 = () => {
               <Collapse
                 isExpanded={collapseState2}
                 onToggle={() => {
-                  // if (!dataLoaded) {
-                  //   setDataLoaded(true);
-                  // }
                   setCollapseState2(!collapseState2);
                 }}
                 style={{
@@ -409,7 +366,6 @@ const PRofileStep1 = () => {
                     borderColor: colors.primary,
                     borderWidth: 2,
                     paddingHorizontal: 15,
-                    // marginHorizontal: 20
                   }}>
                   <View style={{}}>
                     <TextWrapper
@@ -476,7 +432,6 @@ const PRofileStep1 = () => {
                                       catItem => catItem.name === item.name,
                                     )
                                   ) {
-                                    // dispatch(removeCategory(item));
                                     await handleAddRemove(
                                       [item._id ?? item.id],
                                       'remove',
@@ -491,7 +446,6 @@ const PRofileStep1 = () => {
                                     );
                                   }
                                   setCollapseState2(false);
-                                  // console.log(category);
                                 }}
                                 style={{marginTop: 8}}>
                                 <TextWrapper
@@ -596,7 +550,6 @@ const PRofileStep1 = () => {
                     </View>
                     <TouchableOpacity
                       onPress={async () => {
-                        // dispatch(removeCategory(item));
                         await handleAddRemove(
                           [item._id ?? item.id],
                           'remove',

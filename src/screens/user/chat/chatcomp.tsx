@@ -347,10 +347,7 @@ export default function Index({
             }`,
             {
               borderRadius: 6,
-              // minWidth: perWidth(60),
-              // maxWidth: perWidth(270),
               paddingVertical: perHeight(5),
-              // paddingHorizontal: perWidth(5),
               minHeight: perHeight(36),
               marginTop: perHeight(12),
             },
@@ -398,10 +395,6 @@ export default function Index({
                 },
               ]}
             />
-            {/* <Image
-              source={{uri: 'https://via.placeholder.com/50'}} // Replace with your file icon
-              style={{width: 20, height: 20, marginRight: 10}}
-            /> */}
             <Textcomp
               size={14}
               lineHeight={21}

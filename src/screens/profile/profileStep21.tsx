@@ -5,14 +5,12 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
-  Alert,
-  TextInput,
   StyleSheet,
   Platform,
   PermissionsAndroid,
   SafeAreaView,
 } from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {StackNavigation} from '../../constants/navigation';
 import Header from '../../components/Header';
 import images from '../../constants/images';
@@ -20,38 +18,26 @@ import Button from '../../components/Button';
 import TextWrapper from '../../components/TextWrapper';
 import commonStyle from '../../constants/commonStyle';
 import tw from 'twrnc';
-import {
-  useCreateServiceMutation,
-  useGetUserDetailQuery,
-} from '../../store/slice/api';
 import colors from '../../constants/colors';
 import {useDispatch, useSelector} from 'react-redux';
 import ProfileStepWrapper from '../../components/ProfileStepWrapper';
 import PotfolioWrapper from '../../components/PotfolioWrapper';
 import Snackbar from 'react-native-snackbar';
-import {SIZES, perWidth} from '../../utils/position/sizes';
+import {SIZES} from '../../utils/position/sizes';
 import {
   completeProfile,
   getProfile,
   getProviderNew,
   uploadAssetsDOCorIMG,
 } from '../../utils/api/func';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {launchCamera} from 'react-native-image-picker';
 import {addProfileData, addformStage} from '../../store/reducer/mainSlice';
 import {ToastShort} from '../../utils/utils';
 import Modal from 'react-native-modal/dist/modal';
 import Textcomp from '../../components/Textcomp';
 import PortComp from './comp/portComp3';
 import Textarea from 'react-native-textarea';
-type Route = {
-  key: string;
-  name: string;
-  params: {
-    serviceId: string;
-  };
-};
 import {generalStyles} from '../../constants/generalStyles';
-import TextInputs from '../../components/TextInputs';
 import {addcompleteProfile} from '../../store/reducer/mainSlice';
 import FastImage from 'react-native-fast-image';
 import TickIcon from '../../assets/svg/Tick';
@@ -59,9 +45,9 @@ import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import EditComp from './comp/EditComp';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
+
 const ProfileStep21 = () => {
   const navigation = useNavigation<StackNavigation>();
-  const route: Route = useRoute();
   const category = useSelector((state: any) => state.user.pickedServices);
   const ProviderData = useSelector((state: any) => state.user.profileData);
   const completeProfileData = useSelector(
@@ -148,16 +134,6 @@ const ProfileStep21 = () => {
       ToastShort('Description is required!. ');
       return;
     }
-    // if (
-    //   !imageUrl ||
-    //   imageUrl ===
-    //     'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-    // ) {
-    //   ToastShort('Please upload a Profile Picture.');
-    //   return;
-    // }
-
-    // const d = ProviderData?.portfolios?.filter(s => s.service === item?._id);
     const ProviderDataLength = ProviderData?.portfolios?.length;
     const serviceLength = ProviderData?.services?.length;
     if (ProviderDataLength !== serviceLength) {
@@ -188,8 +164,6 @@ const ProfileStep21 = () => {
     }
     setisLoading(false);
   };
-  const {data: getUserData, isLoading: isLoadingUser} = useGetUserDetailQuery();
-  const getUser = getUserData ?? [];
   const [nationalityOpen, setNationalityOpen] = useState(false);
   const [portfolioToServiceCount, setportfolioToServiceCount] = useState([
     // {
@@ -205,28 +179,20 @@ const ProfileStep21 = () => {
   const [profileImageLoading, setProfileImageLoading] = useState(false);
   const userData = useSelector((state: any) => state.user.userData);
   const categoryId = useSelector((state: any) => state.user.pickedServicesId);
-
   const [profileLoading, setprofileLoading] = useState(false);
-
-  const [storedPortfolios, setstoredPortfolios] = useState([]);
   useEffect(() => {
     const initGetProfile = async () => {
       const res: any = await getProfile(userData?._id);
     };
     const initGetProviderNew = async () => {
       const res: any = await getProviderNew(userData?._id);
-      // console.log('providerdatttttaaaaa', res?.data);
-      // console.log('portfolio--', res?.data?.profile?.portfolios);
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addProfileData(res?.data?.profile));
-        // setDescription(res?.data?.profile?.description);
       }
     };
-    // initGetProfile();
     initGetProviderNew();
   }, []);
   const handlePortfolioItemChange = (index: any, updatedData: any) => {
-    // Create a copy of the current portfolio data
     const updatedPortfolioData = [...portfolioToServiceCount];
     updatedPortfolioData[index] = updatedData; // Update the data at the specified index
     setportfolioToServiceCount(updatedPortfolioData); // Update the state with the new data
@@ -266,7 +232,7 @@ const ProfileStep21 = () => {
               // Camera permission is granted, open camera here
               await launchCamera(options, async (resp: unknown) => {
                 if (resp?.assets?.length > 0) {
-                  setprofileLoading(true)
+                  setprofileLoading(true);
                   setisLoading(true);
                   console.log('resp', resp?.assets[0]);
                   setImageUrl(resp?.assets[0].uri);
@@ -286,7 +252,7 @@ const ProfileStep21 = () => {
                 await launchCamera(options, async (resp: unknown) => {
                   if (resp?.assets?.length > 0) {
                     setisLoading(true);
-                    setprofileLoading(true)
+                    setprofileLoading(true);
                     console.log('resp', resp?.assets[0]);
                     setImageUrl(resp?.assets[0].uri);
                     const data = await uploadImgorDoc(resp?.assets[0]);
@@ -364,35 +330,6 @@ const ProfileStep21 = () => {
   };
   const [editModal, seteditModal] = useState(false);
   const profileData = useSelector((state: any) => state.user.profileData);
-
-  // const PickImage2 = () => {
-  //   ImagePicker.openCamera({
-  //     width: 300,
-  //     height: 400,
-  //     borderRadius: 200,
-  //     cropping: true,
-  //     freeStyleCropEnabled: true,
-  //     compressImageQuality: 0.1,
-  //   })
-  //     .then(response => {
-  //       const uri = response.path;
-  //       const type = response.mime;
-  //       const name = response.modificationDate
-  //         ? response.modificationDate
-  //         : response.mime;
-
-  //       const source = {
-  //         uri,
-  //         type,
-  //         name,
-  //       };
-  //       //
-  //       uploadAvatar(source);
-  //       // uploadQr2(image.data);
-  //       //
-  //     })
-  //     .catch(e => {});
-  // };
 
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: colors.greyLight}]}>
@@ -472,18 +409,6 @@ const ProfileStep21 = () => {
                         }}
                         resizeMode={FastImage.resizeMode.cover}
                       />
-                      // <Image
-                      //   style={[
-                      //     tw``,
-                      //     {
-                      //       width: 145,
-                      //       height: 145,
-                      //       borderRadius: 145,
-                      //     },
-                      //   ]}
-                      //   source={{uri: completeProfileData?.profilePic || imageUrl}}
-                      //   resizeMode="cover"
-                      // />
                     )}
                   </TouchableOpacity>
                 ) : (
@@ -516,18 +441,6 @@ const ProfileStep21 = () => {
                     }}
                   />
                 </TouchableOpacity>
-                {/* <TouchableOpacity onPress={() => setImageUrl('')}>
-                  <Image
-                    source={images.bin}
-                    resizeMode="contain"
-                    style={{
-                      width: 20,
-                      height: 20,
-                      marginLeft: 20,
-                      tintColor: '#000',
-                    }}
-                  />
-                </TouchableOpacity> */}
               </View>
             </View>
             <TextWrapper
@@ -544,7 +457,7 @@ const ProfileStep21 = () => {
                   const words = text.split(' ');
                   const limitedWords = words.slice(0, 300);
                   const limitedText = limitedWords.join(' ');
-                  // setShortDescription(limitedText);
+
                   setDescription(limitedText);
                   dispatch(addcompleteProfile({description: limitedText}));
                 }}
@@ -566,49 +479,6 @@ const ProfileStep21 = () => {
                 />
               </View>
             </View>
-
-            {/* <View
-              style={{
-                height: 130,
-                borderRadius: 8,
-                backgroundColor: colors.greyLight1,
-                marginTop: 13,
-              }}>
-              <TextInputs
-                styleInput={{
-                  color: colors.black,
-                  paddingHorizontal: 18,
-                  fontSize: 12,
-                }}
-                style={{backgroundColor: colors.green, flex: 1}}
-                labelText={
-                  'Introduce yourself and enter your profile description.'
-                }
-                state={description}
-                setState={text => {
-                  setDescription(text);
-                  dispatch(addcompleteProfile({description: description}));
-                }}
-                multiline={true}
-                nbLines={20}
-              />
-              <TextInput
-                multiline={true}
-                style={{
-                  height: 130,
-                  borderRadius: 8,
-                  backgroundColor: colors.greyLight1,
-                  marginTop: 0,
-                  padding: 10,
-                }}
-                placeholder="Introduce yourself and enter your profile description."
-                value={description}
-                onChangeText={(text: string) => {
-                  setDescription(text);
-                  dispatch(addcompleteProfile({description: description}));
-                }}
-              />
-            </View> */}
             <TextWrapper
               children="Service Intro"
               isRequired={true}
@@ -629,7 +499,7 @@ const ProfileStep21 = () => {
               {ProviderData?.services?.length > 0
                 ? ProviderData?.services?.map((item: any, index: any) => {
                     const d = ProviderData?.portfolios?.filter(
-                      s => s.service === item?._id,
+                      (s: any) => s.service === item?._id,
                     );
                     return (
                       <View
@@ -672,11 +542,6 @@ const ProfileStep21 = () => {
                         <TouchableOpacity
                           style={tw`border bg-white rounded px-2 py-0.5`}
                           onPress={() => {
-                            // const newPortfolioItem = {
-                            //   service: '',
-                            //   description: '',
-                            //   images: [],
-                            // };
                             if (d?.length > 0) {
                               seteditModal(true);
                               setSelectedService(item);
@@ -766,8 +631,6 @@ const ProfileStep21 = () => {
               <View style={{marginHorizontal: 25, marginTop: 75}}>
                 <Button
                   onClick={() => {
-                    // handleProfileSetup();
-
                     handleNext();
                     console.log('modified data2', portfolioToServiceCount);
                   }}
@@ -924,10 +787,7 @@ const ProfileStep21 = () => {
                 images: [],
               }}
               portfolioData={profileData?.portfolios}
-              handlePortfolioItemChange={(i: any, data: any) =>
-                // handlePortfolioItemChange(0, data)
-                {}
-              }
+              handlePortfolioItemChange={(i: any, data: any) => {}}
               close={() => {
                 seteditModal(false);
                 //
@@ -980,7 +840,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   textarea: {
-    textAlignVertical: 'top', // hack android
+    textAlignVertical: 'top',
     height: 170,
     fontSize: 14,
     color: 'black',

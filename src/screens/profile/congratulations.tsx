@@ -6,7 +6,6 @@ import {StackNavigation} from '../../constants/navigation';
 import Button from '../../components/Button';
 import TextWrapper from '../../components/TextWrapper';
 import colors from '../../constants/colors';
-import {useCreateServiceMutation} from '../../store/slice/api';
 import {useDispatch, useSelector} from 'react-redux';
 import tw from 'twrnc';
 import {addUserData} from '../../store/reducer/mainSlice';
@@ -63,10 +62,7 @@ const Congratulations = () => {
           />
           <Button
             onClick={() => {
-              // navigation.navigate('Homes');
-              // navigation.navigate('Account');
               navigation.navigate('Homes', {screen: 'Home'});
-              // navigation.navigate('Homes');
             }}
             style={{
               marginHorizontal: 40,

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Image,
@@ -17,21 +17,13 @@ import Button from '../../components/Button';
 import TextWrapper from '../../components/TextWrapper';
 import commonStyle from '../../constants/commonStyle';
 import tw from 'twrnc';
-import {
-  useCreateServiceMutation,
-  useGetCategoryQuery,
-} from '../../store/slice/api';
+import {useCreateServiceMutation} from '../../store/slice/api';
 import colors from '../../constants/colors';
 import {useDispatch, useSelector} from 'react-redux';
 import {WIDTH_WINDOW, generalStyles} from '../../constants/generalStyles';
 import ProfileStepWrapper from '../../components/ProfileStepWrapper';
 import TextInputs from '../../components/TextInputs';
-import {
-  allCities,
-  allCountry,
-  // launchCamera,
-  // launchImageLibrary,
-} from '../../constants/utils';
+import {allCities, allCountry} from '../../constants/utils';
 import Snackbar from 'react-native-snackbar';
 import {
   completeProfile,
@@ -50,7 +42,6 @@ import ServiceIntroComp from '../../components/serviceIntro';
 import ServicePriceComp from '../../components/servicePrice';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
-import {RouteContext} from '../../utils/context/route_context';
 import {SelectList} from 'react-native-dropdown-select-list';
 import {ToastShort} from '../../utils/utils';
 
@@ -80,26 +71,7 @@ const PRofileStep2 = () => {
   const currentServiceIntro = useSelector(
     (state: any) => state.user.completeProfileData?.serviceIntro,
   );
-  // useEffect(() => {
-  //   if (category?.length) {
-  //     const updatedInputValues = category.map((service: string) => ({
-  //       service: service?.name,
-  //       description: '',
-  //     }));
-  //     const updatedServiceIntro = [
-  //       ...(currentServiceIntro || []), // Use an empty array if currentServiceIntro is undefined
-  //       ...(updatedInputValues || []).filter(
-  //         updatedItem =>
-  //           !(currentServiceIntro || []).some(
-  //             currentItem => currentItem.service === updatedItem.service,
-  //           ),
-  //       ),
-  //     ];
-  //     // Update the Redux store with the updated array
-  //     setServicesDescription([...updatedServiceIntro]);
-  //     dispatch(addcompleteProfile({serviceIntro: updatedServiceIntro}));
-  //   }
-  // }, [category]);
+
   console.log('===========Cats=========================');
   console.log(category);
   console.log('====================================');
@@ -137,40 +109,11 @@ const PRofileStep2 = () => {
             ),
         ),
       ];
-      // Update the Redux store with the updated array
       setServicesDescription([...updatedServiceIntro]);
       dispatch(addcompleteProfile({serviceIntro: updatedServiceIntro}));
     }
   }, [category]);
 
-  // useEffect(() => {
-  //   if (category?.length) {
-  //     console.log('CATEGORY +HERE',category);
-  //     const updatedInputValues = category.map((service: string) => ({
-  //       serviceName: service?.name,
-  //       service: service?._id || service?.id,
-  //       maxPrice: '',
-  //       minPrice: '',
-  //     }));
-  //     // Retrieve the current state of priceRange from Redux
-  //     // const currentPriceRange = getState().yourSliceName.priceRange;
-  //     // Create a new array with updated and existing values
-  //     const updatedPriceRange = [
-  //       ...(currentPriceRange || []),
-  //       ...updatedInputValues.filter(
-  //         updatedItem =>
-  //           // !currentPriceRange.some(
-  //           !(currentPriceRange || []).some(
-  //             currentItem => currentItem.service === updatedItem.service,
-  //           ),
-  //       ),
-  //     ];
-  //     // Update the Redux store with the updated array
-  //     setServicePrice([...updatedPriceRange]);
-  //     dispatch(addcompleteProfile({priceRange: updatedPriceRange}));
-  //   }
-  //   setDescription(completeProfileData?.description);
-  // }, [category]);
   useEffect(() => {
     if (category?.length) {
       const updatedInputValues = category.map(service => ({
@@ -179,19 +122,15 @@ const PRofileStep2 = () => {
         maxPrice: '',
         minPrice: '',
       }));
-
-      // Create a map for faster lookup
       const existingServicesMap = new Map(
         (currentPriceRange || []).map(item => [item.service, item]),
       );
-
       // Update existing items or add new items
       const updatedPriceRange = updatedInputValues.map(updatedItem =>
         existingServicesMap.has(updatedItem.service)
           ? {...existingServicesMap.get(updatedItem.service), ...updatedItem}
           : updatedItem,
       );
-
       // Update the Redux store with the updated array
       setServicePrice([...updatedPriceRange]);
       dispatch(addcompleteProfile({priceRange: updatedPriceRange}));
@@ -203,8 +142,6 @@ const PRofileStep2 = () => {
   const currentPriceRange = useSelector(
     (state: any) => state.user.completeProfileData?.priceRange,
   );
-  const {data: getCategoryData, isError} = useGetCategoryQuery();
-  const getCategory = getCategoryData ?? [];
 
   const dispatch = useDispatch();
   const handleProfileSetup = () => {
@@ -249,7 +186,6 @@ const PRofileStep2 = () => {
       });
     }
   };
-  // const {currentState, setCurrentState} = useContext(RouteContext);
   console.log('here', categoryId);
   const _handleFuncUpload = async () => {
     setisLoading(true);
@@ -382,26 +318,7 @@ const PRofileStep2 = () => {
       }
     });
   };
-  // const openLibraryfordp = () => {
-  //   launchImageLibrary(options, async (resp: unknown) => {
-  //     if (resp?.assets?.length > 0) {
-  //       const fileSize = resp.assets[0].fileSize; // File size in bytes
-  //       const fileSizeInMB = fileSize / (1024 * 1024); // Convert to megabytes
-  //       if (fileSizeInMB > 1) {
-  //         // console.warn('Image size exceeds 1MB. Please choose a smaller image.');
-  //         ToastShort('Image size exceeds 1MB. Please choose a smaller image.');
-  //         // You may want to display an error message or handle this case accordingly
-  //         return;
-  //       }
-  //       console.log('resp', resp?.assets[0]);
-  //       setImageUrl(resp?.assets[0].uri);
-  //       const data = await uploadImgorDoc(resp?.assets[0]);
-  //       console.warn('processed pic', data);
-  //       dispatch(addcompleteProfile({profilePic: data}));
-  //       const res: any = await completeProfile({profilePic: data});
-  //     }
-  //   });
-  // };
+
   const opencamerafordp = async () => {
     const options = {
       mediaType: 'photo',
@@ -549,10 +466,6 @@ const PRofileStep2 = () => {
                       }}
                     />
                   ) : (
-                    // <Image
-                    //   source={{uri: completeProfileData?.profilePic || imageUrl}}
-                    //   style={{width: 145, height: 145, borderRadius: 145}}
-                    // />
                     <FastImage
                       style={[
                         tw``,
@@ -589,39 +502,6 @@ const PRofileStep2 = () => {
               }}>
               <TouchableOpacity
                 onPress={async () => {
-                  // try {
-                  //   const response: any = await launchImageLibrary();
-                  //   setProfileImageLoading(true);
-                  //   if (response) {
-                  //     const filename = response?.uri.substring(
-                  //       response?.uri.lastIndexOf('/') + 1,
-                  //     );
-                  //     const uploadUri =
-                  //       Platform.OS === 'ios'
-                  //         ? response?.uri.replace('file://', '')
-                  //         : response.uri;
-                  //     const task = await storage()
-                  //       .ref(filename)
-                  //       .putFile(uploadUri);
-                  //     if (task.metadata) {
-                  //       profilePicture.current = task.metadata.fullPath;
-                  //     }
-                  //     let url = '';
-                  //     if (profilePicture.current) {
-                  //       url = await storage()
-                  //         .ref(profilePicture.current)
-                  //         .getDownloadURL();
-                  //     }
-                  //     setImageUrl(url);
-                  //     profilePicture.current = '';
-                  //     setProfileImageLoading(false);
-                  //   } else {
-                  //     setProfileImageLoading(false);
-                  //   }
-                  // } catch (error) {
-                  //   console.log('error', error);
-                  //   setProfileImageLoading(false);
-                  // }
                   openLibraryfordp();
                 }}>
                 <Image
@@ -772,7 +652,6 @@ const PRofileStep2 = () => {
             <View style={{marginHorizontal: 25, marginTop: 75}}>
               <Button
                 onClick={() => {
-                  // _handleFuncUpload();
                   navigation.navigate('ProfileStep21');
                   dispatch(addformStage(21));
                 }}
