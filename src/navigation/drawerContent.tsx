@@ -39,6 +39,8 @@ import UploadModal from './components/UploadModal';
 import {ToastShort} from '../utils/utils';
 import CustomLoading from '../components/customLoading';
 import IdCheckIcon from '../assets/svg/IdCheckIcon';
+import {VERSION_ANDROID, VERSION_IOS} from '../constants/version';
+import RewardIcon from '../assets/svg/reward';
 const DrawerContent = () => {
   const navigation = useNavigation<StackNavigation>();
   const userData = useSelector((state: any) => state.user.userData);
@@ -62,6 +64,14 @@ const DrawerContent = () => {
       notint: true,
     },
     {label: 'Referrals', route: 'Referrals', icon: images.info, notint: false},
+    {
+      label: 'Reward',
+      route: 'SpinToWinScreen',
+      // route: 'MyJobs',
+      icon: images.accountinfo,
+      icon2: <RewardIcon />,
+      notint: false,
+    },
   ];
   // Conditionally include 'ID Check' if user is a freelancer
 
@@ -575,7 +585,7 @@ const DrawerContent = () => {
           <View style={[tw`mt-4 ml-3`, {}]}>
             <Textcomp
               text={`Version: ${
-                Platform.OS === 'ios' ? '1.0.0.51' : '1.0.0.51'
+                Platform.OS === 'ios' ? `${VERSION_IOS}` : `${VERSION_ANDROID}`
               }`}
               size={14}
               color={'#000000'}

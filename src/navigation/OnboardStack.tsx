@@ -37,47 +37,47 @@ export default function OnboardingStack() {
         <Stack.Screen
           name="Signup"
           component={Signup}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
         <Stack.Screen
           name="Login"
           component={Login}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
         <Stack.Screen
           name="BusinessSignup"
           component={BusinessSignup}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
         <Stack.Screen
           name="CustomerSignup"
           component={CustomerSignup}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
         <Stack.Screen
           name="OnBoarding1"
           component={OnBoarding}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
         <Stack.Screen
           name="TokenVerification"
           component={TokenVerification}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
         <Stack.Screen
           name="Register"
           component={Register}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
         <Stack.Screen
           name="waitingList"
           component={WaitingList}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
         <Stack.Screen
           name="SelectCountry"
           component={SelectCountry}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
       </Stack.Navigator>
     );
@@ -91,47 +91,47 @@ export default function OnboardingStack() {
         <Stack.Screen
           name="Signup"
           component={Signup}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
         <Stack.Screen
           name="Login"
           component={Login}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
         <Stack.Screen
           name="BusinessSignup"
           component={BusinessSignup}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
         <Stack.Screen
           name="CustomerSignup"
           component={CustomerSignup}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
         <Stack.Screen
           name="OnBoarding1"
           component={OnBoarding}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
         <Stack.Screen
           name="TokenVerification"
           component={TokenVerification}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
         <Stack.Screen
           name="Register"
           component={Register}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
         <Stack.Screen
           name="waitingList"
           component={WaitingList}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
         <Stack.Screen
           name="SelectCountry"
           component={SelectCountry}
-          options={{headerShown: false, animationEnabled: false}}
+          options={{headerShown: false, animation: 'none'}}
         />
       </Stack.Navigator>
     );

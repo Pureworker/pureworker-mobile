@@ -29,6 +29,8 @@ import USA1 from '../assets/svg/USA1';
 import UpDown from '../assets/svg/UpDown';
 import USA2 from '../assets/svg/USA2';
 import {HEIGHT_SCREEN} from '../constants/generalStyles';
+import Textcomp from '../components/Textcomp';
+import {VERSION_ANDROID, VERSION_IOS} from '../constants/version';
 const DeviceId = DeviceInfo.getDeviceId();
 
 export default function Login() {
@@ -319,6 +321,24 @@ export default function Login() {
                 Register
               </Text>
             </Text>
+
+            <View style={tw`mx-auto mt-auto`}>
+              <Textcomp
+                text={`Version: ${
+                  Platform.OS === 'ios'
+                    ? `${VERSION_IOS}`
+                    : `${VERSION_ANDROID}`
+                }`}
+                size={14}
+                color={colors.white}
+                style={[
+                  tw`ml-3 text-left`,
+                  {lineHeight: 14},
+                  {fontWeight: '900'},
+                ]}
+              />
+            </View>
+
             {/* <View style={tw`mt-auto`}>
               <Text
                 style={{

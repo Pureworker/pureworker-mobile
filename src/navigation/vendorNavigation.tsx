@@ -177,17 +177,17 @@ export default function VendorNavigation() {
             <Stack.Screen
         name="IdVerification"
         component={IdVerification}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="PhotoUploadScreen"
         component={PhotoUploadScreen}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
             <Stack.Screen
         name="IdProcessing"
         component={Processing}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
     </Stack.Navigator>
   );

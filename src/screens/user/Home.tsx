@@ -180,8 +180,8 @@ const Home = () => {
       }
       if (res?.status === 401 || res?.status === 400) {
         if (
-          res?.error?.message === `Invalid token or user doesn't exist` ||
-          res?.error?.data?.message === `Invalid token or user doesn't exist`
+          res?.error?.message === "Invalid token or user doesn't exist" ||
+          res?.error?.data?.message === "Invalid token or user doesn't exist"
         ) {
           dispatch(logout());
         }

@@ -78,5 +78,13 @@ const images = {
   success: require('../assets/images/success.png'),
   process: require('../assets/images/process.png'),
   attachment: require('../assets/images/attachment.png'),
+
+  loginCoin: require('../assets/images/loginCoin.png'),
+  transactionCoin: require('../assets/images/transactionCoin.png'),
+  logoBg: require('../assets/images/logobg.png'),
+  coin: require('../assets/images/coin.png'),
+  conversionSuccess: require('../assets/images/conversionsuccess.png'),
+  conversionFail: require('../assets/images/conversionfail.png'),
+  product: require('../assets/images/product.png'),
 };
 export default images;

@@ -19,37 +19,37 @@ export default function VendorHomeStack() {
       <Stack.Screen
         name="Index"
         component={Home}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       {/* <Stack.Screen
         name="ProfileStep1"
         component={ProfileStep1}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="ProfileStep2"
         component={PRofileStep2}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
             <Stack.Screen
         name="ProfileStep21"
         component={ProfileStep21}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="ProfileStep3"
         component={ProfileStep3}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="ProfileStep4"
         component={ProfileStep4}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen
         name="ProfileStep5"
         component={ProfileStep5}
-        options={{headerShown: false, animationEnabled: false}}
+        options={{headerShown: false, animation: 'none'}}
       /> */}
     </Stack.Navigator>
   );

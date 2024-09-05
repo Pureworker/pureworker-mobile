@@ -1,8 +1,8 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {store} from '../../store/store';
-import {addprovidersByCateegory} from '../../store/reducer/mainSlice';
-import { GLOBAL_API_BASE_URL} from '../../constants/api';
+import {addprovidersByCateegory, loggedIn} from '../../store/reducer/mainSlice';
+import {GLOBAL_API_BASE_URL} from '../../constants/api';
 //<<<<<<<<<<<<<<<--------------Staging------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // const API_BASE_URL = 'https://pureworker-3482.onrender.com/api';
 //<<<<<<<<<<<<<<<--------------Production------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -99,6 +99,12 @@ export const verifyUser = async (param: any) => {
         await AsyncStorage.setItem('AuthToken', res?.data?.token);
         await AsyncStorage.setItem('Role', res?.data?.user.accountType);
         await AsyncStorage.setItem('ID', res?.data?.user._id);
+        store.dispatch(
+          loggedIn({
+            token: res?.data?.token,
+            type: res?.data?.user.accountType?.toUpperCase(),
+          }),
+        );
       } catch (e) {
         // saving error
         console.log('Error Saving Token data.');

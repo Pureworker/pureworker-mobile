@@ -3,6 +3,7 @@ apply plugin: "com.facebook.react"
 apply plugin: 'com.google.gms.google-services'
 apply plugin: "com.google.gms.google-services"
 apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
 
 
 // Project background_geolocation = project(':react-native-background-geolocation')

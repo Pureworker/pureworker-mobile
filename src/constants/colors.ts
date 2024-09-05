@@ -10,4 +10,13 @@ export default {
   lightBlack: '#000413CF',
   darkPurple: '#2D303C',
   green: '#29D31A',
+
+  backgroundPurple: '#e1d4e0',
+  sliderBG: '##E000E0',
+  red: '#ff0000',
+  darkParpal: '#1C091F',
+  bgBlue: '#DDE1F2',
+  wheelBlack: '#2D303C',
+  darkGrey: '#404246',
+  greyBG: '#C7C7C7',
 }
