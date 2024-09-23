@@ -356,6 +356,7 @@ import {
   FlatList,
   SafeAreaView,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -378,6 +379,7 @@ import {
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import {RootState} from '@reduxjs/toolkit/dist/query/core/apiState';
+import colors from '../../constants/colors';
 
 const _Services = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
@@ -400,6 +402,8 @@ const _Services = ({route}: any) => {
   const [savedProviders, setsavedProviders] = useState([]);
   const [isLoading, setisLoading] = useState(false);
 
+  const [searchLoading, setsearchLoading] = useState(false);
+
   useEffect(() => {
     const query = userData?.bookmarks?.filter(item => item?.service === id);
     setsavedProviders(query);
@@ -421,12 +425,12 @@ const _Services = ({route}: any) => {
       dispatch(setbookMarkedProviders(res?.data?.data));
     }
     setisLoading(false);
-  }, [dispatch, id]);
+  }, [id]);
 
   useEffect(() => {
     fetchProviders();
     fetchBookmarkedProviders();
-  }, [fetchProviders, fetchBookmarkedProviders]);
+  }, []);
 
   const debounce = (func, delay) => {
     let timeoutId;
@@ -438,149 +442,155 @@ const _Services = ({route}: any) => {
 
   const handleSearch = useCallback(
     query => {
+      setsearchLoading(true);
       const filteredData =
         _providersByCateegory?.filter(provider =>
           provider.fullName.toLowerCase().includes(query.toLowerCase()),
         ) || [];
       setSearchResults(filteredData);
+      setsearchLoading(false);
     },
     [_providersByCateegory],
   );
 
   const debouncedHandleSearch = useMemo(
-    () => debounce(handleSearch, 500),
+    () => debounce(handleSearch, 300),
     [handleSearch],
   );
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
-      <ScrollView>
+      <View
+        style={{
+          marginTop:
+            Platform.OS === 'ios'
+              ? 10
+              : StatusBar?.currentHeight + getStatusBarHeight(true) + 20,
+        }}
+      />
+      {!searchModal ? (
         <View
-          style={{
-            marginTop:
-              Platform.OS === 'ios'
-                ? 10
-                : StatusBar?.currentHeight + getStatusBarHeight(true) + 20,
-          }}
-        />
-        {!searchModal ? (
-          <View
-            style={[
-              tw`items-center`,
-              {
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginHorizontal: 20,
-              },
-            ]}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.goBack();
-                dispatch(addprovidersByCateegory([]));
-              }}>
-              <Image
-                source={images.back}
-                style={{height: 25, width: 25}}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-            <View style={tw`mx-auto w-3/4  items-center`}>
-              <Textcomp
-                text={`${passedService}`}
-                size={16}
-                lineHeight={17}
-                color={'#000413'}
-                fontFamily={'Inter-SemiBold'}
-                style={{textAlign: 'center'}}
-              />
-            </View>
-            <TouchableOpacity onPress={() => setsearchModal(true)}>
-              <Image
-                source={images.search}
-                style={{height: 25, width: 25}}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View
-            style={[
-              tw`items-center justify-center`,
-              {
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginHorizontal: 20,
-              },
-            ]}>
-            <TouchableOpacity onPress={() => setsearchModal(false)}>
-              <Image
-                source={images.X}
-                style={{height: 20, width: 20}}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-            <TextInputs
-              style={{marginTop: 0, width: '70%'}}
-              labelText={'Search for service provider'}
-              state={searchInput}
-              setState={text => {
-                setsearchInput(text);
-                debouncedHandleSearch(text);
-              }}
+          style={[
+            tw`items-center`,
+            {
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginHorizontal: 20,
+            },
+          ]}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+              dispatch(addprovidersByCateegory([]));
+            }}>
+            <Image
+              source={images.back}
+              style={{height: 25, width: 25}}
+              resizeMode="contain"
             />
-            <TouchableOpacity
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: 40,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Image
-                source={images.search}
-                style={{height: 20, width: 20}}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
+          </TouchableOpacity>
+          <View style={tw`mx-auto w-3/4  items-center`}>
+            <Textcomp
+              text={`${passedService}`}
+              size={16}
+              lineHeight={17}
+              color={'#000413'}
+              fontFamily={'Inter-SemiBold'}
+              style={{textAlign: 'center'}}
+            />
           </View>
-        )}
-        <View style={tw`mt-4 mb-3`}>
-          {!isLoading && _providersByCateegory.length > 0 && (
-            <View style={tw`flex flex-row`}>
-              <TouchableOpacity
-                onPress={() => setactiveSection('All')}
-                style={tw`w-1/2 border-b-2 items-center ${
-                  activeSection === 'All'
-                    ? 'border-[#88087B]'
-                    : 'border-[#000000]'
-                }`}>
-                <Textcomp
-                  text={'All'}
-                  size={14}
-                  lineHeight={16}
-                  color={activeSection === 'All' ? '#88087B' : '#000413'}
-                  fontFamily={'Inter-SemiBold'}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setactiveSection('Saved')}
-                style={tw`w-1/2 border-b-2 items-center ${
-                  activeSection === 'Saved'
-                    ? 'border-[#88087B]'
-                    : 'border-[#000000]'
-                }`}>
-                <Textcomp
-                  text={'Saved'}
-                  size={14}
-                  lineHeight={16}
-                  color={activeSection === 'Saved' ? '#88087B' : '#000413'}
-                  fontFamily={'Inter-SemiBold'}
-                />
-              </TouchableOpacity>
-            </View>
-          )}
+          <TouchableOpacity onPress={() => setsearchModal(true)}>
+            <Image
+              source={images.search}
+              style={{height: 25, width: 25}}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View
+          style={[
+            tw`items-center justify-center`,
+            {
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginHorizontal: 20,
+            },
+          ]}>
+          <TouchableOpacity
+            onPress={() => {
+              setsearchModal(false);
+              setsearchInput('');
+              setSearchResults(_providersByCateegory);
+            }}>
+            <Image
+              source={images.X}
+              style={{height: 20, width: 20}}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+          <TextInputs
+            style={{marginTop: 0, width: '70%'}}
+            labelText={'Search for service provider'}
+            state={searchInput}
+            setState={text => {
+              setsearchInput(text);
+              debouncedHandleSearch(text);
+            }}
+          />
+          <TouchableOpacity
+            style={{
+              width: 20,
+              height: 20,
+              borderRadius: 40,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={images.search}
+              style={{height: 20, width: 20}}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {!isLoading && _providersByCateegory.length > 0 && (
+        <View style={tw`flex flex-row mt-4`}>
+          <TouchableOpacity
+            onPress={() => setactiveSection('All')}
+            style={tw`w-1/2 border-b-2 items-center ${
+              activeSection === 'All' ? 'border-[#88087B]' : 'border-[#000000]'
+            }`}>
+            <Textcomp
+              text={'All'}
+              size={14}
+              lineHeight={16}
+              color={activeSection === 'All' ? '#88087B' : '#000413'}
+              fontFamily={'Inter-SemiBold'}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setactiveSection('Saved')}
+            style={tw`w-1/2 border-b-2 items-center ${
+              activeSection === 'Saved'
+                ? 'border-[#88087B]'
+                : 'border-[#000000]'
+            }`}>
+            <Textcomp
+              text={'Saved'}
+              size={14}
+              lineHeight={16}
+              color={activeSection === 'Saved' ? '#88087B' : '#000413'}
+              fontFamily={'Inter-SemiBold'}
+            />
+          </TouchableOpacity>
+        </View>
+      )}
+      <ScrollView>
+        <View style={tw` mb-3`}>
           {!isLoading && (
             <>
               {_providersByCateegory.length < 1 && searchResults.length < 1 ? (
@@ -602,36 +612,46 @@ const _Services = ({route}: any) => {
               ) : (
                 <>
                   {activeSection === 'All' && (
-                    <FlatList
-                      data={
-                        searchResults.length > 0
-                          ? searchResults
-                          : _providersByCateegory
-                      }
-                      keyExtractor={item => item?._id}
-                      renderItem={({item, index}) => {
-                        const isSaved = savedProviders.some(
-                          d => d?.serviceProvider === item?._id,
-                        );
-                        return (
-                          <ServiceCard2
-                            key={index}
-                            navigation={navigation}
-                            item={item}
-                            index={index}
-                            id={id}
-                            serviceName={passedService}
-                            save={isSaved}
+                    <>
+                      {searchLoading && (
+                        <View style={tw`mt-2`}>
+                          <ActivityIndicator
+                            size={'small'}
+                            color={colors.parpal}
                           />
-                        );
-                      }}
-                      initialNumToRender={10} // Adjust this number based on your needs
-                      maxToRenderPerBatch={10} // Controls how many items are rendered at once
-                      updateCellsBatchingPeriod={50} // Adjust this time to optimize performance
-                      removeClippedSubviews={true} // Unmount components when outside of viewport
-                      contentContainerStyle={{paddingBottom: 20}}
-                      ListFooterComponent={() => <View style={tw`h-20`} />}
-                    />
+                        </View>
+                      )}
+                      <FlatList
+                        data={
+                          searchResults.length >= 0
+                            ? searchResults
+                            : _providersByCateegory
+                        }
+                        keyExtractor={item => item?._id}
+                        renderItem={({item, index}) => {
+                          const isSaved = savedProviders.some(
+                            d => d?.serviceProvider === item?._id,
+                          );
+                          return (
+                            <ServiceCard2
+                              key={index}
+                              navigation={navigation}
+                              item={item}
+                              index={index}
+                              id={id}
+                              serviceName={passedService}
+                              save={isSaved}
+                            />
+                          );
+                        }}
+                        initialNumToRender={10} // Adjust this number based on your needs
+                        maxToRenderPerBatch={10} // Controls how many items are rendered at once
+                        updateCellsBatchingPeriod={50} // Adjust this time to optimize performance
+                        removeClippedSubviews={true} // Unmount components when outside of viewport
+                        contentContainerStyle={{paddingBottom: 20}}
+                        ListFooterComponent={() => <View style={tw`h-20`} />}
+                      />
+                    </>
                   )}
                   {activeSection === 'Saved' &&
                     (bookMarkedProviders.length < 1 ? (

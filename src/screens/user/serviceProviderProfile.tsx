@@ -51,6 +51,7 @@ import {
 } from '../../utils/utils';
 import socket from '../../utils/socket';
 import Negotiate from '../../assets/svg/Negotiate';
+import Cross from '../../assets/svg/Cross';
 
 const ServiceProviderProfile = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -1472,27 +1473,34 @@ const ServiceProviderProfile = () => {
         deviceWidth={SIZES.width}
         onBackdropPress={() => setShowModal(false)}
         swipeThreshold={200}
-        swipeDirection={['down']}
-        onSwipeComplete={() => setShowModal(false)}
+        // swipeDirection={['down']}
+        // onSwipeComplete={() => setShowModal(false)}
         onBackButtonPress={() => setShowModal(false)}>
         <View style={tw` h-full w-full bg-black bg-opacity-5`}>
           <TouchableOpacity
             onPress={() => setShowModal(false)}
             style={tw`flex-1`}
           />
+          <TouchableOpacity
+            onPress={() => setShowModal(false)}
+            style={[styles.closeButton, tw`flex flex-row items-center`]}>
+            <Cross />
+            <Text style={{color: colors.primary, fontSize: 16}}>Close</Text>
+          </TouchableOpacity>
           <View style={[tw`mx-auto w-4/5`, styles.modalContent]}>
-            <Textcomp
-              text={`${display}`}
-              size={14}
-              lineHeight={18}
-              color={colors.black}
-              fontFamily={'Inter-Regular'}
-            />
-            <TouchableOpacity
-              onPress={() => setShowModal(false)}
-              style={styles.closeButton}>
-              <Text style={{color: colors.primary, fontSize: 16}}>Close</Text>
-            </TouchableOpacity>
+            <ScrollView
+              contentContainerStyle={tw`flex-grow `}
+              style={tw` w-full`}>
+              <Textcomp
+                text={`${display}`}
+                size={14}
+                lineHeight={18}
+                color={colors.black}
+                fontFamily={'Inter-Regular'}
+              />
+
+              <View style={tw`h-20`} />
+            </ScrollView>
           </View>
         </View>
       </Modal>
@@ -1511,10 +1519,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
+    maxHeight: SIZES.height * 0.85,
   },
   closeButton: {
     marginTop: 10,
-    alignSelf: 'center',
+    marginLeft: SIZES.width * 0.1,
+    alignSelf: 'flex-start',
   },
 });
 

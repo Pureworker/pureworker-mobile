@@ -1388,6 +1388,30 @@ export const getSearchQuery = async (param: any) => {
   }
 };
 
+export const getAllServices = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  console.log('getAllServices func started', param);
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/service/get-all-services`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response?.status === 201 || response?.status === 200) {
+      // console.log('response data:', response?.data);
+    }
+    // console.log(response?.data);
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+
 export const getSearchProvider = async (param: any) => {
   const AuthToken = await AsyncStorage.getItem('AuthToken');
   console.log(

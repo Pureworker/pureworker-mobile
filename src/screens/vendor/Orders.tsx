@@ -162,16 +162,34 @@ const Orders = () => {
               fontFamily={'Inter-SemiBold'}
             />
           </View>
-          <TouchableOpacity
-            onPress={() => {
-              setsearchModal(true);
-            }}>
-            <Image
-              source={images.search}
-              style={{height: 25, width: 25}}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
+
+          <View style={tw`flex flex-row items-center`}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('MyJobs');
+              }}
+              style={tw`bg-black px-3 py-1.5  rounded-lg mr-3`}
+              >
+              <Textcomp
+                text={'View Job Posts'}
+                size={12}
+                lineHeight={17}
+                color={'#FFFFFF'}
+                fontFamily={'Inter-SemiBold'}
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                setsearchModal(true);
+              }}>
+              <Image
+                source={images.search}
+                style={{height: 25, width: 25}}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       ) : (
         <View

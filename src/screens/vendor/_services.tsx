@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   View,
   Image,
@@ -8,6 +8,7 @@ import {
   FlatList,
   ScrollView,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -24,13 +25,14 @@ import {addprovidersByCateegory} from '../../store/reducer/mainSlice';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CustomLoading from '../../components/customLoading';
 import {ToastShort} from '../../utils/utils';
+import colors from '../../constants/colors';
 
 const _Services = ({route}: any) => {
   const navigation = useNavigation<StackNavigation>();
   const dispatch = useDispatch();
   const passedService = route.params?.service?.name;
   const id = route.params?.service?._id;
-  console.log('--kk-passed', route.params.service?.id);
+  // console.log('--kk-passed', route.params.service?.id);
 
   const _providersByCateegory = useSelector(
     (state: any) => state.user.providersByCateegory,
@@ -38,9 +40,12 @@ const _Services = ({route}: any) => {
   const [activeSection, setactiveSection] = useState('All');
   const [searchModal, setsearchModal] = useState(false);
   const [isLoading, setisLoading] = useState(false);
+  const [searchLoading, setsearchLoading] = useState(false);
   const [searchInput, setsearchInput] = useState('');
 
   const [savedProviders, setsavedProviders] = useState([]);
+
+  const [searchResults, setSearchResults] = useState(_providersByCateegory);
 
   useEffect(() => {
     const initGetUsers = async () => {
@@ -54,11 +59,38 @@ const _Services = ({route}: any) => {
       setisLoading(false);
     };
     initGetUsers();
-  }, [dispatch, id]);
+  }, []);
+
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  const handleSearch = useCallback(
+    query => {
+      setsearchLoading(true);
+      const filteredData =
+        _providersByCateegory?.filter(provider =>
+          provider.fullName.toLowerCase().includes(query.toLowerCase()),
+        ) || [];
+
+      setSearchResults(filteredData);
+      setsearchLoading(false);
+    },
+    [_providersByCateegory],
+  );
+
+  const debouncedHandleSearch = useMemo(
+    () => debounce(handleSearch, 300),
+    [handleSearch],
+  );
 
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: '#EBEBEB'}]}>
-      <ScrollView>
+  
         <View
           style={{
             marginTop:
@@ -124,7 +156,12 @@ const _Services = ({route}: any) => {
                 marginHorizontal: 20,
               },
             ]}>
-            <TouchableOpacity onPress={() => setsearchModal(false)}>
+            <TouchableOpacity
+              onPress={() => {
+                setsearchModal(false);
+                setsearchInput('');
+                setSearchResults(_providersByCateegory)
+              }}>
               <Image
                 source={images.X}
                 style={{height: 20, width: 20}}
@@ -135,7 +172,10 @@ const _Services = ({route}: any) => {
               style={{marginTop: 0, width: '70%'}}
               labelText={'Search for service provider'}
               state={searchInput}
-              setState={setsearchInput}
+              setState={text => {
+                setsearchInput(text);
+                debouncedHandleSearch(text);
+              }}
             />
             <TouchableOpacity
               style={{
@@ -153,31 +193,30 @@ const _Services = ({route}: any) => {
             </TouchableOpacity>
           </View>
         )}
-        <View style={tw`mt-4 mb-3`}>
-          <View style={tw`flex flex-row`}>
-            <TouchableOpacity
-              onPress={() => {
-                setactiveSection('All');
-              }}
-              style={tw`w-1/2 border-b-2  items-center ${
-                activeSection === 'All'
-                  ? 'border-[#88087B]'
-                  : 'border-[#000000]'
-              }`}>
-              <Textcomp
-                text={'All'}
-                size={14}
-                lineHeight={16}
-                color={activeSection === 'All' ? '#88087B' : '#000413'}
-                fontFamily={'Inter-SemiBold'}
-              />
-            </TouchableOpacity>
-          </View>
-
+        <View style={tw` mt-4 flex flex-row`}>
+          <TouchableOpacity
+            onPress={() => {
+              setactiveSection('All');
+            }}
+            style={tw`w-1/2 border-b-2  items-center ${
+              activeSection === 'All' ? 'border-[#88087B]' : 'border-[#000000]'
+            }`}>
+            <Textcomp
+              text={'All'}
+              size={14}
+              lineHeight={16}
+              color={activeSection === 'All' ? '#88087B' : '#000413'}
+              fontFamily={'Inter-SemiBold'}
+            />
+          </TouchableOpacity>
+        </View>
+        <ScrollView>
+        <View style={tw` mb-3`}>
           <>
             {!isLoading && (
               <>
-                {_providersByCateegory.length < 1 ? (
+                {_providersByCateegory.length < 1 &&
+                searchResults.length < 1 ? (
                   <View
                     style={[
                       tw`bg-[#D9D9D9] flex flex-col rounded justify-items mt-3 mx-2`,
@@ -198,10 +237,23 @@ const _Services = ({route}: any) => {
                     {activeSection === 'All' && (
                       <>
                         <View style={[tw`items-center`, {flex: 1}]}>
+                          {searchLoading && (
+                            <View style={tw`mt-2`}>
+                              <ActivityIndicator
+                                size={'small'}
+                                color={colors.parpal}
+                              />
+                            </View>
+                          )}
                           <ScrollView scrollEnabled={false} horizontal>
                             <FlatList
                               style={{flex: 1}}
-                              data={_providersByCateegory}
+                              // data={_providersByCateegory}
+                              data={
+                                searchResults.length >= 0
+                                  ? searchResults
+                                  : _providersByCateegory
+                              }
                               scrollEnabled={false}
                               horizontal={false}
                               renderItem={(item: any, index: any) => {

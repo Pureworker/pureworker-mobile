@@ -66,12 +66,13 @@ const DrawerContent = () => {
     {label: 'Referrals', route: 'Referrals', icon: images.info, notint: false},
     {
       label: 'Reward',
-      route: 'SpinToWinScreen',
-      // route: 'MyJobs',
+      route: 'PureCoinsHome',
+
       icon: images.accountinfo,
       icon2: <RewardIcon />,
       notint: false,
     },
+
   ];
   // Conditionally include 'ID Check' if user is a freelancer
 
@@ -377,14 +378,7 @@ const DrawerContent = () => {
             <TouchableOpacity
               style={[tw`rounded-full`, {width: 50, height: 50}]}
               onPress={() => {
-                // opencamerafordp4();
                 setisUploadModal(true);
-                // if (
-                //   userType.userType === BUSINESS ||
-                //   userType.userType === FREELANCER
-                // ) {
-                //   navigation.navigate('ProfileStep1');
-                // }
               }}>
               <FastImage
                 style={{

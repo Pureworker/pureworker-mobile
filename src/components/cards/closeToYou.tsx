@@ -12,7 +12,7 @@ import Modal from 'react-native-modal/dist/modal';
 import VerifiedTag from '../../assets/svg/verifiedtag';
 
 const ClosetoYou = ({item, index, navigation}: any) => {
-  // console.log('close-order', item);
+  // console.log('close-order', item?.isIdentityVerified);
   const [showModal, setshowModal] = useState(false);
   return (
     <>
@@ -67,8 +67,9 @@ const ClosetoYou = ({item, index, navigation}: any) => {
             />
           </View>
           <View style={[tw``, {marginLeft: perWidth(12)}]}>
-            <View style={[tw`flex flex-row items-center`, {width: perWidth(105)}]}>
-              {/* <VerifiedTag/> */}
+            <View
+              style={[tw`flex flex-row items-center`, {width: perWidth(105)}]}>
+              {item?.isIdentityVerified  && <VerifiedTag />}
               <Textcomp
                 text={
                   item?.businessName
@@ -197,7 +198,7 @@ const ClosetoYou = ({item, index, navigation}: any) => {
                     : item?.services?.length > 10
                     ? SIZES.height * 0.87
                     : SIZES.height * 0.42,
-                    marginBottom: -20,
+                marginBottom: -20,
               },
             ]}>
             <TouchableOpacity

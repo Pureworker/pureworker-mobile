@@ -204,6 +204,19 @@ export function formatDate3(dateString) {
   return formattedDate;
 }
 
+export function formatToCustomString(date) {
+  const jsDate = new Date(date);
+  const luxonDateTime = DateTime.fromJSDate(jsDate);
+
+  return luxonDateTime.toLocaleString({
+    weekday: 'short',
+    month: 'short',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
 // Example usage:
 const lastOnlineTimestamp = '2024-02-03T01:31:07.957Z';
 const result = timeAgo(lastOnlineTimestamp);

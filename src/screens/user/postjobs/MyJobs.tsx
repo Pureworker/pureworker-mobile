@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -13,50 +13,86 @@ import colors from '../../../constants/colors';
 import commonStyle from '../../../constants/commonStyle';
 import {useNavigation} from '@react-navigation/native';
 import CustomButton from '../../../components/Button';
-import images from '../../../constants/images';
+import {useDispatch, useSelector} from 'react-redux';
+import {deleteJob, getAlljobs} from '../../../utils/api/jobs';
+import {setallJobPosts} from '../../../store/reducer/mainSlice';
+import moment from 'moment';
+import {formatAmount2} from '../../../utils/validations';
+import {ToastLong} from '../../../utils/utils';
+import Snackbar from 'react-native-snackbar';
+import {perWidth} from '../../../utils/position/sizes';
+import Textcomp from '../../../components/Textcomp';
+import tw from 'twrnc';
 
 const MyJobs = () => {
   const navigation = useNavigation();
   const [isModalVisible, setModalVisible] = useState(false);
   const [jobToDelete, setJobToDelete] = useState(null);
-  const [jobs, setJobs] = useState([
-    {
-      id: 1,
-      title: 'Fashion Designer',
-      description:
-        'I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art ',
-      price: '50,000',
-      date: '02, May, 2024',
-      image: images.product,
-    },
-    {
-      id: 2,
-      title: 'Graphic Designer',
-      description:
-        'I create visual concepts to communicate ideasI am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art ',
-      price: '75,000',
-      date: '05, May, 2024',
-      image: null, // No image for this job, figma is optional yunk yunk!!!!!
-    },
-    // Other jobs...
-  ]);
+  // const [jobs, setJobs] = useState([
+  //   {
+  //     id: 1,
+  //     title: 'Fashion Designer',
+  //     description:
+  //       'I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art ',
+  //     price: '50,000',
+  //     date: '02, May, 2024',
+  //     image: images.product,
+  //   },
+  //   {
+  //     id: 2,
+  //     title: 'Graphic Designer',
+  //     description:
+  //       'I create visual concepts to communicate ideasI am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art I am a fashion designer with a creative visionary who transforms ideas into wearable art ',
+  //     price: '75,000',
+  //     date: '05, May, 2024',
+  //     image: null, // No image for this job, figma is optional yunk yunk!!!!!
+  //   },
+  //   // Other jobs...
+  // ]);
 
-  // Sort jobs by date in ascending order
-  const sortedJobs = jobs.sort((a, b) => new Date(a.date) - new Date(b.date));
+  const [isLoading, setisLoading] = useState(false);
+  const dispatch = useDispatch();
 
-  const groupedJobs = sortedJobs.reduce((groups, job) => {
-    const date = job.date;
-    if (!groups[date]) {
-      groups[date] = [];
+  const allJobPosts = useSelector((state: any) => state.user.allJobPosts);
+  const initGetJoobs = async () => {
+    setisLoading(true);
+    const res: any = await getAlljobs('');
+    console.log('jobs', res?.data);
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(setallJobPosts(res?.data?.data));
     }
-    groups[date].push(job);
-    return groups;
-  }, {});
+    setisLoading(false);
+  };
+  useEffect(() => {
+    initGetJoobs();
+  }, []);
 
-  const sections = Object.keys(groupedJobs).map(date => ({
-    title: date,
-    data: groupedJobs[date],
-  }));
+  // Function to group jobs by date
+  const groupJobsByDate = (jobs: any[]) => {
+    const groupedJobs: any[] = [];
+
+    jobs.forEach(job => {
+      const formattedDate = moment(job.createdAt).format('DD, MMM, YYYY'); // Using moment for formatting
+
+      // Check if the date already exists in groupedJobs
+      const dateSection = groupedJobs.find(
+        section => section.title === formattedDate,
+      );
+
+      if (dateSection) {
+        dateSection.data.push(job); // Add job to the existing date section
+      } else {
+        groupedJobs.push({
+          title: formattedDate,
+          data: [job], // Create a new section for this date
+        });
+      }
+    });
+
+    return groupedJobs;
+  };
+
+  const sections = groupJobsByDate(allJobPosts); // Group jobs by date
 
   const handleDeleteJob = jobId => {
     setJobToDelete(jobId); // Set the job to be deleted
@@ -64,35 +100,82 @@ const MyJobs = () => {
   };
 
   const confirmDeleteJob = () => {
-    setJobs(jobs.filter(job => job.id !== jobToDelete));
-    setModalVisible(false); // Hide the modal
-    setJobToDelete(null); // Reset the job to delete
+    // setJobs(jobs.filter(job => job.id !== jobToDelete));
+    _deleteJobs(jobToDelete);
   };
 
-  const renderItem = ({item}: any) => (
-    <View style={styles.jobCard}>
-      <View style={styles.jobCardHeader}>
-        <Text style={styles.jobTitle}>{item.title}</Text>
-        <TouchableOpacity onPress={() => handleDeleteJob(item.id)}>
-          <MaterialCommunityIcons name="close" size={24} color={colors.white} />
-        </TouchableOpacity>
+  const _deleteJobs = async (param: any) => {
+    console.log(param);
+    try {
+      const res: any = await deleteJob(param);
+      console.log('delete result:', res?.data);
+      if (res?.status === 200 || res?.status === 201 || res?.status === 204) {
+        ToastLong('Job deleted successfully');
+      } else {
+        Snackbar.show({
+          text: res?.error?.message
+            ? res?.error?.message
+            : res?.error?.data?.message
+            ? res?.error?.data?.message
+            : 'Oops!, an error occured',
+          duration: Snackbar.LENGTH_LONG,
+          textColor: '#fff',
+          backgroundColor: '#88087B',
+        });
+      }
+    } catch (error) {
+      Snackbar.show({
+        text: res?.error?.message
+          ? res?.error?.message
+          : res?.error?.data?.message
+          ? res?.error?.data?.message
+          : 'Oops!, an error occured',
+        duration: Snackbar.LENGTH_LONG,
+        textColor: '#fff',
+        backgroundColor: '#88087B',
+      });
+    } finally {
+      initGetJoobs();
+      setModalVisible(false); // Hide the modal
+      setJobToDelete(null); // Reset the job to delete
+      setisLoading(false);
+    }
+  };
+
+  const renderItem = ({item}: any) => {
+    return (
+      <View style={styles.jobCard}>
+        <View style={styles.jobCardHeader}>
+          <View style={{width: '85%'}}>
+            <Text style={styles.jobTitle}>{item?.service?.name}</Text>
+          </View>
+
+          <TouchableOpacity
+            onPress={() => handleDeleteJob(item._id ?? item?.id)}>
+            <MaterialCommunityIcons
+              name="close"
+              size={24}
+              color={colors.white}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text numberOfLines={3} style={styles.jobDescription}>
+          {item.description.length > 50
+            ? item.description.substring(0, 50) + '...'
+            : item.description}
+        </Text>
+        <View style={styles.jobFooter}>
+          <Text style={styles.jobPrice}>₦{formatAmount2(item?.minPrice)}</Text>
+          <TouchableOpacity
+            style={styles.viewButton}
+            onPress={() => handleViewJob(item)} // Pass the entire job object
+          >
+            <Text style={styles.viewButtonText}>View</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <Text style={styles.jobDescription}>
-        {item.description.length > 50
-          ? item.description.substring(0, 50) + '...'
-          : item.description}
-      </Text>
-      <View style={styles.jobFooter}>
-        <Text style={styles.jobPrice}>₦{item.price}</Text>
-        <TouchableOpacity
-          style={styles.viewButton}
-          onPress={() => handleViewJob(item)} // Pass the entire job object
-        >
-          <Text style={styles.viewButtonText}>View</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+    );
+  };
 
   const renderSectionHeader = ({section: {title}}: any) => (
     <Text style={styles.dateHeader}>{title}</Text>
@@ -101,6 +184,7 @@ const MyJobs = () => {
   const handleViewJob = (job: any) => {
     navigation.navigate('ProductDisplay', {job});
   };
+  const userType = useSelector((state: any) => state.user.isLoggedIn);
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -110,18 +194,39 @@ const MyJobs = () => {
             name="arrow-left"
             size={30}
             color={colors.black}
-            onPress={() => navigation.goBack()}
+            onPress={() => navigation.navigate('Orders')}
           />
           <Text style={styles.title}>Jobs Posted</Text>
         </View>
         <Text style={styles.subTitle}>
-          Delete the job post once you hire a service provider
+          {userType.userType === 'CUSTOMER'
+            ? 'Delete the job post once you hire a service provider'
+            : 'Do not take on jobs you can’t do.'}
         </Text>
+
+        {allJobPosts?.length < 1 && (
+          <View
+            style={[
+              tw` h-7/10  items-center justify-center`,
+              {marginLeft: perWidth(0)},
+            ]}>
+            <Textcomp
+              text={'There are no Job Posts.'}
+              size={18}
+              lineHeight={18}
+              color={'#88087B'}
+              fontFamily={'Inter-SemiBold'}
+            />
+          </View>
+        )}
         <SectionList
           sections={sections}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={item => item._id}
           renderItem={renderItem}
           renderSectionHeader={renderSectionHeader}
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={() => <View style={tw`h-20`} />}
+          contentContainerStyle={{paddingBottom: 20}}
         />
 
         {/* Confirmation Modal */}
@@ -179,7 +284,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontFamily: commonStyle.fontFamily.bold,
-    color: '#000',
+    color: '#000000',
     width: '90%',
     textAlign: 'center',
   },
@@ -197,9 +302,10 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   jobCard: {
-    backgroundColor: colors.darkGrey,
+    backgroundColor: '#2D303C',
     borderRadius: 10,
     padding: 20,
+    paddingTop: 10,
     marginBottom: 10,
   },
   jobCardHeader: {
@@ -208,12 +314,14 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   jobTitle: {
-    fontSize: 16,
-    fontFamily: commonStyle.fontFamily.semibold,
+    fontSize: 13,
+    lineHeight: 18,
+    fontFamily: commonStyle.fontFamily.bold,
     color: colors.white,
   },
   jobDescription: {
-    fontSize: 14,
+    fontSize: 12,
+    lineHeight: 18,
     fontFamily: commonStyle.fontFamily.regular,
     color: colors.white,
     marginBottom: 10,
@@ -265,10 +373,11 @@ const styles = StyleSheet.create({
   },
   modalButton: {
     width: '40%',
-    borderRadius: 5,
+    height: 40,
+    borderRadius: 10,
   },
   cancelButton: {
-    backgroundColor: colors.darkGrey,
+    backgroundColor: colors.darkPurple,
   },
   deleteButton: {
     borderWidth: 1,

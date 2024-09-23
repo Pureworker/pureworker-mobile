@@ -60,6 +60,14 @@ const initialState = {
   //provider-profileID
   provider_id: null,
 
+  //purecoins
+  purecoins: null,
+  purecoinsHistory: [],
+
+  allJobPosts: [],
+  allservices: [],
+  viewJobPost: null,
+
   formStage: 1,
   referralDetails: null,
   language: null,
@@ -183,6 +191,9 @@ export const mainSlice = createSlice({
     },
     addPopularServices: (state, action) => {
       state.popularServices = action.payload;
+    },
+    setallServices: (state, action) => {
+      state.allservices = action.payload;
     },
     addProfileData: (state, action) => {
       state.profileData = action.payload;
@@ -318,6 +329,20 @@ export const mainSlice = createSlice({
     setidCheckModal: (state, action) => {
       state.idcheckModal = action.payload;
     },
+
+    //pureworker coins
+    setPurecoins: (state, action) => {
+      state.purecoins = action.payload;
+    },
+    setPurecoinsHistory: (state, action) => {
+      state.purecoinsHistory = action.payload;
+    },
+    setallJobPosts: (state, action) => {
+      state.allJobPosts = action.payload;
+    },
+    setviewJobPost: (state, action) => {
+      state.viewJobPost = action.payload;
+    },
   },
 });
 
@@ -370,6 +395,11 @@ export const {
   addIntermediateOrder,
   addchatPageUser,
   setidCheckModal,
+  setPurecoins,
+  setPurecoinsHistory,
+  setallJobPosts,
+  setallServices,
+  setviewJobPost
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);

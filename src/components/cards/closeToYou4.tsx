@@ -10,6 +10,7 @@ import FastImage from 'react-native-fast-image';
 import {metersToKilometers} from '../../utils/utils';
 import {useDispatch} from 'react-redux';
 import Modal from 'react-native-modal/dist/modal';
+import VerifiedTag from '../../assets/svg/verifiedtag';
 
 const CloseToYouCard4 = ({item, index, navigation}: any) => {
   const [showModal, setshowModal] = useState(false);
@@ -63,7 +64,8 @@ const CloseToYouCard4 = ({item, index, navigation}: any) => {
           </View>
           <View style={[tw`flex-1`, {marginLeft: perWidth(12)}]}>
             <View style={[tw`flex flex-row justify-between`, {}]}>
-              <View style={[tw``, {}]}>
+              <View style={[tw`flex flex-row items-center`, {}]}>
+                {item?.isIdentityVerified && <VerifiedTag />}
                 <Textcomp
                   //   text={`${item?.services?.[0]?.name}`}
                   text={

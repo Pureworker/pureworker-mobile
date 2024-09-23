@@ -325,24 +325,40 @@ const Home = () => {
                 />
               }
             /> */}
-          <TouchableOpacity
-            onPress={() => {
-              setInfoModal(true);
-            }}
-            style={{
-              backgroundColor: '#000',
-              width: 40,
-              height: 40,
-              borderRadius: 40,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Image
-              source={images.question}
-              style={{height: 20, width: 20}}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
+
+          <View style={tw`flex flex-row items-center`}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('PostJob');
+              }}
+              style={tw`bg-black px-3 py-1.5  rounded-lg mr-3`}>
+              <Textcomp
+                text={'Post a Job'}
+                size={12}
+                lineHeight={17}
+                color={'#FFFFFF'}
+                fontFamily={'Inter-SemiBold'}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setInfoModal(true);
+              }}
+              style={{
+                backgroundColor: '#000',
+                width: 40,
+                height: 40,
+                borderRadius: 40,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Image
+                source={images.question}
+                style={{height: 20, width: 20}}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          </View>
         </View>
         <View
           style={[tw``, {marginLeft: perWidth(18), marginTop: perHeight(28)}]}>

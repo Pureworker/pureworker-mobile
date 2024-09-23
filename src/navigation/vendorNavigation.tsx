@@ -35,6 +35,13 @@ import IdVerification from '../screens/common/IdVerification';
 import PhotoUploadScreen from '../screens/common/Picture';
 import Processing from '../screens/common/Processing';
 
+import SpinToWinScreen from '../screens/user/pureworkercoins/SpinToWinScreen';
+import PureCoinsHome from '../screens/user/pureworkercoins/PureCoinsHome';
+import Rules from '../screens/user/pureworkercoins/Rules';
+import PureCoinsHistory from '../screens/user/pureworkercoins/history';
+import MyJobs from '../screens/user/postjobs/MyJobs';
+import ProductDisplay from '../screens/user/postjobs/ProductDisplay';
+
 const Stack = createNativeStackNavigator();
 
 export default function VendorNavigation() {
@@ -174,7 +181,7 @@ export default function VendorNavigation() {
         component={CreatePinSuccess}
         options={{headerShown: false, animation: 'none'}}
       />
-            <Stack.Screen
+      <Stack.Screen
         name="IdVerification"
         component={IdVerification}
         options={{headerShown: false, animation: 'none'}}
@@ -184,9 +191,41 @@ export default function VendorNavigation() {
         component={PhotoUploadScreen}
         options={{headerShown: false, animation: 'none'}}
       />
-            <Stack.Screen
+      <Stack.Screen
         name="IdProcessing"
         component={Processing}
+        options={{headerShown: false, animation: 'none'}}
+      />
+
+      <Stack.Screen
+        name="SpinToWinScreen"
+        component={SpinToWinScreen}
+        options={{headerShown: false, animation: 'none'}}
+      />
+      <Stack.Screen
+        name="PureCoinsHome"
+        component={PureCoinsHome}
+        options={{headerShown: false, animation: 'none'}}
+      />
+      <Stack.Screen
+        name="Rules"
+        component={Rules}
+        options={{headerShown: false, animation: 'none'}}
+      />
+      <Stack.Screen
+        name="PureCoinsHistory"
+        component={PureCoinsHistory}
+        options={{headerShown: false, animation: 'none'}}
+      />
+
+      <Stack.Screen
+        name="MyJobs"
+        component={MyJobs}
+        options={{headerShown: false, animation: 'none'}}
+      />
+      <Stack.Screen
+        name="ProductDisplay"
+        component={ProductDisplay}
         options={{headerShown: false, animation: 'none'}}
       />
     </Stack.Navigator>

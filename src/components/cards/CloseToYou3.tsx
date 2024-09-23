@@ -6,9 +6,10 @@ import tw from 'twrnc';
 import Textcomp from '../Textcomp';
 import colors from '../../constants/colors';
 import FastImage from 'react-native-fast-image';
+import VerifiedTag from '../../assets/svg/verifiedtag';
 
 const ClosetoYou3 = ({item, index, navigation}: any) => {
-  console.log('pendingOItem--', item);
+  // console.log('pendingOItem--', item);
   function formatDate(dateString: string | number | Date) {
     const options = {year: 'numeric', month: 'short', day: 'numeric'};
     const date = new Date(dateString);
@@ -69,7 +70,8 @@ const ClosetoYou3 = ({item, index, navigation}: any) => {
           />
         </View>
         <View style={[tw``, {marginLeft: perWidth(12)}]}>
-          <View style={[tw``, {}]}>
+          <View style={[tw`flex flex-row items-center`, {}]}>
+            {(item?.isIdentityVerified || item?.user?.isIdentityVerified) && <VerifiedTag />}
             <Textcomp
               text={
                 item?.user?.businessName

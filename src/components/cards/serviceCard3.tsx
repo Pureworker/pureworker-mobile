@@ -15,6 +15,7 @@ import {
 import {ToastShort} from '../../utils/utils';
 import {useDispatch} from 'react-redux';
 import {addUserData} from '../../store/reducer/mainSlice';
+import VerifiedTag from '../../assets/svg/verifiedtag';
 
 const ServiceCard3 = ({
   item,
@@ -137,28 +138,30 @@ const ServiceCard3 = ({
       <View style={tw`flex flex-row `}>
         <View style={[tw``, {width: perWidth(50), height: perWidth(50)}]}>
           {/*  */}
-            <>
-              <FastImage
-                style={{
-                  width: perWidth(50),
-                  height: perWidth(50),
-                  borderRadius: perWidth(50) / 2,
-                }}
-                source={{
-                  uri: item?.profilePic || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                  headers: {Authorization: 'someAuthToken'},
-                  priority: FastImage.priority.high,
-                  // cache: FastImage.cacheControl.cacheOnly
-                }}
-                resizeMode={FastImage.resizeMode.cover}
-              />
-              <View
-                style={[
-                  tw`absolute bottom-0 border-2 right-1 rounded-full`,
-                  {width: 8, height: 8, backgroundColor: colors.green},
-                ]}
-              />
-            </>
+          <>
+            <FastImage
+              style={{
+                width: perWidth(50),
+                height: perWidth(50),
+                borderRadius: perWidth(50) / 2,
+              }}
+              source={{
+                uri:
+                  item?.profilePic ||
+                  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+                headers: {Authorization: 'someAuthToken'},
+                priority: FastImage.priority.high,
+                // cache: FastImage.cacheControl.cacheOnly
+              }}
+              resizeMode={FastImage.resizeMode.cover}
+            />
+            <View
+              style={[
+                tw`absolute bottom-0 border-2 right-1 rounded-full`,
+                {width: 8, height: 8, backgroundColor: colors.green},
+              ]}
+            />
+          </>
         </View>
         <View style={[tw`flex-1`, {marginLeft: perWidth(12)}]}>
           <View style={[tw`flex flex-row justify-between`, {}]}>
@@ -211,7 +214,12 @@ const ServiceCard3 = ({
         </View>
       </View>
       <View>
-        <View style={[tw``, {width: perWidth(105), marginTop: perWidth(4)}]}>
+        <View
+          style={[
+            tw`flex flex-row items-center`,
+            {width: perWidth(105), marginTop: perWidth(4)},
+          ]}>
+          {item?.isIdentityVerified && <VerifiedTag />}
           <Textcomp
             text={
               item?.businessName

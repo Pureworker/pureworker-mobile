@@ -14,7 +14,7 @@ import colors from '../../../constants/colors';
 import commonStyle from '../../../constants/commonStyle';
 import CustomButton from '../../../components/Button';
 import images from '../../../constants/images';
-import {SIZES} from '../../../utils/position/sizes';
+import {perWidth, SIZES} from '../../../utils/position/sizes';
 import tw from 'twrnc';
 
 import Modal from 'react-native-modal';
@@ -24,14 +24,14 @@ const wheelSize = width * 0.9;
 const centerX = 50;
 const centerY = 50;
 
-const SpinningWheel: React.FC = () => {
+const SpinningWheel: React.FC = ({func}: any) => {
   const rotateValue = useRef(new Animated.Value(0)).current;
   const [selectedItem, setSelectedItem] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const sections = Array.from({length: 10}); // 10 sections
   const labels = [
-    'Daily Coins',
+    '10 Coins',
     ...sections.slice(1).map((_, i) => `${i + 1} Coin${i + 1 > 1 ? 's' : ''}`),
   ];
 
@@ -53,10 +53,13 @@ const SpinningWheel: React.FC = () => {
         duration: 100,
         useNativeDriver: true,
       }),
-    ]).start(() => {
+    ]).start(async () => {
       // Trigger modal display after wheel finishes spinning
+      await func(labels[randomSection]);
       setSelectedItem(labels[randomSection]);
-      setIsModalVisible(true);
+      // setIsModalVisible(true);
+
+      // console.log(labels[randomSection]);
     });
   };
 
@@ -204,10 +207,11 @@ const styles = StyleSheet.create({
     marginVertical: 40,
   },
   spinButton: {
-    backgroundColor: colors.black,
+    backgroundColor: '#2D303C',
     paddingHorizontal: 20,
     paddingVertical: 15,
     borderRadius: 8,
+    width: perWidth(183),
   },
   spinButtonText: {
     color: colors.white,
@@ -247,7 +251,7 @@ const styles = StyleSheet.create({
   },
 
   modalButton: {
-    backgroundColor: colors.black,
+    backgroundColor: '#2D303C',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,

@@ -29,6 +29,10 @@ import CreatePinSuccess from '../screens/user/createPin/success';
 import SpinToWinScreen from '../screens/user/pureworkercoins/SpinToWinScreen';
 import ProductDisplay from '../screens/user/postjobs/ProductDisplay';
 import MyJobs from '../screens/user/postjobs/MyJobs';
+import PureCoinsHome from '../screens/user/pureworkercoins/PureCoinsHome';
+import Rules from '../screens/user/pureworkercoins/Rules';
+import PureCoinsHistory from '../screens/user/pureworkercoins/history';
+import PostJob from '../screens/user/postjobs/PostJob';
 // import HelloWorldView from '../tracking/TrackView';
 
 const Stack = createNativeStackNavigator();
@@ -162,23 +166,44 @@ export default function CustomerNavigation() {
         component={FaceDetection}
         options={{headerShown: false, animation: 'none'}}
       />
-
       <Stack.Screen
         name="SpinToWinScreen"
         component={SpinToWinScreen}
         options={{headerShown: false, animation: 'none'}}
       />
-
+      <Stack.Screen
+        name="PureCoinsHome"
+        component={PureCoinsHome}
+        options={{headerShown: false, animation: 'none'}}
+      />
+      <Stack.Screen
+        name="Rules"
+        component={Rules}
+        options={{headerShown: false, animation: 'none'}}
+      />
+      <Stack.Screen
+        name="PureCoinsHistory"
+        component={PureCoinsHistory}
+        options={{headerShown: false, animation: 'none'}}
+      />
       <Stack.Screen
         name="ProductDisplay"
         component={ProductDisplay}
         options={{headerShown: false, animation: 'none'}}
       />
+
       <Stack.Screen
+        name="PostJob"
+        component={PostJob}
+        options={{headerShown: false, animation: 'none'}}
+      />
+            <Stack.Screen
         name="MyJobs"
         component={MyJobs}
         options={{headerShown: false, animation: 'none'}}
       />
+
+
 
       {/* <Stack.Screen
         name="Tracking"

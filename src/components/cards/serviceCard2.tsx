@@ -19,6 +19,7 @@ import {
   addUserData,
   setbookMarkedProviders,
 } from '../../store/reducer/mainSlice';
+import VerifiedTag from '../../assets/svg/verifiedtag';
 
 interface Data {
   item: any;
@@ -101,11 +102,11 @@ const ServiceCard2: React.FC<Data> = React.memo(
       if (res?.status === 201 || res?.status === 200) {
         dispatch(setbookMarkedProviders(res?.data?.data));
       }
-    }, [id, dispatch]);
+    }, []);
 
     useEffect(() => {
-      initBookmarked();
-    }, [initBookmarked]);
+      // initBookmarked();
+    }, []);
 
     useEffect(() => {
       if (noBookmark) {
@@ -184,7 +185,12 @@ const ServiceCard2: React.FC<Data> = React.memo(
             />
           </View>
         </View>
-        <View style={{width: perWidth(105), marginTop: perWidth(4)}}>
+        <View
+          style={[
+            tw`flex flex-row items-center`,
+            {width: perWidth(105), marginTop: perWidth(4)},
+          ]}>
+          {item?.isIdentityVerified && <VerifiedTag />}
           <Textcomp
             text={item?.businessName || `${item?.firstName} ${item?.lastName}`}
             size={12}
