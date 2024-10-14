@@ -23,7 +23,6 @@ import {
   addprovider_id,
   removeCategory,
 } from '../../../store/reducer/mainSlice';
-// import {generalStyles} from '../../constants/generalStyles';
 import ProfileStepWrapper from '../../../components/ProfileStepWrapper';
 import TextInputs from '../../../components/TextInputs';
 import tw from 'twrnc';

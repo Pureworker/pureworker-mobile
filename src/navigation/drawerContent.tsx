@@ -64,14 +64,14 @@ const DrawerContent = () => {
       notint: true,
     },
     {label: 'Referrals', route: 'Referrals', icon: images.info, notint: false},
-    {
-      label: 'Reward',
-      route: 'PureCoinsHome',
+    // {
+    //   label: 'Reward',
+    //   route: 'PureCoinsHome',
 
-      icon: images.accountinfo,
-      icon2: <RewardIcon />,
-      notint: false,
-    },
+    //   icon: images.accountinfo,
+    //   icon2: <RewardIcon />,
+    //   notint: false,
+    // },
 
   ];
   // Conditionally include 'ID Check' if user is a freelancer
@@ -267,7 +267,8 @@ const DrawerContent = () => {
           const data = await uploadImgorDoc(resp?.assets[0]);
           console.warn('processed pic', data);
           dispatch(addcompleteProfile({profilePic: data}));
-          const res: any = await completeProfile({profilePic: data});
+          // const res: any = await completeProfile({profilePic: data});
+          const res = await updateUserData({profilePic: data});
         }
         setloading(false);
       });

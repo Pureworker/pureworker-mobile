@@ -26,6 +26,7 @@ import {SIZES} from '../../../utils/position/sizes';
 import {
   completeProfile,
   getProviderNew,
+  updateUserData,
   uploadAssetsDOCorIMG,
 } from '../../../utils/api/func';
 import {launchCamera} from 'react-native-image-picker';
@@ -131,7 +132,7 @@ const ProfileStep211 = () => {
         const data = await uploadImgorDoc(resp?.assets[0]);
         console.warn('processed pic', data);
         dispatch(addcompleteProfile({profilePic: data}));
-        const res: any = await completeProfile({profilePic: data});
+        const res: any = await updateUserData({profilePic: data});
       }
     });
   };
@@ -153,7 +154,7 @@ const ProfileStep211 = () => {
                 const data = await uploadImgorDoc(resp?.assets[0]);
                 console.warn('processed pic', data);
                 dispatch(addcompleteProfile({profilePic: data}));
-                const res: any = await completeProfile({profilePic: data});
+                const res: any = await updateUserData({profilePic: data});
               }
             });
           } else {
@@ -167,7 +168,7 @@ const ProfileStep211 = () => {
                   const data = await uploadImgorDoc(resp?.assets[0]);
                   console.warn('processed pic', data);
                   dispatch(addcompleteProfile({profilePic: data}));
-                  const res: any = await completeProfile({profilePic: data});
+                  const res: any = await updateUserData({profilePic: data});
                 }
               });
             } else {
@@ -197,7 +198,7 @@ const ProfileStep211 = () => {
               const data = await uploadImgorDoc(resp?.assets[0]);
               console.warn('processed pic', data);
               dispatch(addcompleteProfile({profilePic: data}));
-              const res: any = await completeProfile({profilePic: data});
+              const res: any = await updateUserData({profilePic: data});
             }
           });
         } else {
@@ -532,7 +533,7 @@ const ProfileStep211 = () => {
             )}
           </View>
         </View>
-        <View style={{height: 100}}/>
+        <View style={{height: 100}} />
       </ScrollView>
       <Modal
         isVisible={addModal}
@@ -665,9 +666,7 @@ const ProfileStep211 = () => {
                 images: [],
               }}
               portfolioData={profileData?.portfolios}
-              handlePortfolioItemChange={(i: any, data: any) =>
-                {}
-              }
+              handlePortfolioItemChange={(i: any, data: any) => {}}
               close={() => {
                 seteditModal(false);
                 //

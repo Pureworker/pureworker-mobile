@@ -64,7 +64,7 @@ const Home = () => {
         <Button
           text={'Log Out'}
           style={{marginBottom: 20}}
-          onClick={() => dispatch(logout())}
+          onClick={() => {}}
         />
 
         <Button

@@ -17,13 +17,14 @@ export default function WalletModal({
   const [isLoading, setisLoading] = useState(false);
   const initPhoneOtp = async () => {
     setisLoading(true);
-
     const res: any = await triggerPhoneVerification('');
     console.log('tttttt', res);
     if (res?.status === 201 || res?.status === 200) {
       // dispatch(addUserData(res?.data?.user));
+
       navigation.navigate('CreatePin');
       onClose();
+      ToastShort('Otp sent!.');
     }
     if (res?.status === 400) {
       console.log(res?.error);

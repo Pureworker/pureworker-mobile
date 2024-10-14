@@ -28,10 +28,16 @@ import {
   completeProfile,
   getProfile,
   getProviderNew,
+  getUser,
+  updateUserData,
   uploadAssetsDOCorIMG,
 } from '../../utils/api/func';
-import {launchCamera} from 'react-native-image-picker';
-import {addProfileData, addformStage} from '../../store/reducer/mainSlice';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {
+  addProfileData,
+  addUserData,
+  addformStage,
+} from '../../store/reducer/mainSlice';
 import {ToastShort} from '../../utils/utils';
 import Modal from 'react-native-modal/dist/modal';
 import Textcomp from '../../components/Textcomp';
@@ -239,7 +245,8 @@ const ProfileStep21 = () => {
                   const data = await uploadImgorDoc(resp?.assets[0]);
                   console.warn('processed pic', data);
                   dispatch(addcompleteProfile({profilePic: data}));
-                  const res: any = await completeProfile({profilePic: data});
+                  // const res: any = await completeProfile({profilePic: data});
+                  const res = await updateUserData({profilePic: data});
                   setisLoading(false);
                   // await uploadImgorDoc(resp?.assets[0]);
                 }
@@ -258,7 +265,8 @@ const ProfileStep21 = () => {
                     const data = await uploadImgorDoc(resp?.assets[0]);
                     console.warn('processed pic', data);
                     dispatch(addcompleteProfile({profilePic: data}));
-                    const res: any = await completeProfile({profilePic: data});
+                    // const res: any = await completeProfile({profilePic: data});
+                    const res = await updateUserData({profilePic: data});
                     setisLoading(false);
                   }
                 });
@@ -297,7 +305,8 @@ const ProfileStep21 = () => {
               const data = await uploadImgorDoc(resp?.assets[0]);
               console.warn('processed pic', data);
               dispatch(addcompleteProfile({profilePic: data}));
-              const res: any = await completeProfile({profilePic: data});
+              // const res: any = await completeProfile({profilePic: data});
+              const res = await updateUserData({profilePic: data});
             }
           });
         } else {
@@ -330,6 +339,51 @@ const ProfileStep21 = () => {
   };
   const [editModal, seteditModal] = useState(false);
   const profileData = useSelector((state: any) => state.user.profileData);
+
+  const _openLibraryfordp = () => {
+    launchImageLibrary(options, async (response: unknown) => {
+      try {
+        if (response?.assets?.length > 0) {
+          const {fileSize, uri} = response.assets[0];
+          const fileSizeInMB = fileSize / (1024 * 1024); // Convert to megabytes
+          // if (fileSizeInMB > 1) {
+          //   ToastShort(
+          //     'Image size exceeds 1MB. Please choose a smaller image.',
+          //   );
+          //   return;
+          // }
+          console.log('Selected image:', response.assets[0]);
+          setImageUrl(uri);
+
+          const data = await uploadImgorDoc(response.assets[0]);
+          console.log('Uploaded image data:', data);
+
+          // dispatch(addcompleteProfile({profilePic: data}));
+          const res = await updateUserData({profilePic: data});
+
+          // const result = await completeProfile({profilePic: data, action: 'add'});
+          const result = await updateUserData({profilePic: data});
+          console.log('Profile update result:', result?.data);
+        } else {
+          console.warn('No image selected');
+          ToastShort('No image selected. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error processing image:', error);
+        ToastShort(
+          'An error occurred while processing the image. Please try again.',
+        );
+      } finally {
+        const initGetUsers = async () => {
+          const res: any = await getUser('');
+          if (res?.status === 201 || res?.status === 200) {
+            dispatch(addUserData(res?.data?.user));
+          }
+        };
+        initGetUsers();
+      }
+    });
+  };
 
   return (
     <SafeAreaView style={[{flex: 1, backgroundColor: colors.greyLight}]}>

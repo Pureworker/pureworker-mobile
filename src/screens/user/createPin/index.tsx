@@ -22,10 +22,11 @@ import Button from '../../../components/Button';
 import colors from '../../../constants/colors';
 import Textcomp from '../../../components/Textcomp';
 import images from '../../../constants/images';
-import {verifyLogin} from '../../../utils/api/auth';
-import {getUser, verifyPhoneNumber} from '../../../utils/api/func';
+import {resendOtp, verifyLogin} from '../../../utils/api/auth';
+import {getUser, triggerPhoneVerification, verifyPhoneNumber} from '../../../utils/api/func';
 import {addUserData} from '../../../store/reducer/mainSlice';
 import socket from '../../../utils/socket';
+import { ToastShort } from '../../../utils/utils';
 type Route = {
   key: string;
   name: string;
@@ -41,7 +42,7 @@ const CreatePin = ({navigation}: any) => {
   const [seconds, setSeconds] = useState(30);
   const [isLoading, setisLoading] = useState(false);
   const [resendPressed, setResendPressed] = useState(false);
-  const resendOTP = async () => {
+  const _resendOTP = async () => {
     setLoading(true);
     const param = {
       email: route.params?.email?.toLowerCase(),
@@ -49,10 +50,11 @@ const CreatePin = ({navigation}: any) => {
     };
     try {
       console.log('Before resendOTP API call');
-      const res = await resendOtp(param);
+      // const res = await triggerPhoneVerification(param);
+      const res: any = await triggerPhoneVerification('');
       console.log('After resendOTP API call', res);
       if ([200, 201].includes(res?.status)) {
-        ToastShort('OTP has been sent to your email');
+        ToastShort('OTP has been sent to your Phone Number.');
       } else {
         Toast.show({
           type: 'error',
@@ -222,7 +224,7 @@ const CreatePin = ({navigation}: any) => {
               <TouchableOpacity
                 style={{}}
                 onPress={() => {
-                  resendOTP();
+                  _resendOTP();
                 }}>
                 <Text style={{color: colors.primary}}>Resend</Text>
               </TouchableOpacity>
