@@ -615,7 +615,7 @@ const PostJob = ({submitJobDetails}: any) => {
             <View style={tw`flex-1`}>
               <View style={tw`pt-3`}>
                 <Textcomp
-                  text={'!!! NEXT STEPS !!!'}
+                  text={'NEXT STEPS'}
                   size={16}
                   lineHeight={18.5}
                   color={'black'}
@@ -693,7 +693,7 @@ const PostJob = ({submitJobDetails}: any) => {
               </View>
 
               <View style={tw`mt-auto`}>
-                <View style={tw`flex flex-row items-center mb-4 ml-4`}>
+                <View style={tw`flex flex-row items-center mb-4 ml-4 my-2`}>
                   <CheckBox
                     style={{width: 30, padding: 10}}
                     onClick={() => {
@@ -714,8 +714,9 @@ const PostJob = ({submitJobDetails}: any) => {
                 </View>
               </View>
 
+
               <TouchableOpacity
-                style={tw`bg-[${colors.darkPurple}] border-[${colors.primary}] border w-[85%] py-4 mb-4 items-center  mx-auto rounded-lg`}
+                style={tw`bg-[${colors.darkPurple}] border-[${colors.primary}] border w-[85%] py-4 my-2 items-center  mx-auto rounded-lg`}
                 onPress={() => {
                   if (toggleCheckBox) {
                     HandleCreate();

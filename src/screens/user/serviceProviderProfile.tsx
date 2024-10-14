@@ -110,11 +110,13 @@ const ServiceProviderProfile = () => {
     const initProvider = async () => {
       setisLoading(true);
       setprofileLoading(true);
-      const providerId = profileData?.portfolio?.provider ?? profileData?._id;
+      const providerId = profileData?.portfolio?.provider ?? profileData?.serviceProvider._id ?? profileData?._id;
       const serviceId =
-        profileData?.portfolio?.service || profileData?.services?.[0]?._id;
+        profileData?.portfolio?.service || profileData?.services?.[0]?._id ||  profileData?.service._id;
 
       if (!providerId || !serviceId) {
+        console.log('providerId', providerId);
+        console.log('serviceId', serviceId);
         ToastShort('Invalid Provider Id');
         setisLoading(false);
         return;
@@ -409,7 +411,7 @@ const ServiceProviderProfile = () => {
               text={
                 profileData?.businessName
                   ? `${profileData?.businessName}`
-                  : `${profileData?.firstName} ${profileData?.lastName}`
+                  : `${profileData?.firstName || profileData.serviceProvider.firstName} ${profileData?.lastName || profileData.serviceProvider.lastName}`
               }
               size={20}
               lineHeight={24}

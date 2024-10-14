@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   View,
   Image,
@@ -11,42 +11,51 @@ import {
   RefreshControl,
   Text,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../../components/Textcomp';
-import {SIZES, perHeight, perWidth} from '../../utils/position/sizes';
+import { SIZES, perHeight, perWidth } from '../../utils/position/sizes';
 import colors from '../../constants/colors';
 import ServiceCard from '../../components/cards/serviceCard';
 import ClosetoYou from '../../components/cards/closeToYou';
 import CategoryList2 from '../../components/CategoryList2';
 import Modal from 'react-native-modal';
-import {StackNavigation} from '../../constants/navigation';
-import {useNavigation} from '@react-navigation/native';
+import { StackNavigation } from '../../constants/navigation';
+import { useNavigation } from '@react-navigation/native';
 import {
   addPopularServices,
   addSCategory,
   addUserData,
   addcloseProvider,
+  addpairedProvider,
+  addprovidersByCateegory,
   logout,
+  setallServices,
   setwelcomeModal,
 } from '../../store/reducer/mainSlice';
 import {
+  getAllServices,
   getCategory,
+  getPairedProviders,
   getPopularService,
   getProviderByProximity,
+  getProviderByService,
   getSupportUser,
   getUser,
 } from '../../utils/api/func';
 import FastImage from 'react-native-fast-image';
 import socket from '../../utils/socket';
 import Geolocation from 'react-native-geolocation-service';
-import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
-import {ToastLong} from '../../utils/utils';
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { ToastLong } from '../../utils/utils';
 import WelcomeModal from '../../components/SignupModal';
 import axios from 'axios';
-import {getUnreadMessages} from '../../utils/api/chat';
+import { getUnreadMessages } from '../../utils/api/chat';
 import NetInfo from '@react-native-community/netinfo';
+import PairedProviders from '../../components/cards/pairedProviders';
+import TextInputs from '../../components/TextInput2';
+
 
 const Home = () => {
   useEffect(() => {
@@ -58,11 +67,11 @@ const Home = () => {
           try {
             Geolocation.getCurrentPosition(
               (position: any) => {
-                const {latitude, longitude} = position.coords;
-                console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+                const { latitude, longitude } = position.coords;
+                // console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
               },
               (error: any) => console.error(error),
-              {enableHighAccuracy: true, timeout: 15000, maximumAge: 60000},
+              { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 },
             );
           } catch (error) {
             console.error(error);
@@ -85,7 +94,7 @@ const Home = () => {
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addUserData(res?.data?.user));
       }
-      console.error('GEOLOCATION::', res?.data?.user?.geoLocation);
+      // console.error('GEOLOCATION::', res?.data?.user?.geoLocation);
       const userData = res?.data?.user;
       const netInfo = await NetInfo.fetch();
       const isInternetConnected = netInfo.isConnected;
@@ -107,6 +116,20 @@ const Home = () => {
         // Continue with your logic if geoLocation is valid
       }
     };
+    const initGetServices = async () => {
+      setisLoading(true);
+      let d: any = [];
+      const res: any = await getAllServices('');
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(setallServices(res?.data?.data));
+        res?.data?.data?.map((item: any) => {
+          d.push({ label: item?.name, value: item._id ?? item.id });
+        });
+      }
+
+      setisLoading(false);
+    };
+
     const initGetCategory = async () => {
       setisLoading(true);
       const res: any = await getCategory('');
@@ -120,6 +143,14 @@ const Home = () => {
       const res: any = await getPopularService('');
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addPopularServices(res?.data?.data));
+      }
+      setisLoading(false);
+    };
+    const initGetPairedProviders = async () => {
+      setisLoading(true);
+      const res: any = await getPairedProviders('');
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addpairedProvider(res?.data?.data));
       }
       setisLoading(false);
     };
@@ -143,9 +174,11 @@ const Home = () => {
     initGetUsers();
     initGetCategory();
     initGetPopularServices();
+    initGetPairedProviders();
     initGetProviderByProximity();
     getSupportUser('');
     getUnreadMessages();
+    initGetServices();
   }, [dispatch]);
   //selectors
   const userData = useSelector((state: any) => state.user.userData);
@@ -153,15 +186,17 @@ const Home = () => {
   const _popularServices = useSelector(
     (state: any) => state.user.popularServices,
   );
+  const allservices = useSelector((state: any) => state.user.allservices);
   const supportUser = useSelector((store: any) => store.user.supportUser);
   const closeProvider = useSelector((state: any) => state.user.closeProvider);
+  const pairedProviders = useSelector((state: any) => state.user.pairedProviders);
   const isNetwork = useSelector((state: any) => state.user.isNetwork);
   // console.log('daaaaattttttaaaa', 'here:', closeProvider);
   const welcomeModal = useSelector((state: any) => state.user.welcomeModal);
   const [ContactAgent, setContactAgent] = useState(false);
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const handleDropdownClick = (catId: React.SetStateAction<null>) => {
-    console.log(catId);
+    // console.log(catId);
     if (catId === openDropdownId) {
       setOpenDropdownId(null); // Close the dropdown if it's already open
     } else {
@@ -169,7 +204,7 @@ const Home = () => {
     }
   };
   // Sentry.nativeCrash();
-
+  const [searchInput, setsearchInput] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
@@ -186,7 +221,7 @@ const Home = () => {
           dispatch(logout());
         }
       }
-      console.error('GEOLOCATION::', res?.data?.user?.geoLocation);
+      // console.error('GEOLOCATION::', res?.data?.user?.geoLocation);
       const userData = res?.data?.user;
       const netInfo = await NetInfo.fetch();
       const isInternetConnected = netInfo.isConnected;
@@ -203,6 +238,19 @@ const Home = () => {
       } else {
       }
     };
+    const initGetServices = async () => {
+      setisLoading(true);
+      let d: any = [];
+      const res: any = await getAllServices('');
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(setallServices(res?.data?.data));
+        res?.data?.data?.map((item: any) => {
+          d.push({ label: item?.name, value: item._id ?? item.id });
+        });
+      }
+
+      setisLoading(false);
+    };
     const initGetCategory = async () => {
       setisLoading(true);
       const res: any = await getCategory('');
@@ -216,6 +264,14 @@ const Home = () => {
       const res: any = await getPopularService('');
       if (res?.status === 201 || res?.status === 200) {
         dispatch(addPopularServices(res?.data?.data));
+      }
+      setisLoading(false);
+    };
+    const initGetPairedProviders = async () => {
+      setisLoading(true);
+      const res: any = await getPairedProviders('');
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addpairedProvider(res?.data?.data));
       }
       setisLoading(false);
     };
@@ -238,7 +294,9 @@ const Home = () => {
     initGetUsers();
     initGetCategory();
     initGetPopularServices();
+    initGetPairedProviders();
     initGetProviderByProximity();
+    initGetServices();
     getSupportUser('');
     getUnreadMessages();
     setTimeout(() => {
@@ -248,12 +306,105 @@ const Home = () => {
 
   useEffect(() => {
     socket.connect();
-    console.log('-idid', socket.id);
+    // console.log('-idid', socket.id);
     socket.emit('authentication', userData);
   }, []);
 
+  const handlePostJobPress = () => {
+    navigation.navigate('PostJob');
+  };
+
+  const handleSearch = useMemo(() => {
+    var searchArray = [];
+    if (
+      Array.isArray(allservices) &&
+      allservices.length
+    ) {
+      searchArray = allservices?.filter((service: { name: string }) => {
+        const text = service?.name ? service?.name.toLowerCase() : ''.toLowerCase();
+        const textSearch = searchInput.toLowerCase();
+        return text.indexOf(textSearch) > -1;
+      });
+    }
+
+    if (searchInput && searchArray.length) {
+      return searchArray;
+    } else {
+      return [];
+    }
+  }, [searchInput, allservices]);
+
+  // const handleSearch = (query: string) => {
+  //   try {
+  //     if (!query) {
+  //       // If the query is empty, reset the search result
+  //       setSearchServicesResult([]);
+  //       return;
+  //     }
+  //     // Filter the data based on the search input
+  //     const filteredData =
+  //       allservices?.filter((service: { name: string }) =>
+  //         service.name.toLowerCase().includes(query.toLowerCase()),
+  //       ) || [];
+  //     // const filtered =
+  //     //   customerOrders.filter(
+  //     //     order =>
+  //     //       order?.serviceProvider?.firstName
+  //     //         ?.toLowerCase()
+  //     //         ?.includes(query.toLowerCase()) ||
+  //     //       order?.serviceProvider?.lastName
+  //     //         ?.toLowerCase()
+  //     //         ?.includes(query.toLowerCase()),
+  //     //   ) || [];
+
+  //     // console.log(filtered, '         ..............................');
+  //     // console.log('RESSSSS:', filtered);
+  //     // setFilteredServices(filtered);
+  //     setSearchServicesResult(filteredData);
+  //   } catch (error) {
+  //     console.error('An unexpected error occurred during search:', error);
+  //     // Handle unexpected error, show an error message, or take appropriate action
+  //   } finally {
+  //     // Optional: You can update the loading state here if needed
+  //     // setLoading(false);
+  //   }
+  // };
+  const debounce = (func: any, delay: any) => {
+    let timeoutId: string | number | NodeJS.Timeout | undefined;
+    return function (...args) {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
+  };
+
+  const debouncedHandleSearch = debounce(handleSearch, 500);
+
+  const userType = useSelector((state: any) => state.user.isLoggedIn);
+
+  const initFetchProviders = async (id: any, itemDetail: any) => {
+    setsearchInput('');
+    console.log("itemDetail id", id);
+    setisLoading(true);
+    const res: any = await getProviderByService(id);
+    console.log('service-dddddddd', res?.data);
+    if (res?.status === 201 || res?.status === 200) {
+      dispatch(addprovidersByCateegory(res?.data?.data));
+    }
+    //if customer navigate to _service , if provide navigate to _VService
+    if (userType.userType === 'CUSTOMER') {
+      navigation.navigate('_Services', {service: itemDetail});
+    } else {
+      navigation.navigate('_VServices', {service: itemDetail});
+    }
+    setisLoading(false);
+  };
+
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#EBEBEB'}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#EBEBEB' }}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
       <View
         style={[
@@ -294,7 +445,7 @@ const Home = () => {
                 // }
                 source={{
                   uri: userData?.profilePic,
-                  headers: {Authorization: 'someAuthToken'},
+                  headers: { Authorization: 'someAuthToken' },
                   priority: FastImage.priority.high,
                   // cache: FastImage.cacheControl.cacheOnly,
                 }}
@@ -303,7 +454,7 @@ const Home = () => {
             ) : (
               <Image
                 source={images.profile}
-                style={{width: 50, height: 50, borderRadius: 25}}
+                style={{ width: 50, height: 50, borderRadius: 25 }}
               />
             )}
           </TouchableOpacity>
@@ -328,10 +479,9 @@ const Home = () => {
 
           <View style={tw`flex flex-row items-center`}>
             <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('PostJob');
-              }}
-              style={tw`bg-black px-3 py-1.5  rounded-lg mr-3`}>
+              onPress={handlePostJobPress}
+              hitSlop={{ top: 50, bottom: 50, left: 10, right: 10 }}
+              style={tw`bg-black px-3 py-3  rounded-lg mr-3`}>
               <Textcomp
                 text={'Post a Job'}
                 size={12}
@@ -354,23 +504,77 @@ const Home = () => {
               }}>
               <Image
                 source={images.question}
-                style={{height: 20, width: 20}}
+                style={{ height: 20, width: 20 }}
                 resizeMode="contain"
               />
             </TouchableOpacity>
           </View>
         </View>
+
+        <View style={tw`flex flex-col mt-5 justify-center px-4 relative z-999`}>
+          <TextInputs
+            style={{ width: '100%' }}
+            icon={<Image
+              source={images.search}
+              style={{
+                height: 16,
+                width: 16,
+              }}
+              resizeMode="contain"
+            />}
+            labelText={'Search for orders'}
+            state={searchInput}
+            // setState={setsearchInput}
+            setState={text => {
+              setsearchInput(text);
+              // handleSearch();
+            }}
+          />
+          {handleSearch.length > 0 && <View
+            style={[
+              tw`flex flex-col py-4 mt-4 absolute left-5 -bottom-70`,
+              {
+                backgroundColor: '#D9D9D9',
+                borderRadius: 12,
+                height: perHeight(200),
+                width: '100%',
+                marginHorizontal: 'auto',
+                paddingHorizontal: 2,
+              },
+            ]}>
+            <FlatList
+              data={handleSearch}
+              showsHorizontalScrollIndicator={false}
+              renderItem={(item: any, index: any) => {
+                console.log(item.item);
+                return (
+                  <TouchableOpacity onPress={()=> initFetchProviders(item.item._id, item.item)} style={[tw`py-2`]}>
+                    <Textcomp
+                      text={`${item.item.name}`}
+                      size={14}
+                      lineHeight={17}
+                      color={'#000413'}
+                      fontFamily={'Inter-Medium'}
+                    />
+                  </TouchableOpacity>
+                );
+              }
+              }
+              style={{ paddingLeft: 20 }}
+              keyExtractor={item => item.id}
+            />
+          </View>}
+        </View>
         <View
-          style={[tw``, {marginLeft: perWidth(18), marginTop: perHeight(28)}]}>
+          style={[tw``, { marginLeft: perWidth(18), marginTop: perHeight(12) }]}>
           <Textcomp
             // text={`Welcome ${
             //   userData?.firstName !== undefined ? userData?.firstName : ''
             // },`}
-            text={`Welcome ${
-              userData?.firstName !== undefined
-                ? userData?.firstName?.trimEnd()
-                : ''
-            },`}
+            text={`Welcome ${userData?.firstName !== undefined
+              ? userData?.firstName?.trimEnd()
+              : ''
+              },`}
             size={17}
             lineHeight={17}
             color={'#000413'}
@@ -381,11 +585,94 @@ const Home = () => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
+          {/* Paired Providers */}
+          {pairedProviders?.length > 0 && <>
+            <View
+              style={[
+                tw`flex flex-row items-center justify-between`,
+                { marginLeft: perWidth(16), marginTop: perHeight(14) },
+              ]}>
+              <View style={[tw``]}>
+                <Textcomp
+                  text={'Paired Providers'}
+                  size={25}
+                  lineHeight={28}
+                  color={'#000413'}
+                  fontFamily={'Inter-Medium'}
+                />
+              </View>
+
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('PairedProviders');
+                }}
+                style={[tw`mr-4`]}>
+                <Textcomp
+                  text={'See All'}
+                  size={14}
+                  lineHeight={16}
+                  color={'#000413'}
+                  fontFamily={'Inter-Medium'}
+                />
+              </TouchableOpacity>
+            </View>
+            <Textcomp
+              text={'We have selected these service providers for you. View their Profile and Negotiate with them.'}
+              size={10}
+              lineHeight={16}
+              color={'#4A4949'}
+              fontFamily={'Inter-Regular'}
+              style={[tw`mx-4`]}
+            />
+            <View style={{ flex: 1 }}>
+              <FlatList
+                data={pairedProviders}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                renderItem={(item: any, index: any) => {
+                  if (item.index === pairedProviders?.length - 1) {
+                    // console.log('paired providers to you', item?.item);
+                    return (
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate('ServiceProviderProfile', {
+                            item: item,
+                            serviceName: item.item.name,
+                            id: item.item.id,
+                          });
+                        }}>
+                        <PairedProviders
+                          navigation={navigation}
+                          item={item?.item}
+                          index={index}
+                          showServices={false}
+                        />
+                        <View style={{ marginRight: 50 }} />
+                      </TouchableOpacity>
+                    );
+                  } else {
+                    // console.log('Close to you',item?.item);
+                    return (
+                      <PairedProviders
+                        navigation={navigation}
+                        item={item?.item}
+                        index={index}
+                        showServices={false}
+                      />
+                    );
+                  }
+                }}
+                style={{ paddingLeft: 20 }}
+                keyExtractor={item => item.id}
+              />
+            </View>
+          </>
+          }
           {/* Popular Section */}
           <View
             style={[
               tw`flex flex-row items-center justify-between`,
-              {marginLeft: perWidth(18), marginTop: perHeight(22)},
+              { marginLeft: perWidth(18), marginTop: perHeight(22) },
             ]}>
             <View style={[tw``]}>
               <Textcomp
@@ -413,7 +700,7 @@ const Home = () => {
           </View>
           {_popularServices?.length > 0 && (
             <>
-              <View style={{flex: 1}}>
+              <View style={{ flex: 1 }}>
                 <FlatList
                   data={_popularServices.slice(0, 10)}
                   horizontal={true}
@@ -434,7 +721,7 @@ const Home = () => {
             </>
           )}
           {_popularServices?.length < 1 && (
-            <View style={[tw`mt-4`, {marginLeft: perWidth(27)}]}>
+            <View style={[tw`mt-4`, { marginLeft: perWidth(27) }]}>
               <Textcomp
                 text={'No popular service yet'}
                 size={18}
@@ -449,7 +736,7 @@ const Home = () => {
             <View
               style={[
                 tw`flex flex-row items-center justify-between`,
-                {marginLeft: perWidth(24), marginTop: perHeight(52)},
+                { marginLeft: perWidth(24), marginTop: perHeight(52) },
               ]}>
               <View style={[tw``]}>
                 <Textcomp
@@ -476,14 +763,14 @@ const Home = () => {
               </TouchableOpacity>
             </View>
             {closeProvider?.length > 0 && (
-              <View style={{flex: 1}}>
+              <View style={{ flex: 1 }}>
                 <FlatList
                   data={closeProvider}
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
                   renderItem={(item: any, index: any) => {
                     if (item.index === closeProvider?.length - 1) {
-                      // console.log('Close to you',item?.item);
+                      // console.log('Close to you', item?.item);
                       return (
                         <>
                           <ClosetoYou
@@ -491,7 +778,7 @@ const Home = () => {
                             item={item?.item}
                             index={index}
                           />
-                          <View style={{marginRight: 50}} />
+                          <View style={{ marginRight: 50 }} />
                         </>
                       );
                     } else {
@@ -505,13 +792,13 @@ const Home = () => {
                       );
                     }
                   }}
-                  style={{paddingLeft: 20}}
+                  style={{ paddingLeft: 20 }}
                   keyExtractor={item => item.id}
                 />
               </View>
             )}
             {closeProvider?.length < 1 && (
-              <View style={[tw`mt-4`, {marginLeft: perWidth(27)}]}>
+              <View style={[tw`mt-4`, { marginLeft: perWidth(27) }]}>
                 <Textcomp
                   text={'No Service Provider within your location'}
                   size={18}
@@ -528,7 +815,7 @@ const Home = () => {
             <View
               style={[
                 tw`flex flex-row items-center justify-between`,
-                {marginLeft: perWidth(24), marginTop: perHeight(52)},
+                { marginLeft: perWidth(24), marginTop: perHeight(52) },
               ]}>
               <View style={[tw``]}>
                 <Textcomp
@@ -620,7 +907,7 @@ const Home = () => {
           setInfoModal(false);
           setContactAgent(false);
         }}
-        style={{width: SIZES.width, marginHorizontal: 0}}
+        style={{ width: SIZES.width, marginHorizontal: 0 }}
         deviceWidth={SIZES.width}>
         <View style={tw` h-full w-full bg-black bg-opacity-5`}>
           <TouchableOpacity

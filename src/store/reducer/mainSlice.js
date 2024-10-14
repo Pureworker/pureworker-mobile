@@ -42,6 +42,8 @@ const initialState = {
   viewedNotifications: [],
   faq: [],
   closeProvider: [],
+  pairedProviders: [],
+  pairedCustomers: [],
   portfolio: {},
   portfolio2: [],
   portfolio3: {},
@@ -100,6 +102,8 @@ export const mainSlice = createSlice({
       state.pickedServicesId = [];
       state.subcategory = [];
       state.popularServices = [];
+      state.pairedProviders = [];
+      state.pairedCustomers = [];
       state.transactions = [];
       state.providerOrders = [];
       state.formStage = 1;
@@ -123,6 +127,8 @@ export const mainSlice = createSlice({
       state.pickedServicesId = [];
       state.subcategory = [];
       state.popularServices = [];
+      state.pairedProviders = [];
+      state.pairedCustomers = [];
       state.transactions = [];
       state.providerOrders = [];
       state.formStage = 1;
@@ -258,6 +264,12 @@ export const mainSlice = createSlice({
     addcloseProvider: (state, action) => {
       state.closeProvider = action.payload;
     },
+    addpairedProvider: (state, action) => {
+      state.pairedProviders = action.payload;
+    },
+    addpairedCustomers: (state, action) => {
+      state.pairedCustomers = action.payload;
+    },
     addprovider_id: (state, action) => {
       state.provider_id = action.payload;
     },
@@ -372,6 +384,8 @@ export const {
   addviewedNotifications,
   addfaq,
   addcloseProvider,
+  addpairedProvider,
+  addpairedCustomers,
   addprovider_id,
   addportfolio,
   addformStage,
@@ -399,7 +413,7 @@ export const {
   setPurecoinsHistory,
   setallJobPosts,
   setallServices,
-  setviewJobPost
+  setviewJobPost,
 } = mainSlice.actions;
 
 export default mainReducer = persistReducer(persistConfig, mainSlice.reducer);

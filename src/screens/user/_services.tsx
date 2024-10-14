@@ -400,6 +400,7 @@ const _Services = ({route}: any) => {
   const [searchModal, setsearchModal] = useState(false);
   const [searchInput, setsearchInput] = useState('');
   const [savedProviders, setsavedProviders] = useState([]);
+  const [providersByCategory, setProvidersByCategory] = useState([]);
   const [isLoading, setisLoading] = useState(false);
 
   const [searchLoading, setsearchLoading] = useState(false);
@@ -414,6 +415,7 @@ const _Services = ({route}: any) => {
     const res = await getProviderByService(id);
     if (res?.status === 200 || res?.status === 201) {
       dispatch(addprovidersByCateegory(res?.data?.data));
+      setProvidersByCategory(res?.data?.data);
     }
     setisLoading(false);
   }, [dispatch, id]);
@@ -625,7 +627,7 @@ const _Services = ({route}: any) => {
                         data={
                           searchResults.length >= 0
                             ? searchResults
-                            : _providersByCateegory
+                            : providersByCategory
                         }
                         keyExtractor={item => item?._id}
                         renderItem={({item, index}) => {

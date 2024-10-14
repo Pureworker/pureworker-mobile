@@ -33,6 +33,7 @@ import PureCoinsHome from '../screens/user/pureworkercoins/PureCoinsHome';
 import Rules from '../screens/user/pureworkercoins/Rules';
 import PureCoinsHistory from '../screens/user/pureworkercoins/history';
 import PostJob from '../screens/user/postjobs/PostJob';
+import PairedProviders from '../screens/user/pairedProviders';
 // import HelloWorldView from '../tracking/TrackView';
 
 const Stack = createNativeStackNavigator();
@@ -64,6 +65,11 @@ export default function CustomerNavigation() {
       <Stack.Screen
         name="CloseToYou"
         component={CloseToYou}
+        options={{headerShown: false, animation: 'none'}}
+      />
+      <Stack.Screen
+        name="PairedProviders"
+        component={PairedProviders}
         options={{headerShown: false, animation: 'none'}}
       />
       <Stack.Screen

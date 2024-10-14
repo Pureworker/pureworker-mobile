@@ -21,6 +21,7 @@ import colors from '../../constants/colors';
 import Modal from 'react-native-modal/dist/modal';
 import {
   getCategory,
+  getPairedCustomers,
   getProviderOrders,
   getSupportUser,
   getUser,
@@ -28,6 +29,7 @@ import {
 import {
   addSCategory,
   addUserData,
+  addpairedCustomers,
   addproviderOrders,
   setidCheckModal,
   setwelcomeModal,
@@ -41,6 +43,7 @@ import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {ToastLong} from '../../utils/utils';
 import WelcomeModal from '../../components/SignupModal';
 import RequireIDChechkModal from '../../components/modals/RequireIDChechkModal';
+import PairedCustomers from '../../components/cards/pairedCustomers';
 
 const Home = ({navigation}: any) => {
   useEffect(() => {
@@ -120,10 +123,20 @@ const Home = ({navigation}: any) => {
       }
       setisLoading(false);
     };
+    const initGetPairedCustomers = async () => {
+      setisLoading(true);
+      const res: any = await getPairedCustomers('');
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addpairedCustomers(res?.data?.data));
+      }
+      setisLoading(false);
+    };
     initGetUsers();
+    initGetPairedCustomers();
     getSupportUser('');
     initGetCategory();
   }, [dispatch]);
+  const pairedCustomers = useSelector((state: any) => state.user.pairedCustomers);
   const providerOrders = useSelector((state: any) => state.user.providerOrders);
   useEffect(() => {
     const initGetOrders = async () => {
@@ -249,9 +262,19 @@ const Home = ({navigation}: any) => {
       }
       setisLoading(false);
     };
+    const initGetPairedCustomers = async () => {
+      setisLoading(true);
+      const res: any = await getPairedCustomers('');
+      console.log('pairedCustomers', res);
+      if (res?.status === 201 || res?.status === 200) {
+        dispatch(addpairedCustomers(res?.data?.data));
+      }
+      setisLoading(false);
+    };
     initGetUsers();
     getSupportUser('');
     initGetCategory();
+    initGetPairedCustomers();
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
@@ -508,7 +531,80 @@ const Home = ({navigation}: any) => {
             //   />
             // </TouchableOpacity>
           )}
+          {/* Paired Customers */}
+          {pairedCustomers?.length > 0 && <>
+            <View
+              style={[
+                tw`flex flex-row items-center justify-between`,
+                { marginLeft: perWidth(16), marginTop: perHeight(14) },
+              ]}>
+              <View style={[tw``]}>
+                <Textcomp
+                  text={'Paired Customers'}
+                  size={25}
+                  lineHeight={28}
+                  color={'#000413'}
+                  fontFamily={'Inter-Medium'}
+                />
+              </View>
 
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('PairedCustomers');
+                }}
+                style={[tw`mr-4`]}>
+                <Textcomp
+                  text={'See All'}
+                  size={14}
+                  lineHeight={16}
+                  color={'#000413'}
+                  fontFamily={'Inter-Medium'}
+                />
+              </TouchableOpacity>
+            </View>
+            <Textcomp
+              text={'The customers I need to your service. Message them to get more details.'}
+              size={10}
+              lineHeight={16}
+              color={'#4A4949'}
+              fontFamily={'Inter-Regular'}
+              style={[tw`mx-4`]}
+            />
+            <View style={{ flex: 1 }}>
+              <FlatList
+                data={pairedCustomers}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                renderItem={(item: any, index: any) => {
+                  if (item.index === pairedCustomers?.length - 1) {
+                    console.log('paired customers to you',item?.item);
+                    return (
+                      <>
+                        <PairedCustomers
+                          navigation={navigation}
+                          item={item?.item}
+                          index={index}
+                          key={index}
+                        />
+                        <View style={{ marginRight: 50 }} />
+                      </>
+                    );
+                  } else {
+                    return (
+                      <PairedCustomers
+                        navigation={navigation}
+                        item={item?.item}
+                        index={index}
+                      />
+                    );
+                  }
+                }}
+                style={{ paddingLeft: 20 }}
+                keyExtractor={item => item.id}
+              />
+            </View>
+          </>
+          }
           <View
             style={[
               tw`flex flex-row`,
@@ -696,6 +792,7 @@ const Home = ({navigation}: any) => {
               </View>
             </View>
           </View>
+
           {/* Popular Section */}
           <View>
             <View
