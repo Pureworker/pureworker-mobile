@@ -49,7 +49,7 @@ const TextInputs = ({
   return (
     <View
       style={[
-        tw`flex items-center justify-center`,
+        tw`items-center justify-center`,
         {
           backgroundColor: '#D9D9D9',
           borderRadius: perWidth(265) / 2,
@@ -62,7 +62,7 @@ const TextInputs = ({
       <View />
       <View
         style={[
-          tw`items-center justify-center px-2`,
+          tw`items-center justify-center`,
           {
             flexDirection: 'row',
             //   justifyContent: 'space-between',
@@ -99,7 +99,7 @@ const TextInputs = ({
               fontSize: 14,
               fontWeight: 'normal',
               fontFamily: 'Inter-Medium',
-              paddingHorizontal: 16,
+              paddingHorizontal: 5,
               //   lineHeight: multiline ? 24 : 16,
               //   marginBottom: multiline ? 10 : 0,
               height: Platform.OS === 'ios' ? 40 : 40,

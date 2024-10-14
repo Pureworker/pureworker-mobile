@@ -1960,3 +1960,44 @@ export const getPromoCode = async (param: any) => {
     };
   }
 };
+
+export const getPairedProviders = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/user/pairings`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response?.status === 201 || response?.status === 200) {
+    }
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};
+export const getPairedCustomers = async (param: any) => {
+  const AuthToken = await AsyncStorage.getItem('AuthToken');
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/provider/pairings`,
+      headers: {Authorization: `Bearer ${AuthToken}`},
+    });
+    if (response?.status === 201 || response?.status === 200) {
+    }
+    return response;
+  } catch (error) {
+    console.log(error, error?.response?.data);
+    return {
+      status: 400,
+      err: error,
+      error: error?.response?.data,
+    };
+  }
+};

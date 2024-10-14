@@ -182,7 +182,7 @@ const ProductDisplay = () => {
           </Text>
           <View style={styles.row}>
             <Text style={styles.storeAddress}>Address</Text>
-            <Text style={styles.text}>123 Main Street, Lagos</Text>
+            <Text style={styles.text}>{viewJobPost.address}</Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.storeAddress}>Service</Text>
@@ -333,7 +333,7 @@ const ProductDisplay = () => {
               <View style={tw`flex-1`}>
                 <View style={tw`pt-3`}>
                   <Textcomp
-                    text={'!!! IMPORTANT !!!'}
+                    text={'IMPORTANT'}
                     size={16}
                     lineHeight={18.5}
                     color={'black'}

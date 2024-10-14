@@ -1,5 +1,5 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import Home from '../screens/Home';
 import TermAndCondition from '../screens/TermAndCondition';
 import FAQ from '../screens/FAQ';
@@ -41,6 +41,7 @@ import Rules from '../screens/user/pureworkercoins/Rules';
 import PureCoinsHistory from '../screens/user/pureworkercoins/history';
 import MyJobs from '../screens/user/postjobs/MyJobs';
 import ProductDisplay from '../screens/user/postjobs/ProductDisplay';
+import PairedCustomers from '../screens/vendor/pairedCustomers';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,183 +51,188 @@ export default function VendorNavigation() {
       <Stack.Screen
         name="Homes"
         component={DrawerMenu}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
+      />
+      <Stack.Screen
+        name="PairedCustomers"
+        component={PairedCustomers}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="TermAndCondition"
         component={TermAndCondition}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="FAQ"
         component={FAQ}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="Congratulations"
         component={Congratulations}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="TransactionHistory"
         component={TransactionHistory}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="EditService"
         component={EditServices}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="AddServices"
         component={AddServices}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="Withdraw"
         component={Withdraw}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="Inbox"
         component={Inbox}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="_VServices"
         component={_Services}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="ServiceProviderProfile"
         component={ServiceProviderProfile}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="OrderDetails"
         component={OrderDetails}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="OrderReview"
         component={OrderReview}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="PaymentConfirmed"
         component={PaymentConfirmed}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="FaceDetection"
         component={FaceDetection}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
 
       <Stack.Screen
         name="ProfileStep1"
         component={ProfileStep1}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="ProfileStep2"
         component={PRofileStep2}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="ProfileStep3"
         component={ProfileStep3}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="ProfileStep4"
         component={ProfileStep4}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="ProfileStep5"
         component={ProfileStep5}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="ProfileStep21"
         component={ProfileStep21}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
 
       <Stack.Screen
         name="ProfileStep11"
         component={PRofileStep11}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="ProfileStep211"
         component={ProfileStep211}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
 
       {/* transactionPin */}
       <Stack.Screen
         name="CreatePin"
         component={CreatePin}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="CreatePinPage"
         component={CreatePinPage}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="CreatePinSuccess"
         component={CreatePinSuccess}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="IdVerification"
         component={IdVerification}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="PhotoUploadScreen"
         component={PhotoUploadScreen}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="IdProcessing"
         component={Processing}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
 
       <Stack.Screen
         name="SpinToWinScreen"
         component={SpinToWinScreen}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="PureCoinsHome"
         component={PureCoinsHome}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="Rules"
         component={Rules}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="PureCoinsHistory"
         component={PureCoinsHistory}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
 
       <Stack.Screen
         name="MyJobs"
         component={MyJobs}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
       <Stack.Screen
         name="ProductDisplay"
         component={ProductDisplay}
-        options={{headerShown: false, animation: 'none'}}
+        options={{ headerShown: false, animation: 'none' }}
       />
     </Stack.Navigator>
   );
