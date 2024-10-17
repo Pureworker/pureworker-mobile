@@ -22,21 +22,21 @@ import React, {
   useState,
 } from 'react';
 import tw from 'twrnc';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {SIZES, perHeight, perWidth} from '../../../utils/position/sizes';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SIZES, perHeight, perWidth } from '../../../utils/position/sizes';
 import Chatcomp from './chatcomp';
 import socket from '../../../utils/socket';
-import {launchImageLibrary} from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
-import {ImageZoom} from '@likashefqet/react-native-image-zoom';
+import { ImageZoom } from '@likashefqet/react-native-image-zoom';
 
 import {
   addchatData,
   addchatList,
   addchatPageUser,
 } from '../../../store/reducer/mainSlice';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   getChatsbyuser,
   getMessagesbyuser,
@@ -45,11 +45,11 @@ import {
 } from '../../../utils/api/func';
 import colors from '../../../constants/colors';
 import images from '../../../constants/images';
-import {HEIGHT_SCREEN, HEIGHT_WINDOW} from '../../../constants/generalStyles';
+import { HEIGHT_SCREEN, HEIGHT_WINDOW } from '../../../constants/generalStyles';
 import Textcomp from '../../../components/Textcomp';
-import {ToastLong, ToastShort, timeAgo} from '../../../utils/utils';
+import { ToastLong, ToastShort, timeAgo } from '../../../utils/utils';
 import useChat from '../../../hooks/useChat';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {
   _getUnreadMessages,
   markAsReaArray,
@@ -59,7 +59,7 @@ import InfoIcon from '../../../assets/svg/Info';
 import DocumentPicker from 'react-native-document-picker';
 import CancelIcon from '../../../assets/svg/cancel3';
 
-export default function Inbox({navigation, route}: any) {
+export default function Inbox({ navigation, route }: any) {
   const scrollRef = useRef<ScrollView | null>(null);
   const [imageModal, setImageModal] = useState({
     isOpen: false,
@@ -70,7 +70,7 @@ export default function Inbox({navigation, route}: any) {
   const userName = route.params?.name?.trim();
   const lastOnline = route.params?.lastOnline;
 
-  const {getUnreadMessages, getChatList} = useChat();
+  const { getUnreadMessages, getChatList } = useChat();
   const agentData = useSelector((state: any) => state.user.userData);
   const chatData = useSelector((store: any) => store.user.chatData);
 
@@ -122,7 +122,7 @@ export default function Inbox({navigation, route}: any) {
     console.log(data);
     const currentDate = new Date();
     const createdAt = currentDate.toISOString();
-    const _data = [...chatData, {...data, createdAt: createdAt}];
+    const _data = [...chatData, { ...data, createdAt: createdAt }];
     dispatch(addchatData(_data));
     socket.emit('message', data, async () => {
       console.log('message sent', data);
@@ -212,7 +212,7 @@ export default function Inbox({navigation, route}: any) {
         console.log('----image data now:', data);
         const currentDate = new Date();
         const createdAt = currentDate.toISOString();
-        const _data = [...chatData, {...data, createdAt: createdAt}];
+        const _data = [...chatData, { ...data, createdAt: createdAt }];
         dispatch(addchatData(_data));
         socket.emit('message', data, async () => {
           console.log('message sent', data);
@@ -256,7 +256,7 @@ export default function Inbox({navigation, route}: any) {
 
           const currentDate = new Date();
           const createdAt = currentDate.toISOString();
-          const _data = [...chatData, {...data, createdAt}];
+          const _data = [...chatData, { ...data, createdAt }];
           dispatch(addchatData(_data));
 
           socket.emit('message', data, async () => {
@@ -339,7 +339,7 @@ export default function Inbox({navigation, route}: any) {
           return chat?._id;
         }
       })
-      .map((chat: {_id: any}) => chat?._id);
+      .map((chat: { _id: any }) => chat?._id);
     const handleMarkeRead = async () => {
       console.log(arr);
       try {
@@ -357,7 +357,7 @@ export default function Inbox({navigation, route}: any) {
   return (
     <SafeAreaView style={[tw`h-full bg-[#EBEBEB]  w-full`, styles.container]}>
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // Use "padding" for iOS, "height" for Android
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 50} // Adjust as needed
       >
@@ -365,7 +365,7 @@ export default function Inbox({navigation, route}: any) {
           <View
             style={[
               tw`px-[2.5%]   border-b justify-center border-[#262C550F]`,
-              {height: perHeight(55)},
+              { height: perHeight(55) },
               Platform.OS === 'ios' && styles.shadowProp,
             ]}>
             <View
@@ -389,7 +389,7 @@ export default function Inbox({navigation, route}: any) {
                   />
                 </TouchableOpacity>
               </View>
-              <View style={[tw` `, {maxWidth: '85%'}]}>
+              <View style={[tw` `, { maxWidth: '85%' }]}>
                 <Text
                   style={[
                     tw`text-center  font-bold text-[${colors.black}]`,
@@ -423,7 +423,7 @@ export default function Inbox({navigation, route}: any) {
               </View>
               <View style={[tw`flex flex-row  w-1.5/8`]}>
                 <Text
-                  onPress={() => {}}
+                  onPress={() => { }}
                   numberOfLines={1}
                   style={[
                     tw`text-center font-bold text-[${colors.black}]`,
@@ -436,8 +436,8 @@ export default function Inbox({navigation, route}: any) {
                   {userName === 'Support Support' || userName === 'Support'
                     ? ''
                     : lastOnline
-                    ? `${timeAgo(lastOnline)}`
-                    : ''}
+                      ? `${timeAgo(lastOnline)}`
+                      : ''}
                   2 hrs ago
                 </Text>
               </View>
@@ -448,7 +448,7 @@ export default function Inbox({navigation, route}: any) {
               style={tw`bg-[#FF0000] flex flex-row items-center rounded-lg mx-4 py-2 px-2`}>
               <InfoIcon />
               <Text
-                onPress={() => {}}
+                onPress={() => { }}
                 style={[
                   tw` w-[95%] ml-1  text-[#FFFFFF]`,
                   {
@@ -467,7 +467,7 @@ export default function Inbox({navigation, route}: any) {
               style={tw`bg-[#FF0000] flex flex-row items-center rounded-lg mx-4 py-2 px-2`}>
               <InfoIcon />
               <Text
-                onPress={() => {}}
+                onPress={() => { }}
                 style={[
                   tw` w-[95%] ml-1  text-[#FFFFFF]`,
                   {
@@ -487,7 +487,7 @@ export default function Inbox({navigation, route}: any) {
           <View
             style={[
               tw` mt-1 bg-[#EBEBEB]`,
-              {paddingHorizontal: perWidth(26), height: HEIGHT_WINDOW * 0.725},
+              { paddingHorizontal: perWidth(26), height: HEIGHT_WINDOW * 0.725 },
             ]}>
             {/* <ScrollView showsVerticalScrollIndicator={false}>
               {[...chatData, ...chatData].map((item, index) => {
@@ -519,9 +519,9 @@ export default function Inbox({navigation, route}: any) {
                 {Object.keys(groupedMessages).map((date, i) => (
                   <View key={date} style={tw`${i === 0 ? 'pt-5' : 'pt-2.5'}`}>
                     <View style={tw`flex flex-row items-center`}>
-                      <View style={[tw`bg-black flex-1`, {height: 1}]} />
+                      <View style={[tw`bg-black flex-1`, { height: 1 }]} />
                       <Text
-                        onPress={() => {}}
+                        onPress={() => { }}
                         style={[
                           tw`text-center px-4 font-bold text-[${colors.black}]`,
                           {
@@ -532,7 +532,7 @@ export default function Inbox({navigation, route}: any) {
                         ]}>
                         {date}
                       </Text>
-                      <View style={[tw`bg-black flex-1`, {height: 1}]} />
+                      <View style={[tw`bg-black flex-1`, { height: 1 }]} />
                     </View>
 
                     {groupedMessages[date].map((message, index) => {
@@ -598,7 +598,7 @@ export default function Inbox({navigation, route}: any) {
             </View>
             <View style={tw``}>
               <Text
-                onPress={() => {}}
+                onPress={() => { }}
                 style={[
                   tw`  text-[#000000]`,
                   {
@@ -612,7 +612,35 @@ export default function Inbox({navigation, route}: any) {
               </Text>
             </View>
           </View>
-
+                <>
+          <TouchableOpacity
+            onPress={() => {
+              // navigation.navigate('OrderDetails', {
+              //   data: {
+              //     _id: userId,
+              //     businessName: userName,
+              //   },
+              // });
+              setshowModal(true);
+            }}
+            style={[
+              tw`bg-[#2D303C] absolute bottom-[${Platform.OS === 'android' ? '15%' : '11%'
+                }] rounded-lg right-[35%]  items-center justify-center`,
+              {
+                width: perWidth(90),
+                aspectRatio: 1,
+                height: perHeight(35),
+              },
+            ]}>
+            <Textcomp
+              text={'Add funds'}
+              size={14}
+              lineHeight={16.5}
+              color={'#FFC727'}
+              fontFamily={'Inter-SemiBold'}
+            />
+          </TouchableOpacity>
+          </>
           {userName === 'Support Support' || userName === 'Support' ? null : (
             <>
               {agentData?.accountType?.toLowerCase() === 'customer' ? (
@@ -627,9 +655,8 @@ export default function Inbox({navigation, route}: any) {
                     setshowModal(true);
                   }}
                   style={[
-                    tw`bg-[#2D303C] absolute bottom-[${
-                      Platform.OS === 'android' ? '15%' : '11%'
-                    }] rounded-lg right-[5%]  items-center justify-center`,
+                    tw`bg-[#2D303C] absolute bottom-[${Platform.OS === 'android' ? '15%' : '11%'
+                      }] rounded-lg right-[5%]  items-center justify-center`,
                     {
                       width: perWidth(90),
                       aspectRatio: 1,
@@ -662,9 +689,8 @@ export default function Inbox({navigation, route}: any) {
               style={tw`flex flex-row mt-3 py-2 px-4 bg-[#D9D9D9] rounded-full`}>
               <TextInput
                 style={[
-                  tw`${
-                    Platform.OS === 'ios' ? 'py-2' : 'py-0'
-                  }  flex-1 text-black`,
+                  tw`${Platform.OS === 'ios' ? 'py-2' : 'py-0'
+                    }  flex-1 text-black`,
                   {},
                 ]}
                 placeholder={'Write a message...'}
@@ -748,7 +774,7 @@ export default function Inbox({navigation, route}: any) {
         <Pressable onPress={() => toggleImageModal('')}>
           <Text style={styles.closeText}>Close</Text>
         </Pressable>
-        <GestureHandlerRootView style={{width: '90%', height: '70%'}}>
+        <GestureHandlerRootView style={{ width: '90%', height: '70%' }}>
           <ImageZoom
             uri={imageModal.imageLink}
             minScale={1}
@@ -766,7 +792,7 @@ export default function Inbox({navigation, route}: any) {
         onModalHide={() => {
           setshowModal(false);
         }}
-        style={{width: SIZES.width, marginHorizontal: 0}}
+        style={{ width: SIZES.width, marginHorizontal: 0 }}
         deviceWidth={SIZES.width}
         onBackdropPress={() => setshowModal(false)}
         swipeThreshold={200}
@@ -781,15 +807,15 @@ export default function Inbox({navigation, route}: any) {
           <View
             style={[
               tw` mt-auto bg-[#D9D9D9]`,
-              {maxHeight: '84%', marginBottom: -20},
+              { maxHeight: '84%', marginBottom: -20 },
             ]}>
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={() => { }}
               style={tw`w-15 h-1 mx-auto rounded-full  bg-[${colors.darkPurple}]`}
             />
             <ScrollView contentContainerStyle={tw``}>
               <View>
-                <View style={[tw` py-4 mt-4`, {marginLeft: perWidth(30)}]}>
+                <View style={[tw` py-4 mt-4`, { marginLeft: perWidth(30) }]}>
                   <Textcomp
                     text={'Select service you need'}
                     size={17}
@@ -801,7 +827,7 @@ export default function Inbox({navigation, route}: any) {
 
                 <View style={tw`px-[7.5%]`}>
                   {providerData?.services?.map(
-                    (service: {name: any; _id: any}) => {
+                    (service: { name: any; _id: any }) => {
                       return (
                         <TouchableOpacity
                           key={service?._id}
@@ -832,7 +858,7 @@ export default function Inbox({navigation, route}: any) {
                           />
                           <Image
                             resizeMode="contain"
-                            style={{width: 12}}
+                            style={{ width: 12 }}
                             source={images.polygonForward}
                           />
                         </TouchableOpacity>
@@ -844,13 +870,13 @@ export default function Inbox({navigation, route}: any) {
               <View
                 style={[
                   tw` mt-auto mb-4`,
-                  {height: 50, width: SIZES.width * 0.95},
+                  { height: 50, width: SIZES.width * 0.95 },
                 ]}
               />
               <View
                 style={[
                   tw`bg-black mt-auto mb-4`,
-                  {height: 2, width: SIZES.width * 0.95},
+                  { height: 2, width: SIZES.width * 0.95 },
                 ]}
               />
             </ScrollView>
@@ -864,7 +890,7 @@ export default function Inbox({navigation, route}: any) {
           onModalHide={() => {
             setdocLoading(false);
           }}
-          style={{width: SIZES.width, marginHorizontal: 0}}
+          style={{ width: SIZES.width, marginHorizontal: 0 }}
           deviceWidth={SIZES.width}
           onBackdropPress={() => setdocLoading(false)}
           swipeThreshold={200}
@@ -879,7 +905,7 @@ export default function Inbox({navigation, route}: any) {
             <View
               style={[
                 tw`p-4 px-6 mx-auto bg-[#D9D9D9] items-center  rounded-3xl`,
-                {height: 75, width: 75},
+                { height: 75, width: 75 },
               ]}>
               <View style={tw`flex-1 items-center  justify-center`}>
                 <ActivityIndicator color={colors.parpal} size={'small'} />
@@ -892,7 +918,7 @@ export default function Inbox({navigation, route}: any) {
               }}
               style={tw`flex flex-row items-center mx-auto  absolute bottom-20 left-40`}>
               <Text
-                onPress={() => {}}
+                onPress={() => { }}
                 style={[
                   tw`ml-2  text-[#FF0000]`,
                   {
@@ -968,7 +994,7 @@ const styles = StyleSheet.create({
   },
   shadowProp: {
     shadowColor: '#263238',
-    shadowOffset: {width: -2, height: 4},
+    shadowOffset: { width: -2, height: 4 },
     shadowOpacity: Platform.OS === 'ios' ? 0.15 : 0.5,
     shadowRadius: 3,
     elevation: Platform.OS === 'ios' ? 8 : 2,

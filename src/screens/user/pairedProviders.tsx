@@ -31,6 +31,7 @@ const PairedProviders = () => {
   const [searchModal, setSearchModal] = useState(false);
   const [searchInput, setSearchInput] = useState('');
 
+
   const { data: serviceProviderProfileData = [] } =
     useGetAllServiceProviderProfileQuery();
   const { data: serviceProviderFavoriteData = [] } = useGetFavoriteProductQuery();

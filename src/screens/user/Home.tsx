@@ -54,7 +54,7 @@ import axios from 'axios';
 import { getUnreadMessages } from '../../utils/api/chat';
 import NetInfo from '@react-native-community/netinfo';
 import PairedProviders from '../../components/cards/pairedProviders';
-import TextInputs from '../../components/TextInput2';
+import TextInputs from '../../components/TextInput';
 
 
 const Home = () => {
@@ -522,7 +522,7 @@ const Home = () => {
               }}
               resizeMode="contain"
             />}
-            labelText={'Search for orders'}
+            labelText={'What service do you need help with?'}
             state={searchInput}
             // setState={setsearchInput}
             setState={text => {

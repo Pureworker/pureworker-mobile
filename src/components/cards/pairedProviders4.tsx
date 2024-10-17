@@ -1,6 +1,6 @@
 import { Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import { SIZES, perHeight, perWidth } from '../../utils/position/sizes';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import images from '../../constants/images';
 import tw from 'twrnc';
 import Textcomp from '../Textcomp';
@@ -11,13 +11,14 @@ import { metersToKilometers, ToastShort } from '../../utils/utils';
 import { useDispatch } from 'react-redux';
 import Modal from 'react-native-modal/dist/modal';
 import VerifiedTag from '../../assets/svg/verifiedtag';
-import { bookMarkServiceProvide, deletebookMarkServiceProvide, getUser } from '../../utils/api/func';
+import { bookMarkServiceProvide, deletebookMarkServiceProvide, getProviderNew, getUser } from '../../utils/api/func';
 import { addUserData } from '../../store/reducer/mainSlice';
 
 const PairedProviders4 = ({ item, index, navigation }: any) => {
   const [showModal, setshowModal] = useState(false);
   const [savedProvider, setSavedProvider] = useState(false);
   const dispatch = useDispatch();
+  const [providerData, setproviderData] = useState(null);
 
   const handleBookmark = async () => {
     try {
@@ -56,6 +57,19 @@ const PairedProviders4 = ({ item, index, navigation }: any) => {
       initGetUsers();
     }
   };
+
+  useEffect(() => {
+    const initGetProviderNew = async () => {
+      const res: any = await getProviderNew(item.serviceProvider._id);
+      console.log('portfolio--', res?.data?.profile?.portfolios);
+      if (res?.status === 201 || res?.status === 200) {
+        // dispatch(addProfileData(res?.data?.profile));
+        setproviderData(res?.data?.profile);
+      }
+    };
+    initGetProviderNew();
+  }, [item.serviceProvider._id]);
+
 
   const handleRemoveBookmark = async () => {
     try {
@@ -299,7 +313,7 @@ const PairedProviders4 = ({ item, index, navigation }: any) => {
                 </View>
 
                 <View style={tw`px-[7.5%]`}>
-                  {item?.services?.map((service: { name: any; _id: any }) => {
+                  {providerData?.services?.map((service: { name: any; _id: any }) => {
                     return (
                       <TouchableOpacity
                         onPress={() => {
@@ -310,6 +324,7 @@ const PairedProviders4 = ({ item, index, navigation }: any) => {
                           });
                           setshowModal(false);
                         }}
+                        key={service?._id}
                         style={[
                           tw` mt-2.5 py-1.5 flex flex-row items-center justify-between px-3 border-2 border-[${colors.primary}] bg-[${colors.darkPurple}] `,
                           {},
