@@ -32,7 +32,6 @@ import {
   CollapseHeader,
   CollapseBody,
 } from 'accordion-collapse-react-native';
-import axios from 'axios';
 import Snackbar from 'react-native-snackbar';
 import {
   completeProfile,
@@ -65,7 +64,6 @@ const PRofileStep11 = () => {
   const [collapseState, setCollapseState] = useState(false);
   const [collapseState2, setCollapseState2] = useState(false);
   const [selectCategory, setselectCategory] = useState('');
-  const [subCategory, setsubCategory] = useState([]);
   const [subLoading, setsubLoading] = useState(false);
   const [_getSubCategory, set_getSubCategory] = useState([]);
   const initSubGetCategory = async param => {
@@ -77,7 +75,7 @@ const PRofileStep11 = () => {
       set_getSubCategory(res?.data?.data?.[0]?.services);
     }
     setsubLoading(false);
-  }; 
+  };
   const {currentState, setCurrentState} = useContext(RouteContext);
   console.log(currentState);
   const [isLoading, setisLoading] = useState(false);

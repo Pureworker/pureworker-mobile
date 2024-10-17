@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -11,12 +11,15 @@ import {
 import colors from '../../constants/colors';
 import commonStyle from '../../constants/commonStyle';
 import images from '../../constants/images';
+import {useSelector} from 'react-redux';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
-const Processing = ({navigation ,route}:any) => {
-  const stat = route.params.status
+const Processing = ({navigation, route}: any) => {
+  const stat = route.params.status;
   const [status, setStatus] = useState(stat);
+  const userData = useSelector((state: any) => state.user.userData);
+  console.log('data', userData.verificationStatus, stat);
 
   const renderContent = () => {
     switch (status) {
@@ -54,7 +57,9 @@ const Processing = ({navigation ,route}:any) => {
       return (
         <TouchableOpacity
           style={styles.button}
-          onPress={() => console.log('Done button pressed')}>
+          onPress={() => {
+            navigation.navigate('Home');
+          }}>
           <Text style={styles.buttonText}>Done</Text>
         </TouchableOpacity>
       );
@@ -82,8 +87,54 @@ const Processing = ({navigation ,route}:any) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {renderContent()}
-      {renderButton()}
+      {userData.verificationStatus === 'rejected' ? (
+        <>
+          <View style={styles.centeredContent}>
+            <Image source={images.close} style={styles.image} />
+            <Text style={styles.text}>Your request has been denied</Text>
+          </View>
+        </>
+      ) : (
+        <>{renderContent()}</>
+      )}
+
+      {userData.verificationStatus === 'rejected' ? (
+        <View style={styles.button2}>
+          <TouchableOpacity
+            style={{
+              height: 50,
+              marginBottom: 20,
+              backgroundColor: colors.parpal,
+              width: width - 32,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 8,
+              marginHorizontal: 16,
+            }}
+            onPress={() => {
+              navigation.navigate('PhotoUploadScreen');
+            }}>
+            <Text style={styles.buttonText}>Retry</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{
+              height: 50,
+              marginBottom: 40,
+              backgroundColor: colors.primary,
+              width: width - 32,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 8,
+              marginHorizontal: 16,
+            }}
+            onPress={() => navigation.navigate('Home')}>
+            <Text style={[styles.buttonText, {color: 'black'}]}>Go to Home</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <>{renderButton()}</>
+      )}
     </SafeAreaView>
   );
 };
@@ -111,6 +162,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
   },
+  button2: {
+    position: 'absolute',
+    bottom: 20,
+  },
+
   button: {
     position: 'absolute',
     bottom: 20,
