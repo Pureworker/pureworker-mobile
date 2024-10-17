@@ -35,7 +35,7 @@ const PairedProviders = ({item, index, navigation, showServices}: any) => {
           tw` mt-4 border-[#FFC727] justify-between bg-[${colors.darkPurple}]`,
           {
             height: perWidth(140),
-            width: perWidth(200),
+            width: perWidth(215),
             borderWidth: 3,
             borderRadius: 20,
             marginLeft: index === 0 ? 10 : 3,
@@ -114,7 +114,7 @@ const PairedProviders = ({item, index, navigation, showServices}: any) => {
             <View
               style={[tw``, {width: perWidth(105), marginTop: perWidth(4)}]}>
               <Textcomp
-                text={`$${item?.service?.maxPrice ? item.service.maxPrice : 0}/hr`}
+                text={`₦${item?.service?.maxPrice ? item.service.maxPrice : 0}/hr`}
                 // text={'₦000'}
                 size={12}
                 lineHeight={14}

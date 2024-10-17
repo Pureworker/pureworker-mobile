@@ -1405,10 +1405,10 @@ const ServiceProviderProfile = () => {
                 ToastShort('Service providers cannot chat with themselves!.');
               } else {
                 navigation.navigate('Inbox', {
-                  id: profileData?._id || profileData?._id,
+                  id: profileData?.serviceProvider._id || profileData?._id || profileData?._id,
                   name: profileData?.businessName
                     ? profileData?.businessName
-                    : `${profileData.firstName} ${profileData?.lastName}`,
+                    : `${profileData.firstName || profileData?.serviceProvider.firstName} ${profileData?.lastName || profileData?.serviceProvider.lastName}`,
                 });
               }
             }}

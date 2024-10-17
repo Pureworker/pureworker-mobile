@@ -6,8 +6,8 @@ import {
   StyleSheet,
   Text,
 } from 'react-native';
-import {SIZES, perHeight, perWidth} from '../utils/position/sizes';
-import React, {useEffect, useState} from 'react';
+import { SIZES, perHeight, perWidth } from '../utils/position/sizes';
+import React, { useEffect, useState } from 'react';
 import tw from 'twrnc';
 import Textcomp from './Textcomp';
 import colors from '../constants/colors';
@@ -23,16 +23,16 @@ import {
 import Snackbar from 'react-native-snackbar';
 import OrderDispute from './modals/orderDispute';
 import ScheduledDeliveryDate from './modals/scheduledDeliveryDate';
-import {useDispatch, useSelector} from 'react-redux';
-import {addproviderOrders} from '../store/reducer/mainSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addproviderOrders } from '../store/reducer/mainSlice';
 import RateyourCustommer from './modals/rateYourCustomer';
-import {ToastShort, formatDateHistory2} from '../utils/utils';
+import { ToastShort, formatDateHistory2 } from '../utils/utils';
 import FastImage from 'react-native-fast-image';
 import Modal from 'react-native-modal/dist/modal';
 import socket from '../utils/socket';
 import CheckBox from 'react-native-check-box';
-import {toastAlertSuccess} from '../utils/alert';
-const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
+import { toastAlertSuccess } from '../utils/alert';
+const Orderscomponent2 = ({ item, index, status, showall, navigation }: any) => {
   const [isLoading, setisLoading] = useState(false);
   const [orderDispute, setorderDispute] = useState(false);
   const [scheduledDeliveryDate, setscheduledDeliveryDate] = useState(false);
@@ -61,7 +61,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
   const handleCancel = async () => {
     setisLoading(true);
     if (item?._id) {
-      const res = await cancelOrder(item?._id, {reason: 'Incorrect Request'});
+      const res = await cancelOrder(item?._id, { reason: 'Incorrect Request' });
       if (res?.status === 200 || res?.status === 201) {
         // navigation.navigate('PaymentConfirmed');
         await initGetOrders();
@@ -71,8 +71,8 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           text: res?.error?.message
             ? res?.error?.message
             : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured',
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured',
           duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
@@ -102,8 +102,8 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           text: res?.error?.message
             ? res?.error?.message
             : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured',
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured',
           duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
@@ -130,7 +130,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
     try {
       setisLoading(true);
       if (item?._id) {
-        const res = await completedOrder(item?._id, {...val});
+        const res = await completedOrder(item?._id, { ...val });
         // const res = await addRatingOrder(item?._id, {...val});
         if (res?.status === 200 || res?.status === 201) {
           await initGetOrders();
@@ -159,8 +159,8 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
         text: error?.message
           ? error?.message
           : error?.data?.message
-          ? error?.data?.message
-          : 'Oops!, an error occured',
+            ? error?.data?.message
+            : 'Oops!, an error occured',
         duration: Snackbar.LENGTH_LONG,
         textColor: '#fff',
         backgroundColor: '#88087B',
@@ -196,8 +196,8 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           text: res?.error?.message
             ? res?.error?.message
             : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured',
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured',
           duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
@@ -231,8 +231,8 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           text: res?.error?.message
             ? res?.error?.message
             : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured',
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured',
           duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
@@ -263,8 +263,8 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           text: res?.error?.message
             ? res?.error?.message
             : res?.error?.data?.message
-            ? res?.error?.data?.message
-            : 'Oops!, an error occured',
+              ? res?.error?.data?.message
+              : 'Oops!, an error occured',
           duration: Snackbar.LENGTH_LONG,
           textColor: '#fff',
           backgroundColor: '#88087B',
@@ -307,7 +307,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           },
         ]}>
         <View style={tw`flex flex-row `}>
-          <View style={[tw``, {width: perWidth(50), height: perWidth(50)}]}>
+          <View style={[tw``, { width: perWidth(50), height: perWidth(50) }]}>
             <FastImage
               style={[
                 tw``,
@@ -321,7 +321,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
                 uri:
                   item?.user?.profilePic ||
                   'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
-                headers: {Authorization: 'someAuthToken'},
+                headers: { Authorization: 'someAuthToken' },
                 priority: FastImage.priority.high,
                 // cache: FastImage.cacheControl.cacheOnly,
               }}
@@ -330,11 +330,11 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
             <View
               style={[
                 tw`absolute bottom-0 border-2 right-1 rounded-full`,
-                {width: 8, height: 8, backgroundColor: colors.green},
+                { width: 8, height: 8, backgroundColor: colors.green },
               ]}
             />
           </View>
-          <View style={[tw`flex-1`, {marginLeft: perWidth(12)}]}>
+          <View style={[tw`flex-1`, { marginLeft: perWidth(12) }]}>
             <View style={[tw`flex flex-row justify-between`, {}]}>
               {status === 'INPROGRESS' && (
                 <View style={[tw``, {}]}>
@@ -439,7 +439,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
               onPress={() => {
                 setShowModal(true);
               }}
-              style={[tw``, {width: perWidth(252), marginTop: perHeight(4)}]}>
+              style={[tw``, { width: perWidth(252), marginTop: perHeight(4) }]}>
               <Textcomp
                 text={`${item?.description}`}
                 size={11}
@@ -478,16 +478,15 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           </View>
         </View>
         <View>
-          <View style={[tw``, {width: perWidth(105), marginTop: perWidth(4)}]}>
+          <View style={[tw``, { width: perWidth(105), marginTop: perWidth(4) }]}>
             <Textcomp
               text={
                 item?.user?.businessName
                   ? `${item?.user?.businessName}`
-                  : `${
-                      item?.user?.firstName +
-                      ' ' +
-                      item?.user?.lastName?.charAt(0)
-                    }.`
+                  : `${item?.user?.firstName +
+                  ' ' +
+                  item?.user?.lastName?.charAt(0)
+                  }.`
               }
               size={12}
               lineHeight={14}
@@ -500,12 +499,11 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           <View
             style={[
               tw` mx-auto`,
-              {width: perWidth(300), marginTop: perWidth(5)},
+              { width: perWidth(300), marginTop: perWidth(5) },
             ]}>
             <Textcomp
-              text={`Address: ${
-                item?.location === 'online' ? 'NIL' : item?.address
-              }`}
+              text={`Address: ${item?.location === 'online' ? 'NIL' : item?.address
+                }`}
               size={12}
               lineHeight={14}
               color={colors.white}
@@ -516,7 +514,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           <View
             style={[
               tw` mx-auto`,
-              {width: perWidth(300), marginTop: perWidth(5)},
+              { width: perWidth(300), marginTop: perWidth(5) },
             ]}>
             <Textcomp
               text={`Date & Time: ${formatDateHistory2(
@@ -531,7 +529,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           <View
             style={[
               tw` mx-auto`,
-              {width: perWidth(300), marginTop: perWidth(5)},
+              { width: perWidth(300), marginTop: perWidth(5) },
             ]}>
             <Textcomp
               text={`Location: ${item?.location}`}
@@ -917,6 +915,39 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
         }}
         visible={scheduledDeliveryDate}
       />
+      <View style={tw`flex flex-row justify-end relative mt-10 `}>
+        <TouchableOpacity
+          onPress={() => {
+            socket.connect();
+            // setInfoModal(false);
+            console.log('ERRRRRRRRRRRRR', item);
+            navigation.navigate('Inbox', {
+              id: item?.user._id,
+              name: item?.user.firstName,
+            });
+          }}
+          style={[
+            tw`bg-[#88087b] mx-auto items-center justify-center mt-2`,
+            {
+              width: 'auto',
+              height:
+                Platform.OS === 'ios' ? perHeight(25) : perHeight(25),
+              borderRadius: 7,
+              paddingHorizontal: perWidth(20),
+              alignSelf: 'flex-end',
+              position: 'absolute',
+              right: 0,
+            },
+          ]}>
+          <Textcomp
+            text={'Chat'}
+            size={Platform.OS === 'ios' ? 14 : 13}
+            lineHeight={16}
+            color={colors.white}
+            fontFamily={'Inter-Medium'}
+          />
+        </TouchableOpacity>
+      </View>
       {/* <RateyourExperience
         navigation={null}
         func={(text: boolean | ((prevState: boolean) => boolean)) => {
@@ -946,7 +977,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
         onModalHide={() => {
           setShowModal(false);
         }}
-        style={{width: SIZES.width, marginHorizontal: 0}}
+        style={{ width: SIZES.width, marginHorizontal: 0 }}
         deviceWidth={SIZES.width}
         onBackdropPress={() => setShowModal(false)}
         swipeThreshold={200}
@@ -969,7 +1000,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
             <TouchableOpacity
               onPress={() => setShowModal(false)}
               style={styles.closeButton}>
-              <Text style={{color: colors.primary, fontSize: 16}}>Close</Text>
+              <Text style={{ color: colors.primary, fontSize: 16 }}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -980,7 +1011,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
         onModalHide={() => {
           setready(false);
         }}
-        style={{width: SIZES.width, marginHorizontal: 0}}
+        style={{ width: SIZES.width, marginHorizontal: 0 }}
         deviceWidth={SIZES.width}
         onBackdropPress={() => setready(false)}
         swipeThreshold={200}
@@ -995,7 +1026,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           <View
             style={[
               tw`p-4 mt-auto bg-[#D9D9D9]`,
-              {minHeight: SIZES.height * 0.7, marginBottom: -20},
+              { minHeight: SIZES.height * 0.7, marginBottom: -20 },
             ]}>
             <TouchableOpacity
               onPress={() => {
@@ -1138,7 +1169,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
                   }}>
                   Note: Pureworker charges a 15% fee on all orders. You will be
                   Paid{' '}
-                  <Text style={{fontWeight: 'bold', color: '#FF0000'}}>
+                  <Text style={{ fontWeight: 'bold', color: '#FF0000' }}>
                     ₦{item?.agentAmount}
                   </Text>{' '}
                   On completion of the Job.
@@ -1147,12 +1178,12 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
 
               <View style={tw`flex flex-row items-center  mb-4 ml-4`}>
                 <CheckBox
-                  style={{width: 30, padding: 10}}
+                  style={{ width: 30, padding: 10 }}
                   onClick={() => {
                     setToggleCheckBox(!toggleCheckBox);
                   }}
                   isChecked={toggleCheckBox}
-                  // leftText={'CheckBox'}
+                // leftText={'CheckBox'}
                 />
                 <View style={tw`ml-4`}>
                   <Textcomp
@@ -1193,7 +1224,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           onModalHide={() => {
             setid_inprogress_modal(true);
           }}
-          style={{width: SIZES.width, marginHorizontal: 0}}
+          style={{ width: SIZES.width, marginHorizontal: 0 }}
           deviceWidth={SIZES.width}
           onBackdropPress={() => setid_inprogress_modal(false)}
           swipeThreshold={200}
@@ -1208,7 +1239,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
             <View
               style={[
                 tw`p-4 px-6 mx-[5%] bg-[#D9D9D9] rounded-3xl`,
-                {minHeight: SIZES.height * 0.2},
+                { minHeight: SIZES.height * 0.2 },
               ]}>
               <View style={tw`flex-1 `}>
                 <TouchableOpacity
@@ -1254,7 +1285,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           onModalHide={() => {
             setdeclined_modal(true);
           }}
-          style={{width: SIZES.width, marginHorizontal: 0}}
+          style={{ width: SIZES.width, marginHorizontal: 0 }}
           deviceWidth={SIZES.width}
           onBackdropPress={() => setdeclined_modal(false)}
           swipeThreshold={200}
@@ -1269,7 +1300,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
             <View
               style={[
                 tw`p-4 px-6 mx-[5%] bg-[#D9D9D9] rounded-3xl`,
-                {minHeight: SIZES.height * 0.2},
+                { minHeight: SIZES.height * 0.2 },
               ]}>
               <View style={tw`flex-1 `}>
                 <TouchableOpacity
@@ -1316,7 +1347,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
           onModalHide={() => {
             setweldone_modal(true);
           }}
-          style={{width: SIZES.width, marginHorizontal: 0}}
+          style={{ width: SIZES.width, marginHorizontal: 0 }}
           deviceWidth={SIZES.width}
           onBackdropPress={() => setweldone_modal(false)}
           swipeThreshold={200}
@@ -1331,7 +1362,7 @@ const Orderscomponent2 = ({item, index, status, showall, navigation}: any) => {
             <View
               style={[
                 tw`p-4 px-6 mx-[5%] bg-[#D9D9D9] rounded-3xl`,
-                {minHeight: SIZES.height * 0.18},
+                { minHeight: SIZES.height * 0.18 },
               ]}>
               <View style={tw`flex-1 `}>
                 <TouchableOpacity
